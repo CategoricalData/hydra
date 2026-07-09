@@ -4,11 +4,30 @@
   "dependencies": [
     {"module": "hydra.file"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.file"},
+    {"module": "hydra.decode.file"},
     {"module": "hydra.core"},
     {"module": "hydra.time"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.time"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.file.fileExtensionFileExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.file.FileExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FileExtension"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.file.FileExtension"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.file.fileExtension",
@@ -100,6 +119,22 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.file.FileExtension"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.file.filePathFilePath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.file.FilePath"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FilePath"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.file.FilePath"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.file.filePath",
         "signature": {
           "typeParameters": [],
@@ -184,6 +219,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.file.FilePath"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.file.fileStatusFileStatus",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.file.FileStatus"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FileStatus"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.file.FileStatus"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.file.fileStatus",
@@ -1815,6 +1866,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the statusChangeTime field of hydra.file.FileStatus"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.file.fileTypeFileType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.file.FileType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FileType"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.file.FileType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.file.fileTypeBlock",

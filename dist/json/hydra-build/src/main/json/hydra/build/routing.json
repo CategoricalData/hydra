@@ -5,6 +5,7 @@
     "comments": [],
     "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.dsls"},
     {"module": "hydra.names"},
     {"module": "hydra.encoding"},
     {"module": "hydra.decoding"},
@@ -253,7 +254,7 @@
                     "bindings": [
                       {
                         "name": "dsl",
-                        "term": {"application": {"function": {"variable": "hydra.names.dslModuleName"}, "argument": {"variable": "m"}}},
+                        "term": {"application": {"function": {"variable": "hydra.dsls.dslModuleName"}, "argument": {"variable": "m"}}},
                         "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
                     "body": {
                       "let": {

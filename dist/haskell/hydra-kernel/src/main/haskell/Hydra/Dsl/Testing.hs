@@ -5,7 +5,9 @@
 module Hydra.Dsl.Testing where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Testing as DecodeTesting
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Testing as EncodeTesting
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -32,6 +34,10 @@ effectfulTestCaseActual x =
         Core.projectionTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
         Core.projectionFieldName = (Core.Name "actual")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.testing.EffectfulTestCase
+effectfulTestCaseEffectfulTestCase :: Typed.TypedName Testing.EffectfulTestCase
+effectfulTestCaseEffectfulTestCase = Typed.TypedName (Core.Name "hydra.testing.EffectfulTestCase")
 
 -- | DSL accessor for the expected field of hydra.testing.EffectfulTestCase
 effectfulTestCaseExpected :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm (() -> String)
@@ -83,6 +89,10 @@ tag x =
       Core.wrappedTermTypeName = (Core.Name "hydra.testing.Tag"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.testing.Tag
+tagTag :: Typed.TypedName Testing.Tag
+tagTag = Typed.TypedName (Core.Name "hydra.testing.Tag")
+
 -- | DSL injection for the effectful variant of hydra.testing.TestCase
 testCaseEffectful :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm Testing.TestCase
 testCaseEffectful x =
@@ -91,6 +101,10 @@ testCaseEffectful x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "effectful"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.testing.TestCase
+testCaseTestCase :: Typed.TypedName Testing.TestCase
+testCaseTestCase = Typed.TypedName (Core.Name "hydra.testing.TestCase")
 
 -- | DSL injection for the universal variant of hydra.testing.TestCase
 testCaseUniversal :: Typed.TypedTerm Testing.UniversalTestCase -> Typed.TypedTerm Testing.TestCase
@@ -155,6 +169,10 @@ testCaseWithMetadataTags x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
         Core.projectionFieldName = (Core.Name "tags")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.testing.TestCaseWithMetadata
+testCaseWithMetadataTestCaseWithMetadata :: Typed.TypedName Testing.TestCaseWithMetadata
+testCaseWithMetadataTestCaseWithMetadata = Typed.TypedName (Core.Name "hydra.testing.TestCaseWithMetadata")
 
 -- | DSL updater for the case field of hydra.testing.TestCaseWithMetadata
 testCaseWithMetadataWithCase :: Typed.TypedTerm Testing.TestCaseWithMetadata -> Typed.TypedTerm Testing.TestCase -> Typed.TypedTerm Testing.TestCaseWithMetadata
@@ -335,6 +353,10 @@ testGroupSubgroups x =
         Core.projectionFieldName = (Core.Name "subgroups")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.testing.TestGroup
+testGroupTestGroup :: Typed.TypedName Testing.TestGroup
+testGroupTestGroup = Typed.TypedName (Core.Name "hydra.testing.TestGroup")
+
 -- | DSL updater for the cases field of hydra.testing.TestGroup
 testGroupWithCases :: Typed.TypedTerm Testing.TestGroup -> Typed.TypedTerm [Testing.TestCaseWithMetadata] -> Typed.TypedTerm Testing.TestGroup
 testGroupWithCases original newVal =
@@ -496,6 +518,10 @@ universalTestCaseExpected x =
         Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
         Core.projectionFieldName = (Core.Name "expected")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.testing.UniversalTestCase
+universalTestCaseUniversalTestCase :: Typed.TypedName Testing.UniversalTestCase
+universalTestCaseUniversalTestCase = Typed.TypedName (Core.Name "hydra.testing.UniversalTestCase")
 
 -- | DSL updater for the actual field of hydra.testing.UniversalTestCase
 universalTestCaseWithActual :: Typed.TypedTerm Testing.UniversalTestCase -> Typed.TypedTerm (() -> String) -> Typed.TypedTerm Testing.UniversalTestCase

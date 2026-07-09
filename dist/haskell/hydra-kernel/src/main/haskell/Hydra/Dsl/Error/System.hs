@@ -5,7 +5,9 @@
 module Hydra.Dsl.Error.System where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Error.System as DecodeErrorSystem
 import qualified Hydra.Dsl.File as DslFile
+import qualified Hydra.Encode.Error.System as EncodeErrorSystem
 import qualified Hydra.Error.System as System
 import qualified Hydra.File as File
 import qualified Hydra.Typed as Typed
@@ -56,3 +58,7 @@ systemErrorPermissionDenied x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "permissionDenied"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.error.system.SystemError
+systemErrorSystemError :: Typed.TypedName System.SystemError
+systemErrorSystemError = Typed.TypedName (Core.Name "hydra.error.system.SystemError")

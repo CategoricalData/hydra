@@ -1,8 +1,29 @@
 {
   "name": "hydra.dsl.graphql.syntax",
   "metadata": {"description": "DSL functions for hydra.graphql.syntax", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.graphql.syntax"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.graphql.syntax"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.graphql.syntax"},
+    {"module": "hydra.decode.graphql.syntax"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.nameName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Name"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.name",
@@ -94,6 +115,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Name"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.intValueIntValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.IntValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.IntValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.IntValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.intValue",
         "signature": {
           "typeParameters": [],
@@ -181,6 +222,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.IntValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.floatValueFloatValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FloatValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FloatValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FloatValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.floatValue",
@@ -272,6 +333,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.FloatValue"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.stringValueStringValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.StringValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.StringValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.StringValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.stringValue",
         "signature": {
           "typeParameters": [],
@@ -359,6 +440,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.StringValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.documentDocument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Document"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Document"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Document"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.document",
@@ -458,6 +559,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Document"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.definitionDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Definition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Definition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Definition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.definitionExecutable",
@@ -570,6 +691,26 @@
                   "value": {"literal": {"string": "DSL injection for the typeSystem variant of hydra.graphql.syntax.Definition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.executableDocumentExecutableDocument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ExecutableDocument"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ExecutableDocument"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ExecutableDocument"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.executableDocument",
         "signature": {
           "typeParameters": [],
@@ -667,6 +808,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.ExecutableDocument"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.executableDefinitionExecutableDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ExecutableDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ExecutableDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ExecutableDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.executableDefinitionOperation",
@@ -779,6 +942,28 @@
                   "value": {"literal": {"string": "DSL injection for the fragment variant of hydra.graphql.syntax.ExecutableDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.operationDefinitionOperationDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.OperationDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.OperationDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.OperationDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.operationDefinitionSequence",
         "signature": {
           "typeParameters": [],
@@ -887,6 +1072,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the SelectionSet variant of hydra.graphql.syntax.OperationDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.operationDefinition_SequenceOperationDefinition_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.OperationDefinition_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.OperationDefinition_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.OperationDefinition_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.operationDefinition_Sequence",
@@ -2436,6 +2644,26 @@
                   "value": {"literal": {"string": "DSL updater for the SelectionSet field of hydra.graphql.syntax.OperationDefinition_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.operationTypeOperationType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.OperationType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.OperationType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.OperationType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.operationTypeQuery",
         "signature": {
           "typeParameters": [],
@@ -2553,6 +2781,26 @@
                   "value": {"literal": {"string": "DSL injection for the Subscription variant of hydra.graphql.syntax.OperationType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.selectionSetSelectionSet",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.SelectionSet"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.SelectionSet"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.SelectionSet"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.selectionSet",
         "signature": {
           "typeParameters": [],
@@ -2650,6 +2898,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.SelectionSet"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.selectionSelection",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Selection"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Selection"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Selection"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.selectionField",
@@ -2803,6 +3071,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the InlineFragment variant of hydra.graphql.syntax.Selection"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.fieldField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Field"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Field"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.field",
@@ -4253,6 +4539,24 @@
                   "value": {"literal": {"string": "DSL updater for the SelectionSet field of hydra.graphql.syntax.Field"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.aliasAlias",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Alias"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Alias"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Alias"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.aliasName",
         "signature": {
           "typeParameters": [],
@@ -4341,6 +4645,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the Colon variant of hydra.graphql.syntax.Alias"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.argumentsArguments",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Arguments"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Arguments"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Arguments"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.arguments",
@@ -4434,6 +4758,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Arguments"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.argumentArgument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Argument"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Argument"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Argument"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.argument",
@@ -4811,6 +5155,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the Value field of hydra.graphql.syntax.Argument"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.fragmentSpreadFragmentSpread",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FragmentSpread"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FragmentSpread"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FragmentSpread"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.fragmentSpread",
@@ -5202,6 +5566,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.FragmentSpread"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.inlineFragmentInlineFragment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.InlineFragment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InlineFragment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InlineFragment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.inlineFragment",
@@ -5884,6 +6268,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the SelectionSet field of hydra.graphql.syntax.InlineFragment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.fragmentDefinitionFragmentDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FragmentDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FragmentDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FragmentDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.fragmentDefinition",
@@ -6911,6 +7315,26 @@
                   "value": {"literal": {"string": "DSL updater for the SelectionSet field of hydra.graphql.syntax.FragmentDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.fragmentNameFragmentName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FragmentName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FragmentName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FragmentName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.fragmentName",
         "signature": {
           "typeParameters": [],
@@ -7004,6 +7428,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.FragmentName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.typeConditionTypeCondition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.TypeCondition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeCondition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeCondition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.typeConditionOn",
         "signature": {
           "typeParameters": [],
@@ -7092,6 +7536,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the NamedType variant of hydra.graphql.syntax.TypeCondition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.valueValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Value"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Value"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Value"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.valueVariable",
@@ -7553,6 +8015,26 @@
                   "value": {"literal": {"string": "DSL injection for the object variant of hydra.graphql.syntax.Value"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.booleanValueBooleanValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.BooleanValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.BooleanValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.BooleanValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.booleanValueTrue",
         "signature": {
           "typeParameters": [],
@@ -7629,6 +8111,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the False variant of hydra.graphql.syntax.BooleanValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.nullValueNullValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.NullValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.NullValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.NullValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.nullValue",
@@ -7718,6 +8220,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.NullValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.enumValueEnumValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.EnumValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.enumValue",
@@ -7811,6 +8333,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.EnumValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.listValueListValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ListValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ListValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ListValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.listValueSequence",
@@ -7915,6 +8457,26 @@
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.ListValue"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.listValue_SequenceListValue_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ListValue_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ListValue_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ListValue_Sequence"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.listValue_Sequence",
         "signature": {
           "typeParameters": [],
@@ -7945,6 +8507,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL constructor for hydra.graphql.syntax.ListValue_Sequence"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.objectValueObjectValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ObjectValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.objectValueSequence",
@@ -8057,6 +8639,28 @@
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.ObjectValue"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.objectValue_SequenceObjectValue_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectValue_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectValue_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectValue_Sequence"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.objectValue_Sequence",
         "signature": {
           "typeParameters": [],
@@ -8089,6 +8693,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL constructor for hydra.graphql.syntax.ObjectValue_Sequence"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.objectFieldObjectField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ObjectField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectField"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectField"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.objectField",
@@ -8466,6 +9090,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the Value field of hydra.graphql.syntax.ObjectField"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.variablesDefinitionVariablesDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.VariablesDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.VariablesDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.VariablesDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.variablesDefinition",
@@ -9529,6 +10175,26 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.VariablesDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.variableVariable",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Variable"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Variable"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Variable"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.variable",
         "signature": {
           "typeParameters": [],
@@ -9622,6 +10288,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Variable"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.defaultValueDefaultValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.DefaultValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DefaultValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DefaultValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.defaultValue",
         "signature": {
           "typeParameters": [],
@@ -9713,6 +10399,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.DefaultValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.typeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Type"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.typeNamed",
@@ -9868,6 +10571,26 @@
                   "value": {"literal": {"string": "DSL injection for the nonNull variant of hydra.graphql.syntax.Type"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.namedTypeNamedType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.NamedType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.NamedType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.NamedType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.namedType",
         "signature": {
           "typeParameters": [],
@@ -9961,6 +10684,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.NamedType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.listTypeListType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.ListType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ListType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ListType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.listType",
         "signature": {
           "typeParameters": [],
@@ -10052,6 +10795,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.ListType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.nonNullTypeNonNullType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.NonNullType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.NonNullType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.NonNullType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.nonNullTypeNamed",
@@ -10156,6 +10919,26 @@
                   "value": {"literal": {"string": "DSL injection for the list variant of hydra.graphql.syntax.NonNullType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.directivesDirectives",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Directives"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Directives"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Directives"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.directives",
         "signature": {
           "typeParameters": [],
@@ -10253,6 +11036,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Directives"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveDirective",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Directive"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Directive"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Directive"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.directive",
@@ -10642,6 +11445,26 @@
                   "value": {"literal": {"string": "DSL updater for the Arguments field of hydra.graphql.syntax.Directive"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemDocmentTypeSystemDocment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.TypeSystemDocment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemDocment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemDocment"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemDocment",
         "signature": {
           "typeParameters": [],
@@ -10739,6 +11562,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.TypeSystemDocment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemDefinitionTypeSystemDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemDefinitionSchema",
@@ -10904,6 +11749,29 @@
                   "value": {"literal": {"string": "DSL injection for the directive variant of hydra.graphql.syntax.TypeSystemDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemExtensionDocumentTypeSystemExtensionDocument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.TypeSystemExtensionDocument"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemExtensionDocument"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemExtensionDocument"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemExtensionDocument",
         "signature": {
           "typeParameters": [],
@@ -11009,6 +11877,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.TypeSystemExtensionDocument"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemDefinitionOrExtensionTypeSystemDefinitionOrExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemDefinitionOrExtensionDefinition",
@@ -11129,6 +12020,28 @@
                     "literal": {"string": "DSL injection for the extension variant of hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemExtensionTypeSystemExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.TypeSystemExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemExtensionSchema",
         "signature": {
           "typeParameters": [],
@@ -11233,6 +12146,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the type variant of hydra.graphql.syntax.TypeSystemExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.schemaDefinitionSchemaDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.SchemaDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.SchemaDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.SchemaDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.schemaDefinition",
@@ -11932,6 +12865,26 @@
                     "literal": {"string": "DSL updater for the RootOperationTypeDefinition field of hydra.graphql.syntax.SchemaDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.schemaExtensionSchemaExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.SchemaExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.SchemaExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.SchemaExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.schemaExtensionSequence",
         "signature": {
           "typeParameters": [],
@@ -12036,6 +12989,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.SchemaExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.schemaExtension_SequenceSchemaExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.SchemaExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.SchemaExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.SchemaExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.schemaExtension_Sequence",
@@ -12477,6 +13453,29 @@
                     "literal": {"string": "DSL updater for the RootOperationTypeDefinition field of hydra.graphql.syntax.SchemaExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.rootOperationTypeDefinitionRootOperationTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.RootOperationTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.RootOperationTypeDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.rootOperationTypeDefinition",
         "signature": {
           "typeParameters": [],
@@ -12887,6 +13886,26 @@
                   "value": {"literal": {"string": "DSL updater for the NamedType field of hydra.graphql.syntax.RootOperationTypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.descriptionDescription",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.Description"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.Description"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.Description"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.description",
         "signature": {
           "typeParameters": [],
@@ -12978,6 +13997,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.Description"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.typeDefinitionTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.TypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.typeDefinitionScalar",
@@ -13306,6 +14345,26 @@
                   "value": {"literal": {"string": "DSL injection for the inputObject variant of hydra.graphql.syntax.TypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.typeExtensionTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.TypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.typeExtensionScalar",
         "signature": {
           "typeParameters": [],
@@ -13626,6 +14685,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the inputObject variant of hydra.graphql.syntax.TypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.scalarTypeDefinitionScalarTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ScalarTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ScalarTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ScalarTypeDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.scalarTypeDefinition",
@@ -14330,6 +15411,28 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.ScalarTypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.scalarTypeExtensionScalarTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ScalarTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ScalarTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ScalarTypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.scalarTypeExtension",
         "signature": {
           "typeParameters": [],
@@ -14727,6 +15830,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.ScalarTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.objectTypeDefinitionObjectTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectTypeDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.objectTypeDefinition",
@@ -16253,6 +17378,28 @@
                   "value": {"literal": {"string": "DSL updater for the FieldsDefinition field of hydra.graphql.syntax.ObjectTypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.objectTypeExtensionObjectTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectTypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.objectTypeExtensionSequence",
         "signature": {
           "typeParameters": [],
@@ -16422,6 +17569,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence3 variant of hydra.graphql.syntax.ObjectTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.objectTypeExtension_SequenceObjectTypeExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectTypeExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectTypeExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.objectTypeExtension_Sequence",
@@ -17528,6 +18698,29 @@
                     "literal": {"string": "DSL updater for the FieldsDefinition field of hydra.graphql.syntax.ObjectTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.objectTypeExtension_Sequence2ObjectTypeExtension_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectTypeExtension_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectTypeExtension_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.objectTypeExtension_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -18259,6 +19452,29 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.ObjectTypeExtension_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.objectTypeExtension_Sequence3ObjectTypeExtension_Sequence3",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ObjectTypeExtension_Sequence3"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ObjectTypeExtension_Sequence3"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ObjectTypeExtension_Sequence3"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.objectTypeExtension_Sequence3",
         "signature": {
           "typeParameters": [],
@@ -18687,6 +19903,28 @@
                     "literal": {"string": "DSL updater for the ImplementsInterfaces field of hydra.graphql.syntax.ObjectTypeExtension_Sequence3"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.implementsInterfacesImplementsInterfaces",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ImplementsInterfaces"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ImplementsInterfaces"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.implementsInterfacesSequence",
         "signature": {
           "typeParameters": [],
@@ -18799,6 +20037,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.ImplementsInterfaces"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.implementsInterfaces_SequenceImplementsInterfaces_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ImplementsInterfaces_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ImplementsInterfaces_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ImplementsInterfaces_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.implementsInterfaces_Sequence",
@@ -19229,6 +20490,29 @@
                   "value": {"literal": {"string": "DSL updater for the NamedType field of hydra.graphql.syntax.ImplementsInterfaces_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.implementsInterfaces_Sequence2ImplementsInterfaces_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ImplementsInterfaces_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ImplementsInterfaces_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ImplementsInterfaces_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.implementsInterfaces_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -19629,6 +20913,26 @@
                   "value": {"literal": {"string": "DSL updater for the NamedType field of hydra.graphql.syntax.ImplementsInterfaces_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.fieldsDefinitionFieldsDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FieldsDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FieldsDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.fieldsDefinition",
         "signature": {
           "typeParameters": [],
@@ -19726,6 +21030,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.FieldsDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.fieldDefinitionFieldDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.FieldDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.FieldDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.fieldDefinition",
@@ -21180,6 +22504,28 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.FieldDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.argumentsDefinitionArgumentsDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ArgumentsDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ArgumentsDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.argumentsDefinition",
         "signature": {
           "typeParameters": [],
@@ -21283,6 +22629,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.ArgumentsDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.inputValueDefinitionInputValueDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputValueDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InputValueDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputValueDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.inputValueDefinition",
@@ -22777,6 +24145,29 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.InputValueDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinitionInterfaceTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinitionSequence",
         "signature": {
           "typeParameters": [],
@@ -22891,6 +24282,31 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.InterfaceTypeDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinition_SequenceInterfaceTypeDefinition_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeDefinition_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinition_Sequence",
@@ -24507,6 +25923,31 @@
                     "literal": {"string": "DSL updater for the FieldsDefinition field of hydra.graphql.syntax.InterfaceTypeDefinition_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinition_Sequence2InterfaceTypeDefinition_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeDefinition_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeDefinition_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeDefinition_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -25657,6 +27098,29 @@
                     "literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.InterfaceTypeDefinition_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeExtensionInterfaceTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeExtensionSequence",
         "signature": {
           "typeParameters": [],
@@ -25829,6 +27293,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence3 variant of hydra.graphql.syntax.InterfaceTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_SequenceInterfaceTypeExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_Sequence",
@@ -26935,6 +28422,31 @@
                     "literal": {"string": "DSL updater for the FieldsDefinition field of hydra.graphql.syntax.InterfaceTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_Sequence2InterfaceTypeExtension_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -27683,6 +29195,31 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.InterfaceTypeExtension_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_Sequence3InterfaceTypeExtension_Sequence3",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence3"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InterfaceTypeExtension_Sequence3"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InterfaceTypeExtension_Sequence3"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.interfaceTypeExtension_Sequence3",
         "signature": {
           "typeParameters": [],
@@ -28123,6 +29660,28 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "DSL updater for the ImplementsInterfaces field of hydra.graphql.syntax.InterfaceTypeExtension_Sequence3"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.unionTypeDefinitionUnionTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.UnionTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionTypeDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.unionTypeDefinition",
@@ -29196,6 +30755,26 @@
                   "value": {"literal": {"string": "DSL updater for the UnionMemberTypes field of hydra.graphql.syntax.UnionTypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.unionMemberTypesUnionMemberTypes",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionMemberTypes"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionMemberTypes"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.unionMemberTypesSequence",
         "signature": {
           "typeParameters": [],
@@ -29304,6 +30883,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.UnionMemberTypes"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.unionMemberTypes_SequenceUnionMemberTypes_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.UnionMemberTypes_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionMemberTypes_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionMemberTypes_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.unionMemberTypes_Sequence",
@@ -29716,6 +31318,29 @@
                   "value": {"literal": {"string": "DSL updater for the NamedType field of hydra.graphql.syntax.UnionMemberTypes_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.unionMemberTypes_Sequence2UnionMemberTypes_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.UnionMemberTypes_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionMemberTypes_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionMemberTypes_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.unionMemberTypes_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -30116,6 +31741,26 @@
                   "value": {"literal": {"string": "DSL updater for the NamedType field of hydra.graphql.syntax.UnionMemberTypes_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.unionTypeExtensionUnionTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.UnionTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionTypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.unionTypeExtensionSequence",
         "signature": {
           "typeParameters": [],
@@ -30224,6 +31869,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.UnionTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.unionTypeExtension_SequenceUnionTypeExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.UnionTypeExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionTypeExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.unionTypeExtension_Sequence",
@@ -30939,6 +32607,29 @@
                     "literal": {"string": "DSL updater for the UnionMemberTypes field of hydra.graphql.syntax.UnionTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.unionTypeExtension_Sequence2UnionTypeExtension_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.UnionTypeExtension_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.UnionTypeExtension_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.UnionTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.unionTypeExtension_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -31343,6 +33034,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.UnionTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.enumTypeDefinitionEnumTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.EnumTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumTypeDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.enumTypeDefinition",
@@ -32384,6 +34095,28 @@
                   "value": {"literal": {"string": "DSL updater for the EnumValuesDefinition field of hydra.graphql.syntax.EnumTypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.enumValuesDefinitionEnumValuesDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumValuesDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumValuesDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.enumValuesDefinition",
         "signature": {
           "typeParameters": [],
@@ -32487,6 +34220,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.EnumValuesDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.enumValueDefinitionEnumValueDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumValueDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumValueDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.enumValueDefinition",
@@ -33191,6 +34946,26 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.EnumValueDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.enumTypeExtensionEnumTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.EnumTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumTypeExtension"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.enumTypeExtensionSequence",
         "signature": {
           "typeParameters": [],
@@ -33299,6 +35074,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.EnumTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.enumTypeExtension_SequenceEnumTypeExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.EnumTypeExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumTypeExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.enumTypeExtension_Sequence",
@@ -34032,6 +35830,29 @@
                     "literal": {"string": "DSL updater for the EnumValuesDefinition field of hydra.graphql.syntax.EnumTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.enumTypeExtension_Sequence2EnumTypeExtension_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.EnumTypeExtension_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.EnumTypeExtension_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.EnumTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.enumTypeExtension_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -34438,6 +36259,29 @@
                   "value": {"literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.EnumTypeExtension_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinitionInputObjectTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinitionSequence",
         "signature": {
           "typeParameters": [],
@@ -34552,6 +36396,31 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.InputObjectTypeDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinition_SequenceInputObjectTypeDefinition_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeDefinition_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinition_Sequence",
@@ -35705,6 +37574,31 @@
                     "literal": {"string": "DSL updater for the InputFieldsDefinition field of hydra.graphql.syntax.InputObjectTypeDefinition_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinition_Sequence2InputObjectTypeDefinition_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeDefinition_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeDefinition_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeDefinition_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -36450,6 +38344,28 @@
                     "literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.InputObjectTypeDefinition_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.inputFieldsDefinitionInputFieldsDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InputFieldsDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputFieldsDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.inputFieldsDefinition",
         "signature": {
           "typeParameters": [],
@@ -36553,6 +38469,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.graphql.syntax.InputFieldsDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtensionInputObjectTypeExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeExtension"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeExtension"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtensionSequence",
@@ -36669,6 +38608,31 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.InputObjectTypeExtension"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtension_SequenceInputObjectTypeExtension_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeExtension_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtension_Sequence",
@@ -37430,6 +39394,31 @@
                     "literal": {"string": "DSL updater for the InputFieldsDefinition field of hydra.graphql.syntax.InputObjectTypeExtension_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtension_Sequence2InputObjectTypeExtension_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.graphql.syntax.InputObjectTypeExtension_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.InputObjectTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.inputObjectTypeExtension_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -37850,6 +39839,28 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "DSL updater for the Directives field of hydra.graphql.syntax.InputObjectTypeExtension_Sequence2"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveDefinitionDirectiveDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.DirectiveDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DirectiveDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DirectiveDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.directiveDefinition",
@@ -39362,6 +41373,26 @@
                   "value": {"literal": {"string": "DSL updater for the DirectiveLocations field of hydra.graphql.syntax.DirectiveDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveLocationsDirectiveLocations",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.DirectiveLocations"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DirectiveLocations"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DirectiveLocations"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.directiveLocationsSequence",
         "signature": {
           "typeParameters": [],
@@ -39470,6 +41501,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the sequence2 variant of hydra.graphql.syntax.DirectiveLocations"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveLocations_SequenceDirectiveLocations_Sequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.DirectiveLocations_Sequence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DirectiveLocations_Sequence"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DirectiveLocations_Sequence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.directiveLocations_Sequence",
@@ -39902,6 +41956,29 @@
                     "literal": {"string": "DSL updater for the DirectiveLocation field of hydra.graphql.syntax.DirectiveLocations_Sequence"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveLocations_Sequence2DirectiveLocations_Sequence2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.DirectiveLocations_Sequence2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DirectiveLocations_Sequence2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DirectiveLocations_Sequence2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.directiveLocations_Sequence2",
         "signature": {
           "typeParameters": [],
@@ -40314,6 +42391,26 @@
                     "literal": {"string": "DSL updater for the DirectiveLocation field of hydra.graphql.syntax.DirectiveLocations_Sequence2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.graphql.syntax.directiveLocationDirectiveLocation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.DirectiveLocation"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.DirectiveLocation"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.graphql.syntax.directiveLocationExecutable",
         "signature": {
           "typeParameters": [],
@@ -40422,6 +42519,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the typeSystem variant of hydra.graphql.syntax.DirectiveLocation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.executableDirectiveLocationExecutableDirectiveLocation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.ExecutableDirectiveLocation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.ExecutableDirectiveLocation"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.ExecutableDirectiveLocation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.executableDirectiveLocationQUERY",
@@ -40767,6 +42887,29 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "DSL injection for the VARIABLE_DEFINITION variant of hydra.graphql.syntax.ExecutableDirectiveLocation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.graphql.syntax.typeSystemDirectiveLocationTypeSystemDirectiveLocation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.graphql.syntax.TypeSystemDirectiveLocation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.graphql.syntax.TypeSystemDirectiveLocation"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.graphql.syntax.TypeSystemDirectiveLocation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.graphql.syntax.typeSystemDirectiveLocationSCHEMA",

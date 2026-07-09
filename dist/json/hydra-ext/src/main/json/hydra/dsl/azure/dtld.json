@@ -1,8 +1,31 @@
 {
   "name": "hydra.dsl.azure.dtld",
   "metadata": {"description": "DSL functions for hydra.azure.dtld", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.azure.dtld"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.azure.dtld"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.azure.dtld"},
+    {"module": "hydra.decode.azure.dtld"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.commandCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Command"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Command"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Command"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.command",
@@ -4178,6 +4201,26 @@
                   "value": {"literal": {"string": "DSL updater for the response field of hydra.azure.dtld.Command"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.commandPayloadCommandPayload",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.CommandPayload"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.CommandPayload"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.CommandPayload"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.commandPayload",
         "signature": {
           "typeParameters": [],
@@ -6400,6 +6443,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.CommandPayload"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.commandTypeCommandType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.CommandType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.CommandType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.CommandType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.commandTypeSynchronous",
         "signature": {
           "typeParameters": [],
@@ -6476,6 +6539,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the asynchronous variant of hydra.azure.dtld.CommandType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.componentComponent",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Component"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Component"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Component"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.component",
@@ -9268,6 +9349,22 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Component"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.dtmiDtmi",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Dtmi"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Dtmi"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Dtmi"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.dtmi",
         "signature": {
           "typeParameters": [],
@@ -9352,6 +9449,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.azure.dtld.Dtmi"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.enumValueEnumValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.EnumValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.EnumValue"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.EnumValue"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.enumValue",
@@ -9714,7 +9829,7 @@
                   "value": {"literal": {"string": "DSL accessor for the name field of hydra.azure.dtld.EnumValue"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.azure.dtld.enumValueEnumValue",
+        "name": "hydra.dsl.azure.dtld.enumValueEnumValue2",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -11602,6 +11717,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.EnumValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.fieldField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Field"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Field"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.field",
@@ -13792,6 +13923,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Field"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.integerOrStringIntegerOrString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.IntegerOrString"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.IntegerOrString"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.IntegerOrString"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.integerOrStringInteger",
         "signature": {
           "typeParameters": [],
@@ -13888,6 +14039,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.azure.dtld.IntegerOrString"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.interfaceInterface",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Interface"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Interface"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Interface"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.interface",
@@ -18114,6 +18283,26 @@
                   "value": {"literal": {"string": "DSL updater for the schemas field of hydra.azure.dtld.Interface"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.interface_ContentsInterface_Contents",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Interface_Contents"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Interface_Contents"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Interface_Contents"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.interface_ContentsCommand",
         "signature": {
           "typeParameters": [],
@@ -18369,6 +18558,22 @@
                   "value": {"literal": {"string": "DSL injection for the telemetry variant of hydra.azure.dtld.Interface_Contents"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.iriIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Iri"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Iri"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Iri"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.iri",
         "signature": {
           "typeParameters": [],
@@ -18453,6 +18658,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.azure.dtld.Iri"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.mapKeyMapKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.MapKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.MapKey"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.MapKey"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.mapKey",
@@ -20674,6 +20896,23 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.MapKey"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.mapValueMapValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.MapValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.MapValue"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.MapValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.mapValue",
         "signature": {
           "typeParameters": [],
@@ -22892,6 +23131,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.MapValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.propertyProperty",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Property"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Property"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Property"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.property",
@@ -27101,6 +27357,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the writable field of hydra.azure.dtld.Property"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.relationshipRelationship",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Relationship"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Relationship"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Relationship"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.relationship",
@@ -33099,6 +33375,23 @@
                   "value": {"literal": {"string": "DSL updater for the writable field of hydra.azure.dtld.Relationship"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schemaSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schemaPrimitive",
         "signature": {
           "typeParameters": [],
@@ -33199,6 +33492,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the complex variant of hydra.azure.dtld.Schema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.schema_ArraySchema_Array",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Array"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Array"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Array"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.schema_Array",
@@ -35395,6 +35708,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Schema_Array"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schema_ComplexSchema_Complex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Complex"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Complex"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Complex"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schema_ComplexArray",
         "signature": {
           "typeParameters": [],
@@ -35597,6 +35930,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the object variant of hydra.azure.dtld.Schema_Complex"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.schema_EnumSchema_Enum",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Enum"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Enum"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Enum"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.schema_Enum",
@@ -38376,6 +38729,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Schema_Enum"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schema_InterfaceSchema_Interface",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Interface"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Interface"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Interface"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schema_Interface",
         "signature": {
           "typeParameters": [],
@@ -40056,6 +40429,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Schema_Interface"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schema_Interface_TypeSchema_Interface_Type",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Interface_Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Interface_Type"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Interface_Type"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schema_Interface_TypeArray",
         "signature": {
           "typeParameters": [],
@@ -40258,6 +40651,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the object variant of hydra.azure.dtld.Schema_Interface_Type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.schema_MapSchema_Map",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Map"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Map"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Map"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.schema_Map",
@@ -43022,6 +43433,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Schema_Map"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schema_ObjectSchema_Object",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Object"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Object"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Object"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schema_Object",
         "signature": {
           "typeParameters": [],
@@ -45229,6 +45660,26 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.azure.dtld.Schema_Object"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.azure.dtld.schema_PrimitiveSchema_Primitive",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Schema_Primitive"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Schema_Primitive"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Schema_Primitive"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.azure.dtld.schema_PrimitiveBoolean",
         "signature": {
           "typeParameters": [],
@@ -45617,6 +46068,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the time variant of hydra.azure.dtld.Schema_Primitive"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.telemetryTelemetry",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Telemetry"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Telemetry"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Telemetry"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.telemetry",
@@ -49090,6 +49559,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the unit field of hydra.azure.dtld.Telemetry"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.azure.dtld.unitUnit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.azure.dtld.Unit"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.azure.dtld.Unit"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.azure.dtld.Unit"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.azure.dtld.unit",

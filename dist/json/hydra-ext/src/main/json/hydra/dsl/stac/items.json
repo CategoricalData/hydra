@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.stac.items"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.stac.items"},
+    {"module": "hydra.decode.stac.items"},
     {"module": "hydra.geojson.model"},
     {"module": "hydra.iana.linkrelations"},
     {"module": "hydra.core"},
@@ -11,6 +13,22 @@
     {"module": "hydra.dsl.iana.linkrelations"},
     {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.stac.items.assetAsset",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Asset"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Asset"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Asset"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.stac.items.asset",
@@ -1612,6 +1630,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the roles field of hydra.stac.items.Asset"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.stac.items.itemItem",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Item"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Item"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Item"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.stac.items.item",
@@ -3684,6 +3718,22 @@
                   "value": {"literal": {"string": "DSL updater for the collection field of hydra.stac.items.Item"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.stac.items.linkLink",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Link"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Link"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Link"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.stac.items.link",
         "signature": {
           "typeParameters": [],
@@ -4826,6 +4876,24 @@
                   "value": {"literal": {"string": "DSL updater for the title field of hydra.stac.items.Link"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.stac.items.mediaTypeMediaType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.MediaType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.MediaType"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.MediaType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.stac.items.mediaType",
         "signature": {
           "typeParameters": [],
@@ -4913,6 +4981,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.stac.items.MediaType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.stac.items.relationTypeRelationType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.RelationType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.RelationType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.stac.items.RelationType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.stac.items.relationTypeIana",
@@ -5068,6 +5156,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the other variant of hydra.stac.items.RelationType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.stac.items.roleRole",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Role"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Role"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Role"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.stac.items.roleThumbnail",
@@ -5270,6 +5374,26 @@
                   "value": {"literal": {"string": "DSL injection for the other variant of hydra.stac.items.Role"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.stac.items.stacRelationTypeStacRelationType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.StacRelationType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.StacRelationType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.stac.items.StacRelationType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.stac.items.stacRelationTypeSelf",
         "signature": {
           "typeParameters": [],
@@ -5465,6 +5589,26 @@
                   "value": {"literal": {"string": "DSL injection for the derivedFrom variant of hydra.stac.items.StacRelationType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.stac.items.stacVersionStacVersion",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.StacVersion"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.StacVersion"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.stac.items.StacVersion"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.stac.items.stacVersion",
         "signature": {
           "typeParameters": [],
@@ -5554,6 +5698,22 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.stac.items.StacVersion"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.stac.items.uriUri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Uri"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Uri"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Uri"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.stac.items.uri",
         "signature": {
           "typeParameters": [],
@@ -5638,6 +5798,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.stac.items.Uri"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.stac.items.urlUrl",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.stac.items.Url"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.stac.items.Url"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.stac.items.Url"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.stac.items.url",

@@ -1,8 +1,32 @@
 {
   "name": "hydra.dsl.datalog.syntax",
   "metadata": {"description": "DSL functions for hydra.datalog.syntax", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.datalog.syntax"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.datalog.syntax"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.datalog.syntax"},
+    {"module": "hydra.decode.datalog.syntax"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.constantConstant",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Constant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Constant"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Constant"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.constant",
@@ -94,6 +118,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.datalog.syntax.Constant"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.relationRelation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Relation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Relation"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Relation"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.relation",
         "signature": {
           "typeParameters": [],
@@ -183,6 +227,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.datalog.syntax.Relation"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.variableVariable",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Variable"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Variable"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Variable"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.variable",
         "signature": {
           "typeParameters": [],
@@ -270,6 +334,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.datalog.syntax.Variable"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.programProgram",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Program"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Program"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Program"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.program",
@@ -369,6 +453,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.datalog.syntax.Program"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.program_ElmtProgram_Elmt",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Program_Elmt"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Program_Elmt"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.program_ElmtFact",
@@ -471,6 +575,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the Rule variant of hydra.datalog.syntax.Program_Elmt"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.factFact",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Fact"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Fact"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Fact"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.fact",
@@ -852,6 +973,23 @@
                   "value": {"literal": {"string": "DSL updater for the ConstantList field of hydra.datalog.syntax.Fact"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.ruleRule",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Rule"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Rule"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Rule"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.rule",
         "signature": {
           "typeParameters": [],
@@ -1225,6 +1363,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the AtomList field of hydra.datalog.syntax.Rule"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.atomAtom",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Atom"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Atom"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Atom"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.atom",
@@ -1602,6 +1757,26 @@
                   "value": {"literal": {"string": "DSL updater for the TermList field of hydra.datalog.syntax.Atom"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.atomListAtomList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.AtomList"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.AtomList"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.atomListSingle",
         "signature": {
           "typeParameters": [],
@@ -1702,6 +1877,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.AtomList"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.atomList_MultipleAtomList_Multiple",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.atomList_Multiple",
@@ -2081,6 +2276,23 @@
                   "value": {"literal": {"string": "DSL updater for the AtomList field of hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.termTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Term"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Term"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Term"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.termConstant",
         "signature": {
           "typeParameters": [],
@@ -2183,6 +2395,26 @@
                   "value": {"literal": {"string": "DSL injection for the Variable variant of hydra.datalog.syntax.Term"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.termListTermList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.TermList"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.TermList"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.termListSingle",
         "signature": {
           "typeParameters": [],
@@ -2283,6 +2515,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.TermList"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.termList_MultipleTermList_Multiple",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.termList_Multiple",
@@ -2662,6 +2914,26 @@
                   "value": {"literal": {"string": "DSL updater for the TermList field of hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.datalog.syntax.constantListConstantList",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.ConstantList"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.ConstantList"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.datalog.syntax.constantListSingle",
         "signature": {
           "typeParameters": [],
@@ -2766,6 +3038,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.ConstantList"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.datalog.syntax.constantList_MultipleConstantList_Multiple",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.constantList_Multiple",

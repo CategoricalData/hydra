@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.json.bootstrap"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.json.bootstrap"},
+    {"module": "hydra.decode.json.bootstrap"},
     {"module": "hydra.coders"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},

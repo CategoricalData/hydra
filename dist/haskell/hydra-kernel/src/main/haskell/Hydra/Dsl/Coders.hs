@@ -6,12 +6,14 @@ module Hydra.Dsl.Coders where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Coders as DecodeCoders
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Errors as DslErrors
 import qualified Hydra.Dsl.File as DslFile
 import qualified Hydra.Dsl.Graph as DslGraph
 import qualified Hydra.Dsl.Util as DslUtil
 import qualified Hydra.Dsl.Variants as DslVariants
+import qualified Hydra.Encode.Coders as EncodeCoders
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
@@ -42,6 +44,10 @@ adapter isLossy source target coder =
           Core.fieldName = (Core.Name "coder"),
           Core.fieldTerm = (Typed.unTypedTerm coder)}]}))
 
+-- | DSL name token for hydra.coders.Adapter
+adapterAdapter :: Typed.TypedName (Coders.Adapter t1 t2 v1 v2 e)
+adapterAdapter = Typed.TypedName (Core.Name "hydra.coders.Adapter")
+
 -- | DSL accessor for the coder field of hydra.coders.Adapter
 adapterCoder :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm (Coders.Coder v1 v2 e)
 adapterCoder x =
@@ -66,6 +72,10 @@ adapterContext graph language adapters =
         Core.Field {
           Core.fieldName = (Core.Name "adapters"),
           Core.fieldTerm = (Typed.unTypedTerm adapters)}]}))
+
+-- | DSL name token for hydra.coders.AdapterContext
+adapterContextAdapterContext :: Typed.TypedName Coders.AdapterContext
+adapterContextAdapterContext = Typed.TypedName (Core.Name "hydra.coders.AdapterContext")
 
 -- | DSL accessor for the adapters field of hydra.coders.AdapterContext
 adapterContextAdapters :: Typed.TypedTerm Coders.AdapterContext -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error))
@@ -330,6 +340,10 @@ bicoder encode decode =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Typed.unTypedTerm decode)}]}))
 
+-- | DSL name token for hydra.coders.Bicoder
+bicoderBicoder :: Typed.TypedName (Coders.Bicoder t1 t2 v1 v2 e)
+bicoderBicoder = Typed.TypedName (Core.Name "hydra.coders.Bicoder")
+
 -- | DSL accessor for the decode field of hydra.coders.Bicoder
 bicoderDecode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1 e)
 bicoderDecode x =
@@ -418,6 +432,10 @@ caseConventions constant directory enumValue field file module_ term termVariabl
         Core.Field {
           Core.fieldName = (Core.Name "typeVariable"),
           Core.fieldTerm = (Typed.unTypedTerm typeVariable)}]}))
+
+-- | DSL name token for hydra.coders.CaseConventions
+caseConventionsCaseConventions :: Typed.TypedName Coders.CaseConventions
+caseConventionsCaseConventions = Typed.TypedName (Core.Name "hydra.coders.CaseConventions")
 
 -- | DSL accessor for the constant field of hydra.coders.CaseConventions
 caseConventionsConstant :: Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.CaseConvention
@@ -1252,6 +1270,10 @@ coder encode decode =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Typed.unTypedTerm decode)}]}))
 
+-- | DSL name token for hydra.coders.Coder
+coderCoder :: Typed.TypedName (Coders.Coder v1 v2 e)
+coderCoder = Typed.TypedName (Core.Name "hydra.coders.Coder")
+
 -- | DSL accessor for the decode field of hydra.coders.Coder
 coderDecode :: Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (v2 -> Either e v1)
 coderDecode x =
@@ -1260,6 +1282,10 @@ coderDecode x =
         Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
         Core.projectionFieldName = (Core.Name "decode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.coders.CoderDirection
+coderDirectionCoderDirection :: Typed.TypedName Coders.CoderDirection
+coderDirectionCoderDirection = Typed.TypedName (Core.Name "hydra.coders.CoderDirection")
 
 -- | DSL injection for the decode variant of hydra.coders.CoderDirection
 coderDirectionDecode :: Typed.TypedTerm Coders.CoderDirection
@@ -1321,6 +1347,88 @@ coderWithEncode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
               Core.projectionFieldName = (Core.Name "decode")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL composition builder for the decoder of hydra.coders.Adapter
+decodeAdapter :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t2) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v1) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v2) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Coders.Adapter t1 t2 v1 v2 e))
+decodeAdapter t1 t2 v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.coders.adapter")),
+              Core.applicationArgument = (Typed.unTypedTerm t1)})),
+            Core.applicationArgument = (Typed.unTypedTerm t2)})),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the decoder of hydra.coders.Bicoder
+decodeBicoder :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t2) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v1) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v2) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Coders.Bicoder t1 t2 v1 v2 e))
+decodeBicoder t1 t2 v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.coders.bicoder")),
+              Core.applicationArgument = (Typed.unTypedTerm t1)})),
+            Core.applicationArgument = (Typed.unTypedTerm t2)})),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the decoder of hydra.coders.Coder
+decodeCoder :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v1) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v2) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Coders.Coder v1 v2 e))
+decodeCoder v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.coders.coder")),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the encoder of hydra.coders.Adapter
+encodeAdapter :: Typed.TypedTerm (t1 -> Core.Term) -> Typed.TypedTerm (t2 -> Core.Term) -> Typed.TypedTerm (v1 -> Core.Term) -> Typed.TypedTerm (v2 -> Core.Term) -> Typed.TypedTerm (e -> Core.Term) -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e -> Core.Term)
+encodeAdapter t1 t2 v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.coders.adapter")),
+              Core.applicationArgument = (Typed.unTypedTerm t1)})),
+            Core.applicationArgument = (Typed.unTypedTerm t2)})),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the encoder of hydra.coders.Bicoder
+encodeBicoder :: Typed.TypedTerm (t1 -> Core.Term) -> Typed.TypedTerm (t2 -> Core.Term) -> Typed.TypedTerm (v1 -> Core.Term) -> Typed.TypedTerm (v2 -> Core.Term) -> Typed.TypedTerm (e -> Core.Term) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e -> Core.Term)
+encodeBicoder t1 t2 v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.coders.bicoder")),
+              Core.applicationArgument = (Typed.unTypedTerm t1)})),
+            Core.applicationArgument = (Typed.unTypedTerm t2)})),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the encoder of hydra.coders.Coder
+encodeCoder :: Typed.TypedTerm (v1 -> Core.Term) -> Typed.TypedTerm (v2 -> Core.Term) -> Typed.TypedTerm (e -> Core.Term) -> Typed.TypedTerm (Coders.Coder v1 v2 e -> Core.Term)
+encodeCoder v1 v2 e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.coders.coder")),
+          Core.applicationArgument = (Typed.unTypedTerm v1)})),
+        Core.applicationArgument = (Typed.unTypedTerm v2)})),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
 
 -- | DSL constructor for hydra.coders.Language
 language :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm (S.Set Coders.LanguageFeature) -> Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm File.FileExtension -> Typed.TypedTerm Coders.Language
@@ -1404,6 +1512,10 @@ languageConstraintsIntegerTypes x =
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
         Core.projectionFieldName = (Core.Name "integerTypes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.coders.LanguageConstraints
+languageConstraintsLanguageConstraints :: Typed.TypedName Coders.LanguageConstraints
+languageConstraintsLanguageConstraints = Typed.TypedName (Core.Name "hydra.coders.LanguageConstraints")
 
 -- | DSL accessor for the literalVariants field of hydra.coders.LanguageConstraints
 languageConstraintsLiteralVariants :: Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm (S.Set Variants.LiteralVariant)
@@ -1720,6 +1832,10 @@ languageDefaultFileExtension x =
         Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.coders.LanguageFeature
+languageFeatureLanguageFeature :: Typed.TypedName Coders.LanguageFeature
+languageFeatureLanguageFeature = Typed.TypedName (Core.Name "hydra.coders.LanguageFeature")
+
 -- | DSL injection for the nestedCaseStatements variant of hydra.coders.LanguageFeature
 languageFeatureNestedCaseStatements :: Typed.TypedTerm Coders.LanguageFeature
 languageFeatureNestedCaseStatements =
@@ -1747,6 +1863,10 @@ languageFeaturePartialApplication =
         Core.fieldName = (Core.Name "partialApplication"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.coders.Language
+languageLanguage :: Typed.TypedName Coders.Language
+languageLanguage = Typed.TypedName (Core.Name "hydra.coders.Language")
+
 -- | DSL accessor for the name field of hydra.coders.Language
 languageName :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Coders.LanguageName
 languageName x =
@@ -1762,6 +1882,10 @@ languageName2 x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.coders.LanguageName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.coders.LanguageName
+languageNameLanguageName :: Typed.TypedName Coders.LanguageName
+languageNameLanguageName = Typed.TypedName (Core.Name "hydra.coders.LanguageName")
 
 -- | DSL accessor for the supportedFeatures field of hydra.coders.Language
 languageSupportedFeatures :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm (S.Set Coders.LanguageFeature)
@@ -1979,6 +2103,10 @@ traversalOrderPre =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pre"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.coders.TraversalOrder
+traversalOrderTraversalOrder :: Typed.TypedName Coders.TraversalOrder
+traversalOrderTraversalOrder = Typed.TypedName (Core.Name "hydra.coders.TraversalOrder")
 
 -- | DSL accessor for the body of hydra.coders.LanguageName
 unLanguageName :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm String

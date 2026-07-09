@@ -1,8 +1,31 @@
 {
   "name": "hydra.dsl.paths",
   "metadata": {"description": "DSL functions for hydra.paths", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.paths"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.paths"},
+    {"module": "hydra.decode.paths"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.paths.subtermEdgeSubtermEdge",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtermEdge"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermEdge"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtermEdge"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.paths.subtermEdge",
@@ -732,6 +755,23 @@
                   "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtermEdge"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.paths.subtermGraphSubtermGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtermGraph"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermGraph"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtermGraph"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.paths.subtermGraph",
         "signature": {
           "typeParameters": [],
@@ -1154,6 +1194,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtermGraph"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.paths.subtermNodeSubtermNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtermNode"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermNode"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtermNode"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.paths.subtermNode",
@@ -1878,6 +1935,23 @@
                   "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtermNode"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.paths.subtermPathSubtermPath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtermPath"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermPath"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtermPath"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.paths.subtermPath",
         "signature": {
           "typeParameters": [],
@@ -1969,6 +2043,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtermPath"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.paths.subtermStepSubtermStep",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtermStep"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermStep"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtermStep"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.paths.subtermStepAnnotatedBody",
@@ -2963,6 +3054,23 @@
                   "value": {"literal": {"string": "DSL injection for the wrappedTerm variant of hydra.paths.SubtermStep"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.paths.subtypeEdgeSubtypeEdge",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtypeEdge"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtypeEdge"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtypeEdge"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.paths.subtypeEdge",
         "signature": {
           "typeParameters": [],
@@ -3690,6 +3798,23 @@
                   "value": {"literal": {"string": "DSL updater for the target field of hydra.paths.SubtypeEdge"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.paths.subtypeGraphSubtypeGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtypeGraph"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtypeGraph"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtypeGraph"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.paths.subtypeGraph",
         "signature": {
           "typeParameters": [],
@@ -4112,6 +4237,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the edges field of hydra.paths.SubtypeGraph"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.paths.subtypeNodeSubtypeNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtypeNode"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtypeNode"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtypeNode"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.paths.subtypeNode",
@@ -4836,6 +4978,23 @@
                   "value": {"literal": {"string": "DSL updater for the id field of hydra.paths.SubtypeNode"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.paths.subtypePathSubtypePath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtypePath"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtypePath"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtypePath"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.paths.subtypePath",
         "signature": {
           "typeParameters": [],
@@ -4927,6 +5086,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtypePath"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.paths.subtypeStepSubtypeStep",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.paths.SubtypeStep"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtypeStep"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.paths.SubtypeStep"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.paths.subtypeStepAnnotatedBody",

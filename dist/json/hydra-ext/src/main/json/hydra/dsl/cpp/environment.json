@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.cpp.environment"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.cpp.environment"},
+    {"module": "hydra.decode.cpp.environment"},
     {"module": "hydra.core"},
     {"module": "hydra.packaging"},
     {"module": "hydra.util"},
@@ -11,6 +13,26 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.util"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.cpp.environment.cppEnvironmentCppEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.cpp.environment.CppEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.cpp.environment.CppEnvironment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.cpp.environment.CppEnvironment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.cpp.environment.cppEnvironment",

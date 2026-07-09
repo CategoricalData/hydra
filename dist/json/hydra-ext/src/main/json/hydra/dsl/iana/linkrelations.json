@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.iana.linkrelations",
   "metadata": {"description": "DSL functions for hydra.iana.linkrelations", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.iana.linkrelations"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.iana.linkrelations"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.iana.linkrelations"},
+    {"module": "hydra.decode.iana.linkrelations"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.iana.linkrelations.linkRelationTypeLinkRelationType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.iana.linkrelations.LinkRelationType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.iana.linkrelations.LinkRelationType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.iana.linkrelations.LinkRelationType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.iana.linkrelations.linkRelationTypeAbout",

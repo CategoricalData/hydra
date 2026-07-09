@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.lib.math"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.lib.math"},
+    {"module": "hydra.decode.lib.math"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

@@ -27,6 +27,7 @@
     {"module": "hydra.arity"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.encode.core"},
+    {"module": "hydra.refs"},
     {"module": "hydra.serialization"},
     {"module": "hydra.java.environment"},
     {"module": "hydra.java.syntax"},

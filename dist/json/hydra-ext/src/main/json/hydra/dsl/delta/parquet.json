@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.delta.parquet",
   "metadata": {"description": "DSL functions for hydra.delta.parquet", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.delta.parquet"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.delta.parquet"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.delta.parquet"},
+    {"module": "hydra.decode.delta.parquet"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.delta.parquet.arrayTypeArrayType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.ArrayType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.ArrayType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.ArrayType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.delta.parquet.arrayType",
@@ -378,6 +404,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the containsNull field of hydra.delta.parquet.ArrayType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.delta.parquet.basePrimitiveTypeBasePrimitiveType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.BasePrimitiveType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.BasePrimitiveType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.BasePrimitiveType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.delta.parquet.basePrimitiveTypeBinary",
@@ -809,6 +855,26 @@
                   "value": {"literal": {"string": "DSL injection for the timestamp variant of hydra.delta.parquet.BasePrimitiveType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.delta.parquet.dataTypeDataType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.DataType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.DataType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.DataType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.delta.parquet.dataTypeArray",
         "signature": {
           "typeParameters": [],
@@ -1122,6 +1188,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the struct variant of hydra.delta.parquet.DataType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.delta.parquet.decimalTypeDecimalType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.DecimalType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.DecimalType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.DecimalType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.delta.parquet.decimalType",
@@ -1489,6 +1575,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the scale field of hydra.delta.parquet.DecimalType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.delta.parquet.mapTypeMapType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.MapType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.MapType"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.MapType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.delta.parquet.mapType",
@@ -2149,6 +2253,26 @@
                   "value": {"literal": {"string": "DSL updater for the valueContainsNull field of hydra.delta.parquet.MapType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.delta.parquet.structFieldStructField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.StructField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.StructField"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.StructField"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.delta.parquet.structField",
         "signature": {
           "typeParameters": [],
@@ -2785,6 +2909,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the nullable field of hydra.delta.parquet.StructField"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.delta.parquet.structTypeStructType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.delta.parquet.StructType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.delta.parquet.StructType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.delta.parquet.StructType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.delta.parquet.structType",

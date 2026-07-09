@@ -4,11 +4,31 @@
   "dependencies": [
     {"module": "hydra.packaging"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.packaging"},
+    {"module": "hydra.decode.packaging"},
     {"module": "hydra.core"},
     {"module": "hydra.typing"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.typing"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.definitionDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.Definition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Definition"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.Definition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.definitionPrimitive",
@@ -192,6 +212,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.Definition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.definitionReferenceDefinitionReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.DefinitionReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DefinitionReference"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.definitionReferencePrimitive",
@@ -385,6 +425,26 @@
                   "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.dependencyScopeDependencyScope",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.DependencyScope"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.dependencyScopeApi",
         "signature": {
           "typeParameters": [],
@@ -539,6 +599,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the tool variant of hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.entityMetadataEntityMetadata",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.EntityMetadata"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.EntityMetadata"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.EntityMetadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.entityMetadata",
@@ -1722,6 +1802,26 @@
                   "value": {"literal": {"string": "DSL updater for the lifecycle field of hydra.packaging.EntityMetadata"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.entityReferenceEntityReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.EntityReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.EntityReference"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.EntityReference"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.entityReferenceDefinition",
         "signature": {
           "typeParameters": [],
@@ -2049,6 +2149,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the typeExpr variant of hydra.packaging.EntityReference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.lifecycleInfoLifecycleInfo",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.LifecycleInfo"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.LifecycleInfo"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.LifecycleInfo"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.lifecycleInfo",
@@ -2524,6 +2644,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the deprecatedSince field of hydra.packaging.LifecycleInfo"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.moduleModule",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.Module"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Module"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.Module"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.module",
@@ -3661,6 +3797,26 @@
                   "value": {"literal": {"string": "DSL updater for the definitions field of hydra.packaging.Module"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.moduleDependencyModuleDependency",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.ModuleDependency"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.ModuleDependency"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.ModuleDependency"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.moduleDependency",
         "signature": {
           "typeParameters": [],
@@ -4108,6 +4264,24 @@
                   "value": {"literal": {"string": "DSL updater for the package field of hydra.packaging.ModuleDependency"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.moduleNameModuleName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.ModuleName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.ModuleName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.ModuleName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.moduleName2",
         "signature": {
           "typeParameters": [],
@@ -4195,6 +4369,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.ModuleName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.packagePackage",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.Package"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Package"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.Package"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.package",
@@ -5318,6 +5509,26 @@
                   "value": {"literal": {"string": "DSL updater for the modules field of hydra.packaging.Package"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.packageDependencyPackageDependency",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.PackageDependency"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.packageDependency",
         "signature": {
           "typeParameters": [],
@@ -6093,6 +6304,24 @@
                   "value": {"literal": {"string": "DSL updater for the scope field of hydra.packaging.PackageDependency"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.packageNamePackageName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.PackageName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.PackageName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.packageName2",
         "signature": {
           "typeParameters": [],
@@ -6180,6 +6409,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.PackageName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.primitiveDefinitionPrimitiveDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.PrimitiveDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PrimitiveDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.PrimitiveDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.primitiveDefinition",
@@ -8355,6 +8604,26 @@
                   "value": {"literal": {"string": "DSL updater for the defaultImplementation field of hydra.packaging.PrimitiveDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.termDefinitionTermDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.TermDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.TermDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.TermDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.termDefinition",
         "signature": {
           "typeParameters": [],
@@ -9486,6 +9755,26 @@
                   "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TermDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.typeDefinitionTypeDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.TypeDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.TypeDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.TypeDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.typeDefinition",
         "signature": {
           "typeParameters": [],
@@ -10231,6 +10520,23 @@
                   "value": {"literal": {"string": "DSL updater for the body field of hydra.packaging.TypeDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.versionVersion",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.Version"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Version"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.packaging.Version"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.version",
         "signature": {
           "typeParameters": [],
@@ -10318,6 +10624,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.packaging.Version"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.versionRangeVersionRange",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.VersionRange"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionRange"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.VersionRange"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.versionRange",
@@ -10793,6 +11119,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the upperExclusive field of hydra.packaging.VersionRange"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.versionSpecifierVersionSpecifier",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.packaging.VersionSpecifier"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionSpecifier"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.packaging.VersionSpecifier"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.versionSpecifierAny",

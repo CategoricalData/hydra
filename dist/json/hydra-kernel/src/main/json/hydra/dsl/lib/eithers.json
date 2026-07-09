@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.lib.eithers"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.lib.eithers"},
+    {"module": "hydra.decode.lib.eithers"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

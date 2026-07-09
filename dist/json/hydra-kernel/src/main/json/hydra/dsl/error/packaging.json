@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.error.packaging"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.error.packaging"},
+    {"module": "hydra.decode.error.packaging"},
     {"module": "hydra.core"},
     {"module": "hydra.packaging"},
     {"module": "hydra.util"},
@@ -11,6 +13,29 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.util"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameErrorConflictingModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.ConflictingModuleNameError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.conflictingModuleNameError",
@@ -487,6 +512,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.conflictingVariantNameErrorConflictingVariantNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.ConflictingVariantNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.ConflictingVariantNameError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.conflictingVariantNameError",
@@ -1703,6 +1751,29 @@
                     "literal": {"string": "DSL updater for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameErrorDefinitionNotInModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.DefinitionNotInModuleNameError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.definitionNotInModuleNameError",
         "signature": {
           "typeParameters": [],
@@ -2177,6 +2248,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorDefinitionsOutOfOrderError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.DefinitionsOutOfOrderError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.definitionsOutOfOrderError",
@@ -3011,6 +3105,29 @@
                   "value": {"literal": {"string": "DSL updater for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.duplicateDefinitionNameErrorDuplicateDefinitionNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.DuplicateDefinitionNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.DuplicateDefinitionNameError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.duplicateDefinitionNameError",
         "signature": {
           "typeParameters": [],
@@ -3487,6 +3604,29 @@
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DuplicateDefinitionNameError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.duplicateModuleNameErrorDuplicateModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.DuplicateModuleNameError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.duplicateModuleNameError",
         "signature": {
           "typeParameters": [],
@@ -3697,6 +3837,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorInvalidDefinitionNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.InvalidDefinitionNameError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.invalidDefinitionNameError",
@@ -4550,6 +4713,28 @@
                     "literal": {"string": "DSL updater for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorInvalidModuleError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.InvalidModuleError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.invalidModuleErrorConflictingVariantName",
         "signature": {
           "typeParameters": [],
@@ -5070,6 +5255,31 @@
                     "literal": {"string": "DSL injection for the missingDocumentation variant of hydra.error.packaging.InvalidModuleError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.invalidModuleNameConventionErrorInvalidModuleNameConventionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleNameConventionError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.InvalidModuleNameConventionError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.invalidModuleNameConventionError",
         "signature": {
           "typeParameters": [],
@@ -5293,6 +5503,28 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageErrorInvalidPackageError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.InvalidPackageError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.invalidPackageErrorConflictingModuleName",
@@ -5581,6 +5813,29 @@
                   "value": {"literal": {"string": "DSL injection for the invalidPackageName variant of hydra.error.packaging.InvalidPackageError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.packaging.invalidPackageNameErrorInvalidPackageNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.InvalidPackageNameError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageNameError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.InvalidPackageNameError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.packaging.invalidPackageNameError",
         "signature": {
           "typeParameters": [],
@@ -5801,6 +6056,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the packageName field of hydra.error.packaging.InvalidPackageNameError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorMissingDocumentationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.packaging.MissingDocumentationError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.packaging.MissingDocumentationError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.packaging.missingDocumentationError",

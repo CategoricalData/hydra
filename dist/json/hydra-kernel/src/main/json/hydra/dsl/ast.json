@@ -1,8 +1,31 @@
 {
   "name": "hydra.dsl.ast",
   "metadata": {"description": "DSL functions for hydra.ast", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.ast"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.ast"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.ast"},
+    {"module": "hydra.decode.ast"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.ast.associativityAssociativity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Associativity"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Associativity"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Associativity"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.associativityNone",
@@ -159,6 +182,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the both variant of hydra.ast.Associativity"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.ast.blockStyleBlockStyle",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.BlockStyle"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.BlockStyle"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.BlockStyle"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.blockStyle",
@@ -910,6 +949,22 @@
                   "value": {"literal": {"string": "DSL updater for the newlineAfterContent field of hydra.ast.BlockStyle"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.bracketExprBracketExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.BracketExpr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.BracketExpr"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.BracketExpr"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.bracketExpr",
         "signature": {
           "typeParameters": [],
@@ -1626,6 +1681,22 @@
                   "value": {"literal": {"string": "DSL updater for the style field of hydra.ast.BracketExpr"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.bracketsBrackets",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Brackets"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Brackets"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Brackets"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.brackets",
         "signature": {
           "typeParameters": [],
@@ -2039,6 +2110,21 @@
                   "value": {"literal": {"string": "DSL updater for the close field of hydra.ast.Brackets"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.exprExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Expr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Expr"}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Expr"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.exprConst",
         "signature": {
           "typeParameters": [],
@@ -2351,6 +2437,22 @@
                   "value": {"literal": {"string": "DSL injection for the seq variant of hydra.ast.Expr"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.indentStyleIndentStyle",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.IndentStyle"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.IndentStyle"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.IndentStyle"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.indentStyleAllLines",
         "signature": {
           "typeParameters": [],
@@ -2479,6 +2581,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the subsequentLines variant of hydra.ast.IndentStyle"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.ast.indentedExpressionIndentedExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.IndentedExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.IndentedExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.ast.IndentedExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.indentedExpression",
@@ -2906,6 +3028,20 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the expr field of hydra.ast.IndentedExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.ast.opOp",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Op"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Op"}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Op"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.op",
@@ -3935,6 +4071,21 @@
                   "value": {"literal": {"string": "DSL updater for the associativity field of hydra.ast.Op"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.opExprOpExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.OpExpr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.OpExpr"}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.OpExpr"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.opExpr",
         "signature": {
           "typeParameters": [],
@@ -4641,6 +4792,22 @@
                   "value": {"literal": {"string": "DSL updater for the rhs field of hydra.ast.OpExpr"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.paddingPadding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Padding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Padding"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Padding"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.padding",
         "signature": {
           "typeParameters": [],
@@ -5059,6 +5226,22 @@
                   "value": {"literal": {"string": "DSL updater for the right field of hydra.ast.Padding"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.precedencePrecedence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Precedence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Precedence"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Precedence"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.precedence",
         "signature": {
           "typeParameters": [],
@@ -5144,6 +5327,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.ast.Precedence"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.ast.seqExprSeqExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.SeqExpr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.SeqExpr"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.SeqExpr"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.seqExpr",
@@ -5559,6 +5758,21 @@
                   "value": {"literal": {"string": "DSL updater for the elements field of hydra.ast.SeqExpr"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.ast.symbolSymbol",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Symbol"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Symbol"}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Symbol"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.ast.symbol",
         "signature": {
           "typeParameters": [],
@@ -5641,6 +5855,20 @@
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL accessor for the body of hydra.ast.Symbol"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.ast.wsWs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.ast.Ws"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.ast.Ws"}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.ast.Ws"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.ast.wsNone",

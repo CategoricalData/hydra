@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.lib.regex"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.lib.regex"},
+    {"module": "hydra.decode.lib.regex"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

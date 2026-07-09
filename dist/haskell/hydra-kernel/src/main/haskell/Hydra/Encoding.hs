@@ -27,7 +27,6 @@ import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -67,17 +66,10 @@ encodeBinding cx graph b =
 
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: Core.Name -> Core.Name
-encodeBindingName n =
-
-      let parts = Strings.splitOn "." (Core.unName n)
-          localPart = Formatting.decapitalize (Names.localNameOf n)
-          localResult = Core.Name localPart
-      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsUc ->
-        let tail = Pairs.second nsUc
-        in (Core.Name (Strings.intercalate "." (Lists.concat2 [
-          "hydra",
-          "encode"] (Lists.concat2 tail [
-          localPart])))))))
+encodeBindingName =
+    Names.derivedBindingName [
+      "hydra",
+      "encode"] True
 
 -- | Generate an encoder for an Either type
 encodeEitherType :: Core.EitherType -> Core.Term
@@ -349,13 +341,10 @@ encodeModule cx graph mod =
 
 -- | Generate an encoder module name from a source module name
 encodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
-encodeModuleName ns =
-
-      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
-          fallback = Packaging.ModuleName (Packaging.unModuleName ns)
-      in (Optionals.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
-        "hydra.encode.",
-        (Strings.intercalate "." (Pairs.second uc))])))
+encodeModuleName =
+    Names.derivedModuleName [
+      "hydra",
+      "encode"] True
 
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term

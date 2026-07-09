@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.predicates"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.predicates"},
+    {"module": "hydra.decode.predicates"},
     {"module": "hydra.arity"},
     {"module": "hydra.dependencies"},
     {"module": "hydra.decode.core"},

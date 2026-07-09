@@ -5,8 +5,10 @@
 module Hydra.Dsl.File where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.File as DecodeFile
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Time as DslTime
+import qualified Hydra.Encode.File as EncodeFile
 import qualified Hydra.File as File
 import qualified Hydra.Time as Time
 import qualified Hydra.Typed as Typed
@@ -21,12 +23,20 @@ fileExtension x =
       Core.wrappedTermTypeName = (Core.Name "hydra.file.FileExtension"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.file.FileExtension
+fileExtensionFileExtension :: Typed.TypedName File.FileExtension
+fileExtensionFileExtension = Typed.TypedName (Core.Name "hydra.file.FileExtension")
+
 -- | DSL constructor for the hydra.file.FilePath wrapper
 filePath :: Typed.TypedTerm String -> Typed.TypedTerm File.FilePath
 filePath x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.file.FilePath
+filePathFilePath :: Typed.TypedName File.FilePath
+filePathFilePath = Typed.TypedName (Core.Name "hydra.file.FilePath")
 
 -- | DSL constructor for hydra.file.FileStatus
 fileStatus :: Typed.TypedTerm File.FileType -> Typed.TypedTerm I.Int64 -> Typed.TypedTerm Time.Timespec -> Typed.TypedTerm (Maybe Time.Timespec) -> Typed.TypedTerm (Maybe Time.Timespec) -> Typed.TypedTerm File.FileStatus
@@ -58,6 +68,10 @@ fileStatusAccessTime x =
         Core.projectionTypeName = (Core.Name "hydra.file.FileStatus"),
         Core.projectionFieldName = (Core.Name "accessTime")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.file.FileStatus
+fileStatusFileStatus :: Typed.TypedName File.FileStatus
+fileStatusFileStatus = Typed.TypedName (Core.Name "hydra.file.FileStatus")
 
 -- | DSL accessor for the fileType field of hydra.file.FileStatus
 fileStatusFileType :: Typed.TypedTerm File.FileStatus -> Typed.TypedTerm File.FileType
@@ -320,6 +334,10 @@ fileTypeFifo =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fifo"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.file.FileType
+fileTypeFileType :: Typed.TypedName File.FileType
+fileTypeFileType = Typed.TypedName (Core.Name "hydra.file.FileType")
 
 -- | DSL injection for the link variant of hydra.file.FileType
 fileTypeLink :: Typed.TypedTerm File.FileType

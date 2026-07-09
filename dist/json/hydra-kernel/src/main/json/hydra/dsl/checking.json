@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.checking"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.checking"},
+    {"module": "hydra.decode.checking"},
     {"module": "hydra.constants"},
     {"module": "hydra.dependencies"},
     {"module": "hydra.extract.core"},

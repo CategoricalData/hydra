@@ -1,8 +1,30 @@
 {
   "name": "hydra.dsl.json.model",
   "metadata": {"description": "DSL functions for hydra.json.model", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.json.model"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.json.model"},
+    {"module": "hydra.decode.json.model"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.json.model.valueValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.model.Value"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.model.Value"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.model.Value"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.model.valueArray",

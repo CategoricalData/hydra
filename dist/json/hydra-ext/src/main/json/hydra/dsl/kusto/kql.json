@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.kusto.kql",
   "metadata": {"description": "DSL functions for hydra.kusto.kql", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.kusto.kql"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.kusto.kql"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.kusto.kql"},
+    {"module": "hydra.decode.kusto.kql"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.betweenExpressionBetweenExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.BetweenExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.BetweenExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.BetweenExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.betweenExpression",
@@ -990,6 +1016,26 @@
                   "value": {"literal": {"string": "DSL updater for the upperBound field of hydra.kusto.kql.BetweenExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.binaryExpressionBinaryExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.BinaryExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.BinaryExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.BinaryExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.binaryExpression",
         "signature": {
           "typeParameters": [],
@@ -1638,6 +1684,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the right field of hydra.kusto.kql.BinaryExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.binaryOperatorBinaryOperator",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.BinaryOperator"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.BinaryOperator"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.BinaryOperator"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.binaryOperatorCaseInsensitiveEqual",
@@ -2344,6 +2410,26 @@
                   "value": {"literal": {"string": "DSL injection for the times variant of hydra.kusto.kql.BinaryOperator"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.builtInFunctionBuiltInFunction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.BuiltInFunction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.BuiltInFunction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.BuiltInFunction"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.builtInFunctionAgo",
         "signature": {
           "typeParameters": [],
@@ -2851,6 +2937,24 @@
                   "value": {"literal": {"string": "DSL injection for the todynamic variant of hydra.kusto.kql.BuiltInFunction"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.columnAliasColumnAlias",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.ColumnAlias"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.ColumnAlias"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.ColumnAlias"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.columnAlias",
         "signature": {
           "typeParameters": [],
@@ -3226,6 +3330,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the alias field of hydra.kusto.kql.ColumnAlias"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.columnAssignmentColumnAssignment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.ColumnAssignment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.ColumnAssignment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.ColumnAssignment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.columnAssignment",
@@ -3605,6 +3729,24 @@
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.kusto.kql.ColumnAssignment"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.columnNameColumnName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.ColumnName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.ColumnName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.ColumnName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.columnName",
         "signature": {
           "typeParameters": [],
@@ -3692,6 +3834,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.ColumnName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.columnsColumns",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Columns"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Columns"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Columns"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.columnsAll",
@@ -3782,6 +3941,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the single variant of hydra.kusto.kql.Columns"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.commandCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Command"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Command"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Command"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.commandCount",
@@ -4886,6 +5062,23 @@
                   "value": {"literal": {"string": "DSL injection for the where variant of hydra.kusto.kql.Command"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.datetimeDatetime",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Datetime"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Datetime"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Datetime"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.datetime",
         "signature": {
           "typeParameters": [],
@@ -4973,6 +5166,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.Datetime"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.durationDuration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Duration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Duration"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Duration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.duration",
@@ -5344,6 +5554,26 @@
                   "value": {"literal": {"string": "DSL updater for the unit field of hydra.kusto.kql.Duration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.durationUnitDurationUnit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.DurationUnit"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.DurationUnit"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.DurationUnit"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.durationUnitSecond",
         "signature": {
           "typeParameters": [],
@@ -5459,6 +5689,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the hour variant of hydra.kusto.kql.DurationUnit"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.expressionExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Expression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Expression"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.expressionAnd",
@@ -6183,6 +6431,23 @@
                   "value": {"literal": {"string": "DSL injection for the unary variant of hydra.kusto.kql.Expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.functionFunction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Function"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Function"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Function"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.functionBuiltIn",
         "signature": {
           "typeParameters": [],
@@ -6283,6 +6548,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the custom variant of hydra.kusto.kql.Function"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.functionExpressionFunctionExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.FunctionExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.FunctionExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.FunctionExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.functionExpression",
@@ -6662,6 +6947,26 @@
                   "value": {"literal": {"string": "DSL updater for the arguments field of hydra.kusto.kql.FunctionExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.functionNameFunctionName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.FunctionName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.FunctionName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.FunctionName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.functionName",
         "signature": {
           "typeParameters": [],
@@ -6749,6 +7054,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.FunctionName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.indexExpressionIndexExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.IndexExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.IndexExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.IndexExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.indexExpression",
@@ -7120,6 +7445,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the index field of hydra.kusto.kql.IndexExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.joinCommandJoinCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.JoinCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.JoinCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.JoinCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.joinCommand",
@@ -7772,6 +8115,23 @@
                   "value": {"literal": {"string": "DSL updater for the on field of hydra.kusto.kql.JoinCommand"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.joinKindJoinKind",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.JoinKind"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.JoinKind"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.JoinKind"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.joinKindLeftouter",
         "signature": {
           "typeParameters": [],
@@ -8121,6 +8481,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the rightanti variant of hydra.kusto.kql.JoinKind"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.keyValuePairKeyValuePair",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.KeyValuePair"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.KeyValuePair"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.KeyValuePair"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.keyValuePair",
@@ -8492,6 +8872,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.kusto.kql.KeyValuePair"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.letBindingLetBinding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.LetBinding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.LetBinding"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.LetBinding"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.letBinding",
@@ -8867,6 +9265,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.kusto.kql.LetBinding"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.letExpressionLetExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.LetExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.LetExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.LetExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.letExpression",
@@ -9271,6 +9689,23 @@
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.kusto.kql.LetExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.literalLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Literal"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Literal"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Literal"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.literalDuration",
         "signature": {
           "typeParameters": [],
@@ -9618,6 +10053,22 @@
                   "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.kusto.kql.Literal"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.orderOrder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Order"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Order"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Order"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.orderAscending",
         "signature": {
           "typeParameters": [],
@@ -9692,6 +10143,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the descending variant of hydra.kusto.kql.Order"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.parameterParameter",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Parameter"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Parameter"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Parameter"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.parameter",
@@ -10061,6 +10529,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.kusto.kql.Parameter"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.parseCommandParseCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.ParseCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.ParseCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.ParseCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.parseCommand",
@@ -10465,6 +10953,26 @@
                   "value": {"literal": {"string": "DSL updater for the pairs field of hydra.kusto.kql.ParseCommand"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.pipelineExpressionPipelineExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.PipelineExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.PipelineExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.PipelineExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.pipelineExpression",
         "signature": {
           "typeParameters": [],
@@ -10571,6 +11079,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.PipelineExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.printCommandPrintCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.PrintCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.PrintCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.PrintCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.printCommand",
@@ -10960,6 +11488,24 @@
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.kusto.kql.PrintCommand"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.projectionProjection",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Projection"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Projection"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Projection"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.projection",
         "signature": {
           "typeParameters": [],
@@ -11345,6 +11891,26 @@
                   "value": {"literal": {"string": "DSL updater for the alias field of hydra.kusto.kql.Projection"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.propertyExpressionPropertyExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.PropertyExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.PropertyExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.PropertyExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.propertyExpression",
         "signature": {
           "typeParameters": [],
@@ -11716,6 +12282,22 @@
                   "value": {"literal": {"string": "DSL updater for the property field of hydra.kusto.kql.PropertyExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.queryQuery",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.Query"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.Query"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.Query"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.query",
         "signature": {
           "typeParameters": [],
@@ -11804,6 +12386,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.Query"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.searchCommandSearchCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.SearchCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.SearchCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.SearchCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.searchCommand",
@@ -12181,6 +12783,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the pattern field of hydra.kusto.kql.SearchCommand"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.summarizeCommandSummarizeCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.SummarizeCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.SummarizeCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.SummarizeCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.summarizeCommand",
@@ -12585,6 +13207,23 @@
                   "value": {"literal": {"string": "DSL updater for the by field of hydra.kusto.kql.SummarizeCommand"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.tableNameTableName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.TableName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.TableName"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.TableName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.tableName",
         "signature": {
           "typeParameters": [],
@@ -12672,6 +13311,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.kusto.kql.TableName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.topCommandTopCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.TopCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.TopCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.TopCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.topCommand",
@@ -13044,6 +13701,22 @@
                   "value": {"literal": {"string": "DSL updater for the sort field of hydra.kusto.kql.TopCommand"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.sortBySortBy",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.SortBy"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.SortBy"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.SortBy"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.sortBy",
         "signature": {
           "typeParameters": [],
@@ -13407,6 +14080,26 @@
                   "value": {"literal": {"string": "DSL updater for the order field of hydra.kusto.kql.SortBy"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.tabularExpressionTabularExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.TabularExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.TabularExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.TabularExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.tabularExpressionCommand",
         "signature": {
           "typeParameters": [],
@@ -13609,6 +14302,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the table variant of hydra.kusto.kql.TabularExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.unaryExpressionUnaryExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.UnaryExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.UnaryExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.UnaryExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.unaryExpression",
@@ -13988,6 +14701,26 @@
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.kusto.kql.UnaryExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.kusto.kql.unaryOperatorUnaryOperator",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.UnaryOperator"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.UnaryOperator"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.UnaryOperator"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.kusto.kql.unaryOperatorNot",
         "signature": {
           "typeParameters": [],
@@ -14025,6 +14758,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the not variant of hydra.kusto.kql.UnaryOperator"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.unionCommandUnionCommand",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.UnionCommand"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.UnionCommand"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.UnionCommand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.unionCommand",
@@ -15455,6 +16208,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the tables field of hydra.kusto.kql.UnionCommand"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.kusto.kql.unionKindUnionKind",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.kusto.kql.UnionKind"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.kusto.kql.UnionKind"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.kusto.kql.UnionKind"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.kusto.kql.unionKindInner",

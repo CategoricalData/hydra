@@ -6,10 +6,16 @@ module Hydra.Dsl.Ast where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Ast as DecodeAst
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Ast as EncodeAst
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
+-- | DSL name token for hydra.ast.Associativity
+associativityAssociativity :: Typed.TypedName Ast.Associativity
+associativityAssociativity = Typed.TypedName (Core.Name "hydra.ast.Associativity")
 
 -- | DSL injection for the both variant of hydra.ast.Associativity
 associativityBoth :: Typed.TypedTerm Ast.Associativity
@@ -62,6 +68,10 @@ blockStyle indent newlineBeforeContent newlineAfterContent =
         Core.Field {
           Core.fieldName = (Core.Name "newlineAfterContent"),
           Core.fieldTerm = (Typed.unTypedTerm newlineAfterContent)}]}))
+
+-- | DSL name token for hydra.ast.BlockStyle
+blockStyleBlockStyle :: Typed.TypedName Ast.BlockStyle
+blockStyleBlockStyle = Typed.TypedName (Core.Name "hydra.ast.BlockStyle")
 
 -- | DSL accessor for the indent field of hydra.ast.BlockStyle
 blockStyleIndent :: Typed.TypedTerm Ast.BlockStyle -> Typed.TypedTerm (Maybe String)
@@ -178,6 +188,10 @@ bracketExpr brackets enclosed style =
           Core.fieldName = (Core.Name "style"),
           Core.fieldTerm = (Typed.unTypedTerm style)}]}))
 
+-- | DSL name token for hydra.ast.BracketExpr
+bracketExprBracketExpr :: Typed.TypedName Ast.BracketExpr
+bracketExprBracketExpr = Typed.TypedName (Core.Name "hydra.ast.BracketExpr")
+
 -- | DSL accessor for the brackets field of hydra.ast.BracketExpr
 bracketExprBrackets :: Typed.TypedTerm Ast.BracketExpr -> Typed.TypedTerm Ast.Brackets
 bracketExprBrackets x =
@@ -290,6 +304,10 @@ brackets open close =
           Core.fieldName = (Core.Name "close"),
           Core.fieldTerm = (Typed.unTypedTerm close)}]}))
 
+-- | DSL name token for hydra.ast.Brackets
+bracketsBrackets :: Typed.TypedName Ast.Brackets
+bracketsBrackets = Typed.TypedName (Core.Name "hydra.ast.Brackets")
+
 -- | DSL accessor for the close field of hydra.ast.Brackets
 bracketsClose :: Typed.TypedTerm Ast.Brackets -> Typed.TypedTerm Ast.Symbol
 bracketsClose x =
@@ -360,6 +378,10 @@ exprConst x =
         Core.fieldName = (Core.Name "const"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.ast.Expr
+exprExpr :: Typed.TypedName Ast.Expr
+exprExpr = Typed.TypedName (Core.Name "hydra.ast.Expr")
+
 -- | DSL injection for the indent variant of hydra.ast.Expr
 exprIndent :: Typed.TypedTerm Ast.IndentedExpression -> Typed.TypedTerm Ast.Expr
 exprIndent x =
@@ -396,6 +418,10 @@ indentStyleAllLines x =
         Core.fieldName = (Core.Name "allLines"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.ast.IndentStyle
+indentStyleIndentStyle :: Typed.TypedName Ast.IndentStyle
+indentStyleIndentStyle = Typed.TypedName (Core.Name "hydra.ast.IndentStyle")
+
 -- | DSL injection for the subsequentLines variant of hydra.ast.IndentStyle
 indentStyleSubsequentLines :: Typed.TypedTerm String -> Typed.TypedTerm Ast.IndentStyle
 indentStyleSubsequentLines x =
@@ -426,6 +452,10 @@ indentedExpressionExpr x =
         Core.projectionTypeName = (Core.Name "hydra.ast.IndentedExpression"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.ast.IndentedExpression
+indentedExpressionIndentedExpression :: Typed.TypedName Ast.IndentedExpression
+indentedExpressionIndentedExpression = Typed.TypedName (Core.Name "hydra.ast.IndentedExpression")
 
 -- | DSL accessor for the style field of hydra.ast.IndentedExpression
 indentedExpressionStyle :: Typed.TypedTerm Ast.IndentedExpression -> Typed.TypedTerm Ast.IndentStyle
@@ -532,6 +562,10 @@ opExprOp x =
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.ast.OpExpr
+opExprOpExpr :: Typed.TypedName Ast.OpExpr
+opExprOpExpr = Typed.TypedName (Core.Name "hydra.ast.OpExpr")
+
 -- | DSL accessor for the rhs field of hydra.ast.OpExpr
 opExprRhs :: Typed.TypedTerm Ast.OpExpr -> Typed.TypedTerm Ast.Expr
 opExprRhs x =
@@ -612,6 +646,10 @@ opExprWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.ast.Op
+opOp :: Typed.TypedName Ast.Op
+opOp = Typed.TypedName (Core.Name "hydra.ast.Op")
 
 -- | DSL accessor for the padding field of hydra.ast.Op
 opPadding :: Typed.TypedTerm Ast.Op -> Typed.TypedTerm Ast.Padding
@@ -786,6 +824,10 @@ paddingLeft x =
         Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.ast.Padding
+paddingPadding :: Typed.TypedName Ast.Padding
+paddingPadding = Typed.TypedName (Core.Name "hydra.ast.Padding")
+
 -- | DSL accessor for the right field of hydra.ast.Padding
 paddingRight :: Typed.TypedTerm Ast.Padding -> Typed.TypedTerm Ast.Ws
 paddingRight x =
@@ -836,6 +878,10 @@ precedence x =
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Precedence"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.ast.Precedence
+precedencePrecedence :: Typed.TypedName Ast.Precedence
+precedencePrecedence = Typed.TypedName (Core.Name "hydra.ast.Precedence")
+
 -- | DSL constructor for hydra.ast.SeqExpr
 seqExpr :: Typed.TypedTerm Ast.Op -> Typed.TypedTerm [Ast.Expr] -> Typed.TypedTerm Ast.SeqExpr
 seqExpr op elements =
@@ -866,6 +912,10 @@ seqExprOp x =
         Core.projectionTypeName = (Core.Name "hydra.ast.SeqExpr"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.ast.SeqExpr
+seqExprSeqExpr :: Typed.TypedName Ast.SeqExpr
+seqExprSeqExpr = Typed.TypedName (Core.Name "hydra.ast.SeqExpr")
 
 -- | DSL updater for the elements field of hydra.ast.SeqExpr
 seqExprWithElements :: Typed.TypedTerm Ast.SeqExpr -> Typed.TypedTerm [Ast.Expr] -> Typed.TypedTerm Ast.SeqExpr
@@ -907,6 +957,10 @@ symbol x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Symbol"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.ast.Symbol
+symbolSymbol :: Typed.TypedName Ast.Symbol
+symbolSymbol = Typed.TypedName (Core.Name "hydra.ast.Symbol")
 
 -- | DSL accessor for the body of hydra.ast.Precedence
 unPrecedence :: Typed.TypedTerm Ast.Precedence -> Typed.TypedTerm Int
@@ -966,3 +1020,7 @@ wsSpace =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "space"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.ast.Ws
+wsWs :: Typed.TypedName Ast.Ws
+wsWs = Typed.TypedName (Core.Name "hydra.ast.Ws")

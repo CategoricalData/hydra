@@ -1,8 +1,31 @@
 {
   "name": "hydra.dsl.parquet.format",
   "metadata": {"description": "DSL functions for hydra.parquet.format", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.parquet.format"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.parquet.format"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.parquet.format"},
+    {"module": "hydra.decode.parquet.format"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.typeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.Type"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.parquet.format.Type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.typeBoolean",
@@ -280,6 +303,28 @@
                   "value": {"literal": {"string": "DSL injection for the fixedLenByteArray variant of hydra.parquet.format.Type"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.fieldRepetitionTypeFieldRepetitionType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.FieldRepetitionType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.FieldRepetitionType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.FieldRepetitionType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.fieldRepetitionTypeRequired",
         "signature": {
           "typeParameters": [],
@@ -401,6 +446,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the repeated variant of hydra.parquet.format.FieldRepetitionType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.statisticsStatistics",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.Statistics"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.Statistics"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.Statistics"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.statistics",
@@ -1512,6 +1577,26 @@
                   "value": {"literal": {"string": "DSL updater for the minValue field of hydra.parquet.format.Statistics"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.decimalTypeDecimalType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.DecimalType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.DecimalType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.DecimalType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.decimalType",
         "signature": {
           "typeParameters": [],
@@ -1879,6 +1964,26 @@
                   "value": {"literal": {"string": "DSL updater for the precision field of hydra.parquet.format.DecimalType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.timeUnitTimeUnit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.TimeUnit"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.TimeUnit"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.TimeUnit"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.timeUnitMillis",
         "signature": {
           "typeParameters": [],
@@ -1994,6 +2099,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the nanos variant of hydra.parquet.format.TimeUnit"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.timestampTypeTimestampType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.TimestampType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.TimestampType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.TimestampType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.timestampType",
@@ -2371,6 +2496,26 @@
                   "value": {"literal": {"string": "DSL updater for the unit field of hydra.parquet.format.TimestampType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.timeTypeTimeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.TimeType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.TimeType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.TimeType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.timeType",
         "signature": {
           "typeParameters": [],
@@ -2746,6 +2891,26 @@
                   "value": {"literal": {"string": "DSL updater for the unit field of hydra.parquet.format.TimeType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.intTypeIntType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.IntType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.IntType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.IntType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.intType",
         "signature": {
           "typeParameters": [],
@@ -3110,6 +3275,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the isSigned field of hydra.parquet.format.IntType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.logicalTypeLogicalType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.LogicalType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.LogicalType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.LogicalType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.logicalTypeString",
@@ -3737,6 +3922,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the uuid variant of hydra.parquet.format.LogicalType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.schemaElementSchemaElement",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.SchemaElement"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.SchemaElement"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.SchemaElement"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.schemaElement",
@@ -6515,6 +6720,26 @@
                   "value": {"literal": {"string": "DSL updater for the logicalType field of hydra.parquet.format.SchemaElement"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.encodingEncoding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.Encoding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.Encoding"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.Encoding"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.encodingPlain",
         "signature": {
           "typeParameters": [],
@@ -6831,6 +7056,26 @@
                   "value": {"literal": {"string": "DSL injection for the byteStreamSplit variant of hydra.parquet.format.Encoding"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.compressionCodecCompressionCodec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.CompressionCodec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.CompressionCodec"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.CompressionCodec"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.compressionCodecUncompressed",
         "signature": {
           "typeParameters": [],
@@ -7104,6 +7349,26 @@
                   "value": {"literal": {"string": "DSL injection for the lz4Raw variant of hydra.parquet.format.CompressionCodec"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.pageTypePageType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.PageType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.PageType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.PageType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.pageTypeDataPage",
         "signature": {
           "typeParameters": [],
@@ -7260,6 +7525,26 @@
                   "value": {"literal": {"string": "DSL injection for the dataPageV2 variant of hydra.parquet.format.PageType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.boundaryOrderBoundaryOrder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.BoundaryOrder"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.BoundaryOrder"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.BoundaryOrder"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.boundaryOrderUnordered",
         "signature": {
           "typeParameters": [],
@@ -7375,6 +7660,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the descending variant of hydra.parquet.format.BoundaryOrder"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.dataPageHeaderDataPageHeader",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.DataPageHeader"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.DataPageHeader"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.DataPageHeader"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.dataPageHeader",
@@ -8976,6 +9281,26 @@
                   "value": {"literal": {"string": "DSL updater for the statistics field of hydra.parquet.format.DataPageHeader"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.indexPageHeaderIndexPageHeader",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.IndexPageHeader"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.IndexPageHeader"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.IndexPageHeader"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.indexPageHeader",
         "signature": {
           "typeParameters": [],
@@ -9006,6 +9331,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL constructor for hydra.parquet.format.IndexPageHeader"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.dictionaryPageHeaderDictionaryPageHeader",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.DictionaryPageHeader"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.DictionaryPageHeader"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.DictionaryPageHeader"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.dictionaryPageHeader",
@@ -9783,6 +10130,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the isSorted field of hydra.parquet.format.DictionaryPageHeader"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.dataPageHeaderV2DataPageHeaderV2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.DataPageHeaderV2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.DataPageHeaderV2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.DataPageHeaderV2"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.dataPageHeaderV2",
@@ -13218,6 +13585,28 @@
                   "value": {"literal": {"string": "DSL updater for the statistics field of hydra.parquet.format.DataPageHeaderV2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.bloomFilterAlgorithmBloomFilterAlgorithm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.BloomFilterAlgorithm"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.BloomFilterAlgorithm"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.BloomFilterAlgorithm"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.bloomFilterAlgorithmBlock",
         "signature": {
           "typeParameters": [],
@@ -13259,6 +13648,26 @@
                   "value": {"literal": {"string": "DSL injection for the block variant of hydra.parquet.format.BloomFilterAlgorithm"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.bloomFilterHashBloomFilterHash",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.BloomFilterHash"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.BloomFilterHash"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.BloomFilterHash"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.bloomFilterHashXxhash",
         "signature": {
           "typeParameters": [],
@@ -13296,6 +13705,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the xxhash variant of hydra.parquet.format.BloomFilterHash"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.bloomFilterCompressionBloomFilterCompression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.BloomFilterCompression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.BloomFilterCompression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.BloomFilterCompression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.bloomFilterCompressionUncompressed",
@@ -13338,6 +13770,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the uncompressed variant of hydra.parquet.format.BloomFilterCompression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.bloomFilterHeaderBloomFilterHeader",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.BloomFilterHeader"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.BloomFilterHeader"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.BloomFilterHeader"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.bloomFilterHeader",
@@ -14439,6 +14891,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the compression field of hydra.parquet.format.BloomFilterHeader"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.pageHeaderPageHeader",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.PageHeader"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.PageHeader"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.PageHeader"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.pageHeader",
@@ -17856,6 +18328,26 @@
                   "value": {"literal": {"string": "DSL updater for the dataPageHeaderV2 field of hydra.parquet.format.PageHeader"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.keyValueKeyValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.KeyValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.KeyValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.KeyValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.keyValue",
         "signature": {
           "typeParameters": [],
@@ -18220,6 +18712,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.parquet.format.KeyValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.sortingColumnSortingColumn",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.SortingColumn"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.SortingColumn"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.SortingColumn"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.sortingColumn",
@@ -18992,6 +19504,26 @@
                   "value": {"literal": {"string": "DSL updater for the nullsFirst field of hydra.parquet.format.SortingColumn"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.pageEncodingStatsPageEncodingStats",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.PageEncodingStats"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.PageEncodingStats"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.PageEncodingStats"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.pageEncodingStats",
         "signature": {
           "typeParameters": [],
@@ -19735,6 +20267,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the count field of hydra.parquet.format.PageEncodingStats"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.columnMetaDataColumnMetaData",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.ColumnMetaData"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.ColumnMetaData"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.ColumnMetaData"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.columnMetaData",
@@ -28790,6 +29342,29 @@
                   "value": {"literal": {"string": "DSL updater for the bloomFilterOffset field of hydra.parquet.format.ColumnMetaData"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.encryptionWithFooterKeyEncryptionWithFooterKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.EncryptionWithFooterKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.EncryptionWithFooterKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.EncryptionWithFooterKey"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.encryptionWithFooterKey",
         "signature": {
           "typeParameters": [],
@@ -28823,6 +29398,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL constructor for hydra.parquet.format.EncryptionWithFooterKey"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.encryptionWithColumnKeyEncryptionWithColumnKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.EncryptionWithColumnKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.EncryptionWithColumnKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.EncryptionWithColumnKey"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.encryptionWithColumnKey",
@@ -29290,6 +29888,28 @@
                   "value": {"literal": {"string": "DSL updater for the keyMetadata field of hydra.parquet.format.EncryptionWithColumnKey"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.columnCryptoMetaDataColumnCryptoMetaData",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.ColumnCryptoMetaData"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.ColumnCryptoMetaData"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.ColumnCryptoMetaData"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.columnCryptoMetaDataEncryptionWithFooterKey",
         "signature": {
           "typeParameters": [],
@@ -29408,6 +30028,26 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "DSL injection for the encryptionWithColumnKey variant of hydra.parquet.format.ColumnCryptoMetaData"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.columnChunkColumnChunk",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.ColumnChunk"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.ColumnChunk"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.ColumnChunk"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.columnChunk",
@@ -33659,6 +34299,26 @@
                   "value": {"literal": {"string": "DSL updater for the encryptedColumnMetadata field of hydra.parquet.format.ColumnChunk"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.rowGroupRowGroup",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.RowGroup"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.RowGroup"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.RowGroup"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.rowGroup",
         "signature": {
           "typeParameters": [],
@@ -36434,6 +37094,26 @@
                   "value": {"literal": {"string": "DSL updater for the ordinal field of hydra.parquet.format.RowGroup"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.columnOrderColumnOrder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.ColumnOrder"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.ColumnOrder"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.ColumnOrder"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.columnOrderTypeOrder",
         "signature": {
           "typeParameters": [],
@@ -36471,6 +37151,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the typeOrder variant of hydra.parquet.format.ColumnOrder"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.pageLocationPageLocation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.PageLocation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.PageLocation"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.PageLocation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.pageLocation",
@@ -37268,6 +37968,26 @@
                   "value": {"literal": {"string": "DSL updater for the firstRowIndex field of hydra.parquet.format.PageLocation"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.offsetIndexOffsetIndex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.OffsetIndex"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.OffsetIndex"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.OffsetIndex"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.offsetIndex",
         "signature": {
           "typeParameters": [],
@@ -37495,6 +38215,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the pageLocations field of hydra.parquet.format.OffsetIndex"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.columnIndexColumnIndex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.ColumnIndex"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.ColumnIndex"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.ColumnIndex"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.columnIndex",
@@ -39112,6 +39852,26 @@
                   "value": {"literal": {"string": "DSL updater for the nullCounts field of hydra.parquet.format.ColumnIndex"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.aesGcmV1AesGcmV1",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.AesGcmV1"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.AesGcmV1"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.AesGcmV1"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.aesGcmV1",
         "signature": {
           "typeParameters": [],
@@ -39872,6 +40632,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the supplyAadPrefix field of hydra.parquet.format.AesGcmV1"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.aesGcmCtrV1AesGcmCtrV1",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.AesGcmCtrV1"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.AesGcmCtrV1"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.AesGcmCtrV1"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.aesGcmCtrV1",
@@ -40636,6 +41416,28 @@
                   "value": {"literal": {"string": "DSL updater for the supplyAadPrefix field of hydra.parquet.format.AesGcmCtrV1"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.parquet.format.encryptionAlgorithmEncryptionAlgorithm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.parquet.format.EncryptionAlgorithm"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.EncryptionAlgorithm"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.EncryptionAlgorithm"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.parquet.format.encryptionAlgorithmAesGcmV1",
         "signature": {
           "typeParameters": [],
@@ -40740,6 +41542,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the aesGcmCtrV1 variant of hydra.parquet.format.EncryptionAlgorithm"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.fileMetaDataFileMetaData",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.FileMetaData"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.FileMetaData"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.FileMetaData"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.fileMetaData",
@@ -44938,6 +45760,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the footerSigningKeyMetadata field of hydra.parquet.format.FileMetaData"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.parquet.format.fileCryptoMetaDataFileCryptoMetaData",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.parquet.format.FileCryptoMetaData"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.parquet.format.FileCryptoMetaData"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.parquet.format.FileCryptoMetaData"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.parquet.format.fileCryptoMetaData",

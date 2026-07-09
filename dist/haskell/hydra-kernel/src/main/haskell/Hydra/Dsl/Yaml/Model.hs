@@ -5,7 +5,9 @@
 module Hydra.Dsl.Yaml.Model where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Yaml.Model as DecodeYamlModel
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Yaml.Model as EncodeYamlModel
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -20,6 +22,10 @@ nodeMapping x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapping"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.yaml.model.Node
+nodeNode :: Typed.TypedName Model.Node
+nodeNode = Typed.TypedName (Core.Name "hydra.yaml.model.Node")
 
 -- | DSL injection for the scalar variant of hydra.yaml.model.Node
 nodeScalar :: Typed.TypedTerm Model.Scalar -> Typed.TypedTerm Model.Node
@@ -83,6 +89,10 @@ scalarNull =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.yaml.model.Scalar
+scalarScalar :: Typed.TypedName Model.Scalar
+scalarScalar = Typed.TypedName (Core.Name "hydra.yaml.model.Scalar")
 
 -- | DSL injection for the str variant of hydra.yaml.model.Scalar
 scalarStr :: Typed.TypedTerm String -> Typed.TypedTerm Model.Scalar

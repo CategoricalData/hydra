@@ -20,6 +20,10 @@ addOpAdd =
         Core.fieldName = (Core.Name "add"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.go.syntax.AddOp
+addOpAddOp :: Typed.TypedName Syntax.AddOp
+addOpAddOp = Typed.TypedName (Core.Name "hydra.go.syntax.AddOp")
+
 -- | DSL injection for the bitwiseOr variant of hydra.go.syntax.AddOp
 addOpBitwiseOr :: Typed.TypedTerm Syntax.AddOp
 addOpBitwiseOr =
@@ -59,6 +63,10 @@ aliasDecl name type_ =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
+
+-- | DSL name token for hydra.go.syntax.AliasDecl
+aliasDeclAliasDecl :: Typed.TypedName Syntax.AliasDecl
+aliasDeclAliasDecl = Typed.TypedName (Core.Name "hydra.go.syntax.AliasDecl")
 
 -- | DSL accessor for the name field of hydra.go.syntax.AliasDecl
 aliasDeclName :: Typed.TypedTerm Syntax.AliasDecl -> Typed.TypedTerm Syntax.Identifier
@@ -124,6 +132,10 @@ annotatedDeclaration comment declaration =
         Core.Field {
           Core.fieldName = (Core.Name "declaration"),
           Core.fieldTerm = (Typed.unTypedTerm declaration)}]}))
+
+-- | DSL name token for hydra.go.syntax.AnnotatedDeclaration
+annotatedDeclarationAnnotatedDeclaration :: Typed.TypedName Syntax.AnnotatedDeclaration
+annotatedDeclarationAnnotatedDeclaration = Typed.TypedName (Core.Name "hydra.go.syntax.AnnotatedDeclaration")
 
 -- | DSL accessor for the comment field of hydra.go.syntax.AnnotatedDeclaration
 annotatedDeclarationComment :: Typed.TypedTerm Syntax.AnnotatedDeclaration -> Typed.TypedTerm String
@@ -192,6 +204,10 @@ arguments typeArg expressions ellipsis =
         Core.Field {
           Core.fieldName = (Core.Name "ellipsis"),
           Core.fieldTerm = (Typed.unTypedTerm ellipsis)}]}))
+
+-- | DSL name token for hydra.go.syntax.Arguments
+argumentsArguments :: Typed.TypedName Syntax.Arguments
+argumentsArguments = Typed.TypedName (Core.Name "hydra.go.syntax.Arguments")
 
 -- | DSL accessor for the ellipsis field of hydra.go.syntax.Arguments
 argumentsEllipsis :: Typed.TypedTerm Syntax.Arguments -> Typed.TypedTerm Bool
@@ -305,6 +321,10 @@ arrayType length element =
           Core.fieldName = (Core.Name "element"),
           Core.fieldTerm = (Typed.unTypedTerm element)}]}))
 
+-- | DSL name token for hydra.go.syntax.ArrayType
+arrayTypeArrayType :: Typed.TypedName Syntax.ArrayType
+arrayTypeArrayType = Typed.TypedName (Core.Name "hydra.go.syntax.ArrayType")
+
 -- | DSL accessor for the element field of hydra.go.syntax.ArrayType
 arrayTypeElement :: Typed.TypedTerm Syntax.ArrayType -> Typed.TypedTerm Syntax.Type
 arrayTypeElement x =
@@ -366,6 +386,10 @@ assignOpAdd x =
         Core.fieldName = (Core.Name "add"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.AssignOp
+assignOpAssignOp :: Typed.TypedName Syntax.AssignOp
+assignOpAssignOp = Typed.TypedName (Core.Name "hydra.go.syntax.AssignOp")
+
 -- | DSL injection for the mul variant of hydra.go.syntax.AssignOp
 assignOpMul :: Typed.TypedTerm Syntax.MulOp -> Typed.TypedTerm Syntax.AssignOp
 assignOpMul x =
@@ -399,6 +423,10 @@ assignment lhs op rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.go.syntax.Assignment
+assignmentAssignment :: Typed.TypedName Syntax.Assignment
+assignmentAssignment = Typed.TypedName (Core.Name "hydra.go.syntax.Assignment")
 
 -- | DSL accessor for the lhs field of hydra.go.syntax.Assignment
 assignmentLhs :: Typed.TypedTerm Syntax.Assignment -> Typed.TypedTerm [Syntax.Expression]
@@ -499,6 +527,10 @@ assignmentWithRhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.BasicLit
+basicLitBasicLit :: Typed.TypedName Syntax.BasicLit
+basicLitBasicLit = Typed.TypedName (Core.Name "hydra.go.syntax.BasicLit")
+
 -- | DSL injection for the float variant of hydra.go.syntax.BasicLit
 basicLitFloat :: Typed.TypedTerm Syntax.FloatLit -> Typed.TypedTerm Syntax.BasicLit
 basicLitFloat x =
@@ -559,6 +591,10 @@ binaryExpr left op right =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Typed.unTypedTerm right)}]}))
+
+-- | DSL name token for hydra.go.syntax.BinaryExpr
+binaryExprBinaryExpr :: Typed.TypedName Syntax.BinaryExpr
+binaryExprBinaryExpr = Typed.TypedName (Core.Name "hydra.go.syntax.BinaryExpr")
 
 -- | DSL accessor for the left field of hydra.go.syntax.BinaryExpr
 binaryExprLeft :: Typed.TypedTerm Syntax.BinaryExpr -> Typed.TypedTerm Syntax.Expression
@@ -676,6 +712,10 @@ binaryOpAnd =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.go.syntax.BinaryOp
+binaryOpBinaryOp :: Typed.TypedName Syntax.BinaryOp
+binaryOpBinaryOp = Typed.TypedName (Core.Name "hydra.go.syntax.BinaryOp")
 
 -- | DSL injection for the bitClear variant of hydra.go.syntax.BinaryOp
 binaryOpBitClear :: Typed.TypedTerm Syntax.BinaryOp
@@ -837,12 +877,20 @@ block x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.Block"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.Block
+blockBlock :: Typed.TypedName Syntax.Block
+blockBlock = Typed.TypedName (Core.Name "hydra.go.syntax.Block")
+
 -- | DSL constructor for the hydra.go.syntax.BreakStmt wrapper
 breakStmt :: Typed.TypedTerm (Maybe Syntax.Identifier) -> Typed.TypedTerm Syntax.BreakStmt
 breakStmt x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.BreakStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.BreakStmt
+breakStmtBreakStmt :: Typed.TypedName Syntax.BreakStmt
+breakStmtBreakStmt = Typed.TypedName (Core.Name "hydra.go.syntax.BreakStmt")
 
 -- | DSL constructor for hydra.go.syntax.CallExpr
 callExpr :: Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.Arguments -> Typed.TypedTerm Syntax.CallExpr
@@ -865,6 +913,10 @@ callExprArguments x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CallExpr"),
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.CallExpr
+callExprCallExpr :: Typed.TypedName Syntax.CallExpr
+callExprCallExpr = Typed.TypedName (Core.Name "hydra.go.syntax.CallExpr")
 
 -- | DSL accessor for the function field of hydra.go.syntax.CallExpr
 callExprFunction :: Typed.TypedTerm Syntax.CallExpr -> Typed.TypedTerm Syntax.PrimaryExpr
@@ -918,6 +970,10 @@ channelDirectionBidirectional =
         Core.fieldName = (Core.Name "bidirectional"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.go.syntax.ChannelDirection
+channelDirectionChannelDirection :: Typed.TypedName Syntax.ChannelDirection
+channelDirectionChannelDirection = Typed.TypedName (Core.Name "hydra.go.syntax.ChannelDirection")
+
 -- | DSL injection for the receive variant of hydra.go.syntax.ChannelDirection
 channelDirectionReceive :: Typed.TypedTerm Syntax.ChannelDirection
 channelDirectionReceive =
@@ -948,6 +1004,10 @@ channelType direction element =
         Core.Field {
           Core.fieldName = (Core.Name "element"),
           Core.fieldTerm = (Typed.unTypedTerm element)}]}))
+
+-- | DSL name token for hydra.go.syntax.ChannelType
+channelTypeChannelType :: Typed.TypedName Syntax.ChannelType
+channelTypeChannelType = Typed.TypedName (Core.Name "hydra.go.syntax.ChannelType")
 
 -- | DSL accessor for the direction field of hydra.go.syntax.ChannelType
 channelTypeDirection :: Typed.TypedTerm Syntax.ChannelType -> Typed.TypedTerm Syntax.ChannelDirection
@@ -1001,6 +1061,10 @@ channelTypeWithElement original newVal =
           Core.fieldName = (Core.Name "element"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.CommCase
+commCaseCommCase :: Typed.TypedName Syntax.CommCase
+commCaseCommCase = Typed.TypedName (Core.Name "hydra.go.syntax.CommCase")
+
 -- | DSL injection for the default variant of hydra.go.syntax.CommCase
 commCaseDefault :: Typed.TypedTerm Syntax.CommCase
 commCaseDefault =
@@ -1049,6 +1113,10 @@ commClauseCase x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.CommClause"),
         Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.CommClause
+commClauseCommClause :: Typed.TypedName Syntax.CommClause
+commClauseCommClause = Typed.TypedName (Core.Name "hydra.go.syntax.CommClause")
 
 -- | DSL accessor for the statements field of hydra.go.syntax.CommClause
 commClauseStatements :: Typed.TypedTerm Syntax.CommClause -> Typed.TypedTerm [Syntax.Statement]
@@ -1105,6 +1173,10 @@ compositeLit type_ value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.go.syntax.CompositeLit
+compositeLitCompositeLit :: Typed.TypedName Syntax.CompositeLit
+compositeLitCompositeLit = Typed.TypedName (Core.Name "hydra.go.syntax.CompositeLit")
 
 -- | DSL accessor for the type field of hydra.go.syntax.CompositeLit
 compositeLitType :: Typed.TypedTerm Syntax.CompositeLit -> Typed.TypedTerm Syntax.LiteralType
@@ -1165,6 +1237,10 @@ constDecl x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ConstDecl"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ConstDecl
+constDeclConstDecl :: Typed.TypedName Syntax.ConstDecl
+constDeclConstDecl = Typed.TypedName (Core.Name "hydra.go.syntax.ConstDecl")
+
 -- | DSL constructor for hydra.go.syntax.ConstSpec
 constSpec :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.ConstSpec
 constSpec names type_ values =
@@ -1180,6 +1256,10 @@ constSpec names type_ values =
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (Typed.unTypedTerm values)}]}))
+
+-- | DSL name token for hydra.go.syntax.ConstSpec
+constSpecConstSpec :: Typed.TypedName Syntax.ConstSpec
+constSpecConstSpec = Typed.TypedName (Core.Name "hydra.go.syntax.ConstSpec")
 
 -- | DSL accessor for the names field of hydra.go.syntax.ConstSpec
 constSpecNames :: Typed.TypedTerm Syntax.ConstSpec -> Typed.TypedTerm [Syntax.Identifier]
@@ -1287,6 +1367,10 @@ continueStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ContinueStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ContinueStmt
+continueStmtContinueStmt :: Typed.TypedName Syntax.ContinueStmt
+continueStmtContinueStmt = Typed.TypedName (Core.Name "hydra.go.syntax.ContinueStmt")
+
 -- | DSL constructor for hydra.go.syntax.Conversion
 conversion :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Conversion
 conversion type_ expression =
@@ -1299,6 +1383,10 @@ conversion type_ expression =
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
+
+-- | DSL name token for hydra.go.syntax.Conversion
+conversionConversion :: Typed.TypedName Syntax.Conversion
+conversionConversion = Typed.TypedName (Core.Name "hydra.go.syntax.Conversion")
 
 -- | DSL accessor for the expression field of hydra.go.syntax.Conversion
 conversionExpression :: Typed.TypedTerm Syntax.Conversion -> Typed.TypedTerm Syntax.Expression
@@ -1361,6 +1449,10 @@ declarationConst x =
         Core.fieldName = (Core.Name "const"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.Declaration
+declarationDeclaration :: Typed.TypedName Syntax.Declaration
+declarationDeclaration = Typed.TypedName (Core.Name "hydra.go.syntax.Declaration")
+
 -- | DSL injection for the type variant of hydra.go.syntax.Declaration
 declarationType :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.Declaration
 declarationType x =
@@ -1386,6 +1478,14 @@ deferStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.DeferStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.DeferStmt
+deferStmtDeferStmt :: Typed.TypedName Syntax.DeferStmt
+deferStmtDeferStmt = Typed.TypedName (Core.Name "hydra.go.syntax.DeferStmt")
+
+-- | DSL name token for hydra.go.syntax.Element
+elementElement :: Typed.TypedName Syntax.Element
+elementElement = Typed.TypedName (Core.Name "hydra.go.syntax.Element")
+
 -- | DSL injection for the expression variant of hydra.go.syntax.Element
 elementExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Element
 elementExpression x =
@@ -1401,6 +1501,10 @@ elementList x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ElementList"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ElementList
+elementListElementList :: Typed.TypedName Syntax.ElementList
+elementListElementList = Typed.TypedName (Core.Name "hydra.go.syntax.ElementList")
 
 -- | DSL injection for the literal variant of hydra.go.syntax.Element
 elementLiteral :: Typed.TypedTerm Syntax.LiteralValue -> Typed.TypedTerm Syntax.Element
@@ -1419,6 +1523,10 @@ elseClauseBlock x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.ElseClause
+elseClauseElseClause :: Typed.TypedName Syntax.ElseClause
+elseClauseElseClause = Typed.TypedName (Core.Name "hydra.go.syntax.ElseClause")
 
 -- | DSL injection for the if variant of hydra.go.syntax.ElseClause
 elseClauseIf :: Typed.TypedTerm Syntax.IfStmt -> Typed.TypedTerm Syntax.ElseClause
@@ -1444,6 +1552,10 @@ embeddedField pointer type_ tag =
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
           Core.fieldTerm = (Typed.unTypedTerm tag)}]}))
+
+-- | DSL name token for hydra.go.syntax.EmbeddedField
+embeddedFieldEmbeddedField :: Typed.TypedName Syntax.EmbeddedField
+embeddedFieldEmbeddedField = Typed.TypedName (Core.Name "hydra.go.syntax.EmbeddedField")
 
 -- | DSL accessor for the pointer field of hydra.go.syntax.EmbeddedField
 embeddedFieldPointer :: Typed.TypedTerm Syntax.EmbeddedField -> Typed.TypedTerm Bool
@@ -1551,6 +1663,10 @@ emptyStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.EmptyStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.EmptyStmt
+emptyStmtEmptyStmt :: Typed.TypedName Syntax.EmptyStmt
+emptyStmtEmptyStmt = Typed.TypedName (Core.Name "hydra.go.syntax.EmptyStmt")
+
 -- | DSL constructor for hydra.go.syntax.ExprCaseClause
 exprCaseClause :: Typed.TypedTerm (Maybe [Syntax.Expression]) -> Typed.TypedTerm [Syntax.Statement] -> Typed.TypedTerm Syntax.ExprCaseClause
 exprCaseClause case_ statements =
@@ -1572,6 +1688,10 @@ exprCaseClauseCase x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprCaseClause"),
         Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ExprCaseClause
+exprCaseClauseExprCaseClause :: Typed.TypedName Syntax.ExprCaseClause
+exprCaseClauseExprCaseClause = Typed.TypedName (Core.Name "hydra.go.syntax.ExprCaseClause")
 
 -- | DSL accessor for the statements field of hydra.go.syntax.ExprCaseClause
 exprCaseClauseStatements :: Typed.TypedTerm Syntax.ExprCaseClause -> Typed.TypedTerm [Syntax.Statement]
@@ -1640,6 +1760,10 @@ exprSwitchStmtCases x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ExprSwitchStmt"),
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ExprSwitchStmt
+exprSwitchStmtExprSwitchStmt :: Typed.TypedName Syntax.ExprSwitchStmt
+exprSwitchStmtExprSwitchStmt = Typed.TypedName (Core.Name "hydra.go.syntax.ExprSwitchStmt")
 
 -- | DSL accessor for the expression field of hydra.go.syntax.ExprSwitchStmt
 exprSwitchStmtExpression :: Typed.TypedTerm Syntax.ExprSwitchStmt -> Typed.TypedTerm (Maybe Syntax.Expression)
@@ -1740,12 +1864,20 @@ expressionBinary x =
         Core.fieldName = (Core.Name "binary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.go.syntax.Expression")
+
 -- | DSL constructor for the hydra.go.syntax.ExpressionStmt wrapper
 expressionStmt :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ExpressionStmt
 expressionStmt x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ExpressionStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ExpressionStmt
+expressionStmtExpressionStmt :: Typed.TypedName Syntax.ExpressionStmt
+expressionStmtExpressionStmt = Typed.TypedName (Core.Name "hydra.go.syntax.ExpressionStmt")
 
 -- | DSL injection for the unary variant of hydra.go.syntax.Expression
 expressionUnary :: Typed.TypedTerm Syntax.UnaryExpr -> Typed.TypedTerm Syntax.Expression
@@ -1763,6 +1895,10 @@ fallthroughStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.FallthroughStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.FallthroughStmt
+fallthroughStmtFallthroughStmt :: Typed.TypedName Syntax.FallthroughStmt
+fallthroughStmtFallthroughStmt = Typed.TypedName (Core.Name "hydra.go.syntax.FallthroughStmt")
+
 -- | DSL injection for the embedded variant of hydra.go.syntax.FieldDecl
 fieldDeclEmbedded :: Typed.TypedTerm Syntax.EmbeddedField -> Typed.TypedTerm Syntax.FieldDecl
 fieldDeclEmbedded x =
@@ -1771,6 +1907,10 @@ fieldDeclEmbedded x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "embedded"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.FieldDecl
+fieldDeclFieldDecl :: Typed.TypedName Syntax.FieldDecl
+fieldDeclFieldDecl = Typed.TypedName (Core.Name "hydra.go.syntax.FieldDecl")
 
 -- | DSL injection for the named variant of hydra.go.syntax.FieldDecl
 fieldDeclNamed :: Typed.TypedTerm Syntax.NamedField -> Typed.TypedTerm Syntax.FieldDecl
@@ -1787,6 +1927,10 @@ floatLit x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.FloatLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.FloatLit
+floatLitFloatLit :: Typed.TypedName Syntax.FloatLit
+floatLitFloatLit = Typed.TypedName (Core.Name "hydra.go.syntax.FloatLit")
 
 -- | DSL constructor for hydra.go.syntax.ForClause
 forClause :: Typed.TypedTerm (Maybe Syntax.SimpleStmt) -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm (Maybe Syntax.SimpleStmt) -> Typed.TypedTerm Syntax.ForClause
@@ -1812,6 +1956,10 @@ forClauseCondition x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ForClause"),
         Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ForClause
+forClauseForClause :: Typed.TypedName Syntax.ForClause
+forClauseForClause = Typed.TypedName (Core.Name "hydra.go.syntax.ForClause")
 
 -- | DSL accessor for the init field of hydra.go.syntax.ForClause
 forClauseInit :: Typed.TypedTerm Syntax.ForClause -> Typed.TypedTerm (Maybe Syntax.SimpleStmt)
@@ -1839,6 +1987,10 @@ forClauseOrRangeCondition x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "condition"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.ForClauseOrRange
+forClauseOrRangeForClauseOrRange :: Typed.TypedName Syntax.ForClauseOrRange
+forClauseOrRangeForClauseOrRange = Typed.TypedName (Core.Name "hydra.go.syntax.ForClauseOrRange")
 
 -- | DSL injection for the range variant of hydra.go.syntax.ForClauseOrRange
 forClauseOrRangeRange :: Typed.TypedTerm Syntax.RangeClause -> Typed.TypedTerm Syntax.ForClauseOrRange
@@ -1961,6 +2113,10 @@ forStmtClause x =
         Core.projectionFieldName = (Core.Name "clause")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ForStmt
+forStmtForStmt :: Typed.TypedName Syntax.ForStmt
+forStmtForStmt = Typed.TypedName (Core.Name "hydra.go.syntax.ForStmt")
+
 -- | DSL updater for the body field of hydra.go.syntax.ForStmt
 forStmtWithBody :: Typed.TypedTerm Syntax.ForStmt -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.ForStmt
 forStmtWithBody original newVal =
@@ -2010,6 +2166,10 @@ fullSlice low high max =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Typed.unTypedTerm max)}]}))
+
+-- | DSL name token for hydra.go.syntax.FullSlice
+fullSliceFullSlice :: Typed.TypedName Syntax.FullSlice
+fullSliceFullSlice = Typed.TypedName (Core.Name "hydra.go.syntax.FullSlice")
 
 -- | DSL accessor for the high field of hydra.go.syntax.FullSlice
 fullSliceHigh :: Typed.TypedTerm Syntax.FullSlice -> Typed.TypedTerm Syntax.Expression
@@ -2117,6 +2277,10 @@ functionBody x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.FunctionBody"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.FunctionBody
+functionBodyFunctionBody :: Typed.TypedName Syntax.FunctionBody
+functionBodyFunctionBody = Typed.TypedName (Core.Name "hydra.go.syntax.FunctionBody")
+
 -- | DSL constructor for hydra.go.syntax.FunctionDecl
 functionDecl :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm (Maybe Syntax.TypeParameters) -> Typed.TypedTerm Syntax.Signature -> Typed.TypedTerm (Maybe Syntax.FunctionBody) -> Typed.TypedTerm Syntax.FunctionDecl
 functionDecl name typeParams signature body =
@@ -2144,6 +2308,10 @@ functionDeclBody x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.FunctionDecl"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.FunctionDecl
+functionDeclFunctionDecl :: Typed.TypedName Syntax.FunctionDecl
+functionDeclFunctionDecl = Typed.TypedName (Core.Name "hydra.go.syntax.FunctionDecl")
 
 -- | DSL accessor for the name field of hydra.go.syntax.FunctionDecl
 functionDeclName :: Typed.TypedTerm Syntax.FunctionDecl -> Typed.TypedTerm Syntax.Identifier
@@ -2318,6 +2486,10 @@ functionLitBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.FunctionLit
+functionLitFunctionLit :: Typed.TypedName Syntax.FunctionLit
+functionLitFunctionLit = Typed.TypedName (Core.Name "hydra.go.syntax.FunctionLit")
+
 -- | DSL accessor for the signature field of hydra.go.syntax.FunctionLit
 functionLitSignature :: Typed.TypedTerm Syntax.FunctionLit -> Typed.TypedTerm Syntax.Signature
 functionLitSignature x =
@@ -2368,12 +2540,20 @@ functionType x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.FunctionType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.FunctionType
+functionTypeFunctionType :: Typed.TypedName Syntax.FunctionType
+functionTypeFunctionType = Typed.TypedName (Core.Name "hydra.go.syntax.FunctionType")
+
 -- | DSL constructor for the hydra.go.syntax.GoStmt wrapper
 goStmt :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.GoStmt
 goStmt x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.GoStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.GoStmt
+goStmtGoStmt :: Typed.TypedName Syntax.GoStmt
+goStmtGoStmt = Typed.TypedName (Core.Name "hydra.go.syntax.GoStmt")
 
 -- | DSL constructor for the hydra.go.syntax.GotoStmt wrapper
 gotoStmt :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.GotoStmt
@@ -2382,12 +2562,20 @@ gotoStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.GotoStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.GotoStmt
+gotoStmtGotoStmt :: Typed.TypedName Syntax.GotoStmt
+gotoStmtGotoStmt = Typed.TypedName (Core.Name "hydra.go.syntax.GotoStmt")
+
 -- | DSL constructor for the hydra.go.syntax.Identifier wrapper
 identifier :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Identifier
 identifier x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.Identifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.Identifier
+identifierIdentifier :: Typed.TypedName Syntax.Identifier
+identifierIdentifier = Typed.TypedName (Core.Name "hydra.go.syntax.Identifier")
 
 -- | DSL constructor for hydra.go.syntax.IfStmt
 ifStmt :: Typed.TypedTerm (Maybe Syntax.SimpleStmt) -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm (Maybe Syntax.ElseClause) -> Typed.TypedTerm Syntax.IfStmt
@@ -2425,6 +2613,10 @@ ifStmtElse x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IfStmt"),
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.IfStmt
+ifStmtIfStmt :: Typed.TypedName Syntax.IfStmt
+ifStmtIfStmt = Typed.TypedName (Core.Name "hydra.go.syntax.IfStmt")
 
 -- | DSL accessor for the init field of hydra.go.syntax.IfStmt
 ifStmtInit :: Typed.TypedTerm Syntax.IfStmt -> Typed.TypedTerm (Maybe Syntax.SimpleStmt)
@@ -2575,6 +2767,10 @@ imaginaryLit x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ImaginaryLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ImaginaryLit
+imaginaryLitImaginaryLit :: Typed.TypedName Syntax.ImaginaryLit
+imaginaryLitImaginaryLit = Typed.TypedName (Core.Name "hydra.go.syntax.ImaginaryLit")
+
 -- | DSL injection for the dot variant of hydra.go.syntax.ImportAlias
 importAliasDot :: Typed.TypedTerm Syntax.ImportAlias
 importAliasDot =
@@ -2583,6 +2779,10 @@ importAliasDot =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dot"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.go.syntax.ImportAlias
+importAliasImportAlias :: Typed.TypedName Syntax.ImportAlias
+importAliasImportAlias = Typed.TypedName (Core.Name "hydra.go.syntax.ImportAlias")
 
 -- | DSL injection for the name variant of hydra.go.syntax.ImportAlias
 importAliasName :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.ImportAlias
@@ -2600,12 +2800,20 @@ importDecl x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ImportDecl"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ImportDecl
+importDeclImportDecl :: Typed.TypedName Syntax.ImportDecl
+importDeclImportDecl = Typed.TypedName (Core.Name "hydra.go.syntax.ImportDecl")
+
 -- | DSL constructor for the hydra.go.syntax.ImportPath wrapper
 importPath :: Typed.TypedTerm Syntax.StringLit -> Typed.TypedTerm Syntax.ImportPath
 importPath x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ImportPath"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ImportPath
+importPathImportPath :: Typed.TypedName Syntax.ImportPath
+importPathImportPath = Typed.TypedName (Core.Name "hydra.go.syntax.ImportPath")
 
 -- | DSL constructor for hydra.go.syntax.ImportSpec
 importSpec :: Typed.TypedTerm (Maybe Syntax.ImportAlias) -> Typed.TypedTerm Syntax.ImportPath -> Typed.TypedTerm Syntax.ImportSpec
@@ -2628,6 +2836,10 @@ importSpecAlias x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ImportSpec"),
         Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ImportSpec
+importSpecImportSpec :: Typed.TypedName Syntax.ImportSpec
+importSpecImportSpec = Typed.TypedName (Core.Name "hydra.go.syntax.ImportSpec")
 
 -- | DSL accessor for the path field of hydra.go.syntax.ImportSpec
 importSpecPath :: Typed.TypedTerm Syntax.ImportSpec -> Typed.TypedTerm Syntax.ImportPath
@@ -2693,6 +2905,10 @@ incDecStmtExpression x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.IncDecStmt"),
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.IncDecStmt
+incDecStmtIncDecStmt :: Typed.TypedName Syntax.IncDecStmt
+incDecStmtIncDecStmt = Typed.TypedName (Core.Name "hydra.go.syntax.IncDecStmt")
 
 -- | DSL accessor for the increment field of hydra.go.syntax.IncDecStmt
 incDecStmtIncrement :: Typed.TypedTerm Syntax.IncDecStmt -> Typed.TypedTerm Bool
@@ -2775,6 +2991,10 @@ indexExprIndex x =
         Core.projectionFieldName = (Core.Name "index")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.IndexExpr
+indexExprIndexExpr :: Typed.TypedName Syntax.IndexExpr
+indexExprIndexExpr = Typed.TypedName (Core.Name "hydra.go.syntax.IndexExpr")
+
 -- | DSL updater for the expr field of hydra.go.syntax.IndexExpr
 indexExprWithExpr :: Typed.TypedTerm Syntax.IndexExpr -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.IndexExpr
 indexExprWithExpr original newVal =
@@ -2809,12 +3029,24 @@ indexExprWithIndex original newVal =
           Core.fieldName = (Core.Name "index"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.Index
+indexIndex :: Typed.TypedName Syntax.Index
+indexIndex = Typed.TypedName (Core.Name "hydra.go.syntax.Index")
+
 -- | DSL constructor for the hydra.go.syntax.IntLit wrapper
 intLit :: Typed.TypedTerm Integer -> Typed.TypedTerm Syntax.IntLit
 intLit x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.IntLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.IntLit
+intLitIntLit :: Typed.TypedName Syntax.IntLit
+intLitIntLit = Typed.TypedName (Core.Name "hydra.go.syntax.IntLit")
+
+-- | DSL name token for hydra.go.syntax.InterfaceElem
+interfaceElemInterfaceElem :: Typed.TypedName Syntax.InterfaceElem
+interfaceElemInterfaceElem = Typed.TypedName (Core.Name "hydra.go.syntax.InterfaceElem")
 
 -- | DSL injection for the method variant of hydra.go.syntax.InterfaceElem
 interfaceElemMethod :: Typed.TypedTerm Syntax.MethodElem -> Typed.TypedTerm Syntax.InterfaceElem
@@ -2841,12 +3073,20 @@ interfaceType x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.InterfaceType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.InterfaceType
+interfaceTypeInterfaceType :: Typed.TypedName Syntax.InterfaceType
+interfaceTypeInterfaceType = Typed.TypedName (Core.Name "hydra.go.syntax.InterfaceType")
+
 -- | DSL constructor for the hydra.go.syntax.InterpretedStringLit wrapper
 interpretedStringLit :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.InterpretedStringLit
 interpretedStringLit x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.InterpretedStringLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.InterpretedStringLit
+interpretedStringLitInterpretedStringLit :: Typed.TypedName Syntax.InterpretedStringLit
+interpretedStringLitInterpretedStringLit = Typed.TypedName (Core.Name "hydra.go.syntax.InterpretedStringLit")
 
 -- | DSL injection for the expression variant of hydra.go.syntax.Key
 keyExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Key
@@ -2865,6 +3105,10 @@ keyField x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "field"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.Key
+keyKey :: Typed.TypedName Syntax.Key
+keyKey = Typed.TypedName (Core.Name "hydra.go.syntax.Key")
 
 -- | DSL injection for the literal variant of hydra.go.syntax.Key
 keyLiteral :: Typed.TypedTerm Syntax.LiteralValue -> Typed.TypedTerm Syntax.Key
@@ -2905,6 +3149,10 @@ keyedElementKey x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.KeyedElement"),
         Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.KeyedElement
+keyedElementKeyedElement :: Typed.TypedName Syntax.KeyedElement
+keyedElementKeyedElement = Typed.TypedName (Core.Name "hydra.go.syntax.KeyedElement")
 
 -- | DSL updater for the element field of hydra.go.syntax.KeyedElement
 keyedElementWithElement :: Typed.TypedTerm Syntax.KeyedElement -> Typed.TypedTerm Syntax.Element -> Typed.TypedTerm Syntax.KeyedElement
@@ -2961,6 +3209,10 @@ labeledStmtLabel x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.LabeledStmt"),
         Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.LabeledStmt
+labeledStmtLabeledStmt :: Typed.TypedName Syntax.LabeledStmt
+labeledStmtLabeledStmt = Typed.TypedName (Core.Name "hydra.go.syntax.LabeledStmt")
 
 -- | DSL accessor for the statement field of hydra.go.syntax.LabeledStmt
 labeledStmtStatement :: Typed.TypedTerm Syntax.LabeledStmt -> Typed.TypedTerm Syntax.Statement
@@ -3032,6 +3284,10 @@ literalFunction x =
         Core.fieldName = (Core.Name "function"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.Literal
+literalLiteral :: Typed.TypedName Syntax.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.go.syntax.Literal")
+
 -- | DSL injection for the array variant of hydra.go.syntax.LiteralType
 literalTypeArray :: Typed.TypedTerm Syntax.ArrayType -> Typed.TypedTerm Syntax.LiteralType
 literalTypeArray x =
@@ -3049,6 +3305,10 @@ literalTypeInferredArray x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inferredArray"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.LiteralType
+literalTypeLiteralType :: Typed.TypedName Syntax.LiteralType
+literalTypeLiteralType = Typed.TypedName (Core.Name "hydra.go.syntax.LiteralType")
 
 -- | DSL injection for the map variant of hydra.go.syntax.LiteralType
 literalTypeMap :: Typed.TypedTerm Syntax.MapType -> Typed.TypedTerm Syntax.LiteralType
@@ -3093,6 +3353,10 @@ literalValue x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.LiteralValue"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.LiteralValue
+literalValueLiteralValue :: Typed.TypedName Syntax.LiteralValue
+literalValueLiteralValue = Typed.TypedName (Core.Name "hydra.go.syntax.LiteralValue")
+
 -- | DSL constructor for hydra.go.syntax.MapType
 mapType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.MapType
 mapType key value =
@@ -3114,6 +3378,10 @@ mapTypeKey x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MapType"),
         Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.MapType
+mapTypeMapType :: Typed.TypedName Syntax.MapType
+mapTypeMapType = Typed.TypedName (Core.Name "hydra.go.syntax.MapType")
 
 -- | DSL accessor for the value field of hydra.go.syntax.MapType
 mapTypeValue :: Typed.TypedTerm Syntax.MapType -> Typed.TypedTerm Syntax.Type
@@ -3185,6 +3453,10 @@ methodDeclBody x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodDecl"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.MethodDecl
+methodDeclMethodDecl :: Typed.TypedName Syntax.MethodDecl
+methodDeclMethodDecl = Typed.TypedName (Core.Name "hydra.go.syntax.MethodDecl")
 
 -- | DSL accessor for the name field of hydra.go.syntax.MethodDecl
 methodDeclName :: Typed.TypedTerm Syntax.MethodDecl -> Typed.TypedTerm Syntax.Identifier
@@ -3350,6 +3622,10 @@ methodElem name signature =
           Core.fieldName = (Core.Name "signature"),
           Core.fieldTerm = (Typed.unTypedTerm signature)}]}))
 
+-- | DSL name token for hydra.go.syntax.MethodElem
+methodElemMethodElem :: Typed.TypedName Syntax.MethodElem
+methodElemMethodElem = Typed.TypedName (Core.Name "hydra.go.syntax.MethodElem")
+
 -- | DSL accessor for the name field of hydra.go.syntax.MethodElem
 methodElemName :: Typed.TypedTerm Syntax.MethodElem -> Typed.TypedTerm Syntax.Identifier
 methodElemName x =
@@ -3423,6 +3699,10 @@ methodExprMethod x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.MethodExpr"),
         Core.projectionFieldName = (Core.Name "method")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.MethodExpr
+methodExprMethodExpr :: Typed.TypedName Syntax.MethodExpr
+methodExprMethodExpr = Typed.TypedName (Core.Name "hydra.go.syntax.MethodExpr")
 
 -- | DSL accessor for the receiver field of hydra.go.syntax.MethodExpr
 methodExprReceiver :: Typed.TypedTerm Syntax.MethodExpr -> Typed.TypedTerm Syntax.Type
@@ -3500,6 +3780,10 @@ moduleImports x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Module"),
         Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.Module
+moduleModule :: Typed.TypedName Syntax.Module
+moduleModule = Typed.TypedName (Core.Name "hydra.go.syntax.Module")
 
 -- | DSL accessor for the package field of hydra.go.syntax.Module
 modulePackage :: Typed.TypedTerm Syntax.Module -> Typed.TypedTerm Syntax.PackageClause
@@ -3618,6 +3902,10 @@ mulOpLeftShift =
         Core.fieldName = (Core.Name "leftShift"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.go.syntax.MulOp
+mulOpMulOp :: Typed.TypedName Syntax.MulOp
+mulOpMulOp = Typed.TypedName (Core.Name "hydra.go.syntax.MulOp")
+
 -- | DSL injection for the multiply variant of hydra.go.syntax.MulOp
 mulOpMultiply :: Typed.TypedTerm Syntax.MulOp
 mulOpMultiply =
@@ -3660,6 +3948,10 @@ namedField names type_ tag =
         Core.Field {
           Core.fieldName = (Core.Name "tag"),
           Core.fieldTerm = (Typed.unTypedTerm tag)}]}))
+
+-- | DSL name token for hydra.go.syntax.NamedField
+namedFieldNamedField :: Typed.TypedName Syntax.NamedField
+namedFieldNamedField = Typed.TypedName (Core.Name "hydra.go.syntax.NamedField")
 
 -- | DSL accessor for the names field of hydra.go.syntax.NamedField
 namedFieldNames :: Typed.TypedTerm Syntax.NamedField -> Typed.TypedTerm [Syntax.Identifier]
@@ -3800,6 +4092,10 @@ operandNameName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.OperandName
+operandNameOperandName :: Typed.TypedName Syntax.OperandName
+operandNameOperandName = Typed.TypedName (Core.Name "hydra.go.syntax.OperandName")
+
 -- | DSL accessor for the typeArgs field of hydra.go.syntax.OperandName
 operandNameTypeArgs :: Typed.TypedTerm Syntax.OperandName -> Typed.TypedTerm [Syntax.Type]
 operandNameTypeArgs x =
@@ -3843,6 +4139,10 @@ operandNameWithTypeArgs original newVal =
           Core.fieldName = (Core.Name "typeArgs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.Operand
+operandOperand :: Typed.TypedName Syntax.Operand
+operandOperand = Typed.TypedName (Core.Name "hydra.go.syntax.Operand")
+
 -- | DSL injection for the paren variant of hydra.go.syntax.Operand
 operandParen :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Operand
 operandParen x =
@@ -3858,6 +4158,10 @@ packageClause x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.PackageClause"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.PackageClause
+packageClausePackageClause :: Typed.TypedName Syntax.PackageClause
+packageClausePackageClause = Typed.TypedName (Core.Name "hydra.go.syntax.PackageClause")
 
 -- | DSL constructor for hydra.go.syntax.ParameterDecl
 parameterDecl :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ParameterDecl
@@ -3883,6 +4187,10 @@ parameterDeclNames x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ParameterDecl"),
         Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ParameterDecl
+parameterDeclParameterDecl :: Typed.TypedName Syntax.ParameterDecl
+parameterDeclParameterDecl = Typed.TypedName (Core.Name "hydra.go.syntax.ParameterDecl")
 
 -- | DSL accessor for the type field of hydra.go.syntax.ParameterDecl
 parameterDeclType :: Typed.TypedTerm Syntax.ParameterDecl -> Typed.TypedTerm Syntax.Type
@@ -3981,12 +4289,20 @@ parameters x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.Parameters"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.Parameters
+parametersParameters :: Typed.TypedName Syntax.Parameters
+parametersParameters = Typed.TypedName (Core.Name "hydra.go.syntax.Parameters")
+
 -- | DSL constructor for the hydra.go.syntax.PointerType wrapper
 pointerType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.PointerType
 pointerType x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.PointerType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.PointerType
+pointerTypePointerType :: Typed.TypedName Syntax.PointerType
+pointerTypePointerType = Typed.TypedName (Core.Name "hydra.go.syntax.PointerType")
 
 -- | DSL injection for the call variant of hydra.go.syntax.PrimaryExpr
 primaryExprCall :: Typed.TypedTerm Syntax.CallExpr -> Typed.TypedTerm Syntax.PrimaryExpr
@@ -4032,6 +4348,10 @@ primaryExprOperand x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "operand"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.PrimaryExpr
+primaryExprPrimaryExpr :: Typed.TypedName Syntax.PrimaryExpr
+primaryExprPrimaryExpr = Typed.TypedName (Core.Name "hydra.go.syntax.PrimaryExpr")
 
 -- | DSL injection for the selector variant of hydra.go.syntax.PrimaryExpr
 primaryExprSelector :: Typed.TypedTerm Syntax.SelectorExpr -> Typed.TypedTerm Syntax.PrimaryExpr
@@ -4091,6 +4411,10 @@ qualifiedIdentPackage x =
         Core.projectionFieldName = (Core.Name "package")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.QualifiedIdent
+qualifiedIdentQualifiedIdent :: Typed.TypedName Syntax.QualifiedIdent
+qualifiedIdentQualifiedIdent = Typed.TypedName (Core.Name "hydra.go.syntax.QualifiedIdent")
+
 -- | DSL updater for the name field of hydra.go.syntax.QualifiedIdent
 qualifiedIdentWithName :: Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.QualifiedIdent
 qualifiedIdentWithName original newVal =
@@ -4146,6 +4470,10 @@ rangeClauseExpression x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.RangeClause"),
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.RangeClause
+rangeClauseRangeClause :: Typed.TypedName Syntax.RangeClause
+rangeClauseRangeClause = Typed.TypedName (Core.Name "hydra.go.syntax.RangeClause")
 
 -- | DSL accessor for the vars field of hydra.go.syntax.RangeClause
 rangeClauseVars :: Typed.TypedTerm Syntax.RangeClause -> Typed.TypedTerm (Maybe Syntax.RangeVars)
@@ -4208,12 +4536,20 @@ rangeVarsDeclare x =
         Core.fieldName = (Core.Name "declare"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.RangeVars
+rangeVarsRangeVars :: Typed.TypedName Syntax.RangeVars
+rangeVarsRangeVars = Typed.TypedName (Core.Name "hydra.go.syntax.RangeVars")
+
 -- | DSL constructor for the hydra.go.syntax.RawStringLit wrapper
 rawStringLit :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.RawStringLit
 rawStringLit x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.RawStringLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.RawStringLit
+rawStringLitRawStringLit :: Typed.TypedName Syntax.RawStringLit
+rawStringLitRawStringLit = Typed.TypedName (Core.Name "hydra.go.syntax.RawStringLit")
 
 -- | DSL constructor for hydra.go.syntax.ReceiveCase
 receiveCase :: Typed.TypedTerm (Maybe Syntax.RangeVars) -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ReceiveCase
@@ -4236,6 +4572,10 @@ receiveCaseExpression x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ReceiveCase"),
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ReceiveCase
+receiveCaseReceiveCase :: Typed.TypedName Syntax.ReceiveCase
+receiveCaseReceiveCase = Typed.TypedName (Core.Name "hydra.go.syntax.ReceiveCase")
 
 -- | DSL accessor for the vars field of hydra.go.syntax.ReceiveCase
 receiveCaseVars :: Typed.TypedTerm Syntax.ReceiveCase -> Typed.TypedTerm (Maybe Syntax.RangeVars)
@@ -4301,6 +4641,10 @@ receiverName x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.Receiver"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.Receiver
+receiverReceiver :: Typed.TypedName Syntax.Receiver
+receiverReceiver = Typed.TypedName (Core.Name "hydra.go.syntax.Receiver")
 
 -- | DSL accessor for the type field of hydra.go.syntax.Receiver
 receiverType :: Typed.TypedTerm Syntax.Receiver -> Typed.TypedTerm Syntax.Type
@@ -4399,6 +4743,10 @@ relOpNotEqual =
         Core.fieldName = (Core.Name "notEqual"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.go.syntax.RelOp
+relOpRelOp :: Typed.TypedName Syntax.RelOp
+relOpRelOp = Typed.TypedName (Core.Name "hydra.go.syntax.RelOp")
+
 -- | DSL injection for the parameters variant of hydra.go.syntax.Result
 resultParameters :: Typed.TypedTerm Syntax.Parameters -> Typed.TypedTerm Syntax.Result
 resultParameters x =
@@ -4407,6 +4755,10 @@ resultParameters x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameters"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.Result
+resultResult :: Typed.TypedName Syntax.Result
+resultResult = Typed.TypedName (Core.Name "hydra.go.syntax.Result")
 
 -- | DSL injection for the type variant of hydra.go.syntax.Result
 resultType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Result
@@ -4424,6 +4776,10 @@ returnStmt x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.ReturnStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.ReturnStmt
+returnStmtReturnStmt :: Typed.TypedName Syntax.ReturnStmt
+returnStmtReturnStmt = Typed.TypedName (Core.Name "hydra.go.syntax.ReturnStmt")
+
 -- | DSL constructor for the hydra.go.syntax.RuneLit wrapper
 runeLit :: Typed.TypedTerm Int -> Typed.TypedTerm Syntax.RuneLit
 runeLit x =
@@ -4431,12 +4787,20 @@ runeLit x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.RuneLit"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.RuneLit
+runeLitRuneLit :: Typed.TypedName Syntax.RuneLit
+runeLitRuneLit = Typed.TypedName (Core.Name "hydra.go.syntax.RuneLit")
+
 -- | DSL constructor for the hydra.go.syntax.SelectStmt wrapper
 selectStmt :: Typed.TypedTerm [Syntax.CommClause] -> Typed.TypedTerm Syntax.SelectStmt
 selectStmt x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.SelectStmt"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SelectStmt
+selectStmtSelectStmt :: Typed.TypedName Syntax.SelectStmt
+selectStmtSelectStmt = Typed.TypedName (Core.Name "hydra.go.syntax.SelectStmt")
 
 -- | DSL constructor for the hydra.go.syntax.Selector wrapper
 selector :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.Selector
@@ -4476,6 +4840,10 @@ selectorExprSelector x =
         Core.projectionFieldName = (Core.Name "selector")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.SelectorExpr
+selectorExprSelectorExpr :: Typed.TypedName Syntax.SelectorExpr
+selectorExprSelectorExpr = Typed.TypedName (Core.Name "hydra.go.syntax.SelectorExpr")
+
 -- | DSL updater for the expr field of hydra.go.syntax.SelectorExpr
 selectorExprWithExpr :: Typed.TypedTerm Syntax.SelectorExpr -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.SelectorExpr
 selectorExprWithExpr original newVal =
@@ -4510,6 +4878,10 @@ selectorExprWithSelector original newVal =
           Core.fieldName = (Core.Name "selector"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.Selector
+selectorSelector :: Typed.TypedName Syntax.Selector
+selectorSelector = Typed.TypedName (Core.Name "hydra.go.syntax.Selector")
+
 -- | DSL constructor for hydra.go.syntax.SendStmt
 sendStmt :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SendStmt
 sendStmt channel value =
@@ -4531,6 +4903,10 @@ sendStmtChannel x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SendStmt"),
         Core.projectionFieldName = (Core.Name "channel")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SendStmt
+sendStmtSendStmt :: Typed.TypedName Syntax.SendStmt
+sendStmtSendStmt = Typed.TypedName (Core.Name "hydra.go.syntax.SendStmt")
 
 -- | DSL accessor for the value field of hydra.go.syntax.SendStmt
 sendStmtValue :: Typed.TypedTerm Syntax.SendStmt -> Typed.TypedTerm Syntax.Expression
@@ -4596,6 +4972,10 @@ shortVarDeclNames x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.ShortVarDecl"),
         Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.ShortVarDecl
+shortVarDeclShortVarDecl :: Typed.TypedName Syntax.ShortVarDecl
+shortVarDeclShortVarDecl = Typed.TypedName (Core.Name "hydra.go.syntax.ShortVarDecl")
 
 -- | DSL accessor for the values field of hydra.go.syntax.ShortVarDecl
 shortVarDeclValues :: Typed.TypedTerm Syntax.ShortVarDecl -> Typed.TypedTerm [Syntax.Expression]
@@ -4671,6 +5051,10 @@ signatureResult x =
         Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.Signature
+signatureSignature :: Typed.TypedName Syntax.Signature
+signatureSignature = Typed.TypedName (Core.Name "hydra.go.syntax.Signature")
+
 -- | DSL updater for the parameters field of hydra.go.syntax.Signature
 signatureWithParameters :: Typed.TypedTerm Syntax.Signature -> Typed.TypedTerm Syntax.Parameters -> Typed.TypedTerm Syntax.Signature
 signatureWithParameters original newVal =
@@ -4735,6 +5119,10 @@ simpleSliceLow x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SimpleSlice"),
         Core.projectionFieldName = (Core.Name "low")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SimpleSlice
+simpleSliceSimpleSlice :: Typed.TypedName Syntax.SimpleSlice
+simpleSliceSimpleSlice = Typed.TypedName (Core.Name "hydra.go.syntax.SimpleSlice")
 
 -- | DSL updater for the high field of hydra.go.syntax.SimpleSlice
 simpleSliceWithHigh :: Typed.TypedTerm Syntax.SimpleSlice -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.SimpleSlice
@@ -4824,6 +5212,10 @@ simpleStmtShortVarDecl x =
         Core.fieldName = (Core.Name "shortVarDecl"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.SimpleStmt
+simpleStmtSimpleStmt :: Typed.TypedName Syntax.SimpleStmt
+simpleStmtSimpleStmt = Typed.TypedName (Core.Name "hydra.go.syntax.SimpleStmt")
+
 -- | DSL constructor for hydra.go.syntax.SliceExpr
 sliceExpr :: Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.Slice -> Typed.TypedTerm Syntax.SliceExpr
 sliceExpr expr slice =
@@ -4854,6 +5246,10 @@ sliceExprSlice x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SliceExpr"),
         Core.projectionFieldName = (Core.Name "slice")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SliceExpr
+sliceExprSliceExpr :: Typed.TypedName Syntax.SliceExpr
+sliceExprSliceExpr = Typed.TypedName (Core.Name "hydra.go.syntax.SliceExpr")
 
 -- | DSL updater for the expr field of hydra.go.syntax.SliceExpr
 sliceExprWithExpr :: Typed.TypedTerm Syntax.SliceExpr -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.SliceExpr
@@ -4907,12 +5303,20 @@ sliceSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.Slice
+sliceSlice :: Typed.TypedName Syntax.Slice
+sliceSlice = Typed.TypedName (Core.Name "hydra.go.syntax.Slice")
+
 -- | DSL constructor for the hydra.go.syntax.SliceType wrapper
 sliceType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.SliceType
 sliceType x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.SliceType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SliceType
+sliceTypeSliceType :: Typed.TypedName Syntax.SliceType
+sliceTypeSliceType = Typed.TypedName (Core.Name "hydra.go.syntax.SliceType")
 
 -- | DSL constructor for hydra.go.syntax.SourceFile
 sourceFile :: Typed.TypedTerm Syntax.PackageClause -> Typed.TypedTerm [Syntax.ImportDecl] -> Typed.TypedTerm [Syntax.TopLevelDecl] -> Typed.TypedTerm Syntax.SourceFile
@@ -4956,6 +5360,10 @@ sourceFilePackage x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.SourceFile"),
         Core.projectionFieldName = (Core.Name "package")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.SourceFile
+sourceFileSourceFile :: Typed.TypedName Syntax.SourceFile
+sourceFileSourceFile = Typed.TypedName (Core.Name "hydra.go.syntax.SourceFile")
 
 -- | DSL updater for the declarations field of hydra.go.syntax.SourceFile
 sourceFileWithDeclarations :: Typed.TypedTerm Syntax.SourceFile -> Typed.TypedTerm [Syntax.TopLevelDecl] -> Typed.TypedTerm Syntax.SourceFile
@@ -5155,6 +5563,10 @@ statementSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.Statement
+statementStatement :: Typed.TypedName Syntax.Statement
+statementStatement = Typed.TypedName (Core.Name "hydra.go.syntax.Statement")
+
 -- | DSL injection for the switch variant of hydra.go.syntax.Statement
 statementSwitch :: Typed.TypedTerm Syntax.SwitchStmt -> Typed.TypedTerm Syntax.Statement
 statementSwitch x =
@@ -5182,12 +5594,20 @@ stringLitRaw x =
         Core.fieldName = (Core.Name "raw"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.StringLit
+stringLitStringLit :: Typed.TypedName Syntax.StringLit
+stringLitStringLit = Typed.TypedName (Core.Name "hydra.go.syntax.StringLit")
+
 -- | DSL constructor for the hydra.go.syntax.StructType wrapper
 structType :: Typed.TypedTerm [Syntax.FieldDecl] -> Typed.TypedTerm Syntax.StructType
 structType x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.StructType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.StructType
+structTypeStructType :: Typed.TypedName Syntax.StructType
+structTypeStructType = Typed.TypedName (Core.Name "hydra.go.syntax.StructType")
 
 -- | DSL injection for the expression variant of hydra.go.syntax.SwitchStmt
 switchStmtExpression :: Typed.TypedTerm Syntax.ExprSwitchStmt -> Typed.TypedTerm Syntax.SwitchStmt
@@ -5197,6 +5617,10 @@ switchStmtExpression x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.SwitchStmt
+switchStmtSwitchStmt :: Typed.TypedName Syntax.SwitchStmt
+switchStmtSwitchStmt = Typed.TypedName (Core.Name "hydra.go.syntax.SwitchStmt")
 
 -- | DSL injection for the type variant of hydra.go.syntax.SwitchStmt
 switchStmtType :: Typed.TypedTerm Syntax.TypeSwitchStmt -> Typed.TypedTerm Syntax.SwitchStmt
@@ -5213,6 +5637,10 @@ tag x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.Tag"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.Tag
+tagTag :: Typed.TypedName Syntax.Tag
+tagTag = Typed.TypedName (Core.Name "hydra.go.syntax.Tag")
 
 -- | DSL injection for the declaration variant of hydra.go.syntax.TopLevelDecl
 topLevelDeclDeclaration :: Typed.TypedTerm Syntax.Declaration -> Typed.TypedTerm Syntax.TopLevelDecl
@@ -5240,6 +5668,10 @@ topLevelDeclMethod x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "method"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.TopLevelDecl
+topLevelDeclTopLevelDecl :: Typed.TypedName Syntax.TopLevelDecl
+topLevelDeclTopLevelDecl = Typed.TypedName (Core.Name "hydra.go.syntax.TopLevelDecl")
 
 -- | DSL constructor for the hydra.go.syntax.TypeAssertion wrapper
 typeAssertion :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeAssertion
@@ -5279,6 +5711,10 @@ typeAssertionExprType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeAssertionExpr
+typeAssertionExprTypeAssertionExpr :: Typed.TypedName Syntax.TypeAssertionExpr
+typeAssertionExprTypeAssertionExpr = Typed.TypedName (Core.Name "hydra.go.syntax.TypeAssertionExpr")
+
 -- | DSL updater for the expr field of hydra.go.syntax.TypeAssertionExpr
 typeAssertionExprWithExpr :: Typed.TypedTerm Syntax.TypeAssertionExpr -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.TypeAssertionExpr
 typeAssertionExprWithExpr original newVal =
@@ -5313,6 +5749,10 @@ typeAssertionExprWithType original newVal =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.go.syntax.TypeAssertion
+typeAssertionTypeAssertion :: Typed.TypedName Syntax.TypeAssertion
+typeAssertionTypeAssertion = Typed.TypedName (Core.Name "hydra.go.syntax.TypeAssertion")
+
 -- | DSL constructor for hydra.go.syntax.TypeCaseClause
 typeCaseClause :: Typed.TypedTerm (Maybe [Syntax.Type]) -> Typed.TypedTerm [Syntax.Statement] -> Typed.TypedTerm Syntax.TypeCaseClause
 typeCaseClause case_ statements =
@@ -5343,6 +5783,10 @@ typeCaseClauseStatements x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeCaseClause"),
         Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeCaseClause
+typeCaseClauseTypeCaseClause :: Typed.TypedName Syntax.TypeCaseClause
+typeCaseClauseTypeCaseClause = Typed.TypedName (Core.Name "hydra.go.syntax.TypeCaseClause")
 
 -- | DSL updater for the case field of hydra.go.syntax.TypeCaseClause
 typeCaseClauseWithCase :: Typed.TypedTerm Syntax.TypeCaseClause -> Typed.TypedTerm (Maybe [Syntax.Type]) -> Typed.TypedTerm Syntax.TypeCaseClause
@@ -5385,12 +5829,20 @@ typeConstraint x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.TypeConstraint"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeConstraint
+typeConstraintTypeConstraint :: Typed.TypedName Syntax.TypeConstraint
+typeConstraintTypeConstraint = Typed.TypedName (Core.Name "hydra.go.syntax.TypeConstraint")
+
 -- | DSL constructor for the hydra.go.syntax.TypeDecl wrapper
 typeDecl :: Typed.TypedTerm [Syntax.TypeSpec] -> Typed.TypedTerm Syntax.TypeDecl
 typeDecl x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.TypeDecl"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeDecl
+typeDeclTypeDecl :: Typed.TypedName Syntax.TypeDecl
+typeDeclTypeDecl = Typed.TypedName (Core.Name "hydra.go.syntax.TypeDecl")
 
 -- | DSL constructor for hydra.go.syntax.TypeDef
 typeDef :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm (Maybe Syntax.TypeParameters) -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeDef
@@ -5425,6 +5877,10 @@ typeDefType x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeDef"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeDef
+typeDefTypeDef :: Typed.TypedName Syntax.TypeDef
+typeDefTypeDef = Typed.TypedName (Core.Name "hydra.go.syntax.TypeDef")
 
 -- | DSL accessor for the typeParams field of hydra.go.syntax.TypeDef
 typeDefTypeParams :: Typed.TypedTerm Syntax.TypeDef -> Typed.TypedTerm (Maybe Syntax.TypeParameters)
@@ -5514,6 +5970,10 @@ typeElem x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.TypeElem"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeElem
+typeElemTypeElem :: Typed.TypedName Syntax.TypeElem
+typeElemTypeElem = Typed.TypedName (Core.Name "hydra.go.syntax.TypeElem")
+
 -- | DSL injection for the array variant of hydra.go.syntax.TypeLit
 typeLitArray :: Typed.TypedTerm Syntax.ArrayType -> Typed.TypedTerm Syntax.TypeLit
 typeLitArray x =
@@ -5586,6 +6046,10 @@ typeLitStruct x =
         Core.fieldName = (Core.Name "struct"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.TypeLit
+typeLitTypeLit :: Typed.TypedName Syntax.TypeLit
+typeLitTypeLit = Typed.TypedName (Core.Name "hydra.go.syntax.TypeLit")
+
 -- | DSL injection for the literal variant of hydra.go.syntax.Type
 typeLiteral :: Typed.TypedTerm Syntax.TypeLit -> Typed.TypedTerm Syntax.Type
 typeLiteral x =
@@ -5634,6 +6098,10 @@ typeNameTypeArgs x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeName"),
         Core.projectionFieldName = (Core.Name "typeArgs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeName
+typeNameTypeName :: Typed.TypedName Syntax.TypeName
+typeNameTypeName = Typed.TypedName (Core.Name "hydra.go.syntax.TypeName")
 
 -- | DSL updater for the name field of hydra.go.syntax.TypeName
 typeNameWithName :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm Syntax.TypeName
@@ -5700,6 +6168,10 @@ typeParamDeclNames x =
         Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeParamDecl
+typeParamDeclTypeParamDecl :: Typed.TypedName Syntax.TypeParamDecl
+typeParamDeclTypeParamDecl = Typed.TypedName (Core.Name "hydra.go.syntax.TypeParamDecl")
+
 -- | DSL updater for the constraint field of hydra.go.syntax.TypeParamDecl
 typeParamDeclWithConstraint :: Typed.TypedTerm Syntax.TypeParamDecl -> Typed.TypedTerm Syntax.TypeConstraint -> Typed.TypedTerm Syntax.TypeParamDecl
 typeParamDeclWithConstraint original newVal =
@@ -5741,6 +6213,10 @@ typeParameters x =
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.TypeParameters"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeParameters
+typeParametersTypeParameters :: Typed.TypedName Syntax.TypeParameters
+typeParametersTypeParameters = Typed.TypedName (Core.Name "hydra.go.syntax.TypeParameters")
+
 -- | DSL injection for the paren variant of hydra.go.syntax.Type
 typeParen :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type
 typeParen x =
@@ -5767,6 +6243,10 @@ typeSpecDefinition x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "definition"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.go.syntax.TypeSpec
+typeSpecTypeSpec :: Typed.TypedName Syntax.TypeSpec
+typeSpecTypeSpec = Typed.TypedName (Core.Name "hydra.go.syntax.TypeSpec")
 
 -- | DSL constructor for hydra.go.syntax.TypeSwitchGuard
 typeSwitchGuard :: Typed.TypedTerm (Maybe Syntax.Identifier) -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.TypeSwitchGuard
@@ -5798,6 +6278,10 @@ typeSwitchGuardName x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchGuard"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeSwitchGuard
+typeSwitchGuardTypeSwitchGuard :: Typed.TypedName Syntax.TypeSwitchGuard
+typeSwitchGuardTypeSwitchGuard = Typed.TypedName (Core.Name "hydra.go.syntax.TypeSwitchGuard")
 
 -- | DSL updater for the expression field of hydra.go.syntax.TypeSwitchGuard
 typeSwitchGuardWithExpression :: Typed.TypedTerm Syntax.TypeSwitchGuard -> Typed.TypedTerm Syntax.PrimaryExpr -> Typed.TypedTerm Syntax.TypeSwitchGuard
@@ -5875,6 +6359,10 @@ typeSwitchStmtInit x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeSwitchStmt"),
         Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.TypeSwitchStmt
+typeSwitchStmtTypeSwitchStmt :: Typed.TypedName Syntax.TypeSwitchStmt
+typeSwitchStmtTypeSwitchStmt = Typed.TypedName (Core.Name "hydra.go.syntax.TypeSwitchStmt")
 
 -- | DSL updater for the cases field of hydra.go.syntax.TypeSwitchStmt
 typeSwitchStmtWithCases :: Typed.TypedTerm Syntax.TypeSwitchStmt -> Typed.TypedTerm [Syntax.TypeCaseClause] -> Typed.TypedTerm Syntax.TypeSwitchStmt
@@ -5970,6 +6458,10 @@ typeTermType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.go.syntax.TypeTerm
+typeTermTypeTerm :: Typed.TypedName Syntax.TypeTerm
+typeTermTypeTerm = Typed.TypedName (Core.Name "hydra.go.syntax.TypeTerm")
+
 -- | DSL accessor for the underlying field of hydra.go.syntax.TypeTerm
 typeTermUnderlying :: Typed.TypedTerm Syntax.TypeTerm -> Typed.TypedTerm Bool
 typeTermUnderlying x =
@@ -6012,6 +6504,10 @@ typeTermWithUnderlying original newVal =
               Core.projectionTypeName = (Core.Name "hydra.go.syntax.TypeTerm"),
               Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL name token for hydra.go.syntax.Type
+typeType :: Typed.TypedName Syntax.Type
+typeType = Typed.TypedName (Core.Name "hydra.go.syntax.Type")
 
 -- | DSL accessor for the body of hydra.go.syntax.Block
 unBlock :: Typed.TypedTerm Syntax.Block -> Typed.TypedTerm [Syntax.Statement]
@@ -6311,6 +6807,10 @@ unaryExprPrimary x =
         Core.fieldName = (Core.Name "primary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.go.syntax.UnaryExpr
+unaryExprUnaryExpr :: Typed.TypedName Syntax.UnaryExpr
+unaryExprUnaryExpr = Typed.TypedName (Core.Name "hydra.go.syntax.UnaryExpr")
+
 -- | DSL injection for the addressOf variant of hydra.go.syntax.UnaryOp
 unaryOpAddressOf :: Typed.TypedTerm Syntax.UnaryOp
 unaryOpAddressOf =
@@ -6365,6 +6865,10 @@ unaryOpReceive =
         Core.fieldName = (Core.Name "receive"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.go.syntax.UnaryOp
+unaryOpUnaryOp :: Typed.TypedName Syntax.UnaryOp
+unaryOpUnaryOp = Typed.TypedName (Core.Name "hydra.go.syntax.UnaryOp")
+
 -- | DSL injection for the xor variant of hydra.go.syntax.UnaryOp
 unaryOpXor :: Typed.TypedTerm Syntax.UnaryOp
 unaryOpXor =
@@ -6404,6 +6908,10 @@ unaryOperationOperand x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.UnaryOperation"),
         Core.projectionFieldName = (Core.Name "operand")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.UnaryOperation
+unaryOperationUnaryOperation :: Typed.TypedName Syntax.UnaryOperation
+unaryOperationUnaryOperation = Typed.TypedName (Core.Name "hydra.go.syntax.UnaryOperation")
 
 -- | DSL updater for the op field of hydra.go.syntax.UnaryOperation
 unaryOperationWithOp :: Typed.TypedTerm Syntax.UnaryOperation -> Typed.TypedTerm Syntax.UnaryOp -> Typed.TypedTerm Syntax.UnaryOperation
@@ -6445,6 +6953,10 @@ varDecl x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.go.syntax.VarDecl"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.VarDecl
+varDeclVarDecl :: Typed.TypedName Syntax.VarDecl
+varDeclVarDecl = Typed.TypedName (Core.Name "hydra.go.syntax.VarDecl")
 
 -- | DSL constructor for hydra.go.syntax.VarSpec
 varSpec :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.VarSpec
@@ -6488,6 +7000,10 @@ varSpecValues x =
         Core.projectionTypeName = (Core.Name "hydra.go.syntax.VarSpec"),
         Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.go.syntax.VarSpec
+varSpecVarSpec :: Typed.TypedName Syntax.VarSpec
+varSpecVarSpec = Typed.TypedName (Core.Name "hydra.go.syntax.VarSpec")
 
 -- | DSL updater for the names field of hydra.go.syntax.VarSpec
 varSpecWithNames :: Typed.TypedTerm Syntax.VarSpec -> Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Syntax.VarSpec

@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.strip"},
+    {"module": "hydra.decode.strip"},
     {"module": "hydra.rewriting"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

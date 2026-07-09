@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.errors"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.errors"},
+    {"module": "hydra.decode.errors"},
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -17,6 +19,24 @@
     {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.variants"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.errors.decodingErrorDecodingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.DecodingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.DecodingError"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.errors.DecodingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.decodingError",
@@ -106,6 +126,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.errors.DecodingError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.errorError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.Error"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.Error"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.errors.Error"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.errorChecking",
@@ -1036,6 +1072,26 @@
                   "value": {"literal": {"string": "DSL injection for the unification variant of hydra.errors.Error"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.extractionErrorExtractionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.ExtractionError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.ExtractionError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.ExtractionError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.extractionErrorEmptyList",
         "signature": {
           "typeParameters": [],
@@ -1519,6 +1575,24 @@
                   "value": {"literal": {"string": "DSL injection for the unexpectedShape variant of hydra.errors.ExtractionError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.inferenceErrorInferenceError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.InferenceError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.InferenceError"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.errors.InferenceError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.inferenceErrorChecking",
         "signature": {
           "typeParameters": [],
@@ -1730,6 +1804,26 @@
                   "value": {"literal": {"string": "DSL injection for the unification variant of hydra.errors.InferenceError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.multipleBindingsErrorMultipleBindingsError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.MultipleBindingsError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.MultipleBindingsError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.MultipleBindingsError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.multipleBindingsError",
         "signature": {
           "typeParameters": [],
@@ -1930,6 +2024,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.errors.MultipleBindingsError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.multipleFieldsErrorMultipleFieldsError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.MultipleFieldsError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.MultipleFieldsError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.MultipleFieldsError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.multipleFieldsError",
@@ -2134,6 +2248,26 @@
                   "value": {"literal": {"string": "DSL updater for the fieldName field of hydra.errors.MultipleFieldsError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.noMatchingFieldErrorNoMatchingFieldError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.NoMatchingFieldError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.NoMatchingFieldError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.NoMatchingFieldError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.noMatchingFieldError",
         "signature": {
           "typeParameters": [],
@@ -2329,6 +2463,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fieldName field of hydra.errors.NoMatchingFieldError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.noSuchBindingErrorNoSuchBindingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.NoSuchBindingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.NoSuchBindingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.NoSuchBindingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.noSuchBindingError",
@@ -2533,6 +2687,26 @@
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.errors.NoSuchBindingError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.noSuchPrimitiveErrorNoSuchPrimitiveError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.NoSuchPrimitiveError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.NoSuchPrimitiveError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.NoSuchPrimitiveError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.noSuchPrimitiveError",
         "signature": {
           "typeParameters": [],
@@ -2735,6 +2909,23 @@
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.errors.NoSuchPrimitiveError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.otherErrorOtherError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.OtherError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.OtherError"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.errors.OtherError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.otherError",
         "signature": {
           "typeParameters": [],
@@ -2822,6 +3013,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.errors.OtherError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.otherInferenceErrorOtherInferenceError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.OtherInferenceError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.OtherInferenceError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.OtherInferenceError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.otherInferenceError",
@@ -3271,6 +3482,26 @@
                   "value": {"literal": {"string": "DSL updater for the message field of hydra.errors.OtherInferenceError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.errors.otherResolutionErrorOtherResolutionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.OtherResolutionError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.OtherResolutionError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.OtherResolutionError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.errors.otherResolutionError",
         "signature": {
           "typeParameters": [],
@@ -3358,6 +3589,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.errors.OtherResolutionError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.resolutionErrorResolutionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.ResolutionError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.ResolutionError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.ResolutionError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.resolutionErrorNoSuchBinding",
@@ -3699,6 +3950,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the unexpectedShape variant of hydra.errors.ResolutionError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.unexpectedShapeErrorUnexpectedShapeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.UnexpectedShapeError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.UnexpectedShapeError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.UnexpectedShapeError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.unexpectedShapeError",
@@ -4146,6 +4417,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the actual field of hydra.errors.UnexpectedShapeError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.unificationErrorUnificationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.UnificationError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.UnificationError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.UnificationError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.unificationError",
@@ -4881,6 +5172,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the message field of hydra.errors.UnificationError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.errors.unificationInferenceErrorUnificationInferenceError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.errors.UnificationInferenceError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.errors.UnificationInferenceError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.errors.UnificationInferenceError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.errors.unificationInferenceError",

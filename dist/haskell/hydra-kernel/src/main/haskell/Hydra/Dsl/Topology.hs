@@ -5,13 +5,31 @@
 module Hydra.Dsl.Topology where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Topology as DecodeTopology
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Topology as EncodeTopology
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | DSL composition builder for the decoder of hydra.topology.OrderingIsomorphism
+decodeOrderingIsomorphism :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Topology.OrderingIsomorphism a))
+decodeOrderingIsomorphism a =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.topology.orderingIsomorphism")),
+      Core.applicationArgument = (Typed.unTypedTerm a)}))
+
+-- | DSL composition builder for the encoder of hydra.topology.OrderingIsomorphism
+encodeOrderingIsomorphism :: Typed.TypedTerm (a -> Core.Term) -> Typed.TypedTerm (Topology.OrderingIsomorphism a -> Core.Term)
+encodeOrderingIsomorphism a =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.topology.orderingIsomorphism")),
+      Core.applicationArgument = (Typed.unTypedTerm a)}))
 
 -- | DSL constructor for hydra.topology.OrderingIsomorphism
 orderingIsomorphism :: Typed.TypedTerm ([a] -> [a]) -> Typed.TypedTerm ([a] -> [a]) -> Typed.TypedTerm (Topology.OrderingIsomorphism a)
@@ -43,6 +61,10 @@ orderingIsomorphismEncode x =
         Core.projectionTypeName = (Core.Name "hydra.topology.OrderingIsomorphism"),
         Core.projectionFieldName = (Core.Name "encode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.topology.OrderingIsomorphism
+orderingIsomorphismOrderingIsomorphism :: Typed.TypedName (Topology.OrderingIsomorphism a)
+orderingIsomorphismOrderingIsomorphism = Typed.TypedName (Core.Name "hydra.topology.OrderingIsomorphism")
 
 -- | DSL updater for the decode field of hydra.topology.OrderingIsomorphism
 orderingIsomorphismWithDecode :: Typed.TypedTerm (Topology.OrderingIsomorphism a) -> Typed.TypedTerm ([a] -> [a]) -> Typed.TypedTerm (Topology.OrderingIsomorphism a)
@@ -156,6 +178,10 @@ tarjanStateStack x =
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
         Core.projectionFieldName = (Core.Name "stack")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.topology.TarjanState
+tarjanStateTarjanState :: Typed.TypedName Topology.TarjanState
+tarjanStateTarjanState = Typed.TypedName (Core.Name "hydra.topology.TarjanState")
 
 -- | DSL updater for the counter field of hydra.topology.TarjanState
 tarjanStateWithCounter :: Typed.TypedTerm Topology.TarjanState -> Typed.TypedTerm Int -> Typed.TypedTerm Topology.TarjanState

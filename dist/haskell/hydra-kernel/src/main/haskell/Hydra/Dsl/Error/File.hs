@@ -5,7 +5,9 @@
 module Hydra.Dsl.Error.File where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Error.File as DecodeErrorFile
 import qualified Hydra.Dsl.File as DslFile
+import qualified Hydra.Encode.Error.File as EncodeErrorFile
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.File as File
 import qualified Hydra.Typed as Typed
@@ -20,6 +22,10 @@ fileErrorAlreadyExists x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alreadyExists"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.error.file.FileError
+fileErrorFileError :: Typed.TypedName ErrorFile.FileError
+fileErrorFileError = Typed.TypedName (Core.Name "hydra.error.file.FileError")
 
 -- | DSL injection for the invalidPath variant of hydra.error.file.FileError
 fileErrorInvalidPath :: Typed.TypedTerm String -> Typed.TypedTerm ErrorFile.FileError

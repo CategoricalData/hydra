@@ -72,6 +72,50 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.typed.TypedBinding"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.encode.typed.typedName",
+        "signature": {
+          "typeParameters": [{"name": "a", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "a"}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.typed.TypedName"},
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.typed.TypedName"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {
+                                    "application": {
+                                      "function": {"variable": "hydra.encode.core.name"},
+                                      "argument": {"application": {"function": {"unwrap": "hydra.typed.TypedName"}, "argument": {"variable": "x"}}}}}}]}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.typed.TypedName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.encode.typed.typedTerm",
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}],

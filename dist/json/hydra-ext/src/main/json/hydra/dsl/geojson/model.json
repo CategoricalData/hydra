@@ -4,9 +4,31 @@
   "dependencies": [
     {"module": "hydra.geojson.model"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.geojson.model"},
+    {"module": "hydra.decode.geojson.model"},
     {"module": "hydra.json.model"},
     {"module": "hydra.dsl.json.model"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.boundingBoxBoundingBox",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.BoundingBox"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.BoundingBox"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.BoundingBox"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.boundingBox",
@@ -106,6 +128,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.geojson.model.BoundingBox"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.coordinateRangeCoordinateRange",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.CoordinateRange"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.CoordinateRange"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.CoordinateRange"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.coordinateRange",
@@ -473,6 +515,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the max field of hydra.geojson.model.CoordinateRange"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.featureFeature",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Feature"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Feature"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Feature"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.feature",
@@ -1641,6 +1701,26 @@
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.Feature"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.featureCollectionFeatureCollection",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.FeatureCollection"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.FeatureCollection"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.FeatureCollection"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.featureCollection",
         "signature": {
           "typeParameters": [],
@@ -2026,6 +2106,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.FeatureCollection"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.geometryCollectionGeometryCollection",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.GeometryCollection"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.GeometryCollection"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.GeometryCollection"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.geometryCollection",
@@ -2415,6 +2515,26 @@
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.GeometryCollection"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.geometryGeometry",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Geometry"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Geometry"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Geometry"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.geometryPoint",
         "signature": {
           "typeParameters": [],
@@ -2774,6 +2894,22 @@
                   "value": {"literal": {"string": "DSL injection for the geometryCollection variant of hydra.geojson.model.Geometry"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.idId",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Id"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Id"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Id"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.idNumber",
         "signature": {
           "typeParameters": [],
@@ -2868,6 +3004,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.geojson.model.Id"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.lineStringLineString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.LineString"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.LineString"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.LineString"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.lineString",
@@ -3255,6 +3411,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.LineString"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.multiLineStringMultiLineString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.MultiLineString"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.MultiLineString"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.MultiLineString"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.multiLineString",
@@ -3654,6 +3830,26 @@
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.MultiLineString"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.multiPointMultiPoint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.MultiPoint"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.MultiPoint"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.MultiPoint"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.multiPoint",
         "signature": {
           "typeParameters": [],
@@ -4039,6 +4235,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.MultiPoint"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.multiPolygonMultiPolygon",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.MultiPolygon"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.MultiPolygon"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.MultiPolygon"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.multiPolygon",
@@ -4428,6 +4644,24 @@
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.MultiPolygon"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.objectObject",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Object"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Object"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Object"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.objectGeometry",
         "signature": {
           "typeParameters": [],
@@ -4581,6 +4815,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the featureCollection variant of hydra.geojson.model.Object"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.pointPoint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Point"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Point"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Point"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.point",
@@ -4968,6 +5219,24 @@
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.Point"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.geojson.model.polygonPolygon",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Polygon"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Polygon"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Polygon"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.geojson.model.polygon",
         "signature": {
           "typeParameters": [],
@@ -5353,6 +5622,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the bbox field of hydra.geojson.model.Polygon"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.geojson.model.positionPosition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.geojson.model.Position"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.geojson.model.Position"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.geojson.model.Position"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.geojson.model.position",

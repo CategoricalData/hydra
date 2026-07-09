@@ -5,10 +5,12 @@
 module Hydra.Dsl.Error.Checking where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Error.Checking as DecodeErrorChecking
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Paths as DslPaths
 import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Dsl.Variants as DslVariants
+import qualified Hydra.Encode.Error.Checking as EncodeErrorChecking
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Typed as Typed
@@ -17,6 +19,10 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
+-- | DSL name token for hydra.error.checking.CheckingError
+checkingErrorCheckingError :: Typed.TypedName Checking.CheckingError
+checkingErrorCheckingError = Typed.TypedName (Core.Name "hydra.error.checking.CheckingError")
 
 -- | DSL injection for the incorrectUnification variant of hydra.error.checking.CheckingError
 checkingErrorIncorrectUnification :: Typed.TypedTerm Checking.IncorrectUnificationError -> Typed.TypedTerm Checking.CheckingError
@@ -145,6 +151,11 @@ incorrectUnificationError substitution =
           Core.fieldName = (Core.Name "substitution"),
           Core.fieldTerm = (Typed.unTypedTerm substitution)}]}))
 
+-- | DSL name token for hydra.error.checking.IncorrectUnificationError
+incorrectUnificationErrorIncorrectUnificationError :: Typed.TypedName Checking.IncorrectUnificationError
+incorrectUnificationErrorIncorrectUnificationError =
+    Typed.TypedName (Core.Name "hydra.error.checking.IncorrectUnificationError")
+
 -- | DSL accessor for the substitution field of hydra.error.checking.IncorrectUnificationError
 incorrectUnificationErrorSubstitution :: Typed.TypedTerm Checking.IncorrectUnificationError -> Typed.TypedTerm Typing.TypeSubst
 incorrectUnificationErrorSubstitution x =
@@ -176,6 +187,10 @@ notAForallTypeError type_ typeArguments =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Typed.unTypedTerm typeArguments)}]}))
+
+-- | DSL name token for hydra.error.checking.NotAForallTypeError
+notAForallTypeErrorNotAForallTypeError :: Typed.TypedName Checking.NotAForallTypeError
+notAForallTypeErrorNotAForallTypeError = Typed.TypedName (Core.Name "hydra.error.checking.NotAForallTypeError")
 
 -- | DSL accessor for the type field of hydra.error.checking.NotAForallTypeError
 notAForallTypeErrorType :: Typed.TypedTerm Checking.NotAForallTypeError -> Typed.TypedTerm Core.Type
@@ -239,6 +254,10 @@ notAFunctionTypeError type_ =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 
+-- | DSL name token for hydra.error.checking.NotAFunctionTypeError
+notAFunctionTypeErrorNotAFunctionTypeError :: Typed.TypedName Checking.NotAFunctionTypeError
+notAFunctionTypeErrorNotAFunctionTypeError = Typed.TypedName (Core.Name "hydra.error.checking.NotAFunctionTypeError")
+
 -- | DSL accessor for the type field of hydra.error.checking.NotAFunctionTypeError
 notAFunctionTypeErrorType :: Typed.TypedTerm Checking.NotAFunctionTypeError -> Typed.TypedTerm Core.Type
 notAFunctionTypeErrorType x =
@@ -279,6 +298,10 @@ otherCheckingErrorMessage x =
         Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
         Core.projectionFieldName = (Core.Name "message")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.checking.OtherCheckingError
+otherCheckingErrorOtherCheckingError :: Typed.TypedName Checking.OtherCheckingError
+otherCheckingErrorOtherCheckingError = Typed.TypedName (Core.Name "hydra.error.checking.OtherCheckingError")
 
 -- | DSL accessor for the path field of hydra.error.checking.OtherCheckingError
 otherCheckingErrorPath :: Typed.TypedTerm Checking.OtherCheckingError -> Typed.TypedTerm Paths.SubtermPath
@@ -377,6 +400,10 @@ typeArityMismatchErrorTypeArguments x =
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
         Core.projectionFieldName = (Core.Name "typeArguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.checking.TypeArityMismatchError
+typeArityMismatchErrorTypeArityMismatchError :: Typed.TypedName Checking.TypeArityMismatchError
+typeArityMismatchErrorTypeArityMismatchError = Typed.TypedName (Core.Name "hydra.error.checking.TypeArityMismatchError")
 
 -- | DSL updater for the actualArity field of hydra.error.checking.TypeArityMismatchError
 typeArityMismatchErrorWithActualArity :: Typed.TypedTerm Checking.TypeArityMismatchError -> Typed.TypedTerm Int -> Typed.TypedTerm Checking.TypeArityMismatchError
@@ -533,6 +560,10 @@ typeMismatchErrorExpectedType x =
         Core.projectionFieldName = (Core.Name "expectedType")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.checking.TypeMismatchError
+typeMismatchErrorTypeMismatchError :: Typed.TypedName Checking.TypeMismatchError
+typeMismatchErrorTypeMismatchError = Typed.TypedName (Core.Name "hydra.error.checking.TypeMismatchError")
+
 -- | DSL updater for the actualType field of hydra.error.checking.TypeMismatchError
 typeMismatchErrorWithActualType :: Typed.TypedTerm Checking.TypeMismatchError -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Checking.TypeMismatchError
 typeMismatchErrorWithActualType original newVal =
@@ -588,6 +619,11 @@ unboundTypeVariablesErrorType x =
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.checking.UnboundTypeVariablesError
+unboundTypeVariablesErrorUnboundTypeVariablesError :: Typed.TypedName Checking.UnboundTypeVariablesError
+unboundTypeVariablesErrorUnboundTypeVariablesError =
+    Typed.TypedName (Core.Name "hydra.error.checking.UnboundTypeVariablesError")
 
 -- | DSL accessor for the variables field of hydra.error.checking.UnboundTypeVariablesError
 unboundTypeVariablesErrorVariables :: Typed.TypedTerm Checking.UnboundTypeVariablesError -> Typed.TypedTerm (S.Set Core.Name)
@@ -663,6 +699,11 @@ undefinedTermVariableCheckingErrorPath x =
         Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.checking.UndefinedTermVariableCheckingError
+undefinedTermVariableCheckingErrorUndefinedTermVariableCheckingError :: Typed.TypedName Checking.UndefinedTermVariableCheckingError
+undefinedTermVariableCheckingErrorUndefinedTermVariableCheckingError =
+    Typed.TypedName (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError")
+
 -- | DSL updater for the name field of hydra.error.checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingErrorWithName :: Typed.TypedTerm Checking.UndefinedTermVariableCheckingError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Checking.UndefinedTermVariableCheckingError
 undefinedTermVariableCheckingErrorWithName original newVal =
@@ -728,6 +769,10 @@ unequalTypesErrorTypes x =
         Core.projectionFieldName = (Core.Name "types")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.checking.UnequalTypesError
+unequalTypesErrorUnequalTypesError :: Typed.TypedName Checking.UnequalTypesError
+unequalTypesErrorUnequalTypesError = Typed.TypedName (Core.Name "hydra.error.checking.UnequalTypesError")
+
 -- | DSL updater for the description field of hydra.error.checking.UnequalTypesError
 unequalTypesErrorWithDescription :: Typed.TypedTerm Checking.UnequalTypesError -> Typed.TypedTerm String -> Typed.TypedTerm Checking.UnequalTypesError
 unequalTypesErrorWithDescription original newVal =
@@ -781,6 +826,11 @@ unsupportedTermVariantErrorTermVariant x =
         Core.projectionFieldName = (Core.Name "termVariant")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.checking.UnsupportedTermVariantError
+unsupportedTermVariantErrorUnsupportedTermVariantError :: Typed.TypedName Checking.UnsupportedTermVariantError
+unsupportedTermVariantErrorUnsupportedTermVariantError =
+    Typed.TypedName (Core.Name "hydra.error.checking.UnsupportedTermVariantError")
+
 -- | DSL updater for the termVariant field of hydra.error.checking.UnsupportedTermVariantError
 unsupportedTermVariantErrorWithTermVariant :: Typed.TypedTerm Checking.UnsupportedTermVariantError -> Typed.TypedTerm Variants.TermVariant -> Typed.TypedTerm Checking.UnsupportedTermVariantError
 unsupportedTermVariantErrorWithTermVariant original newVal =
@@ -797,6 +847,10 @@ untypedLambdaError =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.checking.UntypedLambdaError"),
       Core.recordFields = []}))
+
+-- | DSL name token for hydra.error.checking.UntypedLambdaError
+untypedLambdaErrorUntypedLambdaError :: Typed.TypedName Checking.UntypedLambdaError
+untypedLambdaErrorUntypedLambdaError = Typed.TypedName (Core.Name "hydra.error.checking.UntypedLambdaError")
 
 -- | DSL constructor for hydra.error.checking.UntypedLetBindingError
 untypedLetBindingError :: Typed.TypedTerm Core.Binding -> Typed.TypedTerm Checking.UntypedLetBindingError
@@ -816,6 +870,10 @@ untypedLetBindingErrorBinding x =
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedLetBindingError"),
         Core.projectionFieldName = (Core.Name "binding")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.checking.UntypedLetBindingError
+untypedLetBindingErrorUntypedLetBindingError :: Typed.TypedName Checking.UntypedLetBindingError
+untypedLetBindingErrorUntypedLetBindingError = Typed.TypedName (Core.Name "hydra.error.checking.UntypedLetBindingError")
 
 -- | DSL updater for the binding field of hydra.error.checking.UntypedLetBindingError
 untypedLetBindingErrorWithBinding :: Typed.TypedTerm Checking.UntypedLetBindingError -> Typed.TypedTerm Core.Binding -> Typed.TypedTerm Checking.UntypedLetBindingError
@@ -857,6 +915,11 @@ untypedTermVariableCheckingErrorPath x =
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
         Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.checking.UntypedTermVariableCheckingError
+untypedTermVariableCheckingErrorUntypedTermVariableCheckingError :: Typed.TypedName Checking.UntypedTermVariableCheckingError
+untypedTermVariableCheckingErrorUntypedTermVariableCheckingError =
+    Typed.TypedName (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError")
 
 -- | DSL updater for the name field of hydra.error.checking.UntypedTermVariableCheckingError
 untypedTermVariableCheckingErrorWithName :: Typed.TypedTerm Checking.UntypedTermVariableCheckingError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Checking.UntypedTermVariableCheckingError

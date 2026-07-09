@@ -5,8 +5,12 @@
 module Hydra.Dsl.Util where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Util as DecodeUtil
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Packaging as DslPackaging
+import qualified Hydra.Encode.Util as EncodeUtil
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Util as Util
@@ -22,6 +26,10 @@ caseConventionCamel =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "camel"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.util.CaseConvention
+caseConventionCaseConvention :: Typed.TypedName Util.CaseConvention
+caseConventionCaseConvention = Typed.TypedName (Core.Name "hydra.util.CaseConvention")
 
 -- | DSL injection for the lowerSnake variant of hydra.util.CaseConvention
 caseConventionLowerSnake :: Typed.TypedTerm Util.CaseConvention
@@ -50,6 +58,10 @@ caseConventionUpperSnake =
         Core.fieldName = (Core.Name "upperSnake"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.util.Comparison
+comparisonComparison :: Typed.TypedName Util.Comparison
+comparisonComparison = Typed.TypedName (Core.Name "hydra.util.Comparison")
+
 -- | DSL injection for the equalTo variant of hydra.util.Comparison
 comparisonEqualTo :: Typed.TypedTerm Util.Comparison
 comparisonEqualTo =
@@ -76,6 +88,20 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL composition builder for the decoder of hydra.util.ModuleNames
+decodeModuleNames :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError n) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames n))
+decodeModuleNames n =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.util.moduleNames")),
+      Core.applicationArgument = (Typed.unTypedTerm n)}))
+
+-- | DSL composition builder for the encoder of hydra.util.ModuleNames
+encodeModuleNames :: Typed.TypedTerm (n -> Core.Term) -> Typed.TypedTerm (Util.ModuleNames n -> Core.Term)
+encodeModuleNames n =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.util.moduleNames")),
+      Core.applicationArgument = (Typed.unTypedTerm n)}))
 
 -- | DSL constructor for hydra.util.ModuleNames
 moduleNames :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
@@ -107,6 +133,10 @@ moduleNamesMapping x =
         Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
         Core.projectionFieldName = (Core.Name "mapping")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.util.ModuleNames
+moduleNamesModuleNames :: Typed.TypedName (Util.ModuleNames n)
+moduleNamesModuleNames = Typed.TypedName (Core.Name "hydra.util.ModuleNames")
 
 -- | DSL updater for the focus field of hydra.util.ModuleNames
 moduleNamesWithFocus :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (Util.ModuleNames n)
@@ -160,6 +190,10 @@ precisionBits x =
         Core.fieldName = (Core.Name "bits"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.util.Precision
+precisionPrecision :: Typed.TypedName Util.Precision
+precisionPrecision = Typed.TypedName (Core.Name "hydra.util.Precision")
+
 -- | DSL constructor for hydra.util.QualifiedName
 qualifiedName :: Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
 qualifiedName moduleName local =
@@ -190,6 +224,10 @@ qualifiedNameModuleName x =
         Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
         Core.projectionFieldName = (Core.Name "moduleName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.util.QualifiedName
+qualifiedNameQualifiedName :: Typed.TypedName Util.QualifiedName
+qualifiedNameQualifiedName = Typed.TypedName (Core.Name "hydra.util.QualifiedName")
 
 -- | DSL updater for the local field of hydra.util.QualifiedName
 qualifiedNameWithLocal :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName

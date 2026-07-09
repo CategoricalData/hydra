@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.error.system",
   "metadata": {"description": "DSL functions for hydra.error.system", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.error.system"}, {"module": "hydra.typed"}, {"module": "hydra.file"}, {"module": "hydra.dsl.file"}],
+  "dependencies": [
+    {"module": "hydra.error.system"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.error.system"},
+    {"module": "hydra.decode.error.system"},
+    {"module": "hydra.file"},
+    {"module": "hydra.dsl.file"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.error.system.systemErrorSystemError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.system.SystemError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.system.SystemError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.system.SystemError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.system.systemErrorCommandNotFound",

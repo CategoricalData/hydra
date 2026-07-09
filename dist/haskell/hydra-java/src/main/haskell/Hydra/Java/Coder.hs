@@ -50,6 +50,7 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Query as Query
+import qualified Hydra.Refs as Refs
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting

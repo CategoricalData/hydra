@@ -4,11 +4,33 @@
   "dependencies": [
     {"module": "hydra.protobuf.environment"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.protobuf.environment"},
+    {"module": "hydra.decode.protobuf.environment"},
     {"module": "hydra.core"},
     {"module": "hydra.typing"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.typing"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.environment.encoderStateEncoderState",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.environment.EncoderState"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.environment.EncoderState"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.environment.EncoderState"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.environment.encoderState",
@@ -476,6 +498,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fieldIndex field of hydra.protobuf.environment.EncoderState"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.environment.structuralTypeRefStructuralTypeRef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.protobuf.environment.StructuralTypeRef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.environment.StructuralTypeRef"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.environment.StructuralTypeRef"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.environment.structuralTypeRefEither",

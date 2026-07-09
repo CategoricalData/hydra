@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.extract.json"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.extract.json"},
+    {"module": "hydra.decode.extract.json"},
     {"module": "hydra.json.writer"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

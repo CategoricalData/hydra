@@ -5,9 +5,11 @@
 module Hydra.Dsl.Error.Core where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Error.Core as DecodeErrorCore
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Paths as DslPaths
 import qualified Hydra.Dsl.Variants as DslVariants
+import qualified Hydra.Encode.Error.Core as EncodeErrorCore
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Typed as Typed
@@ -27,6 +29,10 @@ constantConditionError location value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.error.core.ConstantConditionError
+constantConditionErrorConstantConditionError :: Typed.TypedName ErrorCore.ConstantConditionError
+constantConditionErrorConstantConditionError = Typed.TypedName (Core.Name "hydra.error.core.ConstantConditionError")
 
 -- | DSL accessor for the location field of hydra.error.core.ConstantConditionError
 constantConditionErrorLocation :: Typed.TypedTerm ErrorCore.ConstantConditionError -> Typed.TypedTerm Paths.SubtermPath
@@ -93,6 +99,10 @@ duplicateBindingError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.core.DuplicateBindingError
+duplicateBindingErrorDuplicateBindingError :: Typed.TypedName ErrorCore.DuplicateBindingError
+duplicateBindingErrorDuplicateBindingError = Typed.TypedName (Core.Name "hydra.error.core.DuplicateBindingError")
+
 -- | DSL accessor for the location field of hydra.error.core.DuplicateBindingError
 duplicateBindingErrorLocation :: Typed.TypedTerm ErrorCore.DuplicateBindingError -> Typed.TypedTerm Paths.SubtermPath
 duplicateBindingErrorLocation x =
@@ -157,6 +167,10 @@ duplicateFieldError location name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.error.core.DuplicateFieldError
+duplicateFieldErrorDuplicateFieldError :: Typed.TypedName ErrorCore.DuplicateFieldError
+duplicateFieldErrorDuplicateFieldError = Typed.TypedName (Core.Name "hydra.error.core.DuplicateFieldError")
 
 -- | DSL accessor for the location field of hydra.error.core.DuplicateFieldError
 duplicateFieldErrorLocation :: Typed.TypedTerm ErrorCore.DuplicateFieldError -> Typed.TypedTerm Paths.SubtermPath
@@ -223,6 +237,11 @@ duplicateRecordTypeFieldNamesError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.core.DuplicateRecordTypeFieldNamesError
+duplicateRecordTypeFieldNamesErrorDuplicateRecordTypeFieldNamesError :: Typed.TypedName ErrorCore.DuplicateRecordTypeFieldNamesError
+duplicateRecordTypeFieldNamesErrorDuplicateRecordTypeFieldNamesError =
+    Typed.TypedName (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError")
+
 -- | DSL accessor for the location field of hydra.error.core.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesErrorLocation :: Typed.TypedTerm ErrorCore.DuplicateRecordTypeFieldNamesError -> Typed.TypedTerm Paths.SubtermPath
 duplicateRecordTypeFieldNamesErrorLocation x =
@@ -287,6 +306,11 @@ duplicateUnionTypeFieldNamesError location name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.error.core.DuplicateUnionTypeFieldNamesError
+duplicateUnionTypeFieldNamesErrorDuplicateUnionTypeFieldNamesError :: Typed.TypedName ErrorCore.DuplicateUnionTypeFieldNamesError
+duplicateUnionTypeFieldNamesErrorDuplicateUnionTypeFieldNamesError =
+    Typed.TypedName (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError")
 
 -- | DSL accessor for the location field of hydra.error.core.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesErrorLocation :: Typed.TypedTerm ErrorCore.DuplicateUnionTypeFieldNamesError -> Typed.TypedTerm Paths.SubtermPath
@@ -353,6 +377,10 @@ emptyCaseStatementError location typeName =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Typed.unTypedTerm typeName)}]}))
 
+-- | DSL name token for hydra.error.core.EmptyCaseStatementError
+emptyCaseStatementErrorEmptyCaseStatementError :: Typed.TypedName ErrorCore.EmptyCaseStatementError
+emptyCaseStatementErrorEmptyCaseStatementError = Typed.TypedName (Core.Name "hydra.error.core.EmptyCaseStatementError")
+
 -- | DSL accessor for the location field of hydra.error.core.EmptyCaseStatementError
 emptyCaseStatementErrorLocation :: Typed.TypedTerm ErrorCore.EmptyCaseStatementError -> Typed.TypedTerm Paths.SubtermPath
 emptyCaseStatementErrorLocation x =
@@ -415,6 +443,10 @@ emptyLetBindingsError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
 
+-- | DSL name token for hydra.error.core.EmptyLetBindingsError
+emptyLetBindingsErrorEmptyLetBindingsError :: Typed.TypedName ErrorCore.EmptyLetBindingsError
+emptyLetBindingsErrorEmptyLetBindingsError = Typed.TypedName (Core.Name "hydra.error.core.EmptyLetBindingsError")
+
 -- | DSL accessor for the location field of hydra.error.core.EmptyLetBindingsError
 emptyLetBindingsErrorLocation :: Typed.TypedTerm ErrorCore.EmptyLetBindingsError -> Typed.TypedTerm Paths.SubtermPath
 emptyLetBindingsErrorLocation x =
@@ -443,6 +475,10 @@ emptyRecordTypeError location =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
+
+-- | DSL name token for hydra.error.core.EmptyRecordTypeError
+emptyRecordTypeErrorEmptyRecordTypeError :: Typed.TypedName ErrorCore.EmptyRecordTypeError
+emptyRecordTypeErrorEmptyRecordTypeError = Typed.TypedName (Core.Name "hydra.error.core.EmptyRecordTypeError")
 
 -- | DSL accessor for the location field of hydra.error.core.EmptyRecordTypeError
 emptyRecordTypeErrorLocation :: Typed.TypedTerm ErrorCore.EmptyRecordTypeError -> Typed.TypedTerm Paths.SubtermPath
@@ -473,6 +509,10 @@ emptyTermAnnotationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
 
+-- | DSL name token for hydra.error.core.EmptyTermAnnotationError
+emptyTermAnnotationErrorEmptyTermAnnotationError :: Typed.TypedName ErrorCore.EmptyTermAnnotationError
+emptyTermAnnotationErrorEmptyTermAnnotationError = Typed.TypedName (Core.Name "hydra.error.core.EmptyTermAnnotationError")
+
 -- | DSL accessor for the location field of hydra.error.core.EmptyTermAnnotationError
 emptyTermAnnotationErrorLocation :: Typed.TypedTerm ErrorCore.EmptyTermAnnotationError -> Typed.TypedTerm Paths.SubtermPath
 emptyTermAnnotationErrorLocation x =
@@ -501,6 +541,10 @@ emptyTypeAnnotationError location =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
+
+-- | DSL name token for hydra.error.core.EmptyTypeAnnotationError
+emptyTypeAnnotationErrorEmptyTypeAnnotationError :: Typed.TypedName ErrorCore.EmptyTypeAnnotationError
+emptyTypeAnnotationErrorEmptyTypeAnnotationError = Typed.TypedName (Core.Name "hydra.error.core.EmptyTypeAnnotationError")
 
 -- | DSL accessor for the location field of hydra.error.core.EmptyTypeAnnotationError
 emptyTypeAnnotationErrorLocation :: Typed.TypedTerm ErrorCore.EmptyTypeAnnotationError -> Typed.TypedTerm Paths.SubtermPath
@@ -531,6 +575,10 @@ emptyTypeNameInTermError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
 
+-- | DSL name token for hydra.error.core.EmptyTypeNameInTermError
+emptyTypeNameInTermErrorEmptyTypeNameInTermError :: Typed.TypedName ErrorCore.EmptyTypeNameInTermError
+emptyTypeNameInTermErrorEmptyTypeNameInTermError = Typed.TypedName (Core.Name "hydra.error.core.EmptyTypeNameInTermError")
+
 -- | DSL accessor for the location field of hydra.error.core.EmptyTypeNameInTermError
 emptyTypeNameInTermErrorLocation :: Typed.TypedTerm ErrorCore.EmptyTypeNameInTermError -> Typed.TypedTerm Paths.SubtermPath
 emptyTypeNameInTermErrorLocation x =
@@ -559,6 +607,10 @@ emptyUnionTypeError location =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Typed.unTypedTerm location)}]}))
+
+-- | DSL name token for hydra.error.core.EmptyUnionTypeError
+emptyUnionTypeErrorEmptyUnionTypeError :: Typed.TypedName ErrorCore.EmptyUnionTypeError
+emptyUnionTypeErrorEmptyUnionTypeError = Typed.TypedName (Core.Name "hydra.error.core.EmptyUnionTypeError")
 
 -- | DSL accessor for the location field of hydra.error.core.EmptyUnionTypeError
 emptyUnionTypeErrorLocation :: Typed.TypedTerm ErrorCore.EmptyUnionTypeError -> Typed.TypedTerm Paths.SubtermPath
@@ -591,6 +643,11 @@ invalidForallParameterNameError location name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.error.core.InvalidForallParameterNameError
+invalidForallParameterNameErrorInvalidForallParameterNameError :: Typed.TypedName ErrorCore.InvalidForallParameterNameError
+invalidForallParameterNameErrorInvalidForallParameterNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.InvalidForallParameterNameError")
 
 -- | DSL accessor for the location field of hydra.error.core.InvalidForallParameterNameError
 invalidForallParameterNameErrorLocation :: Typed.TypedTerm ErrorCore.InvalidForallParameterNameError -> Typed.TypedTerm Paths.SubtermPath
@@ -657,6 +714,11 @@ invalidLambdaParameterNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.core.InvalidLambdaParameterNameError
+invalidLambdaParameterNameErrorInvalidLambdaParameterNameError :: Typed.TypedName ErrorCore.InvalidLambdaParameterNameError
+invalidLambdaParameterNameErrorInvalidLambdaParameterNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.InvalidLambdaParameterNameError")
+
 -- | DSL accessor for the location field of hydra.error.core.InvalidLambdaParameterNameError
 invalidLambdaParameterNameErrorLocation :: Typed.TypedTerm ErrorCore.InvalidLambdaParameterNameError -> Typed.TypedTerm Paths.SubtermPath
 invalidLambdaParameterNameErrorLocation x =
@@ -722,6 +784,11 @@ invalidLetBindingNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.core.InvalidLetBindingNameError
+invalidLetBindingNameErrorInvalidLetBindingNameError :: Typed.TypedName ErrorCore.InvalidLetBindingNameError
+invalidLetBindingNameErrorInvalidLetBindingNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.InvalidLetBindingNameError")
+
 -- | DSL accessor for the location field of hydra.error.core.InvalidLetBindingNameError
 invalidLetBindingNameErrorLocation :: Typed.TypedTerm ErrorCore.InvalidLetBindingNameError -> Typed.TypedTerm Paths.SubtermPath
 invalidLetBindingNameErrorLocation x =
@@ -773,6 +840,10 @@ invalidLetBindingNameErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.error.core.InvalidLiteralError
+invalidLiteralErrorInvalidLiteralError :: Typed.TypedName ErrorCore.InvalidLiteralError
+invalidLiteralErrorInvalidLiteralError = Typed.TypedName (Core.Name "hydra.error.core.InvalidLiteralError")
 
 -- | DSL injection for the typeMismatch variant of hydra.error.core.InvalidLiteralError
 invalidLiteralErrorTypeMismatch :: Typed.TypedTerm ErrorCore.LiteralTypeMismatchError -> Typed.TypedTerm ErrorCore.InvalidLiteralError
@@ -863,6 +934,10 @@ invalidTermErrorInvalidLetBindingName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidLetBindingName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.error.core.InvalidTermError
+invalidTermErrorInvalidTermError :: Typed.TypedName ErrorCore.InvalidTermError
+invalidTermErrorInvalidTermError = Typed.TypedName (Core.Name "hydra.error.core.InvalidTermError")
 
 -- | DSL injection for the invalidTypeLambdaParameterName variant of hydra.error.core.InvalidTermError
 invalidTermErrorInvalidTypeLambdaParameterName :: Typed.TypedTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Typed.TypedTerm ErrorCore.InvalidTermError
@@ -1035,6 +1110,10 @@ invalidTypeErrorInvalidForallParameterName x =
         Core.fieldName = (Core.Name "invalidForallParameterName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.error.core.InvalidTypeError
+invalidTypeErrorInvalidTypeError :: Typed.TypedName ErrorCore.InvalidTypeError
+invalidTypeErrorInvalidTypeError = Typed.TypedName (Core.Name "hydra.error.core.InvalidTypeError")
+
 -- | DSL injection for the invalidTypeSchemeVariableName variant of hydra.error.core.InvalidTypeError
 invalidTypeErrorInvalidTypeSchemeVariableName :: Typed.TypedTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Typed.TypedTerm ErrorCore.InvalidTypeError
 invalidTypeErrorInvalidTypeSchemeVariableName x =
@@ -1120,6 +1199,11 @@ invalidTypeLambdaParameterNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.core.InvalidTypeLambdaParameterNameError
+invalidTypeLambdaParameterNameErrorInvalidTypeLambdaParameterNameError :: Typed.TypedName ErrorCore.InvalidTypeLambdaParameterNameError
+invalidTypeLambdaParameterNameErrorInvalidTypeLambdaParameterNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError")
+
 -- | DSL accessor for the location field of hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameErrorLocation :: Typed.TypedTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Typed.TypedTerm Paths.SubtermPath
 invalidTypeLambdaParameterNameErrorLocation x =
@@ -1184,6 +1268,11 @@ invalidTypeSchemeVariableNameError location name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.error.core.InvalidTypeSchemeVariableNameError
+invalidTypeSchemeVariableNameErrorInvalidTypeSchemeVariableNameError :: Typed.TypedName ErrorCore.InvalidTypeSchemeVariableNameError
+invalidTypeSchemeVariableNameErrorInvalidTypeSchemeVariableNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError")
 
 -- | DSL accessor for the location field of hydra.error.core.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameErrorLocation :: Typed.TypedTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Typed.TypedTerm Paths.SubtermPath
@@ -1268,6 +1357,10 @@ literalTypeMismatchErrorExpectedType x =
         Core.projectionFieldName = (Core.Name "expectedType")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchErrorLiteralTypeMismatchError :: Typed.TypedName ErrorCore.LiteralTypeMismatchError
+literalTypeMismatchErrorLiteralTypeMismatchError = Typed.TypedName (Core.Name "hydra.error.core.LiteralTypeMismatchError")
+
 -- | DSL updater for the actualType field of hydra.error.core.LiteralTypeMismatchError
 literalTypeMismatchErrorWithActualType :: Typed.TypedTerm ErrorCore.LiteralTypeMismatchError -> Typed.TypedTerm Core.LiteralType -> Typed.TypedTerm ErrorCore.LiteralTypeMismatchError
 literalTypeMismatchErrorWithActualType original newVal =
@@ -1321,6 +1414,11 @@ nestedTermAnnotationErrorLocation x =
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.NestedTermAnnotationError
+nestedTermAnnotationErrorNestedTermAnnotationError :: Typed.TypedName ErrorCore.NestedTermAnnotationError
+nestedTermAnnotationErrorNestedTermAnnotationError =
+    Typed.TypedName (Core.Name "hydra.error.core.NestedTermAnnotationError")
+
 -- | DSL updater for the location field of hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationErrorWithLocation :: Typed.TypedTerm ErrorCore.NestedTermAnnotationError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.NestedTermAnnotationError
 nestedTermAnnotationErrorWithLocation original newVal =
@@ -1349,6 +1447,11 @@ nestedTypeAnnotationErrorLocation x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.NestedTypeAnnotationError
+nestedTypeAnnotationErrorNestedTypeAnnotationError :: Typed.TypedName ErrorCore.NestedTypeAnnotationError
+nestedTypeAnnotationErrorNestedTypeAnnotationError =
+    Typed.TypedName (Core.Name "hydra.error.core.NestedTypeAnnotationError")
 
 -- | DSL updater for the location field of hydra.error.core.NestedTypeAnnotationError
 nestedTypeAnnotationErrorWithLocation :: Typed.TypedTerm ErrorCore.NestedTypeAnnotationError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.NestedTypeAnnotationError
@@ -1390,6 +1493,11 @@ nonComparableMapKeyTypeErrorLocation x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.NonComparableMapKeyTypeError
+nonComparableMapKeyTypeErrorNonComparableMapKeyTypeError :: Typed.TypedName ErrorCore.NonComparableMapKeyTypeError
+nonComparableMapKeyTypeErrorNonComparableMapKeyTypeError =
+    Typed.TypedName (Core.Name "hydra.error.core.NonComparableMapKeyTypeError")
 
 -- | DSL updater for the keyType field of hydra.error.core.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeErrorWithKeyType :: Typed.TypedTerm ErrorCore.NonComparableMapKeyTypeError -> Typed.TypedTerm Core.Type -> Typed.TypedTerm ErrorCore.NonComparableMapKeyTypeError
@@ -1456,6 +1564,11 @@ nonComparableSetElementTypeErrorLocation x =
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.NonComparableSetElementTypeError
+nonComparableSetElementTypeErrorNonComparableSetElementTypeError :: Typed.TypedName ErrorCore.NonComparableSetElementTypeError
+nonComparableSetElementTypeErrorNonComparableSetElementTypeError =
+    Typed.TypedName (Core.Name "hydra.error.core.NonComparableSetElementTypeError")
+
 -- | DSL updater for the elementType field of hydra.error.core.NonComparableSetElementTypeError
 nonComparableSetElementTypeErrorWithElementType :: Typed.TypedTerm ErrorCore.NonComparableSetElementTypeError -> Typed.TypedTerm Core.Type -> Typed.TypedTerm ErrorCore.NonComparableSetElementTypeError
 nonComparableSetElementTypeErrorWithElementType original newVal =
@@ -1511,6 +1624,10 @@ redundantWrapUnwrapErrorLocation x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.RedundantWrapUnwrapError
+redundantWrapUnwrapErrorRedundantWrapUnwrapError :: Typed.TypedName ErrorCore.RedundantWrapUnwrapError
+redundantWrapUnwrapErrorRedundantWrapUnwrapError = Typed.TypedName (Core.Name "hydra.error.core.RedundantWrapUnwrapError")
 
 -- | DSL accessor for the typeName field of hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapErrorTypeName :: Typed.TypedTerm ErrorCore.RedundantWrapUnwrapError -> Typed.TypedTerm Core.Name
@@ -1586,6 +1703,10 @@ selfApplicationErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.SelfApplicationError
+selfApplicationErrorSelfApplicationError :: Typed.TypedName ErrorCore.SelfApplicationError
+selfApplicationErrorSelfApplicationError = Typed.TypedName (Core.Name "hydra.error.core.SelfApplicationError")
+
 -- | DSL updater for the location field of hydra.error.core.SelfApplicationError
 selfApplicationErrorWithLocation :: Typed.TypedTerm ErrorCore.SelfApplicationError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.SelfApplicationError
 selfApplicationErrorWithLocation original newVal =
@@ -1650,6 +1771,10 @@ singleVariantUnionErrorLocation x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.SingleVariantUnionError
+singleVariantUnionErrorSingleVariantUnionError :: Typed.TypedName ErrorCore.SingleVariantUnionError
+singleVariantUnionErrorSingleVariantUnionError = Typed.TypedName (Core.Name "hydra.error.core.SingleVariantUnionError")
 
 -- | DSL updater for the fieldName field of hydra.error.core.SingleVariantUnionError
 singleVariantUnionErrorWithFieldName :: Typed.TypedTerm ErrorCore.SingleVariantUnionError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm ErrorCore.SingleVariantUnionError
@@ -1716,6 +1841,11 @@ termVariableShadowingErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.TermVariableShadowingError
+termVariableShadowingErrorTermVariableShadowingError :: Typed.TypedName ErrorCore.TermVariableShadowingError
+termVariableShadowingErrorTermVariableShadowingError =
+    Typed.TypedName (Core.Name "hydra.error.core.TermVariableShadowingError")
+
 -- | DSL updater for the location field of hydra.error.core.TermVariableShadowingError
 termVariableShadowingErrorWithLocation :: Typed.TypedTerm ErrorCore.TermVariableShadowingError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.TermVariableShadowingError
 termVariableShadowingErrorWithLocation original newVal =
@@ -1780,6 +1910,11 @@ typeVariableShadowingInForallErrorName x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.TypeVariableShadowingInForallError
+typeVariableShadowingInForallErrorTypeVariableShadowingInForallError :: Typed.TypedName ErrorCore.TypeVariableShadowingInForallError
+typeVariableShadowingInForallErrorTypeVariableShadowingInForallError =
+    Typed.TypedName (Core.Name "hydra.error.core.TypeVariableShadowingInForallError")
 
 -- | DSL updater for the location field of hydra.error.core.TypeVariableShadowingInForallError
 typeVariableShadowingInForallErrorWithLocation :: Typed.TypedTerm ErrorCore.TypeVariableShadowingInForallError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.TypeVariableShadowingInForallError
@@ -1846,6 +1981,11 @@ typeVariableShadowingInTypeLambdaErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.TypeVariableShadowingInTypeLambdaError
+typeVariableShadowingInTypeLambdaErrorTypeVariableShadowingInTypeLambdaError :: Typed.TypedName ErrorCore.TypeVariableShadowingInTypeLambdaError
+typeVariableShadowingInTypeLambdaErrorTypeVariableShadowingInTypeLambdaError =
+    Typed.TypedName (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError")
+
 -- | DSL updater for the location field of hydra.error.core.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorWithLocation :: Typed.TypedTerm ErrorCore.TypeVariableShadowingInTypeLambdaError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorWithLocation original newVal =
@@ -1910,6 +2050,10 @@ undefinedFieldErrorTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
         Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.UndefinedFieldError
+undefinedFieldErrorUndefinedFieldError :: Typed.TypedName ErrorCore.UndefinedFieldError
+undefinedFieldErrorUndefinedFieldError = Typed.TypedName (Core.Name "hydra.error.core.UndefinedFieldError")
 
 -- | DSL updater for the fieldName field of hydra.error.core.UndefinedFieldError
 undefinedFieldErrorWithFieldName :: Typed.TypedTerm ErrorCore.UndefinedFieldError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm ErrorCore.UndefinedFieldError
@@ -1976,6 +2120,11 @@ undefinedTermVariableErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UndefinedTermVariableError
+undefinedTermVariableErrorUndefinedTermVariableError :: Typed.TypedName ErrorCore.UndefinedTermVariableError
+undefinedTermVariableErrorUndefinedTermVariableError =
+    Typed.TypedName (Core.Name "hydra.error.core.UndefinedTermVariableError")
+
 -- | DSL updater for the location field of hydra.error.core.UndefinedTermVariableError
 undefinedTermVariableErrorWithLocation :: Typed.TypedTerm ErrorCore.UndefinedTermVariableError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UndefinedTermVariableError
 undefinedTermVariableErrorWithLocation original newVal =
@@ -2040,6 +2189,11 @@ undefinedTypeVariableErrorName x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.UndefinedTypeVariableError
+undefinedTypeVariableErrorUndefinedTypeVariableError :: Typed.TypedName ErrorCore.UndefinedTypeVariableError
+undefinedTypeVariableErrorUndefinedTypeVariableError =
+    Typed.TypedName (Core.Name "hydra.error.core.UndefinedTypeVariableError")
 
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableError
 undefinedTypeVariableErrorWithLocation :: Typed.TypedTerm ErrorCore.UndefinedTypeVariableError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UndefinedTypeVariableError
@@ -2106,6 +2260,11 @@ undefinedTypeVariableInBindingTypeErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UndefinedTypeVariableInBindingTypeError
+undefinedTypeVariableInBindingTypeErrorUndefinedTypeVariableInBindingTypeError :: Typed.TypedName ErrorCore.UndefinedTypeVariableInBindingTypeError
+undefinedTypeVariableInBindingTypeErrorUndefinedTypeVariableInBindingTypeError =
+    Typed.TypedName (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError")
+
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorWithLocation :: Typed.TypedTerm ErrorCore.UndefinedTypeVariableInBindingTypeError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorWithLocation original newVal =
@@ -2170,6 +2329,11 @@ undefinedTypeVariableInLambdaDomainErrorName x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.UndefinedTypeVariableInLambdaDomainError
+undefinedTypeVariableInLambdaDomainErrorUndefinedTypeVariableInLambdaDomainError :: Typed.TypedName ErrorCore.UndefinedTypeVariableInLambdaDomainError
+undefinedTypeVariableInLambdaDomainErrorUndefinedTypeVariableInLambdaDomainError =
+    Typed.TypedName (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError")
 
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainErrorWithLocation :: Typed.TypedTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError
@@ -2236,6 +2400,11 @@ undefinedTypeVariableInTypeApplicationErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UndefinedTypeVariableInTypeApplicationError
+undefinedTypeVariableInTypeApplicationErrorUndefinedTypeVariableInTypeApplicationError :: Typed.TypedName ErrorCore.UndefinedTypeVariableInTypeApplicationError
+undefinedTypeVariableInTypeApplicationErrorUndefinedTypeVariableInTypeApplicationError =
+    Typed.TypedName (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError")
+
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorWithLocation :: Typed.TypedTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorWithLocation original newVal =
@@ -2300,6 +2469,11 @@ unexpectedTermVariantErrorExpectedVariant x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
         Core.projectionFieldName = (Core.Name "expectedVariant")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.UnexpectedTermVariantError
+unexpectedTermVariantErrorUnexpectedTermVariantError :: Typed.TypedName ErrorCore.UnexpectedTermVariantError
+unexpectedTermVariantErrorUnexpectedTermVariantError =
+    Typed.TypedName (Core.Name "hydra.error.core.UnexpectedTermVariantError")
 
 -- | DSL updater for the actualTerm field of hydra.error.core.UnexpectedTermVariantError
 unexpectedTermVariantErrorWithActualTerm :: Typed.TypedTerm ErrorCore.UnexpectedTermVariantError -> Typed.TypedTerm Core.Term -> Typed.TypedTerm ErrorCore.UnexpectedTermVariantError
@@ -2366,6 +2540,11 @@ unexpectedTypeVariantErrorExpectedVariant x =
         Core.projectionFieldName = (Core.Name "expectedVariant")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UnexpectedTypeVariantError
+unexpectedTypeVariantErrorUnexpectedTypeVariantError :: Typed.TypedName ErrorCore.UnexpectedTypeVariantError
+unexpectedTypeVariantErrorUnexpectedTypeVariantError =
+    Typed.TypedName (Core.Name "hydra.error.core.UnexpectedTypeVariantError")
+
 -- | DSL updater for the actualType field of hydra.error.core.UnexpectedTypeVariantError
 unexpectedTypeVariantErrorWithActualType :: Typed.TypedTerm ErrorCore.UnexpectedTypeVariantError -> Typed.TypedTerm Core.Type -> Typed.TypedTerm ErrorCore.UnexpectedTypeVariantError
 unexpectedTypeVariantErrorWithActualType original newVal =
@@ -2431,6 +2610,11 @@ unknownPrimitiveNameErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UnknownPrimitiveNameError
+unknownPrimitiveNameErrorUnknownPrimitiveNameError :: Typed.TypedName ErrorCore.UnknownPrimitiveNameError
+unknownPrimitiveNameErrorUnknownPrimitiveNameError =
+    Typed.TypedName (Core.Name "hydra.error.core.UnknownPrimitiveNameError")
+
 -- | DSL updater for the location field of hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorWithLocation :: Typed.TypedTerm ErrorCore.UnknownPrimitiveNameError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorWithLocation original newVal =
@@ -2484,6 +2668,11 @@ unnecessaryIdentityApplicationErrorLocation x =
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.error.core.UnnecessaryIdentityApplicationError
+unnecessaryIdentityApplicationErrorUnnecessaryIdentityApplicationError :: Typed.TypedName ErrorCore.UnnecessaryIdentityApplicationError
+unnecessaryIdentityApplicationErrorUnnecessaryIdentityApplicationError =
+    Typed.TypedName (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError")
+
 -- | DSL updater for the location field of hydra.error.core.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationErrorWithLocation :: Typed.TypedTerm ErrorCore.UnnecessaryIdentityApplicationError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationErrorWithLocation original newVal =
@@ -2524,6 +2713,10 @@ untypedTermVariableErrorName x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.UntypedTermVariableError
+untypedTermVariableErrorUntypedTermVariableError :: Typed.TypedName ErrorCore.UntypedTermVariableError
+untypedTermVariableErrorUntypedTermVariableError = Typed.TypedName (Core.Name "hydra.error.core.UntypedTermVariableError")
 
 -- | DSL updater for the location field of hydra.error.core.UntypedTermVariableError
 untypedTermVariableErrorWithLocation :: Typed.TypedTerm ErrorCore.UntypedTermVariableError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.UntypedTermVariableError
@@ -2577,6 +2770,11 @@ voidInNonBottomPositionErrorLocation x =
         Core.projectionTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
         Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.core.VoidInNonBottomPositionError
+voidInNonBottomPositionErrorVoidInNonBottomPositionError :: Typed.TypedName ErrorCore.VoidInNonBottomPositionError
+voidInNonBottomPositionErrorVoidInNonBottomPositionError =
+    Typed.TypedName (Core.Name "hydra.error.core.VoidInNonBottomPositionError")
 
 -- | DSL updater for the location field of hydra.error.core.VoidInNonBottomPositionError
 voidInNonBottomPositionErrorWithLocation :: Typed.TypedTerm ErrorCore.VoidInNonBottomPositionError -> Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm ErrorCore.VoidInNonBottomPositionError

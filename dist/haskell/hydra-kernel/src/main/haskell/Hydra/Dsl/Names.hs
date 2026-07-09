@@ -89,12 +89,42 @@ compactName arg0 arg1 =
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
--- | DSL reference to hydra.names.dslModuleName
-dslModuleName :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Packaging.ModuleName
-dslModuleName arg0 =
+-- | DSL reference to hydra.names.derivedBindingName
+derivedBindingName :: Typed.TypedTerm [String] -> Typed.TypedTerm Bool -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.Name
+derivedBindingName arg0 arg1 arg2 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.names.dslModuleName")),
-      Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.names.derivedBindingName")),
+          Core.applicationArgument = (Typed.unTypedTerm arg0)})),
+        Core.applicationArgument = (Typed.unTypedTerm arg1)})),
+      Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
+-- | DSL reference to hydra.names.derivedDefinitionName
+derivedDefinitionName :: Typed.TypedTerm [String] -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Core.Name -> Typed.TypedTerm String -> Typed.TypedTerm Core.Name
+derivedDefinitionName arg0 arg1 arg2 arg3 arg4 =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.names.derivedDefinitionName")),
+              Core.applicationArgument = (Typed.unTypedTerm arg0)})),
+            Core.applicationArgument = (Typed.unTypedTerm arg1)})),
+          Core.applicationArgument = (Typed.unTypedTerm arg2)})),
+        Core.applicationArgument = (Typed.unTypedTerm arg3)})),
+      Core.applicationArgument = (Typed.unTypedTerm arg4)}))
+
+-- | DSL reference to hydra.names.derivedModuleName
+derivedModuleName :: Typed.TypedTerm [String] -> Typed.TypedTerm Bool -> Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Packaging.ModuleName
+derivedModuleName arg0 arg1 arg2 =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.names.derivedModuleName")),
+          Core.applicationArgument = (Typed.unTypedTerm arg0)})),
+        Core.applicationArgument = (Typed.unTypedTerm arg1)})),
+      Core.applicationArgument = (Typed.unTypedTerm arg2)}))
 
 -- | DSL reference to hydra.names.freshName
 freshName :: Typed.TypedTerm Typing.InferenceContext -> Typed.TypedTerm (Core.Name, Typing.InferenceContext)
