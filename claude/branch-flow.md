@@ -217,6 +217,11 @@ There is **one staging agent per machine**, and all of them push to the same
    agents cannot see from inside their worktrees and may need to respond to. As the
    per-machine coordination hub, staging is the recipient for these host-level
    signals; the usual response is fleet back-pressure (throttle/pause build work
-   until the condition clears). See [`external-alerts.md`](external-alerts.md) for
-   what these alerts look like, how to tell one from a peer message, and how to
-   handle it.
+   until the condition clears). This duty includes **watching for a monitor's
+   liveness heartbeat to cease**: some watchdogs send a periodic "still alive"
+   beat whose *absence* is the alarm (a silent freeze sends no alert), so staging
+   must notice a stale beat, promptly bring it to the user's attention, and — if
+   it is not addressed within a short interval — start pausing agents proactively
+   rather than wait. See [`external-alerts.md`](external-alerts.md) for what these
+   alerts (and heartbeats) look like, how to tell one from a peer message, and the
+   escalation ladder for a ceased heartbeat.

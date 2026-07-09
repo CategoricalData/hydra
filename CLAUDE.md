@@ -351,6 +351,8 @@ Primary entry point — the doc most likely to answer the question by task:
 | Agent + issue hierarchy (roles, parentage, proposals, two homes, cross-machine staging) | [claude/agent-hierarchy.md](claude/agent-hierarchy.md) — the organizing model that coordinator-workflow + branch-flow implement |
 | Coordinate/spawn/finalize agents (coordinator responsibility) | [claude/coordinator-workflow.md](claude/coordinator-workflow.md) — spawn command, model policy, agent lifecycle; companion to [claude/agent-handoff.md](claude/agent-handoff.md) (the assigned agent's view) |
 | Branch promotion + staging cycle | [claude/branch-flow.md](claude/branch-flow.md) |
+| External/environmental alerts (resource watchdog) + preventive back-pressure | [claude/external-alerts.md](claude/external-alerts.md) |
+| Recover the fleet after a machine crash (relaunch sessions, repair worktree corruption) | [claude/crash-recovery.md](claude/crash-recovery.md) |
 
 ---
 
