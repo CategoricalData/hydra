@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.testing",
   "metadata": {"description": "DSL functions for hydra.testing", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.testing"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.testing"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.testing"},
+    {"module": "hydra.decode.testing"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.testing.effectfulTestCaseEffectfulTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.EffectfulTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.EffectfulTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.testing.EffectfulTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.testing.effectfulTestCase",
@@ -472,6 +498,22 @@
                   "value": {"literal": {"string": "DSL updater for the expected field of hydra.testing.EffectfulTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.testing.tagTag",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.Tag"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.Tag"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.testing.Tag"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.testing.tag",
         "signature": {
           "typeParameters": [],
@@ -554,6 +596,22 @@
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL accessor for the body of hydra.testing.Tag"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.testCaseTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.TestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.TestCase"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.testing.TestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.testing.testCaseEffectful",
@@ -684,6 +742,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the universal variant of hydra.testing.TestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.testCaseWithMetadataTestCaseWithMetadata",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.TestCaseWithMetadata"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.testing.TestCaseWithMetadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.testing.testCaseWithMetadata",
@@ -1797,6 +1875,23 @@
                   "value": {"literal": {"string": "DSL updater for the tags field of hydra.testing.TestCaseWithMetadata"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.testing.testGroupTestGroup",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.TestGroup"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.TestGroup"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.testing.TestGroup"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.testing.testGroup",
         "signature": {
           "typeParameters": [],
@@ -2903,6 +2998,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the cases field of hydra.testing.TestGroup"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.testing.universalTestCaseUniversalTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.testing.UniversalTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.testing.UniversalTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.testing.UniversalTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.testing.universalTestCase",

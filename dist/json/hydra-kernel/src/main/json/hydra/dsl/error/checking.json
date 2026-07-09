@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.error.checking"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.error.checking"},
+    {"module": "hydra.decode.error.checking"},
     {"module": "hydra.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.typing"},
@@ -13,6 +15,26 @@
     {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.variants"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.checkingErrorCheckingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.checking.CheckingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.CheckingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.CheckingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorIncorrectUnification",
@@ -900,6 +922,29 @@
                   "value": {"literal": {"string": "DSL injection for the untypedTermVariable variant of hydra.error.checking.CheckingError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.incorrectUnificationErrorIncorrectUnificationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.IncorrectUnificationError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.IncorrectUnificationError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.incorrectUnificationError",
         "signature": {
           "typeParameters": [],
@@ -1132,6 +1177,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the substitution field of hydra.error.checking.IncorrectUnificationError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.notAForallTypeErrorNotAForallTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.NotAForallTypeError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.NotAForallTypeError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.NotAForallTypeError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeError",
@@ -1592,6 +1659,28 @@
                   "value": {"literal": {"string": "DSL updater for the typeArguments field of hydra.error.checking.NotAForallTypeError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.notAFunctionTypeErrorNotAFunctionTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.NotAFunctionTypeError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.NotAFunctionTypeError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.notAFunctionTypeError",
         "signature": {
           "typeParameters": [],
@@ -1799,6 +1888,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.error.checking.NotAFunctionTypeError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.otherCheckingErrorOtherCheckingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.checking.OtherCheckingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.OtherCheckingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.OtherCheckingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.otherCheckingError",
@@ -2246,6 +2355,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the message field of hydra.error.checking.OtherCheckingError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.typeArityMismatchErrorTypeArityMismatchError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.TypeArityMismatchError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.TypeArityMismatchError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchError",
@@ -3433,6 +3565,26 @@
                   "value": {"literal": {"string": "DSL updater for the typeArguments field of hydra.error.checking.TypeArityMismatchError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.typeMismatchErrorTypeMismatchError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.checking.TypeMismatchError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.TypeMismatchError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.TypeMismatchError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.typeMismatchError",
         "signature": {
           "typeParameters": [],
@@ -3862,6 +4014,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the actualType field of hydra.error.checking.TypeMismatchError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorUnboundTypeVariablesError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UnboundTypeVariablesError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UnboundTypeVariablesError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesError",
@@ -4328,6 +4503,31 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.error.checking.UnboundTypeVariablesError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingErrorUndefinedTermVariableCheckingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.UndefinedTermVariableCheckingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.error.checking.UndefinedTermVariableCheckingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UndefinedTermVariableCheckingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.undefinedTermVariableCheckingError",
@@ -4820,6 +5020,26 @@
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.error.checking.UndefinedTermVariableCheckingError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.unequalTypesErrorUnequalTypesError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.checking.UnequalTypesError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UnequalTypesError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UnequalTypesError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.unequalTypesError",
         "signature": {
           "typeParameters": [],
@@ -5272,6 +5492,29 @@
                   "value": {"literal": {"string": "DSL updater for the description field of hydra.error.checking.UnequalTypesError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorUnsupportedTermVariantError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UnsupportedTermVariantError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UnsupportedTermVariantError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.unsupportedTermVariantError",
         "signature": {
           "typeParameters": [],
@@ -5484,6 +5727,26 @@
                   "value": {"literal": {"string": "DSL updater for the termVariant field of hydra.error.checking.UnsupportedTermVariantError"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.error.checking.untypedLambdaErrorUntypedLambdaError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.checking.UntypedLambdaError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UntypedLambdaError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UntypedLambdaError"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.checking.untypedLambdaError",
         "signature": {
           "typeParameters": [],
@@ -5514,6 +5777,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL constructor for hydra.error.checking.UntypedLambdaError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.untypedLetBindingErrorUntypedLetBindingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UntypedLetBindingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UntypedLetBindingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedLetBindingError",
@@ -5726,6 +6012,31 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the binding field of hydra.error.checking.UntypedLetBindingError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.checking.untypedTermVariableCheckingErrorUntypedTermVariableCheckingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.Name",
+                    "body": {"literal": {"string": "hydra.error.checking.UntypedTermVariableCheckingError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.error.checking.UntypedTermVariableCheckingError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedTermVariableCheckingError",

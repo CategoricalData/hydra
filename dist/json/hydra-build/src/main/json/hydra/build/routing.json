@@ -6,6 +6,7 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.dsls"},
+    {"module": "hydra.names"},
     {"module": "hydra.encoding"},
     {"module": "hydra.decoding"},
     {"module": "hydra.paths"},

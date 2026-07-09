@@ -16,37 +16,8 @@ object Language:
 
   val NS: ModuleName = "hydra.scala.language"
 
-  /** Dependencies list — `Lexical.ns ++ KernelTypes.kernelTypesModuleNames` in the Haskell source.
-   *  Kept in the order produced by the Haskell pipeline so JSON output stays byte-identical. */
-  private val KERNEL_DEPS: Seq[ModuleName] = Seq(
-    "hydra.lexical",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.coders",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.file",
-    "hydra.error.packaging",
-    "hydra.error.system",
-    "hydra.errors",
-    "hydra.file",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.system",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.time",
-    "hydra.topology",
-    "hydra.typed",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants")
+  /** Dependencies list — `Lexical.ns ++ KernelTypes.kernelTypesModuleNames` in the Haskell source. */
+  private val KERNEL_DEPS: Seq[ModuleName] = Seq("hydra.lexical") ++ Helpers.kernelTypesModuleNames
 
   // ===== scalaLanguage =====
 
@@ -131,8 +102,7 @@ object Language:
             UtilDsl.caseConventionCamel)(UtilDsl.caseConventionCamel)(UtilDsl.caseConventionPascal)(
             UtilDsl.caseConventionPascal))(
           FileDsl.fileExtension(Phantoms.string("scala"))))
-    val docBody = Phantoms.doc("Language constraints for Scala", body)
-    Phantoms.`def`(NS, "scalaLanguage", docBody)
+    Phantoms.define(NS, "scalaLanguage").doc("Language constraints for Scala").to(body)
 
   // ===== scalaReservedWords =====
 
@@ -158,8 +128,7 @@ object Language:
       Sets.fromList(Lists.concat(Phantoms.list(
         Phantoms.`var`("keywords"),
         Phantoms.`var`("classNames")))))
-    Phantoms.`def`(NS, "scalaReservedWords",
-      Phantoms.doc("A set of reserved words in Scala", body))
+    Phantoms.define(NS, "scalaReservedWords").doc("A set of reserved words in Scala").to(body)
 
   // ===== Module assembly =====
 

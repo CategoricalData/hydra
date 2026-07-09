@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.lib.equality"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.lib.equality"},
+    {"module": "hydra.decode.lib.equality"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

@@ -1,8 +1,30 @@
 {
   "name": "hydra.dsl.time",
   "metadata": {"description": "DSL functions for hydra.time", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.time"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.time"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.time"},
+    {"module": "hydra.decode.time"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.time.timespecTimespec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.time.Timespec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.time.Timespec"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.time.Timespec"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.time.timespec",

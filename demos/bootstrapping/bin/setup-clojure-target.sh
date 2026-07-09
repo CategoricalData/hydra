@@ -55,6 +55,17 @@ if [ -d "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" ]; then
     cp -r "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" "$OUTPUT_DIR/src/test/clojure/"
 fi
 
+# #546: hydra-build owns hydra.build.* + hydra.test.build.*, relocated out of hydra-kernel.
+# The kernel's generated testSuite references hydra.test.build.*, which reference hydra.build.*;
+# neither is in the hydra-kernel dist tree. Overlay hydra-build's generated main+test onto the cell.
+HYDRA_CLOJURE_BUILD_DIST="$HYDRA_ROOT/dist/clojure/hydra-build"
+if [ -d "$HYDRA_CLOJURE_BUILD_DIST/src/main/clojure/hydra" ]; then
+    cp -r "$HYDRA_CLOJURE_BUILD_DIST/src/main/clojure/hydra/." "$OUTPUT_DIR/src/main/clojure/hydra/"
+fi
+if [ -d "$HYDRA_CLOJURE_BUILD_DIST/src/test/clojure/hydra" ]; then
+    cp -r "$HYDRA_CLOJURE_BUILD_DIST/src/test/clojure/hydra/." "$OUTPUT_DIR/src/test/clojure/hydra/"
+fi
+
 # Summary
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.clj" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Static resources: $STATIC_COUNT files"

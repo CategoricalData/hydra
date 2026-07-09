@@ -47,6 +47,16 @@ done
 if [ -d "$HYDRA_CL_DIST/src/test/common-lisp/hydra" ]; then
     cp -r "$HYDRA_CL_DIST/src/test/common-lisp/hydra" "$OUTPUT_DIR/src/test/common-lisp/"
 fi
+
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
+HYDRA_CL_BUILD_DIST="$HYDRA_ROOT/dist/common-lisp/hydra-build"
+if [ -d "$HYDRA_CL_BUILD_DIST/src/main/common-lisp/hydra" ]; then
+    cp -r "$HYDRA_CL_BUILD_DIST/src/main/common-lisp/hydra/." "$OUTPUT_DIR/src/main/common-lisp/hydra/"
+fi
+if [ -d "$HYDRA_CL_BUILD_DIST/src/test/common-lisp/hydra" ]; then
+    cp -r "$HYDRA_CL_BUILD_DIST/src/test/common-lisp/hydra/." "$OUTPUT_DIR/src/test/common-lisp/hydra/"
+fi
 # Overlay head-only hand-written test files not present in dist (test_runner.lisp,
 # annotation_bindings.lisp). Mirrors setup-emacs-lisp-target.sh's pattern (#496).
 mkdir -p "$OUTPUT_DIR/src/test/common-lisp/hydra"

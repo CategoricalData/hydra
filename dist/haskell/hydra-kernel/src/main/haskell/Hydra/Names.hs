@@ -72,6 +72,33 @@ compactName namespaces name =
         ":",
         local])))
 
+-- | Generate a binding name for a derived function from a type/term name, given the category's namespace segments
+derivedBindingName :: [String] -> Bool -> Core.Name -> Core.Name
+derivedBindingName categoryPrefix alwaysDropFirst n =
+    derivedDefinitionName categoryPrefix alwaysDropFirst False n (Formatting.decapitalize (localNameOf n))
+
+-- | Generate a derived element name from a source name's namespace and an explicit local name
+derivedDefinitionName :: [String] -> Bool -> Bool -> Core.Name -> String -> Core.Name
+derivedDefinitionName categoryPrefix alwaysDropFirst prefixWhenNoNamespace n localName =
+
+      let localResult = Core.Name localName
+          prefixedResult = Core.Name (Strings.intercalate "." (Lists.concat2 categoryPrefix [
+                localName]))
+          noNamespaceResult = Logic.ifElse prefixWhenNoNamespace prefixedResult localResult
+      in (Optionals.cases (Lists.maybeInit (Strings.splitOn "." (Core.unName n))) noNamespaceResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) noNamespaceResult (\nsHeadTail ->
+        let categoryPrefixResolved =
+                Logic.ifElse (Logic.or alwaysDropFirst (Equality.equal (Pairs.first nsHeadTail) "hydra")) (Lists.concat2 categoryPrefix (Pairs.second nsHeadTail)) (Lists.concat2 categoryPrefix nsParts)
+        in (Core.Name (Strings.intercalate "." (Lists.concat2 categoryPrefixResolved [
+          localName]))))))
+
+-- | Generate a derived module name from a source module name, given the category's namespace segments
+derivedModuleName :: [String] -> Bool -> Packaging.ModuleName -> Packaging.ModuleName
+derivedModuleName categoryPrefix alwaysDropFirst ns =
+
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
+          fallback = Packaging.ModuleName (Strings.intercalate "." (Lists.concat2 categoryPrefix parts))
+      in (Optionals.cases (Lists.uncons parts) fallback (\ht -> Logic.ifElse (Logic.or alwaysDropFirst (Equality.equal (Pairs.first ht) "hydra")) (Packaging.ModuleName (Strings.intercalate "." (Lists.concat2 categoryPrefix (Pairs.second ht)))) fallback))
+
 -- | Generate a fresh type variable name, threading InferenceContext
 freshName :: Typing.InferenceContext -> (Core.Name, Typing.InferenceContext)
 freshName cx =

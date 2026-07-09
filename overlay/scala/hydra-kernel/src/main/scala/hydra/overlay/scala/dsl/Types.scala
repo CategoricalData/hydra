@@ -136,6 +136,8 @@ object Types:
     if c1.nonEmpty then cm = cm + (Terms.name(v1) -> TypeVariableConstraints(toConstraints(c1)))
     TypeScheme(Seq(Terms.name(v1)), body, Some(cm))
 
+  // constrained2/3/4 are currently unused by the hydra-scala coder sources (kept for
+  // cross-language parity with the Java/Python DSLs — see #553 audit). Confirm before deleting.
   def constrained2(v1: String, c1: Set[Name], v2: String, c2: Set[Name], body: Type): TypeScheme =
     var cm: Map[Name, TypeVariableConstraints] = Map.empty
     if c1.nonEmpty then cm = cm + (Terms.name(v1) -> TypeVariableConstraints(toConstraints(c1)))

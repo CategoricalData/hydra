@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.protobuf.proto3",
   "metadata": {"description": "DSL functions for hydra.protobuf.proto3", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.protobuf.proto3"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.protobuf.proto3"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.protobuf.proto3"},
+    {"module": "hydra.decode.protobuf.proto3"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.definitionDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.Definition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.Definition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.Definition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.definitionEnum",
@@ -105,6 +131,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the message variant of hydra.protobuf.proto3.Definition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.enumDefinitionEnumDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.EnumDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.EnumDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.EnumDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.enumDefinition",
@@ -832,6 +878,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.protobuf.proto3.EnumDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.enumValueEnumValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.EnumValue"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.EnumValue"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.EnumValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.enumValue",
         "signature": {
           "typeParameters": [],
@@ -1557,6 +1623,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.protobuf.proto3.EnumValue"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.enumValueNameEnumValueName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.EnumValueName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.EnumValueName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.EnumValueName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.enumValueName2",
         "signature": {
           "typeParameters": [],
@@ -1644,6 +1730,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.EnumValueName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.fieldField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.Field"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.Field"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.Field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.field",
@@ -3171,6 +3275,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.protobuf.proto3.Field"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.fieldNameFieldName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.FieldName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.FieldName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.FieldName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.fieldName2",
         "signature": {
           "typeParameters": [],
@@ -3258,6 +3382,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.FieldName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.fieldTypeFieldType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.FieldType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.FieldType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.FieldType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.fieldTypeMap",
@@ -3464,6 +3608,26 @@
                   "value": {"literal": {"string": "DSL injection for the simple variant of hydra.protobuf.proto3.FieldType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.fileReferenceFileReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.FileReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.FileReference"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.FileReference"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.fileReference",
         "signature": {
           "typeParameters": [],
@@ -3551,6 +3715,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.FileReference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.mapTypeMapType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.MapType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.MapType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.MapType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.mapType",
@@ -3928,6 +4112,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the values field of hydra.protobuf.proto3.MapType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.messageDefinitionMessageDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.MessageDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.MessageDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.MessageDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.messageDefinition",
@@ -4655,6 +4859,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.protobuf.proto3.MessageDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.optionOption",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.Option"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.Option"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.Option"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.option",
         "signature": {
           "typeParameters": [],
@@ -5112,6 +5336,26 @@
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.protobuf.proto3.Option"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.packageNamePackageName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.PackageName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.PackageName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.PackageName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.packageName",
         "signature": {
           "typeParameters": [],
@@ -5199,6 +5443,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.PackageName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.protoFileProtoFile",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.ProtoFile"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.ProtoFile"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.ProtoFile"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.protoFile",
@@ -6212,6 +6476,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.protobuf.proto3.ProtoFile"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.scalarTypeScalarType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.ScalarType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.ScalarType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.scalarTypeBool",
         "signature": {
           "typeParameters": [],
@@ -6797,6 +7081,26 @@
                   "value": {"literal": {"string": "DSL injection for the uint64 variant of hydra.protobuf.proto3.ScalarType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.simpleTypeSimpleType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.SimpleType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.SimpleType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.SimpleType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.simpleTypeReference",
         "signature": {
           "typeParameters": [],
@@ -6899,6 +7203,26 @@
                   "value": {"literal": {"string": "DSL injection for the scalar variant of hydra.protobuf.proto3.SimpleType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.typeNameTypeName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.TypeName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.TypeName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.TypeName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.typeName",
         "signature": {
           "typeParameters": [],
@@ -6988,6 +7312,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.TypeName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.protobuf.proto3.typeReferenceTypeReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.TypeReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.TypeReference"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.TypeReference"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.protobuf.proto3.typeReference",
         "signature": {
           "typeParameters": [],
@@ -7075,6 +7419,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.protobuf.proto3.TypeReference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.proto3.valueValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.proto3.Value"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.proto3.Value"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.protobuf.proto3.Value"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.proto3.valueBoolean",

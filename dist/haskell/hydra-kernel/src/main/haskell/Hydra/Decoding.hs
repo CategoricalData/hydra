@@ -29,7 +29,6 @@ import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
@@ -126,17 +125,10 @@ decodeBinding cx graph b =
 
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
-decodeBindingName n =
-
-      let parts = Strings.splitOn "." (Core.unName n)
-          localPart = Formatting.decapitalize (Names.localNameOf n)
-          localResult = Core.Name localPart
-      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsUc ->
-        let tail = Pairs.second nsUc
-        in (Core.Name (Strings.intercalate "." (Lists.concat2 [
-          "hydra",
-          "decode"] (Lists.concat2 tail [
-          localPart])))))))
+decodeBindingName =
+    Names.derivedBindingName [
+      "hydra",
+      "decode"] True
 
 -- | Generate a decoder for an Either type
 decodeEitherType :: Core.EitherType -> Core.Term
@@ -1552,13 +1544,10 @@ decodeModule cx graph mod =
 
 -- | Generate a decoder module name from a source module name
 decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
-decodeModuleName ns =
-
-      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
-          fallback = Packaging.ModuleName (Packaging.unModuleName ns)
-      in (Optionals.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
-        "hydra.decode.",
-        (Strings.intercalate "." (Pairs.second uc))])))
+decodeModuleName =
+    Names.derivedModuleName [
+      "hydra",
+      "decode"] True
 
 -- | Generate a decoder for a pair type
 decodePairType :: Core.PairType -> Core.Term

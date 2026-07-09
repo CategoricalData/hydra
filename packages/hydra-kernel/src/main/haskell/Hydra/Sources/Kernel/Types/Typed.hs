@@ -24,6 +24,7 @@ module_ = Module {
   where
     definitions = [
       typedBinding,
+      typedName,
       typedTerm,
       typedTermDefinition]
 
@@ -37,6 +38,11 @@ typedBinding = define "TypedBinding" $
     "term">:
       doc "The term with its phantom type" $
       typedTerm @@ "a"]
+
+typedName :: TypeDefinition
+typedName = define "TypedName" $
+  doc "An association of a name with a phantom type" $
+  T.forAll "a" $ T.wrap Core.name
 
 typedTerm :: TypeDefinition
 typedTerm = define "TypedTerm" $

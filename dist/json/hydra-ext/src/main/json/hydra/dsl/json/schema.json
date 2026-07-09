@@ -4,11 +4,31 @@
   "dependencies": [
     {"module": "hydra.json.schema"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.json.schema"},
+    {"module": "hydra.decode.json.schema"},
     {"module": "hydra.json.model"},
     {"module": "hydra.core"},
     {"module": "hydra.dsl.json.model"},
     {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.documentDocument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Document"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Document"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Document"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.document",
@@ -669,6 +689,23 @@
                   "value": {"literal": {"string": "DSL updater for the root field of hydra.json.schema.Document"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.keywordKeyword",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Keyword"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Keyword"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Keyword"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.keyword",
         "signature": {
           "typeParameters": [],
@@ -756,6 +793,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.json.schema.Keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.schemaSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Schema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Schema"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Schema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.schema",
@@ -864,6 +918,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.json.schema.Schema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.restrictionRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Restriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Restriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.Restriction"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.restrictionType",
@@ -1319,6 +1393,22 @@
                   "value": {"literal": {"string": "DSL injection for the description variant of hydra.json.schema.Restriction"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.typeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Type"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Type"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.typeSingle",
         "signature": {
           "typeParameters": [],
@@ -1427,6 +1517,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.json.schema.Type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.typeNameTypeName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.TypeName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.TypeName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.TypeName"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.typeNameString",
@@ -1702,6 +1810,26 @@
                   "value": {"literal": {"string": "DSL injection for the object variant of hydra.json.schema.TypeName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.stringRestrictionStringRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.StringRestriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.StringRestriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.StringRestriction"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.stringRestrictionMinLength",
         "signature": {
           "typeParameters": [],
@@ -1851,6 +1979,26 @@
                   "value": {"literal": {"string": "DSL injection for the pattern variant of hydra.json.schema.StringRestriction"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.regularExpressionRegularExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.RegularExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.RegularExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.RegularExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.regularExpression",
         "signature": {
           "typeParameters": [],
@@ -1938,6 +2086,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.json.schema.RegularExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.numericRestrictionNumericRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.NumericRestriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.NumericRestriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.NumericRestriction"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.numericRestrictionMinimum",
@@ -2089,6 +2257,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the multipleOf variant of hydra.json.schema.NumericRestriction"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.limitLimit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Limit"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Limit"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Limit"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.limit",
@@ -2454,6 +2639,26 @@
                   "value": {"literal": {"string": "DSL updater for the exclusive field of hydra.json.schema.Limit"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.arrayRestrictionArrayRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.ArrayRestriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.ArrayRestriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.ArrayRestriction"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.arrayRestrictionItems",
         "signature": {
           "typeParameters": [],
@@ -2703,6 +2908,23 @@
                   "value": {"literal": {"string": "DSL injection for the uniqueItems variant of hydra.json.schema.ArrayRestriction"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.itemsItems",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.Items"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.Items"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.json.schema.Items"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.itemsSameItems",
         "signature": {
           "typeParameters": [],
@@ -2815,6 +3037,26 @@
                   "value": {"literal": {"string": "DSL injection for the varItems variant of hydra.json.schema.Items"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.additionalItemsAdditionalItems",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.AdditionalItems"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.AdditionalItems"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.AdditionalItems"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.additionalItemsAny",
         "signature": {
           "typeParameters": [],
@@ -2913,6 +3155,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the schema variant of hydra.json.schema.AdditionalItems"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.objectRestrictionObjectRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.ObjectRestriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.ObjectRestriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.ObjectRestriction"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.objectRestrictionProperties",
@@ -3296,6 +3558,26 @@
                   "value": {"literal": {"string": "DSL injection for the patternProperties variant of hydra.json.schema.ObjectRestriction"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.json.schema.schemaOrArraySchemaOrArray",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.SchemaOrArray"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.SchemaOrArray"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.SchemaOrArray"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.json.schema.schemaOrArraySchema",
         "signature": {
           "typeParameters": [],
@@ -3396,6 +3678,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the array variant of hydra.json.schema.SchemaOrArray"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.multipleRestrictionMultipleRestriction",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.MultipleRestriction"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.MultipleRestriction"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.MultipleRestriction"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.multipleRestrictionAllOf",
@@ -3691,6 +3993,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the enum variant of hydra.json.schema.MultipleRestriction"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.schema.schemaReferenceSchemaReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.json.schema.SchemaReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.schema.SchemaReference"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.json.schema.SchemaReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.json.schema.schemaReference",

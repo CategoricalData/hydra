@@ -205,6 +205,9 @@ object Terms:
 
   def triple(a: Term, b: Term, c: Term): Term = pair(a, pair(b, c))
   def tuple3(a: Term, b: Term, c: Term): Term = triple(a, b, c)
+
+  // tuple4/5 are currently unused by the hydra-scala coder sources (kept for cross-language
+  // parity with the Java/Python DSLs — see #553 audit). Confirm before deleting.
   def tuple4(a: Term, b: Term, c: Term, d: Term): Term = pair(a, pair(b, pair(c, d)))
   def tuple5(a: Term, b: Term, c: Term, d: Term, e: Term): Term =
     pair(a, pair(b, pair(c, pair(d, e))))

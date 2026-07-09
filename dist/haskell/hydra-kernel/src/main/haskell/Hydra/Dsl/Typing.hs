@@ -5,14 +5,32 @@
 module Hydra.Dsl.Typing where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Typing as DecodeTyping
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Paths as DslPaths
+import qualified Hydra.Encode.Typing as EncodeTyping
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
+-- | DSL composition builder for the decoder of hydra.typing.FunctionStructure
+decodeFunctionStructure :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError env) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure env))
+decodeFunctionStructure env =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.typing.functionStructure")),
+      Core.applicationArgument = (Typed.unTypedTerm env)}))
+
+-- | DSL composition builder for the encoder of hydra.typing.FunctionStructure
+encodeFunctionStructure :: Typed.TypedTerm (env -> Core.Term) -> Typed.TypedTerm (Typing.FunctionStructure env -> Core.Term)
+encodeFunctionStructure env =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.typing.functionStructure")),
+      Core.applicationArgument = (Typed.unTypedTerm env)}))
 
 -- | DSL constructor for hydra.typing.FunctionStructure
 functionStructure :: Typed.TypedTerm [Core.Name] -> Typed.TypedTerm [Core.Name] -> Typed.TypedTerm [Core.Binding] -> Typed.TypedTerm Core.Term -> Typed.TypedTerm [Core.Type] -> Typed.TypedTerm (Maybe Core.Type) -> Typed.TypedTerm env -> Typed.TypedTerm (Typing.FunctionStructure env)
@@ -86,6 +104,10 @@ functionStructureEnvironment x =
         Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
         Core.projectionFieldName = (Core.Name "environment")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.FunctionStructure
+functionStructureFunctionStructure :: Typed.TypedName (Typing.FunctionStructure env)
+functionStructureFunctionStructure = Typed.TypedName (Core.Name "hydra.typing.FunctionStructure")
 
 -- | DSL accessor for the params field of hydra.typing.FunctionStructure
 functionStructureParams :: Typed.TypedTerm (Typing.FunctionStructure env) -> Typed.TypedTerm [Core.Name]
@@ -491,6 +513,10 @@ inferenceContextFreshTypeVariableCount x =
         Core.projectionFieldName = (Core.Name "freshTypeVariableCount")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typing.InferenceContext
+inferenceContextInferenceContext :: Typed.TypedName Typing.InferenceContext
+inferenceContextInferenceContext = Typed.TypedName (Core.Name "hydra.typing.InferenceContext")
+
 -- | DSL accessor for the trace field of hydra.typing.InferenceContext
 inferenceContextTrace :: Typed.TypedTerm Typing.InferenceContext -> Typed.TypedTerm [Paths.SubtermStep]
 inferenceContextTrace x =
@@ -573,6 +599,10 @@ inferenceResultContext x =
         Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
         Core.projectionFieldName = (Core.Name "context")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.InferenceResult
+inferenceResultInferenceResult :: Typed.TypedName Typing.InferenceResult
+inferenceResultInferenceResult = Typed.TypedName (Core.Name "hydra.typing.InferenceResult")
 
 -- | DSL accessor for the subst field of hydra.typing.InferenceResult
 inferenceResultSubst :: Typed.TypedTerm Typing.InferenceResult -> Typed.TypedTerm Typing.TypeSubst
@@ -837,6 +867,10 @@ parameterName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typing.Parameter
+parameterParameter :: Typed.TypedName Typing.Parameter
+parameterParameter = Typed.TypedName (Core.Name "hydra.typing.Parameter")
+
 -- | DSL accessor for the type field of hydra.typing.Parameter
 parameterType :: Typed.TypedTerm Typing.Parameter -> Typed.TypedTerm Core.Type
 parameterType x =
@@ -992,6 +1026,10 @@ resultDescription x =
         Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typing.Result
+resultResult :: Typed.TypedName Typing.Result
+resultResult = Typed.TypedName (Core.Name "hydra.typing.Result")
+
 -- | DSL accessor for the type field of hydra.typing.Result
 resultType :: Typed.TypedTerm Typing.Result -> Typed.TypedTerm Core.Type
 resultType x =
@@ -1068,6 +1106,10 @@ termSignatureResult x =
         Core.projectionTypeName = (Core.Name "hydra.typing.TermSignature"),
         Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.TermSignature
+termSignatureTermSignature :: Typed.TypedName Typing.TermSignature
+termSignatureTermSignature = Typed.TypedName (Core.Name "hydra.typing.TermSignature")
 
 -- | DSL accessor for the typeParameters field of hydra.typing.TermSignature
 termSignatureTypeParameters :: Typed.TypedTerm Typing.TermSignature -> Typed.TypedTerm [Typing.TypeParameter]
@@ -1157,6 +1199,10 @@ termSubst x =
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typing.TermSubst
+termSubstTermSubst :: Typed.TypedName Typing.TermSubst
+termSubstTermSubst = Typed.TypedName (Core.Name "hydra.typing.TermSubst")
+
 -- | DSL constructor for hydra.typing.TypeClass
 typeClass :: Typed.TypedTerm String -> Typed.TypedTerm Typing.TypeClass
 typeClass description =
@@ -1175,6 +1221,10 @@ typeClassDescription x =
         Core.projectionTypeName = (Core.Name "hydra.typing.TypeClass"),
         Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.TypeClass
+typeClassTypeClass :: Typed.TypedName Typing.TypeClass
+typeClassTypeClass = Typed.TypedName (Core.Name "hydra.typing.TypeClass")
 
 -- | DSL updater for the description field of hydra.typing.TypeClass
 typeClassWithDescription :: Typed.TypedTerm Typing.TypeClass -> Typed.TypedTerm String -> Typed.TypedTerm Typing.TypeClass
@@ -1228,6 +1278,10 @@ typeConstraintRight x =
         Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
         Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.TypeConstraint
+typeConstraintTypeConstraint :: Typed.TypedName Typing.TypeConstraint
+typeConstraintTypeConstraint = Typed.TypedName (Core.Name "hydra.typing.TypeConstraint")
 
 -- | DSL updater for the comment field of hydra.typing.TypeConstraint
 typeConstraintWithComment :: Typed.TypedTerm Typing.TypeConstraint -> Typed.TypedTerm String -> Typed.TypedTerm Typing.TypeConstraint
@@ -1332,6 +1386,10 @@ typeParameterName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typing.TypeParameter
+typeParameterTypeParameter :: Typed.TypedName Typing.TypeParameter
+typeParameterTypeParameter = Typed.TypedName (Core.Name "hydra.typing.TypeParameter")
+
 -- | DSL updater for the constraints field of hydra.typing.TypeParameter
 typeParameterWithConstraints :: Typed.TypedTerm Typing.TypeParameter -> Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Typing.TypeParameter
 typeParameterWithConstraints original newVal =
@@ -1372,6 +1430,10 @@ typeSubst x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TypeSubst"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typing.TypeSubst
+typeSubstTypeSubst :: Typed.TypedName Typing.TypeSubst
+typeSubstTypeSubst = Typed.TypedName (Core.Name "hydra.typing.TypeSubst")
 
 -- | DSL accessor for the body of hydra.typing.TermSubst
 unTermSubst :: Typed.TypedTerm Typing.TermSubst -> Typed.TypedTerm (M.Map Core.Name Core.Term)

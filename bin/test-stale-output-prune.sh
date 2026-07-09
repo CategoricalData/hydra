@@ -27,6 +27,21 @@ fi
 PASS=0
 FAIL=0
 
+# The haskell leg below calls bootstrap-from-json --prune-stale directly
+# against the real dist/haskell/hydra-kernel tree (bypassing
+# assemble-distribution.sh by design, to isolate the prune mechanism).
+# --prune-stale deletes anything not in bootstrap-from-json's own output
+# set, which includes the hand-written Hydra/Overlay/Haskell/* files that
+# overlay-kernel-runtime.sh copies in (#418) — those are untracked from
+# git as of 02474cbfc2, so `git checkout` can no longer restore them.
+# Mirror test-json-content-invalidates-render.sh's #469 restore-on-exit
+# pattern: always re-run the overlay step on exit so a standalone run
+# leaves the tree buildable. Idempotent (plain cp -R), so unconditional.
+_test_558_restore_overlay() {
+    "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh" >/dev/null
+}
+trap _test_558_restore_overlay EXIT
+
 # Build bootstrap-from-json from current source before any `stack exec`.
 # `stack exec` runs whatever binary is already in .stack-work and never
 # rebuilds, so a stale executable predating the --prune-stale flag (#357)

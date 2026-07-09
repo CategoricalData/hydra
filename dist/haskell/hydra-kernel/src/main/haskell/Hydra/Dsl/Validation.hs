@@ -5,14 +5,32 @@
 module Hydra.Dsl.Validation where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Validation as DecodeValidation
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Error.Core as DslErrorCore
+import qualified Hydra.Encode.Validation as EncodeValidation
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
+-- | DSL composition builder for the decoder of hydra.validation.ValidationResult
+decodeValidationResult :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Validation.ValidationResult e))
+decodeValidationResult e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.validation.validationResult")),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
+
+-- | DSL composition builder for the encoder of hydra.validation.ValidationResult
+encodeValidationResult :: Typed.TypedTerm (e -> Core.Term) -> Typed.TypedTerm (Validation.ValidationResult e -> Core.Term)
+encodeValidationResult e =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.validation.validationResult")),
+      Core.applicationArgument = (Typed.unTypedTerm e)}))
 
 -- | DSL constructor for hydra.validation.ValidationProfile
 validationProfile :: Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Int -> Typed.TypedTerm Int -> Typed.TypedTerm Validation.ValidationProfile
@@ -59,6 +77,10 @@ validationProfileMaxWarnings x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
         Core.projectionFieldName = (Core.Name "maxWarnings")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.validation.ValidationProfile
+validationProfileValidationProfile :: Typed.TypedName Validation.ValidationProfile
+validationProfileValidationProfile = Typed.TypedName (Core.Name "hydra.validation.ValidationProfile")
 
 -- | DSL accessor for the warningRules field of hydra.validation.ValidationProfile
 validationProfileWarningRules :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm (S.Set Core.Name)
@@ -214,6 +236,10 @@ validationResultErrors x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
         Core.projectionFieldName = (Core.Name "errors")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.validation.ValidationResult
+validationResultValidationResult :: Typed.TypedName (Validation.ValidationResult e)
+validationResultValidationResult = Typed.TypedName (Core.Name "hydra.validation.ValidationResult")
 
 -- | DSL accessor for the warnings field of hydra.validation.ValidationResult
 validationResultWarnings :: Typed.TypedTerm (Validation.ValidationResult e) -> Typed.TypedTerm [e]

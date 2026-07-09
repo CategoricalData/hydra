@@ -190,6 +190,16 @@ public class Bootstrap {
         List<Module> fullMods = new ArrayList<>(baselineMods);
         fullMods.addAll(coderMods);
 
+        // #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+        // (Option A). When emitting tests, hydra-build's main modules must be in the
+        // universe so those refs type-check; otherwise cross-host generation fails with
+        // "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+        // bootstrap-from-json fix (load hydra-build under --include-tests).
+        if (includeTests) {
+            List<Module> buildMainMods = loadPackageMain(distJsonRoot, "hydra-build", schemaMap);
+            fullMods.addAll(buildMainMods);
+        }
+
         // Generate main modules
         String outMain = outDir + File.separator + "src/main";
         System.out.println("Mapping " + modsToGenerate.size() + " modules to " + targetCap + "...");
@@ -287,6 +297,17 @@ public class Bootstrap {
             List<ModuleName> testNamespaces = Generation.readManifestField(kernelMainDir, "testModules");
             List<Module> testMods = Generation.loadModulesFromJson(testJsonDir,
                     schemaMap, testNamespaces);
+            // #546/#547: also load hydra-build's OWN test modules (hydra.test.build.*),
+            // which the kernel test suite imports (Option A). They live in the hydra-build
+            // package's test tree, not hydra-kernel's. Without this, the kernel testSuite's
+            // references to them are unresolved on cross-host generation.
+            String buildMainDir = packageMainDir(distJsonRoot, "hydra-build");
+            String buildTestJsonDir = distJsonRoot + File.separator + "hydra-build"
+                    + File.separator + "src" + File.separator + "test" + File.separator + "json";
+            List<ModuleName> buildTestNs = Generation.readManifestField(buildMainDir, "testModules");
+            if (buildTestNs != null && !buildTestNs.isEmpty()) {
+                testMods.addAll(Generation.loadModulesFromJson(buildTestJsonDir, schemaMap, buildTestNs));
+            }
             stepTime = System.currentTimeMillis() - stepStart;
 
             int testBindings = 0;

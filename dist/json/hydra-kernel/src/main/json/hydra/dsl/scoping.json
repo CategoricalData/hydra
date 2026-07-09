@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.scoping"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.scoping"},
+    {"module": "hydra.decode.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

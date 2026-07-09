@@ -5,7 +5,9 @@
 module Hydra.Dsl.Variants where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Variants as DecodeVariants
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Variants as EncodeVariants
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -55,6 +57,10 @@ literalVariantInteger =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.variants.LiteralVariant
+literalVariantLiteralVariant :: Typed.TypedName Variants.LiteralVariant
+literalVariantLiteralVariant = Typed.TypedName (Core.Name "hydra.variants.LiteralVariant")
 
 -- | DSL injection for the string variant of hydra.variants.LiteralVariant
 literalVariantString :: Typed.TypedTerm Variants.LiteralVariant
@@ -199,6 +205,10 @@ termVariantSet =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.variants.TermVariant
+termVariantTermVariant :: Typed.TypedName Variants.TermVariant
+termVariantTermVariant = Typed.TypedName (Core.Name "hydra.variants.TermVariant")
 
 -- | DSL injection for the typeApplication variant of hydra.variants.TermVariant
 termVariantTypeApplication :: Typed.TypedTerm Variants.TermVariant
@@ -370,6 +380,10 @@ typeVariantSet =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.variants.TypeVariant
+typeVariantTypeVariant :: Typed.TypedName Variants.TypeVariant
+typeVariantTypeVariant = Typed.TypedName (Core.Name "hydra.variants.TypeVariant")
 
 -- | DSL injection for the union variant of hydra.variants.TypeVariant
 typeVariantUnion :: Typed.TypedTerm Variants.TypeVariant

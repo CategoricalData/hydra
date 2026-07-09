@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.haskell.syntax",
   "metadata": {"description": "DSL functions for hydra.haskell.syntax", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.haskell.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.haskell.syntax"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.haskell.syntax"},
+    {"module": "hydra.decode.haskell.syntax"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.alternativeAlternative",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Alternative"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Alternative"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Alternative"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.alternative",
@@ -735,6 +761,26 @@
                   "value": {"literal": {"string": "DSL updater for the binds field of hydra.haskell.syntax.Alternative"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.constraintConstraint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Constraint"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Constraint"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Constraint"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.constraintClass",
         "signature": {
           "typeParameters": [],
@@ -855,6 +901,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the tuple variant of hydra.haskell.syntax.Constraint"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.classConstraintClassConstraint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ClassConstraint"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ClassConstraint"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ClassConstraint"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.classConstraint",
@@ -1289,6 +1355,26 @@
                   "value": {"literal": {"string": "DSL updater for the types field of hydra.haskell.syntax.ClassConstraint"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.caseRhsCaseRhs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.CaseRhs"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.CaseRhs"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.CaseRhs"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.caseRhs",
         "signature": {
           "typeParameters": [],
@@ -1380,6 +1466,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.CaseRhs"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.constructorConstructor",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Constructor"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Constructor"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Constructor"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.constructorOrdinary",
@@ -1504,6 +1610,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the record variant of hydra.haskell.syntax.Constructor"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.positionalConstructorPositionalConstructor",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.PositionalConstructor"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.PositionalConstructor"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.PositionalConstructor"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.positionalConstructor",
@@ -2263,6 +2391,26 @@
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.PositionalConstructor"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.recordConstructorRecordConstructor",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.RecordConstructor"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.RecordConstructor"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.RecordConstructor"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.recordConstructor",
         "signature": {
           "typeParameters": [],
@@ -2986,6 +3134,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.RecordConstructor"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.dataDeclarationDataDeclaration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.DataDeclaration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.DataDeclaration"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.DataDeclaration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.dataDeclaration",
@@ -5027,6 +5195,26 @@
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.DataDeclaration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.dataKeywordDataKeyword",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.DataKeyword"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.DataKeyword"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.DataKeyword"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.dataKeywordData",
         "signature": {
           "typeParameters": [],
@@ -5103,6 +5291,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the newtype variant of hydra.haskell.syntax.DataKeyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.declarationDeclaration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Declaration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Declaration"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Declaration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.declarationData",
@@ -5349,6 +5557,26 @@
                   "value": {"literal": {"string": "DSL injection for the typedBinding variant of hydra.haskell.syntax.Declaration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.declarationHeadDeclarationHead",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.DeclarationHead"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.DeclarationHead"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.DeclarationHead"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.declarationHeadApplication",
         "signature": {
           "typeParameters": [],
@@ -5471,6 +5699,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the simple variant of hydra.haskell.syntax.DeclarationHead"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.applicationDeclarationHeadApplicationDeclarationHead",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ApplicationDeclarationHead"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.applicationDeclarationHead",
@@ -5929,6 +6180,26 @@
                   "value": {"literal": {"string": "DSL updater for the operand field of hydra.haskell.syntax.ApplicationDeclarationHead"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.derivingClauseDerivingClause",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.DerivingClause"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.DerivingClause"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.DerivingClause"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.derivingClause",
         "signature": {
           "typeParameters": [],
@@ -6020,6 +6291,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.DerivingClause"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.exportExport",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Export"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Export"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Export"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.exportDeclaration",
@@ -6142,6 +6431,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the module variant of hydra.haskell.syntax.Export"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.expressionExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Expression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Expression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.expressionApplication",
@@ -7120,6 +7429,28 @@
                   "value": {"literal": {"string": "DSL injection for the variable variant of hydra.haskell.syntax.Expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.applicationExpressionApplicationExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.ApplicationExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ApplicationExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ApplicationExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.applicationExpression",
         "signature": {
           "typeParameters": [],
@@ -7569,6 +7900,26 @@
                   "value": {"literal": {"string": "DSL updater for the argument field of hydra.haskell.syntax.ApplicationExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.caseExpressionCaseExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.CaseExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.CaseExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.CaseExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.caseExpression",
         "signature": {
           "typeParameters": [],
@@ -8000,6 +8351,26 @@
                   "value": {"literal": {"string": "DSL updater for the alternatives field of hydra.haskell.syntax.CaseExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.recordExpressionRecordExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.RecordExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.RecordExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.RecordExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.recordExpression",
         "signature": {
           "typeParameters": [],
@@ -8425,6 +8796,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fields field of hydra.haskell.syntax.RecordExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.ifExpressionIfExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.IfExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.IfExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.IfExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.ifExpression",
@@ -9152,6 +9543,26 @@
                   "value": {"literal": {"string": "DSL updater for the else field of hydra.haskell.syntax.IfExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.infixExpressionInfixExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.InfixExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.InfixExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.InfixExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.infixExpression",
         "signature": {
           "typeParameters": [],
@@ -9877,6 +10288,26 @@
                   "value": {"literal": {"string": "DSL updater for the rhs field of hydra.haskell.syntax.InfixExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.lambdaExpressionLambdaExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.LambdaExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.LambdaExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.LambdaExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.lambdaExpression",
         "signature": {
           "typeParameters": [],
@@ -10302,6 +10733,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the inner field of hydra.haskell.syntax.LambdaExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.letExpressionLetExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.LetExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.LetExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.LetExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.letExpression",
@@ -10731,6 +11182,26 @@
                   "value": {"literal": {"string": "DSL updater for the inner field of hydra.haskell.syntax.LetExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.sectionExpressionSectionExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.SectionExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.SectionExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.SectionExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.sectionExpression",
         "signature": {
           "typeParameters": [],
@@ -11158,6 +11629,26 @@
                   "value": {"literal": {"string": "DSL updater for the expression field of hydra.haskell.syntax.SectionExpression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.typedExpressionTypedExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.TypedExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.TypedExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.TypedExpression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.typedExpression",
         "signature": {
           "typeParameters": [],
@@ -11583,6 +12074,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.haskell.syntax.TypedExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.recordUpdateExpressionRecordUpdateExpression",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.RecordUpdateExpression"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.RecordUpdateExpression"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.RecordUpdateExpression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.recordUpdateExpression",
@@ -12039,6 +12553,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fields field of hydra.haskell.syntax.RecordUpdateExpression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.fieldField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Field"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Field"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.field",
@@ -12764,6 +13296,26 @@
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.Field"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.fieldUpdateFieldUpdate",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.FieldUpdate"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.FieldUpdate"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.FieldUpdate"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.fieldUpdate",
         "signature": {
           "typeParameters": [],
@@ -13189,6 +13741,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.haskell.syntax.FieldUpdate"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.importImport",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Import"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Import"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Import"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.import",
@@ -14282,6 +14852,26 @@
                   "value": {"literal": {"string": "DSL updater for the spec field of hydra.haskell.syntax.Import"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.importSpecImportSpec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ImportSpec"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ImportSpec"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.importSpecList",
         "signature": {
           "typeParameters": [],
@@ -14404,6 +14994,26 @@
                   "value": {"literal": {"string": "DSL injection for the hiding variant of hydra.haskell.syntax.ImportSpec"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.importModifierImportModifier",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ImportModifier"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ImportModifier"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ImportModifier"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.importModifierPattern",
         "signature": {
           "typeParameters": [],
@@ -14480,6 +15090,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the type variant of hydra.haskell.syntax.ImportModifier"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.namedImportExportNamedImportExport",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.NamedImportExport"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.NamedImportExport"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.namedImportExport",
@@ -15207,6 +15837,28 @@
                   "value": {"literal": {"string": "DSL updater for the subspec field of hydra.haskell.syntax.NamedImportExport"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.importExportSubspecImportExportSubspec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ImportExportSubspec"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ImportExportSubspec"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.importExportSubspecAll",
         "signature": {
           "typeParameters": [],
@@ -15309,6 +15961,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the list variant of hydra.haskell.syntax.ImportExportSubspec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.literalLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Literal"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Literal"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Literal"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.literalChar",
@@ -15683,6 +16355,26 @@
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.haskell.syntax.Literal"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.localBindingLocalBinding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.LocalBinding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.LocalBinding"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.LocalBinding"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.localBindingSignature",
         "signature": {
           "typeParameters": [],
@@ -15805,6 +16497,26 @@
                   "value": {"literal": {"string": "DSL injection for the value variant of hydra.haskell.syntax.LocalBinding"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.localBindingsLocalBindings",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.LocalBindings"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.LocalBindings"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.localBindings",
         "signature": {
           "typeParameters": [],
@@ -15902,6 +16614,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.LocalBindings"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.moduleModule",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Module"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Module"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Module"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.module",
@@ -16635,6 +17365,26 @@
                   "value": {"literal": {"string": "DSL updater for the declarations field of hydra.haskell.syntax.Module"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.moduleHeadModuleHead",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ModuleHead"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ModuleHead"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ModuleHead"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.moduleHead2",
         "signature": {
           "typeParameters": [],
@@ -17360,6 +18110,26 @@
                   "value": {"literal": {"string": "DSL updater for the exports field of hydra.haskell.syntax.ModuleHead"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.moduleNameModuleName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ModuleName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ModuleName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.moduleName",
         "signature": {
           "typeParameters": [],
@@ -17447,6 +18217,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.ModuleName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.nameName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Name"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.nameImplicit",
@@ -17571,6 +18358,26 @@
                   "value": {"literal": {"string": "DSL injection for the normal variant of hydra.haskell.syntax.Name"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.namePartNamePart",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.NamePart"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.NamePart"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.NamePart"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.namePart",
         "signature": {
           "typeParameters": [],
@@ -17658,6 +18465,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.NamePart"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.operatorOperator",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Operator"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Operator"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Operator"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.operatorBacktick",
@@ -17782,6 +18609,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the normal variant of hydra.haskell.syntax.Operator"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.patternPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Pattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Pattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Pattern"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.patternApplication",
@@ -18311,6 +19158,26 @@
                   "value": {"literal": {"string": "DSL injection for the wildcard variant of hydra.haskell.syntax.Pattern"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.applicationPatternApplicationPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ApplicationPattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ApplicationPattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ApplicationPattern"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.applicationPattern",
         "signature": {
           "typeParameters": [],
@@ -18736,6 +19603,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the args field of hydra.haskell.syntax.ApplicationPattern"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.asPatternAsPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.AsPattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.AsPattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.AsPattern"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.asPattern",
@@ -19165,6 +20052,26 @@
                   "value": {"literal": {"string": "DSL updater for the inner field of hydra.haskell.syntax.AsPattern"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.recordPatternRecordPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.RecordPattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.RecordPattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.RecordPattern"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.recordPattern",
         "signature": {
           "typeParameters": [],
@@ -19590,6 +20497,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fields field of hydra.haskell.syntax.RecordPattern"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.typedPatternTypedPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.TypedPattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.TypedPattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.TypedPattern"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.typedPattern",
@@ -20019,6 +20946,26 @@
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.haskell.syntax.TypedPattern"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.patternFieldPatternField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.PatternField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.PatternField"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.PatternField"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.patternField",
         "signature": {
           "typeParameters": [],
@@ -20444,6 +21391,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the pattern field of hydra.haskell.syntax.PatternField"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.qualifiedNameQualifiedName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.QualifiedName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.QualifiedName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.QualifiedName"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.qualifiedName",
@@ -20873,6 +21840,26 @@
                   "value": {"literal": {"string": "DSL updater for the unqualified field of hydra.haskell.syntax.QualifiedName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.rightHandSideRightHandSide",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.RightHandSide"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.RightHandSide"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.RightHandSide"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.rightHandSide",
         "signature": {
           "typeParameters": [],
@@ -20966,6 +21953,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.RightHandSide"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.statementStatement",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Statement"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Statement"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Statement"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.statement",
         "signature": {
           "typeParameters": [],
@@ -21057,6 +22064,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.haskell.syntax.Statement"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.typeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Type"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.typeApplication",
@@ -21486,6 +22510,26 @@
                   "value": {"literal": {"string": "DSL injection for the variable variant of hydra.haskell.syntax.Type"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.applicationTypeApplicationType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ApplicationType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ApplicationType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ApplicationType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.applicationType",
         "signature": {
           "typeParameters": [],
@@ -21911,6 +22955,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the argument field of hydra.haskell.syntax.ApplicationType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.constrainedTypeConstrainedType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ConstrainedType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ConstrainedType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ConstrainedType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.constrainedType",
@@ -22340,6 +23404,26 @@
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.haskell.syntax.ConstrainedType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.functionTypeFunctionType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.FunctionType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.FunctionType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.FunctionType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.functionType",
         "signature": {
           "typeParameters": [],
@@ -22765,6 +23849,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the codomain field of hydra.haskell.syntax.FunctionType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.infixTypeInfixType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.InfixType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.InfixType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.InfixType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.infixType",
@@ -23490,6 +24594,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the rhs field of hydra.haskell.syntax.InfixType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.typeSynonymDeclarationTypeSynonymDeclaration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.TypeSynonymDeclaration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.typeSynonymDeclaration",
@@ -24262,6 +25389,26 @@
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.TypeSynonymDeclaration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.typeSignatureTypeSignature",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.TypeSignature"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.TypeSignature"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.TypeSignature"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.typeSignature",
         "signature": {
           "typeParameters": [],
@@ -24687,6 +25834,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.haskell.syntax.TypeSignature"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.typedBindingTypedBinding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.TypedBinding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.TypedBinding"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.TypedBinding"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.typedBinding",
@@ -25426,6 +26593,26 @@
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.TypedBinding"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.syntax.valueBindingValueBinding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.ValueBinding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.ValueBinding"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.ValueBinding"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.syntax.valueBindingSimple",
         "signature": {
           "typeParameters": [],
@@ -25485,6 +26672,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the simple variant of hydra.haskell.syntax.ValueBinding"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.simpleValueBindingSimpleValueBinding",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.SimpleValueBinding"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.SimpleValueBinding"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.SimpleValueBinding"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.simpleValueBinding",
@@ -26589,6 +27796,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the comments field of hydra.haskell.syntax.SimpleValueBinding"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.syntax.variableVariable",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.haskell.syntax.Variable"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.syntax.Variable"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.syntax.Variable"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.syntax.variable",

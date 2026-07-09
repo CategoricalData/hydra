@@ -3,9 +3,10 @@
 Kernel-function references have been replaced by the generated hydra.dsl.* modules
 (#467): e.g. hydra.dsl.strip.deannotate_type, hydra.dsl.names.qualify_name.
 This package's OWN modules (hydra.python.utils, hydra.python.names) are also now
-generated (#556): hydra.dsl.python.utils.*, hydra.dsl.python.names.*. What remains
-here are derived-family refs (hydra.show.*) not yet covered, and a handful of
-permanent partial-application exceptions (see bottom of file) that the
+generated (#556): hydra.dsl.python.utils.*, hydra.dsl.python.names.*. The last
+derived-family reference (hydra.show.core.type) was retired in favor of the typed
+hydra.refs.show_ref + hydra.dsl.core.type_type (see #555). What remains here is a
+handful of permanent partial-application exceptions (see bottom of file) that the
 arity-saturated generated wrappers cannot express.
 
 Keep this list minimal -- only add what is actually used and not generated.
@@ -14,6 +15,9 @@ Keep this list minimal -- only add what is actually used and not generated.
 from hydra.overlay.python.dsl.meta.phantoms import var
 from hydra.dsl.python import utils as _utils
 from hydra.dsl.python import names as _names
+from hydra.typed import TypedTerm
+import hydra.dsl.core
+import hydra.refs
 
 
 # hydra.constants
@@ -68,7 +72,7 @@ utils_raise_type_error = _utils.raise_type_error
 utils_return_single = _utils.return_single
 utils_name_and_params = _utils.name_and_params
 utils_py_none = _utils.py_none()
-show_core_type = var("hydra.show.core.type")
+show_core_type = TypedTerm(hydra.refs.show_ref(hydra.dsl.core.type_type))
 names_type_variable_reference = _names.type_variable_reference
 names_term_variable_reference = _names.term_variable_reference
 names_encode_name_qualified = _names.encode_name_qualified

@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.avro.testing"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.avro.testing"},
+    {"module": "hydra.decode.avro.testing"},
     {"module": "hydra.core"},
     {"module": "hydra.avro.schema"},
     {"module": "hydra.json.model"},
@@ -11,6 +13,29 @@
     {"module": "hydra.dsl.avro.schema"},
     {"module": "hydra.dsl.json.model"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.typeLevelForwardTestCaseTypeLevelForwardTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TypeLevelForwardTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TypeLevelForwardTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TypeLevelForwardTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.typeLevelForwardTestCase",
@@ -803,6 +828,29 @@
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.avro.testing.TypeLevelForwardTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.typeLevelReverseTestCaseTypeLevelReverseTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TypeLevelReverseTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TypeLevelReverseTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TypeLevelReverseTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.typeLevelReverseTestCase",
         "signature": {
           "typeParameters": [],
@@ -1591,6 +1639,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the schema field of hydra.avro.testing.TypeLevelReverseTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.typeLevelRoundTripAvroTestCaseTypeLevelRoundTripAvroTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TypeLevelRoundTripAvroTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.typeLevelRoundTripAvroTestCase",
@@ -2420,6 +2491,29 @@
                   "value": {"literal": {"string": "DSL updater for the expectedSchema field of hydra.avro.testing.TypeLevelRoundTripAvroTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.typeLevelRoundTripHydraTestCaseTypeLevelRoundTripHydraTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TypeLevelRoundTripHydraTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.typeLevelRoundTripHydraTestCase",
         "signature": {
           "typeParameters": [],
@@ -3244,6 +3338,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the expectedType field of hydra.avro.testing.TypeLevelRoundTripHydraTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.termLevelForwardTestCaseTermLevelForwardTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TermLevelForwardTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TermLevelForwardTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TermLevelForwardTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.termLevelForwardTestCase",
@@ -4423,6 +4540,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.avro.testing.TermLevelForwardTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.termLevelReverseTestCaseTermLevelReverseTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TermLevelReverseTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TermLevelReverseTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TermLevelReverseTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.termLevelReverseTestCase",
@@ -5617,6 +5757,29 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the json field of hydra.avro.testing.TermLevelReverseTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.termLevelRoundTripJsonTestCaseTermLevelRoundTripJsonTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TermLevelRoundTripJsonTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TermLevelRoundTripJsonTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TermLevelRoundTripJsonTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.termLevelRoundTripJsonTestCase",
@@ -6831,6 +6994,29 @@
                   "value": {"literal": {"string": "DSL updater for the expectedJson field of hydra.avro.testing.TermLevelRoundTripJsonTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.termLevelRoundTripTermTestCaseTermLevelRoundTripTermTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.TermLevelRoundTripTermTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.TermLevelRoundTripTermTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.TermLevelRoundTripTermTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.termLevelRoundTripTermTestCase",
         "signature": {
           "typeParameters": [],
@@ -8038,6 +8224,26 @@
                   "value": {"literal": {"string": "DSL updater for the expectedTerm field of hydra.avro.testing.TermLevelRoundTripTermTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.unionTestCaseUnionTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.testing.UnionTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.UnionTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.UnionTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.unionTestCase",
         "signature": {
           "typeParameters": [],
@@ -9194,6 +9400,26 @@
                   "value": {"literal": {"string": "DSL updater for the termPairs field of hydra.avro.testing.UnionTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.nameMappingTestCaseNameMappingTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.testing.NameMappingTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.NameMappingTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.NameMappingTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.nameMappingTestCase",
         "signature": {
           "typeParameters": [],
@@ -10331,6 +10557,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the avroNamespace field of hydra.avro.testing.NameMappingTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.lossinessTestCaseLossinessTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.testing.LossinessTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.LossinessTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.LossinessTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.lossinessTestCase",
@@ -11978,6 +12224,29 @@
                   "value": {"literal": {"string": "DSL updater for the isLossy field of hydra.avro.testing.LossinessTestCase"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.testing.schemaSerializationTestCaseSchemaSerializationTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.testing.SchemaSerializationTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.SchemaSerializationTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.SchemaSerializationTestCase"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.testing.schemaSerializationTestCase",
         "signature": {
           "typeParameters": [],
@@ -12776,6 +13045,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the json field of hydra.avro.testing.SchemaSerializationTestCase"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.testing.avroTestCaseAvroTestCase",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.testing.AvroTestCase"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.testing.AvroTestCase"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.testing.AvroTestCase"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.testing.avroTestCaseTypeLevelForward",

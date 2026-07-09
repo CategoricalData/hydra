@@ -1,8 +1,30 @@
 {
   "name": "hydra.dsl.protobuf.any",
   "metadata": {"description": "DSL functions for hydra.protobuf.any", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.protobuf.any"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.protobuf.any"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.protobuf.any"},
+    {"module": "hydra.decode.protobuf.any"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.any.anyAny",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.protobuf.any.Any"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.any.Any"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.protobuf.any.Any"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.any.any",

@@ -25,6 +25,15 @@ on:
 #     Phase 2 (JSON -> target source) themselves; that's the Haskell
 #     job's responsibility.
 #
+#   * The regression-harnesses job (#563) runs the #535 standalone
+#     regression scripts (bin/test-regressions.sh) separately from the
+#     haskell job. It needs the haskell job's dist-diff check to have
+#     passed (so committed dist/json/ is known-fresh) but not its dist
+#     artifacts: dist/json/ is git-committed, so a fresh checkout already
+#     has it. It builds its own standalone Haskell executables from
+#     source, so it sets up its own Stack/GHC toolchain independent of
+#     the haskell job's stack project.
+#
 # This matches integration's de-facto CI topology: one expensive job
 # producing JSON + all target source trees; cheap jobs consuming those
 # and running target-language tests.
@@ -33,13 +42,24 @@ jobs:
   haskell:
     name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
-    # A healthy full cold run (regenerate all-target dists + stack tests) is ~2.5h
-    # (historically 2h19m-2h43m). 200min (3h20m) sits comfortably above the worst
-    # normal run while well under GitHub's 6h default, so a genuinely wedged job
-    # fails deterministically here instead of needing a human to guess "is it hung?"
-    # and cancel — which previously caused healthy long runs to be cancelled at
-    # ~half-time and misdiagnosed as runner stalls. See #494 CI investigation.
-    timeout-minutes: 200
+    # A healthy full cold run (regenerate all-target dists + stack tests) was ~2.5h
+    # (historically 2h19m-2h43m). The old 200min ceiling sat above that — but the
+    # #535 regression-harnesses step (bin/test-regressions.sh, which builds four
+    # standalone Haskell executables from source before running them) plus kernel
+    # growth pushed real work PAST 200min: every run from 2026-07-06 11:17Z onward
+    # was killed at exactly 200m00s on the final regression step (GitHub reports a
+    # timeout-kill as "cancelled", so it masqueraded as a runner stall for ~30h).
+    # Raised to 300min: headroom above the now-longer run while still well under
+    # GitHub's 6h default, so a genuinely wedged job still fails deterministically
+    # rather than needing a human to guess "is it hung?".
+    # #563: the regression-harnesses step itself has since moved to its own job
+    # (below), removing that specific driver of growth. Left at 300 rather than
+    # retuned back down without fresh measurement of the job's duration post-split;
+    # #546-class additions (new packages, per-package digests) remain a live
+    # accretion risk. If this ceiling is approached again, look for a similar
+    # self-contained tail to split out before raising it further.
+    # See #494 CI investigation.
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       # #541: cheap, toolchain-free gate that must run before anything else
@@ -168,18 +188,40 @@ jobs:
           name: dist-emacs-lisp
           path: dist/emacs-lisp/
           retention-days: 1
-      # #535: standalone regression harnesses guarding specific prune/reconcile
-      # bugs (#393, #405, #469, #357). Each builds its own Haskell executable
-      # from current source before exec'ing it; the #405 and #469 cases need
-      # the dist/json/ tree populated by the sync step above. Runs LAST in
-      # this job: the haskell leg of test-stale-output-prune.sh (#357) calls
-      # bootstrap-from-json --prune-stale directly against the real
-      # dist/haskell/hydra-kernel tree (by design, to exercise the prune
-      # mechanism in isolation from assemble-distribution.sh), which deletes
-      # the Hydra/Overlay/Haskell/ files that overlay-kernel-runtime.sh
-      # copies in separately. Running it any earlier would corrupt the tree
-      # for the dist-diff check, Stack tests, the self-containment gate, and
-      # the dist/<lang> artifact uploads above.
+  # #535/#563: standalone regression harnesses guarding specific prune/reconcile
+  # bugs (#393, #405, #469, #357, #551). Split out of the haskell job (#563) so
+  # this self-contained tail stops accreting toward that job's timeout ceiling
+  # and no longer gates the 8 downstream language jobs. Needs the haskell job's
+  # dist-diff check to have passed (committed dist/json/ confirmed fresh) but
+  # not its build artifacts: dist/json/ is git-committed, so this job's own
+  # checkout already has it. Each script builds its own standalone Haskell
+  # executable from source, so this job sets up its own Stack/GHC toolchain
+  # rather than reusing the haskell job's stack project (jobs don't share
+  # filesystem). Three of the five scripts need dist/json/ and SKIP cleanly
+  # without it; two are hermetic. See bin/test-regressions.sh for the list.
+  regression-harnesses:
+    name: Regression harnesses
+    needs: haskell
+    runs-on: ubuntu-latest
+    # Five small stack builds/execs, not a full sync — generous but bounded.
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          enable-stack: true
+          stack-version: latest
+      - uses: actions/cache@v4
+        with:
+          path: ~/.stack
+          key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
+          restore-keys: stack-
+      # Post-#418 the overlay/haskell/hydra-kernel runtime files are untracked,
+      # so a fresh checkout alone can't build the Haskell project (GHC fails
+      # with "Could not find module 'Hydra.Overlay.Haskell.Lib.*'"). git
+      # checkout can't restore them either. This is the canonical fix.
+      - name: Restore overlay kernel runtime
+        run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
         run: bin/test-regressions.sh
 

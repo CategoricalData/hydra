@@ -23,6 +23,14 @@ _TypedBinding_name = Core.Name "name"
 
 _TypedBinding_term = Core.Name "term"
 
+-- | An association of a name with a phantom type
+newtype TypedName a =
+  TypedName {
+    unTypedName :: Core.Name}
+  deriving (Eq, Ord, Read, Show)
+
+_TypedName = Core.Name "hydra.typed.TypedName"
+
 -- | An association of a term with a phantom type
 newtype TypedTerm a =
   TypedTerm {

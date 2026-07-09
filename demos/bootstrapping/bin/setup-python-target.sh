@@ -109,6 +109,21 @@ for f in test_suite_runner.py test_python.py test_generated_code.py test_grammar
     fi
 done
 
+# #546: hydra-build owns hydra.build.* (main) + hydra.test.build.* (test), relocated out of
+# hydra-kernel. The kernel's generated testSuite imports hydra.test.build.*, which import
+# hydra.build.*; neither is emitted into the cell under --kernel-only. Copy both from the
+# hydra-build baseline (else: "ModuleNotFoundError: No module named 'hydra.build'").
+PY_BUILD_BASELINE="$HYDRA_ROOT/dist/python/hydra-build/src"
+if [ -d "$PY_BUILD_BASELINE/main/python/hydra/build" ]; then
+    mkdir -p "$PY_DST/build"
+    cp -r "$PY_BUILD_BASELINE/main/python/hydra/build/." "$PY_DST/build/"
+fi
+if [ -d "$PY_BUILD_BASELINE/test/python/hydra/test/build" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/python/hydra/test/build"
+    cp -r "$PY_BUILD_BASELINE/test/python/hydra/test/build/." "$OUTPUT_DIR/src/test/python/hydra/test/build/"
+fi
+find "$OUTPUT_DIR/src" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+
 # Create symlink to hydra-kernel so that relative paths (../hydra-kernel/...)
 # used by test_suite_runner.py to find JSON modules resolve correctly.
 echo "  Creating hydra-kernel symlink..."

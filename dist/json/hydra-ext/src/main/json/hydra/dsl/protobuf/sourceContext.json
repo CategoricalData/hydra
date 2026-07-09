@@ -4,9 +4,33 @@
   "dependencies": [
     {"module": "hydra.protobuf.sourceContext"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.protobuf.sourceContext"},
+    {"module": "hydra.decode.protobuf.sourceContext"},
     {"module": "hydra.core"},
     {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.protobuf.sourceContext.sourceContextSourceContext",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.protobuf.sourceContext.SourceContext"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.protobuf.sourceContext.SourceContext"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.protobuf.sourceContext.SourceContext"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.protobuf.sourceContext.sourceContext",

@@ -5,8 +5,10 @@
 module Hydra.Dsl.System where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.System as DecodeSystem
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.File as DslFile
+import qualified Hydra.Encode.System as EncodeSystem
 import qualified Hydra.File as File
 import qualified Hydra.System as System
 import qualified Hydra.Typed as Typed
@@ -42,6 +44,10 @@ commandArguments x =
         Core.projectionTypeName = (Core.Name "hydra.system.Command"),
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.system.Command
+commandCommand :: Typed.TypedName System.Command
+commandCommand = Typed.TypedName (Core.Name "hydra.system.Command")
 
 -- | DSL accessor for the environment field of hydra.system.Command
 commandEnvironment :: Typed.TypedTerm System.Command -> Typed.TypedTerm (Maybe (M.Map System.EnvironmentVariable String))
@@ -201,6 +207,10 @@ environmentVariable x =
       Core.wrappedTermTypeName = (Core.Name "hydra.system.EnvironmentVariable"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.system.EnvironmentVariable
+environmentVariableEnvironmentVariable :: Typed.TypedName System.EnvironmentVariable
+environmentVariableEnvironmentVariable = Typed.TypedName (Core.Name "hydra.system.EnvironmentVariable")
+
 -- | DSL constructor for hydra.system.ProcessResult
 processResult :: Typed.TypedTerm System.StatusCode -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm System.ProcessResult
 processResult exitCode stdout stderr =
@@ -225,6 +235,10 @@ processResultExitCode x =
         Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
         Core.projectionFieldName = (Core.Name "exitCode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.system.ProcessResult
+processResultProcessResult :: Typed.TypedName System.ProcessResult
+processResultProcessResult = Typed.TypedName (Core.Name "hydra.system.ProcessResult")
 
 -- | DSL accessor for the stderr field of hydra.system.ProcessResult
 processResultStderr :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm B.ByteString
@@ -322,6 +336,10 @@ statusCode x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.system.StatusCode"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.system.StatusCode
+statusCodeStatusCode :: Typed.TypedName System.StatusCode
+statusCodeStatusCode = Typed.TypedName (Core.Name "hydra.system.StatusCode")
 
 -- | DSL accessor for the body of hydra.system.EnvironmentVariable
 unEnvironmentVariable :: Typed.TypedTerm System.EnvironmentVariable -> Typed.TypedTerm String

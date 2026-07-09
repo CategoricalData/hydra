@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.rewriting"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.rewriting"},
+    {"module": "hydra.decode.rewriting"},
     {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

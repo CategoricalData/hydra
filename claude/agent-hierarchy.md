@@ -289,14 +289,21 @@ leaf/non-top agent that drafts a proposal:
 
 1. writes it into its *own* `proposals/pending/<id>.md`,
 2. sends it up the coordinator chain (ordinary message transport, copying into
-   the coordinator's `proposals/pending/`), and
-3. **immediately moves its own copy to `proposals/forwarded/`** — so its own
-   pending queue does not nag for a proposal whose disposition it does not own.
+   the coordinator's `proposals/pending/` — `mkdir -p` it first if the recipient
+   worktree predates the #557 spawn tooling), and
+3. moves its own copy to `proposals/forwarded/` **only after verifying the copy
+   is present in the coordinator's queue** — so its own pending queue does not
+   nag for a proposal whose disposition it does not own, and so "forwarded"
+   records verified state, not intent.
 
 Only the top coordinator's `pending/` accumulates awaiting-user proposals, and
 only there does the banner fire. A coordinator that is *itself* a child of a
 higher coordinator forwards likewise, until the proposal reaches the top of the
-subtree the user checks in with. See
+subtree the user checks in with. **Every hop is verified separately** — a
+proposal is not "with the user" until it sits in the queue the user actually
+checks; an agent reporting "awaiting user decision" should be able to point at
+that queue entry (a mid-chain coordinator holding an un-forwarded proposal is
+the observed failure mode). See
 [`cross-worktree-messages.md § Issue proposals`](cross-worktree-messages.md#issue-proposals-a-distinct-channel)
 for the transport mechanics (filenames, copy-before-archive, crash recovery).
 The banner always shows on the holding coordinator's surface; the
@@ -338,6 +345,48 @@ that already exists:
   to **Fable** only if the new subtree is high-stakes — the same "high-stakes is
   the parent's or user's call" rule as the spawn-time table. One small dependency
   makes an Opus coordinator, not a Fable one.
+
+### Capability-tiered mentoring across a parent/child model gap
+
+Because the model tiers differ across the hierarchy, a parent coordinator is
+often running a **more capable model** than its child (Fable parent over an Opus
+child, Opus over `opusplan`). When that gap exists, the review relationship is
+not just lifecycle bookkeeping — it is **mentoring**: the more-capable parent
+sharpens the child's thinking, catches errors, and supplies context the child
+couldn't have. Two disciplines make this work, and both matter:
+
+- **The child owns its hard problems — it does not throw them upward.** The child
+  is expected to *solve* the difficult design decisions in its scope, then bring
+  its **worked solution** to the parent for review: "here is the decision, my
+  analysis, the approach I chose and why, the alternatives I rejected and the
+  tradeoff — does this hold?" That is the correct shape. "Here is a hard fork, you
+  pick" is throwing up its hands — not acceptable; it abdicates a decision the
+  child owns and wastes the point of provisioning a capable child. Lead with
+  analysis and a lean, never a blank ask. (The only legitimate blank-ish ask is
+  after *genuinely* working a problem and being unable to distinguish two options
+  on the merits — and even then, present both with the tradeoff, not "what do I
+  do?") A parent models this upward too: it brings *its* parent a recommendation
+  with reasoning, never "what should I do?"
+- **But the child *does* surface the calls that could genuinely use a smarter
+  look.** The flip side of "own your problems" is not "never ask." A child should
+  proactively route to the parent the design decisions where a more-capable model
+  plausibly sees something it can't — the load-bearing splits, the novel/
+  unproven paths, the behavior-changing flips, anything with a subtle or
+  irreversible downside. Silent over-confidence on a genuinely hard call is as bad
+  as helpless under-confidence. The parent's job is to make those calls *better*,
+  not to make them.
+- **The child respects the parent's context budget.** The parent is usually the
+  longer-lived, higher-stakes session; do not flood it with routine status or
+  every small decision. Batch routine updates; reserve interrupts for the
+  genuinely-review-worthy calls above and for blockers. A well-run child makes the
+  parent's attention *count* — surfacing the few decisions that need the smarter
+  model, handling the rest itself.
+
+The asymmetry to internalize: **cheap to bring a worked design call for review;
+expensive to guess wrong on one silently, and also expensive to abdicate one that
+was yours to make.** The parent raises the bar on the child deliberately — "own
+the calls; I make them better, not for you" — while keeping the door open for the
+hard ones.
 
 ## Context minimization: role-appropriate initial context
 
@@ -411,6 +460,13 @@ block on the user unless the user has given the *specific* standing direction
 "confirm pushes with me." That toggle is orthogonal to the dial. The mandatory
 pre-push invariants always hold regardless of level: WIP-scan clean,
 `[CI]`-by-name gate, fetch-merge-before-push, tree-consistency.
+
+**Staging is exempt from the messaging row.** A staging agent sends coordination
+messages freely — and every agent responds to it freely — at *every* dial level,
+including *low*. This is a standing, dial-independent authority (staging is the
+fleet's coordination hub); see
+[branch-flow.md § Staging's non-issue duties](branch-flow.md#stagings-non-issue-duties).
+It covers coordination traffic only, not GitHub writes or other outward actions.
 
 Two asymmetries are load-bearing:
 
@@ -563,10 +619,16 @@ Design against "found out by accident."
    regression OR pushing a batch, drop a one-line "diagnosing / fixing /
    pushing X" note where the other staging agents reliably see it. Convergent
    double-work (two machines fixing the same red-CI bug) happened this week; this
-   prevents it. **Recommended channel: a pinned coordination issue** (rides
-   existing GitHub primitives, reliably pollable); a shared
-   `claude-hydra-messages`-style inbox that all staging agents poll is the
-   lower-latency alternative. The mechanism matters less than the invariant:
+   prevents it. **Channel (adopted 2026-07-06): the `coordination` branch of the wiki
+   repository** — `STATE.md` (durable, edit-in-place) + `LOG.md` (append-only
+   claims/events); a claim is a commit, so push-rejection gives atomic
+   compare-and-swap semantics; the branch is periodically deleted/recreated so
+   churn never bloats the wiki. See the rendered "Fleet coordination" wiki
+   page. (A pinned coordination issue was considered and rejected: unbounded
+   comment growth, weaker claim atomicity, and — decisive — main-repo events
+   including issue comments echo to the community Discord, so coordination
+   churn there would spam human developers. Wiki changes are not echoed;
+   never migrate this channel to a Discord-echoed surface.) The mechanism matters less than the invariant:
    *no staging agent starts a red-CI fix or a push without first checking
    whether another machine already has it in flight.*
 3. **Serialize pushes; parallelize everything else.** Validation (sync, test,
@@ -623,7 +685,10 @@ notes are for issue agents doing host-generating work.)
   staging AND from other machines'. A remembered tip is a bug.
 - **Cross-worktree message sends normally need per-send user permission**, but a
   scoped autonomous grant (e.g. "coordinate freely until #416 lands") lifts that
-  within the stated scope. Know your scope.
+  within the stated scope. Know your scope. **Exception: a staging agent sends
+  freely at all times, and every agent responds to a staging agent freely** — a
+  standing, dial-independent authority for coordination traffic (see
+  [branch-flow.md § Staging's non-issue duties](branch-flow.md#stagings-non-issue-duties)).
 - **An agent's branch commits are safe as a git ref in the shared bare repo**
   independent of its tmux session — so pausing an agent (ending its session to
   save context) loses nothing *provided the coordinator has the commits*. The

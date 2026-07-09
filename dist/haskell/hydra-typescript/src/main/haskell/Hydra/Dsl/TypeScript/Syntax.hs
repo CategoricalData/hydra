@@ -12,6 +12,10 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Int as I
 
+-- | DSL name token for hydra.typeScript.syntax.ArrayElement
+arrayElementArrayElement :: Typed.TypedName Syntax.ArrayElement
+arrayElementArrayElement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ArrayElement")
+
 -- | DSL injection for the expression variant of hydra.typeScript.syntax.ArrayElement
 arrayElementExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ArrayElement
 arrayElementExpression x =
@@ -46,6 +50,14 @@ arrayTypeExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.ArrayTypeExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.ArrayTypeExpression
+arrayTypeExpressionArrayTypeExpression :: Typed.TypedName Syntax.ArrayTypeExpression
+arrayTypeExpressionArrayTypeExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ArrayTypeExpression")
+
+-- | DSL name token for hydra.typeScript.syntax.ArrowFunctionBody
+arrowFunctionBodyArrowFunctionBody :: Typed.TypedName Syntax.ArrowFunctionBody
+arrowFunctionBodyArrowFunctionBody = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ArrowFunctionBody")
+
 -- | DSL injection for the block variant of hydra.typeScript.syntax.ArrowFunctionBody
 arrowFunctionBodyBlock :: Typed.TypedTerm Syntax.BlockStatement -> Typed.TypedTerm Syntax.ArrowFunctionBody
 arrowFunctionBodyBlock x =
@@ -79,6 +91,11 @@ arrowFunctionExpression params body async =
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Typed.unTypedTerm async)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.ArrowFunctionExpression
+arrowFunctionExpressionArrowFunctionExpression :: Typed.TypedName Syntax.ArrowFunctionExpression
+arrowFunctionExpressionArrowFunctionExpression =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ArrowFunctionExpression")
 
 -- | DSL accessor for the async field of hydra.typeScript.syntax.ArrowFunctionExpression
 arrowFunctionExpressionAsync :: Typed.TypedTerm Syntax.ArrowFunctionExpression -> Typed.TypedTerm Bool
@@ -192,6 +209,10 @@ asExpression expression type_ =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 
+-- | DSL name token for hydra.typeScript.syntax.AsExpression
+asExpressionAsExpression :: Typed.TypedName Syntax.AsExpression
+asExpressionAsExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.AsExpression")
+
 -- | DSL accessor for the expression field of hydra.typeScript.syntax.AsExpression
 asExpressionExpression :: Typed.TypedTerm Syntax.AsExpression -> Typed.TypedTerm Syntax.Expression
 asExpressionExpression x =
@@ -259,6 +280,10 @@ assignmentExpression operator left right =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Typed.unTypedTerm right)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression :: Typed.TypedName Syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.AssignmentExpression")
 
 -- | DSL accessor for the left field of hydra.typeScript.syntax.AssignmentExpression
 assignmentExpressionLeft :: Typed.TypedTerm Syntax.AssignmentExpression -> Typed.TypedTerm Syntax.Pattern
@@ -385,6 +410,10 @@ assignmentOperatorAssign =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assign"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.typeScript.syntax.AssignmentOperator
+assignmentOperatorAssignmentOperator :: Typed.TypedName Syntax.AssignmentOperator
+assignmentOperatorAssignmentOperator = Typed.TypedName (Core.Name "hydra.typeScript.syntax.AssignmentOperator")
 
 -- | DSL injection for the bitwiseAndAssign variant of hydra.typeScript.syntax.AssignmentOperator
 assignmentOperatorBitwiseAndAssign :: Typed.TypedTerm Syntax.AssignmentOperator
@@ -516,6 +545,10 @@ assignmentPattern left right =
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Typed.unTypedTerm right)}]}))
 
+-- | DSL name token for hydra.typeScript.syntax.AssignmentPattern
+assignmentPatternAssignmentPattern :: Typed.TypedName Syntax.AssignmentPattern
+assignmentPatternAssignmentPattern = Typed.TypedName (Core.Name "hydra.typeScript.syntax.AssignmentPattern")
+
 -- | DSL accessor for the left field of hydra.typeScript.syntax.AssignmentPattern
 assignmentPatternLeft :: Typed.TypedTerm Syntax.AssignmentPattern -> Typed.TypedTerm Syntax.Pattern
 assignmentPatternLeft x =
@@ -583,6 +616,10 @@ binaryExpression operator left right =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Typed.unTypedTerm right)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.BinaryExpression
+binaryExpressionBinaryExpression :: Typed.TypedName Syntax.BinaryExpression
+binaryExpressionBinaryExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.BinaryExpression")
 
 -- | DSL accessor for the left field of hydra.typeScript.syntax.BinaryExpression
 binaryExpressionLeft :: Typed.TypedTerm Syntax.BinaryExpression -> Typed.TypedTerm Syntax.Expression
@@ -700,6 +737,10 @@ binaryOperatorAnd =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.typeScript.syntax.BinaryOperator
+binaryOperatorBinaryOperator :: Typed.TypedName Syntax.BinaryOperator
+binaryOperatorBinaryOperator = Typed.TypedName (Core.Name "hydra.typeScript.syntax.BinaryOperator")
 
 -- | DSL injection for the bitwiseAnd variant of hydra.typeScript.syntax.BinaryOperator
 binaryOperatorBitwiseAnd :: Typed.TypedTerm Syntax.BinaryOperator
@@ -933,6 +974,10 @@ callExpressionArguments x =
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.CallExpression
+callExpressionCallExpression :: Typed.TypedName Syntax.CallExpression
+callExpressionCallExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.CallExpression")
+
 -- | DSL accessor for the callee field of hydra.typeScript.syntax.CallExpression
 callExpressionCallee :: Typed.TypedTerm Syntax.CallExpression -> Typed.TypedTerm Syntax.Expression
 callExpressionCallee x =
@@ -1045,6 +1090,10 @@ catchClauseBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.CatchClause
+catchClauseCatchClause :: Typed.TypedName Syntax.CatchClause
+catchClauseCatchClause = Typed.TypedName (Core.Name "hydra.typeScript.syntax.CatchClause")
+
 -- | DSL accessor for the param field of hydra.typeScript.syntax.CatchClause
 catchClauseParam :: Typed.TypedTerm Syntax.CatchClause -> Typed.TypedTerm (Maybe Syntax.Pattern)
 catchClauseParam x =
@@ -1113,6 +1162,10 @@ classDeclarationBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.ClassDeclaration
+classDeclarationClassDeclaration :: Typed.TypedName Syntax.ClassDeclaration
+classDeclarationClassDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ClassDeclaration")
+
 -- | DSL accessor for the id field of hydra.typeScript.syntax.ClassDeclaration
 classDeclarationId :: Typed.TypedTerm Syntax.ClassDeclaration -> Typed.TypedTerm Syntax.Identifier
 classDeclarationId x =
@@ -1176,6 +1229,11 @@ classDeclarationWithCommentsBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ClassDeclarationWithComments"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ClassDeclarationWithComments
+classDeclarationWithCommentsClassDeclarationWithComments :: Typed.TypedName Syntax.ClassDeclarationWithComments
+classDeclarationWithCommentsClassDeclarationWithComments =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ClassDeclarationWithComments")
 
 -- | DSL accessor for the comments field of hydra.typeScript.syntax.ClassDeclarationWithComments
 classDeclarationWithCommentsComments :: Typed.TypedTerm Syntax.ClassDeclarationWithComments -> Typed.TypedTerm (Maybe Syntax.DocumentationComment)
@@ -1277,6 +1335,10 @@ commentBlock x =
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.Comment
+commentComment :: Typed.TypedName Syntax.Comment
+commentComment = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Comment")
+
 -- | DSL injection for the documentation variant of hydra.typeScript.syntax.Comment
 commentDocumentation :: Typed.TypedTerm Syntax.DocumentationComment -> Typed.TypedTerm Syntax.Comment
 commentDocumentation x =
@@ -1319,6 +1381,10 @@ conditionalExpressionAlternate x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ConditionalExpression"),
         Core.projectionFieldName = (Core.Name "alternate")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ConditionalExpression
+conditionalExpressionConditionalExpression :: Typed.TypedName Syntax.ConditionalExpression
+conditionalExpressionConditionalExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ConditionalExpression")
 
 -- | DSL accessor for the consequent field of hydra.typeScript.syntax.ConditionalExpression
 conditionalExpressionConsequent :: Typed.TypedTerm Syntax.ConditionalExpression -> Typed.TypedTerm Syntax.Expression
@@ -1432,6 +1498,10 @@ doWhileStatementBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.DoWhileStatement
+doWhileStatementDoWhileStatement :: Typed.TypedName Syntax.DoWhileStatement
+doWhileStatementDoWhileStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.DoWhileStatement")
+
 -- | DSL accessor for the test field of hydra.typeScript.syntax.DoWhileStatement
 doWhileStatementTest :: Typed.TypedTerm Syntax.DoWhileStatement -> Typed.TypedTerm Syntax.Expression
 doWhileStatementTest x =
@@ -1496,6 +1566,10 @@ documentationCommentDescription x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.DocumentationComment"),
         Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.DocumentationComment
+documentationCommentDocumentationComment :: Typed.TypedName Syntax.DocumentationComment
+documentationCommentDocumentationComment = Typed.TypedName (Core.Name "hydra.typeScript.syntax.DocumentationComment")
 
 -- | DSL accessor for the tags field of hydra.typeScript.syntax.DocumentationComment
 documentationCommentTags :: Typed.TypedTerm Syntax.DocumentationComment -> Typed.TypedTerm [Syntax.DocumentationTag]
@@ -1567,6 +1641,10 @@ documentationTagDescription x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.DocumentationTag"),
         Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.DocumentationTag
+documentationTagDocumentationTag :: Typed.TypedName Syntax.DocumentationTag
+documentationTagDocumentationTag = Typed.TypedName (Core.Name "hydra.typeScript.syntax.DocumentationTag")
 
 -- | DSL accessor for the name field of hydra.typeScript.syntax.DocumentationTag
 documentationTagName :: Typed.TypedTerm Syntax.DocumentationTag -> Typed.TypedTerm String
@@ -1732,6 +1810,10 @@ exportAllDeclaration exported source =
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Typed.unTypedTerm source)}]}))
 
+-- | DSL name token for hydra.typeScript.syntax.ExportAllDeclaration
+exportAllDeclarationExportAllDeclaration :: Typed.TypedName Syntax.ExportAllDeclaration
+exportAllDeclarationExportAllDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ExportAllDeclaration")
+
 -- | DSL accessor for the exported field of hydra.typeScript.syntax.ExportAllDeclaration
 exportAllDeclarationExported :: Typed.TypedTerm Syntax.ExportAllDeclaration -> Typed.TypedTerm (Maybe Syntax.Identifier)
 exportAllDeclarationExported x =
@@ -1811,6 +1893,10 @@ exportDeclarationDefault x =
         Core.fieldName = (Core.Name "default"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.ExportDeclaration
+exportDeclarationExportDeclaration :: Typed.TypedName Syntax.ExportDeclaration
+exportDeclarationExportDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ExportDeclaration")
+
 -- | DSL injection for the named variant of hydra.typeScript.syntax.ExportDeclaration
 exportDeclarationNamed :: Typed.TypedTerm Syntax.NamedExport -> Typed.TypedTerm Syntax.ExportDeclaration
 exportDeclarationNamed x =
@@ -1832,6 +1918,10 @@ exportSpecifier local exported =
         Core.Field {
           Core.fieldName = (Core.Name "exported"),
           Core.fieldTerm = (Typed.unTypedTerm exported)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.ExportSpecifier
+exportSpecifierExportSpecifier :: Typed.TypedName Syntax.ExportSpecifier
+exportSpecifierExportSpecifier = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ExportSpecifier")
 
 -- | DSL accessor for the exported field of hydra.typeScript.syntax.ExportSpecifier
 exportSpecifierExported :: Typed.TypedTerm Syntax.ExportSpecifier -> Typed.TypedTerm Syntax.Identifier
@@ -1957,6 +2047,10 @@ expressionConditional x =
         Core.fieldName = (Core.Name "conditional"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Expression")
+
 -- | DSL injection for the function variant of hydra.typeScript.syntax.Expression
 expressionFunction :: Typed.TypedTerm Syntax.FunctionExpression -> Typed.TypedTerm Syntax.Expression
 expressionFunction x =
@@ -2065,6 +2159,10 @@ expressionYield x =
         Core.fieldName = (Core.Name "yield"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.ForInLeft
+forInLeftForInLeft :: Typed.TypedName Syntax.ForInLeft
+forInLeftForInLeft = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ForInLeft")
+
 -- | DSL injection for the pattern variant of hydra.typeScript.syntax.ForInLeft
 forInLeftPattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.ForInLeft
 forInLeftPattern x =
@@ -2107,6 +2205,10 @@ forInStatementBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ForInStatement"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ForInStatement
+forInStatementForInStatement :: Typed.TypedName Syntax.ForInStatement
+forInStatementForInStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ForInStatement")
 
 -- | DSL accessor for the left field of hydra.typeScript.syntax.ForInStatement
 forInStatementLeft :: Typed.TypedTerm Syntax.ForInStatement -> Typed.TypedTerm Syntax.ForInLeft
@@ -2207,6 +2309,10 @@ forInitExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.ForInit
+forInitForInit :: Typed.TypedName Syntax.ForInit
+forInitForInit = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ForInit")
+
 -- | DSL injection for the variable variant of hydra.typeScript.syntax.ForInit
 forInitVariable :: Typed.TypedTerm Syntax.VariableDeclaration -> Typed.TypedTerm Syntax.ForInit
 forInitVariable x =
@@ -2252,6 +2358,10 @@ forOfStatementBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ForOfStatement"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ForOfStatement
+forOfStatementForOfStatement :: Typed.TypedName Syntax.ForOfStatement
+forOfStatementForOfStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ForOfStatement")
 
 -- | DSL accessor for the left field of hydra.typeScript.syntax.ForOfStatement
 forOfStatementLeft :: Typed.TypedTerm Syntax.ForOfStatement -> Typed.TypedTerm Syntax.ForInLeft
@@ -2422,6 +2532,10 @@ forStatementBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ForStatement"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ForStatement
+forStatementForStatement :: Typed.TypedName Syntax.ForStatement
+forStatementForStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ForStatement")
 
 -- | DSL accessor for the init field of hydra.typeScript.syntax.ForStatement
 forStatementInit :: Typed.TypedTerm Syntax.ForStatement -> Typed.TypedTerm (Maybe Syntax.ForInit)
@@ -2614,6 +2728,10 @@ functionDeclarationBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.FunctionDeclaration
+functionDeclarationFunctionDeclaration :: Typed.TypedName Syntax.FunctionDeclaration
+functionDeclarationFunctionDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.FunctionDeclaration")
+
 -- | DSL accessor for the generator field of hydra.typeScript.syntax.FunctionDeclaration
 functionDeclarationGenerator :: Typed.TypedTerm Syntax.FunctionDeclaration -> Typed.TypedTerm Bool
 functionDeclarationGenerator x =
@@ -2747,6 +2865,11 @@ functionDeclarationWithCommentsComments x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.FunctionDeclarationWithComments"),
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.FunctionDeclarationWithComments
+functionDeclarationWithCommentsFunctionDeclarationWithComments :: Typed.TypedName Syntax.FunctionDeclarationWithComments
+functionDeclarationWithCommentsFunctionDeclarationWithComments =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.FunctionDeclarationWithComments")
 
 -- | DSL updater for the body field of hydra.typeScript.syntax.FunctionDeclarationWithComments
 functionDeclarationWithCommentsWithBody :: Typed.TypedTerm Syntax.FunctionDeclarationWithComments -> Typed.TypedTerm Syntax.FunctionDeclaration -> Typed.TypedTerm Syntax.FunctionDeclarationWithComments
@@ -2935,6 +3058,10 @@ functionExpressionBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.FunctionExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.FunctionExpression
+functionExpressionFunctionExpression :: Typed.TypedName Syntax.FunctionExpression
+functionExpressionFunctionExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.FunctionExpression")
 
 -- | DSL accessor for the generator field of hydra.typeScript.syntax.FunctionExpression
 functionExpressionGenerator :: Typed.TypedTerm Syntax.FunctionExpression -> Typed.TypedTerm Bool
@@ -3169,6 +3296,11 @@ functionTypeExpression typeParameters parameters returnType =
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Typed.unTypedTerm returnType)}]}))
 
+-- | DSL name token for hydra.typeScript.syntax.FunctionTypeExpression
+functionTypeExpressionFunctionTypeExpression :: Typed.TypedName Syntax.FunctionTypeExpression
+functionTypeExpressionFunctionTypeExpression =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.FunctionTypeExpression")
+
 -- | DSL accessor for the parameters field of hydra.typeScript.syntax.FunctionTypeExpression
 functionTypeExpressionParameters :: Typed.TypedTerm Syntax.FunctionTypeExpression -> Typed.TypedTerm [Syntax.TypeExpression]
 functionTypeExpressionParameters x =
@@ -3275,6 +3407,10 @@ identifier x =
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.Identifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.Identifier
+identifierIdentifier :: Typed.TypedName Syntax.Identifier
+identifierIdentifier = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Identifier")
+
 -- | DSL constructor for hydra.typeScript.syntax.IfStatement
 ifStatement :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm (Maybe Syntax.Statement) -> Typed.TypedTerm Syntax.IfStatement
 ifStatement test consequent alternate =
@@ -3308,6 +3444,10 @@ ifStatementConsequent x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.IfStatement"),
         Core.projectionFieldName = (Core.Name "consequent")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.IfStatement
+ifStatementIfStatement :: Typed.TypedName Syntax.IfStatement
+ifStatementIfStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.IfStatement")
 
 -- | DSL accessor for the test field of hydra.typeScript.syntax.IfStatement
 ifStatementTest :: Typed.TypedTerm Syntax.IfStatement -> Typed.TypedTerm Syntax.Expression
@@ -3399,6 +3539,10 @@ importClauseDefault x =
         Core.fieldName = (Core.Name "default"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.ImportClause
+importClauseImportClause :: Typed.TypedName Syntax.ImportClause
+importClauseImportClause = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ImportClause")
+
 -- | DSL injection for the named variant of hydra.typeScript.syntax.ImportClause
 importClauseNamed :: Typed.TypedTerm Syntax.ImportSpecifier -> Typed.TypedTerm Syntax.ImportClause
 importClauseNamed x =
@@ -3429,6 +3573,10 @@ importDeclaration specifiers source =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Typed.unTypedTerm source)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.ImportDeclaration
+importDeclarationImportDeclaration :: Typed.TypedName Syntax.ImportDeclaration
+importDeclarationImportDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ImportDeclaration")
 
 -- | DSL accessor for the source field of hydra.typeScript.syntax.ImportDeclaration
 importDeclarationSource :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.StringLiteral
@@ -3489,12 +3637,22 @@ importDefaultSpecifier x =
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.ImportDefaultSpecifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.ImportDefaultSpecifier
+importDefaultSpecifierImportDefaultSpecifier :: Typed.TypedName Syntax.ImportDefaultSpecifier
+importDefaultSpecifierImportDefaultSpecifier =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ImportDefaultSpecifier")
+
 -- | DSL constructor for the hydra.typeScript.syntax.ImportNamespaceSpecifier wrapper
 importNamespaceSpecifier :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.ImportNamespaceSpecifier
 importNamespaceSpecifier x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.ImportNamespaceSpecifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ImportNamespaceSpecifier
+importNamespaceSpecifierImportNamespaceSpecifier :: Typed.TypedName Syntax.ImportNamespaceSpecifier
+importNamespaceSpecifierImportNamespaceSpecifier =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ImportNamespaceSpecifier")
 
 -- | DSL constructor for hydra.typeScript.syntax.ImportSpecifier
 importSpecifier :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.ImportSpecifier
@@ -3508,6 +3666,10 @@ importSpecifier imported local =
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Typed.unTypedTerm local)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.ImportSpecifier
+importSpecifierImportSpecifier :: Typed.TypedName Syntax.ImportSpecifier
+importSpecifierImportSpecifier = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ImportSpecifier")
 
 -- | DSL accessor for the imported field of hydra.typeScript.syntax.ImportSpecifier
 importSpecifierImported :: Typed.TypedTerm Syntax.ImportSpecifier -> Typed.TypedTerm Syntax.Identifier
@@ -3588,6 +3750,10 @@ interfaceDeclarationExtends x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.InterfaceDeclaration"),
         Core.projectionFieldName = (Core.Name "extends")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.InterfaceDeclaration
+interfaceDeclarationInterfaceDeclaration :: Typed.TypedName Syntax.InterfaceDeclaration
+interfaceDeclarationInterfaceDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.InterfaceDeclaration")
 
 -- | DSL accessor for the members field of hydra.typeScript.syntax.InterfaceDeclaration
 interfaceDeclarationMembers :: Typed.TypedTerm Syntax.InterfaceDeclaration -> Typed.TypedTerm [Syntax.PropertySignature]
@@ -3771,6 +3937,10 @@ labeledStatementLabel x =
         Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.LabeledStatement
+labeledStatementLabeledStatement :: Typed.TypedName Syntax.LabeledStatement
+labeledStatementLabeledStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.LabeledStatement")
+
 -- | DSL updater for the body field of hydra.typeScript.syntax.LabeledStatement
 labeledStatementWithBody :: Typed.TypedTerm Syntax.LabeledStatement -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.LabeledStatement
 labeledStatementWithBody original newVal =
@@ -3822,6 +3992,10 @@ literalBoolean x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.typeScript.syntax.Literal
+literalLiteral :: Typed.TypedName Syntax.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Literal")
 
 -- | DSL injection for the null variant of hydra.typeScript.syntax.Literal
 literalNull :: Typed.TypedTerm Syntax.Literal
@@ -3895,6 +4069,10 @@ memberExpressionComputed x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.MemberExpression"),
         Core.projectionFieldName = (Core.Name "computed")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.MemberExpression
+memberExpressionMemberExpression :: Typed.TypedName Syntax.MemberExpression
+memberExpressionMemberExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.MemberExpression")
 
 -- | DSL accessor for the object field of hydra.typeScript.syntax.MemberExpression
 memberExpressionObject :: Typed.TypedTerm Syntax.MemberExpression -> Typed.TypedTerm Syntax.Expression
@@ -4095,6 +4273,10 @@ methodDefinitionKind x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.MethodDefinition"),
         Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.MethodDefinition
+methodDefinitionMethodDefinition :: Typed.TypedName Syntax.MethodDefinition
+methodDefinitionMethodDefinition = Typed.TypedName (Core.Name "hydra.typeScript.syntax.MethodDefinition")
 
 -- | DSL accessor for the static field of hydra.typeScript.syntax.MethodDefinition
 methodDefinitionStatic :: Typed.TypedTerm Syntax.MethodDefinition -> Typed.TypedTerm Bool
@@ -4331,6 +4513,10 @@ methodKindMethod =
         Core.fieldName = (Core.Name "method"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.typeScript.syntax.MethodKind
+methodKindMethodKind :: Typed.TypedName Syntax.MethodKind
+methodKindMethodKind = Typed.TypedName (Core.Name "hydra.typeScript.syntax.MethodKind")
+
 -- | DSL injection for the set variant of hydra.typeScript.syntax.MethodKind
 methodKindSet :: Typed.TypedTerm Syntax.MethodKind
 methodKindSet =
@@ -4366,6 +4552,10 @@ moduleItemInterface x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.typeScript.syntax.ModuleItem
+moduleItemModuleItem :: Typed.TypedName Syntax.ModuleItem
+moduleItemModuleItem = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ModuleItem")
 
 -- | DSL injection for the statement variant of hydra.typeScript.syntax.ModuleItem
 moduleItemStatement :: Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.ModuleItem
@@ -4416,6 +4606,11 @@ moduleItemWithCommentsComments x =
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.ModuleItemWithComments
+moduleItemWithCommentsModuleItemWithComments :: Typed.TypedName Syntax.ModuleItemWithComments
+moduleItemWithCommentsModuleItemWithComments =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ModuleItemWithComments")
+
 -- | DSL updater for the body field of hydra.typeScript.syntax.ModuleItemWithComments
 moduleItemWithCommentsWithBody :: Typed.TypedTerm Syntax.ModuleItemWithComments -> Typed.TypedTerm Syntax.ModuleItem -> Typed.TypedTerm Syntax.ModuleItemWithComments
 moduleItemWithCommentsWithBody original newVal =
@@ -4462,6 +4657,10 @@ namedExport specifiers source =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Typed.unTypedTerm source)}]}))
+
+-- | DSL name token for hydra.typeScript.syntax.NamedExport
+namedExportNamedExport :: Typed.TypedName Syntax.NamedExport
+namedExportNamedExport = Typed.TypedName (Core.Name "hydra.typeScript.syntax.NamedExport")
 
 -- | DSL accessor for the source field of hydra.typeScript.syntax.NamedExport
 namedExportSource :: Typed.TypedTerm Syntax.NamedExport -> Typed.TypedTerm (Maybe Syntax.StringLiteral)
@@ -4533,6 +4732,10 @@ numericLiteralInteger x =
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.NumericLiteral
+numericLiteralNumericLiteral :: Typed.TypedName Syntax.NumericLiteral
+numericLiteralNumericLiteral = Typed.TypedName (Core.Name "hydra.typeScript.syntax.NumericLiteral")
+
 -- | DSL constructor for hydra.typeScript.syntax.ObjectPattern
 objectPattern :: Typed.TypedTerm [Syntax.ObjectPatternProperty] -> Typed.TypedTerm Syntax.ObjectPattern
 objectPattern properties =
@@ -4543,6 +4746,10 @@ objectPattern properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Typed.unTypedTerm properties)}]}))
 
+-- | DSL name token for hydra.typeScript.syntax.ObjectPattern
+objectPatternObjectPattern :: Typed.TypedName Syntax.ObjectPattern
+objectPatternObjectPattern = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ObjectPattern")
+
 -- | DSL accessor for the properties field of hydra.typeScript.syntax.ObjectPattern
 objectPatternProperties :: Typed.TypedTerm Syntax.ObjectPattern -> Typed.TypedTerm [Syntax.ObjectPatternProperty]
 objectPatternProperties x =
@@ -4551,6 +4758,10 @@ objectPatternProperties x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ObjectPattern"),
         Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ObjectPatternProperty
+objectPatternPropertyObjectPatternProperty :: Typed.TypedName Syntax.ObjectPatternProperty
+objectPatternPropertyObjectPatternProperty = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ObjectPatternProperty")
 
 -- | DSL injection for the property variant of hydra.typeScript.syntax.ObjectPatternProperty
 objectPatternPropertyProperty :: Typed.TypedTerm Syntax.Property -> Typed.TypedTerm Syntax.ObjectPatternProperty
@@ -4610,6 +4821,11 @@ parameterizedTypeExpressionBase x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.ParameterizedTypeExpression"),
         Core.projectionFieldName = (Core.Name "base")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ParameterizedTypeExpression
+parameterizedTypeExpressionParameterizedTypeExpression :: Typed.TypedName Syntax.ParameterizedTypeExpression
+parameterizedTypeExpressionParameterizedTypeExpression =
+    Typed.TypedName (Core.Name "hydra.typeScript.syntax.ParameterizedTypeExpression")
 
 -- | DSL updater for the arguments field of hydra.typeScript.syntax.ParameterizedTypeExpression
 parameterizedTypeExpressionWithArguments :: Typed.TypedTerm Syntax.ParameterizedTypeExpression -> Typed.TypedTerm [Syntax.TypeExpression] -> Typed.TypedTerm Syntax.ParameterizedTypeExpression
@@ -4681,6 +4897,10 @@ patternObject x =
         Core.fieldName = (Core.Name "object"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.Pattern
+patternPattern :: Typed.TypedName Syntax.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Pattern")
+
 -- | DSL injection for the rest variant of hydra.typeScript.syntax.Pattern
 patternRest :: Typed.TypedTerm Syntax.RestElement -> Typed.TypedTerm Syntax.Pattern
 patternRest x =
@@ -4720,6 +4940,10 @@ programBody x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.Program"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.Program
+programProgram :: Typed.TypedName Syntax.Program
+programProgram = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Program")
 
 -- | DSL accessor for the sourceType field of hydra.typeScript.syntax.Program
 programSourceType :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm Syntax.SourceType
@@ -4831,6 +5055,10 @@ propertyKindInit =
         Core.fieldName = (Core.Name "init"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.typeScript.syntax.PropertyKind
+propertyKindPropertyKind :: Typed.TypedName Syntax.PropertyKind
+propertyKindPropertyKind = Typed.TypedName (Core.Name "hydra.typeScript.syntax.PropertyKind")
+
 -- | DSL injection for the set variant of hydra.typeScript.syntax.PropertyKind
 propertyKindSet :: Typed.TypedTerm Syntax.PropertyKind
 propertyKindSet =
@@ -4839,6 +5067,10 @@ propertyKindSet =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.typeScript.syntax.Property
+propertyProperty :: Typed.TypedName Syntax.Property
+propertyProperty = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Property")
 
 -- | DSL accessor for the shorthand field of hydra.typeScript.syntax.Property
 propertyShorthand :: Typed.TypedTerm Syntax.Property -> Typed.TypedTerm Bool
@@ -4897,6 +5129,10 @@ propertySignatureOptional x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.PropertySignature"),
         Core.projectionFieldName = (Core.Name "optional")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.PropertySignature
+propertySignaturePropertySignature :: Typed.TypedName Syntax.PropertySignature
+propertySignaturePropertySignature = Typed.TypedName (Core.Name "hydra.typeScript.syntax.PropertySignature")
 
 -- | DSL accessor for the readonly field of hydra.typeScript.syntax.PropertySignature
 propertySignatureReadonly :: Typed.TypedTerm Syntax.PropertySignature -> Typed.TypedTerm Bool
@@ -5312,6 +5548,10 @@ restElement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.RestElement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.RestElement
+restElementRestElement :: Typed.TypedName Syntax.RestElement
+restElementRestElement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.RestElement")
+
 -- | DSL injection for the module variant of hydra.typeScript.syntax.SourceType
 sourceTypeModule :: Typed.TypedTerm Syntax.SourceType
 sourceTypeModule =
@@ -5330,12 +5570,20 @@ sourceTypeScript =
         Core.fieldName = (Core.Name "script"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.typeScript.syntax.SourceType
+sourceTypeSourceType :: Typed.TypedName Syntax.SourceType
+sourceTypeSourceType = Typed.TypedName (Core.Name "hydra.typeScript.syntax.SourceType")
+
 -- | DSL constructor for the hydra.typeScript.syntax.SpreadElement wrapper
 spreadElement :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SpreadElement
 spreadElement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.SpreadElement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.SpreadElement
+spreadElementSpreadElement :: Typed.TypedName Syntax.SpreadElement
+spreadElementSpreadElement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.SpreadElement")
 
 -- | DSL injection for the block variant of hydra.typeScript.syntax.Statement
 statementBlock :: Typed.TypedTerm Syntax.BlockStatement -> Typed.TypedTerm Syntax.Statement
@@ -5472,6 +5720,10 @@ statementReturn x =
         Core.fieldName = (Core.Name "return"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.Statement
+statementStatement :: Typed.TypedName Syntax.Statement
+statementStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.Statement")
+
 -- | DSL injection for the switch variant of hydra.typeScript.syntax.Statement
 statementSwitch :: Typed.TypedTerm Syntax.SwitchStatement -> Typed.TypedTerm Syntax.Statement
 statementSwitch x =
@@ -5548,6 +5800,10 @@ statementWithCommentsComments x =
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.StatementWithComments
+statementWithCommentsStatementWithComments :: Typed.TypedName Syntax.StatementWithComments
+statementWithCommentsStatementWithComments = Typed.TypedName (Core.Name "hydra.typeScript.syntax.StatementWithComments")
+
 -- | DSL updater for the body field of hydra.typeScript.syntax.StatementWithComments
 statementWithCommentsWithBody :: Typed.TypedTerm Syntax.StatementWithComments -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.StatementWithComments
 statementWithCommentsWithBody original newVal =
@@ -5603,6 +5859,10 @@ stringLiteralSingleQuote x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.StringLiteral"),
         Core.projectionFieldName = (Core.Name "singleQuote")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.StringLiteral
+stringLiteralStringLiteral :: Typed.TypedName Syntax.StringLiteral
+stringLiteralStringLiteral = Typed.TypedName (Core.Name "hydra.typeScript.syntax.StringLiteral")
 
 -- | DSL accessor for the value field of hydra.typeScript.syntax.StringLiteral
 stringLiteralValue :: Typed.TypedTerm Syntax.StringLiteral -> Typed.TypedTerm String
@@ -5668,6 +5928,10 @@ switchCaseConsequent x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.SwitchCase"),
         Core.projectionFieldName = (Core.Name "consequent")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.SwitchCase
+switchCaseSwitchCase :: Typed.TypedName Syntax.SwitchCase
+switchCaseSwitchCase = Typed.TypedName (Core.Name "hydra.typeScript.syntax.SwitchCase")
 
 -- | DSL accessor for the test field of hydra.typeScript.syntax.SwitchCase
 switchCaseTest :: Typed.TypedTerm Syntax.SwitchCase -> Typed.TypedTerm (Maybe Syntax.Expression)
@@ -5743,6 +6007,10 @@ switchStatementDiscriminant x =
         Core.projectionFieldName = (Core.Name "discriminant")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.SwitchStatement
+switchStatementSwitchStatement :: Typed.TypedName Syntax.SwitchStatement
+switchStatementSwitchStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.SwitchStatement")
+
 -- | DSL updater for the cases field of hydra.typeScript.syntax.SwitchStatement
 switchStatementWithCases :: Typed.TypedTerm Syntax.SwitchStatement -> Typed.TypedTerm [Syntax.SwitchCase] -> Typed.TypedTerm Syntax.SwitchStatement
 switchStatementWithCases original newVal =
@@ -5798,6 +6066,10 @@ templateElementTail x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.TemplateElement"),
         Core.projectionFieldName = (Core.Name "tail")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.TemplateElement
+templateElementTemplateElement :: Typed.TypedName Syntax.TemplateElement
+templateElementTemplateElement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TemplateElement")
 
 -- | DSL accessor for the value field of hydra.typeScript.syntax.TemplateElement
 templateElementValue :: Typed.TypedTerm Syntax.TemplateElement -> Typed.TypedTerm String
@@ -5873,6 +6145,10 @@ templateLiteralQuasis x =
         Core.projectionFieldName = (Core.Name "quasis")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.TemplateLiteral
+templateLiteralTemplateLiteral :: Typed.TypedName Syntax.TemplateLiteral
+templateLiteralTemplateLiteral = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TemplateLiteral")
+
 -- | DSL updater for the expressions field of hydra.typeScript.syntax.TemplateLiteral
 templateLiteralWithExpressions :: Typed.TypedTerm Syntax.TemplateLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.TemplateLiteral
 templateLiteralWithExpressions original newVal =
@@ -5913,6 +6189,10 @@ throwStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.ThrowStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.ThrowStatement
+throwStatementThrowStatement :: Typed.TypedName Syntax.ThrowStatement
+throwStatementThrowStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.ThrowStatement")
 
 -- | DSL constructor for hydra.typeScript.syntax.TryStatement
 tryStatement :: Typed.TypedTerm Syntax.BlockStatement -> Typed.TypedTerm (Maybe Syntax.CatchClause) -> Typed.TypedTerm (Maybe Syntax.BlockStatement) -> Typed.TypedTerm Syntax.TryStatement
@@ -5956,6 +6236,10 @@ tryStatementHandler x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.TryStatement"),
         Core.projectionFieldName = (Core.Name "handler")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.TryStatement
+tryStatementTryStatement :: Typed.TypedName Syntax.TryStatement
+tryStatementTryStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TryStatement")
 
 -- | DSL updater for the block field of hydra.typeScript.syntax.TryStatement
 tryStatementWithBlock :: Typed.TypedTerm Syntax.TryStatement -> Typed.TypedTerm Syntax.BlockStatement -> Typed.TypedTerm Syntax.TryStatement
@@ -6063,6 +6347,10 @@ typeAliasDeclarationType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.TypeAliasDeclaration
+typeAliasDeclarationTypeAliasDeclaration :: Typed.TypedName Syntax.TypeAliasDeclaration
+typeAliasDeclarationTypeAliasDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TypeAliasDeclaration")
+
 -- | DSL accessor for the typeParameters field of hydra.typeScript.syntax.TypeAliasDeclaration
 typeAliasDeclarationTypeParameters :: Typed.TypedTerm Syntax.TypeAliasDeclaration -> Typed.TypedTerm [Syntax.TypeParameter]
 typeAliasDeclarationTypeParameters x =
@@ -6150,6 +6438,10 @@ typeAnnotation x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typeScript.syntax.TypeAnnotation"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.TypeAnnotation
+typeAnnotationTypeAnnotation :: Typed.TypedName Syntax.TypeAnnotation
+typeAnnotationTypeAnnotation = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TypeAnnotation")
 
 -- | DSL injection for the any variant of hydra.typeScript.syntax.TypeExpression
 typeExpressionAny :: Typed.TypedTerm Syntax.TypeExpression
@@ -6259,6 +6551,10 @@ typeExpressionTuple x =
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.typeScript.syntax.TypeExpression
+typeExpressionTypeExpression :: Typed.TypedName Syntax.TypeExpression
+typeExpressionTypeExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TypeExpression")
+
 -- | DSL injection for the union variant of hydra.typeScript.syntax.TypeExpression
 typeExpressionUnion :: Typed.TypedTerm Syntax.UnionTypeExpression -> Typed.TypedTerm Syntax.TypeExpression
 typeExpressionUnion x =
@@ -6328,6 +6624,10 @@ typeParameterName x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.TypeParameter"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.TypeParameter
+typeParameterTypeParameter :: Typed.TypedName Syntax.TypeParameter
+typeParameterTypeParameter = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TypeParameter")
 
 -- | DSL updater for the constraint field of hydra.typeScript.syntax.TypeParameter
 typeParameterWithConstraint :: Typed.TypedTerm Syntax.TypeParameter -> Typed.TypedTerm (Maybe Syntax.TypeExpression) -> Typed.TypedTerm Syntax.TypeParameter
@@ -6431,6 +6731,10 @@ typedPatternType x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.TypedPattern"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.TypedPattern
+typedPatternTypedPattern :: Typed.TypedName Syntax.TypedPattern
+typedPatternTypedPattern = Typed.TypedName (Core.Name "hydra.typeScript.syntax.TypedPattern")
 
 -- | DSL updater for the pattern field of hydra.typeScript.syntax.TypedPattern
 typedPatternWithPattern :: Typed.TypedTerm Syntax.TypedPattern -> Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.TypedPattern
@@ -6564,6 +6868,10 @@ unaryExpressionPrefix x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.UnaryExpression"),
         Core.projectionFieldName = (Core.Name "prefix")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.UnaryExpression
+unaryExpressionUnaryExpression :: Typed.TypedName Syntax.UnaryExpression
+unaryExpressionUnaryExpression = Typed.TypedName (Core.Name "hydra.typeScript.syntax.UnaryExpression")
 
 -- | DSL updater for the argument field of hydra.typeScript.syntax.UnaryExpression
 unaryExpressionWithArgument :: Typed.TypedTerm Syntax.UnaryExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.UnaryExpression
@@ -6709,6 +7017,10 @@ unaryOperatorTypeof =
         Core.fieldName = (Core.Name "typeof"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.typeScript.syntax.UnaryOperator
+unaryOperatorUnaryOperator :: Typed.TypedName Syntax.UnaryOperator
+unaryOperatorUnaryOperator = Typed.TypedName (Core.Name "hydra.typeScript.syntax.UnaryOperator")
+
 -- | DSL injection for the void variant of hydra.typeScript.syntax.UnaryOperator
 unaryOperatorVoid :: Typed.TypedTerm Syntax.UnaryOperator
 unaryOperatorVoid =
@@ -6748,6 +7060,10 @@ variableDeclarationKind x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.VariableDeclaration"),
         Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.VariableDeclaration
+variableDeclarationVariableDeclaration :: Typed.TypedName Syntax.VariableDeclaration
+variableDeclarationVariableDeclaration = Typed.TypedName (Core.Name "hydra.typeScript.syntax.VariableDeclaration")
 
 -- | DSL updater for the declarations field of hydra.typeScript.syntax.VariableDeclaration
 variableDeclarationWithDeclarations :: Typed.TypedTerm Syntax.VariableDeclaration -> Typed.TypedTerm [Syntax.VariableDeclarator] -> Typed.TypedTerm Syntax.VariableDeclaration
@@ -6814,6 +7130,10 @@ variableDeclaratorInit x =
         Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.typeScript.syntax.VariableDeclarator
+variableDeclaratorVariableDeclarator :: Typed.TypedName Syntax.VariableDeclarator
+variableDeclaratorVariableDeclarator = Typed.TypedName (Core.Name "hydra.typeScript.syntax.VariableDeclarator")
+
 -- | DSL updater for the id field of hydra.typeScript.syntax.VariableDeclarator
 variableDeclaratorWithId :: Typed.TypedTerm Syntax.VariableDeclarator -> Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.VariableDeclarator
 variableDeclaratorWithId original newVal =
@@ -6875,6 +7195,10 @@ variableKindVar =
         Core.fieldName = (Core.Name "var"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.typeScript.syntax.VariableKind
+variableKindVariableKind :: Typed.TypedName Syntax.VariableKind
+variableKindVariableKind = Typed.TypedName (Core.Name "hydra.typeScript.syntax.VariableKind")
+
 -- | DSL constructor for hydra.typeScript.syntax.WhileStatement
 whileStatement :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.WhileStatement
 whileStatement test body =
@@ -6905,6 +7229,10 @@ whileStatementTest x =
         Core.projectionTypeName = (Core.Name "hydra.typeScript.syntax.WhileStatement"),
         Core.projectionFieldName = (Core.Name "test")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.typeScript.syntax.WhileStatement
+whileStatementWhileStatement :: Typed.TypedName Syntax.WhileStatement
+whileStatementWhileStatement = Typed.TypedName (Core.Name "hydra.typeScript.syntax.WhileStatement")
 
 -- | DSL updater for the body field of hydra.typeScript.syntax.WhileStatement
 whileStatementWithBody :: Typed.TypedTerm Syntax.WhileStatement -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.WhileStatement

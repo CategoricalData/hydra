@@ -5,7 +5,11 @@
 module Hydra.Dsl.Relational where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Relational as DecodeRelational
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Relational as EncodeRelational
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -20,6 +24,10 @@ columnName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.ColumnName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.relational.ColumnName
+columnNameColumnName :: Typed.TypedName Relational.ColumnName
+columnNameColumnName = Typed.TypedName (Core.Name "hydra.relational.ColumnName")
+
 -- | DSL constructor for hydra.relational.ColumnSchema
 columnSchema :: Typed.TypedTerm Relational.ColumnName -> Typed.TypedTerm t -> Typed.TypedTerm (Relational.ColumnSchema t)
 columnSchema name domain =
@@ -32,6 +40,10 @@ columnSchema name domain =
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Typed.unTypedTerm domain)}]}))
+
+-- | DSL name token for hydra.relational.ColumnSchema
+columnSchemaColumnSchema :: Typed.TypedName (Relational.ColumnSchema t)
+columnSchemaColumnSchema = Typed.TypedName (Core.Name "hydra.relational.ColumnSchema")
 
 -- | DSL accessor for the domain field of hydra.relational.ColumnSchema
 columnSchemaDomain :: Typed.TypedTerm (Relational.ColumnSchema t) -> Typed.TypedTerm t
@@ -85,6 +97,76 @@ columnSchemaWithName original newVal =
               Core.projectionFieldName = (Core.Name "domain")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL composition builder for the decoder of hydra.relational.ColumnSchema
+decodeColumnSchema :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.ColumnSchema t))
+decodeColumnSchema t =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.relational.columnSchema")),
+      Core.applicationArgument = (Typed.unTypedTerm t)}))
+
+-- | DSL composition builder for the decoder of hydra.relational.Relation
+decodeRelation :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Relation v))
+decodeRelation v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.relational.relation")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the decoder of hydra.relational.RelationSchema
+decodeRelationSchema :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.RelationSchema t))
+decodeRelationSchema t =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.relational.relationSchema")),
+      Core.applicationArgument = (Typed.unTypedTerm t)}))
+
+-- | DSL composition builder for the decoder of hydra.relational.Relationship
+decodeRelationship :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Relationship v))
+decodeRelationship v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.relational.relationship")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the decoder of hydra.relational.Row
+decodeRow :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Row v))
+decodeRow v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.relational.row")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the encoder of hydra.relational.ColumnSchema
+encodeColumnSchema :: Typed.TypedTerm (t -> Core.Term) -> Typed.TypedTerm (Relational.ColumnSchema t -> Core.Term)
+encodeColumnSchema t =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.relational.columnSchema")),
+      Core.applicationArgument = (Typed.unTypedTerm t)}))
+
+-- | DSL composition builder for the encoder of hydra.relational.Relation
+encodeRelation :: Typed.TypedTerm (v -> Core.Term) -> Typed.TypedTerm (Relational.Relation v -> Core.Term)
+encodeRelation v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.relational.relation")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the encoder of hydra.relational.RelationSchema
+encodeRelationSchema :: Typed.TypedTerm (t -> Core.Term) -> Typed.TypedTerm (Relational.RelationSchema t -> Core.Term)
+encodeRelationSchema t =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.relational.relationSchema")),
+      Core.applicationArgument = (Typed.unTypedTerm t)}))
+
+-- | DSL composition builder for the encoder of hydra.relational.Relationship
+encodeRelationship :: Typed.TypedTerm (v -> Core.Term) -> Typed.TypedTerm (Relational.Relationship v -> Core.Term)
+encodeRelationship v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.relational.relationship")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the encoder of hydra.relational.Row
+encodeRow :: Typed.TypedTerm (v -> Core.Term) -> Typed.TypedTerm (Relational.Row v -> Core.Term)
+encodeRow v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.relational.row")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
 -- | DSL constructor for hydra.relational.ForeignKey
 foreignKey :: Typed.TypedTerm Relational.RelationName -> Typed.TypedTerm (M.Map Relational.ColumnName Relational.ColumnName) -> Typed.TypedTerm Relational.ForeignKey
 foreignKey foreignRelation keys =
@@ -97,6 +179,10 @@ foreignKey foreignRelation keys =
         Core.Field {
           Core.fieldName = (Core.Name "keys"),
           Core.fieldTerm = (Typed.unTypedTerm keys)}]}))
+
+-- | DSL name token for hydra.relational.ForeignKey
+foreignKeyForeignKey :: Typed.TypedName Relational.ForeignKey
+foreignKeyForeignKey = Typed.TypedName (Core.Name "hydra.relational.ForeignKey")
 
 -- | DSL accessor for the foreignRelation field of hydra.relational.ForeignKey
 foreignKeyForeignRelation :: Typed.TypedTerm Relational.ForeignKey -> Typed.TypedTerm Relational.RelationName
@@ -157,6 +243,10 @@ primaryKey x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.PrimaryKey"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.relational.PrimaryKey
+primaryKeyPrimaryKey :: Typed.TypedName Relational.PrimaryKey
+primaryKeyPrimaryKey = Typed.TypedName (Core.Name "hydra.relational.PrimaryKey")
+
 -- | DSL constructor for the hydra.relational.Relation wrapper
 relation :: Typed.TypedTerm [Relational.Row v] -> Typed.TypedTerm (Relational.Relation v)
 relation x =
@@ -170,6 +260,14 @@ relationName x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.RelationName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.relational.RelationName
+relationNameRelationName :: Typed.TypedName Relational.RelationName
+relationNameRelationName = Typed.TypedName (Core.Name "hydra.relational.RelationName")
+
+-- | DSL name token for hydra.relational.Relation
+relationRelation :: Typed.TypedName (Relational.Relation v)
+relationRelation = Typed.TypedName (Core.Name "hydra.relational.Relation")
 
 -- | DSL constructor for hydra.relational.RelationSchema
 relationSchema :: Typed.TypedTerm Relational.RelationName -> Typed.TypedTerm [Relational.ColumnSchema t] -> Typed.TypedTerm [Relational.PrimaryKey] -> Typed.TypedTerm [Relational.ForeignKey] -> Typed.TypedTerm (Relational.RelationSchema t)
@@ -225,6 +323,10 @@ relationSchemaPrimaryKeys x =
         Core.projectionTypeName = (Core.Name "hydra.relational.RelationSchema"),
         Core.projectionFieldName = (Core.Name "primaryKeys")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.relational.RelationSchema
+relationSchemaRelationSchema :: Typed.TypedName (Relational.RelationSchema t)
+relationSchemaRelationSchema = Typed.TypedName (Core.Name "hydra.relational.RelationSchema")
 
 -- | DSL updater for the columns field of hydra.relational.RelationSchema
 relationSchemaWithColumns :: Typed.TypedTerm (Relational.RelationSchema t) -> Typed.TypedTerm [Relational.ColumnSchema t] -> Typed.TypedTerm (Relational.RelationSchema t)
@@ -357,12 +459,20 @@ relationship x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relationship"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.relational.Relationship
+relationshipRelationship :: Typed.TypedName (Relational.Relationship v)
+relationshipRelationship = Typed.TypedName (Core.Name "hydra.relational.Relationship")
+
 -- | DSL constructor for the hydra.relational.Row wrapper
 row :: Typed.TypedTerm [v] -> Typed.TypedTerm (Relational.Row v)
 row x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Row"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.relational.Row
+rowRow :: Typed.TypedName (Relational.Row v)
+rowRow = Typed.TypedName (Core.Name "hydra.relational.Row")
 
 -- | DSL accessor for the body of hydra.relational.ColumnName
 unColumnName :: Typed.TypedTerm Relational.ColumnName -> Typed.TypedTerm String

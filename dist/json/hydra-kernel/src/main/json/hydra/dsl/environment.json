@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.environment"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.environment"},
+    {"module": "hydra.decode.environment"},
     {"module": "hydra.lexical"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.encode.core"},

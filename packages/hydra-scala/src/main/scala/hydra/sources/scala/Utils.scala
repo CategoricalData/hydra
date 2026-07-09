@@ -1,7 +1,7 @@
 package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, casesWithDefault, project, unwrap, wrap}
+import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, casesWithDefault, project, unwrap, wrap, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 
@@ -15,76 +15,61 @@ object Utils:
 
   val NS: ModuleName = "hydra.scala.utils"
 
-  /** Dependencies: matches Haskell `[scalaLanguage, names, formatting] ++ (scalaSyntax : kernelTypesModuleNames)`.
-   *  kernelTypesModuleNames starts with hydra.paths; baseline ordering preserved exactly. */
-  private val DEPS: Seq[ModuleName] = Seq(
-    "hydra.scala.language",
-    "hydra.names",
-    "hydra.formatting",
-    "hydra.scala.syntax",
-    "hydra.paths",
-    "hydra.ast", "hydra.coders", "hydra.core",
-    "hydra.error.checking", "hydra.error.core", "hydra.error.file",
-    "hydra.error.packaging", "hydra.error.system",
-    "hydra.errors", "hydra.file", "hydra.graph", "hydra.json.model",
-    "hydra.packaging", "hydra.parsing",
-    "hydra.query", "hydra.relational", "hydra.system", "hydra.tabular",
-    "hydra.testing", "hydra.time", "hydra.topology", "hydra.typed",
-    "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants")
+  /** Dependencies: matches Haskell `[scalaLanguage, names, formatting] ++ (scalaSyntax : kernelTypesModuleNames)`. */
+  private val DEPS: Seq[ModuleName] =
+    Seq("hydra.scala.language", "hydra.names", "hydra.formatting", "hydra.scala.syntax")
+      ++ Helpers.kernelTypesModuleNames
 
   // ===== Local helpers — shorthand FQN references =====
+
+  private val local = makeLocal(NS)
+  private val localLanguage = makeLocal("hydra.scala.language")
 
   // Local re-export: references the scalaReservedWords binding in THIS module
   // (which itself proxies hydra.scala.language.scalaReservedWords). Matches the
   // Haskell DSL's `scalaReservedWordsRef` which is a local TypedTermDefinition.
   private val scalaReservedWordsRefVar: TypedTerm[Set[String]] =
-    v("hydra.scala.utils.scalaReservedWords")
-
-  /** 2-arg string concat — Haskell's (++) operator on strings desugars to this. */
-  private def cat2(a: TypedTerm[String], b: TypedTerm[String]): TypedTerm[String] =
-    applyP("hydra.lib.strings.cat2", a, b)
+    v(local("scalaReservedWords"))
 
   // ===== Definitions (alphabetical by camelCase, matching Haskell file order) =====
 
   lazy val nameOfTypeDef: Definition =
-    val body = lambda("cx", lambda("t",
-      casesWithDefault("hydra.core.Type",
-        applyP("hydra.strip.deannotateType", v("t")),
-        nothing,
-        field("variable", lambda("name", just(v("name")))),
-        field("forall", lambda("ft",
-          applyP("hydra.scala.utils.nameOfType",
-            v("cx"),
-            CoreDsl.forallTypeBody(v("ft"))))))))
-    Phantoms.`def`(NS, "nameOfType",
-      doc("Extract the name from a type, if it is a named type", body))
+    define(NS, "nameOfType").doc("Extract the name from a type, if it is a named type")
+      .lam("cx").lam("t").to(
+        casesWithDefault("hydra.core.Type",
+          applyP("hydra.strip.deannotateType", v("t")),
+          nothing,
+          field("variable", lambda("name", just(v("name")))),
+          field("forall", lambda("ft",
+            applyP(local("nameOfType"),
+              v("cx"),
+              CoreDsl.forallTypeBody(v("ft")))))))
 
   lazy val qualifyUnionFieldNameDef: Definition =
-    val body = lambda("dlft", lambda("sname", lambda("fname",
-      cat2(
-        applyP("hydra.lib.optionals.cases",
-          v("sname"),
-          v("dlft"),
-          lambda("n",
-            cat2(
-              applyP("hydra.scala.utils.scalaTypeName", bool(true), v("n")),
-              string(".")))),
-        applyP("hydra.scala.utils.scalaEscapeName",
-          CoreDsl.unName(v("fname")))))))
-    Phantoms.`def`(NS, "qualifyUnionFieldName",
-      doc("Qualify a union field name, optionally prefixing with the Scala type name", body))
+    define(NS, "qualifyUnionFieldName").doc("Qualify a union field name, optionally prefixing with the Scala type name")
+      .lam("dlft").lam("sname").lam("fname").to(
+        cat2(
+          applyP("hydra.lib.optionals.cases",
+            v("sname"),
+            v("dlft"),
+            lambda("n",
+              cat2(
+                applyP(local("scalaTypeName"), bool(true), v("n")),
+                string(".")))),
+          applyP(local("scalaEscapeName"),
+            CoreDsl.unName(v("fname")))))
 
   lazy val sapplyDef: Definition =
-    val body = lambda("fun", lambda("args",
-      ScalaSyntax.dataApply(ScalaSyntax.applyData(v("fun"))(v("args")))))
-    Phantoms.`def`(NS, "sapply",
-      doc("Apply a Scala data expression to a list of arguments", body))
+    define(NS, "sapply").doc("Apply a Scala data expression to a list of arguments")
+      .lam("fun").lam("args").to(
+        ScalaSyntax.dataApply(ScalaSyntax.applyData(v("fun"))(v("args"))))
 
   lazy val sapplyTypesDef: Definition =
-    val body = lambda("fun", lambda("typeArgs",
+    define(NS, "sapplyTypes").doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B])")
+      .lam("fun").lam("typeArgs").to(
       let(Seq(
         field("typeToStr", lambda("t",
-          applyP("hydra.scala.utils.typeToString", v("t")))),
+          applyP(local("typeToString"), v("t")))),
         field("typeStrings",
           applyP("hydra.lib.lists.map", v("typeToStr"), v("typeArgs"))),
         field("typeArgStr",
@@ -102,7 +87,7 @@ object Utils:
                 let(Seq(
                   field("nameStr", ScalaSyntax.nameDataValue(v("dn"))),
                   field("rawName", ScalaSyntax.unPredefString(v("nameStr")))),
-                  applyP("hydra.scala.utils.sname",
+                  applyP(local("sname"),
                     cat2(v("rawName"), v("typeArgStr")))))),
               field("select", lambda("sel",
                 let(Seq(
@@ -114,27 +99,24 @@ object Utils:
                     ScalaSyntax.selectData(v("qual"))(
                       ScalaSyntax.nameData(
                         ScalaSyntax.predefString(
-                          cat2(v("rawName"), v("typeArgStr")))))))))))))))))
-    Phantoms.`def`(NS, "sapplyTypes",
-      doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B])", body))
+                          cat2(v("rawName"), v("typeArgStr"))))))))))))))))
 
   lazy val sassignDef: Definition =
-    val body = lambda("lhs", lambda("rhs",
-      ScalaSyntax.dataAssign(ScalaSyntax.assignData(v("lhs"))(v("rhs")))))
-    Phantoms.`def`(NS, "sassign",
-      doc("Create a Scala assignment expression", body))
+    define(NS, "sassign").doc("Create a Scala assignment expression")
+      .lam("lhs").lam("rhs").to(
+        ScalaSyntax.dataAssign(ScalaSyntax.assignData(v("lhs"))(v("rhs"))))
 
   lazy val scalaEscapeEnumCaseNameDef: Definition =
-    val body = lambda("s",
-      let(Seq(
-        field("renamed",
-          applyP("hydra.lib.logic.ifElse",
-            applyP("hydra.lib.equality.equal", v("s"), string("values")),
-            string("values_"),
-            v("s")))),
-        applyP("hydra.scala.utils.scalaEscapeName", v("renamed"))))
-    Phantoms.`def`(NS, "scalaEscapeEnumCaseName",
-      doc("Like scalaEscapeName, but also renames 'values' to 'values_' to avoid conflict with Scala 3 enum's synthesized values() method", body))
+    define(NS, "scalaEscapeEnumCaseName")
+      .doc("Like scalaEscapeName, but also renames 'values' to 'values_' to avoid conflict with Scala 3 enum's synthesized values() method")
+      .lam("s").to(
+        let(Seq(
+          field("renamed",
+            applyP("hydra.lib.logic.ifElse",
+              applyP("hydra.lib.equality.equal", v("s"), string("values")),
+              string("values_"),
+              v("s")))),
+          applyP(local("scalaEscapeName"), v("renamed"))))
 
   lazy val scalaEscapeNameDef: Definition =
     // Compose intermediate sub-expressions with vals to keep the structure readable.
@@ -182,169 +164,156 @@ object Utils:
         applyP("hydra.lib.sets.member", v("sanitized3"), scalaReservedWordsRefVar),
         endsWithUnderscore)
 
-    val body = lambda("s",
-      let(Seq(
-        field("sanitized", sanitized),
-        field("sanitized2", sanitized2),
-        field("sanitized3", sanitized3),
-        field("needsBackticks", needsBackticks)),
-        applyP("hydra.lib.logic.ifElse",
-          v("needsBackticks"),
-          applyP("hydra.lib.strings.cat",
-            list(string("`"), v("sanitized3"), string("`"))),
-          v("sanitized3"))))
-    Phantoms.`def`(NS, "scalaEscapeName",
-      doc("Sanitize a name for Scala: escape reserved words, replace invalid characters", body))
+    define(NS, "scalaEscapeName").doc("Sanitize a name for Scala: escape reserved words, replace invalid characters")
+      .lam("s").to(
+        let(Seq(
+          field("sanitized", sanitized),
+          field("sanitized2", sanitized2),
+          field("sanitized3", sanitized3),
+          field("needsBackticks", needsBackticks)),
+          applyP("hydra.lib.logic.ifElse",
+            v("needsBackticks"),
+            applyP("hydra.lib.strings.cat",
+              list(string("`"), v("sanitized3"), string("`"))),
+            v("sanitized3"))))
 
   lazy val scalaReservedWordsRefDef: Definition =
-    val body = v("hydra.scala.language.scalaReservedWords")
-    Phantoms.`def`(NS, "scalaReservedWords",
-      doc("Reference to scalaReservedWords from the language module", body))
+    define(NS, "scalaReservedWords").doc("Reference to scalaReservedWords from the language module")
+      .to(v(localLanguage("scalaReservedWords")))
 
   lazy val scalaTypeNameDef: Definition =
-    val body = lambda("qualify", lambda("name",
-      applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.logic.or",
-          v("qualify"),
-          applyP("hydra.lib.sets.member",
-            applyP("hydra.names.localNameOf", v("name")),
-            scalaReservedWordsRefVar)),
-        CoreDsl.unName(v("name")),
-        applyP("hydra.names.localNameOf", v("name")))))
-    Phantoms.`def`(NS, "scalaTypeName",
-      doc("Convert a Hydra name to a Scala type name", body))
+    define(NS, "scalaTypeName").doc("Convert a Hydra name to a Scala type name")
+      .lam("qualify").lam("name").to(
+        applyP("hydra.lib.logic.ifElse",
+          applyP("hydra.lib.logic.or",
+            v("qualify"),
+            applyP("hydra.lib.sets.member",
+              applyP("hydra.names.localNameOf", v("name")),
+              scalaReservedWordsRefVar)),
+          CoreDsl.unName(v("name")),
+          applyP("hydra.names.localNameOf", v("name"))))
 
   lazy val slambdaDef: Definition =
-    val body = lambda("v", lambda("body", lambda("sdom",
-      ScalaSyntax.dataFunction(ScalaSyntax.functionData(
-        list(
-          ScalaSyntax.paramData(list[Any]())(  // mods
-            ScalaSyntax.nameValue(v("v")))(
-            v("sdom"))(
-            nothing)))(  // default
-        v("body"))))))
-    Phantoms.`def`(NS, "slambda",
-      doc("Create a Scala lambda (function) expression", body))
+    define(NS, "slambda").doc("Create a Scala lambda (function) expression")
+      .lam("v").lam("body").lam("sdom").to(
+        ScalaSyntax.dataFunction(ScalaSyntax.functionData(
+          list(
+            ScalaSyntax.paramData(list[Any]())(  // mods
+              ScalaSyntax.nameValue(v("v")))(
+              v("sdom"))(
+              nothing)))(  // default
+          v("body"))))
 
   lazy val snameDef: Definition =
-    val body = lambda("s",
-      ScalaSyntax.dataRef(ScalaSyntax.refDataName(
-        ScalaSyntax.nameData(ScalaSyntax.predefString(v("s"))))))
-    Phantoms.`def`(NS, "sname",
-      doc("Create a Scala name reference", body))
+    define(NS, "sname").doc("Create a Scala name reference")
+      .lam("s").to(
+        ScalaSyntax.dataRef(ScalaSyntax.refDataName(
+          ScalaSyntax.nameData(ScalaSyntax.predefString(v("s"))))))
 
   lazy val sprimDef: Definition =
-    val body = lambda("name",
-      let(Seq(
-        field("qname", applyP("hydra.names.qualifyName", v("name"))),
-        field("prefix",
-          PackagingDsl.unModuleName(
-            applyP("hydra.lib.optionals.fromOptional",
-              wrap("hydra.packaging.ModuleName", string("")),
-              UtilDsl.qualifiedNameModuleName(v("qname"))))),
-        field("local",
-          applyP("hydra.scala.utils.scalaEscapeName",
-            UtilDsl.qualifiedNameLocal(v("qname"))))),
-        applyP("hydra.scala.utils.sname",
-          cat2(cat2(v("prefix"), string(".")), v("local")))))
-    Phantoms.`def`(NS, "sprim",
-      doc("Create a Scala primitive reference from a Hydra name", body))
+    define(NS, "sprim").doc("Create a Scala primitive reference from a Hydra name")
+      .lam("name").to(
+        let(Seq(
+          field("qname", applyP("hydra.names.qualifyName", v("name"))),
+          field("prefix",
+            PackagingDsl.unModuleName(
+              applyP("hydra.lib.optionals.fromOptional",
+                wrap("hydra.packaging.ModuleName", string("")),
+                UtilDsl.qualifiedNameModuleName(v("qname"))))),
+          field("local",
+            applyP(local("scalaEscapeName"),
+              UtilDsl.qualifiedNameLocal(v("qname"))))),
+          applyP(local("sname"),
+            cat2(cat2(v("prefix"), string(".")), v("local")))))
 
   lazy val stapplyDef: Definition =
-    val body = lambda("t", lambda("args",
-      ScalaSyntax.typeApply(ScalaSyntax.applyType(v("t"))(v("args")))))
-    Phantoms.`def`(NS, "stapply",
-      doc("Apply a Scala type to a list of type arguments", body))
+    define(NS, "stapply").doc("Apply a Scala type to a list of type arguments")
+      .lam("t").lam("args").to(
+        ScalaSyntax.typeApply(ScalaSyntax.applyType(v("t"))(v("args"))))
 
   lazy val stapply1Def: Definition =
-    val body = lambda("t1", lambda("t2",
-      applyP("hydra.scala.utils.stapply", v("t1"), list(v("t2")))))
-    Phantoms.`def`(NS, "stapply1",
-      doc("Apply a Scala type to one type argument", body))
+    define(NS, "stapply1").doc("Apply a Scala type to one type argument")
+      .lam("t1").lam("t2").to(
+        applyP(local("stapply"), v("t1"), list(v("t2"))))
 
   lazy val stapply2Def: Definition =
-    val body = lambda("t1", lambda("t2", lambda("t3",
-      applyP("hydra.scala.utils.stapply", v("t1"), list(v("t2"), v("t3"))))))
-    Phantoms.`def`(NS, "stapply2",
-      doc("Apply a Scala type to two type arguments", body))
+    define(NS, "stapply2").doc("Apply a Scala type to two type arguments")
+      .lam("t1").lam("t2").lam("t3").to(
+        applyP(local("stapply"), v("t1"), list(v("t2"), v("t3"))))
 
   lazy val stparamDef: Definition =
-    val body = lambda("name",
-      let(Seq(
-        field("v",
-          applyP("hydra.formatting.capitalize",
-            CoreDsl.unName(v("name"))))),
-        ScalaSyntax.paramType(
-          list[Any]())(  // mods
-          ScalaSyntax.nameValue(v("v")))(
-          list[Any]())(  // tparams
-          list[Any]())(  // tbounds
-          list[Any]())(  // vbounds
-          list[Any]())))  // cbounds
-    Phantoms.`def`(NS, "stparam",
-      doc("Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params", body))
+    define(NS, "stparam").doc("Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params")
+      .lam("name").to(
+        let(Seq(
+          field("v",
+            applyP("hydra.formatting.capitalize",
+              CoreDsl.unName(v("name"))))),
+          ScalaSyntax.paramType(
+            list[Any]())(  // mods
+            ScalaSyntax.nameValue(v("v")))(
+            list[Any]())(  // tparams
+            list[Any]())(  // tbounds
+            list[Any]())(  // vbounds
+            list[Any]())))  // cbounds
 
   lazy val strefDef: Definition =
-    val body = lambda("s",
-      ScalaSyntax.typeRef(ScalaSyntax.refTypeName(ScalaSyntax.nameType(v("s")))))
-    Phantoms.`def`(NS, "stref",
-      doc("Create a Scala type reference by name", body))
+    define(NS, "stref").doc("Create a Scala type reference by name")
+      .lam("s").to(
+        ScalaSyntax.typeRef(ScalaSyntax.refTypeName(ScalaSyntax.nameType(v("s")))))
 
   lazy val svarDef: Definition =
-    val body = lambda("name",
-      let(Seq(
-        field("v", CoreDsl.unName(v("name")))),
-        ScalaSyntax.patVar(
-          ScalaSyntax.varPat(
-            ScalaSyntax.nameData(
-              ScalaSyntax.predefString(v("v")))))))
-    Phantoms.`def`(NS, "svar",
-      doc("Create a Scala pattern variable", body))
+    define(NS, "svar").doc("Create a Scala pattern variable")
+      .lam("name").to(
+        let(Seq(
+          field("v", CoreDsl.unName(v("name")))),
+          ScalaSyntax.patVar(
+            ScalaSyntax.varPat(
+              ScalaSyntax.nameData(
+                ScalaSyntax.predefString(v("v")))))))
 
   lazy val typeToStringDef: Definition =
-    val body = lambda("t",
-      casesWithDefault("hydra.scala.syntax.Type",
-        v("t"), string("Any"),
-        field("ref", lambda("tr",
-          casesWithDefault("hydra.scala.syntax.RefType",
-            v("tr"), string("Any"),
-            field("name", lambda("tn",
-              ScalaSyntax.nameTypeValue(v("tn"))))))),
-        field("var", lambda("tv",
-          ScalaSyntax.nameTypeValue(
-            ScalaSyntax.varTypeName(v("tv"))))),
-        field("function", lambda("fn",
-          let(Seq(
-            field("params",
-              applyP("hydra.lib.lists.map",
-                v("hydra.scala.utils.typeToString"),
-                ScalaSyntax.functionTypeParams(v("fn")))),
-            field("res",
-              applyP("hydra.scala.utils.typeToString",
-                ScalaSyntax.functionTypeRes(v("fn"))))),
-            applyP("hydra.lib.strings.cat",
-              list(
-                string("("),
-                applyP("hydra.lib.strings.intercalate", string(", "), v("params")),
-                string(") => "),
-                v("res")))))),
-        field("apply", lambda("ta",
-          let(Seq(
-            field("base",
-              applyP("hydra.scala.utils.typeToString",
-                ScalaSyntax.applyTypeTpe(v("ta")))),
-            field("argStrs",
-              applyP("hydra.lib.lists.map",
-                v("hydra.scala.utils.typeToString"),
-                ScalaSyntax.applyTypeArgs(v("ta"))))),
-            applyP("hydra.lib.strings.cat",
-              list(
-                v("base"),
-                string("["),
-                applyP("hydra.lib.strings.intercalate", string(", "), v("argStrs")),
-                string("]"))))))))
-    Phantoms.`def`(NS, "typeToString",
-      doc("Convert a Scala type to its string representation", body))
+    define(NS, "typeToString").doc("Convert a Scala type to its string representation")
+      .lam("t").to(
+        casesWithDefault("hydra.scala.syntax.Type",
+          v("t"), string("Any"),
+          field("ref", lambda("tr",
+            casesWithDefault("hydra.scala.syntax.RefType",
+              v("tr"), string("Any"),
+              field("name", lambda("tn",
+                ScalaSyntax.nameTypeValue(v("tn"))))))),
+          field("var", lambda("tv",
+            ScalaSyntax.nameTypeValue(
+              ScalaSyntax.varTypeName(v("tv"))))),
+          field("function", lambda("fn",
+            let(Seq(
+              field("params",
+                applyP("hydra.lib.lists.map",
+                  v(local("typeToString")),
+                  ScalaSyntax.functionTypeParams(v("fn")))),
+              field("res",
+                applyP(local("typeToString"),
+                  ScalaSyntax.functionTypeRes(v("fn"))))),
+              applyP("hydra.lib.strings.cat",
+                list(
+                  string("("),
+                  applyP("hydra.lib.strings.intercalate", string(", "), v("params")),
+                  string(") => "),
+                  v("res")))))),
+          field("apply", lambda("ta",
+            let(Seq(
+              field("base",
+                applyP(local("typeToString"),
+                  ScalaSyntax.applyTypeTpe(v("ta")))),
+              field("argStrs",
+                applyP("hydra.lib.lists.map",
+                  v(local("typeToString")),
+                  ScalaSyntax.applyTypeArgs(v("ta"))))),
+              applyP("hydra.lib.strings.cat",
+                list(
+                  v("base"),
+                  string("["),
+                  applyP("hydra.lib.strings.intercalate", string(", "), v("argStrs")),
+                  string("]"))))))))
 
   // ===== Module assembly =====
 

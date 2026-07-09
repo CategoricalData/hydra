@@ -5,9 +5,11 @@
 module Hydra.Dsl.Error.Packaging where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Error.Packaging as DecodeErrorPackaging
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Packaging as DslPackaging
 import qualified Hydra.Dsl.Util as DslUtil
+import qualified Hydra.Encode.Error.Packaging as EncodeErrorPackaging
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Typed as Typed
@@ -27,6 +29,11 @@ conflictingModuleNameError first second =
         Core.Field {
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (Typed.unTypedTerm second)}]}))
+
+-- | DSL name token for hydra.error.packaging.ConflictingModuleNameError
+conflictingModuleNameErrorConflictingModuleNameError :: Typed.TypedName ErrorPackaging.ConflictingModuleNameError
+conflictingModuleNameErrorConflictingModuleNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.ConflictingModuleNameError")
 
 -- | DSL accessor for the first field of hydra.error.packaging.ConflictingModuleNameError
 conflictingModuleNameErrorFirst :: Typed.TypedTerm ErrorPackaging.ConflictingModuleNameError -> Typed.TypedTerm Packaging.ModuleName
@@ -107,6 +114,11 @@ conflictingVariantNameErrorConflictingName x =
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
         Core.projectionFieldName = (Core.Name "conflictingName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.packaging.ConflictingVariantNameError
+conflictingVariantNameErrorConflictingVariantNameError :: Typed.TypedName ErrorPackaging.ConflictingVariantNameError
+conflictingVariantNameErrorConflictingVariantNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.ConflictingVariantNameError")
 
 -- | DSL accessor for the moduleName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorModuleName :: Typed.TypedTerm ErrorPackaging.ConflictingVariantNameError -> Typed.TypedTerm Packaging.ModuleName
@@ -272,6 +284,11 @@ definitionNotInModuleNameError moduleName name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.packaging.DefinitionNotInModuleNameError
+definitionNotInModuleNameErrorDefinitionNotInModuleNameError :: Typed.TypedName ErrorPackaging.DefinitionNotInModuleNameError
+definitionNotInModuleNameErrorDefinitionNotInModuleNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError")
+
 -- | DSL accessor for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError
 definitionNotInModuleNameErrorModuleName :: Typed.TypedTerm ErrorPackaging.DefinitionNotInModuleNameError -> Typed.TypedTerm Packaging.ModuleName
 definitionNotInModuleNameErrorModuleName x =
@@ -339,6 +356,11 @@ definitionsOutOfOrderError moduleName precedingName followingName =
         Core.Field {
           Core.fieldName = (Core.Name "followingName"),
           Core.fieldTerm = (Typed.unTypedTerm followingName)}]}))
+
+-- | DSL name token for hydra.error.packaging.DefinitionsOutOfOrderError
+definitionsOutOfOrderErrorDefinitionsOutOfOrderError :: Typed.TypedName ErrorPackaging.DefinitionsOutOfOrderError
+definitionsOutOfOrderErrorDefinitionsOutOfOrderError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError")
 
 -- | DSL accessor for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderErrorFollowingName :: Typed.TypedTerm ErrorPackaging.DefinitionsOutOfOrderError -> Typed.TypedTerm Core.Name
@@ -452,6 +474,11 @@ duplicateDefinitionNameError moduleName name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
 
+-- | DSL name token for hydra.error.packaging.DuplicateDefinitionNameError
+duplicateDefinitionNameErrorDuplicateDefinitionNameError :: Typed.TypedName ErrorPackaging.DuplicateDefinitionNameError
+duplicateDefinitionNameErrorDuplicateDefinitionNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError")
+
 -- | DSL accessor for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameErrorModuleName :: Typed.TypedTerm ErrorPackaging.DuplicateDefinitionNameError -> Typed.TypedTerm Packaging.ModuleName
 duplicateDefinitionNameErrorModuleName x =
@@ -514,6 +541,11 @@ duplicateModuleNameError moduleName =
           Core.fieldName = (Core.Name "moduleName"),
           Core.fieldTerm = (Typed.unTypedTerm moduleName)}]}))
 
+-- | DSL name token for hydra.error.packaging.DuplicateModuleNameError
+duplicateModuleNameErrorDuplicateModuleNameError :: Typed.TypedName ErrorPackaging.DuplicateModuleNameError
+duplicateModuleNameErrorDuplicateModuleNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.DuplicateModuleNameError")
+
 -- | DSL accessor for the moduleName field of hydra.error.packaging.DuplicateModuleNameError
 duplicateModuleNameErrorModuleName :: Typed.TypedTerm ErrorPackaging.DuplicateModuleNameError -> Typed.TypedTerm Packaging.ModuleName
 duplicateModuleNameErrorModuleName x =
@@ -557,6 +589,11 @@ invalidDefinitionNameErrorExpectedConvention x =
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
         Core.projectionFieldName = (Core.Name "expectedConvention")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.packaging.InvalidDefinitionNameError
+invalidDefinitionNameErrorInvalidDefinitionNameError :: Typed.TypedName ErrorPackaging.InvalidDefinitionNameError
+invalidDefinitionNameErrorInvalidDefinitionNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.InvalidDefinitionNameError")
 
 -- | DSL accessor for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameErrorModuleName :: Typed.TypedTerm ErrorPackaging.InvalidDefinitionNameError -> Typed.TypedTerm Packaging.ModuleName
@@ -693,6 +730,10 @@ invalidModuleErrorInvalidDefinitionName x =
         Core.fieldName = (Core.Name "invalidDefinitionName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.error.packaging.InvalidModuleError
+invalidModuleErrorInvalidModuleError :: Typed.TypedName ErrorPackaging.InvalidModuleError
+invalidModuleErrorInvalidModuleError = Typed.TypedName (Core.Name "hydra.error.packaging.InvalidModuleError")
+
 -- | DSL injection for the invalidModuleNameConvention variant of hydra.error.packaging.InvalidModuleError
 invalidModuleErrorInvalidModuleNameConvention :: Typed.TypedTerm ErrorPackaging.InvalidModuleNameConventionError -> Typed.TypedTerm ErrorPackaging.InvalidModuleError
 invalidModuleErrorInvalidModuleNameConvention x =
@@ -720,6 +761,11 @@ invalidModuleNameConventionError moduleName =
         Core.Field {
           Core.fieldName = (Core.Name "moduleName"),
           Core.fieldTerm = (Typed.unTypedTerm moduleName)}]}))
+
+-- | DSL name token for hydra.error.packaging.InvalidModuleNameConventionError
+invalidModuleNameConventionErrorInvalidModuleNameConventionError :: Typed.TypedName ErrorPackaging.InvalidModuleNameConventionError
+invalidModuleNameConventionErrorInvalidModuleNameConventionError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError")
 
 -- | DSL accessor for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError
 invalidModuleNameConventionErrorModuleName :: Typed.TypedTerm ErrorPackaging.InvalidModuleNameConventionError -> Typed.TypedTerm Packaging.ModuleName
@@ -767,6 +813,10 @@ invalidPackageErrorInvalidModule x =
         Core.fieldName = (Core.Name "invalidModule"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.error.packaging.InvalidPackageError
+invalidPackageErrorInvalidPackageError :: Typed.TypedName ErrorPackaging.InvalidPackageError
+invalidPackageErrorInvalidPackageError = Typed.TypedName (Core.Name "hydra.error.packaging.InvalidPackageError")
+
 -- | DSL injection for the invalidPackageName variant of hydra.error.packaging.InvalidPackageError
 invalidPackageErrorInvalidPackageName :: Typed.TypedTerm ErrorPackaging.InvalidPackageNameError -> Typed.TypedTerm ErrorPackaging.InvalidPackageError
 invalidPackageErrorInvalidPackageName x =
@@ -785,6 +835,11 @@ invalidPackageNameError packageName =
         Core.Field {
           Core.fieldName = (Core.Name "packageName"),
           Core.fieldTerm = (Typed.unTypedTerm packageName)}]}))
+
+-- | DSL name token for hydra.error.packaging.InvalidPackageNameError
+invalidPackageNameErrorInvalidPackageNameError :: Typed.TypedName ErrorPackaging.InvalidPackageNameError
+invalidPackageNameErrorInvalidPackageNameError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.InvalidPackageNameError")
 
 -- | DSL accessor for the packageName field of hydra.error.packaging.InvalidPackageNameError
 invalidPackageNameErrorPackageName :: Typed.TypedTerm ErrorPackaging.InvalidPackageNameError -> Typed.TypedTerm Packaging.PackageName
@@ -817,6 +872,11 @@ missingDocumentationError moduleName name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.error.packaging.MissingDocumentationError
+missingDocumentationErrorMissingDocumentationError :: Typed.TypedName ErrorPackaging.MissingDocumentationError
+missingDocumentationErrorMissingDocumentationError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.MissingDocumentationError")
 
 -- | DSL accessor for the moduleName field of hydra.error.packaging.MissingDocumentationError
 missingDocumentationErrorModuleName :: Typed.TypedTerm ErrorPackaging.MissingDocumentationError -> Typed.TypedTerm Packaging.ModuleName

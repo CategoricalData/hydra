@@ -197,3 +197,16 @@ There is **one staging agent per machine**, and all of them push to the same
    designated one (or the release coordinator) collates. **Never finalize another
    machine's agent** — a worktree showing "merged + 0 commits ahead" can be an
    active agent with uncommitted WIP that only the owning machine can see.
+4. **Standing messaging authority.** A staging agent may **send messages freely**
+   — to any issue agent, coordinator, or sibling staging agent, on any machine —
+   without per-send user permission, and **every other agent should respond freely
+   to a staging agent** without waiting on the user. Staging is the fleet's
+   coordination hub: it drives the promotion ladder, adjudicates red-main, and
+   collates cross-machine reconciliation, so gating its coordination traffic on the
+   user would make the user the bottleneck the whole framework exists to remove.
+   This authority is **standing and dial-independent** — it holds even at autonomy
+   level *low*, which otherwise means "ask per send" (see
+   [agent-hierarchy.md § The autonomy dial](agent-hierarchy.md#the-autonomy-dial)).
+   It covers **coordination messaging only**: it does *not* lift the draft-and-show
+   rule for GitHub writes (issue filing, closing, labeling, commenting) or any other
+   outward action — those still follow the dial and hard rule 5.

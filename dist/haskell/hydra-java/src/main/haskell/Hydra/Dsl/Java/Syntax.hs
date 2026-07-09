@@ -18,6 +18,14 @@ additionalBound x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AdditionalBound"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.AdditionalBound
+additionalBoundAdditionalBound :: Typed.TypedName Syntax.AdditionalBound
+additionalBoundAdditionalBound = Typed.TypedName (Core.Name "hydra.java.syntax.AdditionalBound")
+
+-- | DSL name token for hydra.java.syntax.AdditiveExpression
+additiveExpressionAdditiveExpression :: Typed.TypedName Syntax.AdditiveExpression
+additiveExpressionAdditiveExpression = Typed.TypedName (Core.Name "hydra.java.syntax.AdditiveExpression")
+
 -- | DSL injection for the minus variant of hydra.java.syntax.AdditiveExpression
 additiveExpressionMinus :: Typed.TypedTerm Syntax.AdditiveExpression_Binary -> Typed.TypedTerm Syntax.AdditiveExpression
 additiveExpressionMinus x =
@@ -57,6 +65,11 @@ additiveExpression_Binary lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.java.syntax.AdditiveExpression_Binary
+additiveExpression_BinaryAdditiveExpression_Binary :: Typed.TypedName Syntax.AdditiveExpression_Binary
+additiveExpression_BinaryAdditiveExpression_Binary =
+    Typed.TypedName (Core.Name "hydra.java.syntax.AdditiveExpression_Binary")
 
 -- | DSL accessor for the lhs field of hydra.java.syntax.AdditiveExpression_Binary
 additiveExpression_BinaryLhs :: Typed.TypedTerm Syntax.AdditiveExpression_Binary -> Typed.TypedTerm Syntax.AdditiveExpression
@@ -117,12 +130,20 @@ ambiguousName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AmbiguousName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.AmbiguousName
+ambiguousNameAmbiguousName :: Typed.TypedName Syntax.AmbiguousName
+ambiguousNameAmbiguousName = Typed.TypedName (Core.Name "hydra.java.syntax.AmbiguousName")
+
 -- | DSL constructor for the hydra.java.syntax.AndExpression wrapper
 andExpression :: Typed.TypedTerm [Syntax.EqualityExpression] -> Typed.TypedTerm Syntax.AndExpression
 andExpression x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AndExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.AndExpression
+andExpressionAndExpression :: Typed.TypedName Syntax.AndExpression
+andExpressionAndExpression = Typed.TypedName (Core.Name "hydra.java.syntax.AndExpression")
 
 -- | DSL constructor for hydra.java.syntax.AnnotatedIdentifier
 annotatedIdentifier :: Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.AnnotatedIdentifier
@@ -136,6 +157,10 @@ annotatedIdentifier annotations identifier =
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Typed.unTypedTerm identifier)}]}))
+
+-- | DSL name token for hydra.java.syntax.AnnotatedIdentifier
+annotatedIdentifierAnnotatedIdentifier :: Typed.TypedName Syntax.AnnotatedIdentifier
+annotatedIdentifierAnnotatedIdentifier = Typed.TypedName (Core.Name "hydra.java.syntax.AnnotatedIdentifier")
 
 -- | DSL accessor for the annotations field of hydra.java.syntax.AnnotatedIdentifier
 annotatedIdentifierAnnotations :: Typed.TypedTerm Syntax.AnnotatedIdentifier -> Typed.TypedTerm [Syntax.Annotation]
@@ -189,12 +214,20 @@ annotatedIdentifierWithIdentifier original newVal =
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.Annotation
+annotationAnnotation :: Typed.TypedName Syntax.Annotation
+annotationAnnotation = Typed.TypedName (Core.Name "hydra.java.syntax.Annotation")
+
 -- | DSL constructor for the hydra.java.syntax.AnnotationInterfaceBody wrapper
 annotationInterfaceBody :: Typed.TypedTerm [Syntax.AnnotationInterfaceMemberDeclaration] -> Typed.TypedTerm Syntax.AnnotationInterfaceBody
 annotationInterfaceBody x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceBody"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.AnnotationInterfaceBody
+annotationInterfaceBodyAnnotationInterfaceBody :: Typed.TypedName Syntax.AnnotationInterfaceBody
+annotationInterfaceBodyAnnotationInterfaceBody = Typed.TypedName (Core.Name "hydra.java.syntax.AnnotationInterfaceBody")
 
 -- | DSL constructor for hydra.java.syntax.AnnotationInterfaceDeclaration
 annotationInterfaceDeclaration :: Typed.TypedTerm [Syntax.InterfaceModifier] -> Typed.TypedTerm Syntax.TypeIdentifier -> Typed.TypedTerm Syntax.AnnotationInterfaceBody -> Typed.TypedTerm Syntax.AnnotationInterfaceDeclaration
@@ -211,6 +244,11 @@ annotationInterfaceDeclaration modifiers identifier body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
+-- | DSL name token for hydra.java.syntax.AnnotationInterfaceDeclaration
+annotationInterfaceDeclarationAnnotationInterfaceDeclaration :: Typed.TypedName Syntax.AnnotationInterfaceDeclaration
+annotationInterfaceDeclarationAnnotationInterfaceDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration")
 
 -- | DSL accessor for the body field of hydra.java.syntax.AnnotationInterfaceDeclaration
 annotationInterfaceDeclarationBody :: Typed.TypedTerm Syntax.AnnotationInterfaceDeclaration -> Typed.TypedTerm Syntax.AnnotationInterfaceBody
@@ -332,6 +370,11 @@ annotationInterfaceElementDeclaration modifiers type_ identifier dims default_ =
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Typed.unTypedTerm default_)}]}))
+
+-- | DSL name token for hydra.java.syntax.AnnotationInterfaceElementDeclaration
+annotationInterfaceElementDeclarationAnnotationInterfaceElementDeclaration :: Typed.TypedName Syntax.AnnotationInterfaceElementDeclaration
+annotationInterfaceElementDeclarationAnnotationInterfaceElementDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration")
 
 -- | DSL accessor for the default field of hydra.java.syntax.AnnotationInterfaceElementDeclaration
 annotationInterfaceElementDeclarationDefault :: Typed.TypedTerm Syntax.AnnotationInterfaceElementDeclaration -> Typed.TypedTerm (Maybe Syntax.DefaultValue)
@@ -586,6 +629,11 @@ annotationInterfaceElementModifierAnnotation x =
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.AnnotationInterfaceElementModifier
+annotationInterfaceElementModifierAnnotationInterfaceElementModifier :: Typed.TypedName Syntax.AnnotationInterfaceElementModifier
+annotationInterfaceElementModifierAnnotationInterfaceElementModifier =
+    Typed.TypedName (Core.Name "hydra.java.syntax.AnnotationInterfaceElementModifier")
+
 -- | DSL injection for the public variant of hydra.java.syntax.AnnotationInterfaceElementModifier
 annotationInterfaceElementModifierPublic :: Typed.TypedTerm Syntax.AnnotationInterfaceElementModifier
 annotationInterfaceElementModifierPublic =
@@ -603,6 +651,11 @@ annotationInterfaceMemberDeclarationAnnotationInterface x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationInterface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.AnnotationInterfaceMemberDeclaration
+annotationInterfaceMemberDeclarationAnnotationInterfaceMemberDeclaration :: Typed.TypedName Syntax.AnnotationInterfaceMemberDeclaration
+annotationInterfaceMemberDeclarationAnnotationInterfaceMemberDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.AnnotationInterfaceMemberDeclaration")
 
 -- | DSL injection for the class variant of hydra.java.syntax.AnnotationInterfaceMemberDeclaration
 annotationInterfaceMemberDeclarationClass :: Typed.TypedTerm Syntax.ClassDeclaration -> Typed.TypedTerm Syntax.AnnotationInterfaceMemberDeclaration
@@ -671,6 +724,10 @@ arrayAccess expression variant =
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Typed.unTypedTerm variant)}]}))
 
+-- | DSL name token for hydra.java.syntax.ArrayAccess
+arrayAccessArrayAccess :: Typed.TypedName Syntax.ArrayAccess
+arrayAccessArrayAccess = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayAccess")
+
 -- | DSL accessor for the expression field of hydra.java.syntax.ArrayAccess
 arrayAccessExpression :: Typed.TypedTerm Syntax.ArrayAccess -> Typed.TypedTerm (Maybe Syntax.Expression)
 arrayAccessExpression x =
@@ -723,6 +780,10 @@ arrayAccessWithVariant original newVal =
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.ArrayAccess_Variant
+arrayAccess_VariantArrayAccess_Variant :: Typed.TypedName Syntax.ArrayAccess_Variant
+arrayAccess_VariantArrayAccess_Variant = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayAccess_Variant")
+
 -- | DSL injection for the arrayCreationWithInitializer variant of hydra.java.syntax.ArrayAccess_Variant
 arrayAccess_VariantArrayCreationWithInitializer :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer -> Typed.TypedTerm Syntax.ArrayAccess_Variant
 arrayAccess_VariantArrayCreationWithInitializer x =
@@ -750,6 +811,10 @@ arrayAccess_VariantPrimary x =
         Core.fieldName = (Core.Name "primary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpression
+arrayCreationExpressionArrayCreationExpression :: Typed.TypedName Syntax.ArrayCreationExpression
+arrayCreationExpressionArrayCreationExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpression")
+
 -- | DSL injection for the withInitializer variant of hydra.java.syntax.ArrayCreationExpression
 arrayCreationExpressionWithInitializer :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer -> Typed.TypedTerm Syntax.ArrayCreationExpression
 arrayCreationExpressionWithInitializer x =
@@ -758,6 +823,11 @@ arrayCreationExpressionWithInitializer x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withInitializer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithInitializer
+arrayCreationExpressionWithInitializerArrayCreationExpressionWithInitializer :: Typed.TypedName Syntax.ArrayCreationExpressionWithInitializer
+arrayCreationExpressionWithInitializerArrayCreationExpressionWithInitializer =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer")
 
 -- | DSL injection for the classOrInterface variant of hydra.java.syntax.ArrayCreationExpressionWithInitializer
 arrayCreationExpressionWithInitializerClassOrInterface :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer
@@ -801,6 +871,11 @@ arrayCreationExpressionWithInitializer_ClassOrInterfaceArray x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
         Core.projectionFieldName = (Core.Name "array")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
+arrayCreationExpressionWithInitializer_ClassOrInterfaceArrayCreationExpressionWithInitializer_ClassOrInterface :: Typed.TypedName Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
+arrayCreationExpressionWithInitializer_ClassOrInterfaceArrayCreationExpressionWithInitializer_ClassOrInterface =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface")
 
 -- | DSL accessor for the dims field of hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
 arrayCreationExpressionWithInitializer_ClassOrInterfaceDims :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Typed.TypedTerm [Syntax.Dims]
@@ -917,6 +992,11 @@ arrayCreationExpressionWithInitializer_PrimitiveArray x =
         Core.projectionFieldName = (Core.Name "array")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive
+arrayCreationExpressionWithInitializer_PrimitiveArrayCreationExpressionWithInitializer_Primitive :: Typed.TypedName Syntax.ArrayCreationExpressionWithInitializer_Primitive
+arrayCreationExpressionWithInitializer_PrimitiveArrayCreationExpressionWithInitializer_Primitive =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive")
+
 -- | DSL accessor for the dims field of hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive
 arrayCreationExpressionWithInitializer_PrimitiveDims :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Typed.TypedTerm [Syntax.Dims]
 arrayCreationExpressionWithInitializer_PrimitiveDims x =
@@ -1016,6 +1096,11 @@ arrayCreationExpressionWithoutInitializer x =
         Core.fieldName = (Core.Name "withoutInitializer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithoutInitializer
+arrayCreationExpressionWithoutInitializerArrayCreationExpressionWithoutInitializer :: Typed.TypedName Syntax.ArrayCreationExpressionWithoutInitializer
+arrayCreationExpressionWithoutInitializerArrayCreationExpressionWithoutInitializer =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer")
+
 -- | DSL injection for the classOrInterface variant of hydra.java.syntax.ArrayCreationExpressionWithoutInitializer
 arrayCreationExpressionWithoutInitializerClassOrInterface :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer
 arrayCreationExpressionWithoutInitializerClassOrInterface x =
@@ -1049,6 +1134,11 @@ arrayCreationExpressionWithoutInitializer_ClassOrInterface type_ dimExprs dims =
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Typed.unTypedTerm dims)}]}))
+
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
+arrayCreationExpressionWithoutInitializer_ClassOrInterfaceArrayCreationExpressionWithoutInitializer_ClassOrInterface :: Typed.TypedName Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
+arrayCreationExpressionWithoutInitializer_ClassOrInterfaceArrayCreationExpressionWithoutInitializer_ClassOrInterface =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface")
 
 -- | DSL accessor for the dimExprs field of hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
 arrayCreationExpressionWithoutInitializer_ClassOrInterfaceDimExprs :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Typed.TypedTerm [Syntax.DimExpr]
@@ -1165,6 +1255,11 @@ arrayCreationExpressionWithoutInitializer_Primitive type_ dimExprs dims =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Typed.unTypedTerm dims)}]}))
 
+-- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive
+arrayCreationExpressionWithoutInitializer_PrimitiveArrayCreationExpressionWithoutInitializer_Primitive :: Typed.TypedName Syntax.ArrayCreationExpressionWithoutInitializer_Primitive
+arrayCreationExpressionWithoutInitializer_PrimitiveArrayCreationExpressionWithoutInitializer_Primitive =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive")
+
 -- | DSL accessor for the dimExprs field of hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive
 arrayCreationExpressionWithoutInitializer_PrimitiveDimExprs :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Typed.TypedTerm [Syntax.DimExpr]
 arrayCreationExpressionWithoutInitializer_PrimitiveDimExprs x =
@@ -1271,6 +1366,10 @@ arrayInitializer x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ArrayInitializer"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ArrayInitializer
+arrayInitializerArrayInitializer :: Typed.TypedName Syntax.ArrayInitializer
+arrayInitializerArrayInitializer = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayInitializer")
+
 -- | DSL constructor for hydra.java.syntax.ArrayType
 arrayType :: Typed.TypedTerm Syntax.Dims -> Typed.TypedTerm Syntax.ArrayType_Variant -> Typed.TypedTerm Syntax.ArrayType
 arrayType dims variant =
@@ -1283,6 +1382,10 @@ arrayType dims variant =
         Core.Field {
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Typed.unTypedTerm variant)}]}))
+
+-- | DSL name token for hydra.java.syntax.ArrayType
+arrayTypeArrayType :: Typed.TypedName Syntax.ArrayType
+arrayTypeArrayType = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayType")
 
 -- | DSL accessor for the dims field of hydra.java.syntax.ArrayType
 arrayTypeDims :: Typed.TypedTerm Syntax.ArrayType -> Typed.TypedTerm Syntax.Dims
@@ -1336,6 +1439,10 @@ arrayTypeWithVariant original newVal =
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.ArrayType_Variant
+arrayType_VariantArrayType_Variant :: Typed.TypedName Syntax.ArrayType_Variant
+arrayType_VariantArrayType_Variant = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayType_Variant")
+
 -- | DSL injection for the classOrInterface variant of hydra.java.syntax.ArrayType_Variant
 arrayType_VariantClassOrInterface :: Typed.TypedTerm Syntax.ClassOrInterfaceType -> Typed.TypedTerm Syntax.ArrayType_Variant
 arrayType_VariantClassOrInterface x =
@@ -1362,6 +1469,10 @@ arrayType_VariantVariable x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.AssertStatement
+assertStatementAssertStatement :: Typed.TypedName Syntax.AssertStatement
+assertStatementAssertStatement = Typed.TypedName (Core.Name "hydra.java.syntax.AssertStatement")
 
 -- | DSL injection for the pair variant of hydra.java.syntax.AssertStatement
 assertStatementPair :: Typed.TypedTerm Syntax.AssertStatement_Pair -> Typed.TypedTerm Syntax.AssertStatement
@@ -1393,6 +1504,10 @@ assertStatement_Pair first second =
         Core.Field {
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (Typed.unTypedTerm second)}]}))
+
+-- | DSL name token for hydra.java.syntax.AssertStatement_Pair
+assertStatement_PairAssertStatement_Pair :: Typed.TypedName Syntax.AssertStatement_Pair
+assertStatement_PairAssertStatement_Pair = Typed.TypedName (Core.Name "hydra.java.syntax.AssertStatement_Pair")
 
 -- | DSL accessor for the first field of hydra.java.syntax.AssertStatement_Pair
 assertStatement_PairFirst :: Typed.TypedTerm Syntax.AssertStatement_Pair -> Typed.TypedTerm Syntax.Expression
@@ -1462,6 +1577,10 @@ assignment lhs op expression =
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
 
+-- | DSL name token for hydra.java.syntax.Assignment
+assignmentAssignment :: Typed.TypedName Syntax.Assignment
+assignmentAssignment = Typed.TypedName (Core.Name "hydra.java.syntax.Assignment")
+
 -- | DSL accessor for the expression field of hydra.java.syntax.Assignment
 assignmentExpression :: Typed.TypedTerm Syntax.Assignment -> Typed.TypedTerm Syntax.Expression
 assignmentExpression x =
@@ -1479,6 +1598,10 @@ assignmentExpressionAssignment x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assignment"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression :: Typed.TypedName Syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression = Typed.TypedName (Core.Name "hydra.java.syntax.AssignmentExpression")
 
 -- | DSL injection for the conditional variant of hydra.java.syntax.AssignmentExpression
 assignmentExpressionConditional :: Typed.TypedTerm Syntax.ConditionalExpression -> Typed.TypedTerm Syntax.AssignmentExpression
@@ -1515,6 +1638,10 @@ assignmentOperatorAnd =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.java.syntax.AssignmentOperator
+assignmentOperatorAssignmentOperator :: Typed.TypedName Syntax.AssignmentOperator
+assignmentOperatorAssignmentOperator = Typed.TypedName (Core.Name "hydra.java.syntax.AssignmentOperator")
 
 -- | DSL injection for the div variant of hydra.java.syntax.AssignmentOperator
 assignmentOperatorDiv :: Typed.TypedTerm Syntax.AssignmentOperator
@@ -1700,6 +1827,10 @@ basicForStatement cond body =
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
 
+-- | DSL name token for hydra.java.syntax.BasicForStatement
+basicForStatementBasicForStatement :: Typed.TypedName Syntax.BasicForStatement
+basicForStatementBasicForStatement = Typed.TypedName (Core.Name "hydra.java.syntax.BasicForStatement")
+
 -- | DSL accessor for the body field of hydra.java.syntax.BasicForStatement
 basicForStatementBody :: Typed.TypedTerm Syntax.BasicForStatement -> Typed.TypedTerm Syntax.Statement
 basicForStatementBody x =
@@ -1730,6 +1861,11 @@ basicForStatementNoShortIf cond body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
+-- | DSL name token for hydra.java.syntax.BasicForStatementNoShortIf
+basicForStatementNoShortIfBasicForStatementNoShortIf :: Typed.TypedName Syntax.BasicForStatementNoShortIf
+basicForStatementNoShortIfBasicForStatementNoShortIf =
+    Typed.TypedName (Core.Name "hydra.java.syntax.BasicForStatementNoShortIf")
 
 -- | DSL accessor for the body field of hydra.java.syntax.BasicForStatementNoShortIf
 basicForStatementNoShortIfBody :: Typed.TypedTerm Syntax.BasicForStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf
@@ -1824,6 +1960,14 @@ block x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Block"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.Block
+blockBlock :: Typed.TypedName Syntax.Block
+blockBlock = Typed.TypedName (Core.Name "hydra.java.syntax.Block")
+
+-- | DSL name token for hydra.java.syntax.BlockStatement
+blockStatementBlockStatement :: Typed.TypedName Syntax.BlockStatement
+blockStatementBlockStatement = Typed.TypedName (Core.Name "hydra.java.syntax.BlockStatement")
+
 -- | DSL injection for the localClassOrInterface variant of hydra.java.syntax.BlockStatement
 blockStatementLocalClassOrInterface :: Typed.TypedTerm Syntax.LocalClassOrInterfaceDeclaration -> Typed.TypedTerm Syntax.BlockStatement
 blockStatementLocalClassOrInterface x =
@@ -1860,6 +2004,10 @@ booleanArrayArray x =
         Core.fieldName = (Core.Name "array"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.BooleanArray
+booleanArrayBooleanArray :: Typed.TypedName Syntax.BooleanArray
+booleanArrayBooleanArray = Typed.TypedName (Core.Name "hydra.java.syntax.BooleanArray")
+
 -- | DSL injection for the simple variant of hydra.java.syntax.BooleanArray
 booleanArraySimple :: Typed.TypedTerm Syntax.BooleanArray
 booleanArraySimple =
@@ -1876,12 +2024,20 @@ breakStatement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.BreakStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.BreakStatement
+breakStatementBreakStatement :: Typed.TypedName Syntax.BreakStatement
+breakStatementBreakStatement = Typed.TypedName (Core.Name "hydra.java.syntax.BreakStatement")
+
 -- | DSL constructor for the hydra.java.syntax.CaseConstant wrapper
 caseConstant :: Typed.TypedTerm Syntax.ConditionalExpression -> Typed.TypedTerm Syntax.CaseConstant
 caseConstant x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.CaseConstant"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.CaseConstant
+caseConstantCaseConstant :: Typed.TypedName Syntax.CaseConstant
+caseConstantCaseConstant = Typed.TypedName (Core.Name "hydra.java.syntax.CaseConstant")
 
 -- | DSL constructor for hydra.java.syntax.CasePattern
 casePattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm (Maybe Syntax.Guard) -> Typed.TypedTerm Syntax.CasePattern
@@ -1895,6 +2051,10 @@ casePattern pattern guard =
         Core.Field {
           Core.fieldName = (Core.Name "guard"),
           Core.fieldTerm = (Typed.unTypedTerm guard)}]}))
+
+-- | DSL name token for hydra.java.syntax.CasePattern
+casePatternCasePattern :: Typed.TypedName Syntax.CasePattern
+casePatternCasePattern = Typed.TypedName (Core.Name "hydra.java.syntax.CasePattern")
 
 -- | DSL accessor for the guard field of hydra.java.syntax.CasePattern
 casePatternGuard :: Typed.TypedTerm Syntax.CasePattern -> Typed.TypedTerm (Maybe Syntax.Guard)
@@ -1948,6 +2108,10 @@ casePatternWithPattern original newVal =
               Core.projectionFieldName = (Core.Name "guard")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.CastExpression
+castExpressionCastExpression :: Typed.TypedName Syntax.CastExpression
+castExpressionCastExpression = Typed.TypedName (Core.Name "hydra.java.syntax.CastExpression")
+
 -- | DSL injection for the lambda variant of hydra.java.syntax.CastExpression
 castExpressionLambda :: Typed.TypedTerm Syntax.CastExpression_Lambda -> Typed.TypedTerm Syntax.CastExpression
 castExpressionLambda x =
@@ -1987,6 +2151,10 @@ castExpression_Lambda refAndBounds expression =
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
+
+-- | DSL name token for hydra.java.syntax.CastExpression_Lambda
+castExpression_LambdaCastExpression_Lambda :: Typed.TypedName Syntax.CastExpression_Lambda
+castExpression_LambdaCastExpression_Lambda = Typed.TypedName (Core.Name "hydra.java.syntax.CastExpression_Lambda")
 
 -- | DSL accessor for the expression field of hydra.java.syntax.CastExpression_Lambda
 castExpression_LambdaExpression :: Typed.TypedTerm Syntax.CastExpression_Lambda -> Typed.TypedTerm Syntax.LambdaExpression
@@ -2053,6 +2221,11 @@ castExpression_NotPlusMinus refAndBounds expression =
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
 
+-- | DSL name token for hydra.java.syntax.CastExpression_NotPlusMinus
+castExpression_NotPlusMinusCastExpression_NotPlusMinus :: Typed.TypedName Syntax.CastExpression_NotPlusMinus
+castExpression_NotPlusMinusCastExpression_NotPlusMinus =
+    Typed.TypedName (Core.Name "hydra.java.syntax.CastExpression_NotPlusMinus")
+
 -- | DSL accessor for the expression field of hydra.java.syntax.CastExpression_NotPlusMinus
 castExpression_NotPlusMinusExpression :: Typed.TypedTerm Syntax.CastExpression_NotPlusMinus -> Typed.TypedTerm Syntax.UnaryExpression
 castExpression_NotPlusMinusExpression x =
@@ -2117,6 +2290,11 @@ castExpression_Primitive type_ expression =
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
+
+-- | DSL name token for hydra.java.syntax.CastExpression_Primitive
+castExpression_PrimitiveCastExpression_Primitive :: Typed.TypedName Syntax.CastExpression_Primitive
+castExpression_PrimitiveCastExpression_Primitive =
+    Typed.TypedName (Core.Name "hydra.java.syntax.CastExpression_Primitive")
 
 -- | DSL accessor for the expression field of hydra.java.syntax.CastExpression_Primitive
 castExpression_PrimitiveExpression :: Typed.TypedTerm Syntax.CastExpression_Primitive -> Typed.TypedTerm Syntax.UnaryExpression
@@ -2192,6 +2370,11 @@ castExpression_RefAndBoundsBounds x =
         Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.CastExpression_RefAndBounds
+castExpression_RefAndBoundsCastExpression_RefAndBounds :: Typed.TypedName Syntax.CastExpression_RefAndBounds
+castExpression_RefAndBoundsCastExpression_RefAndBounds =
+    Typed.TypedName (Core.Name "hydra.java.syntax.CastExpression_RefAndBounds")
+
 -- | DSL accessor for the type field of hydra.java.syntax.CastExpression_RefAndBounds
 castExpression_RefAndBoundsType :: Typed.TypedTerm Syntax.CastExpression_RefAndBounds -> Typed.TypedTerm Syntax.ReferenceType
 castExpression_RefAndBoundsType x =
@@ -2257,6 +2440,10 @@ catchClauseBlock x =
         Core.projectionFieldName = (Core.Name "block")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.CatchClause
+catchClauseCatchClause :: Typed.TypedName Syntax.CatchClause
+catchClauseCatchClause = Typed.TypedName (Core.Name "hydra.java.syntax.CatchClause")
+
 -- | DSL accessor for the parameter field of hydra.java.syntax.CatchClause
 catchClauseParameter :: Typed.TypedTerm Syntax.CatchClause -> Typed.TypedTerm (Maybe Syntax.CatchFormalParameter)
 catchClauseParameter x =
@@ -2315,6 +2502,10 @@ catchFormalParameter modifiers type_ id =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Typed.unTypedTerm id)}]}))
+
+-- | DSL name token for hydra.java.syntax.CatchFormalParameter
+catchFormalParameterCatchFormalParameter :: Typed.TypedName Syntax.CatchFormalParameter
+catchFormalParameterCatchFormalParameter = Typed.TypedName (Core.Name "hydra.java.syntax.CatchFormalParameter")
 
 -- | DSL accessor for the id field of hydra.java.syntax.CatchFormalParameter
 catchFormalParameterId :: Typed.TypedTerm Syntax.CatchFormalParameter -> Typed.TypedTerm Syntax.VariableDeclaratorId
@@ -2428,6 +2619,10 @@ catchType type_ types =
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Typed.unTypedTerm types)}]}))
 
+-- | DSL name token for hydra.java.syntax.CatchType
+catchTypeCatchType :: Typed.TypedName Syntax.CatchType
+catchTypeCatchType = Typed.TypedName (Core.Name "hydra.java.syntax.CatchType")
+
 -- | DSL accessor for the type field of hydra.java.syntax.CatchType
 catchTypeType :: Typed.TypedTerm Syntax.CatchType -> Typed.TypedTerm Syntax.UnannClassType
 catchTypeType x =
@@ -2487,12 +2682,24 @@ catches x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Catches"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.Catches
+catchesCatches :: Typed.TypedName Syntax.Catches
+catchesCatches = Typed.TypedName (Core.Name "hydra.java.syntax.Catches")
+
 -- | DSL constructor for the hydra.java.syntax.ClassBody wrapper
 classBody :: Typed.TypedTerm [Syntax.ClassBodyDeclarationWithComments] -> Typed.TypedTerm Syntax.ClassBody
 classBody x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ClassBody"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ClassBody
+classBodyClassBody :: Typed.TypedName Syntax.ClassBody
+classBodyClassBody = Typed.TypedName (Core.Name "hydra.java.syntax.ClassBody")
+
+-- | DSL name token for hydra.java.syntax.ClassBodyDeclaration
+classBodyDeclarationClassBodyDeclaration :: Typed.TypedName Syntax.ClassBodyDeclaration
+classBodyDeclarationClassBodyDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ClassBodyDeclaration")
 
 -- | DSL injection for the classMember variant of hydra.java.syntax.ClassBodyDeclaration
 classBodyDeclarationClassMember :: Typed.TypedTerm Syntax.ClassMemberDeclaration -> Typed.TypedTerm Syntax.ClassBodyDeclaration
@@ -2542,6 +2749,11 @@ classBodyDeclarationWithComments value comments =
         Core.Field {
           Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Typed.unTypedTerm comments)}]}))
+
+-- | DSL name token for hydra.java.syntax.ClassBodyDeclarationWithComments
+classBodyDeclarationWithCommentsClassBodyDeclarationWithComments :: Typed.TypedName Syntax.ClassBodyDeclarationWithComments
+classBodyDeclarationWithCommentsClassBodyDeclarationWithComments =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ClassBodyDeclarationWithComments")
 
 -- | DSL accessor for the comments field of hydra.java.syntax.ClassBodyDeclarationWithComments
 classBodyDeclarationWithCommentsComments :: Typed.TypedTerm Syntax.ClassBodyDeclarationWithComments -> Typed.TypedTerm (Maybe String)
@@ -2595,6 +2807,10 @@ classBodyDeclarationWithCommentsWithValue original newVal =
               Core.projectionFieldName = (Core.Name "comments")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.ClassDeclaration
+classDeclarationClassDeclaration :: Typed.TypedName Syntax.ClassDeclaration
+classDeclarationClassDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ClassDeclaration")
+
 -- | DSL injection for the enum variant of hydra.java.syntax.ClassDeclaration
 classDeclarationEnum :: Typed.TypedTerm Syntax.EnumDeclaration -> Typed.TypedTerm Syntax.ClassDeclaration
 classDeclarationEnum x =
@@ -2634,6 +2850,11 @@ classInstanceCreationExpression qualifier expression =
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
+
+-- | DSL name token for hydra.java.syntax.ClassInstanceCreationExpression
+classInstanceCreationExpressionClassInstanceCreationExpression :: Typed.TypedName Syntax.ClassInstanceCreationExpression
+classInstanceCreationExpressionClassInstanceCreationExpression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ClassInstanceCreationExpression")
 
 -- | DSL accessor for the expression field of hydra.java.syntax.ClassInstanceCreationExpression
 classInstanceCreationExpressionExpression :: Typed.TypedTerm Syntax.ClassInstanceCreationExpression -> Typed.TypedTerm Syntax.UnqualifiedClassInstanceCreationExpression
@@ -2687,6 +2908,11 @@ classInstanceCreationExpressionWithQualifier original newVal =
               Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.ClassInstanceCreationExpression_Qualifier
+classInstanceCreationExpression_QualifierClassInstanceCreationExpression_Qualifier :: Typed.TypedName Syntax.ClassInstanceCreationExpression_Qualifier
+classInstanceCreationExpression_QualifierClassInstanceCreationExpression_Qualifier =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier")
+
 -- | DSL injection for the expression variant of hydra.java.syntax.ClassInstanceCreationExpression_Qualifier
 classInstanceCreationExpression_QualifierExpression :: Typed.TypedTerm Syntax.ExpressionName -> Typed.TypedTerm Syntax.ClassInstanceCreationExpression_Qualifier
 classInstanceCreationExpression_QualifierExpression x =
@@ -2713,6 +2939,10 @@ classLiteralBoolean x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ClassLiteral
+classLiteralClassLiteral :: Typed.TypedName Syntax.ClassLiteral
+classLiteralClassLiteral = Typed.TypedName (Core.Name "hydra.java.syntax.ClassLiteral")
 
 -- | DSL injection for the numericType variant of hydra.java.syntax.ClassLiteral
 classLiteralNumericType :: Typed.TypedTerm Syntax.NumericTypeArray -> Typed.TypedTerm Syntax.ClassLiteral
@@ -2749,6 +2979,10 @@ classMemberDeclarationClass x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ClassMemberDeclaration
+classMemberDeclarationClassMemberDeclaration :: Typed.TypedName Syntax.ClassMemberDeclaration
+classMemberDeclarationClassMemberDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ClassMemberDeclaration")
 
 -- | DSL injection for the field variant of hydra.java.syntax.ClassMemberDeclaration
 classMemberDeclarationField :: Typed.TypedTerm Syntax.FieldDeclaration -> Typed.TypedTerm Syntax.ClassMemberDeclaration
@@ -2803,6 +3037,10 @@ classModifierAnnotation x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ClassModifier
+classModifierClassModifier :: Typed.TypedName Syntax.ClassModifier
+classModifierClassModifier = Typed.TypedName (Core.Name "hydra.java.syntax.ClassModifier")
 
 -- | DSL injection for the final variant of hydra.java.syntax.ClassModifier
 classModifierFinal :: Typed.TypedTerm Syntax.ClassModifier
@@ -2885,6 +3123,10 @@ classOrInterfaceTypeClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ClassOrInterfaceType
+classOrInterfaceTypeClassOrInterfaceType :: Typed.TypedName Syntax.ClassOrInterfaceType
+classOrInterfaceTypeClassOrInterfaceType = Typed.TypedName (Core.Name "hydra.java.syntax.ClassOrInterfaceType")
+
 -- | DSL injection for the interface variant of hydra.java.syntax.ClassOrInterfaceType
 classOrInterfaceTypeInterface :: Typed.TypedTerm Syntax.InterfaceType -> Typed.TypedTerm Syntax.ClassOrInterfaceType
 classOrInterfaceTypeInterface x =
@@ -2906,6 +3148,11 @@ classOrInterfaceTypeToInstantiate identifiers typeArguments =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Typed.unTypedTerm typeArguments)}]}))
+
+-- | DSL name token for hydra.java.syntax.ClassOrInterfaceTypeToInstantiate
+classOrInterfaceTypeToInstantiateClassOrInterfaceTypeToInstantiate :: Typed.TypedName Syntax.ClassOrInterfaceTypeToInstantiate
+classOrInterfaceTypeToInstantiateClassOrInterfaceTypeToInstantiate =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ClassOrInterfaceTypeToInstantiate")
 
 -- | DSL accessor for the identifiers field of hydra.java.syntax.ClassOrInterfaceTypeToInstantiate
 classOrInterfaceTypeToInstantiateIdentifiers :: Typed.TypedTerm Syntax.ClassOrInterfaceTypeToInstantiate -> Typed.TypedTerm [Syntax.AnnotatedIdentifier]
@@ -2996,6 +3243,10 @@ classTypeArguments x =
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ClassType
+classTypeClassType :: Typed.TypedName Syntax.ClassType
+classTypeClassType = Typed.TypedName (Core.Name "hydra.java.syntax.ClassType")
+
 -- | DSL accessor for the identifier field of hydra.java.syntax.ClassType
 classTypeIdentifier :: Typed.TypedTerm Syntax.ClassType -> Typed.TypedTerm Syntax.TypeIdentifier
 classTypeIdentifier x =
@@ -3013,6 +3264,10 @@ classTypeQualifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ClassType"),
         Core.projectionFieldName = (Core.Name "qualifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ClassTypeQualifier
+classTypeQualifierClassTypeQualifier :: Typed.TypedName Syntax.ClassTypeQualifier
+classTypeQualifierClassTypeQualifier = Typed.TypedName (Core.Name "hydra.java.syntax.ClassTypeQualifier")
 
 -- | DSL injection for the none variant of hydra.java.syntax.ClassTypeQualifier
 classTypeQualifierNone :: Typed.TypedTerm Syntax.ClassTypeQualifier
@@ -3190,6 +3445,11 @@ compactConstructorDeclarationBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.CompactConstructorDeclaration
+compactConstructorDeclarationCompactConstructorDeclaration :: Typed.TypedName Syntax.CompactConstructorDeclaration
+compactConstructorDeclarationCompactConstructorDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.CompactConstructorDeclaration")
+
 -- | DSL accessor for the modifiers field of hydra.java.syntax.CompactConstructorDeclaration
 compactConstructorDeclarationModifiers :: Typed.TypedTerm Syntax.CompactConstructorDeclaration -> Typed.TypedTerm [Syntax.ConstructorModifier]
 compactConstructorDeclarationModifiers x =
@@ -3280,6 +3540,10 @@ compactConstructorDeclarationWithName original newVal =
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.CompilationUnit
+compilationUnitCompilationUnit :: Typed.TypedName Syntax.CompilationUnit
+compilationUnitCompilationUnit = Typed.TypedName (Core.Name "hydra.java.syntax.CompilationUnit")
+
 -- | DSL injection for the modular variant of hydra.java.syntax.CompilationUnit
 compilationUnitModular :: Typed.TypedTerm Syntax.ModularCompilationUnit -> Typed.TypedTerm Syntax.CompilationUnit
 compilationUnitModular x =
@@ -3304,6 +3568,15 @@ conditionalAndExpression x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ConditionalAndExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ConditionalAndExpression
+conditionalAndExpressionConditionalAndExpression :: Typed.TypedName Syntax.ConditionalAndExpression
+conditionalAndExpressionConditionalAndExpression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ConditionalAndExpression")
+
+-- | DSL name token for hydra.java.syntax.ConditionalExpression
+conditionalExpressionConditionalExpression :: Typed.TypedName Syntax.ConditionalExpression
+conditionalExpressionConditionalExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ConditionalExpression")
 
 -- | DSL injection for the simple variant of hydra.java.syntax.ConditionalExpression
 conditionalExpressionSimple :: Typed.TypedTerm Syntax.ConditionalOrExpression -> Typed.TypedTerm Syntax.ConditionalExpression
@@ -3356,6 +3629,11 @@ conditionalExpression_TernaryCondCond x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ConditionalExpression_TernaryCond"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ConditionalExpression_TernaryCond
+conditionalExpression_TernaryCondConditionalExpression_TernaryCond :: Typed.TypedName Syntax.ConditionalExpression_TernaryCond
+conditionalExpression_TernaryCondConditionalExpression_TernaryCond =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ConditionalExpression_TernaryCond")
 
 -- | DSL accessor for the ifFalse field of hydra.java.syntax.ConditionalExpression_TernaryCond
 conditionalExpression_TernaryCondIfFalse :: Typed.TypedTerm Syntax.ConditionalExpression_TernaryCond -> Typed.TypedTerm Syntax.ConditionalExpression
@@ -3472,6 +3750,11 @@ conditionalExpression_TernaryLambdaCond x =
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ConditionalExpression_TernaryLambda
+conditionalExpression_TernaryLambdaConditionalExpression_TernaryLambda :: Typed.TypedName Syntax.ConditionalExpression_TernaryLambda
+conditionalExpression_TernaryLambdaConditionalExpression_TernaryLambda =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ConditionalExpression_TernaryLambda")
+
 -- | DSL accessor for the ifFalse field of hydra.java.syntax.ConditionalExpression_TernaryLambda
 conditionalExpression_TernaryLambdaIfFalse :: Typed.TypedTerm Syntax.ConditionalExpression_TernaryLambda -> Typed.TypedTerm Syntax.LambdaExpression
 conditionalExpression_TernaryLambdaIfFalse x =
@@ -3569,6 +3852,10 @@ conditionalOrExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ConditionalOrExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ConditionalOrExpression
+conditionalOrExpressionConditionalOrExpression :: Typed.TypedName Syntax.ConditionalOrExpression
+conditionalOrExpressionConditionalOrExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ConditionalOrExpression")
+
 -- | DSL constructor for hydra.java.syntax.ConstantDeclaration
 constantDeclaration :: Typed.TypedTerm [Syntax.ConstantModifier] -> Typed.TypedTerm Syntax.UnannType -> Typed.TypedTerm [Syntax.VariableDeclarator] -> Typed.TypedTerm Syntax.ConstantDeclaration
 constantDeclaration modifiers type_ variables =
@@ -3584,6 +3871,10 @@ constantDeclaration modifiers type_ variables =
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Typed.unTypedTerm variables)}]}))
+
+-- | DSL name token for hydra.java.syntax.ConstantDeclaration
+constantDeclarationConstantDeclaration :: Typed.TypedName Syntax.ConstantDeclaration
+constantDeclarationConstantDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ConstantDeclaration")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.ConstantDeclaration
 constantDeclarationModifiers :: Typed.TypedTerm Syntax.ConstantDeclaration -> Typed.TypedTerm [Syntax.ConstantModifier]
@@ -3691,6 +3982,10 @@ constantExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ConstantExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ConstantExpression
+constantExpressionConstantExpression :: Typed.TypedName Syntax.ConstantExpression
+constantExpressionConstantExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ConstantExpression")
+
 -- | DSL injection for the annotation variant of hydra.java.syntax.ConstantModifier
 constantModifierAnnotation :: Typed.TypedTerm Syntax.Annotation -> Typed.TypedTerm Syntax.ConstantModifier
 constantModifierAnnotation x =
@@ -3699,6 +3994,10 @@ constantModifierAnnotation x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ConstantModifier
+constantModifierConstantModifier :: Typed.TypedName Syntax.ConstantModifier
+constantModifierConstantModifier = Typed.TypedName (Core.Name "hydra.java.syntax.ConstantModifier")
 
 -- | DSL injection for the final variant of hydra.java.syntax.ConstantModifier
 constantModifierFinal :: Typed.TypedTerm Syntax.ConstantModifier
@@ -3739,6 +4038,10 @@ constructorBody invocation statements =
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Typed.unTypedTerm statements)}]}))
+
+-- | DSL name token for hydra.java.syntax.ConstructorBody
+constructorBodyConstructorBody :: Typed.TypedName Syntax.ConstructorBody
+constructorBodyConstructorBody = Typed.TypedName (Core.Name "hydra.java.syntax.ConstructorBody")
 
 -- | DSL accessor for the invocation field of hydra.java.syntax.ConstructorBody
 constructorBodyInvocation :: Typed.TypedTerm Syntax.ConstructorBody -> Typed.TypedTerm (Maybe Syntax.ExplicitConstructorInvocation)
@@ -3828,6 +4131,10 @@ constructorDeclarationConstructor x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ConstructorDeclaration"),
         Core.projectionFieldName = (Core.Name "constructor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ConstructorDeclaration
+constructorDeclarationConstructorDeclaration :: Typed.TypedName Syntax.ConstructorDeclaration
+constructorDeclarationConstructorDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ConstructorDeclaration")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.ConstructorDeclaration
 constructorDeclarationModifiers :: Typed.TypedTerm Syntax.ConstructorDeclaration -> Typed.TypedTerm [Syntax.ConstructorModifier]
@@ -3989,6 +4296,10 @@ constructorDeclarator parameters name receiverParameter formalParameters =
         Core.Field {
           Core.fieldName = (Core.Name "formalParameters"),
           Core.fieldTerm = (Typed.unTypedTerm formalParameters)}]}))
+
+-- | DSL name token for hydra.java.syntax.ConstructorDeclarator
+constructorDeclaratorConstructorDeclarator :: Typed.TypedName Syntax.ConstructorDeclarator
+constructorDeclaratorConstructorDeclarator = Typed.TypedName (Core.Name "hydra.java.syntax.ConstructorDeclarator")
 
 -- | DSL accessor for the formalParameters field of hydra.java.syntax.ConstructorDeclarator
 constructorDeclaratorFormalParameters :: Typed.TypedTerm Syntax.ConstructorDeclarator -> Typed.TypedTerm [Syntax.FormalParameter]
@@ -4159,6 +4470,10 @@ constructorModifierAnnotation x =
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ConstructorModifier
+constructorModifierConstructorModifier :: Typed.TypedName Syntax.ConstructorModifier
+constructorModifierConstructorModifier = Typed.TypedName (Core.Name "hydra.java.syntax.ConstructorModifier")
+
 -- | DSL injection for the private variant of hydra.java.syntax.ConstructorModifier
 constructorModifierPrivate :: Typed.TypedTerm Syntax.ConstructorModifier
 constructorModifierPrivate =
@@ -4193,12 +4508,20 @@ continueStatement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ContinueStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ContinueStatement
+continueStatementContinueStatement :: Typed.TypedName Syntax.ContinueStatement
+continueStatementContinueStatement = Typed.TypedName (Core.Name "hydra.java.syntax.ContinueStatement")
+
 -- | DSL constructor for the hydra.java.syntax.DefaultValue wrapper
 defaultValue :: Typed.TypedTerm Syntax.ElementValue -> Typed.TypedTerm Syntax.DefaultValue
 defaultValue x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.DefaultValue"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.DefaultValue
+defaultValueDefaultValue :: Typed.TypedName Syntax.DefaultValue
+defaultValueDefaultValue = Typed.TypedName (Core.Name "hydra.java.syntax.DefaultValue")
 
 -- | DSL constructor for hydra.java.syntax.DimExpr
 dimExpr :: Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.DimExpr
@@ -4221,6 +4544,10 @@ dimExprAnnotations x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.DimExpr"),
         Core.projectionFieldName = (Core.Name "annotations")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.DimExpr
+dimExprDimExpr :: Typed.TypedName Syntax.DimExpr
+dimExprDimExpr = Typed.TypedName (Core.Name "hydra.java.syntax.DimExpr")
 
 -- | DSL accessor for the expression field of hydra.java.syntax.DimExpr
 dimExprExpression :: Typed.TypedTerm Syntax.DimExpr -> Typed.TypedTerm (Maybe Syntax.Expression)
@@ -4272,6 +4599,10 @@ dims x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Dims"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.Dims
+dimsDims :: Typed.TypedName Syntax.Dims
+dimsDims = Typed.TypedName (Core.Name "hydra.java.syntax.Dims")
+
 -- | DSL constructor for hydra.java.syntax.DoStatement
 doStatement :: Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DoStatement
 doStatement body cond =
@@ -4302,6 +4633,10 @@ doStatementCond x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.DoStatement"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.DoStatement
+doStatementDoStatement :: Typed.TypedName Syntax.DoStatement
+doStatementDoStatement = Typed.TypedName (Core.Name "hydra.java.syntax.DoStatement")
 
 -- | DSL updater for the body field of hydra.java.syntax.DoStatement
 doStatementWithBody :: Typed.TypedTerm Syntax.DoStatement -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.DoStatement
@@ -4353,6 +4688,11 @@ elementValueArrayInitializer x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ElementValueArrayInitializer"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ElementValueArrayInitializer
+elementValueArrayInitializerElementValueArrayInitializer :: Typed.TypedName Syntax.ElementValueArrayInitializer
+elementValueArrayInitializerElementValueArrayInitializer =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ElementValueArrayInitializer")
+
 -- | DSL injection for the conditionalExpression variant of hydra.java.syntax.ElementValue
 elementValueConditionalExpression :: Typed.TypedTerm Syntax.ConditionalExpression -> Typed.TypedTerm Syntax.ElementValue
 elementValueConditionalExpression x =
@@ -4361,6 +4701,10 @@ elementValueConditionalExpression x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conditionalExpression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.ElementValue
+elementValueElementValue :: Typed.TypedName Syntax.ElementValue
+elementValueElementValue = Typed.TypedName (Core.Name "hydra.java.syntax.ElementValue")
 
 -- | DSL injection for the elementValueArrayInitializer variant of hydra.java.syntax.ElementValue
 elementValueElementValueArrayInitializer :: Typed.TypedTerm Syntax.ElementValueArrayInitializer -> Typed.TypedTerm Syntax.ElementValue
@@ -4383,6 +4727,10 @@ elementValuePair key value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.java.syntax.ElementValuePair
+elementValuePairElementValuePair :: Typed.TypedName Syntax.ElementValuePair
+elementValuePairElementValuePair = Typed.TypedName (Core.Name "hydra.java.syntax.ElementValuePair")
 
 -- | DSL accessor for the key field of hydra.java.syntax.ElementValuePair
 elementValuePairKey :: Typed.TypedTerm Syntax.ElementValuePair -> Typed.TypedTerm Syntax.Identifier
@@ -4458,6 +4806,10 @@ enhancedForCondDeclaration x =
         Core.projectionFieldName = (Core.Name "declaration")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.EnhancedForCond
+enhancedForCondEnhancedForCond :: Typed.TypedName Syntax.EnhancedForCond
+enhancedForCondEnhancedForCond = Typed.TypedName (Core.Name "hydra.java.syntax.EnhancedForCond")
+
 -- | DSL accessor for the expression field of hydra.java.syntax.EnhancedForCond
 enhancedForCondExpression :: Typed.TypedTerm Syntax.EnhancedForCond -> Typed.TypedTerm Syntax.Expression
 enhancedForCondExpression x =
@@ -4532,6 +4884,10 @@ enhancedForStatementCond x =
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.EnhancedForStatement
+enhancedForStatementEnhancedForStatement :: Typed.TypedName Syntax.EnhancedForStatement
+enhancedForStatementEnhancedForStatement = Typed.TypedName (Core.Name "hydra.java.syntax.EnhancedForStatement")
+
 -- | DSL constructor for hydra.java.syntax.EnhancedForStatementNoShortIf
 enhancedForStatementNoShortIf :: Typed.TypedTerm Syntax.EnhancedForCond -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.EnhancedForStatementNoShortIf
 enhancedForStatementNoShortIf cond body =
@@ -4562,6 +4918,11 @@ enhancedForStatementNoShortIfCond x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForStatementNoShortIf"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.EnhancedForStatementNoShortIf
+enhancedForStatementNoShortIfEnhancedForStatementNoShortIf :: Typed.TypedName Syntax.EnhancedForStatementNoShortIf
+enhancedForStatementNoShortIfEnhancedForStatementNoShortIf =
+    Typed.TypedName (Core.Name "hydra.java.syntax.EnhancedForStatementNoShortIf")
 
 -- | DSL updater for the body field of hydra.java.syntax.EnhancedForStatementNoShortIf
 enhancedForStatementNoShortIfWithBody :: Typed.TypedTerm Syntax.EnhancedForStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.EnhancedForStatementNoShortIf
@@ -4638,6 +4999,10 @@ enumBody x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.EnumBody"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.EnumBody
+enumBodyEnumBody :: Typed.TypedName Syntax.EnumBody
+enumBodyEnumBody = Typed.TypedName (Core.Name "hydra.java.syntax.EnumBody")
+
 -- | DSL constructor for hydra.java.syntax.EnumBody_Element
 enumBody_Element :: Typed.TypedTerm [Syntax.EnumConstant] -> Typed.TypedTerm [Syntax.ClassBodyDeclaration] -> Typed.TypedTerm Syntax.EnumBody_Element
 enumBody_Element constants bodyDeclarations =
@@ -4668,6 +5033,10 @@ enumBody_ElementConstants x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnumBody_Element"),
         Core.projectionFieldName = (Core.Name "constants")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.EnumBody_Element
+enumBody_ElementEnumBody_Element :: Typed.TypedName Syntax.EnumBody_Element
+enumBody_ElementEnumBody_Element = Typed.TypedName (Core.Name "hydra.java.syntax.EnumBody_Element")
 
 -- | DSL updater for the bodyDeclarations field of hydra.java.syntax.EnumBody_Element
 enumBody_ElementWithBodyDeclarations :: Typed.TypedTerm Syntax.EnumBody_Element -> Typed.TypedTerm [Syntax.ClassBodyDeclaration] -> Typed.TypedTerm Syntax.EnumBody_Element
@@ -4740,6 +5109,10 @@ enumConstantBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.EnumConstant
+enumConstantEnumConstant :: Typed.TypedName Syntax.EnumConstant
+enumConstantEnumConstant = Typed.TypedName (Core.Name "hydra.java.syntax.EnumConstant")
+
 -- | DSL accessor for the identifier field of hydra.java.syntax.EnumConstant
 enumConstantIdentifier :: Typed.TypedTerm Syntax.EnumConstant -> Typed.TypedTerm Syntax.Identifier
 enumConstantIdentifier x =
@@ -4755,6 +5128,10 @@ enumConstantModifier x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.EnumConstantModifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.EnumConstantModifier
+enumConstantModifierEnumConstantModifier :: Typed.TypedName Syntax.EnumConstantModifier
+enumConstantModifierEnumConstantModifier = Typed.TypedName (Core.Name "hydra.java.syntax.EnumConstantModifier")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.EnumConstant
 enumConstantModifiers :: Typed.TypedTerm Syntax.EnumConstant -> Typed.TypedTerm [Syntax.EnumConstantModifier]
@@ -4917,6 +5294,10 @@ enumDeclarationBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.EnumDeclaration
+enumDeclarationEnumDeclaration :: Typed.TypedName Syntax.EnumDeclaration
+enumDeclarationEnumDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.EnumDeclaration")
+
 -- | DSL accessor for the identifier field of hydra.java.syntax.EnumDeclaration
 enumDeclarationIdentifier :: Typed.TypedTerm Syntax.EnumDeclaration -> Typed.TypedTerm Syntax.TypeIdentifier
 enumDeclarationIdentifier x =
@@ -5077,6 +5458,10 @@ equalityExpressionEqual x =
         Core.fieldName = (Core.Name "equal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.EqualityExpression
+equalityExpressionEqualityExpression :: Typed.TypedName Syntax.EqualityExpression
+equalityExpressionEqualityExpression = Typed.TypedName (Core.Name "hydra.java.syntax.EqualityExpression")
+
 -- | DSL injection for the notEqual variant of hydra.java.syntax.EqualityExpression
 equalityExpressionNotEqual :: Typed.TypedTerm Syntax.EqualityExpression_Binary -> Typed.TypedTerm Syntax.EqualityExpression
 equalityExpressionNotEqual x =
@@ -5107,6 +5492,11 @@ equalityExpression_Binary lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.java.syntax.EqualityExpression_Binary
+equalityExpression_BinaryEqualityExpression_Binary :: Typed.TypedName Syntax.EqualityExpression_Binary
+equalityExpression_BinaryEqualityExpression_Binary =
+    Typed.TypedName (Core.Name "hydra.java.syntax.EqualityExpression_Binary")
 
 -- | DSL accessor for the lhs field of hydra.java.syntax.EqualityExpression_Binary
 equalityExpression_BinaryLhs :: Typed.TypedTerm Syntax.EqualityExpression_Binary -> Typed.TypedTerm Syntax.EqualityExpression
@@ -5169,6 +5559,10 @@ exceptionTypeClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ExceptionType
+exceptionTypeExceptionType :: Typed.TypedName Syntax.ExceptionType
+exceptionTypeExceptionType = Typed.TypedName (Core.Name "hydra.java.syntax.ExceptionType")
+
 -- | DSL injection for the variable variant of hydra.java.syntax.ExceptionType
 exceptionTypeVariable :: Typed.TypedTerm Syntax.TypeVariable -> Typed.TypedTerm Syntax.ExceptionType
 exceptionTypeVariable x =
@@ -5184,6 +5578,10 @@ exclusiveOrExpression x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ExclusiveOrExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ExclusiveOrExpression
+exclusiveOrExpressionExclusiveOrExpression :: Typed.TypedName Syntax.ExclusiveOrExpression
+exclusiveOrExpressionExclusiveOrExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ExclusiveOrExpression")
 
 -- | DSL constructor for hydra.java.syntax.ExplicitConstructorInvocation
 explicitConstructorInvocation :: Typed.TypedTerm [Syntax.TypeArgument] -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.ExplicitConstructorInvocation_Variant -> Typed.TypedTerm Syntax.ExplicitConstructorInvocation
@@ -5209,6 +5607,11 @@ explicitConstructorInvocationArguments x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation"),
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ExplicitConstructorInvocation
+explicitConstructorInvocationExplicitConstructorInvocation :: Typed.TypedName Syntax.ExplicitConstructorInvocation
+explicitConstructorInvocationExplicitConstructorInvocation =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation")
 
 -- | DSL accessor for the typeArguments field of hydra.java.syntax.ExplicitConstructorInvocation
 explicitConstructorInvocationTypeArguments :: Typed.TypedTerm Syntax.ExplicitConstructorInvocation -> Typed.TypedTerm [Syntax.TypeArgument]
@@ -5300,6 +5703,11 @@ explicitConstructorInvocationWithVariant original newVal =
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.ExplicitConstructorInvocation_Variant
+explicitConstructorInvocation_VariantExplicitConstructorInvocation_Variant :: Typed.TypedName Syntax.ExplicitConstructorInvocation_Variant
+explicitConstructorInvocation_VariantExplicitConstructorInvocation_Variant =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation_Variant")
+
 -- | DSL injection for the primary variant of hydra.java.syntax.ExplicitConstructorInvocation_Variant
 explicitConstructorInvocation_VariantPrimary :: Typed.TypedTerm Syntax.Primary -> Typed.TypedTerm Syntax.ExplicitConstructorInvocation_Variant
 explicitConstructorInvocation_VariantPrimary x =
@@ -5336,6 +5744,10 @@ expressionAssignment x =
         Core.fieldName = (Core.Name "assignment"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.java.syntax.Expression")
+
 -- | DSL injection for the lambda variant of hydra.java.syntax.Expression
 expressionLambda :: Typed.TypedTerm Syntax.LambdaExpression -> Typed.TypedTerm Syntax.Expression
 expressionLambda x =
@@ -5357,6 +5769,10 @@ expressionName qualifier identifier =
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Typed.unTypedTerm identifier)}]}))
+
+-- | DSL name token for hydra.java.syntax.ExpressionName
+expressionNameExpressionName :: Typed.TypedName Syntax.ExpressionName
+expressionNameExpressionName = Typed.TypedName (Core.Name "hydra.java.syntax.ExpressionName")
 
 -- | DSL accessor for the identifier field of hydra.java.syntax.ExpressionName
 expressionNameIdentifier :: Typed.TypedTerm Syntax.ExpressionName -> Typed.TypedTerm Syntax.Identifier
@@ -5417,6 +5833,10 @@ expressionStatement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ExpressionStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ExpressionStatement
+expressionStatementExpressionStatement :: Typed.TypedName Syntax.ExpressionStatement
+expressionStatementExpressionStatement = Typed.TypedName (Core.Name "hydra.java.syntax.ExpressionStatement")
+
 -- | DSL constructor for hydra.java.syntax.FieldAccess
 fieldAccess :: Typed.TypedTerm Syntax.FieldAccess_Qualifier -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.FieldAccess
 fieldAccess qualifier identifier =
@@ -5429,6 +5849,10 @@ fieldAccess qualifier identifier =
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Typed.unTypedTerm identifier)}]}))
+
+-- | DSL name token for hydra.java.syntax.FieldAccess
+fieldAccessFieldAccess :: Typed.TypedName Syntax.FieldAccess
+fieldAccessFieldAccess = Typed.TypedName (Core.Name "hydra.java.syntax.FieldAccess")
 
 -- | DSL accessor for the identifier field of hydra.java.syntax.FieldAccess
 fieldAccessIdentifier :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Identifier
@@ -5482,6 +5906,10 @@ fieldAccessWithQualifier original newVal =
               Core.projectionFieldName = (Core.Name "identifier")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.FieldAccess_Qualifier
+fieldAccess_QualifierFieldAccess_Qualifier :: Typed.TypedName Syntax.FieldAccess_Qualifier
+fieldAccess_QualifierFieldAccess_Qualifier = Typed.TypedName (Core.Name "hydra.java.syntax.FieldAccess_Qualifier")
+
 -- | DSL injection for the primary variant of hydra.java.syntax.FieldAccess_Qualifier
 fieldAccess_QualifierPrimary :: Typed.TypedTerm Syntax.Primary -> Typed.TypedTerm Syntax.FieldAccess_Qualifier
 fieldAccess_QualifierPrimary x =
@@ -5524,6 +5952,10 @@ fieldDeclaration modifiers unannType variableDeclarators =
         Core.Field {
           Core.fieldName = (Core.Name "variableDeclarators"),
           Core.fieldTerm = (Typed.unTypedTerm variableDeclarators)}]}))
+
+-- | DSL name token for hydra.java.syntax.FieldDeclaration
+fieldDeclarationFieldDeclaration :: Typed.TypedName Syntax.FieldDeclaration
+fieldDeclarationFieldDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.FieldDeclaration")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.FieldDeclaration
 fieldDeclarationModifiers :: Typed.TypedTerm Syntax.FieldDeclaration -> Typed.TypedTerm [Syntax.FieldModifier]
@@ -5633,6 +6065,10 @@ fieldModifierAnnotation x =
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.FieldModifier
+fieldModifierFieldModifier :: Typed.TypedName Syntax.FieldModifier
+fieldModifierFieldModifier = Typed.TypedName (Core.Name "hydra.java.syntax.FieldModifier")
+
 -- | DSL injection for the final variant of hydra.java.syntax.FieldModifier
 fieldModifierFinal :: Typed.TypedTerm Syntax.FieldModifier
 fieldModifierFinal =
@@ -5703,12 +6139,20 @@ finally x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Finally"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.Finally
+finallyFinally :: Typed.TypedName Syntax.Finally
+finallyFinally = Typed.TypedName (Core.Name "hydra.java.syntax.Finally")
+
 -- | DSL constructor for the hydra.java.syntax.FloatingPointLiteral wrapper
 floatingPointLiteral :: Typed.TypedTerm Double -> Typed.TypedTerm Syntax.FloatingPointLiteral
 floatingPointLiteral x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.FloatingPointLiteral"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.FloatingPointLiteral
+floatingPointLiteralFloatingPointLiteral :: Typed.TypedName Syntax.FloatingPointLiteral
+floatingPointLiteralFloatingPointLiteral = Typed.TypedName (Core.Name "hydra.java.syntax.FloatingPointLiteral")
 
 -- | DSL injection for the double variant of hydra.java.syntax.FloatingPointType
 floatingPointTypeDouble :: Typed.TypedTerm Syntax.FloatingPointType
@@ -5727,6 +6171,10 @@ floatingPointTypeFloat =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.java.syntax.FloatingPointType
+floatingPointTypeFloatingPointType :: Typed.TypedName Syntax.FloatingPointType
+floatingPointTypeFloatingPointType = Typed.TypedName (Core.Name "hydra.java.syntax.FloatingPointType")
 
 -- | DSL constructor for hydra.java.syntax.ForCond
 forCond :: Typed.TypedTerm (Maybe Syntax.ForInit) -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm (Maybe Syntax.ForUpdate) -> Typed.TypedTerm Syntax.ForCond
@@ -5752,6 +6200,10 @@ forCondCond x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ForCond"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ForCond
+forCondForCond :: Typed.TypedName Syntax.ForCond
+forCondForCond = Typed.TypedName (Core.Name "hydra.java.syntax.ForCond")
 
 -- | DSL accessor for the init field of hydra.java.syntax.ForCond
 forCondInit :: Typed.TypedTerm Syntax.ForCond -> Typed.TypedTerm (Maybe Syntax.ForInit)
@@ -5843,6 +6295,10 @@ forCondWithUpdate original newVal =
           Core.fieldName = (Core.Name "update"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.ForInit
+forInitForInit :: Typed.TypedName Syntax.ForInit
+forInitForInit = Typed.TypedName (Core.Name "hydra.java.syntax.ForInit")
+
 -- | DSL injection for the localVariable variant of hydra.java.syntax.ForInit
 forInitLocalVariable :: Typed.TypedTerm Syntax.LocalVariableDeclaration -> Typed.TypedTerm Syntax.ForInit
 forInitLocalVariable x =
@@ -5879,6 +6335,10 @@ forStatementEnhanced x =
         Core.fieldName = (Core.Name "enhanced"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ForStatement
+forStatementForStatement :: Typed.TypedName Syntax.ForStatement
+forStatementForStatement = Typed.TypedName (Core.Name "hydra.java.syntax.ForStatement")
+
 -- | DSL injection for the basic variant of hydra.java.syntax.ForStatementNoShortIf
 forStatementNoShortIfBasic :: Typed.TypedTerm Syntax.BasicForStatementNoShortIf -> Typed.TypedTerm Syntax.ForStatementNoShortIf
 forStatementNoShortIfBasic x =
@@ -5897,12 +6357,24 @@ forStatementNoShortIfEnhanced x =
         Core.fieldName = (Core.Name "enhanced"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ForStatementNoShortIf
+forStatementNoShortIfForStatementNoShortIf :: Typed.TypedName Syntax.ForStatementNoShortIf
+forStatementNoShortIfForStatementNoShortIf = Typed.TypedName (Core.Name "hydra.java.syntax.ForStatementNoShortIf")
+
 -- | DSL constructor for the hydra.java.syntax.ForUpdate wrapper
 forUpdate :: Typed.TypedTerm [Syntax.StatementExpression] -> Typed.TypedTerm Syntax.ForUpdate
 forUpdate x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ForUpdate"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ForUpdate
+forUpdateForUpdate :: Typed.TypedName Syntax.ForUpdate
+forUpdateForUpdate = Typed.TypedName (Core.Name "hydra.java.syntax.ForUpdate")
+
+-- | DSL name token for hydra.java.syntax.FormalParameter
+formalParameterFormalParameter :: Typed.TypedName Syntax.FormalParameter
+formalParameterFormalParameter = Typed.TypedName (Core.Name "hydra.java.syntax.FormalParameter")
 
 -- | DSL injection for the simple variant of hydra.java.syntax.FormalParameter
 formalParameterSimple :: Typed.TypedTerm Syntax.FormalParameter_Simple -> Typed.TypedTerm Syntax.FormalParameter
@@ -5937,6 +6409,10 @@ formalParameter_Simple modifiers type_ id =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Typed.unTypedTerm id)}]}))
+
+-- | DSL name token for hydra.java.syntax.FormalParameter_Simple
+formalParameter_SimpleFormalParameter_Simple :: Typed.TypedName Syntax.FormalParameter_Simple
+formalParameter_SimpleFormalParameter_Simple = Typed.TypedName (Core.Name "hydra.java.syntax.FormalParameter_Simple")
 
 -- | DSL accessor for the id field of hydra.java.syntax.FormalParameter_Simple
 formalParameter_SimpleId :: Typed.TypedTerm Syntax.FormalParameter_Simple -> Typed.TypedTerm Syntax.VariableDeclaratorId
@@ -6044,12 +6520,20 @@ guard x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Guard"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.Guard
+guardGuard :: Typed.TypedName Syntax.Guard
+guardGuard = Typed.TypedName (Core.Name "hydra.java.syntax.Guard")
+
 -- | DSL constructor for the hydra.java.syntax.Identifier wrapper
 identifier :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Identifier
 identifier x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Identifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.Identifier
+identifierIdentifier :: Typed.TypedName Syntax.Identifier
+identifierIdentifier = Typed.TypedName (Core.Name "hydra.java.syntax.Identifier")
 
 -- | DSL constructor for hydra.java.syntax.IfThenElseStatement
 ifThenElseStatement :: Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.IfThenElseStatement
@@ -6085,6 +6569,10 @@ ifThenElseStatementElse x =
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.IfThenElseStatement
+ifThenElseStatementIfThenElseStatement :: Typed.TypedName Syntax.IfThenElseStatement
+ifThenElseStatementIfThenElseStatement = Typed.TypedName (Core.Name "hydra.java.syntax.IfThenElseStatement")
+
 -- | DSL constructor for hydra.java.syntax.IfThenElseStatementNoShortIf
 ifThenElseStatementNoShortIf :: Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.IfThenElseStatementNoShortIf
 ifThenElseStatementNoShortIf cond then_ else_ =
@@ -6118,6 +6606,11 @@ ifThenElseStatementNoShortIfElse x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.IfThenElseStatementNoShortIf"),
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.IfThenElseStatementNoShortIf
+ifThenElseStatementNoShortIfIfThenElseStatementNoShortIf :: Typed.TypedName Syntax.IfThenElseStatementNoShortIf
+ifThenElseStatementNoShortIfIfThenElseStatementNoShortIf =
+    Typed.TypedName (Core.Name "hydra.java.syntax.IfThenElseStatementNoShortIf")
 
 -- | DSL accessor for the then field of hydra.java.syntax.IfThenElseStatementNoShortIf
 ifThenElseStatementNoShortIfThen :: Typed.TypedTerm Syntax.IfThenElseStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf
@@ -6303,6 +6796,10 @@ ifThenStatementExpression x =
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.IfThenStatement
+ifThenStatementIfThenStatement :: Typed.TypedName Syntax.IfThenStatement
+ifThenStatementIfThenStatement = Typed.TypedName (Core.Name "hydra.java.syntax.IfThenStatement")
+
 -- | DSL accessor for the statement field of hydra.java.syntax.IfThenStatement
 ifThenStatementStatement :: Typed.TypedTerm Syntax.IfThenStatement -> Typed.TypedTerm Syntax.Statement
 ifThenStatementStatement x =
@@ -6345,6 +6842,10 @@ ifThenStatementWithStatement original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "statement"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.java.syntax.ImportDeclaration
+importDeclarationImportDeclaration :: Typed.TypedName Syntax.ImportDeclaration
+importDeclarationImportDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ImportDeclaration")
 
 -- | DSL injection for the singleStaticImport variant of hydra.java.syntax.ImportDeclaration
 importDeclarationSingleStaticImport :: Typed.TypedTerm Syntax.SingleStaticImportDeclaration -> Typed.TypedTerm Syntax.ImportDeclaration
@@ -6389,12 +6890,20 @@ inclusiveOrExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.InclusiveOrExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.InclusiveOrExpression
+inclusiveOrExpressionInclusiveOrExpression :: Typed.TypedName Syntax.InclusiveOrExpression
+inclusiveOrExpressionInclusiveOrExpression = Typed.TypedName (Core.Name "hydra.java.syntax.InclusiveOrExpression")
+
 -- | DSL constructor for the hydra.java.syntax.InstanceInitializer wrapper
 instanceInitializer :: Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.InstanceInitializer
 instanceInitializer x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.InstanceInitializer"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.InstanceInitializer
+instanceInitializerInstanceInitializer :: Typed.TypedName Syntax.InstanceInitializer
+instanceInitializerInstanceInitializer = Typed.TypedName (Core.Name "hydra.java.syntax.InstanceInitializer")
 
 -- | DSL constructor for hydra.java.syntax.InstanceofExpression
 instanceofExpression :: Typed.TypedTerm Syntax.RelationalExpression -> Typed.TypedTerm Syntax.InstanceofExpression_Rhs -> Typed.TypedTerm Syntax.InstanceofExpression
@@ -6408,6 +6917,10 @@ instanceofExpression lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.java.syntax.InstanceofExpression
+instanceofExpressionInstanceofExpression :: Typed.TypedName Syntax.InstanceofExpression
+instanceofExpressionInstanceofExpression = Typed.TypedName (Core.Name "hydra.java.syntax.InstanceofExpression")
 
 -- | DSL accessor for the lhs field of hydra.java.syntax.InstanceofExpression
 instanceofExpressionLhs :: Typed.TypedTerm Syntax.InstanceofExpression -> Typed.TypedTerm Syntax.RelationalExpression
@@ -6461,6 +6974,11 @@ instanceofExpressionWithRhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.InstanceofExpression_Rhs
+instanceofExpression_RhsInstanceofExpression_Rhs :: Typed.TypedName Syntax.InstanceofExpression_Rhs
+instanceofExpression_RhsInstanceofExpression_Rhs =
+    Typed.TypedName (Core.Name "hydra.java.syntax.InstanceofExpression_Rhs")
+
 -- | DSL injection for the pattern variant of hydra.java.syntax.InstanceofExpression_Rhs
 instanceofExpression_RhsPattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.InstanceofExpression_Rhs
 instanceofExpression_RhsPattern x =
@@ -6485,6 +7003,10 @@ integerLiteral x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.IntegerLiteral"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.IntegerLiteral
+integerLiteralIntegerLiteral :: Typed.TypedName Syntax.IntegerLiteral
+integerLiteralIntegerLiteral = Typed.TypedName (Core.Name "hydra.java.syntax.IntegerLiteral")
 
 -- | DSL injection for the byte variant of hydra.java.syntax.IntegralType
 integralTypeByte :: Typed.TypedTerm Syntax.IntegralType
@@ -6513,6 +7035,10 @@ integralTypeInt =
         Core.fieldName = (Core.Name "int"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.java.syntax.IntegralType
+integralTypeIntegralType :: Typed.TypedName Syntax.IntegralType
+integralTypeIntegralType = Typed.TypedName (Core.Name "hydra.java.syntax.IntegralType")
+
 -- | DSL injection for the long variant of hydra.java.syntax.IntegralType
 integralTypeLong :: Typed.TypedTerm Syntax.IntegralType
 integralTypeLong =
@@ -6538,6 +7064,10 @@ interfaceBody x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.InterfaceBody"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.InterfaceBody
+interfaceBodyInterfaceBody :: Typed.TypedName Syntax.InterfaceBody
+interfaceBodyInterfaceBody = Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceBody")
+
 -- | DSL injection for the annotationInterface variant of hydra.java.syntax.InterfaceDeclaration
 interfaceDeclarationAnnotationInterface :: Typed.TypedTerm Syntax.AnnotationInterfaceDeclaration -> Typed.TypedTerm Syntax.InterfaceDeclaration
 interfaceDeclarationAnnotationInterface x =
@@ -6546,6 +7076,10 @@ interfaceDeclarationAnnotationInterface x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationInterface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.InterfaceDeclaration
+interfaceDeclarationInterfaceDeclaration :: Typed.TypedName Syntax.InterfaceDeclaration
+interfaceDeclarationInterfaceDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceDeclaration")
 
 -- | DSL injection for the normalInterface variant of hydra.java.syntax.InterfaceDeclaration
 interfaceDeclarationNormalInterface :: Typed.TypedTerm Syntax.NormalInterfaceDeclaration -> Typed.TypedTerm Syntax.InterfaceDeclaration
@@ -6583,6 +7117,11 @@ interfaceMemberDeclarationInterface x =
         Core.fieldName = (Core.Name "interface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.InterfaceMemberDeclaration
+interfaceMemberDeclarationInterfaceMemberDeclaration :: Typed.TypedName Syntax.InterfaceMemberDeclaration
+interfaceMemberDeclarationInterfaceMemberDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceMemberDeclaration")
+
 -- | DSL injection for the interfaceMethod variant of hydra.java.syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationInterfaceMethod :: Typed.TypedTerm Syntax.InterfaceMethodDeclaration -> Typed.TypedTerm Syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationInterfaceMethod x =
@@ -6613,6 +7152,11 @@ interfaceMemberDeclarationWithCommentsComments x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments"),
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.InterfaceMemberDeclarationWithComments
+interfaceMemberDeclarationWithCommentsInterfaceMemberDeclarationWithComments :: Typed.TypedName Syntax.InterfaceMemberDeclarationWithComments
+interfaceMemberDeclarationWithCommentsInterfaceMemberDeclarationWithComments =
+    Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceMemberDeclarationWithComments")
 
 -- | DSL accessor for the value field of hydra.java.syntax.InterfaceMemberDeclarationWithComments
 interfaceMemberDeclarationWithCommentsValue :: Typed.TypedTerm Syntax.InterfaceMemberDeclarationWithComments -> Typed.TypedTerm Syntax.InterfaceMemberDeclaration
@@ -6690,6 +7234,11 @@ interfaceMethodDeclarationHeader x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodDeclaration"),
         Core.projectionFieldName = (Core.Name "header")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.InterfaceMethodDeclaration
+interfaceMethodDeclarationInterfaceMethodDeclaration :: Typed.TypedName Syntax.InterfaceMethodDeclaration
+interfaceMethodDeclarationInterfaceMethodDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceMethodDeclaration")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.InterfaceMethodDeclaration
 interfaceMethodDeclarationModifiers :: Typed.TypedTerm Syntax.InterfaceMethodDeclaration -> Typed.TypedTerm [Syntax.InterfaceMethodModifier]
@@ -6799,6 +7348,10 @@ interfaceMethodModifierDefault =
         Core.fieldName = (Core.Name "default"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.java.syntax.InterfaceMethodModifier
+interfaceMethodModifierInterfaceMethodModifier :: Typed.TypedName Syntax.InterfaceMethodModifier
+interfaceMethodModifierInterfaceMethodModifier = Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceMethodModifier")
+
 -- | DSL injection for the private variant of hydra.java.syntax.InterfaceMethodModifier
 interfaceMethodModifierPrivate :: Typed.TypedTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierPrivate =
@@ -6852,6 +7405,10 @@ interfaceModifierAnnotation x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.InterfaceModifier
+interfaceModifierInterfaceModifier :: Typed.TypedName Syntax.InterfaceModifier
+interfaceModifierInterfaceModifier = Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceModifier")
 
 -- | DSL injection for the nonSealed variant of hydra.java.syntax.InterfaceModifier
 interfaceModifierNonSealed :: Typed.TypedTerm Syntax.InterfaceModifier
@@ -6923,6 +7480,10 @@ interfaceType x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.InterfaceType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.InterfaceType
+interfaceTypeInterfaceType :: Typed.TypedName Syntax.InterfaceType
+interfaceTypeInterfaceType = Typed.TypedName (Core.Name "hydra.java.syntax.InterfaceType")
+
 -- | DSL constructor for hydra.java.syntax.LabeledStatement
 labeledStatement :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.LabeledStatement
 labeledStatement identifier statement =
@@ -6945,6 +7506,10 @@ labeledStatementIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.LabeledStatement
+labeledStatementLabeledStatement :: Typed.TypedName Syntax.LabeledStatement
+labeledStatementLabeledStatement = Typed.TypedName (Core.Name "hydra.java.syntax.LabeledStatement")
+
 -- | DSL constructor for hydra.java.syntax.LabeledStatementNoShortIf
 labeledStatementNoShortIf :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.LabeledStatementNoShortIf
 labeledStatementNoShortIf identifier statement =
@@ -6966,6 +7531,11 @@ labeledStatementNoShortIfIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.LabeledStatementNoShortIf"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.LabeledStatementNoShortIf
+labeledStatementNoShortIfLabeledStatementNoShortIf :: Typed.TypedName Syntax.LabeledStatementNoShortIf
+labeledStatementNoShortIfLabeledStatementNoShortIf =
+    Typed.TypedName (Core.Name "hydra.java.syntax.LabeledStatementNoShortIf")
 
 -- | DSL accessor for the statement field of hydra.java.syntax.LabeledStatementNoShortIf
 labeledStatementNoShortIfStatement :: Typed.TypedTerm Syntax.LabeledStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf
@@ -7071,6 +7641,10 @@ lambdaBodyExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.LambdaBody
+lambdaBodyLambdaBody :: Typed.TypedName Syntax.LambdaBody
+lambdaBodyLambdaBody = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaBody")
+
 -- | DSL constructor for hydra.java.syntax.LambdaExpression
 lambdaExpression :: Typed.TypedTerm Syntax.LambdaParameters -> Typed.TypedTerm Syntax.LambdaBody -> Typed.TypedTerm Syntax.LambdaExpression
 lambdaExpression parameters body =
@@ -7092,6 +7666,10 @@ lambdaExpressionBody x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.LambdaExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.LambdaExpression
+lambdaExpressionLambdaExpression :: Typed.TypedName Syntax.LambdaExpression
+lambdaExpressionLambdaExpression = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaExpression")
 
 -- | DSL accessor for the parameters field of hydra.java.syntax.LambdaExpression
 lambdaExpressionParameters :: Typed.TypedTerm Syntax.LambdaExpression -> Typed.TypedTerm Syntax.LambdaParameters
@@ -7136,6 +7714,10 @@ lambdaExpressionWithParameters original newVal =
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.LambdaParameter
+lambdaParameterLambdaParameter :: Typed.TypedName Syntax.LambdaParameter
+lambdaParameterLambdaParameter = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaParameter")
+
 -- | DSL injection for the normal variant of hydra.java.syntax.LambdaParameter
 lambdaParameterNormal :: Typed.TypedTerm Syntax.LambdaParameter_Normal -> Typed.TypedTerm Syntax.LambdaParameter
 lambdaParameterNormal x =
@@ -7144,6 +7726,10 @@ lambdaParameterNormal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.LambdaParameterType
+lambdaParameterTypeLambdaParameterType :: Typed.TypedName Syntax.LambdaParameterType
+lambdaParameterTypeLambdaParameterType = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaParameterType")
 
 -- | DSL injection for the type variant of hydra.java.syntax.LambdaParameterType
 lambdaParameterTypeType :: Typed.TypedTerm Syntax.UnannType -> Typed.TypedTerm Syntax.LambdaParameterType
@@ -7196,6 +7782,10 @@ lambdaParameter_NormalId x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameter_Normal"),
         Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.LambdaParameter_Normal
+lambdaParameter_NormalLambdaParameter_Normal :: Typed.TypedName Syntax.LambdaParameter_Normal
+lambdaParameter_NormalLambdaParameter_Normal = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaParameter_Normal")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.LambdaParameter_Normal
 lambdaParameter_NormalModifiers :: Typed.TypedTerm Syntax.LambdaParameter_Normal -> Typed.TypedTerm [Syntax.VariableModifier]
@@ -7287,6 +7877,10 @@ lambdaParameter_NormalWithType original newVal =
               Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.LambdaParameters
+lambdaParametersLambdaParameters :: Typed.TypedName Syntax.LambdaParameters
+lambdaParametersLambdaParameters = Typed.TypedName (Core.Name "hydra.java.syntax.LambdaParameters")
+
 -- | DSL injection for the single variant of hydra.java.syntax.LambdaParameters
 lambdaParametersSingle :: Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.LambdaParameters
 lambdaParametersSingle x =
@@ -7332,6 +7926,10 @@ leftHandSideFieldAccess x =
         Core.fieldName = (Core.Name "fieldAccess"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.LeftHandSide
+leftHandSideLeftHandSide :: Typed.TypedName Syntax.LeftHandSide
+leftHandSideLeftHandSide = Typed.TypedName (Core.Name "hydra.java.syntax.LeftHandSide")
+
 -- | DSL injection for the boolean variant of hydra.java.syntax.Literal
 literalBoolean :: Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.Literal
 literalBoolean x =
@@ -7367,6 +7965,10 @@ literalInteger x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.Literal
+literalLiteral :: Typed.TypedName Syntax.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.java.syntax.Literal")
 
 -- | DSL injection for the null variant of hydra.java.syntax.Literal
 literalNull :: Typed.TypedTerm Syntax.Literal
@@ -7404,6 +8006,11 @@ localClassOrInterfaceDeclarationClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.LocalClassOrInterfaceDeclaration
+localClassOrInterfaceDeclarationLocalClassOrInterfaceDeclaration :: Typed.TypedName Syntax.LocalClassOrInterfaceDeclaration
+localClassOrInterfaceDeclarationLocalClassOrInterfaceDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.LocalClassOrInterfaceDeclaration")
+
 -- | DSL injection for the normalInterface variant of hydra.java.syntax.LocalClassOrInterfaceDeclaration
 localClassOrInterfaceDeclarationNormalInterface :: Typed.TypedTerm Syntax.NormalInterfaceDeclaration -> Typed.TypedTerm Syntax.LocalClassOrInterfaceDeclaration
 localClassOrInterfaceDeclarationNormalInterface x =
@@ -7438,6 +8045,11 @@ localVariableDeclarationDeclarators x =
         Core.projectionFieldName = (Core.Name "declarators")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.LocalVariableDeclaration
+localVariableDeclarationLocalVariableDeclaration :: Typed.TypedName Syntax.LocalVariableDeclaration
+localVariableDeclarationLocalVariableDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.LocalVariableDeclaration")
+
 -- | DSL accessor for the modifiers field of hydra.java.syntax.LocalVariableDeclaration
 localVariableDeclarationModifiers :: Typed.TypedTerm Syntax.LocalVariableDeclaration -> Typed.TypedTerm [Syntax.VariableModifier]
 localVariableDeclarationModifiers x =
@@ -7453,6 +8065,11 @@ localVariableDeclarationStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.LocalVariableDeclarationStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.LocalVariableDeclarationStatement
+localVariableDeclarationStatementLocalVariableDeclarationStatement :: Typed.TypedName Syntax.LocalVariableDeclarationStatement
+localVariableDeclarationStatementLocalVariableDeclarationStatement =
+    Typed.TypedName (Core.Name "hydra.java.syntax.LocalVariableDeclarationStatement")
 
 -- | DSL accessor for the type field of hydra.java.syntax.LocalVariableDeclaration
 localVariableDeclarationType :: Typed.TypedTerm Syntax.LocalVariableDeclaration -> Typed.TypedTerm Syntax.LocalVariableType
@@ -7535,6 +8152,10 @@ localVariableDeclarationWithType original newVal =
               Core.projectionFieldName = (Core.Name "declarators")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.LocalVariableType
+localVariableTypeLocalVariableType :: Typed.TypedName Syntax.LocalVariableType
+localVariableTypeLocalVariableType = Typed.TypedName (Core.Name "hydra.java.syntax.LocalVariableType")
+
 -- | DSL injection for the type variant of hydra.java.syntax.LocalVariableType
 localVariableTypeType :: Typed.TypedTerm Syntax.UnannType -> Typed.TypedTerm Syntax.LocalVariableType
 localVariableTypeType x =
@@ -7560,6 +8181,10 @@ markerAnnotation x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.MarkerAnnotation"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MarkerAnnotation
+markerAnnotationMarkerAnnotation :: Typed.TypedName Syntax.MarkerAnnotation
+markerAnnotationMarkerAnnotation = Typed.TypedName (Core.Name "hydra.java.syntax.MarkerAnnotation")
+
 -- | DSL injection for the block variant of hydra.java.syntax.MethodBody
 methodBodyBlock :: Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.MethodBody
 methodBodyBlock x =
@@ -7568,6 +8193,10 @@ methodBodyBlock x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.MethodBody
+methodBodyMethodBody :: Typed.TypedName Syntax.MethodBody
+methodBodyMethodBody = Typed.TypedName (Core.Name "hydra.java.syntax.MethodBody")
 
 -- | DSL injection for the none variant of hydra.java.syntax.MethodBody
 methodBodyNone :: Typed.TypedTerm Syntax.MethodBody
@@ -7623,6 +8252,10 @@ methodDeclarationHeader x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MethodDeclaration"),
         Core.projectionFieldName = (Core.Name "header")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MethodDeclaration
+methodDeclarationMethodDeclaration :: Typed.TypedName Syntax.MethodDeclaration
+methodDeclarationMethodDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.MethodDeclaration")
 
 -- | DSL accessor for the modifiers field of hydra.java.syntax.MethodDeclaration
 methodDeclarationModifiers :: Typed.TypedTerm Syntax.MethodDeclaration -> Typed.TypedTerm [Syntax.MethodModifier]
@@ -7791,6 +8424,10 @@ methodDeclaratorIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodDeclarator
+methodDeclaratorMethodDeclarator :: Typed.TypedName Syntax.MethodDeclarator
+methodDeclaratorMethodDeclarator = Typed.TypedName (Core.Name "hydra.java.syntax.MethodDeclarator")
+
 -- | DSL accessor for the receiverParameter field of hydra.java.syntax.MethodDeclarator
 methodDeclaratorReceiverParameter :: Typed.TypedTerm Syntax.MethodDeclarator -> Typed.TypedTerm (Maybe Syntax.ReceiverParameter)
 methodDeclaratorReceiverParameter x =
@@ -7899,6 +8536,10 @@ methodHeaderDeclarator x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MethodHeader"),
         Core.projectionFieldName = (Core.Name "declarator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MethodHeader
+methodHeaderMethodHeader :: Typed.TypedName Syntax.MethodHeader
+methodHeaderMethodHeader = Typed.TypedName (Core.Name "hydra.java.syntax.MethodHeader")
 
 -- | DSL accessor for the parameters field of hydra.java.syntax.MethodHeader
 methodHeaderParameters :: Typed.TypedTerm Syntax.MethodHeader -> Typed.TypedTerm [Syntax.TypeParameter]
@@ -8082,6 +8723,10 @@ methodInvocationHeader x =
         Core.projectionFieldName = (Core.Name "header")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodInvocation
+methodInvocationMethodInvocation :: Typed.TypedName Syntax.MethodInvocation
+methodInvocationMethodInvocation = Typed.TypedName (Core.Name "hydra.java.syntax.MethodInvocation")
+
 -- | DSL updater for the arguments field of hydra.java.syntax.MethodInvocation
 methodInvocationWithArguments :: Typed.TypedTerm Syntax.MethodInvocation -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.MethodInvocation
 methodInvocationWithArguments original newVal =
@@ -8140,6 +8785,11 @@ methodInvocation_ComplexIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Complex"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MethodInvocation_Complex
+methodInvocation_ComplexMethodInvocation_Complex :: Typed.TypedName Syntax.MethodInvocation_Complex
+methodInvocation_ComplexMethodInvocation_Complex =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MethodInvocation_Complex")
 
 -- | DSL accessor for the typeArguments field of hydra.java.syntax.MethodInvocation_Complex
 methodInvocation_ComplexTypeArguments :: Typed.TypedTerm Syntax.MethodInvocation_Complex -> Typed.TypedTerm [Syntax.TypeArgument]
@@ -8240,6 +8890,10 @@ methodInvocation_HeaderComplex x =
         Core.fieldName = (Core.Name "complex"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.MethodInvocation_Header
+methodInvocation_HeaderMethodInvocation_Header :: Typed.TypedName Syntax.MethodInvocation_Header
+methodInvocation_HeaderMethodInvocation_Header = Typed.TypedName (Core.Name "hydra.java.syntax.MethodInvocation_Header")
+
 -- | DSL injection for the simple variant of hydra.java.syntax.MethodInvocation_Header
 methodInvocation_HeaderSimple :: Typed.TypedTerm Syntax.MethodName -> Typed.TypedTerm Syntax.MethodInvocation_Header
 methodInvocation_HeaderSimple x =
@@ -8257,6 +8911,11 @@ methodInvocation_VariantExpression x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.MethodInvocation_Variant
+methodInvocation_VariantMethodInvocation_Variant :: Typed.TypedName Syntax.MethodInvocation_Variant
+methodInvocation_VariantMethodInvocation_Variant =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MethodInvocation_Variant")
 
 -- | DSL injection for the primary variant of hydra.java.syntax.MethodInvocation_Variant
 methodInvocation_VariantPrimary :: Typed.TypedTerm Syntax.Primary -> Typed.TypedTerm Syntax.MethodInvocation_Variant
@@ -8320,6 +8979,10 @@ methodModifierFinal =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.java.syntax.MethodModifier
+methodModifierMethodModifier :: Typed.TypedName Syntax.MethodModifier
+methodModifierMethodModifier = Typed.TypedName (Core.Name "hydra.java.syntax.MethodModifier")
 
 -- | DSL injection for the native variant of hydra.java.syntax.MethodModifier
 methodModifierNative :: Typed.TypedTerm Syntax.MethodModifier
@@ -8391,6 +9054,10 @@ methodName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.MethodName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodName
+methodNameMethodName :: Typed.TypedName Syntax.MethodName
+methodNameMethodName = Typed.TypedName (Core.Name "hydra.java.syntax.MethodName")
+
 -- | DSL injection for the array variant of hydra.java.syntax.MethodReference
 methodReferenceArray :: Typed.TypedTerm Syntax.MethodReference_Array -> Typed.TypedTerm Syntax.MethodReference
 methodReferenceArray x =
@@ -8408,6 +9075,10 @@ methodReferenceExpression x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.MethodReference
+methodReferenceMethodReference :: Typed.TypedName Syntax.MethodReference
+methodReferenceMethodReference = Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference")
 
 -- | DSL injection for the new variant of hydra.java.syntax.MethodReference
 methodReferenceNew :: Typed.TypedTerm Syntax.MethodReference_New -> Typed.TypedTerm Syntax.MethodReference
@@ -8452,6 +9123,10 @@ methodReference_Array x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.MethodReference_Array"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodReference_Array
+methodReference_ArrayMethodReference_Array :: Typed.TypedName Syntax.MethodReference_Array
+methodReference_ArrayMethodReference_Array = Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_Array")
+
 -- | DSL constructor for hydra.java.syntax.MethodReference_Expression
 methodReference_Expression :: Typed.TypedTerm Syntax.ExpressionName -> Typed.TypedTerm [Syntax.TypeArgument] -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.MethodReference_Expression
 methodReference_Expression name typeArguments identifier =
@@ -8476,6 +9151,11 @@ methodReference_ExpressionIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MethodReference_Expression"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MethodReference_Expression
+methodReference_ExpressionMethodReference_Expression :: Typed.TypedName Syntax.MethodReference_Expression
+methodReference_ExpressionMethodReference_Expression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_Expression")
 
 -- | DSL accessor for the name field of hydra.java.syntax.MethodReference_Expression
 methodReference_ExpressionName :: Typed.TypedTerm Syntax.MethodReference_Expression -> Typed.TypedTerm Syntax.ExpressionName
@@ -8589,6 +9269,10 @@ methodReference_NewClassType x =
         Core.projectionFieldName = (Core.Name "classType")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodReference_New
+methodReference_NewMethodReference_New :: Typed.TypedName Syntax.MethodReference_New
+methodReference_NewMethodReference_New = Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_New")
+
 -- | DSL accessor for the typeArguments field of hydra.java.syntax.MethodReference_New
 methodReference_NewTypeArguments :: Typed.TypedTerm Syntax.MethodReference_New -> Typed.TypedTerm [Syntax.TypeArgument]
 methodReference_NewTypeArguments x =
@@ -8656,6 +9340,10 @@ methodReference_PrimaryIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MethodReference_Primary"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MethodReference_Primary
+methodReference_PrimaryMethodReference_Primary :: Typed.TypedName Syntax.MethodReference_Primary
+methodReference_PrimaryMethodReference_Primary = Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_Primary")
 
 -- | DSL accessor for the primary field of hydra.java.syntax.MethodReference_Primary
 methodReference_PrimaryPrimary :: Typed.TypedTerm Syntax.MethodReference_Primary -> Typed.TypedTerm Syntax.Primary
@@ -8772,6 +9460,11 @@ methodReference_ReferenceTypeIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodReference_ReferenceType
+methodReference_ReferenceTypeMethodReference_ReferenceType :: Typed.TypedName Syntax.MethodReference_ReferenceType
+methodReference_ReferenceTypeMethodReference_ReferenceType =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_ReferenceType")
+
 -- | DSL accessor for the referenceType field of hydra.java.syntax.MethodReference_ReferenceType
 methodReference_ReferenceTypeReferenceType :: Typed.TypedTerm Syntax.MethodReference_ReferenceType -> Typed.TypedTerm Syntax.ReferenceType
 methodReference_ReferenceTypeReferenceType x =
@@ -8887,6 +9580,10 @@ methodReference_SuperIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.MethodReference_Super
+methodReference_SuperMethodReference_Super :: Typed.TypedName Syntax.MethodReference_Super
+methodReference_SuperMethodReference_Super = Typed.TypedName (Core.Name "hydra.java.syntax.MethodReference_Super")
+
 -- | DSL accessor for the super field of hydra.java.syntax.MethodReference_Super
 methodReference_SuperSuper :: Typed.TypedTerm Syntax.MethodReference_Super -> Typed.TypedTerm Bool
 methodReference_SuperSuper x =
@@ -8999,6 +9696,10 @@ modularCompilationUnitImports x =
         Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ModularCompilationUnit
+modularCompilationUnitModularCompilationUnit :: Typed.TypedName Syntax.ModularCompilationUnit
+modularCompilationUnitModularCompilationUnit = Typed.TypedName (Core.Name "hydra.java.syntax.ModularCompilationUnit")
+
 -- | DSL accessor for the module field of hydra.java.syntax.ModularCompilationUnit
 modularCompilationUnitModule :: Typed.TypedTerm Syntax.ModularCompilationUnit -> Typed.TypedTerm Syntax.ModuleDeclaration
 modularCompilationUnitModule x =
@@ -9087,6 +9788,10 @@ moduleDeclarationIdentifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ModuleDeclaration"),
         Core.projectionFieldName = (Core.Name "identifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ModuleDeclaration
+moduleDeclarationModuleDeclaration :: Typed.TypedName Syntax.ModuleDeclaration
+moduleDeclarationModuleDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.ModuleDeclaration")
 
 -- | DSL accessor for the open field of hydra.java.syntax.ModuleDeclaration
 moduleDeclarationOpen :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm Bool
@@ -9230,6 +9935,10 @@ moduleDirectiveExports x =
         Core.fieldName = (Core.Name "exports"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ModuleDirective
+moduleDirectiveModuleDirective :: Typed.TypedName Syntax.ModuleDirective
+moduleDirectiveModuleDirective = Typed.TypedName (Core.Name "hydra.java.syntax.ModuleDirective")
+
 -- | DSL injection for the opens variant of hydra.java.syntax.ModuleDirective
 moduleDirectiveOpens :: Typed.TypedTerm Syntax.ModuleDirective_ExportsOrOpens -> Typed.TypedTerm Syntax.ModuleDirective
 moduleDirectiveOpens x =
@@ -9278,6 +9987,11 @@ moduleDirective_ExportsOrOpens package modules =
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Typed.unTypedTerm modules)}]}))
+
+-- | DSL name token for hydra.java.syntax.ModuleDirective_ExportsOrOpens
+moduleDirective_ExportsOrOpensModuleDirective_ExportsOrOpens :: Typed.TypedName Syntax.ModuleDirective_ExportsOrOpens
+moduleDirective_ExportsOrOpensModuleDirective_ExportsOrOpens =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ModuleDirective_ExportsOrOpens")
 
 -- | DSL accessor for the modules field of hydra.java.syntax.ModuleDirective_ExportsOrOpens
 moduleDirective_ExportsOrOpensModules :: Typed.TypedTerm Syntax.ModuleDirective_ExportsOrOpens -> Typed.TypedTerm [Syntax.ModuleName]
@@ -9343,6 +10057,11 @@ moduleDirective_Provides to with =
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Typed.unTypedTerm with)}]}))
+
+-- | DSL name token for hydra.java.syntax.ModuleDirective_Provides
+moduleDirective_ProvidesModuleDirective_Provides :: Typed.TypedName Syntax.ModuleDirective_Provides
+moduleDirective_ProvidesModuleDirective_Provides =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ModuleDirective_Provides")
 
 -- | DSL accessor for the to field of hydra.java.syntax.ModuleDirective_Provides
 moduleDirective_ProvidesTo :: Typed.TypedTerm Syntax.ModuleDirective_Provides -> Typed.TypedTerm Syntax.TypeName
@@ -9427,6 +10146,11 @@ moduleDirective_RequiresModule x =
         Core.projectionFieldName = (Core.Name "module")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ModuleDirective_Requires
+moduleDirective_RequiresModuleDirective_Requires :: Typed.TypedName Syntax.ModuleDirective_Requires
+moduleDirective_RequiresModuleDirective_Requires =
+    Typed.TypedName (Core.Name "hydra.java.syntax.ModuleDirective_Requires")
+
 -- | DSL updater for the modifiers field of hydra.java.syntax.ModuleDirective_Requires
 moduleDirective_RequiresWithModifiers :: Typed.TypedTerm Syntax.ModuleDirective_Requires -> Typed.TypedTerm [Syntax.RequiresModifier] -> Typed.TypedTerm Syntax.ModuleDirective_Requires
 moduleDirective_RequiresWithModifiers original newVal =
@@ -9482,6 +10206,10 @@ moduleNameIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ModuleName"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ModuleName
+moduleNameModuleName :: Typed.TypedName Syntax.ModuleName
+moduleNameModuleName = Typed.TypedName (Core.Name "hydra.java.syntax.ModuleName")
 
 -- | DSL accessor for the name field of hydra.java.syntax.ModuleName
 moduleNameName :: Typed.TypedTerm Syntax.ModuleName -> Typed.TypedTerm (Maybe Syntax.ModuleName)
@@ -9544,6 +10272,11 @@ multiplicativeExpressionMod x =
         Core.fieldName = (Core.Name "mod"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.MultiplicativeExpression
+multiplicativeExpressionMultiplicativeExpression :: Typed.TypedName Syntax.MultiplicativeExpression
+multiplicativeExpressionMultiplicativeExpression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MultiplicativeExpression")
+
 -- | DSL injection for the times variant of hydra.java.syntax.MultiplicativeExpression
 multiplicativeExpressionTimes :: Typed.TypedTerm Syntax.MultiplicativeExpression_Binary -> Typed.TypedTerm Syntax.MultiplicativeExpression
 multiplicativeExpressionTimes x =
@@ -9583,6 +10316,11 @@ multiplicativeExpression_BinaryLhs x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.MultiplicativeExpression_Binary"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.MultiplicativeExpression_Binary
+multiplicativeExpression_BinaryMultiplicativeExpression_Binary :: Typed.TypedName Syntax.MultiplicativeExpression_Binary
+multiplicativeExpression_BinaryMultiplicativeExpression_Binary =
+    Typed.TypedName (Core.Name "hydra.java.syntax.MultiplicativeExpression_Binary")
 
 -- | DSL accessor for the rhs field of hydra.java.syntax.MultiplicativeExpression_Binary
 multiplicativeExpression_BinaryRhs :: Typed.TypedTerm Syntax.MultiplicativeExpression_Binary -> Typed.TypedTerm Syntax.UnaryExpression
@@ -9639,6 +10377,10 @@ normalAnnotation typeName pairs =
         Core.Field {
           Core.fieldName = (Core.Name "pairs"),
           Core.fieldTerm = (Typed.unTypedTerm pairs)}]}))
+
+-- | DSL name token for hydra.java.syntax.NormalAnnotation
+normalAnnotationNormalAnnotation :: Typed.TypedName Syntax.NormalAnnotation
+normalAnnotationNormalAnnotation = Typed.TypedName (Core.Name "hydra.java.syntax.NormalAnnotation")
 
 -- | DSL accessor for the pairs field of hydra.java.syntax.NormalAnnotation
 normalAnnotationPairs :: Typed.TypedTerm Syntax.NormalAnnotation -> Typed.TypedTerm [Syntax.ElementValuePair]
@@ -9764,6 +10506,10 @@ normalClassDeclarationModifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.NormalClassDeclaration"),
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.NormalClassDeclaration
+normalClassDeclarationNormalClassDeclaration :: Typed.TypedName Syntax.NormalClassDeclaration
+normalClassDeclarationNormalClassDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.NormalClassDeclaration")
 
 -- | DSL accessor for the parameters field of hydra.java.syntax.NormalClassDeclaration
 normalClassDeclarationParameters :: Typed.TypedTerm Syntax.NormalClassDeclaration -> Typed.TypedTerm [Syntax.TypeParameter]
@@ -10208,6 +10954,11 @@ normalInterfaceDeclarationModifiers x =
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.NormalInterfaceDeclaration
+normalInterfaceDeclarationNormalInterfaceDeclaration :: Typed.TypedName Syntax.NormalInterfaceDeclaration
+normalInterfaceDeclarationNormalInterfaceDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.NormalInterfaceDeclaration")
+
 -- | DSL accessor for the parameters field of hydra.java.syntax.NormalInterfaceDeclaration
 normalInterfaceDeclarationParameters :: Typed.TypedTerm Syntax.NormalInterfaceDeclaration -> Typed.TypedTerm [Syntax.TypeParameter]
 normalInterfaceDeclarationParameters x =
@@ -10505,6 +11256,10 @@ numericTypeArrayArray x =
         Core.fieldName = (Core.Name "array"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.NumericTypeArray
+numericTypeArrayNumericTypeArray :: Typed.TypedName Syntax.NumericTypeArray
+numericTypeArrayNumericTypeArray = Typed.TypedName (Core.Name "hydra.java.syntax.NumericTypeArray")
+
 -- | DSL injection for the simple variant of hydra.java.syntax.NumericTypeArray
 numericTypeArraySimple :: Typed.TypedTerm Syntax.NumericType -> Typed.TypedTerm Syntax.NumericTypeArray
 numericTypeArraySimple x =
@@ -10532,6 +11287,10 @@ numericTypeIntegral x =
         Core.fieldName = (Core.Name "integral"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.NumericType
+numericTypeNumericType :: Typed.TypedName Syntax.NumericType
+numericTypeNumericType = Typed.TypedName (Core.Name "hydra.java.syntax.NumericType")
+
 -- | DSL constructor for hydra.java.syntax.OrdinaryCompilationUnit
 ordinaryCompilationUnit :: Typed.TypedTerm (Maybe Syntax.PackageDeclaration) -> Typed.TypedTerm [Syntax.ImportDeclaration] -> Typed.TypedTerm [Syntax.TopLevelClassOrInterfaceDeclarationWithComments] -> Typed.TypedTerm Syntax.OrdinaryCompilationUnit
 ordinaryCompilationUnit package imports types =
@@ -10556,6 +11315,10 @@ ordinaryCompilationUnitImports x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.OrdinaryCompilationUnit"),
         Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.OrdinaryCompilationUnit
+ordinaryCompilationUnitOrdinaryCompilationUnit :: Typed.TypedName Syntax.OrdinaryCompilationUnit
+ordinaryCompilationUnitOrdinaryCompilationUnit = Typed.TypedName (Core.Name "hydra.java.syntax.OrdinaryCompilationUnit")
 
 -- | DSL accessor for the package field of hydra.java.syntax.OrdinaryCompilationUnit
 ordinaryCompilationUnitPackage :: Typed.TypedTerm Syntax.OrdinaryCompilationUnit -> Typed.TypedTerm (Maybe Syntax.PackageDeclaration)
@@ -10678,6 +11441,10 @@ packageDeclarationModifiers x =
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.PackageDeclaration
+packageDeclarationPackageDeclaration :: Typed.TypedName Syntax.PackageDeclaration
+packageDeclarationPackageDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.PackageDeclaration")
+
 -- | DSL updater for the identifiers field of hydra.java.syntax.PackageDeclaration
 packageDeclarationWithIdentifiers :: Typed.TypedTerm Syntax.PackageDeclaration -> Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Syntax.PackageDeclaration
 packageDeclarationWithIdentifiers original newVal =
@@ -10719,6 +11486,10 @@ packageModifier x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PackageModifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.PackageModifier
+packageModifierPackageModifier :: Typed.TypedName Syntax.PackageModifier
+packageModifierPackageModifier = Typed.TypedName (Core.Name "hydra.java.syntax.PackageModifier")
+
 -- | DSL constructor for the hydra.java.syntax.PackageName wrapper
 packageName :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Syntax.PackageName
 packageName x =
@@ -10726,12 +11497,24 @@ packageName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PackageName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.PackageName
+packageNamePackageName :: Typed.TypedName Syntax.PackageName
+packageNamePackageName = Typed.TypedName (Core.Name "hydra.java.syntax.PackageName")
+
 -- | DSL constructor for the hydra.java.syntax.PackageOrTypeName wrapper
 packageOrTypeName :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Syntax.PackageOrTypeName
 packageOrTypeName x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PackageOrTypeName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.PackageOrTypeName
+packageOrTypeNamePackageOrTypeName :: Typed.TypedName Syntax.PackageOrTypeName
+packageOrTypeNamePackageOrTypeName = Typed.TypedName (Core.Name "hydra.java.syntax.PackageOrTypeName")
+
+-- | DSL name token for hydra.java.syntax.Pattern
+patternPattern :: Typed.TypedName Syntax.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.java.syntax.Pattern")
 
 -- | DSL injection for the record variant of hydra.java.syntax.Pattern
 patternRecord :: Typed.TypedTerm Syntax.RecordPattern -> Typed.TypedTerm Syntax.Pattern
@@ -10758,12 +11541,20 @@ postDecrementExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PostDecrementExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.PostDecrementExpression
+postDecrementExpressionPostDecrementExpression :: Typed.TypedName Syntax.PostDecrementExpression
+postDecrementExpressionPostDecrementExpression = Typed.TypedName (Core.Name "hydra.java.syntax.PostDecrementExpression")
+
 -- | DSL constructor for the hydra.java.syntax.PostIncrementExpression wrapper
 postIncrementExpression :: Typed.TypedTerm Syntax.PostfixExpression -> Typed.TypedTerm Syntax.PostIncrementExpression
 postIncrementExpression x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PostIncrementExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.PostIncrementExpression
+postIncrementExpressionPostIncrementExpression :: Typed.TypedName Syntax.PostIncrementExpression
+postIncrementExpressionPostIncrementExpression = Typed.TypedName (Core.Name "hydra.java.syntax.PostIncrementExpression")
 
 -- | DSL injection for the name variant of hydra.java.syntax.PostfixExpression
 postfixExpressionName :: Typed.TypedTerm Syntax.ExpressionName -> Typed.TypedTerm Syntax.PostfixExpression
@@ -10792,6 +11583,10 @@ postfixExpressionPostIncrement x =
         Core.fieldName = (Core.Name "postIncrement"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.PostfixExpression
+postfixExpressionPostfixExpression :: Typed.TypedName Syntax.PostfixExpression
+postfixExpressionPostfixExpression = Typed.TypedName (Core.Name "hydra.java.syntax.PostfixExpression")
+
 -- | DSL injection for the primary variant of hydra.java.syntax.PostfixExpression
 postfixExpressionPrimary :: Typed.TypedTerm Syntax.Primary -> Typed.TypedTerm Syntax.PostfixExpression
 postfixExpressionPrimary x =
@@ -10808,12 +11603,20 @@ preDecrementExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PreDecrementExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.PreDecrementExpression
+preDecrementExpressionPreDecrementExpression :: Typed.TypedName Syntax.PreDecrementExpression
+preDecrementExpressionPreDecrementExpression = Typed.TypedName (Core.Name "hydra.java.syntax.PreDecrementExpression")
+
 -- | DSL constructor for the hydra.java.syntax.PreIncrementExpression wrapper
 preIncrementExpression :: Typed.TypedTerm Syntax.UnaryExpression -> Typed.TypedTerm Syntax.PreIncrementExpression
 preIncrementExpression x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.PreIncrementExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.PreIncrementExpression
+preIncrementExpressionPreIncrementExpression :: Typed.TypedName Syntax.PreIncrementExpression
+preIncrementExpressionPreIncrementExpression = Typed.TypedName (Core.Name "hydra.java.syntax.PreIncrementExpression")
 
 -- | DSL injection for the arrayCreation variant of hydra.java.syntax.Primary
 primaryArrayCreation :: Typed.TypedTerm Syntax.ArrayCreationExpression -> Typed.TypedTerm Syntax.Primary
@@ -10914,6 +11717,11 @@ primaryNoNewArrayExpressionParens x =
         Core.fieldName = (Core.Name "parens"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionPrimaryNoNewArrayExpression :: Typed.TypedName Syntax.PrimaryNoNewArrayExpression
+primaryNoNewArrayExpressionPrimaryNoNewArrayExpression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression")
+
 -- | DSL injection for the this variant of hydra.java.syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionThis :: Typed.TypedTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionThis =
@@ -10922,6 +11730,10 @@ primaryNoNewArrayExpressionThis =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "this"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.java.syntax.Primary
+primaryPrimary :: Typed.TypedName Syntax.Primary
+primaryPrimary = Typed.TypedName (Core.Name "hydra.java.syntax.Primary")
 
 -- | DSL injection for the boolean variant of hydra.java.syntax.PrimitiveType
 primitiveTypeBoolean :: Typed.TypedTerm Syntax.PrimitiveType
@@ -10940,6 +11752,10 @@ primitiveTypeNumeric x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.PrimitiveType
+primitiveTypePrimitiveType :: Typed.TypedName Syntax.PrimitiveType
+primitiveTypePrimitiveType = Typed.TypedName (Core.Name "hydra.java.syntax.PrimitiveType")
 
 -- | DSL constructor for hydra.java.syntax.PrimitiveTypeWithAnnotations
 primitiveTypeWithAnnotations :: Typed.TypedTerm Syntax.PrimitiveType -> Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.PrimitiveTypeWithAnnotations
@@ -10962,6 +11778,11 @@ primitiveTypeWithAnnotationsAnnotations x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.PrimitiveTypeWithAnnotations"),
         Core.projectionFieldName = (Core.Name "annotations")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.PrimitiveTypeWithAnnotations
+primitiveTypeWithAnnotationsPrimitiveTypeWithAnnotations :: Typed.TypedName Syntax.PrimitiveTypeWithAnnotations
+primitiveTypeWithAnnotationsPrimitiveTypeWithAnnotations =
+    Typed.TypedName (Core.Name "hydra.java.syntax.PrimitiveTypeWithAnnotations")
 
 -- | DSL accessor for the type field of hydra.java.syntax.PrimitiveTypeWithAnnotations
 primitiveTypeWithAnnotationsType :: Typed.TypedTerm Syntax.PrimitiveTypeWithAnnotations -> Typed.TypedTerm Syntax.PrimitiveType
@@ -11039,6 +11860,10 @@ receiverParameterIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.ReceiverParameter"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ReceiverParameter
+receiverParameterReceiverParameter :: Typed.TypedName Syntax.ReceiverParameter
+receiverParameterReceiverParameter = Typed.TypedName (Core.Name "hydra.java.syntax.ReceiverParameter")
 
 -- | DSL accessor for the unannType field of hydra.java.syntax.ReceiverParameter
 receiverParameterUnannType :: Typed.TypedTerm Syntax.ReceiverParameter -> Typed.TypedTerm Syntax.UnannType
@@ -11146,12 +11971,28 @@ recordBodyDeclarationCompactConstructor x =
         Core.fieldName = (Core.Name "compactConstructor"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.RecordBodyDeclaration
+recordBodyDeclarationRecordBodyDeclaration :: Typed.TypedName Syntax.RecordBodyDeclaration
+recordBodyDeclarationRecordBodyDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.RecordBodyDeclaration")
+
+-- | DSL name token for hydra.java.syntax.RecordBody
+recordBodyRecordBody :: Typed.TypedName Syntax.RecordBody
+recordBodyRecordBody = Typed.TypedName (Core.Name "hydra.java.syntax.RecordBody")
+
 -- | DSL constructor for the hydra.java.syntax.RecordComponentModifier wrapper
 recordComponentModifier :: Typed.TypedTerm Syntax.Annotation -> Typed.TypedTerm Syntax.RecordComponentModifier
 recordComponentModifier x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.RecordComponentModifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RecordComponentModifier
+recordComponentModifierRecordComponentModifier :: Typed.TypedName Syntax.RecordComponentModifier
+recordComponentModifierRecordComponentModifier = Typed.TypedName (Core.Name "hydra.java.syntax.RecordComponentModifier")
+
+-- | DSL name token for hydra.java.syntax.RecordComponent
+recordComponentRecordComponent :: Typed.TypedName Syntax.RecordComponent
+recordComponentRecordComponent = Typed.TypedName (Core.Name "hydra.java.syntax.RecordComponent")
 
 -- | DSL injection for the simple variant of hydra.java.syntax.RecordComponent
 recordComponentSimple :: Typed.TypedTerm Syntax.RecordComponent_Simple -> Typed.TypedTerm Syntax.RecordComponent
@@ -11204,6 +12045,10 @@ recordComponent_SimpleModifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.RecordComponent_Simple"),
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RecordComponent_Simple
+recordComponent_SimpleRecordComponent_Simple :: Typed.TypedName Syntax.RecordComponent_Simple
+recordComponent_SimpleRecordComponent_Simple = Typed.TypedName (Core.Name "hydra.java.syntax.RecordComponent_Simple")
 
 -- | DSL accessor for the type field of hydra.java.syntax.RecordComponent_Simple
 recordComponent_SimpleType :: Typed.TypedTerm Syntax.RecordComponent_Simple -> Typed.TypedTerm Syntax.UnannType
@@ -11364,6 +12209,10 @@ recordDeclarationParameters x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.RecordDeclaration"),
         Core.projectionFieldName = (Core.Name "parameters")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RecordDeclaration
+recordDeclarationRecordDeclaration :: Typed.TypedName Syntax.RecordDeclaration
+recordDeclarationRecordDeclaration = Typed.TypedName (Core.Name "hydra.java.syntax.RecordDeclaration")
 
 -- | DSL updater for the body field of hydra.java.syntax.RecordDeclaration
 recordDeclarationWithBody :: Typed.TypedTerm Syntax.RecordDeclaration -> Typed.TypedTerm Syntax.RecordBody -> Typed.TypedTerm Syntax.RecordDeclaration
@@ -11642,6 +12491,10 @@ recordHeader x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.RecordHeader"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.RecordHeader
+recordHeaderRecordHeader :: Typed.TypedName Syntax.RecordHeader
+recordHeaderRecordHeader = Typed.TypedName (Core.Name "hydra.java.syntax.RecordHeader")
+
 -- | DSL constructor for hydra.java.syntax.RecordPattern
 recordPattern :: Typed.TypedTerm Syntax.ReferenceType -> Typed.TypedTerm [Syntax.Pattern] -> Typed.TypedTerm Syntax.RecordPattern
 recordPattern type_ patterns =
@@ -11663,6 +12516,10 @@ recordPatternPatterns x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.RecordPattern"),
         Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RecordPattern
+recordPatternRecordPattern :: Typed.TypedName Syntax.RecordPattern
+recordPatternRecordPattern = Typed.TypedName (Core.Name "hydra.java.syntax.RecordPattern")
 
 -- | DSL accessor for the type field of hydra.java.syntax.RecordPattern
 recordPatternType :: Typed.TypedTerm Syntax.RecordPattern -> Typed.TypedTerm Syntax.ReferenceType
@@ -11725,6 +12582,10 @@ referenceTypeClassOrInterface x =
         Core.fieldName = (Core.Name "classOrInterface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.ReferenceType
+referenceTypeReferenceType :: Typed.TypedName Syntax.ReferenceType
+referenceTypeReferenceType = Typed.TypedName (Core.Name "hydra.java.syntax.ReferenceType")
+
 -- | DSL injection for the variable variant of hydra.java.syntax.ReferenceType
 referenceTypeVariable :: Typed.TypedTerm Syntax.TypeVariable -> Typed.TypedTerm Syntax.ReferenceType
 referenceTypeVariable x =
@@ -11779,6 +12640,10 @@ relationalExpressionLessThanEqual x =
         Core.fieldName = (Core.Name "lessThanEqual"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.RelationalExpression
+relationalExpressionRelationalExpression :: Typed.TypedName Syntax.RelationalExpression
+relationalExpressionRelationalExpression = Typed.TypedName (Core.Name "hydra.java.syntax.RelationalExpression")
+
 -- | DSL injection for the simple variant of hydra.java.syntax.RelationalExpression
 relationalExpressionSimple :: Typed.TypedTerm Syntax.ShiftExpression -> Typed.TypedTerm Syntax.RelationalExpression
 relationalExpressionSimple x =
@@ -11822,6 +12687,11 @@ relationalExpression_GreaterThanEqualLhs x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_GreaterThanEqual"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RelationalExpression_GreaterThanEqual
+relationalExpression_GreaterThanEqualRelationalExpression_GreaterThanEqual :: Typed.TypedName Syntax.RelationalExpression_GreaterThanEqual
+relationalExpression_GreaterThanEqualRelationalExpression_GreaterThanEqual =
+    Typed.TypedName (Core.Name "hydra.java.syntax.RelationalExpression_GreaterThanEqual")
 
 -- | DSL accessor for the rhs field of hydra.java.syntax.RelationalExpression_GreaterThanEqual
 relationalExpression_GreaterThanEqualRhs :: Typed.TypedTerm Syntax.RelationalExpression_GreaterThanEqual -> Typed.TypedTerm Syntax.ShiftExpression
@@ -11874,6 +12744,11 @@ relationalExpression_GreaterThanLhs x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_GreaterThan"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.RelationalExpression_GreaterThan
+relationalExpression_GreaterThanRelationalExpression_GreaterThan :: Typed.TypedName Syntax.RelationalExpression_GreaterThan
+relationalExpression_GreaterThanRelationalExpression_GreaterThan =
+    Typed.TypedName (Core.Name "hydra.java.syntax.RelationalExpression_GreaterThan")
 
 -- | DSL accessor for the rhs field of hydra.java.syntax.RelationalExpression_GreaterThan
 relationalExpression_GreaterThanRhs :: Typed.TypedTerm Syntax.RelationalExpression_GreaterThan -> Typed.TypedTerm Syntax.ShiftExpression
@@ -11953,6 +12828,11 @@ relationalExpression_LessThanEqualLhs x =
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.RelationalExpression_LessThanEqual
+relationalExpression_LessThanEqualRelationalExpression_LessThanEqual :: Typed.TypedName Syntax.RelationalExpression_LessThanEqual
+relationalExpression_LessThanEqualRelationalExpression_LessThanEqual =
+    Typed.TypedName (Core.Name "hydra.java.syntax.RelationalExpression_LessThanEqual")
+
 -- | DSL accessor for the rhs field of hydra.java.syntax.RelationalExpression_LessThanEqual
 relationalExpression_LessThanEqualRhs :: Typed.TypedTerm Syntax.RelationalExpression_LessThanEqual -> Typed.TypedTerm Syntax.ShiftExpression
 relationalExpression_LessThanEqualRhs x =
@@ -12005,6 +12885,11 @@ relationalExpression_LessThanLhs x =
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.RelationalExpression_LessThan
+relationalExpression_LessThanRelationalExpression_LessThan :: Typed.TypedName Syntax.RelationalExpression_LessThan
+relationalExpression_LessThanRelationalExpression_LessThan =
+    Typed.TypedName (Core.Name "hydra.java.syntax.RelationalExpression_LessThan")
+
 -- | DSL accessor for the rhs field of hydra.java.syntax.RelationalExpression_LessThan
 relationalExpression_LessThanRhs :: Typed.TypedTerm Syntax.RelationalExpression_LessThan -> Typed.TypedTerm Syntax.ShiftExpression
 relationalExpression_LessThanRhs x =
@@ -12048,6 +12933,10 @@ relationalExpression_LessThanWithRhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.RequiresModifier
+requiresModifierRequiresModifier :: Typed.TypedName Syntax.RequiresModifier
+requiresModifierRequiresModifier = Typed.TypedName (Core.Name "hydra.java.syntax.RequiresModifier")
+
 -- | DSL injection for the static variant of hydra.java.syntax.RequiresModifier
 requiresModifierStatic :: Typed.TypedTerm Syntax.RequiresModifier
 requiresModifierStatic =
@@ -12075,12 +12964,20 @@ resourceLocal x =
         Core.fieldName = (Core.Name "local"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.Resource
+resourceResource :: Typed.TypedName Syntax.Resource
+resourceResource = Typed.TypedName (Core.Name "hydra.java.syntax.Resource")
+
 -- | DSL constructor for the hydra.java.syntax.ResourceSpecification wrapper
 resourceSpecification :: Typed.TypedTerm [Syntax.Resource] -> Typed.TypedTerm Syntax.ResourceSpecification
 resourceSpecification x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ResourceSpecification"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ResourceSpecification
+resourceSpecificationResourceSpecification :: Typed.TypedName Syntax.ResourceSpecification
+resourceSpecificationResourceSpecification = Typed.TypedName (Core.Name "hydra.java.syntax.ResourceSpecification")
 
 -- | DSL injection for the variable variant of hydra.java.syntax.Resource
 resourceVariable :: Typed.TypedTerm Syntax.VariableAccess -> Typed.TypedTerm Syntax.Resource
@@ -12136,6 +13033,10 @@ resource_LocalModifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.Resource_Local"),
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.Resource_Local
+resource_LocalResource_Local :: Typed.TypedName Syntax.Resource_Local
+resource_LocalResource_Local = Typed.TypedName (Core.Name "hydra.java.syntax.Resource_Local")
 
 -- | DSL accessor for the type field of hydra.java.syntax.Resource_Local
 resource_LocalType :: Typed.TypedTerm Syntax.Resource_Local -> Typed.TypedTerm Syntax.LocalVariableType
@@ -12270,6 +13171,10 @@ resource_LocalWithType original newVal =
               Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.java.syntax.Result
+resultResult :: Typed.TypedName Syntax.Result
+resultResult = Typed.TypedName (Core.Name "hydra.java.syntax.Result")
+
 -- | DSL injection for the type variant of hydra.java.syntax.Result
 resultType :: Typed.TypedTerm Syntax.UnannType -> Typed.TypedTerm Syntax.Result
 resultType x =
@@ -12294,6 +13199,14 @@ returnStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ReturnStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.ReturnStatement
+returnStatementReturnStatement :: Typed.TypedName Syntax.ReturnStatement
+returnStatementReturnStatement = Typed.TypedName (Core.Name "hydra.java.syntax.ReturnStatement")
+
+-- | DSL name token for hydra.java.syntax.ShiftExpression
+shiftExpressionShiftExpression :: Typed.TypedName Syntax.ShiftExpression
+shiftExpressionShiftExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ShiftExpression")
 
 -- | DSL injection for the shiftLeft variant of hydra.java.syntax.ShiftExpression
 shiftExpressionShiftLeft :: Typed.TypedTerm Syntax.ShiftExpression_Binary -> Typed.TypedTerm Syntax.ShiftExpression
@@ -12362,6 +13275,10 @@ shiftExpression_BinaryRhs x =
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ShiftExpression_Binary
+shiftExpression_BinaryShiftExpression_Binary :: Typed.TypedName Syntax.ShiftExpression_Binary
+shiftExpression_BinaryShiftExpression_Binary = Typed.TypedName (Core.Name "hydra.java.syntax.ShiftExpression_Binary")
+
 -- | DSL updater for the lhs field of hydra.java.syntax.ShiftExpression_Binary
 shiftExpression_BinaryWithLhs :: Typed.TypedTerm Syntax.ShiftExpression_Binary -> Typed.TypedTerm Syntax.ShiftExpression -> Typed.TypedTerm Syntax.ShiftExpression_Binary
 shiftExpression_BinaryWithLhs original newVal =
@@ -12403,6 +13320,10 @@ simpleTypeName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.SimpleTypeName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.SimpleTypeName
+simpleTypeNameSimpleTypeName :: Typed.TypedName Syntax.SimpleTypeName
+simpleTypeNameSimpleTypeName = Typed.TypedName (Core.Name "hydra.java.syntax.SimpleTypeName")
+
 -- | DSL constructor for hydra.java.syntax.SingleElementAnnotation
 singleElementAnnotation :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm (Maybe Syntax.ElementValue) -> Typed.TypedTerm Syntax.SingleElementAnnotation
 singleElementAnnotation name value =
@@ -12424,6 +13345,10 @@ singleElementAnnotationName x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.SingleElementAnnotation"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.SingleElementAnnotation
+singleElementAnnotationSingleElementAnnotation :: Typed.TypedName Syntax.SingleElementAnnotation
+singleElementAnnotationSingleElementAnnotation = Typed.TypedName (Core.Name "hydra.java.syntax.SingleElementAnnotation")
 
 -- | DSL accessor for the value field of hydra.java.syntax.SingleElementAnnotation
 singleElementAnnotationValue :: Typed.TypedTerm Syntax.SingleElementAnnotation -> Typed.TypedTerm (Maybe Syntax.ElementValue)
@@ -12490,6 +13415,11 @@ singleStaticImportDeclarationIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.SingleStaticImportDeclaration
+singleStaticImportDeclarationSingleStaticImportDeclaration :: Typed.TypedName Syntax.SingleStaticImportDeclaration
+singleStaticImportDeclarationSingleStaticImportDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.SingleStaticImportDeclaration")
+
 -- | DSL accessor for the typeName field of hydra.java.syntax.SingleStaticImportDeclaration
 singleStaticImportDeclarationTypeName :: Typed.TypedTerm Syntax.SingleStaticImportDeclaration -> Typed.TypedTerm Syntax.TypeName
 singleStaticImportDeclarationTypeName x =
@@ -12539,6 +13469,11 @@ singleTypeImportDeclaration x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.SingleTypeImportDeclaration"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.SingleTypeImportDeclaration
+singleTypeImportDeclarationSingleTypeImportDeclaration :: Typed.TypedName Syntax.SingleTypeImportDeclaration
+singleTypeImportDeclarationSingleTypeImportDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.SingleTypeImportDeclaration")
 
 -- | DSL injection for the assignment variant of hydra.java.syntax.StatementExpression
 statementExpressionAssignment :: Typed.TypedTerm Syntax.Assignment -> Typed.TypedTerm Syntax.StatementExpression
@@ -12603,6 +13538,10 @@ statementExpressionPreIncrement x =
         Core.fieldName = (Core.Name "preIncrement"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.StatementExpression
+statementExpressionStatementExpression :: Typed.TypedName Syntax.StatementExpression
+statementExpressionStatementExpression = Typed.TypedName (Core.Name "hydra.java.syntax.StatementExpression")
+
 -- | DSL injection for the for variant of hydra.java.syntax.Statement
 statementFor :: Typed.TypedTerm Syntax.ForStatement -> Typed.TypedTerm Syntax.Statement
 statementFor x =
@@ -12666,6 +13605,10 @@ statementNoShortIfLabeled x =
         Core.fieldName = (Core.Name "labeled"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.StatementNoShortIf
+statementNoShortIfStatementNoShortIf :: Typed.TypedName Syntax.StatementNoShortIf
+statementNoShortIfStatementNoShortIf = Typed.TypedName (Core.Name "hydra.java.syntax.StatementNoShortIf")
+
 -- | DSL injection for the while variant of hydra.java.syntax.StatementNoShortIf
 statementNoShortIfWhile :: Typed.TypedTerm Syntax.WhileStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf
 statementNoShortIfWhile x =
@@ -12683,6 +13626,10 @@ statementNoShortIfWithoutTrailing x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withoutTrailing"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.Statement
+statementStatement :: Typed.TypedName Syntax.Statement
+statementStatement = Typed.TypedName (Core.Name "hydra.java.syntax.Statement")
 
 -- | DSL injection for the while variant of hydra.java.syntax.Statement
 statementWhile :: Typed.TypedTerm Syntax.WhileStatement -> Typed.TypedTerm Syntax.Statement
@@ -12774,6 +13721,11 @@ statementWithoutTrailingSubstatementReturn x =
         Core.fieldName = (Core.Name "return"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.StatementWithoutTrailingSubstatement
+statementWithoutTrailingSubstatementStatementWithoutTrailingSubstatement :: Typed.TypedName Syntax.StatementWithoutTrailingSubstatement
+statementWithoutTrailingSubstatementStatementWithoutTrailingSubstatement =
+    Typed.TypedName (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement")
+
 -- | DSL injection for the switch variant of hydra.java.syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementSwitch :: Typed.TypedTerm Syntax.SwitchStatement -> Typed.TypedTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementSwitch x =
@@ -12826,6 +13778,11 @@ staticImportOnDemandDeclaration x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.StaticImportOnDemandDeclaration"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.StaticImportOnDemandDeclaration
+staticImportOnDemandDeclarationStaticImportOnDemandDeclaration :: Typed.TypedName Syntax.StaticImportOnDemandDeclaration
+staticImportOnDemandDeclarationStaticImportOnDemandDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.StaticImportOnDemandDeclaration")
+
 -- | DSL constructor for the hydra.java.syntax.StaticInitializer wrapper
 staticInitializer :: Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.StaticInitializer
 staticInitializer x =
@@ -12833,12 +13790,20 @@ staticInitializer x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.StaticInitializer"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.StaticInitializer
+staticInitializerStaticInitializer :: Typed.TypedName Syntax.StaticInitializer
+staticInitializerStaticInitializer = Typed.TypedName (Core.Name "hydra.java.syntax.StaticInitializer")
+
 -- | DSL constructor for the hydra.java.syntax.StringLiteral wrapper
 stringLiteral :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.StringLiteral
 stringLiteral x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.StringLiteral"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.StringLiteral
+stringLiteralStringLiteral :: Typed.TypedName Syntax.StringLiteral
+stringLiteralStringLiteral = Typed.TypedName (Core.Name "hydra.java.syntax.StringLiteral")
 
 -- | DSL injection for the legacy variant of hydra.java.syntax.SwitchBlock
 switchBlockLegacy :: Typed.TypedTerm Syntax.SwitchBlock_Legacy -> Typed.TypedTerm Syntax.SwitchBlock
@@ -12889,6 +13854,11 @@ switchBlockStatementGroupStatements x =
         Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.SwitchBlockStatementGroup
+switchBlockStatementGroupSwitchBlockStatementGroup :: Typed.TypedName Syntax.SwitchBlockStatementGroup
+switchBlockStatementGroupSwitchBlockStatementGroup =
+    Typed.TypedName (Core.Name "hydra.java.syntax.SwitchBlockStatementGroup")
+
 -- | DSL updater for the labels field of hydra.java.syntax.SwitchBlockStatementGroup
 switchBlockStatementGroupWithLabels :: Typed.TypedTerm Syntax.SwitchBlockStatementGroup -> Typed.TypedTerm [Syntax.SwitchLabel] -> Typed.TypedTerm Syntax.SwitchBlockStatementGroup
 switchBlockStatementGroupWithLabels original newVal =
@@ -12923,6 +13893,10 @@ switchBlockStatementGroupWithStatements original newVal =
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.java.syntax.SwitchBlock
+switchBlockSwitchBlock :: Typed.TypedName Syntax.SwitchBlock
+switchBlockSwitchBlock = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchBlock")
+
 -- | DSL constructor for hydra.java.syntax.SwitchBlock_Legacy
 switchBlock_Legacy :: Typed.TypedTerm [Syntax.SwitchBlockStatementGroup] -> Typed.TypedTerm [Syntax.SwitchLabel] -> Typed.TypedTerm Syntax.SwitchBlock_Legacy
 switchBlock_Legacy groups trailingLabels =
@@ -12944,6 +13918,10 @@ switchBlock_LegacyGroups x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Legacy"),
         Core.projectionFieldName = (Core.Name "groups")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.SwitchBlock_Legacy
+switchBlock_LegacySwitchBlock_Legacy :: Typed.TypedName Syntax.SwitchBlock_Legacy
+switchBlock_LegacySwitchBlock_Legacy = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchBlock_Legacy")
 
 -- | DSL accessor for the trailingLabels field of hydra.java.syntax.SwitchBlock_Legacy
 switchBlock_LegacyTrailingLabels :: Typed.TypedTerm Syntax.SwitchBlock_Legacy -> Typed.TypedTerm [Syntax.SwitchLabel]
@@ -13019,6 +13997,10 @@ switchExpressionCond x =
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.SwitchExpression
+switchExpressionSwitchExpression :: Typed.TypedName Syntax.SwitchExpression
+switchExpressionSwitchExpression = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchExpression")
+
 -- | DSL updater for the block field of hydra.java.syntax.SwitchExpression
 switchExpressionWithBlock :: Typed.TypedTerm Syntax.SwitchExpression -> Typed.TypedTerm Syntax.SwitchBlock -> Typed.TypedTerm Syntax.SwitchExpression
 switchExpressionWithBlock original newVal =
@@ -13089,6 +14071,10 @@ switchLabelNull x =
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.SwitchLabel
+switchLabelSwitchLabel :: Typed.TypedName Syntax.SwitchLabel
+switchLabelSwitchLabel = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchLabel")
+
 -- | DSL constructor for hydra.java.syntax.SwitchRule
 switchRule :: Typed.TypedTerm Syntax.SwitchLabel -> Typed.TypedTerm Syntax.SwitchRule_Body -> Typed.TypedTerm Syntax.SwitchRule
 switchRule label body =
@@ -13119,6 +14105,10 @@ switchRuleLabel x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchRule"),
         Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.SwitchRule
+switchRuleSwitchRule :: Typed.TypedName Syntax.SwitchRule
+switchRuleSwitchRule = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchRule")
 
 -- | DSL updater for the body field of hydra.java.syntax.SwitchRule
 switchRuleWithBody :: Typed.TypedTerm Syntax.SwitchRule -> Typed.TypedTerm Syntax.SwitchRule_Body -> Typed.TypedTerm Syntax.SwitchRule
@@ -13172,6 +14162,10 @@ switchRule_BodyExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.SwitchRule_Body
+switchRule_BodySwitchRule_Body :: Typed.TypedName Syntax.SwitchRule_Body
+switchRule_BodySwitchRule_Body = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchRule_Body")
+
 -- | DSL injection for the throw variant of hydra.java.syntax.SwitchRule_Body
 switchRule_BodyThrow :: Typed.TypedTerm Syntax.ThrowStatement -> Typed.TypedTerm Syntax.SwitchRule_Body
 switchRule_BodyThrow x =
@@ -13211,6 +14205,10 @@ switchStatementCond x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchStatement"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.SwitchStatement
+switchStatementSwitchStatement :: Typed.TypedName Syntax.SwitchStatement
+switchStatementSwitchStatement = Typed.TypedName (Core.Name "hydra.java.syntax.SwitchStatement")
 
 -- | DSL updater for the block field of hydra.java.syntax.SwitchStatement
 switchStatementWithBlock :: Typed.TypedTerm Syntax.SwitchStatement -> Typed.TypedTerm Syntax.SwitchBlock -> Typed.TypedTerm Syntax.SwitchStatement
@@ -13277,6 +14275,10 @@ synchronizedStatementExpression x =
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.SynchronizedStatement
+synchronizedStatementSynchronizedStatement :: Typed.TypedName Syntax.SynchronizedStatement
+synchronizedStatementSynchronizedStatement = Typed.TypedName (Core.Name "hydra.java.syntax.SynchronizedStatement")
+
 -- | DSL updater for the block field of hydra.java.syntax.SynchronizedStatement
 synchronizedStatementWithBlock :: Typed.TypedTerm Syntax.SynchronizedStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.SynchronizedStatement
 synchronizedStatementWithBlock original newVal =
@@ -13318,6 +14320,10 @@ textBlock x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.TextBlock"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.TextBlock
+textBlockTextBlock :: Typed.TypedName Syntax.TextBlock
+textBlockTextBlock = Typed.TypedName (Core.Name "hydra.java.syntax.TextBlock")
+
 -- | DSL constructor for the hydra.java.syntax.ThrowStatement wrapper
 throwStatement :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.ThrowStatement
 throwStatement x =
@@ -13325,12 +14331,20 @@ throwStatement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.ThrowStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.ThrowStatement
+throwStatementThrowStatement :: Typed.TypedName Syntax.ThrowStatement
+throwStatementThrowStatement = Typed.TypedName (Core.Name "hydra.java.syntax.ThrowStatement")
+
 -- | DSL constructor for the hydra.java.syntax.Throws wrapper
 throws :: Typed.TypedTerm [Syntax.ExceptionType] -> Typed.TypedTerm Syntax.Throws
 throws x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Throws"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.Throws
+throwsThrows :: Typed.TypedName Syntax.Throws
+throwsThrows = Typed.TypedName (Core.Name "hydra.java.syntax.Throws")
 
 -- | DSL injection for the class variant of hydra.java.syntax.TopLevelClassOrInterfaceDeclaration
 topLevelClassOrInterfaceDeclarationClass :: Typed.TypedTerm Syntax.ClassDeclaration -> Typed.TypedTerm Syntax.TopLevelClassOrInterfaceDeclaration
@@ -13359,6 +14373,11 @@ topLevelClassOrInterfaceDeclarationNone =
         Core.fieldName = (Core.Name "none"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.java.syntax.TopLevelClassOrInterfaceDeclaration
+topLevelClassOrInterfaceDeclarationTopLevelClassOrInterfaceDeclaration :: Typed.TypedName Syntax.TopLevelClassOrInterfaceDeclaration
+topLevelClassOrInterfaceDeclarationTopLevelClassOrInterfaceDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclaration")
+
 -- | DSL constructor for hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments
 topLevelClassOrInterfaceDeclarationWithComments :: Typed.TypedTerm Syntax.TopLevelClassOrInterfaceDeclaration -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments
 topLevelClassOrInterfaceDeclarationWithComments value comments =
@@ -13380,6 +14399,11 @@ topLevelClassOrInterfaceDeclarationWithCommentsComments x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments
+topLevelClassOrInterfaceDeclarationWithCommentsTopLevelClassOrInterfaceDeclarationWithComments :: Typed.TypedName Syntax.TopLevelClassOrInterfaceDeclarationWithComments
+topLevelClassOrInterfaceDeclarationWithCommentsTopLevelClassOrInterfaceDeclarationWithComments =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments")
 
 -- | DSL accessor for the value field of hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments
 topLevelClassOrInterfaceDeclarationWithCommentsValue :: Typed.TypedTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Typed.TypedTerm Syntax.TopLevelClassOrInterfaceDeclaration
@@ -13433,6 +14457,10 @@ tryStatementSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.TryStatement
+tryStatementTryStatement :: Typed.TypedName Syntax.TryStatement
+tryStatementTryStatement = Typed.TypedName (Core.Name "hydra.java.syntax.TryStatement")
+
 -- | DSL injection for the withFinally variant of hydra.java.syntax.TryStatement
 tryStatementWithFinally :: Typed.TypedTerm Syntax.TryStatement_WithFinally -> Typed.TypedTerm Syntax.TryStatement
 tryStatementWithFinally x =
@@ -13481,6 +14509,10 @@ tryStatement_SimpleCatches x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TryStatement_Simple"),
         Core.projectionFieldName = (Core.Name "catches")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TryStatement_Simple
+tryStatement_SimpleTryStatement_Simple :: Typed.TypedName Syntax.TryStatement_Simple
+tryStatement_SimpleTryStatement_Simple = Typed.TypedName (Core.Name "hydra.java.syntax.TryStatement_Simple")
 
 -- | DSL updater for the block field of hydra.java.syntax.TryStatement_Simple
 tryStatement_SimpleWithBlock :: Typed.TypedTerm Syntax.TryStatement_Simple -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryStatement_Simple
@@ -13558,6 +14590,11 @@ tryStatement_WithFinallyFinally x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TryStatement_WithFinally"),
         Core.projectionFieldName = (Core.Name "finally")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TryStatement_WithFinally
+tryStatement_WithFinallyTryStatement_WithFinally :: Typed.TypedName Syntax.TryStatement_WithFinally
+tryStatement_WithFinallyTryStatement_WithFinally =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TryStatement_WithFinally")
 
 -- | DSL updater for the block field of hydra.java.syntax.TryStatement_WithFinally
 tryStatement_WithFinallyWithBlock :: Typed.TypedTerm Syntax.TryStatement_WithFinally -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryStatement_WithFinally
@@ -13685,6 +14722,11 @@ tryWithResourcesStatementResourceSpecification x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TryWithResourcesStatement"),
         Core.projectionFieldName = (Core.Name "resourceSpecification")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TryWithResourcesStatement
+tryWithResourcesStatementTryWithResourcesStatement :: Typed.TypedName Syntax.TryWithResourcesStatement
+tryWithResourcesStatementTryWithResourcesStatement =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TryWithResourcesStatement")
 
 -- | DSL updater for the block field of hydra.java.syntax.TryWithResourcesStatement
 tryWithResourcesStatementWithBlock :: Typed.TypedTerm Syntax.TryWithResourcesStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryWithResourcesStatement
@@ -13819,6 +14861,10 @@ typeArgumentReference x =
         Core.fieldName = (Core.Name "reference"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.TypeArgument
+typeArgumentTypeArgument :: Typed.TypedName Syntax.TypeArgument
+typeArgumentTypeArgument = Typed.TypedName (Core.Name "hydra.java.syntax.TypeArgument")
+
 -- | DSL injection for the wildcard variant of hydra.java.syntax.TypeArgument
 typeArgumentWildcard :: Typed.TypedTerm Syntax.Wildcard -> Typed.TypedTerm Syntax.TypeArgument
 typeArgumentWildcard x =
@@ -13846,6 +14892,10 @@ typeArgumentsOrDiamondDiamond =
         Core.fieldName = (Core.Name "diamond"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.java.syntax.TypeArgumentsOrDiamond
+typeArgumentsOrDiamondTypeArgumentsOrDiamond :: Typed.TypedName Syntax.TypeArgumentsOrDiamond
+typeArgumentsOrDiamondTypeArgumentsOrDiamond = Typed.TypedName (Core.Name "hydra.java.syntax.TypeArgumentsOrDiamond")
+
 -- | DSL injection for the classOrInterface variant of hydra.java.syntax.TypeBound
 typeBoundClassOrInterface :: Typed.TypedTerm Syntax.TypeBound_ClassOrInterface -> Typed.TypedTerm Syntax.TypeBound
 typeBoundClassOrInterface x =
@@ -13854,6 +14904,10 @@ typeBoundClassOrInterface x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterface"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.TypeBound
+typeBoundTypeBound :: Typed.TypedName Syntax.TypeBound
+typeBoundTypeBound = Typed.TypedName (Core.Name "hydra.java.syntax.TypeBound")
 
 -- | DSL injection for the variable variant of hydra.java.syntax.TypeBound
 typeBoundVariable :: Typed.TypedTerm Syntax.TypeVariable -> Typed.TypedTerm Syntax.TypeBound
@@ -13894,6 +14948,11 @@ typeBound_ClassOrInterfaceType x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeBound_ClassOrInterface"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TypeBound_ClassOrInterface
+typeBound_ClassOrInterfaceTypeBound_ClassOrInterface :: Typed.TypedName Syntax.TypeBound_ClassOrInterface
+typeBound_ClassOrInterfaceTypeBound_ClassOrInterface =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TypeBound_ClassOrInterface")
 
 -- | DSL updater for the additional field of hydra.java.syntax.TypeBound_ClassOrInterface
 typeBound_ClassOrInterfaceWithAdditional :: Typed.TypedTerm Syntax.TypeBound_ClassOrInterface -> Typed.TypedTerm [Syntax.AdditionalBound] -> Typed.TypedTerm Syntax.TypeBound_ClassOrInterface
@@ -13936,12 +14995,21 @@ typeIdentifier x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.TypeIdentifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.TypeIdentifier
+typeIdentifierTypeIdentifier :: Typed.TypedName Syntax.TypeIdentifier
+typeIdentifierTypeIdentifier = Typed.TypedName (Core.Name "hydra.java.syntax.TypeIdentifier")
+
 -- | DSL constructor for the hydra.java.syntax.TypeImportOnDemandDeclaration wrapper
 typeImportOnDemandDeclaration :: Typed.TypedTerm Syntax.PackageOrTypeName -> Typed.TypedTerm Syntax.TypeImportOnDemandDeclaration
 typeImportOnDemandDeclaration x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.TypeImportOnDemandDeclaration"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TypeImportOnDemandDeclaration
+typeImportOnDemandDeclarationTypeImportOnDemandDeclaration :: Typed.TypedName Syntax.TypeImportOnDemandDeclaration
+typeImportOnDemandDeclarationTypeImportOnDemandDeclaration =
+    Typed.TypedName (Core.Name "hydra.java.syntax.TypeImportOnDemandDeclaration")
 
 -- | DSL constructor for hydra.java.syntax.TypeName
 typeName :: Typed.TypedTerm Syntax.TypeIdentifier -> Typed.TypedTerm (Maybe Syntax.PackageOrTypeName) -> Typed.TypedTerm Syntax.TypeName
@@ -13974,6 +15042,10 @@ typeNameArraySimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.TypeNameArray
+typeNameArrayTypeNameArray :: Typed.TypedName Syntax.TypeNameArray
+typeNameArrayTypeNameArray = Typed.TypedName (Core.Name "hydra.java.syntax.TypeNameArray")
+
 -- | DSL accessor for the identifier field of hydra.java.syntax.TypeName
 typeNameIdentifier :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm Syntax.TypeIdentifier
 typeNameIdentifier x =
@@ -13991,6 +15063,10 @@ typeNameQualifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeName"),
         Core.projectionFieldName = (Core.Name "qualifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TypeName
+typeNameTypeName :: Typed.TypedName Syntax.TypeName
+typeNameTypeName = Typed.TypedName (Core.Name "hydra.java.syntax.TypeName")
 
 -- | DSL updater for the identifier field of hydra.java.syntax.TypeName
 typeNameWithIdentifier :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm Syntax.TypeIdentifier -> Typed.TypedTerm Syntax.TypeName
@@ -14067,6 +15143,10 @@ typeParameterModifier x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.TypeParameterModifier"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.TypeParameterModifier
+typeParameterModifierTypeParameterModifier :: Typed.TypedName Syntax.TypeParameterModifier
+typeParameterModifierTypeParameterModifier = Typed.TypedName (Core.Name "hydra.java.syntax.TypeParameterModifier")
+
 -- | DSL accessor for the modifiers field of hydra.java.syntax.TypeParameter
 typeParameterModifiers :: Typed.TypedTerm Syntax.TypeParameter -> Typed.TypedTerm [Syntax.TypeParameterModifier]
 typeParameterModifiers x =
@@ -14075,6 +15155,10 @@ typeParameterModifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeParameter"),
         Core.projectionFieldName = (Core.Name "modifiers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TypeParameter
+typeParameterTypeParameter :: Typed.TypedName Syntax.TypeParameter
+typeParameterTypeParameter = Typed.TypedName (Core.Name "hydra.java.syntax.TypeParameter")
 
 -- | DSL updater for the bound field of hydra.java.syntax.TypeParameter
 typeParameterWithBound :: Typed.TypedTerm Syntax.TypeParameter -> Typed.TypedTerm (Maybe Syntax.TypeBound) -> Typed.TypedTerm Syntax.TypeParameter
@@ -14155,6 +15239,10 @@ typePattern x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.TypePattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.TypePattern
+typePatternTypePattern :: Typed.TypedName Syntax.TypePattern
+typePatternTypePattern = Typed.TypedName (Core.Name "hydra.java.syntax.TypePattern")
+
 -- | DSL injection for the primitive variant of hydra.java.syntax.Type
 typePrimitive :: Typed.TypedTerm Syntax.PrimitiveTypeWithAnnotations -> Typed.TypedTerm Syntax.Type
 typePrimitive x =
@@ -14172,6 +15260,10 @@ typeReference x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.Type
+typeType :: Typed.TypedName Syntax.Type
+typeType = Typed.TypedName (Core.Name "hydra.java.syntax.Type")
 
 -- | DSL constructor for hydra.java.syntax.TypeVariable
 typeVariable :: Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.TypeIdentifier -> Typed.TypedTerm Syntax.TypeVariable
@@ -14203,6 +15295,10 @@ typeVariableIdentifier x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeVariable"),
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.TypeVariable
+typeVariableTypeVariable :: Typed.TypedName Syntax.TypeVariable
+typeVariableTypeVariable = Typed.TypedName (Core.Name "hydra.java.syntax.TypeVariable")
 
 -- | DSL updater for the annotations field of hydra.java.syntax.TypeVariable
 typeVariableWithAnnotations :: Typed.TypedTerm Syntax.TypeVariable -> Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.TypeVariable
@@ -14679,12 +15775,20 @@ unannClassType x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.UnannClassType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.UnannClassType
+unannClassTypeUnannClassType :: Typed.TypedName Syntax.UnannClassType
+unannClassTypeUnannClassType = Typed.TypedName (Core.Name "hydra.java.syntax.UnannClassType")
+
 -- | DSL constructor for the hydra.java.syntax.UnannType wrapper
 unannType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.UnannType
 unannType x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.UnannType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.UnannType
+unannTypeUnannType :: Typed.TypedName Syntax.UnannType
+unannTypeUnannType = Typed.TypedName (Core.Name "hydra.java.syntax.UnannType")
 
 -- | DSL injection for the minus variant of hydra.java.syntax.UnaryExpression
 unaryExpressionMinus :: Typed.TypedTerm Syntax.UnaryExpression -> Typed.TypedTerm Syntax.UnaryExpression
@@ -14740,6 +15844,11 @@ unaryExpressionNotPlusMinusTilde x =
         Core.fieldName = (Core.Name "tilde"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.UnaryExpressionNotPlusMinus
+unaryExpressionNotPlusMinusUnaryExpressionNotPlusMinus :: Typed.TypedName Syntax.UnaryExpressionNotPlusMinus
+unaryExpressionNotPlusMinusUnaryExpressionNotPlusMinus =
+    Typed.TypedName (Core.Name "hydra.java.syntax.UnaryExpressionNotPlusMinus")
+
 -- | DSL injection for the other variant of hydra.java.syntax.UnaryExpression
 unaryExpressionOther :: Typed.TypedTerm Syntax.UnaryExpressionNotPlusMinus -> Typed.TypedTerm Syntax.UnaryExpression
 unaryExpressionOther x =
@@ -14775,6 +15884,10 @@ unaryExpressionPreIncrement x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preIncrement"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.syntax.UnaryExpression
+unaryExpressionUnaryExpression :: Typed.TypedName Syntax.UnaryExpression
+unaryExpressionUnaryExpression = Typed.TypedName (Core.Name "hydra.java.syntax.UnaryExpression")
 
 -- | DSL constructor for hydra.java.syntax.UnqualifiedClassInstanceCreationExpression
 unqualifiedClassInstanceCreationExpression :: Typed.TypedTerm [Syntax.TypeArgument] -> Typed.TypedTerm Syntax.ClassOrInterfaceTypeToInstantiate -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm (Maybe Syntax.ClassBody) -> Typed.TypedTerm Syntax.UnqualifiedClassInstanceCreationExpression
@@ -14830,6 +15943,11 @@ unqualifiedClassInstanceCreationExpressionTypeArguments x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression"),
         Core.projectionFieldName = (Core.Name "typeArguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.UnqualifiedClassInstanceCreationExpression
+unqualifiedClassInstanceCreationExpressionUnqualifiedClassInstanceCreationExpression :: Typed.TypedName Syntax.UnqualifiedClassInstanceCreationExpression
+unqualifiedClassInstanceCreationExpressionUnqualifiedClassInstanceCreationExpression =
+    Typed.TypedName (Core.Name "hydra.java.syntax.UnqualifiedClassInstanceCreationExpression")
 
 -- | DSL updater for the arguments field of hydra.java.syntax.UnqualifiedClassInstanceCreationExpression
 unqualifiedClassInstanceCreationExpressionWithArguments :: Typed.TypedTerm Syntax.UnqualifiedClassInstanceCreationExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.UnqualifiedClassInstanceCreationExpression
@@ -14973,6 +16091,10 @@ variableAccessFieldAccess x =
         Core.fieldName = (Core.Name "fieldAccess"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.VariableAccess
+variableAccessVariableAccess :: Typed.TypedName Syntax.VariableAccess
+variableAccessVariableAccess = Typed.TypedName (Core.Name "hydra.java.syntax.VariableAccess")
+
 -- | DSL constructor for hydra.java.syntax.VariableArityParameter
 variableArityParameter :: Typed.TypedTerm [Syntax.VariableModifier] -> Typed.TypedTerm Syntax.UnannType -> Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.Identifier -> Typed.TypedTerm Syntax.VariableArityParameter
 variableArityParameter modifiers type_ annotations identifier =
@@ -15027,6 +16149,10 @@ variableArityParameterType x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.VariableArityParameter"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.VariableArityParameter
+variableArityParameterVariableArityParameter :: Typed.TypedName Syntax.VariableArityParameter
+variableArityParameterVariableArityParameter = Typed.TypedName (Core.Name "hydra.java.syntax.VariableArityParameter")
 
 -- | DSL updater for the annotations field of hydra.java.syntax.VariableArityParameter
 variableArityParameterWithAnnotations :: Typed.TypedTerm Syntax.VariableArityParameter -> Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.VariableArityParameter
@@ -15207,6 +16333,11 @@ variableArityRecordComponentType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.VariableArityRecordComponent
+variableArityRecordComponentVariableArityRecordComponent :: Typed.TypedName Syntax.VariableArityRecordComponent
+variableArityRecordComponentVariableArityRecordComponent =
+    Typed.TypedName (Core.Name "hydra.java.syntax.VariableArityRecordComponent")
+
 -- | DSL updater for the annotations field of hydra.java.syntax.VariableArityRecordComponent
 variableArityRecordComponentWithAnnotations :: Typed.TypedTerm Syntax.VariableArityRecordComponent -> Typed.TypedTerm [Syntax.Annotation] -> Typed.TypedTerm Syntax.VariableArityRecordComponent
 variableArityRecordComponentWithAnnotations original newVal =
@@ -15384,6 +16515,10 @@ variableDeclaratorIdIdentifier x =
         Core.projectionFieldName = (Core.Name "identifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.VariableDeclaratorId
+variableDeclaratorIdVariableDeclaratorId :: Typed.TypedName Syntax.VariableDeclaratorId
+variableDeclaratorIdVariableDeclaratorId = Typed.TypedName (Core.Name "hydra.java.syntax.VariableDeclaratorId")
+
 -- | DSL updater for the dims field of hydra.java.syntax.VariableDeclaratorId
 variableDeclaratorIdWithDims :: Typed.TypedTerm Syntax.VariableDeclaratorId -> Typed.TypedTerm (Maybe Syntax.Dims) -> Typed.TypedTerm Syntax.VariableDeclaratorId
 variableDeclaratorIdWithDims original newVal =
@@ -15426,6 +16561,10 @@ variableDeclaratorInitializer x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.VariableDeclarator"),
         Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.VariableDeclarator
+variableDeclaratorVariableDeclarator :: Typed.TypedName Syntax.VariableDeclarator
+variableDeclaratorVariableDeclarator = Typed.TypedName (Core.Name "hydra.java.syntax.VariableDeclarator")
 
 -- | DSL updater for the id field of hydra.java.syntax.VariableDeclarator
 variableDeclaratorWithId :: Typed.TypedTerm Syntax.VariableDeclarator -> Typed.TypedTerm Syntax.VariableDeclaratorId -> Typed.TypedTerm Syntax.VariableDeclarator
@@ -15479,6 +16618,10 @@ variableInitializerExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.VariableInitializer
+variableInitializerVariableInitializer :: Typed.TypedName Syntax.VariableInitializer
+variableInitializerVariableInitializer = Typed.TypedName (Core.Name "hydra.java.syntax.VariableInitializer")
+
 -- | DSL injection for the annotation variant of hydra.java.syntax.VariableModifier
 variableModifierAnnotation :: Typed.TypedTerm Syntax.Annotation -> Typed.TypedTerm Syntax.VariableModifier
 variableModifierAnnotation x =
@@ -15496,6 +16639,10 @@ variableModifierFinal =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.java.syntax.VariableModifier
+variableModifierVariableModifier :: Typed.TypedName Syntax.VariableModifier
+variableModifierVariableModifier = Typed.TypedName (Core.Name "hydra.java.syntax.VariableModifier")
 
 -- | DSL constructor for hydra.java.syntax.WhileStatement
 whileStatement :: Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.WhileStatement
@@ -15559,6 +16706,10 @@ whileStatementNoShortIfCond x =
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.syntax.WhileStatementNoShortIf
+whileStatementNoShortIfWhileStatementNoShortIf :: Typed.TypedName Syntax.WhileStatementNoShortIf
+whileStatementNoShortIfWhileStatementNoShortIf = Typed.TypedName (Core.Name "hydra.java.syntax.WhileStatementNoShortIf")
+
 -- | DSL updater for the body field of hydra.java.syntax.WhileStatementNoShortIf
 whileStatementNoShortIfWithBody :: Typed.TypedTerm Syntax.WhileStatementNoShortIf -> Typed.TypedTerm Syntax.StatementNoShortIf -> Typed.TypedTerm Syntax.WhileStatementNoShortIf
 whileStatementNoShortIfWithBody original newVal =
@@ -15592,6 +16743,10 @@ whileStatementNoShortIfWithCond original newVal =
               Core.projectionTypeName = (Core.Name "hydra.java.syntax.WhileStatementNoShortIf"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL name token for hydra.java.syntax.WhileStatement
+whileStatementWhileStatement :: Typed.TypedName Syntax.WhileStatement
+whileStatementWhileStatement = Typed.TypedName (Core.Name "hydra.java.syntax.WhileStatement")
 
 -- | DSL updater for the body field of hydra.java.syntax.WhileStatement
 whileStatementWithBody :: Typed.TypedTerm Syntax.WhileStatement -> Typed.TypedTerm Syntax.Statement -> Typed.TypedTerm Syntax.WhileStatement
@@ -15667,9 +16822,17 @@ wildcardBoundsSuper x =
         Core.fieldName = (Core.Name "super"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.java.syntax.WildcardBounds
+wildcardBoundsWildcardBounds :: Typed.TypedName Syntax.WildcardBounds
+wildcardBoundsWildcardBounds = Typed.TypedName (Core.Name "hydra.java.syntax.WildcardBounds")
+
+-- | DSL name token for hydra.java.syntax.Wildcard
+wildcardWildcard :: Typed.TypedName Syntax.Wildcard
+wildcardWildcard = Typed.TypedName (Core.Name "hydra.java.syntax.Wildcard")
+
 -- | DSL accessor for the wildcard field of hydra.java.syntax.Wildcard
-wildcardWildcard :: Typed.TypedTerm Syntax.Wildcard -> Typed.TypedTerm (Maybe Syntax.WildcardBounds)
-wildcardWildcard x =
+wildcardWildcard2 :: Typed.TypedTerm Syntax.Wildcard -> Typed.TypedTerm (Maybe Syntax.WildcardBounds)
+wildcardWildcard2 x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.Wildcard"),
@@ -15716,3 +16879,7 @@ yieldStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.YieldStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.java.syntax.YieldStatement
+yieldStatementYieldStatement :: Typed.TypedName Syntax.YieldStatement
+yieldStatementYieldStatement = Typed.TypedName (Core.Name "hydra.java.syntax.YieldStatement")

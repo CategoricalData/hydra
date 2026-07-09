@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.arity"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.arity"},
+    {"module": "hydra.decode.arity"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

@@ -21,6 +21,10 @@ andExpression expressions =
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.AndExpression
+andExpressionAndExpression :: Typed.TypedName Syntax.AndExpression
+andExpressionAndExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.AndExpression")
+
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.AndExpression
 andExpressionExpressions :: Typed.TypedTerm Syntax.AndExpression -> Typed.TypedTerm [Syntax.Expression]
 andExpressionExpressions x =
@@ -52,6 +56,10 @@ application function arguments =
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Typed.unTypedTerm arguments)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.Application
+applicationApplication :: Typed.TypedName Syntax.Application
+applicationApplication = Typed.TypedName (Core.Name "hydra.lisp.syntax.Application")
 
 -- | DSL accessor for the arguments field of hydra.lisp.syntax.Application
 applicationArguments :: Typed.TypedTerm Syntax.Application -> Typed.TypedTerm [Syntax.Expression]
@@ -115,6 +123,10 @@ beginExpression expressions =
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.BeginExpression
+beginExpressionBeginExpression :: Typed.TypedName Syntax.BeginExpression
+beginExpressionBeginExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.BeginExpression")
+
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.BeginExpression
 beginExpressionExpressions :: Typed.TypedTerm Syntax.BeginExpression -> Typed.TypedTerm [Syntax.Expression]
 beginExpressionExpressions x =
@@ -133,6 +145,10 @@ beginExpressionWithExpressions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.BooleanStyle
+booleanStyleBooleanStyle :: Typed.TypedName Syntax.BooleanStyle
+booleanStyleBooleanStyle = Typed.TypedName (Core.Name "hydra.lisp.syntax.BooleanStyle")
 
 -- | DSL injection for the hashTF variant of hydra.lisp.syntax.BooleanStyle
 booleanStyleHashTF :: Typed.TypedTerm Syntax.BooleanStyle
@@ -182,6 +198,10 @@ caseClauseBody x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.CaseClause"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.CaseClause
+caseClauseCaseClause :: Typed.TypedName Syntax.CaseClause
+caseClauseCaseClause = Typed.TypedName (Core.Name "hydra.lisp.syntax.CaseClause")
 
 -- | DSL accessor for the keys field of hydra.lisp.syntax.CaseClause
 caseClauseKeys :: Typed.TypedTerm Syntax.CaseClause -> Typed.TypedTerm [Syntax.Expression]
@@ -241,6 +261,10 @@ caseExpression scrutinee clauses default_ =
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Typed.unTypedTerm default_)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.CaseExpression
+caseExpressionCaseExpression :: Typed.TypedName Syntax.CaseExpression
+caseExpressionCaseExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.CaseExpression")
 
 -- | DSL accessor for the clauses field of hydra.lisp.syntax.CaseExpression
 caseExpressionClauses :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm [Syntax.CaseClause]
@@ -351,6 +375,10 @@ characterLiteral value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.CharacterLiteral
+characterLiteralCharacterLiteral :: Typed.TypedName Syntax.CharacterLiteral
+characterLiteralCharacterLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.CharacterLiteral")
+
 -- | DSL accessor for the value field of hydra.lisp.syntax.CharacterLiteral
 characterLiteralValue :: Typed.TypedTerm Syntax.CharacterLiteral -> Typed.TypedTerm String
 characterLiteralValue x =
@@ -383,6 +411,10 @@ comment style text =
           Core.fieldName = (Core.Name "text"),
           Core.fieldTerm = (Typed.unTypedTerm text)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.Comment
+commentComment :: Typed.TypedName Syntax.Comment
+commentComment = Typed.TypedName (Core.Name "hydra.lisp.syntax.Comment")
+
 -- | DSL accessor for the style field of hydra.lisp.syntax.Comment
 commentStyle :: Typed.TypedTerm Syntax.Comment -> Typed.TypedTerm Syntax.CommentStyle
 commentStyle x =
@@ -400,6 +432,10 @@ commentStyleBlock =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.lisp.syntax.CommentStyle
+commentStyleCommentStyle :: Typed.TypedName Syntax.CommentStyle
+commentStyleCommentStyle = Typed.TypedName (Core.Name "hydra.lisp.syntax.CommentStyle")
 
 -- | DSL injection for the datum variant of hydra.lisp.syntax.CommentStyle
 commentStyleDatum :: Typed.TypedTerm Syntax.CommentStyle
@@ -484,6 +520,10 @@ condClauseBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.CondClause
+condClauseCondClause :: Typed.TypedName Syntax.CondClause
+condClauseCondClause = Typed.TypedName (Core.Name "hydra.lisp.syntax.CondClause")
+
 -- | DSL accessor for the condition field of hydra.lisp.syntax.CondClause
 condClauseCondition :: Typed.TypedTerm Syntax.CondClause -> Typed.TypedTerm Syntax.Expression
 condClauseCondition x =
@@ -549,6 +589,10 @@ condExpressionClauses x =
         Core.projectionFieldName = (Core.Name "clauses")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.CondExpression
+condExpressionCondExpression :: Typed.TypedName Syntax.CondExpression
+condExpressionCondExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.CondExpression")
+
 -- | DSL accessor for the default field of hydra.lisp.syntax.CondExpression
 condExpressionDefault :: Typed.TypedTerm Syntax.CondExpression -> Typed.TypedTerm (Maybe Syntax.Expression)
 condExpressionDefault x =
@@ -604,6 +648,10 @@ consExpression head tail =
         Core.Field {
           Core.fieldName = (Core.Name "tail"),
           Core.fieldTerm = (Typed.unTypedTerm tail)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.ConsExpression
+consExpressionConsExpression :: Typed.TypedName Syntax.ConsExpression
+consExpressionConsExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.ConsExpression")
 
 -- | DSL accessor for the head field of hydra.lisp.syntax.ConsExpression
 consExpressionHead :: Typed.TypedTerm Syntax.ConsExpression -> Typed.TypedTerm Syntax.Expression
@@ -672,6 +720,10 @@ constantDefinition name value doc =
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Typed.unTypedTerm doc)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.ConstantDefinition
+constantDefinitionConstantDefinition :: Typed.TypedName Syntax.ConstantDefinition
+constantDefinitionConstantDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.ConstantDefinition")
 
 -- | DSL accessor for the doc field of hydra.lisp.syntax.ConstantDefinition
 constantDefinitionDoc :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring)
@@ -803,6 +855,10 @@ constructorPatternConstructor x =
         Core.projectionFieldName = (Core.Name "constructor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.ConstructorPattern
+constructorPatternConstructorPattern :: Typed.TypedName Syntax.ConstructorPattern
+constructorPatternConstructorPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.ConstructorPattern")
+
 -- | DSL updater for the arguments field of hydra.lisp.syntax.ConstructorPattern
 constructorPatternWithArguments :: Typed.TypedTerm Syntax.ConstructorPattern -> Typed.TypedTerm [Syntax.Pattern] -> Typed.TypedTerm Syntax.ConstructorPattern
 constructorPatternWithArguments original newVal =
@@ -849,6 +905,10 @@ destructuringBinding pattern value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.DestructuringBinding
+destructuringBindingDestructuringBinding :: Typed.TypedName Syntax.DestructuringBinding
+destructuringBindingDestructuringBinding = Typed.TypedName (Core.Name "hydra.lisp.syntax.DestructuringBinding")
 
 -- | DSL accessor for the pattern field of hydra.lisp.syntax.DestructuringBinding
 destructuringBindingPattern :: Typed.TypedTerm Syntax.DestructuringBinding -> Typed.TypedTerm Syntax.DestructuringPattern
@@ -911,6 +971,10 @@ destructuringPatternAssociative x =
         Core.fieldName = (Core.Name "associative"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.lisp.syntax.DestructuringPattern
+destructuringPatternDestructuringPattern :: Typed.TypedName Syntax.DestructuringPattern
+destructuringPatternDestructuringPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.DestructuringPattern")
+
 -- | DSL injection for the rest variant of hydra.lisp.syntax.DestructuringPattern
 destructuringPatternRest :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.DestructuringPattern
 destructuringPatternRest x =
@@ -947,6 +1011,10 @@ dialectCommonLisp =
         Core.fieldName = (Core.Name "commonLisp"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.lisp.syntax.Dialect
+dialectDialect :: Typed.TypedName Syntax.Dialect
+dialectDialect = Typed.TypedName (Core.Name "hydra.lisp.syntax.Dialect")
+
 -- | DSL injection for the emacsLisp variant of hydra.lisp.syntax.Dialect
 dialectEmacsLisp :: Typed.TypedTerm Syntax.Dialect
 dialectEmacsLisp =
@@ -975,6 +1043,10 @@ doExpression expressions =
           Core.fieldName = (Core.Name "expressions"),
           Core.fieldTerm = (Typed.unTypedTerm expressions)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.DoExpression
+doExpressionDoExpression :: Typed.TypedName Syntax.DoExpression
+doExpressionDoExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.DoExpression")
+
 -- | DSL accessor for the expressions field of hydra.lisp.syntax.DoExpression
 doExpressionExpressions :: Typed.TypedTerm Syntax.DoExpression -> Typed.TypedTerm [Syntax.Expression]
 doExpressionExpressions x =
@@ -1000,6 +1072,10 @@ docstring x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.Docstring"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.Docstring
+docstringDocstring :: Typed.TypedName Syntax.Docstring
+docstringDocstring = Typed.TypedName (Core.Name "hydra.lisp.syntax.Docstring")
 
 -- | DSL constructor for hydra.lisp.syntax.DottedPair
 dottedPair :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DottedPair
@@ -1031,6 +1107,10 @@ dottedPairCdr x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.DottedPair"),
         Core.projectionFieldName = (Core.Name "cdr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.DottedPair
+dottedPairDottedPair :: Typed.TypedName Syntax.DottedPair
+dottedPairDottedPair = Typed.TypedName (Core.Name "hydra.lisp.syntax.DottedPair")
 
 -- | DSL updater for the car field of hydra.lisp.syntax.DottedPair
 dottedPairWithCar :: Typed.TypedTerm Syntax.DottedPair -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.DottedPair
@@ -1075,6 +1155,10 @@ exportDeclaration symbols =
         Core.Field {
           Core.fieldName = (Core.Name "symbols"),
           Core.fieldTerm = (Typed.unTypedTerm symbols)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.ExportDeclaration
+exportDeclarationExportDeclaration :: Typed.TypedName Syntax.ExportDeclaration
+exportDeclarationExportDeclaration = Typed.TypedName (Core.Name "hydra.lisp.syntax.ExportDeclaration")
 
 -- | DSL accessor for the symbols field of hydra.lisp.syntax.ExportDeclaration
 exportDeclarationSymbols :: Typed.TypedTerm Syntax.ExportDeclaration -> Typed.TypedTerm [Syntax.Symbol]
@@ -1166,6 +1250,10 @@ expressionDottedPair x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dottedPair"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.lisp.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.Expression")
 
 -- | DSL injection for the fieldAccess variant of hydra.lisp.syntax.Expression
 expressionFieldAccess :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Expression
@@ -1354,6 +1442,10 @@ fieldAccessField x =
         Core.projectionFieldName = (Core.Name "field")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.FieldAccess
+fieldAccessFieldAccess :: Typed.TypedName Syntax.FieldAccess
+fieldAccessFieldAccess = Typed.TypedName (Core.Name "hydra.lisp.syntax.FieldAccess")
+
 -- | DSL accessor for the recordType field of hydra.lisp.syntax.FieldAccess
 fieldAccessRecordType :: Typed.TypedTerm Syntax.FieldAccess -> Typed.TypedTerm Syntax.Symbol
 fieldAccessRecordType x =
@@ -1466,6 +1558,10 @@ fieldDefinitionDefaultValue x =
         Core.projectionFieldName = (Core.Name "defaultValue")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.FieldDefinition
+fieldDefinitionFieldDefinition :: Typed.TypedName Syntax.FieldDefinition
+fieldDefinitionFieldDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.FieldDefinition")
+
 -- | DSL accessor for the name field of hydra.lisp.syntax.FieldDefinition
 fieldDefinitionName :: Typed.TypedTerm Syntax.FieldDefinition -> Typed.TypedTerm Syntax.Symbol
 fieldDefinitionName x =
@@ -1521,6 +1617,10 @@ floatLiteral value precision =
         Core.Field {
           Core.fieldName = (Core.Name "precision"),
           Core.fieldTerm = (Typed.unTypedTerm precision)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.FloatLiteral
+floatLiteralFloatLiteral :: Typed.TypedName Syntax.FloatLiteral
+floatLiteralFloatLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.FloatLiteral")
 
 -- | DSL accessor for the precision field of hydra.lisp.syntax.FloatLiteral
 floatLiteralPrecision :: Typed.TypedTerm Syntax.FloatLiteral -> Typed.TypedTerm (Maybe String)
@@ -1616,6 +1716,10 @@ functionDefinitionDoc x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.FunctionDefinition"),
         Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.FunctionDefinition
+functionDefinitionFunctionDefinition :: Typed.TypedName Syntax.FunctionDefinition
+functionDefinitionFunctionDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.FunctionDefinition")
 
 -- | DSL accessor for the name field of hydra.lisp.syntax.FunctionDefinition
 functionDefinitionName :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm Syntax.Symbol
@@ -1957,6 +2061,10 @@ ifExpressionElse x =
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.IfExpression
+ifExpressionIfExpression :: Typed.TypedName Syntax.IfExpression
+ifExpressionIfExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.IfExpression")
+
 -- | DSL accessor for the then field of hydra.lisp.syntax.IfExpression
 ifExpressionThen :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
 ifExpressionThen x =
@@ -2051,6 +2159,10 @@ importDeclaration module_ spec =
           Core.fieldName = (Core.Name "spec"),
           Core.fieldTerm = (Typed.unTypedTerm spec)}]}))
 
+-- | DSL name token for hydra.lisp.syntax.ImportDeclaration
+importDeclarationImportDeclaration :: Typed.TypedName Syntax.ImportDeclaration
+importDeclarationImportDeclaration = Typed.TypedName (Core.Name "hydra.lisp.syntax.ImportDeclaration")
+
 -- | DSL accessor for the module field of hydra.lisp.syntax.ImportDeclaration
 importDeclarationModule :: Typed.TypedTerm Syntax.ImportDeclaration -> Typed.TypedTerm Syntax.NamespaceName
 importDeclarationModule x =
@@ -2121,6 +2233,10 @@ importSpecAll =
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.lisp.syntax.ImportSpec
+importSpecImportSpec :: Typed.TypedName Syntax.ImportSpec
+importSpecImportSpec = Typed.TypedName (Core.Name "hydra.lisp.syntax.ImportSpec")
+
 -- | DSL injection for the only variant of hydra.lisp.syntax.ImportSpec
 importSpecOnly :: Typed.TypedTerm [Syntax.Symbol] -> Typed.TypedTerm Syntax.ImportSpec
 importSpecOnly x =
@@ -2160,6 +2276,10 @@ integerLiteralBigint x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.IntegerLiteral"),
         Core.projectionFieldName = (Core.Name "bigint")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.IntegerLiteral
+integerLiteralIntegerLiteral :: Typed.TypedName Syntax.IntegerLiteral
+integerLiteralIntegerLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.IntegerLiteral")
 
 -- | DSL accessor for the value field of hydra.lisp.syntax.IntegerLiteral
 integerLiteralValue :: Typed.TypedTerm Syntax.IntegerLiteral -> Typed.TypedTerm Integer
@@ -2216,6 +2336,10 @@ keyword name namespace =
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Typed.unTypedTerm namespace)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.Keyword
+keywordKeyword :: Typed.TypedName Syntax.Keyword
+keywordKeyword = Typed.TypedName (Core.Name "hydra.lisp.syntax.Keyword")
 
 -- | DSL accessor for the name field of hydra.lisp.syntax.Keyword
 keywordName :: Typed.TypedTerm Syntax.Keyword -> Typed.TypedTerm String
@@ -2296,6 +2420,10 @@ lambdaBody x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Lambda"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.Lambda
+lambdaLambda :: Typed.TypedName Syntax.Lambda
+lambdaLambda = Typed.TypedName (Core.Name "hydra.lisp.syntax.Lambda")
 
 -- | DSL accessor for the name field of hydra.lisp.syntax.Lambda
 lambdaName :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm (Maybe Syntax.Symbol)
@@ -2457,6 +2585,10 @@ letBindingDestructuring x =
         Core.fieldName = (Core.Name "destructuring"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.lisp.syntax.LetBinding
+letBindingLetBinding :: Typed.TypedName Syntax.LetBinding
+letBindingLetBinding = Typed.TypedName (Core.Name "hydra.lisp.syntax.LetBinding")
+
 -- | DSL injection for the simple variant of hydra.lisp.syntax.LetBinding
 letBindingSimple :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.LetBinding
 letBindingSimple x =
@@ -2508,6 +2640,10 @@ letExpressionKind x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.LetExpression"),
         Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.LetExpression
+letExpressionLetExpression :: Typed.TypedName Syntax.LetExpression
+letExpressionLetExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.LetExpression")
 
 -- | DSL updater for the bindings field of hydra.lisp.syntax.LetExpression
 letExpressionWithBindings :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.LetBinding] -> Typed.TypedTerm Syntax.LetExpression
@@ -2581,6 +2717,10 @@ letExpressionWithKind original newVal =
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.lisp.syntax.LetKind
+letKindLetKind :: Typed.TypedName Syntax.LetKind
+letKindLetKind = Typed.TypedName (Core.Name "hydra.lisp.syntax.LetKind")
+
 -- | DSL injection for the parallel variant of hydra.lisp.syntax.LetKind
 letKindParallel :: Typed.TypedTerm Syntax.LetKind
 letKindParallel =
@@ -2629,6 +2769,10 @@ listLiteralElements x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ListLiteral"),
         Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.ListLiteral
+listLiteralListLiteral :: Typed.TypedName Syntax.ListLiteral
+listLiteralListLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.ListLiteral")
 
 -- | DSL accessor for the quoted field of hydra.lisp.syntax.ListLiteral
 listLiteralQuoted :: Typed.TypedTerm Syntax.ListLiteral -> Typed.TypedTerm Bool
@@ -2718,6 +2862,10 @@ literalKeyword x =
         Core.fieldName = (Core.Name "keyword"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.lisp.syntax.Literal
+literalLiteral :: Typed.TypedName Syntax.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.Literal")
+
 -- | DSL injection for the nil variant of hydra.lisp.syntax.Literal
 literalNil :: Typed.TypedTerm Syntax.Literal
 literalNil =
@@ -2736,6 +2884,10 @@ literalPattern value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.lisp.syntax.LiteralPattern
+literalPatternLiteralPattern :: Typed.TypedName Syntax.LiteralPattern
+literalPatternLiteralPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.LiteralPattern")
 
 -- | DSL accessor for the value field of hydra.lisp.syntax.LiteralPattern
 literalPatternValue :: Typed.TypedTerm Syntax.LiteralPattern -> Typed.TypedTerm Syntax.Literal
@@ -2801,6 +2953,10 @@ macroDefinitionBody x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.MacroDefinition"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.MacroDefinition
+macroDefinitionMacroDefinition :: Typed.TypedName Syntax.MacroDefinition
+macroDefinitionMacroDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.MacroDefinition")
 
 -- | DSL accessor for the name field of hydra.lisp.syntax.MacroDefinition
 macroDefinitionName :: Typed.TypedTerm Syntax.MacroDefinition -> Typed.TypedTerm Syntax.Symbol
@@ -2975,6 +3131,10 @@ mapEntryKey x =
         Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.MapEntry
+mapEntryMapEntry :: Typed.TypedName Syntax.MapEntry
+mapEntryMapEntry = Typed.TypedName (Core.Name "hydra.lisp.syntax.MapEntry")
+
 -- | DSL accessor for the value field of hydra.lisp.syntax.MapEntry
 mapEntryValue :: Typed.TypedTerm Syntax.MapEntry -> Typed.TypedTerm Syntax.Expression
 mapEntryValue x =
@@ -3037,6 +3197,10 @@ mapLiteralEntries x =
         Core.projectionFieldName = (Core.Name "entries")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.MapLiteral
+mapLiteralMapLiteral :: Typed.TypedName Syntax.MapLiteral
+mapLiteralMapLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.MapLiteral")
+
 -- | DSL updater for the entries field of hydra.lisp.syntax.MapLiteral
 mapLiteralWithEntries :: Typed.TypedTerm Syntax.MapLiteral -> Typed.TypedTerm [Syntax.MapEntry] -> Typed.TypedTerm Syntax.MapLiteral
 mapLiteralWithEntries original newVal =
@@ -3068,6 +3232,10 @@ moduleDeclarationDoc x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.ModuleDeclaration"),
         Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.ModuleDeclaration
+moduleDeclarationModuleDeclaration :: Typed.TypedName Syntax.ModuleDeclaration
+moduleDeclarationModuleDeclaration = Typed.TypedName (Core.Name "hydra.lisp.syntax.ModuleDeclaration")
 
 -- | DSL accessor for the name field of hydra.lisp.syntax.ModuleDeclaration
 moduleDeclarationName :: Typed.TypedTerm Syntax.ModuleDeclaration -> Typed.TypedTerm Syntax.NamespaceName
@@ -3119,6 +3287,10 @@ namespaceName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.NamespaceName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.NamespaceName
+namespaceNameNamespaceName :: Typed.TypedName Syntax.NamespaceName
+namespaceNameNamespaceName = Typed.TypedName (Core.Name "hydra.lisp.syntax.NamespaceName")
+
 -- | DSL injection for the emptyList variant of hydra.lisp.syntax.NilStyle
 nilStyleEmptyList :: Typed.TypedTerm Syntax.NilStyle
 nilStyleEmptyList =
@@ -3136,6 +3308,10 @@ nilStyleNil =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nil"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.lisp.syntax.NilStyle
+nilStyleNilStyle :: Typed.TypedName Syntax.NilStyle
+nilStyleNilStyle = Typed.TypedName (Core.Name "hydra.lisp.syntax.NilStyle")
 
 -- | DSL constructor for hydra.lisp.syntax.NotExpression
 notExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.NotExpression
@@ -3155,6 +3331,10 @@ notExpressionExpression x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.NotExpression"),
         Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.NotExpression
+notExpressionNotExpression :: Typed.TypedName Syntax.NotExpression
+notExpressionNotExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.NotExpression")
 
 -- | DSL updater for the expression field of hydra.lisp.syntax.NotExpression
 notExpressionWithExpression :: Typed.TypedTerm Syntax.NotExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.NotExpression
@@ -3185,6 +3365,10 @@ orExpressionExpressions x =
         Core.projectionFieldName = (Core.Name "expressions")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.OrExpression
+orExpressionOrExpression :: Typed.TypedName Syntax.OrExpression
+orExpressionOrExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.OrExpression")
+
 -- | DSL updater for the expressions field of hydra.lisp.syntax.OrExpression
 orExpressionWithExpressions :: Typed.TypedTerm Syntax.OrExpression -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.OrExpression
 orExpressionWithExpressions original newVal =
@@ -3212,6 +3396,10 @@ patternLiteral x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.lisp.syntax.Pattern
+patternPattern :: Typed.TypedName Syntax.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.Pattern")
 
 -- | DSL injection for the variable variant of hydra.lisp.syntax.Pattern
 patternVariable :: Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.Pattern
@@ -3297,6 +3485,10 @@ programModule x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.Program"),
         Core.projectionFieldName = (Core.Name "module")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.Program
+programProgram :: Typed.TypedName Syntax.Program
+programProgram = Typed.TypedName (Core.Name "hydra.lisp.syntax.Program")
 
 -- | DSL updater for the dialect field of hydra.lisp.syntax.Program
 programWithDialect :: Typed.TypedTerm Syntax.Program -> Typed.TypedTerm Syntax.Dialect -> Typed.TypedTerm Syntax.Program
@@ -3519,6 +3711,10 @@ qualifiedSymbolNamespace x =
         Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.QualifiedSymbol
+qualifiedSymbolQualifiedSymbol :: Typed.TypedName Syntax.QualifiedSymbol
+qualifiedSymbolQualifiedSymbol = Typed.TypedName (Core.Name "hydra.lisp.syntax.QualifiedSymbol")
+
 -- | DSL updater for the name field of hydra.lisp.syntax.QualifiedSymbol
 qualifiedSymbolWithName :: Typed.TypedTerm Syntax.QualifiedSymbol -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.QualifiedSymbol
 qualifiedSymbolWithName original newVal =
@@ -3572,6 +3768,10 @@ quasiquoteExpressionBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.QuasiquoteExpression
+quasiquoteExpressionQuasiquoteExpression :: Typed.TypedName Syntax.QuasiquoteExpression
+quasiquoteExpressionQuasiquoteExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.QuasiquoteExpression")
+
 -- | DSL updater for the body field of hydra.lisp.syntax.QuasiquoteExpression
 quasiquoteExpressionWithBody :: Typed.TypedTerm Syntax.QuasiquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuasiquoteExpression
 quasiquoteExpressionWithBody original newVal =
@@ -3600,6 +3800,10 @@ quoteExpressionBody x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.QuoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.QuoteExpression
+quoteExpressionQuoteExpression :: Typed.TypedName Syntax.QuoteExpression
+quoteExpressionQuoteExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.QuoteExpression")
 
 -- | DSL updater for the body field of hydra.lisp.syntax.QuoteExpression
 quoteExpressionWithBody :: Typed.TypedTerm Syntax.QuoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.QuoteExpression
@@ -3653,6 +3857,10 @@ recordTypeDefinitionName x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.RecordTypeDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.RecordTypeDefinition
+recordTypeDefinitionRecordTypeDefinition :: Typed.TypedName Syntax.RecordTypeDefinition
+recordTypeDefinitionRecordTypeDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.RecordTypeDefinition")
 
 -- | DSL updater for the doc field of hydra.lisp.syntax.RecordTypeDefinition
 recordTypeDefinitionWithDoc :: Typed.TypedTerm Syntax.RecordTypeDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.RecordTypeDefinition
@@ -3744,6 +3952,10 @@ sExpressionList x =
         Core.fieldName = (Core.Name "list"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.lisp.syntax.SExpression
+sExpressionSExpression :: Typed.TypedName Syntax.SExpression
+sExpressionSExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.SExpression")
+
 -- | DSL constructor for hydra.lisp.syntax.SetLiteral
 setLiteral :: Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.SetLiteral
 setLiteral elements =
@@ -3762,6 +3974,10 @@ setLiteralElements x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SetLiteral"),
         Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.SetLiteral
+setLiteralSetLiteral :: Typed.TypedName Syntax.SetLiteral
+setLiteralSetLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.SetLiteral")
 
 -- | DSL updater for the elements field of hydra.lisp.syntax.SetLiteral
 setLiteralWithElements :: Typed.TypedTerm Syntax.SetLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.SetLiteral
@@ -3794,6 +4010,10 @@ simpleBindingName x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.SimpleBinding"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.SimpleBinding
+simpleBindingSimpleBinding :: Typed.TypedName Syntax.SimpleBinding
+simpleBindingSimpleBinding = Typed.TypedName (Core.Name "hydra.lisp.syntax.SimpleBinding")
 
 -- | DSL accessor for the value field of hydra.lisp.syntax.SimpleBinding
 simpleBindingValue :: Typed.TypedTerm Syntax.SimpleBinding -> Typed.TypedTerm Syntax.Expression
@@ -3857,6 +4077,11 @@ splicingUnquoteExpressionBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.SplicingUnquoteExpression
+splicingUnquoteExpressionSplicingUnquoteExpression :: Typed.TypedName Syntax.SplicingUnquoteExpression
+splicingUnquoteExpressionSplicingUnquoteExpression =
+    Typed.TypedName (Core.Name "hydra.lisp.syntax.SplicingUnquoteExpression")
+
 -- | DSL updater for the body field of hydra.lisp.syntax.SplicingUnquoteExpression
 splicingUnquoteExpressionWithBody :: Typed.TypedTerm Syntax.SplicingUnquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SplicingUnquoteExpression
 splicingUnquoteExpressionWithBody original newVal =
@@ -3873,6 +4098,10 @@ symbol x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.lisp.syntax.Symbol"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.Symbol
+symbolSymbol :: Typed.TypedName Syntax.Symbol
+symbolSymbol = Typed.TypedName (Core.Name "hydra.lisp.syntax.Symbol")
 
 -- | DSL injection for the constant variant of hydra.lisp.syntax.TopLevelForm
 topLevelFormConstant :: Typed.TypedTerm Syntax.ConstantDefinition -> Typed.TypedTerm Syntax.TopLevelForm
@@ -3918,6 +4147,10 @@ topLevelFormRecordType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordType"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.lisp.syntax.TopLevelForm
+topLevelFormTopLevelForm :: Typed.TypedName Syntax.TopLevelForm
+topLevelFormTopLevelForm = Typed.TypedName (Core.Name "hydra.lisp.syntax.TopLevelForm")
 
 -- | DSL injection for the variable variant of hydra.lisp.syntax.TopLevelForm
 topLevelFormVariable :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm Syntax.TopLevelForm
@@ -3970,6 +4203,11 @@ topLevelFormWithCommentsForm x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments"),
         Core.projectionFieldName = (Core.Name "form")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.TopLevelFormWithComments
+topLevelFormWithCommentsTopLevelFormWithComments :: Typed.TypedName Syntax.TopLevelFormWithComments
+topLevelFormWithCommentsTopLevelFormWithComments =
+    Typed.TypedName (Core.Name "hydra.lisp.syntax.TopLevelFormWithComments")
 
 -- | DSL updater for the comment field of hydra.lisp.syntax.TopLevelFormWithComments
 topLevelFormWithCommentsWithComment :: Typed.TypedTerm Syntax.TopLevelFormWithComments -> Typed.TypedTerm (Maybe Syntax.Comment) -> Typed.TypedTerm Syntax.TopLevelFormWithComments
@@ -4074,6 +4312,10 @@ typeAnnotationType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.TypeAnnotation
+typeAnnotationTypeAnnotation :: Typed.TypedName Syntax.TypeAnnotation
+typeAnnotationTypeAnnotation = Typed.TypedName (Core.Name "hydra.lisp.syntax.TypeAnnotation")
+
 -- | DSL updater for the expression field of hydra.lisp.syntax.TypeAnnotation
 typeAnnotationWithExpression :: Typed.TypedTerm Syntax.TypeAnnotation -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypeAnnotation
 typeAnnotationWithExpression original newVal =
@@ -4138,6 +4380,10 @@ typeHintType x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.TypeHint"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.TypeHint
+typeHintTypeHint :: Typed.TypedName Syntax.TypeHint
+typeHintTypeHint = Typed.TypedName (Core.Name "hydra.lisp.syntax.TypeHint")
 
 -- | DSL updater for the name field of hydra.lisp.syntax.TypeHint
 typeHintWithName :: Typed.TypedTerm Syntax.TypeHint -> Typed.TypedTerm Syntax.Symbol -> Typed.TypedTerm Syntax.TypeHint
@@ -4245,6 +4491,10 @@ typeSpecifierSet x =
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.lisp.syntax.TypeSpecifier
+typeSpecifierTypeSpecifier :: Typed.TypedName Syntax.TypeSpecifier
+typeSpecifierTypeSpecifier = Typed.TypedName (Core.Name "hydra.lisp.syntax.TypeSpecifier")
+
 -- | DSL injection for the unit variant of hydra.lisp.syntax.TypeSpecifier
 typeSpecifierUnit :: Typed.TypedTerm Syntax.TypeSpecifier
 typeSpecifierUnit =
@@ -4293,6 +4543,10 @@ unquoteExpressionBody x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.UnquoteExpression"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.UnquoteExpression
+unquoteExpressionUnquoteExpression :: Typed.TypedName Syntax.UnquoteExpression
+unquoteExpressionUnquoteExpression = Typed.TypedName (Core.Name "hydra.lisp.syntax.UnquoteExpression")
 
 -- | DSL updater for the body field of hydra.lisp.syntax.UnquoteExpression
 unquoteExpressionWithBody :: Typed.TypedTerm Syntax.UnquoteExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.UnquoteExpression
@@ -4346,6 +4600,10 @@ variableDefinitionValue x =
         Core.projectionTypeName = (Core.Name "hydra.lisp.syntax.VariableDefinition"),
         Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.lisp.syntax.VariableDefinition
+variableDefinitionVariableDefinition :: Typed.TypedName Syntax.VariableDefinition
+variableDefinitionVariableDefinition = Typed.TypedName (Core.Name "hydra.lisp.syntax.VariableDefinition")
 
 -- | DSL updater for the doc field of hydra.lisp.syntax.VariableDefinition
 variableDefinitionWithDoc :: Typed.TypedTerm Syntax.VariableDefinition -> Typed.TypedTerm (Maybe Syntax.Docstring) -> Typed.TypedTerm Syntax.VariableDefinition
@@ -4450,6 +4708,10 @@ variableReferenceName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.VariableReference
+variableReferenceVariableReference :: Typed.TypedName Syntax.VariableReference
+variableReferenceVariableReference = Typed.TypedName (Core.Name "hydra.lisp.syntax.VariableReference")
+
 -- | DSL updater for the functionNamespace field of hydra.lisp.syntax.VariableReference
 variableReferenceWithFunctionNamespace :: Typed.TypedTerm Syntax.VariableReference -> Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.VariableReference
 variableReferenceWithFunctionNamespace original newVal =
@@ -4503,6 +4765,10 @@ vectorLiteralElements x =
         Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.lisp.syntax.VectorLiteral
+vectorLiteralVectorLiteral :: Typed.TypedName Syntax.VectorLiteral
+vectorLiteralVectorLiteral = Typed.TypedName (Core.Name "hydra.lisp.syntax.VectorLiteral")
+
 -- | DSL updater for the elements field of hydra.lisp.syntax.VectorLiteral
 vectorLiteralWithElements :: Typed.TypedTerm Syntax.VectorLiteral -> Typed.TypedTerm [Syntax.Expression] -> Typed.TypedTerm Syntax.VectorLiteral
 vectorLiteralWithElements original newVal =
@@ -4519,3 +4785,7 @@ wildcardPattern =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.lisp.syntax.WildcardPattern"),
       Core.recordFields = []}))
+
+-- | DSL name token for hydra.lisp.syntax.WildcardPattern
+wildcardPatternWildcardPattern :: Typed.TypedName Syntax.WildcardPattern
+wildcardPatternWildcardPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.WildcardPattern")

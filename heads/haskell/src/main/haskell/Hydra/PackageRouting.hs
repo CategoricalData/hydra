@@ -52,6 +52,7 @@ module Hydra.PackageRouting (
 
 import Hydra.Kernel
 import qualified Hydra.Dsls as Dsls
+import qualified Hydra.Names as Names
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Decoding as Decoding
 

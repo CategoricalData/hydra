@@ -1,8 +1,29 @@
 {
   "name": "hydra.dsl.osv.schema",
   "metadata": {"description": "DSL functions for hydra.osv.schema", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.osv.schema"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.osv.schema"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.osv.schema"},
+    {"module": "hydra.decode.osv.schema"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.creditedCredited",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Credited"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Credited"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Credited"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.credited",
@@ -384,6 +405,24 @@
                   "value": {"literal": {"string": "DSL updater for the contact field of hydra.osv.schema.Credited"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.ecosystemEcosystem",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Ecosystem"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Ecosystem"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Ecosystem"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.ecosystem",
         "signature": {
           "typeParameters": [],
@@ -471,6 +510,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Ecosystem"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.entryEntry",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Entry"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Entry"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Entry"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.entry",
@@ -7665,6 +7720,22 @@
                   "value": {"literal": {"string": "DSL updater for the credits field of hydra.osv.schema.Entry"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.eventEvent",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Event"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Event"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Event"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.eventIntroduced",
         "signature": {
           "typeParameters": [],
@@ -7865,6 +7936,22 @@
                   "value": {"literal": {"string": "DSL injection for the limit variant of hydra.osv.schema.Event"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.idId",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Id"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Id"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Id"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.id",
         "signature": {
           "typeParameters": [],
@@ -7949,6 +8036,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Id"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.markdownMarkdown",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Markdown"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Markdown"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Markdown"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.markdown",
@@ -8040,6 +8144,24 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Markdown"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.osvVersionOsvVersion",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.OsvVersion"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.OsvVersion"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.OsvVersion"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.osvVersion",
         "signature": {
           "typeParameters": [],
@@ -8127,6 +8249,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.OsvVersion"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.packagePackage",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Package"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Package"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Package"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.package",
@@ -8768,6 +8907,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the purl field of hydra.osv.schema.Package"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.packageVersionsPackageVersions",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.PackageVersions"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.PackageVersions"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.PackageVersions"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.packageVersions",
@@ -9440,6 +9599,24 @@
                   "value": {"literal": {"string": "DSL updater for the versions field of hydra.osv.schema.PackageVersions"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.referenceReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Reference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Reference"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Reference"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.reference",
         "signature": {
           "typeParameters": [],
@@ -9810,6 +9987,26 @@
                   "value": {"literal": {"string": "DSL updater for the url field of hydra.osv.schema.Reference"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.referenceTypeReferenceType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.ReferenceType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.ReferenceType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.ReferenceType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.referenceType2",
         "signature": {
           "typeParameters": [],
@@ -9897,6 +10094,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.ReferenceType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.severitySeverity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Severity"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Severity"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Severity"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.severity",
@@ -10274,6 +10488,26 @@
                   "value": {"literal": {"string": "DSL updater for the score field of hydra.osv.schema.Severity"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.severityScoreSeverityScore",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.SeverityScore"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.SeverityScore"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.SeverityScore"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.severityScore2",
         "signature": {
           "typeParameters": [],
@@ -10361,6 +10595,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.SeverityScore"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.severityTypeSeverityType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.SeverityType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.SeverityType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.SeverityType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.severityType2",
@@ -10452,6 +10706,24 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.SeverityType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.timestampTimestamp",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Timestamp"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Timestamp"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Timestamp"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.timestamp",
         "signature": {
           "typeParameters": [],
@@ -10541,6 +10813,22 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Timestamp"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.urlUrl",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Url"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Url"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Url"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.url",
         "signature": {
           "typeParameters": [],
@@ -10625,6 +10913,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Url"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.versionVersion",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.Version"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.Version"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.osv.schema.Version"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.version",
@@ -10716,6 +11021,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.Version"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.versionOrStarVersionOrStar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.VersionOrStar"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.VersionOrStar"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.VersionOrStar"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.versionOrStar",
         "signature": {
           "typeParameters": [],
@@ -10805,6 +11130,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.VersionOrStar"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.osv.schema.versionOrZeroVersionOrZero",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.VersionOrZero"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.VersionOrZero"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.VersionOrZero"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.osv.schema.versionOrZero",
         "signature": {
           "typeParameters": [],
@@ -10892,6 +11237,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.osv.schema.VersionOrZero"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.versionRangeVersionRange",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.VersionRange"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.VersionRange"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.VersionRange"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.versionRange",
@@ -11542,6 +11907,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the events field of hydra.osv.schema.VersionRange"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.osv.schema.versionTypeVersionType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.osv.schema.VersionType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.osv.schema.VersionType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.osv.schema.VersionType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.osv.schema.versionType",

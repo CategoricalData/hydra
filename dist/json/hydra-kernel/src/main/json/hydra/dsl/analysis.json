@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.analysis"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.analysis"},
+    {"module": "hydra.decode.analysis"},
     {"module": "hydra.annotations"},
     {"module": "hydra.arity"},
     {"module": "hydra.checking"},

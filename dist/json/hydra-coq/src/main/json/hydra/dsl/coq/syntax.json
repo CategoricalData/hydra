@@ -1,8 +1,32 @@
 {
   "name": "hydra.dsl.coq.syntax",
   "metadata": {"description": "DSL functions for hydra.coq.syntax", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.coq.syntax"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.coq.syntax"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.coq.syntax"},
+    {"module": "hydra.decode.coq.syntax"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.annotatedApplicationAnnotatedApplication",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.AnnotatedApplication"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.AnnotatedApplication"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.AnnotatedApplication"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.annotatedApplication",
@@ -407,6 +431,26 @@
                   "value": {"literal": {"string": "DSL updater for the terms field of hydra.coq.syntax.AnnotatedApplication"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.applicationApplication",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Application"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Application"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Application"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.applicationNormal",
         "signature": {
           "typeParameters": [],
@@ -507,6 +551,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the annotated variant of hydra.coq.syntax.Application"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.argArg",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Arg"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Arg"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Arg"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.argIdent",
@@ -655,6 +715,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the term variant of hydra.coq.syntax.Arg"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.binderBinder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Binder"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Binder"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Binder"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.binderName",
@@ -959,6 +1036,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the pattern variant of hydra.coq.syntax.Binder"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.caseItemCaseItem",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.CaseItem"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.CaseItem"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.CaseItem"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.caseItem",
@@ -1609,6 +1703,22 @@
                   "value": {"literal": {"string": "DSL updater for the in field of hydra.coq.syntax.CaseItem"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.cofixCofix",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Cofix"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Cofix"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Cofix"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.cofix",
         "signature": {
           "typeParameters": [],
@@ -1980,6 +2090,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the qual field of hydra.coq.syntax.Cofix"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.cofixBodyCofixBody",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.CofixBody"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.CofixBody"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.CofixBody"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.cofixBody2",
@@ -2961,6 +3089,24 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.CofixBody"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.cofixQualCofixQual",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.CofixQual"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.CofixQual"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.CofixQual"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.cofixQualIn",
         "signature": {
           "typeParameters": [],
@@ -3059,6 +3205,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the with variant of hydra.coq.syntax.CofixQual"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.cofixWithCofixWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.CofixWith"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.CofixWith"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.CofixWith"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.cofixWith",
@@ -3459,6 +3623,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the for field of hydra.coq.syntax.CofixWith"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.equationEquation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Equation"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Equation"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Equation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.equation",
@@ -3876,6 +4057,26 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.Equation"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.existentialVariableExistentialVariable",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ExistentialVariable"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ExistentialVariable"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ExistentialVariable"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.existentialVariable",
         "signature": {
           "typeParameters": [],
@@ -4258,6 +4459,29 @@
                   "value": {"literal": {"string": "DSL updater for the variant field of hydra.coq.syntax.ExistentialVariable"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.existentialVariableVariantExistentialVariableVariant",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.coq.syntax.ExistentialVariableVariant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ExistentialVariableVariant"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ExistentialVariableVariant"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.existentialVariableVariantPlaceholder",
         "signature": {
           "typeParameters": [],
@@ -4438,6 +4662,24 @@
                   "value": {"literal": {"string": "DSL injection for the outside variant of hydra.coq.syntax.ExistentialVariableVariant"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.fieldIdentFieldIdent",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FieldIdent"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FieldIdent"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FieldIdent"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.fieldIdent",
         "signature": {
           "typeParameters": [],
@@ -4526,6 +4768,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.FieldIdent"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fixFix",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Fix"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Fix"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Fix"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fixDecl",
@@ -4626,6 +4884,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the qual variant of hydra.coq.syntax.Fix"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fixAnnotFixAnnot",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FixAnnot"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FixAnnot"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FixAnnot"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fixAnnotStruct",
@@ -4777,6 +5052,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the measure variant of hydra.coq.syntax.FixAnnot"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fixAnnot_MeasureFixAnnot_Measure",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FixAnnot_Measure"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FixAnnot_Measure"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FixAnnot_Measure"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fixAnnot_Measure",
@@ -5429,6 +5724,26 @@
                   "value": {"literal": {"string": "DSL updater for the term2 field of hydra.coq.syntax.FixAnnot_Measure"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.fixAnnot_WfFixAnnot_Wf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FixAnnot_Wf"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FixAnnot_Wf"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FixAnnot_Wf"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.fixAnnot_Wf",
         "signature": {
           "typeParameters": [],
@@ -5799,6 +6114,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the ident field of hydra.coq.syntax.FixAnnot_Wf"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fix_DeclFix_Decl",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Fix_Decl"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Fix_Decl"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Fix_Decl"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fix_Decl",
@@ -7189,6 +7521,23 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.Fix_Decl"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.fix_QualFix_Qual",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Fix_Qual"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Fix_Qual"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Fix_Qual"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.fix_QualIn",
         "signature": {
           "typeParameters": [],
@@ -7287,6 +7636,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the with variant of hydra.coq.syntax.Fix_Qual"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fixWithFixWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FixWith"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FixWith"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FixWith"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fixWith",
@@ -7688,6 +8054,23 @@
                   "value": {"literal": {"string": "DSL updater for the for field of hydra.coq.syntax.FixWith"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.forallForall",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Forall"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Forall"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Forall"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.forall",
         "signature": {
           "typeParameters": [],
@@ -8057,6 +8440,26 @@
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.coq.syntax.Forall"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.forallOrFunForallOrFun",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ForallOrFun"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ForallOrFun"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ForallOrFun"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.forallOrFunForall",
         "signature": {
           "typeParameters": [],
@@ -8155,6 +8558,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the fun variant of hydra.coq.syntax.ForallOrFun"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.funFun",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Fun"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Fun"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Fun"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fun",
@@ -8515,6 +8934,26 @@
                   "value": {"literal": {"string": "DSL updater for the body field of hydra.coq.syntax.Fun"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.generalizingBinderGeneralizingBinder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.GeneralizingBinder"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.GeneralizingBinder"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.GeneralizingBinder"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.generalizingBinderExplicit",
         "signature": {
           "typeParameters": [],
@@ -8730,6 +9169,22 @@
                     "literal": {"string": "DSL injection for the implicitNonMaximallyInserted variant of hydra.coq.syntax.GeneralizingBinder"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.identIdent",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Ident"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Ident"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Ident"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.ident",
         "signature": {
           "typeParameters": [],
@@ -8818,6 +9273,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Ident"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.identArgIdentArg",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.IdentArg"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.IdentArg"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.IdentArg"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.identArg",
@@ -9183,6 +9655,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.IdentArg"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.ifIf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.If"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.If"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.If"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.if",
@@ -10137,6 +10625,26 @@
                   "value": {"literal": {"string": "DSL updater for the else field of hydra.coq.syntax.If"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.implicitBindersImplicitBinders",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ImplicitBinders"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ImplicitBinders"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ImplicitBinders"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.implicitBindersMaximallyInserted",
         "signature": {
           "typeParameters": [],
@@ -10277,6 +10785,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the nonMaximallyInserted variant of hydra.coq.syntax.ImplicitBinders"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.letLet",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Let"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Let"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Let"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.let",
@@ -10635,6 +11159,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the in field of hydra.coq.syntax.Let"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.letBinderLetBinder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.LetBinder"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetBinder"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetBinder"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.letBinder",
@@ -11275,6 +11817,26 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.LetBinder"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.letBindingsLetBindings",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.LetBindings"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetBindings"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetBindings"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.letBindingsNamed",
         "signature": {
           "typeParameters": [],
@@ -11375,6 +11937,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the destructuring variant of hydra.coq.syntax.LetBindings"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.letNamedLetNamed",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.LetNamed"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetNamed"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetNamed"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.letNamed",
@@ -11752,6 +12331,26 @@
                   "value": {"literal": {"string": "DSL updater for the binders field of hydra.coq.syntax.LetNamed"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.letDestructuringLetDestructuring",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.LetDestructuring"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetDestructuring"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetDestructuring"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.letDestructuringVariant1",
         "signature": {
           "typeParameters": [],
@@ -11915,6 +12514,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the variant3 variant of hydra.coq.syntax.LetDestructuring"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.letDestructuring_Variant1LetDestructuring_Variant1",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.coq.syntax.LetDestructuring_Variant1"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetDestructuring_Variant1"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetDestructuring_Variant1"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.letDestructuring_Variant1",
@@ -12594,6 +13215,28 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.LetDestructuring_Variant1"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.letDestructuring_Variant2LetDestructuring_Variant2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.coq.syntax.LetDestructuring_Variant2"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetDestructuring_Variant2"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetDestructuring_Variant2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.letDestructuring_Variant2",
         "signature": {
           "typeParameters": [],
@@ -13269,6 +13912,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the return field of hydra.coq.syntax.LetDestructuring_Variant2"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.letDestructuring_Variant3LetDestructuring_Variant3",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.coq.syntax.LetDestructuring_Variant3"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.LetDestructuring_Variant3"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.LetDestructuring_Variant3"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.letDestructuring_Variant3",
@@ -14299,6 +14964,22 @@
                   "value": {"literal": {"string": "DSL updater for the return field of hydra.coq.syntax.LetDestructuring_Variant3"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.matchMatch",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Match"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Match"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Match"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.match",
         "signature": {
           "typeParameters": [],
@@ -15285,6 +15966,22 @@
                   "value": {"literal": {"string": "DSL updater for the equations field of hydra.coq.syntax.Match"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.nameName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Name"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Name"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.name",
         "signature": {
           "typeParameters": [],
@@ -15375,6 +16072,23 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Name"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.naturalNatural",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Natural"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Natural"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Natural"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.natural",
         "signature": {
           "typeParameters": [],
@@ -15463,6 +16177,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Natural"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.naturalArgNaturalArg",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.NaturalArg"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.NaturalArg"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.NaturalArg"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.naturalArg",
@@ -15835,6 +16567,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.NaturalArg"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.normalApplicationNormalApplication",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.NormalApplication"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.NormalApplication"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.NormalApplication"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.normalApplication",
@@ -16234,6 +16986,23 @@
                   "value": {"literal": {"string": "DSL updater for the rhs field of hydra.coq.syntax.NormalApplication"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.numberNumber",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Number"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Number"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Number"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.number",
         "signature": {
           "typeParameters": [],
@@ -16322,6 +17091,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Number"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.oneTermOneTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.OneTerm"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.OneTerm"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.OneTerm"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.oneTermExplicit",
@@ -16422,6 +17208,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the term1 variant of hydra.coq.syntax.OneTerm"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.openBindersOpenBinders",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.OpenBinders"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.OpenBinders"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.OpenBinders"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.openBindersType",
@@ -16529,6 +17335,23 @@
         "name": "hydra.dsl.coq.syntax.patternPattern",
         "signature": {
           "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.patternPattern2",
+        "signature": {
+          "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
@@ -16626,6 +17449,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the term variant of hydra.coq.syntax.Pattern"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.pattern0Pattern0",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern0"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern0"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern0"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.pattern0Qualid",
@@ -16930,6 +17770,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.coq.syntax.Pattern0"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.pattern1Pattern1",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern1"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern1"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern1"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.pattern1",
@@ -17307,6 +18164,24 @@
                   "value": {"literal": {"string": "DSL updater for the scope field of hydra.coq.syntax.Pattern1"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.pattern10Pattern10",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern10"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern10"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern10"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.pattern10As",
         "signature": {
           "typeParameters": [],
@@ -17458,6 +18333,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the qualiid variant of hydra.coq.syntax.Pattern10"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.pattern10_AsPattern10_As",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern10_As"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern10_As"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern10_As"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.pattern10_As",
@@ -17830,6 +18725,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the as field of hydra.coq.syntax.Pattern10_As"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.pattern10_PatternsPattern10_Patterns",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern10_Patterns"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern10_Patterns"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern10_Patterns"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.pattern10_Patterns",
@@ -18209,6 +19124,26 @@
                   "value": {"literal": {"string": "DSL updater for the patterns field of hydra.coq.syntax.Pattern10_Patterns"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.pattern10_QualidPattern10_Qualid",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Pattern10_Qualid"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Pattern10_Qualid"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Pattern10_Qualid"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.pattern10_Qualid",
         "signature": {
           "typeParameters": [],
@@ -18586,6 +19521,26 @@
                   "value": {"literal": {"string": "DSL updater for the patterns field of hydra.coq.syntax.Pattern10_Qualid"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.primitiveNotationsPrimitiveNotations",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.PrimitiveNotations"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.PrimitiveNotations"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.PrimitiveNotations"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.primitiveNotationsNumber",
         "signature": {
           "typeParameters": [],
@@ -18686,6 +19641,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.coq.syntax.PrimitiveNotations"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.qualidQualid",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Qualid"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Qualid"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Qualid"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.qualid",
@@ -19055,6 +20027,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fieldIds field of hydra.coq.syntax.Qualid"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.qualidAndPatternQualidAndPattern",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.QualidAndPattern"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.QualidAndPattern"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.QualidAndPattern"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.qualidAndPattern",
@@ -19432,6 +20424,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the pattern field of hydra.coq.syntax.QualidAndPattern"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.qualidAnnotatedQualidAnnotated",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.QualidAnnotated"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.QualidAnnotated"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.QualidAnnotated"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.qualidAnnotated",
@@ -19821,6 +20833,23 @@
                   "value": {"literal": {"string": "DSL updater for the univAnnot field of hydra.coq.syntax.QualidAnnotated"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.returnAsReturnAs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ReturnAs"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ReturnAs"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ReturnAs"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.returnAs",
         "signature": {
           "typeParameters": [],
@@ -20196,6 +21225,23 @@
                   "value": {"literal": {"string": "DSL updater for the return field of hydra.coq.syntax.ReturnAs"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.scopeKeyScopeKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ScopeKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ScopeKey"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ScopeKey"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.scopeKey",
         "signature": {
           "typeParameters": [],
@@ -20284,6 +21330,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.ScopeKey"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.sortSort",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Sort"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Sort"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Sort"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.sortSet",
@@ -20528,6 +21590,23 @@
                   "value": {"literal": {"string": "DSL injection for the typeWithUniverse variant of hydra.coq.syntax.Sort"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.stringString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.String"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.String"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.String"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.string",
         "signature": {
           "typeParameters": [],
@@ -20615,6 +21694,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.String"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.termTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Term"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Term"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Term"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.termForallOrFun",
@@ -20907,6 +22002,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the term100 variant of hydra.coq.syntax.Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.term0Term0",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Term0"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Term0"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Term0"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.term0QualidAnnotated",
@@ -21319,6 +22430,22 @@
                   "value": {"literal": {"string": "DSL injection for the parens variant of hydra.coq.syntax.Term0"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.term1Term1",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Term1"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Term1"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Term1"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.term1Projection",
         "signature": {
           "typeParameters": [],
@@ -21443,6 +22570,23 @@
                   "value": {"literal": {"string": "DSL injection for the term0 variant of hydra.coq.syntax.Term1"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.term10Term10",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Term10"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Term10"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Term10"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.term10Application",
         "signature": {
           "typeParameters": [],
@@ -21543,6 +22687,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the oneTerm variant of hydra.coq.syntax.Term10"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.term100Term100",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Term100"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Term100"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Term100"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.term100Cast",
@@ -21647,6 +22808,22 @@
                   "value": {"literal": {"string": "DSL injection for the term10 variant of hydra.coq.syntax.Term100"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.typeType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Type"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Type"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Type"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.type",
         "signature": {
           "typeParameters": [],
@@ -21732,6 +22909,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.typeCastTypeCast",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TypeCast"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TypeCast"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TypeCast"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.typeCast",
@@ -22377,6 +23571,26 @@
                   "value": {"literal": {"string": "DSL updater for the operator field of hydra.coq.syntax.TypeCast"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.typeCastOperatorTypeCastOperator",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TypeCastOperator"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TypeCastOperator"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TypeCastOperator"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.typeCastOperatorNormal",
         "signature": {
           "typeParameters": [],
@@ -22492,6 +23706,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the nativeCompute variant of hydra.coq.syntax.TypeCastOperator"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.typeBindersTypeBinders",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TypeBinders"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TypeBinders"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TypeBinders"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.typeBinders",
@@ -22889,6 +24123,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.coq.syntax.TypeBinders"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.typeclassConstraintTypeclassConstraint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TypeclassConstraint"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TypeclassConstraint"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TypeclassConstraint"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.typeclassConstraint",
@@ -23536,6 +24790,24 @@
                   "value": {"literal": {"string": "DSL updater for the term field of hydra.coq.syntax.TypeclassConstraint"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.univAnnotUnivAnnot",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.UnivAnnot"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.UnivAnnot"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.UnivAnnot"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.univAnnot",
         "signature": {
           "typeParameters": [],
@@ -23633,6 +24905,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.UnivAnnot"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.universeUniverse",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Universe"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Universe"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Universe"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.universeMax",
@@ -23745,6 +25034,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the expr variant of hydra.coq.syntax.Universe"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.universe_ExprUniverse_Expr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Universe_Expr"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Universe_Expr"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Universe_Expr"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.universe_Expr",
@@ -24124,6 +25433,26 @@
                   "value": {"literal": {"string": "DSL updater for the number field of hydra.coq.syntax.Universe_Expr"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.universeLevelUniverseLevel",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.UniverseLevel"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.UniverseLevel"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.UniverseLevel"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.universeLevelSet",
         "signature": {
           "typeParameters": [],
@@ -24331,6 +25660,26 @@
                   "value": {"literal": {"string": "DSL injection for the qualid variant of hydra.coq.syntax.UniverseLevel"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.universeNameUniverseName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.UniverseName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.UniverseName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.UniverseName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.universeNameQualid",
         "signature": {
           "typeParameters": [],
@@ -24458,6 +25807,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the prop variant of hydra.coq.syntax.UniverseName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.axiomDeclarationAxiomDeclaration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.AxiomDeclaration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.AxiomDeclaration"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.AxiomDeclaration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.axiomDeclaration",
@@ -24827,6 +26196,23 @@
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.coq.syntax.AxiomDeclaration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.commentComment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Comment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Comment"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Comment"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.comment",
         "signature": {
           "typeParameters": [],
@@ -24914,6 +26300,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.coq.syntax.Comment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.constructorConstructor",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Constructor"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Constructor"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Constructor"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.constructor",
@@ -25559,6 +26965,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.coq.syntax.Constructor"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.definitionDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Definition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Definition"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Definition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.definition",
@@ -26951,6 +28375,23 @@
                   "value": {"literal": {"string": "DSL updater for the body field of hydra.coq.syntax.Definition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.documentDocument",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Document"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Document"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Document"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.document",
         "signature": {
           "typeParameters": [],
@@ -27119,6 +28560,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the sentences field of hydra.coq.syntax.Document"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.fixpointDefinitionFixpointDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.FixpointDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.FixpointDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.FixpointDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.fixpointDefinition",
@@ -29533,6 +30994,26 @@
                   "value": {"literal": {"string": "DSL updater for the with field of hydra.coq.syntax.FixpointDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.importQualificationImportQualification",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ImportQualification"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ImportQualification"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ImportQualification"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.importQualificationImport",
         "signature": {
           "typeParameters": [],
@@ -29609,6 +31090,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the export variant of hydra.coq.syntax.ImportQualification"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.inductiveBodyInductiveBody",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.InductiveBody"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.InductiveBody"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.InductiveBody"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.inductiveBody",
@@ -30605,6 +32106,26 @@
                   "value": {"literal": {"string": "DSL updater for the constructors field of hydra.coq.syntax.InductiveBody"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.inductiveDefinitionInductiveDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.InductiveDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.InductiveDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.InductiveDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.inductiveDefinition",
         "signature": {
           "typeParameters": [],
@@ -31274,6 +32795,23 @@
                   "value": {"literal": {"string": "DSL updater for the bodies field of hydra.coq.syntax.InductiveDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.localityLocality",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Locality"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Locality"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Locality"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.localityLocal",
         "signature": {
           "typeParameters": [],
@@ -31350,6 +32888,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the global variant of hydra.coq.syntax.Locality"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.moduleDefinitionModuleDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.ModuleDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.ModuleDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.ModuleDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.moduleDefinition",
@@ -31722,6 +33280,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the sentences field of hydra.coq.syntax.ModuleDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.notationDeclarationNotationDeclaration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.NotationDeclaration"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.NotationDeclaration"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.NotationDeclaration"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.notationDeclaration",
@@ -32713,6 +34291,24 @@
                   "value": {"literal": {"string": "DSL updater for the associativity field of hydra.coq.syntax.NotationDeclaration"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.recordBodyRecordBody",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.RecordBody"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.RecordBody"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.RecordBody"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.recordBody",
         "signature": {
           "typeParameters": [],
@@ -33088,6 +34684,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the fields field of hydra.coq.syntax.RecordBody"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.recordDefinitionRecordDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.RecordDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.RecordDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.RecordDefinition"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.recordDefinition",
@@ -34485,6 +36101,26 @@
                   "value": {"literal": {"string": "DSL updater for the body field of hydra.coq.syntax.RecordDefinition"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.recordFieldRecordField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.RecordField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.RecordField"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.RecordField"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.recordField",
         "signature": {
           "typeParameters": [],
@@ -34850,6 +36486,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the type field of hydra.coq.syntax.RecordField"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.requireImportRequireImport",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.RequireImport"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.RequireImport"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.RequireImport"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.requireImport",
@@ -35880,6 +37536,26 @@
                   "value": {"literal": {"string": "DSL updater for the modules field of hydra.coq.syntax.RequireImport"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.coq.syntax.sectionDefinitionSectionDefinition",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.SectionDefinition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.SectionDefinition"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.SectionDefinition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.coq.syntax.sectionDefinition",
         "signature": {
           "typeParameters": [],
@@ -36250,6 +37926,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the sentences field of hydra.coq.syntax.SectionDefinition"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.sentenceSentence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.Sentence"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.Sentence"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.Sentence"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.sentence",
@@ -36625,6 +38318,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the content field of hydra.coq.syntax.Sentence"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.sentenceContentSentenceContent",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.SentenceContent"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.SentenceContent"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.SentenceContent"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.sentenceContentAxiom",
@@ -37135,6 +38848,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the theorem variant of hydra.coq.syntax.SentenceContent"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.theoremBodyTheoremBody",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TheoremBody"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TheoremBody"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TheoremBody"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.theoremBody",
@@ -38520,6 +40253,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the proof field of hydra.coq.syntax.TheoremBody"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.coq.syntax.theoremKindTheoremKind",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.coq.syntax.TheoremKind"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.coq.syntax.TheoremKind"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.coq.syntax.TheoremKind"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.coq.syntax.theoremKindTheorem",

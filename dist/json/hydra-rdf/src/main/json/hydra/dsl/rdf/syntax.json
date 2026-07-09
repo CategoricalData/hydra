@@ -1,8 +1,32 @@
 {
   "name": "hydra.dsl.rdf.syntax",
   "metadata": {"description": "DSL functions for hydra.rdf.syntax", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.rdf.syntax"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.rdf.syntax"},
+    {"module": "hydra.decode.rdf.syntax"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.blankNodeBlankNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.BlankNode"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.BlankNode"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.BlankNode"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.blankNode",
@@ -94,6 +118,24 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.BlankNode"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.rdfsClassRdfsClass",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.RdfsClass"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.RdfsClass"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.RdfsClass"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.rdfsClass",
         "signature": {
           "typeParameters": [],
@@ -181,6 +223,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.RdfsClass"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.datasetDataset",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Dataset"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Dataset"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Dataset"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.dataset",
@@ -274,6 +333,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Dataset"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.descriptionDescription",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Description"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Description"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Description"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.description",
@@ -643,6 +722,22 @@
                   "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Description"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.graphGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Graph"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Graph"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Graph"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.graph",
         "signature": {
           "typeParameters": [],
@@ -733,6 +828,22 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Graph"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.iriIri",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Iri"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Iri"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Iri"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.iri",
         "signature": {
           "typeParameters": [],
@@ -817,6 +928,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.Iri"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.iriOrLiteralIriOrLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.IriOrLiteral"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.IriOrLiteral"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.iriOrLiteralIri",
@@ -919,6 +1050,26 @@
                   "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.IriOrLiteral"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.langStringsLangStrings",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.LangStrings"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.LangStrings"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.LangStrings"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.langStrings",
         "signature": {
           "typeParameters": [],
@@ -1018,6 +1169,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LangStrings"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.languageTagLanguageTag",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.LanguageTag"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.LanguageTag"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.LanguageTag"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.languageTag",
         "signature": {
           "typeParameters": [],
@@ -1105,6 +1276,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.rdf.syntax.LanguageTag"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.literalLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Literal"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Literal"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Literal"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.literal",
@@ -1899,6 +2087,22 @@
                   "value": {"literal": {"string": "DSL updater for the languageTag field of hydra.rdf.syntax.Literal"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.nodeNode",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Node"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Node"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Node"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.nodeIri",
         "signature": {
           "typeParameters": [],
@@ -2045,6 +2249,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the literal variant of hydra.rdf.syntax.Node"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.propertyProperty",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Property"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Property"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Property"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.property",
@@ -2789,6 +3010,22 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the subPropertyOf field of hydra.rdf.syntax.Property"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.quadQuad",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Quad"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Quad"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Quad"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.quad",
@@ -3748,6 +3985,23 @@
                   "value": {"literal": {"string": "DSL updater for the graph field of hydra.rdf.syntax.Quad"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.rdf.syntax.resourceResource",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Resource"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Resource"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Resource"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.rdf.syntax.resourceIri",
         "signature": {
           "typeParameters": [],
@@ -3846,6 +4100,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the bnode variant of hydra.rdf.syntax.Resource"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.rdf.syntax.tripleTriple",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.rdf.syntax.Triple"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.rdf.syntax.Triple"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rdf.syntax.Triple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.rdf.syntax.triple",

@@ -1,8 +1,32 @@
 {
   "name": "hydra.dsl.error.file",
   "metadata": {"description": "DSL functions for hydra.error.file", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.error.file"}, {"module": "hydra.typed"}, {"module": "hydra.file"}, {"module": "hydra.dsl.file"}],
+  "dependencies": [
+    {"module": "hydra.error.file"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.error.file"},
+    {"module": "hydra.decode.error.file"},
+    {"module": "hydra.file"},
+    {"module": "hydra.dsl.file"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.error.file.fileErrorFileError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.file.FileError"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.error.file.FileError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.error.file.fileErrorAlreadyExists",

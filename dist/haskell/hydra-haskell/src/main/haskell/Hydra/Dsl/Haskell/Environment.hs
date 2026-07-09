@@ -29,6 +29,10 @@ haskellModuleMetadata usesByteString usesInt usesMap usesSet =
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Typed.unTypedTerm usesSet)}]}))
 
+-- | DSL name token for hydra.haskell.environment.HaskellModuleMetadata
+haskellModuleMetadataHaskellModuleMetadata :: Typed.TypedName Environment.HaskellModuleMetadata
+haskellModuleMetadataHaskellModuleMetadata = Typed.TypedName (Core.Name "hydra.haskell.environment.HaskellModuleMetadata")
+
 -- | DSL accessor for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesByteString :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesByteString x =

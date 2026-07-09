@@ -4,9 +4,31 @@
   "dependencies": [
     {"module": "hydra.atlas"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.atlas"},
+    {"module": "hydra.decode.atlas"},
     {"module": "hydra.xml.schema"},
     {"module": "hydra.dsl.xml.schema"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.atlas.atlasAttributeDefAtlasAttributeDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDef"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.atlas.atlasAttributeDef",
@@ -10566,6 +10588,28 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.atlas.AtlasAttributeDef"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalityAtlasAttributeDef_Cardinality",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalitySingle",
         "signature": {
           "typeParameters": [],
@@ -10689,6 +10733,26 @@
                   "value": {"literal": {"string": "DSL injection for the set variant of hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.atlas.atlasAttributeDef_IndexTypeAtlasAttributeDef_IndexType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDef_IndexType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.atlas.atlasAttributeDef_IndexTypeDefault",
         "signature": {
           "typeParameters": [],
@@ -10765,6 +10829,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.atlas.AtlasAttributeDef_IndexType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.atlas.atlasBaseTypeDefAtlasBaseTypeDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasBaseTypeDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasBaseTypeDef"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasBaseTypeDef"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.atlas.atlasBaseTypeDef",
@@ -16909,6 +16993,26 @@
                   "value": {"literal": {"string": "DSL updater for the options field of hydra.atlas.AtlasBaseTypeDef"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.atlas.atlasConstraintDefAtlasConstraintDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasConstraintDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasConstraintDef"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasConstraintDef"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.atlas.atlasConstraintDef",
         "signature": {
           "typeParameters": [],
@@ -17289,6 +17393,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the params field of hydra.atlas.AtlasConstraintDef"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.atlas.atlasEntityDefAtlasEntityDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasEntityDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasEntityDef"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasEntityDef"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.atlas.atlasEntityDef",
@@ -18884,6 +19006,28 @@
                   "value": {"literal": {"string": "DSL updater for the businessAttributeDefs field of hydra.atlas.AtlasEntityDef"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.atlas.atlasRelationshipAttributeDefAtlasRelationshipAttributeDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.atlas.AtlasRelationshipAttributeDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasRelationshipAttributeDef"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasRelationshipAttributeDef"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.atlas.atlasRelationshipAttributeDef",
         "signature": {
           "typeParameters": [],
@@ -19589,6 +19733,24 @@
                   "value": {"literal": {"string": "DSL updater for the isLegacyAttribute field of hydra.atlas.AtlasRelationshipAttributeDef"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.atlas.atlasStructDefAtlasStructDef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasStructDef"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasStructDef"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasStructDef"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.atlas.atlasStructDef",
         "signature": {
           "typeParameters": [],
@@ -19970,6 +20132,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the attributeDefs field of hydra.atlas.AtlasStructDef"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.atlas.typeCategoryTypeCategory",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.TypeCategory"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.TypeCategory"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.atlas.TypeCategory"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.atlas.typeCategoryPrimitive",

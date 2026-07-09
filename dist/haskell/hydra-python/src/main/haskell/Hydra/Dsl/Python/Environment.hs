@@ -54,6 +54,10 @@ pyGraphMetadata x =
         Core.projectionFieldName = (Core.Name "metadata")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.environment.PyGraph
+pyGraphPyGraph :: Typed.TypedName Environment.PyGraph
+pyGraphPyGraph = Typed.TypedName (Core.Name "hydra.python.environment.PyGraph")
+
 -- | DSL updater for the graph field of hydra.python.environment.PyGraph
 pyGraphWithGraph :: Typed.TypedTerm Environment.PyGraph -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.PyGraph
 pyGraphWithGraph original newVal =
@@ -160,6 +164,10 @@ pythonEnvironmentNullaryBindings x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "nullaryBindings")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.environment.PythonEnvironment
+pythonEnvironmentPythonEnvironment :: Typed.TypedName Environment.PythonEnvironment
+pythonEnvironmentPythonEnvironment = Typed.TypedName (Core.Name "hydra.python.environment.PythonEnvironment")
 
 -- | DSL accessor for the skipCasts field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentSkipCasts :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Bool
@@ -627,6 +635,10 @@ pythonModuleMetadataNamespaces x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "namespaces")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.environment.PythonModuleMetadata
+pythonModuleMetadataPythonModuleMetadata :: Typed.TypedName Environment.PythonModuleMetadata
+pythonModuleMetadataPythonModuleMetadata = Typed.TypedName (Core.Name "hydra.python.environment.PythonModuleMetadata")
 
 -- | DSL accessor for the typeVariables field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataTypeVariables :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (S.Set Core.Name)
@@ -4615,3 +4627,7 @@ pythonVersionPython312 =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "python312"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.python.environment.PythonVersion
+pythonVersionPythonVersion :: Typed.TypedName Environment.PythonVersion
+pythonVersionPythonVersion = Typed.TypedName (Core.Name "hydra.python.environment.PythonVersion")

@@ -1,8 +1,30 @@
 {
   "name": "hydra.dsl.docs",
   "metadata": {"description": "DSL functions for hydra.docs", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.docs"}, {"module": "hydra.typed"}, {"module": "hydra.packaging"}, {"module": "hydra.dsl.packaging"}],
+  "dependencies": [
+    {"module": "hydra.docs"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.docs"},
+    {"module": "hydra.decode.docs"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.dsl.packaging"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.docs.docSegmentDocSegment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.docs.DocSegment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.docs.DocSegment"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.docs.DocSegment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.docs.docSegmentRef",
