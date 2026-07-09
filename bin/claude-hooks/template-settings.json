@@ -141,7 +141,6 @@
       "Bash(diff -rq *)",
       "Bash(diff -u *)"
     ],
-    "defaultMode": "bypassPermissions",
     "deny": [
       "AskUserQuestion"
     ]

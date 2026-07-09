@@ -353,6 +353,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Branch promotion + staging cycle | [claude/branch-flow.md](claude/branch-flow.md) |
 | External/environmental alerts (resource watchdog) + preventive back-pressure | [claude/external-alerts.md](claude/external-alerts.md) |
 | Recover the fleet after a machine crash (relaunch sessions, repair worktree corruption) | [claude/crash-recovery.md](claude/crash-recovery.md) |
+| Sandbox permission bypass (why/how agents skip prompts on a sandbox, not a laptop) | [claude/sandbox-permissions.md](claude/sandbox-permissions.md) — `~/.hydra-sandbox` marker gates it |
 
 ---
 

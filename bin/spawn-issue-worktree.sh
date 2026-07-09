@@ -185,6 +185,26 @@ for hook in proposals-hook.sh autonomy-hook.sh; do
 done
 cp "$WT/bin/claude-hooks/template-settings.json" "$WT/.claude/settings.json"
 
+# Sandbox permission bypass (see claude/sandbox-permissions.md). The checked-in
+# template deliberately does NOT carry defaultMode: bypassPermissions — that would
+# leak bypass to every machine that clones the repo, including non-sandbox laptops.
+# Instead, inject it here ONLY when this machine declares itself a sandbox via the
+# ~/.hydra-sandbox marker. On a non-sandbox machine the marker is absent, the
+# injection is skipped, and the spawned agent prompts normally.
+if [ -f "$HOME/.hydra-sandbox" ]; then
+    echo "Sandbox marker present — enabling permission bypass for this agent..."
+    python3 - "$WT/.claude/settings.json" <<'PYEOF'
+import json, sys
+p = sys.argv[1]
+with open(p) as f:
+    cfg = json.load(f)
+cfg.setdefault("permissions", {})["defaultMode"] = "bypassPermissions"
+with open(p, "w") as f:
+    json.dump(cfg, f, indent=2)
+    f.write("\n")
+PYEOF
+fi
+
 echo "Seeding claude-hydra-messages/inbox/ with briefing..."
 mkdir -p "$WT/claude-hydra-messages/inbox/archive"
 mkdir -p "$WT/claude-hydra-messages/outbox/archive"

@@ -63,9 +63,22 @@ staging worktree, with the staging agent session resolving any conflicts.
   the user must explicitly authorize it — per the "modify only your assigned
   worktree" rule in CLAUDE.md.
 - `main` is pushed to `origin/main` by the staging session as part of its
-  workflow loop (see [Staging workflow](#staging-workflow) below), once `/sync`,
-  `/test`, and `/bootstrap` are green — but the session confirms with the user before
-  each `origin/main` push, since it is outward-facing and hard to reverse.
+  workflow loop (see [Staging workflow](#staging-workflow) below). **Landing to
+  main is gated on exactly two things — neither of which is a per-push user
+  prompt:**
+  1. **Owner acceptance.** The issue's owner/coordinator has accepted the work as
+     complete and it is squashed to clean, no-`WIP:` history. (This happens
+     *upstream* of staging, in the issue's own lifecycle.)
+  2. **A clean staging cycle.** It passes `/sync`, `/test`, and `/bootstrap`
+     green through staging.
+
+  When both hold, **staging lands it autonomously** — that is the entire purpose
+  of the staging tier, and the push is part of staging's charter. It is **not** in
+  the same category as feature-agent pushes or GitHub writes (issue
+  create/close/comment/label), which stay user-gated. The remaining guardrails are
+  intrinsic to the cycle, not a confirmation step: the pre-push `WIP:`-scan (never
+  push `WIP:` to main), the cross-machine claim + read-before-push (don't collide
+  with another machine's staging), and no automatic force-push of a shared branch.
   Feature and integration sessions never push to `origin/main`.
 
 ## Staging workflow
@@ -104,7 +117,12 @@ Each iteration:
    fix is not clear, reach out to the user before proceeding. Repeat the failing
    step until green.
 6. **Push to `origin/main`** once `/sync`, `/test`, and `/bootstrap` are all green.
-   Confirm with the user before the push (see the cadence note above).
+   Staging pushes **autonomously.** Landing is gated on (1) owner acceptance of the
+   work as complete + squashed, and (2) a clean staging cycle — **not** on a
+   per-push user prompt (see the cadence note above; this push is staging's
+   charter, unlike feature-agent pushes or GitHub writes). Complete the intrinsic
+   guardrails instead of asking: pass the pre-push WIP gate, honor the
+   cross-machine claim/read-before-push, and don't auto-force-push a shared branch.
    **Pre-push WIP gate:** before pushing, scan the full range that would land
    on main (`git log --oneline origin/main..staging | grep '^[0-9a-f]* WIP:'`).
    It must be empty. This catches `WIP:` commits regardless of origin — both
@@ -132,8 +150,8 @@ Each iteration:
 
 ### Handling pulled WIP commits
 
-When step 1a finds `WIP:` commits inside a merge from `integration` or a
-user-named remote branch (e.g. `409`), remediation has **two parts** — cleaning
+When step 1a finds `WIP:` commits inside a merge from `integration` or another
+user-named shared remote branch, remediation has **two parts** — cleaning
 staging is necessary but *not sufficient*; the source must also be corrected, or
 the same WIP commits leak again on the next pull.
 
@@ -147,7 +165,7 @@ the same WIP commits leak again on the next pull.
 2. **Correct the source (required follow-up; needs explicit approval).** The
    source branch still carries the `WIP:` commits, so they will return on the
    next pull. Propose bringing it in line with the cleaned history. If the source
-   is a shared remote branch (`409`, `integration`), this means a **force-push**,
+   is a shared remote branch (e.g. `integration`), this means a **force-push**,
    which can disrupt another agent actively working there. So:
    - **Never force-push a shared remote branch automatically.** Stop, show the
      user the exact `WIP:` commits and the proposed cleaned history (old → new
