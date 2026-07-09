@@ -156,23 +156,7 @@ encodeBinding = define "encodeBinding" $
 encodeBindingName :: TypedTermDefinition (Name -> Name)
 encodeBindingName = define "encodeBindingName" $
   doc "Generate a binding name for an encoder function from a type name" $
-  "n" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
-  "localResult" <~ (Core.name (var "localPart")) $
-  -- Extract namespace parts (all but the last); if the name has no namespace,
-  -- fall back to the bare decapitalized local name.
-  Optionals.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
-      Optionals.cases
-        (Lists.uncons $ var "nsParts")
-        (var "localResult")  -- unreachable: nsParts empty means no namespace
-        ("nsUc" ~>
-          "tail" <~ Pairs.second (var "nsUc") $
-          Core.name (Strings.intercalate (string ".") (Lists.concat2
-            (list [string "hydra", string "encode"])
-            (Lists.concat2
-              (var "tail")
-              (list [var "localPart"]))))))
+  Names.derivedBindingName @@ list [string "hydra", string "encode"] @@ boolean True
 
 -- | Generate the encoder term for a field value
 -- Creates a lambda that encodes the field value and wraps in an encoded union/injection
@@ -421,15 +405,7 @@ encodeName = define "encodeName" $
 encodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
 encodeModuleName = define "encodeModuleName" $
   doc "Generate an encoder module name from a source module name" $
-  "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
-  "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
-  -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
-  Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
-      Packaging.moduleName2 (
-        Strings.cat $ list [
-          string "hydra.encode.",
-          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+  Names.derivedModuleName @@ list [string "hydra", string "encode"] @@ boolean True
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record

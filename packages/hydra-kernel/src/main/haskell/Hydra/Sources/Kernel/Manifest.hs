@@ -47,10 +47,12 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Refs as Refs
 import qualified Hydra.Sources.Kernel.Terms.Resolution as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
+import qualified Hydra.Sources.Kernel.Terms.Show.Docs as ShowDocs
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
@@ -85,7 +87,7 @@ mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherMo
 -- | Kernel term modules whose definitions project to hydra.dsl.<x> reference
 -- wrappers (#467). Demand-driven curation: exactly the modules the native
 -- Java/Python DSL sources reference today via stringly-typed var("hydra....")
--- strings. Extend as consumers need more; the non-kernel and derived-family
+-- strings. Extend as consumers need more; the non-kernel and derived-category
 -- (hydra.encode.*/show.*/decode.*) demand is deferred.
 dslTermModules :: [Module]
 dslTermModules = [
@@ -101,10 +103,12 @@ dslTermModules = [
   Names.module_,
   Predicates.module_,
   Reduction.module_,
+  Refs.module_,
   Resolution.module_,
   Rewriting.module_,
   Scoping.module_,
   Serialization.module_,
+  ShowDocs.module_,
   Sorting.module_,
   Strip.module_,
   Variables.module_]

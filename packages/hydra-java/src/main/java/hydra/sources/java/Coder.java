@@ -1,4 +1,5 @@
 package hydra.sources.java;
+import hydra.Refs;
 import hydra.core.Field;
 import hydra.core.Name;
 import hydra.core.Type;
@@ -222,7 +223,7 @@ public class Coder {
                     lambda("t",
                         hydra.dsl.Annotations.setTermAnnotation(
                             hydra.dsl.Constants.keyType(),
-                            just(apply(var("hydra.encode.core.type"), var("typ"))),
+                            just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                             var("t"))),
                     casesWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm( var("term")),
@@ -447,11 +448,11 @@ public class Coder {
                                                         Maps.insert(
                                                             hydra.dsl.Constants.keyType(),
                                                             apply(
-                                                                var("hydra.encode.core.type"),
+                                                                tterm(Refs.encodeRef(Core.typeType())),
                                                                 var("t'")),
                                                             var("ann")))),
                                                 apply(
-                                                    var("hydra.decode.core.type"),
+                                                    tterm(Refs.decodeRef(Core.typeType())),
                                                     var("cx"),
                                                     var("typeTerm")))))),
                                 inject(Term.TYPE_,
@@ -1301,7 +1302,7 @@ public class Coder {
                                                                                         proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                                                                         var("dom"))))))))))),
                                                 apply(
-                                                    var("hydra.decode.core.type"),
+                                                    tterm(Refs.decodeRef(Core.typeType())),
                                                     var("g"),
                                                     var("typeTerm")))))),
                                 Maps.union(var("annSubst"), var("bodySubst"))))),
@@ -5094,7 +5095,7 @@ public class Coder {
                                     Literal.STRING,
                                     Strings.cat2(
                                         string("Unimplemented function variant: "),
-                                        apply(var("hydra.show.core.term"), var("funTerm")))))),
+                                        apply(tterm(Refs.showRef(Core.termTerm())), var("funTerm")))))),
                         field(
                             Term.PROJECT,
                             constant(
@@ -5165,7 +5166,7 @@ public class Coder {
                                                                         Strings.cat2(
                                                                             string("expected function type for lambda body, but got: "),
                                                                             apply(
-                                                                                var("hydra.show.core.type"),
+                                                                                tterm(Refs.showRef(Core.typeType())),
                                                                                 var("cod")))))),
                                                             field(
                                                                 Type.FUNCTION,
@@ -5895,7 +5896,7 @@ public class Coder {
                                     string("nullary function"),
                                     Strings.cat2(
                                         string(" in "),
-                                        apply(var("hydra.show.core.term"), var("funTerm")))))))));
+                                        apply(tterm(Refs.showRef(Core.termTerm())), var("funTerm")))))))));
 
     public static final Def encodeNullaryConstant_typeArgsFromReturnType = def("encodeNullaryConstant_typeArgsFromReturnType")
         .lam("aliases").lam("t").lam("cx").lam("g")
@@ -6699,7 +6700,7 @@ public class Coder {
                                                                         hydra.dsl.Constants.keyType(),
                                                                         just(
                                                                             apply(
-                                                                                var("hydra.encode.core.type"),
+                                                                                tterm(Refs.encodeRef(Core.typeType())),
                                                                                 var("branchType"))),
                                                                         var("t1")),
                                                                     apply(
@@ -7380,7 +7381,7 @@ public class Coder {
                                                                                         hydra.dsl.Constants.keyType(),
                                                                                         just(
                                                                                             apply(
-                                                                                                var("hydra.encode.core.type"),
+                                                                                                tterm(Refs.encodeRef(Core.typeType())),
                                                                                                 var("resolvedType"))),
                                                                                         proj(Field.TYPE_, Field.TERM, "fld"))),
                                                                                 apply(
@@ -7623,7 +7624,7 @@ public class Coder {
                                                                                 hydra.dsl.Constants.keyType(),
                                                                                 just(
                                                                                     apply(
-                                                                                        var("hydra.encode.core.type"),
+                                                                                        tterm(Refs.encodeRef(Core.typeType())),
                                                                                         proj(ForallType.TYPE_, ForallType.BODY, "fa"))),
                                                                                 proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))))),
                                                         apply(
@@ -7975,7 +7976,7 @@ public class Coder {
                                                                                                                                 hydra.dsl.Constants.keyType(),
                                                                                                                                 just(
                                                                                                                                     apply(
-                                                                                                                                        var("hydra.encode.core.type"),
+                                                                                                                                        tterm(Refs.encodeRef(Core.typeType())),
                                                                                                                                         var("branchType"))),
                                                                                                                                 var("t1")),
                                                                                                                             apply(
@@ -8569,7 +8570,7 @@ public class Coder {
                                 wrap(OtherError.TYPE_,
                                     Strings.cat2(
                                         string("can't encode unsupported type in Java: "),
-                                        apply(var("hydra.show.core.type"), var("t")))))),
+                                        apply(tterm(Refs.showRef(Core.typeType())), var("t")))))),
                         field(
                             Type.APPLICATION,
                             lambda("at",
@@ -10167,7 +10168,7 @@ public class Coder {
                                             wrap(OtherError.TYPE_,
                                                 Strings.cat2(
                                                     string("expected function type, got: "),
-                                                    apply(var("hydra.show.core.type"), var("t")))))),
+                                                    apply(tterm(Refs.showRef(Core.typeType())), var("t")))))),
                                     field(Type.FUNCTION, lambda("ft", right(var("ft"))))))))));
 
     public static final Def groupPairsByFirst = def("groupPairsByFirst")
@@ -10980,7 +10981,7 @@ public class Coder {
                     lambda("t",
                         hydra.dsl.Annotations.setTermAnnotation(
                             hydra.dsl.Constants.keyType(),
-                            just(apply(var("hydra.encode.core.type"), var("typ"))),
+                            just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                             var("t"))),
                     casesWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm( var("term")),
@@ -11066,7 +11067,7 @@ public class Coder {
                                                             hydra.dsl.Constants.keyType(),
                                                             just(
                                                                 apply(
-                                                                    var("hydra.encode.core.type"),
+                                                                    tterm(Refs.encodeRef(Core.typeType())),
                                                                     var("ft"))),
                                                             var("fun"))))))),
                                     apply(
@@ -11194,7 +11195,7 @@ public class Coder {
                             field("annotatedFun",
                                 hydra.dsl.Annotations.setTermAnnotation(
                                     hydra.dsl.Constants.keyType(),
-                                    just(apply(var("hydra.encode.core.type"), var("funType"))),
+                                    just(apply(tterm(Refs.encodeRef(Core.typeType())), var("funType"))),
                                     var("fun"))),
                             apply(
                                 ref(Coder.rebuildApps),
@@ -11205,7 +11206,7 @@ public class Coder {
                             hydra.dsl.Strip.deannotateTerm( var("t")),
                             hydra.dsl.Annotations.setTermAnnotation(
                                 hydra.dsl.Constants.keyType(),
-                                just(apply(var("hydra.encode.core.type"), var("resultType"))),
+                                just(apply(tterm(Refs.encodeRef(Core.typeType())), var("resultType"))),
                                 var("t")),
                             field(
                                 Term.APPLICATION,
@@ -11242,14 +11243,14 @@ public class Coder {
                                                                 hydra.dsl.Constants.keyType(),
                                                                 just(
                                                                     apply(
-                                                                        var("hydra.encode.core.type"),
+                                                                        tterm(Refs.encodeRef(Core.typeType())),
                                                                         var("ft"))),
                                                                 var("lhs"))))))),
                                         hydra.dsl.Annotations.setTermAnnotation(
                                             hydra.dsl.Constants.keyType(),
                                             just(
                                                 apply(
-                                                    var("hydra.encode.core.type"),
+                                                    tterm(Refs.encodeRef(Core.typeType())),
                                                     var("resultType"))),
                                             inject(Term.TYPE_,
                                                 Term.APPLICATION,
@@ -11309,7 +11310,7 @@ public class Coder {
                                                         hydra.dsl.Constants.keyType(),
                                                         just(
                                                             apply(
-                                                                var("hydra.encode.core.type"),
+                                                                tterm(Refs.encodeRef(Core.typeType())),
                                                                 var("remainingType"))),
                                                         var("app"))),
                                                 apply(
@@ -12883,7 +12884,7 @@ public class Coder {
                                             hydra.dsl.Annotations.setTermAnnotation(
                                                 hydra.dsl.Constants.keyType(),
                                                 just(
-                                                    apply(var("hydra.encode.core.type"), var("typ"))),
+                                                    apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                                                 var("value"))),
                                         Eithers.bind(
                                             apply(
@@ -13041,7 +13042,7 @@ public class Coder {
                 let("annotatedBody",
                     hydra.dsl.Annotations.setTermAnnotation(
                         hydra.dsl.Constants.keyType(),
-                        just(apply(var("hydra.encode.core.type"), var("typ"))),
+                        just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                         var("body")),
                     Eithers.bind(
                         apply(
@@ -13497,7 +13498,7 @@ public class Coder {
                                     Strings.cat2(
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
-                                            var("hydra.show.core.term"),
+                                            tterm(Refs.showRef(Core.termTerm())),
                                             proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")))))),
                         field(
                             Term.LAMBDA,
@@ -13955,6 +13956,7 @@ public class Coder {
         new ModuleName("hydra.arity"),
         new ModuleName("hydra.decode.core"),
         new ModuleName("hydra.encode.core"),
+        new ModuleName("hydra.refs"),
         new ModuleName("hydra.serialization"),
         new ModuleName("hydra.java.environment"),
         new ModuleName("hydra.java.syntax"),
