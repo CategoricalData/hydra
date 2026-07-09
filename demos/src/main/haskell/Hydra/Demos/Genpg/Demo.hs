@@ -8,7 +8,7 @@ import Hydra.Demos.Genpg.Examples.Sales.Mapping
 import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
-import Hydra.Dsl.Pg.Mappings
+import Hydra.Overlay.Haskell.Dsl.Pg.Mappings
 import Hydra.Overlay.Haskell.Lib.Literals
 import Hydra.Pg.Graphson.Utils
 import qualified Hydra.Demos.Genpg.Transform as Transform

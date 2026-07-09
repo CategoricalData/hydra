@@ -1,6 +1,6 @@
 module Hydra.Demos.Genpg.Examples.Health.GraphSchema where
 
-import Hydra.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
+import Hydra.Overlay.Haskell.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
 import Hydra.Overlay.Haskell.Dsl.Types (string, int32, float64, boolean)
 
 -- Reusable types

@@ -2,16 +2,19 @@
 
 Kernel-function references have been replaced by the generated hydra.dsl.* modules
 (#467): e.g. hydra.dsl.strip.deannotate_type, hydra.dsl.names.qualify_name.
-What remains here are references to this package's OWN modules (hydra.python.*),
-which do not yet project generated DSLs; they migrate when DSL generation widens
-beyond the kernel (see #467). The last derived-family reference
-(hydra.show.core.type) was retired in favor of the typed hydra.refs.show_ref +
-hydra.dsl.core.type_type (see #555).
+This package's OWN modules (hydra.python.utils, hydra.python.names) are also now
+generated (#556): hydra.dsl.python.utils.*, hydra.dsl.python.names.*. The last
+derived-family reference (hydra.show.core.type) was retired in favor of the typed
+hydra.refs.show_ref + hydra.dsl.core.type_type (see #555). What remains here is a
+handful of permanent partial-application exceptions (see bottom of file) that the
+arity-saturated generated wrappers cannot express.
 
 Keep this list minimal -- only add what is actually used and not generated.
 """
 
 from hydra.overlay.python.dsl.meta.phantoms import var
+from hydra.dsl.python import utils as _utils
+from hydra.dsl.python import names as _names
 from hydra.typed import TypedTerm
 import hydra.dsl.core
 import hydra.refs
@@ -23,73 +26,76 @@ import hydra.refs
 
 # hydra.names
 
-# hydra.python.utils (used by coder.py)
-utils_assignment_statement = var("hydra.python.utils.assignmentStatement")
-utils_double_quoted_string = var("hydra.python.utils.doubleQuotedString")
-utils_find_namespaces = var("hydra.python.utils.findNamespaces")
-utils_function_call = var("hydra.python.utils.functionCall")
-utils_indented_block = var("hydra.python.utils.indentedBlock")
-utils_primary_with_expression_slices = var("hydra.python.utils.primaryWithExpressionSlices")
-utils_primary_with_rhs = var("hydra.python.utils.primaryWithRhs")
-utils_project_from_expression = var("hydra.python.utils.projectFromExpression")
-utils_py_atom_to_py_expression = var("hydra.python.utils.pyAtomToPyExpression")
-utils_py_closed_pattern_to_py_patterns = var("hydra.python.utils.pyClosedPatternToPyPatterns")
-utils_py_expression_to_py_primary = var("hydra.python.utils.pyExpressionToPyPrimary")
-utils_py_expression_to_py_star_named_expression = var("hydra.python.utils.pyExpressionToPyStarNamedExpression")
-utils_py_expressions_to_py_args = var("hydra.python.utils.pyExpressionsToPyArgs")
-utils_py_name_to_py_expression = var("hydra.python.utils.pyNameToPyExpression")
-utils_py_name_to_py_type_parameter = var("hydra.python.utils.pyNameToPyTypeParameter")
-utils_py_primary_to_py_expression = var("hydra.python.utils.pyPrimaryToPyExpression")
-utils_py_simple_statement_to_py_statement = var("hydra.python.utils.pySimpleStatementToPyStatement")
-utils_string_to_py_expression = var("hydra.python.utils.stringToPyExpression")
-utils_py_list = var("hydra.python.utils.pyList")
-utils_py_name_to_py_primary = var("hydra.python.utils.pyNameToPyPrimary")
-utils_single_quoted_string = var("hydra.python.utils.singleQuotedString")
-utils_primary_and_params = var("hydra.python.utils.primaryAndParams")
-utils_primary_with_slices = var("hydra.python.utils.primaryWithSlices")
-utils_py_expression_to_py_slice = var("hydra.python.utils.pyExpressionToPySlice")
-utils_py_primary_to_py_slice = var("hydra.python.utils.pyPrimaryToPySlice")
-utils_target_python_version = var("hydra.python.utils.targetPythonVersion")
-utils_annotated_expression = var("hydra.python.utils.annotatedExpression")
-utils_py_assignment_to_py_statement = var("hydra.python.utils.pyAssignmentToPyStatement")
-utils_py_class_definition_to_py_statement = var("hydra.python.utils.pyClassDefinitionToPyStatement")
-utils_py_expression_to_py_statement = var("hydra.python.utils.pyExpressionToPyStatement")
-utils_triple_quoted_string = var("hydra.python.utils.tripleQuotedString")
-utils_unit_variant_methods = var("hydra.python.utils.unitVariantMethods")
-utils_annotated_statement = var("hydra.python.utils.annotatedStatement")
-utils_dotted_assignment_statement = var("hydra.python.utils.dottedAssignmentStatement")
-utils_comment_statement = var("hydra.python.utils.commentStatement")
-utils_or_expression = var("hydra.python.utils.orExpression")
-utils_py_expression_to_bitwise_or = var("hydra.python.utils.pyExpressionToBitwiseOr")
-utils_py_expression_to_disjunction = var("hydra.python.utils.pyExpressionToDisjunction")
-utils_raise_assertion_error = var("hydra.python.utils.raiseAssertionError")
-utils_raise_type_error = var("hydra.python.utils.raiseTypeError")
-utils_return_single = var("hydra.python.utils.returnSingle")
-utils_name_and_params = var("hydra.python.utils.nameAndParams")
-utils_py_none = var("hydra.python.utils.pyNone")
+# hydra.python.utils (used by coder.py; #556 -- generated, was var("hydra.python.utils.*"))
+utils_assignment_statement = _utils.assignment_statement
+utils_double_quoted_string = _utils.double_quoted_string
+utils_find_namespaces = _utils.find_namespaces
+utils_function_call = _utils.function_call
+utils_indented_block = _utils.indented_block
+utils_primary_with_expression_slices = _utils.primary_with_expression_slices
+utils_primary_with_rhs = _utils.primary_with_rhs
+utils_project_from_expression = _utils.project_from_expression
+utils_py_atom_to_py_expression = _utils.py_atom_to_py_expression
+utils_py_closed_pattern_to_py_patterns = _utils.py_closed_pattern_to_py_patterns
+utils_py_expression_to_py_primary = _utils.py_expression_to_py_primary
+utils_py_expression_to_py_star_named_expression = _utils.py_expression_to_py_star_named_expression
+utils_py_expressions_to_py_args = _utils.py_expressions_to_py_args
+# utils_py_name_to_py_expression: see partial-application/first-class-reference
+# exceptions at the bottom of this file (used bare via Lists.map in one place).
+# utils_py_name_to_py_type_parameter: see partial-application/first-class-reference
+# exceptions at the bottom of this file (used bare via Lists.map, not called directly).
+utils_py_primary_to_py_expression = _utils.py_primary_to_py_expression
+utils_py_simple_statement_to_py_statement = _utils.py_simple_statement_to_py_statement
+utils_string_to_py_expression = _utils.string_to_py_expression
+utils_py_list = _utils.py_list
+utils_py_name_to_py_primary = _utils.py_name_to_py_primary
+utils_single_quoted_string = _utils.single_quoted_string
+utils_primary_and_params = _utils.primary_and_params
+utils_primary_with_slices = _utils.primary_with_slices
+utils_py_expression_to_py_slice = _utils.py_expression_to_py_slice
+utils_py_primary_to_py_slice = _utils.py_primary_to_py_slice
+utils_target_python_version = _utils.target_python_version()
+utils_annotated_expression = _utils.annotated_expression
+utils_py_assignment_to_py_statement = _utils.py_assignment_to_py_statement
+utils_py_class_definition_to_py_statement = _utils.py_class_definition_to_py_statement
+utils_py_expression_to_py_statement = _utils.py_expression_to_py_statement
+utils_triple_quoted_string = _utils.triple_quoted_string
+utils_unit_variant_methods = _utils.unit_variant_methods
+utils_annotated_statement = _utils.annotated_statement
+utils_dotted_assignment_statement = _utils.dotted_assignment_statement
+utils_comment_statement = _utils.comment_statement
+utils_or_expression = _utils.or_expression
+utils_py_expression_to_bitwise_or = _utils.py_expression_to_bitwise_or
+utils_py_expression_to_disjunction = _utils.py_expression_to_disjunction
+utils_raise_assertion_error = _utils.raise_assertion_error
+utils_raise_type_error = _utils.raise_type_error
+utils_return_single = _utils.return_single
+utils_name_and_params = _utils.name_and_params
+utils_py_none = _utils.py_none()
 show_core_type = TypedTerm(hydra.refs.show_ref(hydra.dsl.core.type_type))
-names_type_variable_reference = var("hydra.python.names.typeVariableReference")
-names_term_variable_reference = var("hydra.python.names.termVariableReference")
-names_encode_name_qualified = var("hydra.python.names.encodeNameQualified")
+names_type_variable_reference = _names.type_variable_reference
+names_term_variable_reference = _names.term_variable_reference
+names_encode_name_qualified = _names.encode_name_qualified
 
 # hydra.annotations
 formatting_normalize_comment = var("hydra.formatting.normalizeComment")
 
-utils_type_alias_statement = var("hydra.python.utils.typeAliasStatement")
-utils_type_alias_statement310 = var("hydra.python.utils.typeAliasStatement310")
-utils_union_type_class_statements310 = var("hydra.python.utils.unionTypeClassStatements310")
+utils_type_alias_statement = _utils.type_alias_statement
+utils_type_alias_statement310 = _utils.type_alias_statement310
+utils_union_type_class_statements310 = _utils.union_type_class_statements310
 
-# hydra.python.names (used by coder.py)
-names_encode_enum_value = var("hydra.python.names.encodeEnumValue")
-names_encode_field_name = var("hydra.python.names.encodeFieldName")
-names_encode_name = var("hydra.python.names.encodeName")
-names_encode_namespace = var("hydra.python.names.encodeNamespace")
-names_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
-names_encode_type_variable = var("hydra.python.names.encodeTypeVariable")
-names_use_future_annotations = var("hydra.python.names.useFutureAnnotations")
-names_variant_name = var("hydra.python.names.variantName")
-names_encode_constant_for_type_name = var("hydra.python.names.encodeConstantForTypeName")
-names_encode_constant_for_field_name = var("hydra.python.names.encodeConstantForFieldName")
+# hydra.python.names (used by coder.py; #556 -- generated, was var("hydra.python.names.*"))
+names_encode_enum_value = _names.encode_enum_value
+names_encode_field_name = _names.encode_field_name
+# names_encode_name: see partial-application exceptions at the bottom of this file
+# (line 3399 of coder.py calls it with 3 args, one short of its arity-4 signature).
+names_encode_namespace = _names.encode_namespace
+# names_encode_namespace_with_overrides, names_encode_type_variable: see
+# partial-application/first-class-reference exceptions at the bottom of this file.
+names_use_future_annotations = _names.use_future_annotations()
+names_variant_name = _names.variant_name
+names_encode_constant_for_type_name = _names.encode_constant_for_type_name
+names_encode_constant_for_field_name = _names.encode_constant_for_field_name
 
 # hydra.predicates (used by coder.py)
 
@@ -116,14 +122,23 @@ from hydra.dsl.util import (
 )
 
 
-# Partial-application sites: these functions are referenced with FEWER args than
-# their full arity (the rest arrive later in the term), so the arity-saturated
-# generated wrappers in hydra.dsl.* cannot express them. Keep as raw refs.
+# Partial-application / first-class-reference sites: these functions are either
+# referenced with FEWER args than their full arity (the rest arrive later in the
+# term) or passed around as bare term-level values (e.g. to Lists.map, compose),
+# so the arity-saturated generated wrappers in hydra.dsl.* cannot express them
+# (calling one immediately builds a term; there is no unapplied handle to pass
+# around). Keep as raw refs -- var(...) returns a TypedTerm whose __call__ builds
+# the same application generated wrappers do, so it still works when called too.
 environment_with_lambda_context = var("hydra.environment.withLambdaContext")
 environment_with_let_context = var("hydra.environment.withLetContext")
 environment_with_type_lambda_context = var("hydra.environment.withTypeLambdaContext")
 formatting_convert_case = var("hydra.formatting.convertCase")
 formatting_sanitize_with_underscores = var("hydra.formatting.sanitizeWithUnderscores")
+utils_py_name_to_py_type_parameter = var("hydra.python.utils.pyNameToPyTypeParameter")
+names_encode_type_variable = var("hydra.python.names.encodeTypeVariable")
+names_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
+names_encode_name = var("hydra.python.names.encodeName")
+utils_py_name_to_py_expression = var("hydra.python.utils.pyNameToPyExpression")
 
 # hydra.util CaseConvention enum constants are TTerms (injects), already
 # available as constants in hydra.dsl.util. Re-export here for symmetry.

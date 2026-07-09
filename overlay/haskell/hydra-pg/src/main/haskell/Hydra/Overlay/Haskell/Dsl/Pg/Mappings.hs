@@ -1,5 +1,5 @@
 -- | A DSL for defining mappings between relational data and property graphs in Hydra.
-module Hydra.Dsl.Pg.Mappings where
+module Hydra.Overlay.Haskell.Dsl.Pg.Mappings where
 
 import Hydra.Core
 import Hydra.Typed

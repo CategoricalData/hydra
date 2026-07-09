@@ -3,7 +3,7 @@ module Hydra.Demos.Genpg.Runtime where
 import Hydra.Kernel hiding (Result)
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Pg.Model as Pg
-import Hydra.Dsl.Pg.Mappings
+import Hydra.Overlay.Haskell.Dsl.Pg.Mappings
 import Hydra.Overlay.Haskell.Lib.Literals
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore

@@ -52,6 +52,11 @@ library:
     # forward-compatible with the planned switch to a hydra-kernel-0.16.0 package
     # dependency: the runtime will then come from the dependency, with no local
     # copy on the head's compile path to conflict with it (#418).
+    # The same principle now covers hydra-pg's and hydra-typescript's hand-written
+    # DSL helpers (Hydra.Overlay.Haskell.Dsl.{Pg.Mappings,Pg.Schemas,TypeScript.Helpers}):
+    # they live under overlay/haskell/hydra-{pg,typescript}/ and are merged into the
+    # dist/haskell/hydra-{pg,typescript}/ source-dirs below by the same
+    # overlay-kernel-runtime.sh step (#501/#556).
     - ../../demos/src/main/haskell
     - ../../dist/haskell/hydra-kernel/src/main/haskell
     - ../../dist/haskell/hydra-haskell/src/main/haskell

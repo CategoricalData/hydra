@@ -1,5 +1,5 @@
 -- | A DSL for constructing property graph schemas and instances in Hydra.
-module Hydra.Dsl.Pg.Schemas where
+module Hydra.Overlay.Haskell.Dsl.Pg.Schemas where
 
 import Hydra.Pg.Model
 import Hydra.Core

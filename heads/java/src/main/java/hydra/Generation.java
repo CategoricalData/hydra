@@ -491,6 +491,7 @@ public class Generation {
         new Pair<>("hydra.go.",                   "hydra-go"),
         // DSL wrapper modules for coder packages
         new Pair<>("hydra.dsl.haskell.",          "hydra-haskell"),
+        new Pair<>("hydra.dsl.jvm.",              "hydra-jvm"),
         new Pair<>("hydra.dsl.java.",             "hydra-java"),
         new Pair<>("hydra.dsl.python.",           "hydra-python"),
         new Pair<>("hydra.dsl.scala.",            "hydra-scala"),
@@ -1025,6 +1026,69 @@ public class Generation {
         List<Value> arr = new ArrayList<>();
         for (String ns : nss) arr.add(new Value.String_(ns));
         return new Value.Array(arr);
+    }
+
+    /**
+     * Names of term definitions in {@code m} with no {@code TermSignature}
+     * (i.e. {@code termDefinitionSignature = None}). Mirrors the Haskell
+     * {@code Hydra.Generation.reloadTermSignatureSources}'s {@code unsigned}.
+     */
+    private static List<Name> unsignedTermNames(Module m) {
+        List<Name> unsigned = new ArrayList<>();
+        for (Definition d : m.definitions) {
+            if (d instanceof Definition.Term) {
+                TermDefinition td = ((Definition.Term) d).value;
+                if (td.signature.isNone()) {
+                    unsigned.add(td.name);
+                }
+            }
+        }
+        return unsigned;
+    }
+
+    /**
+     * Replace each DSL source module containing term definitions WITHOUT
+     * signatures by its just-written {@code distJsonRoot} counterpart, whose
+     * term definitions carry the main pass's inferred signatures. Mirrors the
+     * Haskell {@code Hydra.Generation.reloadTermSignatureSources} (#467): the
+     * raw in-memory source modules always have {@code termDefinitionSignature
+     * = None} (inference never runs on derived modules, and native drivers
+     * build their DSL-module lists from the pre-inference {@code sources}
+     * list), so without this read-back {@code Dsls.generateRefBindings}'s
+     * term path would silently skip every term definition and emit an empty
+     * module (#556). Modules with no unsigned term definitions (type modules,
+     * primitive-only modules) pass through untouched. Throws if a reloaded
+     * module still lacks a term signature, rather than regressing to silent
+     * omission.
+     */
+    public static List<Module> reloadTermSignatureSources(
+            String distJsonRoot, List<Module> universeMods, List<Module> mods) throws IOException {
+        Graph bsGraph = bootstrapGraph();
+        List<Module> result = new ArrayList<>();
+        for (Module m : mods) {
+            if (unsignedTermNames(m).isEmpty()) {
+                result.add(m);
+                continue;
+            }
+            String pkg = namespaceToPackage(m.name);
+            String filePath = distJsonRoot + File.separator + pkg + File.separator + "src"
+                + File.separator + "main" + File.separator + "json" + File.separator
+                + Codegen.moduleNameToPath(m.name) + ".json";
+            Value jsonVal = parseJsonFile(filePath);
+            Module reloaded = decodeModuleFromJson(bsGraph, universeMods, jsonVal);
+            List<Name> stillUnsigned = unsignedTermNames(reloaded);
+            if (!stillUnsigned.isEmpty()) {
+                StringBuilder names = new StringBuilder();
+                for (Name n : stillUnsigned) {
+                    if (names.length() > 0) names.append(", ");
+                    names.append(n.value);
+                }
+                throw new RuntimeException("DSL read-back: term definitions still lack signatures in "
+                    + m.name.value + ": " + names);
+            }
+            result.add(reloaded);
+        }
+        return result;
     }
 
     /**
