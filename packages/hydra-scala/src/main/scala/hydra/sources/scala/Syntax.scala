@@ -2,6 +2,7 @@ package hydra.sources.scala
 
 import hydra.core.Type
 import hydra.overlay.scala.dsl.{Helpers, Types}
+import hydra.overlay.scala.dsl.meta.Defs
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 
 /**
@@ -1035,5 +1036,7 @@ object Syntax:
       lifecycle = None)),
     dependencies = Helpers.unqualifiedDeps(CORE_NS),
     definitions = DEFINITIONS)
+
+  Defs.checkComplete(this, DEFINITIONS)
 
 end Syntax

@@ -142,6 +142,45 @@ Scala's `lazy val` (used at each `lazy val fooDef` call site) already resolves f
 cross-references regardless of source order, so — unlike Java's `Supplier`-deferred `Def` — the
 body passed to `.to(...)` is not specially deferred beyond Scala's own by-name parameter.
 
+## Registration-completeness checking
+
+Every DSL-authoring file ends with a `val DEFINITIONS: Seq[Definition] = Seq(...)` list and a
+`val module_ : Module = Module(..., definitions = DEFINITIONS)`. A recurring authoring mistake:
+adding a new `lazy val fooDef: Definition` but forgetting to add `fooDef` to `DEFINITIONS`. The
+binding still compiles fine (it's just an unreferenced value), but it silently never reaches the
+generated module — no error, anywhere, until something references it much later.
+
+`hydra.overlay.scala.dsl.meta.Defs.checkComplete(this, DEFINITIONS)` catches this. Call it as the
+last statement in each source module's `object` body, right after `module_` is defined:
+
+```scala
+object Foo:
+  // ... lazy val definitions ...
+
+  val DEFINITIONS: Seq[Definition] = Seq(fooDef, barDef)
+
+  val module_ : Module = Module(name = NS, ..., definitions = DEFINITIONS)
+
+  Defs.checkComplete(this, DEFINITIONS)
+
+end Foo
+```
+
+This runs via plain JVM reflection (`Class.getDeclaredMethods` on the object's singleton class),
+filtering zero-arg methods whose return type is `Definition` — the shape every `lazy val fooDef:
+Definition` compiles to — and confirming each is present in `registered` (`DEFINITIONS`, excluded
+from the check itself by name). It's a Scala-specific mechanism, not a copy of Java's `Defs.
+checkComplete` or Python's `check_complete`: Scala's `lazy val`s have no dedicated wrapper type to
+filter fields by (unlike Java's `Def`), and unlike Haskell (no reflection at all — its port is a
+source-text scanner instead, see [docs/dsl-guide.md § Registration-completeness
+checking](dsl-guide.md#registration-completeness-checking)), Scala is JVM-based and has real
+reflection to use directly.
+
+Because a Scala `object`'s `val`s are evaluated eagerly at first initialization (not lazily like
+its `lazy val`s), `Defs.checkComplete` fires the first time anything touches the module — the
+first access to `Foo.module_` from `Manifest.scala` or the sync driver — mirroring Java's
+class-load-time check and Python's import-time check.
+
 ## Inferring opaque `TypedTerm[Term]` values
 
 The phantom type alias is `type TypedTerm[A] = hydra.core.Term`. Some kernel APIs expect a

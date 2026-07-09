@@ -10,7 +10,9 @@ import hydra.typing.TermSignature
  * Mirror of Haskell's Hydra.Dsl.Java.Helpers and Java's hydra.dsl.java.Helpers.
  *
  * For the deferred-body Def wrapper that Java uses, Scala uses `lazy val`
- * directly in source modules — no equivalent of Defs is needed.
+ * directly in source modules — no equivalent wrapper type is needed. A
+ * registration-completeness checker still exists, though, for the same
+ * reason Java's does: see hydra.overlay.scala.dsl.meta.Defs.checkComplete.
  */
 object Helpers:
 

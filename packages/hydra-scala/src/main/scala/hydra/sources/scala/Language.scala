@@ -1,6 +1,7 @@
 package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
+import hydra.overlay.scala.dsl.meta.Defs
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 
@@ -145,5 +146,7 @@ object Language:
       lifecycle = None)),
     dependencies = KERNEL_DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
+
+  Defs.checkComplete(this, DEFINITIONS)
 
 end Language

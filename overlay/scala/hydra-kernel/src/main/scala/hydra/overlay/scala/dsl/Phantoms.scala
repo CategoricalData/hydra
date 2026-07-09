@@ -19,6 +19,11 @@ import _root_.java.math.BigInteger
  * Scala lazy val replaces Java's Defs/Def deferred-supplier pattern. The
  * source modules use `lazy val foo: TypedTerm[T] = ...` directly; forward
  * references between definitions resolve at first access.
+ *
+ * This does not mean no completeness checking is needed, though: see
+ * hydra.overlay.scala.dsl.meta.Defs.checkComplete, which verifies every
+ * `lazy val` def is present in its module's DEFINITIONS list (via JVM
+ * reflection, since Scala has no dedicated Def marker type to filter on).
  */
 object Phantoms:
 

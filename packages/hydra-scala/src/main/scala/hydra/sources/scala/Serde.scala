@@ -1,6 +1,7 @@
 package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
+import hydra.overlay.scala.dsl.meta.Defs
 import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, casesWithDefault, cases, project, unwrap, wrap, constant, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
@@ -835,5 +836,7 @@ object Serde:
       lifecycle = None)),
     dependencies = DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
+
+  Defs.checkComplete(this, DEFINITIONS)
 
 end Serde
