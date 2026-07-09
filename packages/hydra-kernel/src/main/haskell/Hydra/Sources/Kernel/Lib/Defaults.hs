@@ -53,7 +53,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm defaultImplementationsDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.lib.eithers", ModuleName "hydra.lib.equality", ModuleName "hydra.lib.lists", ModuleName "hydra.lib.logic", ModuleName "hydra.lib.maps", ModuleName "hydra.lib.math", ModuleName "hydra.lib.optionals", ModuleName "hydra.lib.pairs", ModuleName "hydra.lib.sets"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.lib.eithers", ModuleName "hydra.lib.equality", ModuleName "hydra.lib.lists", ModuleName "hydra.lib.logic", ModuleName "hydra.lib.maps", ModuleName "hydra.lib.math", ModuleName "hydra.lib.optionals", ModuleName "hydra.lib.pairs", ModuleName "hydra.lib.sets"],
             moduleMetadata = descriptionMetadata (Just ("A module which provides a single map from primitive names to their"
       ++ " default, cross-compilable reference implementations, for primitives which declare one."))}
 
