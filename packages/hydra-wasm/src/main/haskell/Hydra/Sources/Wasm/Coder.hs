@@ -62,7 +62,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName WasmSerdeSource.module_, moduleName WasmLanguageSource.module_,
-      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "WebAssembly code generator: converts Hydra type and term modules to WAT source code")}
   where
     definitions = [

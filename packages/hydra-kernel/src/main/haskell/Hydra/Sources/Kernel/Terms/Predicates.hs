@@ -88,7 +88,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, ModuleName "hydra.decode.core", Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, ModuleName "hydra.decode.core", Lexical.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Type and term classification predicates"))}
   where
     definitions = [

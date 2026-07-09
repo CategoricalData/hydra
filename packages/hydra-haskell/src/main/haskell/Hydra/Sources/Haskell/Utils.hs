@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns, Strip.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for working with Haskell syntax trees")}
   where
     definitions = [

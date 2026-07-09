@@ -18,7 +18,8 @@ import Hydra.Error.Packaging (
   _InvalidPackageError,
   _InvalidPackageError_conflictingModuleName,
   _InvalidPackageError_duplicateModuleName,
-  _InvalidPackageError_invalidPackageName)
+  _InvalidPackageError_invalidPackageName,
+  _InvalidPackageError_undeclaredDependency)
 import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core             as Core
@@ -39,8 +40,10 @@ import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
+import qualified Hydra.Sources.Kernel.Terms.Variables  as Variables
 import qualified Data.List                       as L
 import           Prelude hiding ((++))
 import qualified Data.List                       as L
@@ -55,7 +58,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, Names.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Validation functions for modules and packages")}
   where
     definitions = [
@@ -71,13 +74,16 @@ module_ = Module {
       toDefinition checkDuplicateModuleNames,
       toDefinition checkModuleNameConvention,
       toDefinition checkPackageNameConvention,
+      toDefinition checkUndeclaredDependencies,
       toDefinition definitionName,
       toDefinition enabledPackaging,
       toDefinition kernelDefaultPackagingProfile,
       toDefinition kernelModule,
       toDefinition kernelPackage,
+      toDefinition kernelUniverseUndeclaredDependencies,
       toDefinition module',
-      toDefinition package]
+      toDefinition package,
+      toDefinition undeclaredDependencyOwners]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -444,6 +450,98 @@ checkPackageNameConvention = define "checkPackageNameConvention" $
     (just $ ErrorPackaging.invalidPackageErrorInvalidPackageName $
       ErrorPackaging.invalidPackageNameError (var "pname"))
 
+-- | Build a map from every name defined anywhere in the given universe to
+-- the name of the module that defines it. A name should be defined in at
+-- most one module; if two modules define the same name, this map picks one
+-- arbitrarily (checkDuplicateDefinitionNames / checkDuplicateModuleNames
+-- catch that condition separately -- it is not this check's concern).
+--
+-- Callers checking multiple modules against the same universe (e.g.
+-- 'kernelUniverseUndeclaredDependencies') should build this ONCE and reuse
+-- it across calls to 'checkUndeclaredDependencies' -- rebuilding it per
+-- module makes the whole pass quadratic in the size of the universe.
+undeclaredDependencyOwners :: TypedTermDefinition ([Module] -> M.Map Name ModuleName)
+undeclaredDependencyOwners = define "undeclaredDependencyOwners" $
+  doc "Build a map from every name defined in the universe to its owning module" $
+  "universe" ~>
+  (Maps.fromList (Lists.concat (Lists.map
+    ("m" ~> Lists.map
+      ("def" ~> pair (definitionName @@ var "def") (Packaging.moduleName $ var "m"))
+      (Packaging.moduleDefinitions $ var "m"))
+    (var "universe")))
+    :: TypedTerm (M.Map Name ModuleName))
+
+-- | Check a single module's definitions for free names whose owning module
+-- is not among the module's declared moduleDependencies. Takes a
+-- pre-computed owner map (see 'undeclaredDependencyOwners') covering the
+-- whole universe of modules (not just one package), because the owning
+-- module of a referenced name may live in a different package (the
+-- motivating case: a symbol moved to a module in another package, and the
+-- referencing module's hand-maintained dependency list was not updated to
+-- match).
+--
+-- One-hop: a module must directly declare the dependency that owns any name
+-- it references, even if that name is also transitively reachable via some
+-- other declared dependency. This is stricter than transitive resolution,
+-- and is the only mode that would have caught the motivating incident
+-- structurally (see #574): transitive resolution would silently accept a
+-- dependency list that no longer names the true owner, as long as some
+-- other declared dependency happens to re-expose the name.
+--
+-- Primitives are excluded via the given primitive-name set (not via
+-- termDependencyNames' withPrims flag, which is dead code -- see #574).
+-- Accumulates every violation found across the module's definitions, rather
+-- than stopping at the first, since a single module can have multiple
+-- independent undeclared references.
+checkUndeclaredDependencies :: TypedTermDefinition (
+  M.Map Name ModuleName -> S.Set Name -> Module -> [InvalidPackageError])
+checkUndeclaredDependencies = define "checkUndeclaredDependencies" $
+  doc "Check a module's definitions for free names whose owning module is not among its declared dependencies" $
+  "owners" ~> "primNames" ~> "mod" ~>
+  "ns" <~ Packaging.moduleName (var "mod") $
+  -- The set of module names this module may reference without a finding:
+  -- itself, plus every directly-declared dependency (one-hop only).
+  "visible" <~ (Sets.insert (var "ns")
+    (Sets.fromList (Lists.map
+      ("dep" ~> Packaging.moduleDependencyModule (var "dep"))
+      (Packaging.moduleDependencies $ var "mod")))
+    :: TypedTerm (S.Set ModuleName)) $
+  -- Free names referenced by a single definition's body.
+  -- Term definitions: term variables (via freeVariablesInTerm, scope-aware)
+  -- unioned with nominal type references (via termDependencyNames with
+  -- binds=False, which only the nominal-reference cases actually populate;
+  -- see Dependencies.hs). Type definitions: every type name appearing in
+  -- the type scheme's body (via typeDependencyNames; type-level names have
+  -- no notion of "bound", so schema variables are excluded by withSchema=
+  -- False and only structural nominal references remain). Primitive
+  -- definitions have no body to inspect here (their optional
+  -- defaultImplementation, if any, is not currently traversed).
+  "referencedNames" <~ (("def" ~> cases _Definition (var "def")
+    (Just $ (Sets.empty :: TypedTerm (S.Set Name))) [
+    _Definition_term>>: "td" ~> Sets.union
+      (Variables.freeVariablesInTerm @@ (Packaging.termDefinitionBody $ var "td"))
+      (Dependencies.termDependencyNames @@ false @@ false @@ true @@ (Packaging.termDefinitionBody $ var "td")),
+    _Definition_type>>: "tyd" ~> Dependencies.typeDependencyNames @@ false @@
+      (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tyd"))])
+    :: TypedTerm (Definition -> S.Set Name)) $
+  -- For a referenced name: Just the finding if it has a known owner (unowned
+  -- names -- e.g. a typo -- are out of scope for this check) which is
+  -- neither this module itself nor a declared dependency, and the name is
+  -- not a primitive; Nothing otherwise.
+  "findingForRef" <~ ("refName" ~>
+    Logic.ifElse (Sets.member (var "refName" :: TypedTerm Name) (var "primNames"))
+      nothing
+      (Optionals.bind (Maps.lookup (var "refName" :: TypedTerm Name) (var "owners"))
+        ("owner" ~>
+          Logic.ifElse (Sets.member (var "owner" :: TypedTerm ModuleName) (var "visible"))
+            nothing
+            (just $ ErrorPackaging.invalidPackageErrorUndeclaredDependency $
+              ErrorPackaging.undeclaredDependencyError (var "ns") (var "refName") (var "owner"))))) $
+  "findingsForDef" <~ ("def" ~>
+    Optionals.mapOptional (var "findingForRef")
+      (Sets.toList ((var "referencedNames" @@ var "def") :: TypedTerm (S.Set Name)))) $
+  Lists.concat (Lists.map (var "findingsForDef") (Packaging.moduleDefinitions $ var "mod"))
+
 -- ============================================================================
 -- ValidationProfile-aware orchestrators
 -- ============================================================================
@@ -530,6 +628,31 @@ kernelPackage = define "kernelPackage" $
   "pkg" ~>
   Lists.maybeHead $ Validation.validationResultErrors $
     package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
+
+-- | Run 'checkUndeclaredDependencies' over every module in the given
+-- universe, returning every finding across every module. Unlike 'module''
+-- and 'package', this check is not scoped to a single 'Package' -- the
+-- owning module of a cross-package reference may live outside the package
+-- under test (see #574; the motivating incident was exactly this case) --
+-- so it takes the whole universe of modules directly rather than being
+-- wired through the per-'Package' 'ValidationProfile' orchestrator.
+--
+-- Not currently part of 'kernelPackagingRuleNames' / 'kernelDefaultPackagingProfile'
+-- for the same reason: those assume single-'Package' scope throughout.
+-- Callers wanting this check should call it directly, e.g. alongside
+-- 'kernelModule'/'kernelPackage' at a pipeline's validation entry point.
+kernelUniverseUndeclaredDependencies :: TypedTermDefinition (
+  [Module] -> S.Set Name -> [InvalidPackageError])
+kernelUniverseUndeclaredDependencies = define "kernelUniverseUndeclaredDependencies" $
+  doc "Check every module in the given universe for undeclared cross-module dependencies, returning every finding." $
+  "universe" ~> "primNames" ~>
+  -- Build the owner map ONCE for the whole universe; checkUndeclaredDependencies
+  -- takes it pre-built rather than rebuilding it per module, which would make
+  -- this pass quadratic in the size of the universe (see #574 perf follow-up).
+  "owners" <~ (undeclaredDependencyOwners @@ var "universe") $
+  Lists.concat (Lists.map
+    ("mod" ~> checkUndeclaredDependencies @@ var "owners" @@ var "primNames" @@ var "mod")
+    (var "universe"))
 
 -- | The full set of rule names classified as errors in
 -- 'kernelDefaultPackagingProfile'. Single source of truth: any rule

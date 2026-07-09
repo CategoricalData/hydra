@@ -76,7 +76,8 @@ module_ = Module {
      toDefinition invalidModuleNameConventionError,
      toDefinition invalidPackageError,
      toDefinition invalidPackageNameError,
-     toDefinition missingDocumentationError]
+     toDefinition missingDocumentationError,
+     toDefinition undeclaredDependencyError]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -180,7 +181,8 @@ invalidPackageError = define "invalidPackageError" $
       _InvalidPackageError_conflictingModuleName>>: conflictingModuleNameError,
       _InvalidPackageError_duplicateModuleName>>: duplicateModuleNameError,
       _InvalidPackageError_invalidModule>>: invalidModuleError,
-      _InvalidPackageError_invalidPackageName>>: invalidPackageNameError]
+      _InvalidPackageError_invalidPackageName>>: invalidPackageNameError,
+      _InvalidPackageError_undeclaredDependency>>: undeclaredDependencyError]
 
 invalidPackageNameError :: TypedTermDefinition (InvalidPackageNameError -> String)
 invalidPackageNameError = define "invalidPackageNameError" $
@@ -199,3 +201,15 @@ missingDocumentationError = define "missingDocumentationError" $
     string ": definition ",
     Core.unName $ project _MissingDocumentationError _MissingDocumentationError_name @@ var "e",
     string " lacks a description annotation"]
+
+undeclaredDependencyError :: TypedTermDefinition (UndeclaredDependencyError -> String)
+undeclaredDependencyError = define "undeclaredDependencyError" $
+  doc "Show an undeclared dependency error as a string" $
+  "e" ~> Strings.cat $ list [
+    string "module ",
+    Packaging.unModuleName $ project _UndeclaredDependencyError _UndeclaredDependencyError_moduleName @@ var "e",
+    string " references ",
+    Core.unName $ project _UndeclaredDependencyError _UndeclaredDependencyError_referencedName @@ var "e",
+    string ", whose owning module ",
+    Packaging.unModuleName $ project _UndeclaredDependencyError _UndeclaredDependencyError_owningModuleName @@ var "e",
+    string " is not among its declared dependencies; add it to moduleDependencies"]

@@ -12,6 +12,7 @@ import           Prelude hiding ((++))
 import           Hydra.Error.Pg
 import qualified Hydra.Sources.Error.Pg                    as ErrorPg
 import qualified Hydra.Pg.Model                            as PG
+import qualified Hydra.Sources.Pg.Model                    as PgModelSource
 
 
 ns :: ModuleName
@@ -24,7 +25,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ((ErrorPg.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ((ErrorPg.ns:PgModelSource.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "String representations of hydra.error.pg types")}
   where
     definitions = [

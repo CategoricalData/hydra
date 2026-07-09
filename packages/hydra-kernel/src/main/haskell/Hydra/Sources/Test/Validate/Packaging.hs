@@ -13,6 +13,7 @@ import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
 import qualified Hydra.Dsl.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Lib.Maps       as Maps
 import qualified Hydra.Dsl.Lib.Sets      as Sets
+import qualified Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
 import qualified Hydra.Dsl.Packaging          as Packaging
@@ -20,6 +21,7 @@ import qualified Hydra.Dsl.Util               as Util
 import qualified Hydra.Dsl.Validation         as Validation
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 import Hydra.Testing
 
@@ -47,6 +49,7 @@ module_ = Module {
       Phantoms.toDefinition checkDuplicateModuleNamesTests,
       Phantoms.toDefinition checkModuleNameConventionTests,
       Phantoms.toDefinition checkPackageNameConventionTests,
+      Phantoms.toDefinition checkUndeclaredDependenciesTests,
       Phantoms.toDefinition kernelModuleTests,
       Phantoms.toDefinition kernelPackageTests,
       Phantoms.toDefinition profileBehaviourTests]
@@ -72,6 +75,7 @@ allTests = define "allTests" $
     checkDuplicateModuleNamesTests,
     checkModuleNameConventionTests,
     checkPackageNameConventionTests,
+    checkUndeclaredDependenciesTests,
     kernelModuleTests,
     kernelPackageTests,
     profileBehaviourTests]
@@ -280,12 +284,75 @@ checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
       (mkPackage "hydra.kernel" [])
       (invalidPackageNameErr "hydra.kernel")]
 
+-- | Regression coverage for #574: a module referencing a symbol owned by
+-- another module, where the reference is not covered by a declared
+-- dependency, must be flagged -- this is the exact shape of the #555
+-- incident (hydra.build.routing referenced hydra.dsls.dslModuleName
+-- without hydra.dsls in its moduleDependencies, and the omission surfaced
+-- only much later, as an opaque "untyped term variable" error during a
+-- different package's code generation).
+checkUndeclaredDependenciesTests :: TypedTermDefinition TestGroup
+checkUndeclaredDependenciesTests = define "checkUndeclaredDependenciesTests" $
+  subgroup "checkUndeclaredDependencies" [
+    let target = mkModule "hydra.foo" [mkDocumentedTermDef "hydra.foo.a"]
+    in uc "single module, no references: no error"
+      [target] Sets.empty target [],
+
+    let bar = mkModule "hydra.bar" [mkDocumentedTermDef "hydra.bar.b"]
+        foo = mkModuleWithDeps "hydra.foo" ["hydra.bar"]
+          [mkReferencingTermDef "hydra.foo.a" "hydra.bar.b"]
+    in uc "declared dependency covers the reference: no error"
+      [bar, foo] Sets.empty foo [],
+
+    let dsls = mkModule "hydra.dsls" [mkDocumentedTermDef "hydra.dsls.dslModuleName"]
+        routing = mkModuleWithDeps "hydra.build.routing" []
+          [mkReferencingTermDef "hydra.build.routing.route" "hydra.dsls.dslModuleName"]
+    in uc "#555 regression: reference to another module's symbol with no declared dependency: error"
+      [dsls, routing] Sets.empty routing
+      [undeclaredDependencyErr "hydra.build.routing" "hydra.dsls.dslModuleName" "hydra.dsls"],
+
+    let baz = mkModule "hydra.baz" [mkDocumentedTermDef "hydra.baz.c"]
+        bar = mkModuleWithDeps "hydra.bar" ["hydra.baz"] [mkDocumentedTermDef "hydra.bar.b"]
+        foo = mkModuleWithDeps "hydra.foo" ["hydra.bar"]
+          [mkReferencingTermDef "hydra.foo.a" "hydra.baz.c"]
+    in uc "transitive-only dependency does not satisfy one-hop: error"
+      [baz, bar, foo] Sets.empty foo
+      [undeclaredDependencyErr "hydra.foo" "hydra.baz.c" "hydra.baz"],
+
+    let foo = mkModuleWithDeps "hydra.foo" []
+          [mkReferencingTermDef "hydra.foo.a" "hydra.nonexistent.thing"]
+    in uc "reference to a name with no known owner (e.g. a typo): no error"
+      [foo] Sets.empty foo [],
+
+    let lib = mkModule "hydra.lib.lists" [mkDocumentedTermDef "hydra.lib.lists.map"]
+        foo = mkModuleWithDeps "hydra.foo" []
+          [mkReferencingTermDef "hydra.foo.a" "hydra.lib.lists.map"]
+    in uc "reference to a primitive name: excluded, no error"
+      [lib, foo] (Sets.fromList $ Phantoms.list [nm "hydra.lib.lists.map"]) foo [],
+
+    let foo = mkModuleWithDeps "hydra.foo" []
+          [mkDocumentedTermDef "hydra.foo.a",
+           mkReferencingTermDef "hydra.foo.b" "hydra.foo.a"]
+    in uc "self-reference within the same module: no error"
+      [foo] Sets.empty foo []]
+
 conflictingModuleNameErr :: String -> String -> TypedTerm (Maybe InvalidPackageError)
 conflictingModuleNameErr firstNs secondNs = justPackageError $
   Phantoms.inject _InvalidPackageError _InvalidPackageError_conflictingModuleName $
     Phantoms.record _ConflictingModuleNameError [
       unName _ConflictingModuleNameError_first Phantoms.>: nsLit firstNs,
       unName _ConflictingModuleNameError_second Phantoms.>: nsLit secondNs]
+
+-- | Bare (non-Maybe) InvalidPackageError for an undeclaredDependency finding.
+-- Used in checkUndeclaredDependenciesTests, whose expected values are lists
+-- of findings rather than a single Maybe.
+undeclaredDependencyErr :: String -> String -> String -> TypedTerm InvalidPackageError
+undeclaredDependencyErr moduleNs referencedNameStr owningModuleNs =
+  Phantoms.inject _InvalidPackageError _InvalidPackageError_undeclaredDependency $
+    Phantoms.record _UndeclaredDependencyError [
+      unName _UndeclaredDependencyError_moduleName Phantoms.>: nsLit moduleNs,
+      unName _UndeclaredDependencyError_referencedName Phantoms.>: nm referencedNameStr,
+      unName _UndeclaredDependencyError_owningModuleName Phantoms.>: nsLit owningModuleNs]
 
 definitionNotInModuleNameErr :: String -> String -> TypedTerm (Maybe InvalidModuleError)
 definitionNotInModuleNameErr nsStr nameStr = justModuleError $
@@ -460,13 +527,25 @@ mkDocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefiniti
 
 -- | Build a Module with the given namespace and definitions and no dependencies.
 mkModule :: String -> [TypedTerm Definition] -> TypedTerm Module
-mkModule nsStr defs = Packaging.module_
+mkModule nsStr defs = mkModuleWithDeps nsStr [] defs
+
+-- | Build a Module with the given namespace, declared dependency namespaces,
+-- and definitions. Used for checkUndeclaredDependencies fixtures, which need
+-- to control the declared-dependency list explicitly (mkModule always
+-- passes an empty list, which can't exercise the "has a dependency"
+-- happy path).
+mkModuleWithDeps :: String -> [String] -> [TypedTerm Definition] -> TypedTerm Module
+mkModuleWithDeps nsStr depNsStrs defs = Packaging.module_
   (nsLit nsStr)
   (Phantoms.just (Packaging.entityMetadata
     (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
     (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing))
-  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list (mkModuleDependency <$> depNsStrs))
   (Phantoms.list defs)
+
+-- | Build a ModuleDependency on the given namespace, with no package qualifier.
+mkModuleDependency :: String -> TypedTerm ModuleDependency
+mkModuleDependency depNsStr = Packaging.moduleDependency (nsLit depNsStr) Phantoms.nothing
 
 -- | Build a Package with the given name and modules.
 mkPackage :: String -> [TypedTerm Module] -> TypedTerm Package
@@ -509,10 +588,42 @@ nsLit s = Packaging.moduleName2 $ Phantoms.string s
 pc :: String -> TypedTerm (Package -> Maybe InvalidPackageError) -> TypedTerm Package -> TypedTerm (Maybe InvalidPackageError) -> TypedTerm TestCaseWithMetadata
 pc = validatePackagingPackageCase
 
+-- | Whole-universe convenience for checkUndeclaredDependencies: builds the
+-- owner map for 'universe' (via undeclaredDependencyOwnersRef), applies the
+-- check to 'targetModule', and compares the rendered finding list against
+-- 'expected'. Unlike 'pc'/'mc', the validator under test is not a
+-- Package/Module -> Maybe E function but a
+-- Map Name ModuleName -> Set Name -> Module -> [E] function, so this needs
+-- its own case-builder rather than reusing validatePackagingPackageCase.
+uc :: String -> [TypedTerm Module] -> TypedTerm (S.Set Name) -> TypedTerm Module -> [TypedTerm InvalidPackageError] -> TypedTerm TestCaseWithMetadata
+uc cname universe primNames targetModule expected = universalCase cname
+  (showFindings (checkUndeclaredDependenciesRef @@ (undeclaredDependencyOwnersRef @@ Phantoms.list universe) @@ primNames @@ targetModule))
+  (showFindings (Phantoms.list expected))
+  where
+    showFindings :: TypedTerm [InvalidPackageError] -> TypedTerm String
+    showFindings fs = retype $
+      Strings.cat2 (Phantoms.string "[") $
+        Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+          Lists.map (Phantoms.lambda "e" $ Testing.showInvalidPackageErrorRef @@ Phantoms.var "e") fs)
+          (Phantoms.string "]")
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
 -- | A reified Term value (a Core.TermLiteral of a Core.LiteralString) for use
 -- as a placeholder body in test fixture term-definitions.
 placeholderTerm :: TypedTerm Term
 placeholderTerm = Core.termLiteral $ Core.literalString $ Phantoms.string "value"
+
+-- | Build a documented TermDefinition whose body is a bare reference
+-- (Term_variable) to the given fully-qualified name. Used to construct
+-- checkUndeclaredDependencies fixtures: a module whose definition
+-- references a symbol owned by another module.
+mkReferencingTermDef :: String -> String -> TypedTerm Definition
+mkReferencingTermDef fullName referencedName = Packaging.definitionTerm $ Packaging.termDefinition
+  (nm fullName)
+  Phantoms.nothing
+  (Phantoms.nothing :: TypedTerm (Maybe TermSignature))
+  (Core.termVariable $ nm referencedName)
 
 -- | Build a PackageName from a String literal.
 pn :: String -> TypedTerm PackageName

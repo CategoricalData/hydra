@@ -49,6 +49,7 @@ import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
@@ -78,7 +79,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ModuleName "hydra.decode.core", Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ModuleName "hydra.decode.core", Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term encoders from type modules")}
   where
     definitions = [

@@ -39,7 +39,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ModuleName "hydra.pg.model", ModuleName "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ModuleName "hydra.pg.model", ModuleName "hydra.core", Formatting.ns, ModuleName "hydra.util"],
             moduleMetadata = descriptionMetadata (Just "A mapping between Hydra's property-graph model (hydra.pg.model, TinkerPop-shaped) and the Neo4j model (hydra.neo4j.model). It is not an isomorphism and not invertible: ids and values are bridged by caller-supplied conversions (Neo4jMapping); a Neo4j relationship type expands into a property-graph edge label conditionally on the schema; and multi-label nodes, which Hydra's single-label vertices cannot represent, are rejected.")}
   where
    definitions = [

@@ -59,7 +59,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
-     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesModuleNames),
+     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns, Scoping.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline")}
   where
     definitions = [

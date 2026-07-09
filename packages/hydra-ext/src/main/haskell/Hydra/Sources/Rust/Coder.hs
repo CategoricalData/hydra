@@ -58,7 +58,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName RustSerdeSource.module_, moduleName RustLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, Scoping.ns, SerializationSource.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Rust code generator: converts Hydra type and term modules to Rust source code")}
   where
     definitions = [

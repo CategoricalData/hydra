@@ -103,7 +103,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([HaskellSerde.ns, HaskellUtilsSource.ns,
-      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+      Adapt.ns, Analysis.ns, Annotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, HaskellLanguage.ns, Lexical.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Scoping.ns, Serialization.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for encoding Hydra modules as Haskell modules")}
   where
     ns = ModuleName "hydra.haskell.coder"

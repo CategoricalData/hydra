@@ -87,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Constants.ns, Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Dependency extraction, binding sort, and let normalization"))}
   where
    definitions = [
