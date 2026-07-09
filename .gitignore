@@ -93,6 +93,11 @@ dist/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/
 #   - hydra-kernel hand-written test bridge (overlaid from overlay/haskell/.../src/test/)
 dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs
 dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/DefaultImplGraph.hs
+#   - hydra-pg / hydra-typescript hand-written DSL helpers (overlaid from
+#     overlay/haskell/hydra-{pg,typescript}/; relocated to the
+#     Hydra.Overlay.Haskell.* namespace in #501/#556)
+dist/haskell/hydra-pg/src/main/haskell/Hydra/Overlay/
+dist/haskell/hydra-typescript/src/main/haskell/Hydra/Overlay/
 
 dist/clojure/
 dist/common-lisp/

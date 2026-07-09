@@ -689,6 +689,60 @@ def _list_json_files_recursive(root):
     return out
 
 
+def _unsigned_term_names(m):
+    """Names of term definitions in m with no TermSignature (i.e.
+    termDefinitionSignature = None). Mirrors the Haskell
+    Hydra.Generation.reloadTermSignatureSources's `unsigned`.
+    """
+    from hydra.packaging import DefinitionTerm
+
+    unsigned = []
+    for d in m.definitions:
+        if isinstance(d, DefinitionTerm):
+            td = d.value
+            if isinstance(td.signature, None_):
+                unsigned.append(td.name)
+    return unsigned
+
+
+def reload_term_signature_sources(dist_json_root, universe_mods, mods):
+    """Replace each DSL source module containing term definitions WITHOUT
+    signatures by its just-written dist_json_root counterpart, whose term
+    definitions carry the main pass's inferred signatures. Mirrors the
+    Haskell Hydra.Generation.reloadTermSignatureSources (#467): the raw
+    in-memory source modules always have termDefinitionSignature = None
+    (inference never runs on derived modules, and native drivers build
+    their DSL-module lists from the pre-inference sources list), so
+    without this read-back hydra.dsls.generate_ref_bindings's term path
+    would silently skip every term definition and emit an empty module
+    (#556). Modules with no unsigned term definitions (type modules,
+    primitive-only modules) pass through untouched. Raises if a reloaded
+    module still lacks a term signature, rather than regressing to silent
+    omission.
+    """
+    bs_graph = bootstrap_graph()
+    schema_map = bootstrap_schema_map()
+    result = []
+    for m in mods:
+        if not _unsigned_term_names(m):
+            result.append(m)
+            continue
+        pkg = namespace_to_package(m.name)
+        file_path = os.path.join(
+            dist_json_root, pkg, "src", "main", "json",
+            module_name_to_path(m.name) + ".json")
+        json_val = parse_json_file(file_path)
+        reloaded = decode_module(bs_graph, schema_map, json_val)
+        still_unsigned = _unsigned_term_names(reloaded)
+        if still_unsigned:
+            names = ", ".join(n.value for n in still_unsigned)
+            raise RuntimeError(
+                "DSL read-back: term definitions still lack signatures in "
+                f"{m.name.value}: {names}")
+        result.append(reloaded)
+    return result
+
+
 def generate_dsl_modules(universe_mods, type_mods):
     """Synthesize the DSL-wrapper modules (hydra.dsl.<lang>.*) for a set of
     type-defining modules, mirroring Hydra.Generation.generateDslModules.
@@ -787,3 +841,48 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
                 case _:
                     raise RuntimeError(
                         f"_write_package_split_json: unexpected encode result {result!r}")
+
+
+def _namespaces_array(mods):
+    """A sorted JSON string array of the namespaces of the given modules."""
+    names = sorted(m.name.value for m in mods)
+    return JsonModel.ValueArray([JsonModel.ValueString(n) for n in names])
+
+
+def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
+    """Write each package's manifest.json in the current (#511) schema:
+    mainDslModules / mainEncodingModules / mainModules / manifestFormatVersion /
+    package / testModules. Mirrors Java's Generation.writePackageManifests and
+    the underlying Haskell writer's field order and formatting (alphabetized
+    keys, via hydra.json.writer.print_json so output is byte-for-byte
+    consistent with the other native drivers).
+
+    Only packages present in main_mods are visited (mirrors Java): a package
+    whose sources feed dsl_mods/enc_mods but not main_mods won't get a
+    manifest written here.
+    """
+    from hydra.json.writer import print_json
+
+    main_by_pkg = dict(group_by_package(main_mods))
+    dsl_by_pkg = dict(group_by_package(dsl_mods))
+    enc_by_pkg = dict(group_by_package(enc_mods))
+
+    for pkg in sorted(main_by_pkg.keys()):
+        main = main_by_pkg.get(pkg, [])
+        dsl = dsl_by_pkg.get(pkg, [])
+        enc = enc_by_pkg.get(pkg, [])
+        fields = [
+            ("mainDslModules", _namespaces_array(dsl)),
+            ("mainEncodingModules", _namespaces_array(enc)),
+            ("mainModules", _namespaces_array(main)),
+            ("manifestFormatVersion", JsonModel.ValueNumber(Decimal(1))),
+            ("package", JsonModel.ValueString(pkg)),
+            ("testModules", _namespaces_array([])),
+        ]
+        json_str = print_json(JsonModel.ValueObject(fields))
+        pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
+        os.makedirs(pkg_dir, exist_ok=True)
+        file_path = os.path.join(pkg_dir, "manifest.json")
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(json_str + "\n")
+        print(f"  Wrote manifest: {file_path}", flush=True)

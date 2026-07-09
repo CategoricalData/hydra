@@ -4,8 +4,8 @@
 --
 -- This is a translingual term module: 'modernSchema' and 'modernGraph' are
 -- 'DefinitionTerm's built from the phantom term DSL, so they generate to all
--- host languages (unlike the genpg demo's Hydra.Dsl.Pg.Schemas helpers, which
--- produce plain Haskell values).
+-- host languages (unlike the genpg demo's Hydra.Overlay.Haskell.Dsl.Pg.Schemas
+-- helpers, which produce plain Haskell values).
 --
 -- The schema is a hydra.pg.model.GraphSchema parameterized by
 -- hydra.core.LiteralType (id/property types); the data is a

@@ -1,5 +1,5 @@
 -- | A DSL for constructing TypeScript syntax trees in Haskell.
-module Hydra.Dsl.TypeScript.Helpers where
+module Hydra.Overlay.Haskell.Dsl.TypeScript.Helpers where
 
 import Hydra.TypeScript.Syntax
 import qualified Data.Int as I

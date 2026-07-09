@@ -1,10 +1,12 @@
 {
-  "dslModules": ["hydra.dsl.python.environment", "hydra.dsl.python.syntax"],
+  "mainDslModules": ["hydra.python.environment", "hydra.python.names", "hydra.python.syntax", "hydra.python.utils"],
+  "mainEncodingModules": [],
   "mainModules": [
     "hydra.python.coder",
     "hydra.python.environment",
     "hydra.python.language",
     "hydra.python.names",
+    "hydra.python.pyproject",
     "hydra.python.serde",
     "hydra.python.syntax",
     "hydra.python.testing",

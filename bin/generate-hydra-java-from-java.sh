@@ -150,19 +150,13 @@ fi
 # wrote to a tmp dir (compare-only mode without --out-root); in that
 # case the canonical dist/json is untouched.
 if [ "$ACTUAL_OUT_ROOT" = "$CANON_ROOT" ]; then
-    echo ""
-    echo "=== Writing manifest.json for hydra-jvm (#505) ==="
-    JVM_MANIFEST_DIR="$HYDRA_ROOT/dist/json/hydra-jvm/src/main/json"
-    mkdir -p "$JVM_MANIFEST_DIR"
-    cat > "$JVM_MANIFEST_DIR/manifest.json" <<'JSON'
-{
-  "dslModules": [],
-  "mainModules": ["hydra.jvm.serde"],
-  "manifestFormatVersion": 1,
-  "package": "hydra-jvm",
-  "testModules": []}
-JSON
-
+    # hydra-jvm's manifest.json is written by hydra.UpdateJavaJson itself
+    # (Generation.writePackageManifests, #556) as part of the
+    # update-java-json.sh run above — no separate write needed here. A
+    # static heredoc used to duplicate that write with stale legacy-schema
+    # content (pre-#511, missing mainDslModules); removed since it
+    # unconditionally clobbered the driver's own correct output on every
+    # run (a no-post-generation-patches violation).
     echo ""
     echo "=== Refreshing per-package input digests for hydra-jvm and hydra-java (#469/#505) ==="
     (cd "$HYDRA_ROOT/heads/haskell" && \

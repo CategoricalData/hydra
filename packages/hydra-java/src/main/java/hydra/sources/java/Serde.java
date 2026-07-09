@@ -1703,8 +1703,7 @@ public class Serde {
                                                                             int32(127))),
                                                                     Strings.fromList(
                                                                         list(var("ci"))),
-                                                                    apply(
-                                                                        var("hydra.jvm.serde.javaUnicodeEscape"),
+                                                                    hydra.dsl.jvm.Serde.javaUnicodeEscape(
                                                                         var("ci")))))))),
                                             string("'"))))))),
                     field(
@@ -2739,7 +2738,7 @@ public class Serde {
                             Strings.cat2(
                                 string("\""),
                                 Strings.cat2(
-                                    apply(var("hydra.jvm.serde.escapeJavaString"), var("s")),
+                                    hydra.dsl.jvm.Serde.escapeJavaString(var("s")),
                                     string("\""))))));
 
     public static final Def switchStatementToExpr = def("switchStatementToExpr")
