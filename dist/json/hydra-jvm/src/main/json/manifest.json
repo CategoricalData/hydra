@@ -1,5 +1,6 @@
 {
-  "dslModules": [],
+  "mainDslModules": ["hydra.jvm.serde"],
+  "mainEncodingModules": [],
   "mainModules": ["hydra.jvm.serde"],
   "manifestFormatVersion": 1,
   "package": "hydra-jvm",
