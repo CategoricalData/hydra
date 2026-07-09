@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.jvm.serde"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.jvm.serde"},
+    {"module": "hydra.decode.jvm.serde"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},

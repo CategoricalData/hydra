@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.java.language"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.java.language"},
+    {"module": "hydra.decode.java.language"},
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

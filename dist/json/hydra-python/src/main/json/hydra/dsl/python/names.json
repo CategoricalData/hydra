@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.python.names"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.python.names"},
+    {"module": "hydra.decode.python.names"},
     {"module": "hydra.names"},
     {"module": "hydra.formatting"},
     {"module": "hydra.python.serde"},

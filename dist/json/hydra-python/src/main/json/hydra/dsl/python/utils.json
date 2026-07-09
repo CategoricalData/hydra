@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.python.utils"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.python.utils"},
+    {"module": "hydra.decode.python.utils"},
     {"module": "hydra.python.names"},
     {"module": "hydra.python.serde"},
     {"module": "hydra.serialization"},
