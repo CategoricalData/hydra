@@ -10,6 +10,7 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
@@ -19,6 +20,7 @@ import qualified Hydra.Dsl.Arity as DslArity
 import qualified Hydra.Dsl.Ast as DslAst
 import qualified Hydra.Dsl.Checking as DslChecking
 import qualified Hydra.Dsl.Coders as DslCoders
+import qualified Hydra.Dsl.Constants as DslConstants
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Dependencies as DslDependencies
 import qualified Hydra.Dsl.Docs as DslDocs

@@ -2,6 +2,7 @@
   "name": "hydra.adapt",
   "metadata": {"description": "Simple, one-way adapters for types and terms", "comments": [], "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.annotations"},
     {"module": "hydra.dependencies"},
     {"module": "hydra.hoisting"},
     {"module": "hydra.inference"},

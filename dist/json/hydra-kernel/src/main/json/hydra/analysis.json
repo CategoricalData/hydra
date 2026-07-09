@@ -5,6 +5,7 @@
     {"module": "hydra.annotations"},
     {"module": "hydra.arity"},
     {"module": "hydra.checking"},
+    {"module": "hydra.constants"},
     {"module": "hydra.dependencies"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.lexical"},

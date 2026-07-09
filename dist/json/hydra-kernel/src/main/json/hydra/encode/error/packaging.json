@@ -914,7 +914,38 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "application": {"function": {"variable": "hydra.encode.error.packaging.invalidPackageNameError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
+                                                "application": {"function": {"variable": "hydra.encode.error.packaging.invalidPackageNameError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                  {
+                    "name": "undeclaredDependency",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "undeclaredDependency"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {"function": {"variable": "hydra.encode.error.packaging.undeclaredDependencyError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [
                 {
@@ -1031,4 +1062,81 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Encoder for hydra.error.packaging.MissingDocumentationError"}}}]}}}}}]}
+                  "value": {"literal": {"string": "Encoder for hydra.error.packaging.MissingDocumentationError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.encode.error.packaging.undeclaredDependencyError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.UndeclaredDependencyError"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Record",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.UndeclaredDependencyError"}}}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "moduleName"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {"variable": "hydra.encode.packaging.moduleName"},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "moduleName"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "referencedName"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {"variable": "hydra.encode.core.name"},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "referencedName"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "owningModuleName"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {"variable": "hydra.encode.packaging.moduleName"},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "owningModuleName"}},
+                                                  "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.packaging.UndeclaredDependencyError"}}}]}}}}}]}

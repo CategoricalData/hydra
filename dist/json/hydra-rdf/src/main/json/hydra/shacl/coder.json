@@ -8,6 +8,7 @@
     {"module": "hydra.names"},
     {"module": "hydra.strip"},
     {"module": "hydra.annotations"},
+    {"module": "hydra.constants"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.extract.core"},
     {"module": "hydra.formatting"},

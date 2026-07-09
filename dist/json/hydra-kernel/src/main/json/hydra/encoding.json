@@ -3,11 +3,13 @@
   "metadata": {"description": "Functions for generating term encoders from type modules", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.annotations"},
+    {"module": "hydra.constants"},
     {"module": "hydra.decode.core"},
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},
     {"module": "hydra.predicates"},
     {"module": "hydra.rewriting"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

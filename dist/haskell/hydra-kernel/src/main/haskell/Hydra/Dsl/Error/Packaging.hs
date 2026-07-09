@@ -826,6 +826,15 @@ invalidPackageErrorInvalidPackageName x =
         Core.fieldName = (Core.Name "invalidPackageName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL injection for the undeclaredDependency variant of hydra.error.packaging.InvalidPackageError
+invalidPackageErrorUndeclaredDependency :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm ErrorPackaging.InvalidPackageError
+invalidPackageErrorUndeclaredDependency x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "undeclaredDependency"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.error.packaging.InvalidPackageNameError
 invalidPackageNameError :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm ErrorPackaging.InvalidPackageNameError
 invalidPackageNameError packageName =
@@ -929,3 +938,123 @@ missingDocumentationErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL constructor for hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyError :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyError moduleName referencedName owningModuleName =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Typed.unTypedTerm moduleName)},
+        Core.Field {
+          Core.fieldName = (Core.Name "referencedName"),
+          Core.fieldTerm = (Typed.unTypedTerm referencedName)},
+        Core.Field {
+          Core.fieldName = (Core.Name "owningModuleName"),
+          Core.fieldTerm = (Typed.unTypedTerm owningModuleName)}]}))
+
+-- | DSL accessor for the moduleName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorModuleName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Packaging.ModuleName
+undeclaredDependencyErrorModuleName x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+        Core.projectionFieldName = (Core.Name "moduleName")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL accessor for the owningModuleName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorOwningModuleName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Packaging.ModuleName
+undeclaredDependencyErrorOwningModuleName x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+        Core.projectionFieldName = (Core.Name "owningModuleName")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL accessor for the referencedName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorReferencedName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Core.Name
+undeclaredDependencyErrorReferencedName x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+        Core.projectionFieldName = (Core.Name "referencedName")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorUndeclaredDependencyError :: Typed.TypedName ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyErrorUndeclaredDependencyError =
+    Typed.TypedName (Core.Name "hydra.error.packaging.UndeclaredDependencyError")
+
+-- | DSL updater for the moduleName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithModuleName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithModuleName original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "referencedName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "referencedName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "owningModuleName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "owningModuleName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL updater for the owningModuleName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithOwningModuleName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithOwningModuleName original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "moduleName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "referencedName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "referencedName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "owningModuleName"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL updater for the referencedName field of hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithReferencedName :: Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyErrorWithReferencedName original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "moduleName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "referencedName"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "owningModuleName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+              Core.projectionFieldName = (Core.Name "owningModuleName")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))

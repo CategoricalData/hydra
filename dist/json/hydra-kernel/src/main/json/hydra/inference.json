@@ -13,6 +13,7 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.names"},
     {"module": "hydra.resolution"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.show.core"},
     {"module": "hydra.show.errors"},
     {"module": "hydra.show.typing"},

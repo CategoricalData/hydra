@@ -5,6 +5,7 @@
     {"module": "hydra.strip"},
     {"module": "hydra.show.core"},
     {"module": "hydra.show.errors"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

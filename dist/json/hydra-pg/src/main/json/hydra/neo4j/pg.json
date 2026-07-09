@@ -4,7 +4,12 @@
     "description": "A mapping between Hydra's property-graph model (hydra.pg.model, TinkerPop-shaped) and the Neo4j model (hydra.neo4j.model). It is not an isomorphism and not invertible: ids and values are bridged by caller-supplied conversions (Neo4jMapping); a Neo4j relationship type expands into a property-graph edge label conditionally on the schema; and multi-label nodes, which Hydra's single-label vertices cannot represent, are rejected.",
     "comments": [],
     "seeAlso": []},
-  "dependencies": [{"module": "hydra.neo4j.model"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
+  "dependencies": [
+    {"module": "hydra.neo4j.model"},
+    {"module": "hydra.pg.model"},
+    {"module": "hydra.core"},
+    {"module": "hydra.formatting"},
+    {"module": "hydra.util"}],
   "definitions": [
     {
       "term": {

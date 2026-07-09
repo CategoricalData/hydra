@@ -2,6 +2,7 @@
   "name": "hydra.reduction",
   "metadata": {"description": "Functions for reducing terms and types, i.e. performing computations.", "comments": [], "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.annotations"},
     {"module": "hydra.arity"},
     {"module": "hydra.checking"},
     {"module": "hydra.extract.core"},

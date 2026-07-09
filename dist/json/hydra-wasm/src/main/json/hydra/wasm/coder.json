@@ -11,6 +11,7 @@
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
     {"module": "hydra.environment"},

@@ -12,6 +12,7 @@
     {"module": "hydra.predicates"},
     {"module": "hydra.annotations"},
     {"module": "hydra.serialization"},
+    {"module": "hydra.show.core"},
     {"module": "hydra.graphql.language"},
     {"module": "hydra.graphql.serde"},
     {"module": "hydra.graphql.syntax"},

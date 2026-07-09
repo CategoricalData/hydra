@@ -170,7 +170,10 @@ invalidPackageError cx raw =
                         (\input -> Eithers.map (\t -> ErrorPackaging.InvalidPackageErrorInvalidModule t) (invalidModuleError cx input))),
                       (
                         Core.Name "invalidPackageName",
-                        (\input -> Eithers.map (\t -> ErrorPackaging.InvalidPackageErrorInvalidPackageName t) (invalidPackageNameError cx input)))]
+                        (\input -> Eithers.map (\t -> ErrorPackaging.InvalidPackageErrorInvalidPackageName t) (invalidPackageNameError cx input))),
+                      (
+                        Core.Name "undeclaredDependency",
+                        (\input -> Eithers.map (\t -> ErrorPackaging.InvalidPackageErrorUndeclaredDependency t) (undeclaredDependencyError cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -197,3 +200,15 @@ missingDocumentationError cx raw =
           ErrorPackaging.missingDocumentationErrorModuleName = field_moduleName,
           ErrorPackaging.missingDocumentationErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.MissingDocumentationError")) (ExtractCore.stripWithDecodingError cx raw)
+
+-- | Decoder for hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.UndeclaredDependencyError
+undeclaredDependencyError cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "moduleName" DecodePackaging.moduleName fieldMap cx) (\field_moduleName -> Eithers.bind (ExtractCore.requireField "referencedName" DecodeCore.name fieldMap cx) (\field_referencedName -> Eithers.bind (ExtractCore.requireField "owningModuleName" DecodePackaging.moduleName fieldMap cx) (\field_owningModuleName -> Right (ErrorPackaging.UndeclaredDependencyError {
+          ErrorPackaging.undeclaredDependencyErrorModuleName = field_moduleName,
+          ErrorPackaging.undeclaredDependencyErrorReferencedName = field_referencedName,
+          ErrorPackaging.undeclaredDependencyErrorOwningModuleName = field_owningModuleName})))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.UndeclaredDependencyError")) (ExtractCore.stripWithDecodingError cx raw)

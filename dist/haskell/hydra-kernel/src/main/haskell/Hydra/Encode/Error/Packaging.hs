@@ -186,6 +186,11 @@ invalidPackageError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidPackageName"),
           Core.fieldTerm = (invalidPackageNameError v0)}})
+      ErrorPackaging.InvalidPackageErrorUndeclaredDependency v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "undeclaredDependency"),
+          Core.fieldTerm = (undeclaredDependencyError v0)}})
 
 -- | Encoder for hydra.error.packaging.InvalidPackageNameError
 invalidPackageNameError :: ErrorPackaging.InvalidPackageNameError -> Core.Term
@@ -209,3 +214,19 @@ missingDocumentationError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorPackaging.missingDocumentationErrorName x))}]})
+
+-- | Encoder for hydra.error.packaging.UndeclaredDependencyError
+undeclaredDependencyError :: ErrorPackaging.UndeclaredDependencyError -> Core.Term
+undeclaredDependencyError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.packaging.UndeclaredDependencyError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "moduleName"),
+          Core.fieldTerm = (EncodePackaging.moduleName (ErrorPackaging.undeclaredDependencyErrorModuleName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "referencedName"),
+          Core.fieldTerm = (EncodeCore.name (ErrorPackaging.undeclaredDependencyErrorReferencedName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "owningModuleName"),
+          Core.fieldTerm = (EncodePackaging.moduleName (ErrorPackaging.undeclaredDependencyErrorOwningModuleName x))}]})

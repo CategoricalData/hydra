@@ -53,6 +53,7 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.System as System

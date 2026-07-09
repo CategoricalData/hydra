@@ -9,6 +9,7 @@ import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -44,9 +45,12 @@ import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation
+import qualified Hydra.Variables as Variables
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingModule :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
@@ -257,6 +261,26 @@ checkPackageNameConvention pkg =
       in (Logic.ifElse (Regex.matches Constants.regexPackageName (Packaging.unPackageName pname)) Nothing (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
         ErrorPackaging.invalidPackageNameErrorPackageName = pname}))))
 
+-- | Check a module's definitions for free names whose owning module is not among its declared dependencies
+checkUndeclaredDependencies :: M.Map Core.Name Packaging.ModuleName -> S.Set Core.Name -> Packaging.Module -> [ErrorPackaging.InvalidPackageError]
+checkUndeclaredDependencies owners primNames mod =
+
+      let ns = Packaging.moduleName mod
+          visible =
+                  Sets.insert ns (Sets.fromList (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)))
+          referencedNames =
+                  \def -> case def of
+                    Packaging.DefinitionTerm v0 -> Sets.union (Variables.freeVariablesInTerm (Packaging.termDefinitionBody v0)) (Dependencies.termDependencyNames False False True (Packaging.termDefinitionBody v0))
+                    Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionBody v0))
+                    _ -> Sets.empty
+          findingForRef =
+                  \refName -> Logic.ifElse (Sets.member refName primNames) Nothing (Optionals.bind (Maps.lookup refName owners) (\owner -> Logic.ifElse (Sets.member owner visible) Nothing (Just (ErrorPackaging.InvalidPackageErrorUndeclaredDependency (ErrorPackaging.UndeclaredDependencyError {
+                    ErrorPackaging.undeclaredDependencyErrorModuleName = ns,
+                    ErrorPackaging.undeclaredDependencyErrorReferencedName = refName,
+                    ErrorPackaging.undeclaredDependencyErrorOwningModuleName = owner})))))
+          findingsForDef = \def -> Optionals.mapOptional findingForRef (Sets.toList (referencedNames def))
+      in (Lists.concat (Lists.map findingsForDef (Packaging.moduleDefinitions mod)))
+
 -- | Extract the name from a definition
 definitionName :: Packaging.Definition -> Core.Name
 definitionName def =
@@ -303,6 +327,13 @@ kernelPackage pkg =
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) pkg))
 
+-- | Check every module in the given universe for undeclared cross-module dependencies, returning every finding.
+kernelUniverseUndeclaredDependencies :: [Packaging.Module] -> S.Set Core.Name -> [ErrorPackaging.InvalidPackageError]
+kernelUniverseUndeclaredDependencies universe primNames =
+
+      let owners = undeclaredDependencyOwners universe
+      in (Lists.concat (Lists.map (\mod -> checkUndeclaredDependencies owners primNames mod) universe))
+
 -- | Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached.
 module_ :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidModuleError -> Packaging.Module -> Validation.ValidationResult ErrorPackaging.InvalidModuleError
 module_ p acc0 mod =
@@ -338,3 +369,8 @@ package p acc0 pkg =
         in Validation.ValidationResult {
           Validation.validationResultErrors = newErrs,
           Validation.validationResultWarnings = newWrns})) accPkg (Packaging.packageModules pkg))
+
+-- | Build a map from every name defined in the universe to its owning module
+undeclaredDependencyOwners :: [Packaging.Module] -> M.Map Core.Name Packaging.ModuleName
+undeclaredDependencyOwners universe =
+    Maps.fromList (Lists.concat (Lists.map (\m -> Lists.map (\def -> (definitionName def, (Packaging.moduleName m))) (Packaging.moduleDefinitions m)) universe))

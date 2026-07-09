@@ -4,12 +4,14 @@
 
 module Hydra.Dsl.Reduction where
 
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Docs as Docs
+import qualified Hydra.Dsl.Annotations as DslAnnotations
 import qualified Hydra.Dsl.Arity as DslArity
 import qualified Hydra.Dsl.Ast as DslAst
 import qualified Hydra.Dsl.Checking as DslChecking
