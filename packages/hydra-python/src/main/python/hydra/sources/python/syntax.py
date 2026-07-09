@@ -4,8 +4,11 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 Retrieved from https://docs.python.org/3/reference/grammar.html on 2024-12-22.
 """
 
+import sys
+
 from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
+from hydra.overlay.python.dsl.meta.defs import check_complete
 from hydra.packaging import (EntityMetadata,
     Module,
     ModuleName,
@@ -812,3 +815,4 @@ module_ = Module(
     DEPENDENCIES,
     tuple(_constructs + _terminals + _nonterminals),
 )
+check_complete(sys.modules[__name__], module_.definitions)

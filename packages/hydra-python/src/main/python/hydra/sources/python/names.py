@@ -3,6 +3,8 @@
 Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
+import sys
+
 from hydra.core import Name
 from hydra.overlay.python.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
@@ -15,6 +17,7 @@ import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.defs import check_complete
 import hydra.dsl.formatting
 from hydra.dsl.util import (
     case_convention_camel as util_case_convention_camel,
@@ -498,3 +501,4 @@ def _build_module() -> Module:
 
 
 module_ = _build_module()
+check_complete(sys.modules[__name__], module_.definitions)

@@ -3,8 +3,11 @@
 Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
+import sys
+
 from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
+from hydra.overlay.python.dsl.meta.defs import check_complete
 from hydra.packaging import (EntityMetadata,
     Module,
     ModuleName,
@@ -190,3 +193,4 @@ def _build_module() -> Module:
 
 
 module_ = _build_module()
+check_complete(sys.modules[__name__], module_.definitions)

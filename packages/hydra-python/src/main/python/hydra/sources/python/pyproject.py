@@ -17,8 +17,11 @@ dependencies (runtime + test); requires-python, the build backend, and namespace
 configuration are emitted uniformly by the generic per-package generator.
 """
 
+import sys
+
 from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
+from hydra.overlay.python.dsl.meta.defs import check_complete
 from hydra.packaging import (EntityMetadata,
     DefinitionType,
     Module,
@@ -70,3 +73,4 @@ module_ = Module(
     DEPENDENCIES,
     tuple(_definitions),
 )
+check_complete(sys.modules[__name__], module_.definitions)

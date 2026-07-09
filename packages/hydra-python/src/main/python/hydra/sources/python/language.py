@@ -5,6 +5,8 @@ Builds the same Module value; serializing it via hydra.dsl.core's module-to-JSON
 path produces JSON byte-equivalent to the Haskell-generated language.json.
 """
 
+import sys
+
 from hydra.core import Name
 from hydra.overlay.python.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
@@ -12,6 +14,7 @@ from hydra.packaging import EntityMetadata, Module, ModuleName
 import hydra.dsl.lib.lists as Lists
 import hydra.dsl.lib.sets as Sets
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.defs import check_complete
 import hydra.dsl.core as Core
 import hydra.dsl.variants as Variants
 import hydra.dsl.coders as Coders
@@ -204,3 +207,4 @@ def _build_module() -> Module:
 
 
 module_ = _build_module()
+check_complete(sys.modules[__name__], module_.definitions)
