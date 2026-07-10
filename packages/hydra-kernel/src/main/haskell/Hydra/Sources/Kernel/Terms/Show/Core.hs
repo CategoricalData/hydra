@@ -71,11 +71,11 @@ module_ = Module {
      toDefinition field,
      toDefinition fieldType,
      toDefinition fields,
-     toDefinition floatType,
      toDefinition floatValue,
+     toDefinition floatType,
      toDefinition injection,
-     toDefinition integerType,
      toDefinition integerValue,
+     toDefinition integerType,
      toDefinition lambda,
      toDefinition let_,
      toDefinition list_,
@@ -163,19 +163,19 @@ fields = define "fields" $
     Strings.intercalate (string ", ") (var "fieldStrs"),
     string "}"]
 
-floatType :: TypedTermDefinition (FloatType -> String)
-floatType = define "floatType" $
-  doc "Show a float type as a string" $
-  "ft" ~> cases _FloatType (var "ft") Nothing [
-    _FloatType_float32>>: constant $ string "float32",
-    _FloatType_float64>>: constant $ string "float64"]
-
 floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
+
+floatType :: TypedTermDefinition (FloatType -> String)
+floatType = define "floatType" $
+  doc "Show a float type as a string" $
+  "ft" ~> cases _FloatType (var "ft") Nothing [
+    _FloatType_float32>>: constant $ string "float32",
+    _FloatType_float64>>: constant $ string "float64"]
 
 injection :: TypedTermDefinition (Injection -> String)
 injection = define "injection" $
@@ -188,20 +188,6 @@ injection = define "injection" $
     unwrap _Name @@ var "tname",
     string ")",
     fields @@ (list [var "f"])]
-
-integerType :: TypedTermDefinition (IntegerType -> String)
-integerType = define "integerType" $
-  doc "Show an integer type as a string" $
-  "it" ~> cases _IntegerType (var "it") Nothing [
-    _IntegerType_bigint>>: constant $ string "bigint",
-    _IntegerType_int8>>: constant $ string "int8",
-    _IntegerType_int16>>: constant $ string "int16",
-    _IntegerType_int32>>: constant $ string "int32",
-    _IntegerType_int64>>: constant $ string "int64",
-    _IntegerType_uint8>>: constant $ string "uint8",
-    _IntegerType_uint16>>: constant $ string "uint16",
-    _IntegerType_uint32>>: constant $ string "uint32",
-    _IntegerType_uint64>>: constant $ string "uint64"]
 
 integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
@@ -216,6 +202,20 @@ integerValue = define "integer" $
     _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ (string ":uint16"),
     _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
     _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
+
+integerType :: TypedTermDefinition (IntegerType -> String)
+integerType = define "integerType" $
+  doc "Show an integer type as a string" $
+  "it" ~> cases _IntegerType (var "it") Nothing [
+    _IntegerType_bigint>>: constant $ string "bigint",
+    _IntegerType_int8>>: constant $ string "int8",
+    _IntegerType_int16>>: constant $ string "int16",
+    _IntegerType_int32>>: constant $ string "int32",
+    _IntegerType_int64>>: constant $ string "int64",
+    _IntegerType_uint8>>: constant $ string "uint8",
+    _IntegerType_uint16>>: constant $ string "uint16",
+    _IntegerType_uint32>>: constant $ string "uint32",
+    _IntegerType_uint64>>: constant $ string "uint64"]
 
 lambda :: TypedTermDefinition (Lambda -> String)
 lambda = define "lambda" $

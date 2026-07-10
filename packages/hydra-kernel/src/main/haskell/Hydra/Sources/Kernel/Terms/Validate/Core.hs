@@ -569,11 +569,21 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
-  "undefined" <~ (Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") :: TypedTerm (S.Set Name)) $
+  -- freeVariablesInType treats every TypeVariable node as a free variable,
+  -- including ordinary nominal type references (Hydra represents e.g.
+  -- hydra.core.Name as TypeVariable "hydra.core.Name", not a distinct node
+  -- kind) -- not just lexically forall-bound variables. So the resolved-name
+  -- set here must be the union of graphTypeVariables (lexical, introduced by
+  -- type lambdas) and the nominal type names declared in graphSchemaTypes,
+  -- mirroring how the term-level analog (undefinedTermVariable) resolves a
+  -- variable reference against graphBoundTerms OR graphLambdaVariables OR
+  -- graphPrimitives, not a single narrow source.
+  "resolvedNames" <~ (Sets.union
+    (Graph.graphTypeVariables $ var "cx")
+    (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
+  "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
   Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
--- | Check a type scheme for undefined type variables against the current graph scope.
--- The scheme's own bound variables are excluded before checking.
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
 checkUndefinedTypeVariablesInTypeScheme :: TypedTermDefinition (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
@@ -581,7 +591,12 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
-  "undefined" <~ (Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") :: TypedTerm (S.Set Name)) $
+  -- See checkUndefinedTypeVariablesInType's comment: nominal type references
+  -- must resolve against graphSchemaTypes, not just the lexical graphTypeVariables.
+  "resolvedNames" <~ (Sets.union
+    (Graph.graphTypeVariables $ var "cx")
+    (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
+  "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
   Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================

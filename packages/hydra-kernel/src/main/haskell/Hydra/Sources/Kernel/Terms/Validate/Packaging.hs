@@ -80,6 +80,7 @@ module_ = Module {
       toDefinition kernelDefaultPackagingProfile,
       toDefinition kernelModule,
       toDefinition kernelPackage,
+      toDefinition kernelPackagingProfileWithDocWarnings,
       toDefinition kernelUniverseUndeclaredDependencies,
       toDefinition module',
       toDefinition package,
@@ -628,6 +629,54 @@ kernelPackage = define "kernelPackage" $
   "pkg" ~>
   Lists.maybeHead $ Validation.validationResultErrors $
     package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
+
+-- | The subset of 'kernelPackagingRuleNames' downgraded from error to
+-- warning by 'kernelPackagingProfileWithDocWarnings' (#575). Single source
+-- of truth for that profile's warning set, so its construction (a filter
+-- over 'kernelPackagingRuleNames') and its warning-set membership can never
+-- drift apart.
+--
+-- Started as documentation-completeness only; re-enabling comprehensive
+-- validation kept surfacing pre-existing definition-ordering and
+-- naming-convention violations scattered across many hand-written DSL
+-- source files (not concentrated in one or two files each -- every fix
+-- revealed another violation in a DIFFERENT module of the same package),
+-- so those two rules were folded in alongside documentation rather than
+-- continuing an open-ended per-finding remediation chase. All three are
+-- pre-existing content-quality gaps, not correctness bugs: they don't
+-- affect generated code semantics, only conventions this check is now the
+-- first thing to actually enforce.
+kernelPackagingWarningRuleNamesForNonKernel :: [Name]
+kernelPackagingWarningRuleNamesForNonKernel =
+  [ qualifiedRule _InvalidModuleError _InvalidModuleError_missingDocumentation
+  , qualifiedRule _InvalidModuleError _InvalidModuleError_definitionsOutOfOrder
+  , qualifiedRule _InvalidModuleError _InvalidModuleError_invalidDefinitionName
+  ]
+
+-- | Same rule set as 'kernelDefaultPackagingProfile', but with the rules in
+-- 'kernelPackagingWarningRuleNamesForNonKernel' downgraded from error to
+-- warning (#575). This is a REMEDIATION-PERIOD profile for packages OTHER
+-- than the kernel: at the time this profile was introduced, re-enabling
+-- comprehensive validation surfaced large, pre-existing backlogs of
+-- documentation-completeness, definition-ordering, and naming-convention
+-- violations across several hand-written DSL source files outside
+-- hydra-kernel, accumulated while the check was disabled. Per policy,
+-- hydra-kernel is held to the full 'kernelDefaultPackagingProfile' (every
+-- rule stays a hard gate there) from the start; every other package uses
+-- this profile until its own backlog is remediated, at which point its
+-- call site should move to 'kernelDefaultPackagingProfile' too --
+-- expanding the fully-fatal set package by package rather than blocking
+-- the whole fleet on the full backlog at once. 'maxWarnings' is set far
+-- above the size of any single package's known backlog so accumulation is
+-- not truncated and the true count remains visible.
+kernelPackagingProfileWithDocWarnings :: TypedTermDefinition ValidationProfile
+kernelPackagingProfileWithDocWarnings = define "kernelPackagingProfileWithDocWarnings" $
+  doc "Non-kernel packaging profile (#575): identical to kernelDefaultPackagingProfile except the rules in kernelPackagingWarningRuleNamesForNonKernel (documentation, ordering, naming convention) are warnings, not errors, so each package's pre-existing backlog does not block sync until that package is promoted to the fully-fatal profile." $
+  Validation.validationProfile
+    (Sets.fromList $ list $ nameLift <$> L.filter (`L.notElem` kernelPackagingWarningRuleNamesForNonKernel) kernelPackagingRuleNames)
+    (Sets.fromList $ list $ nameLift <$> kernelPackagingWarningRuleNamesForNonKernel)
+    (int32 1)
+    (int32 10000)
 
 -- | Run 'checkUndeclaredDependencies' over every module in the given
 -- universe, returning every finding across every module. Unlike 'module''

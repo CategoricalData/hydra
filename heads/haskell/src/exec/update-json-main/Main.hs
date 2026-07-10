@@ -20,8 +20,10 @@ module Main where
 
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
   loadModulesFromJson, readManifestField, loadNativePackageModulesTagged,
-  generateEncoderModules, generateDecoderModules)
-import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
+  generateEncoderModules, generateDecoderModules,
+  isDerivedModule, packagesFromRouting, validatePackagesStructural, validatePackagesSemantic,
+  ValidationFindings(..), validationFindingsNull)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap, groupByPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
   hydraBenchModules,
@@ -66,6 +68,27 @@ dedupByNamespace = go S.empty
       | ns `S.member` seen = go seen ms
       | otherwise          = m : go (S.insert ns seen) ms
       where ns = Kernel.moduleName m
+
+-- | Type definitions exempt from #575 semantic validation. UntypedLambdaError
+-- is currently `T.record []` and should migrate to `T.wrap T.unit`, but the
+-- change ripples through encode/decode/DSL helpers + every host language and
+-- is sized as its own change. Tracked separately. Applied globally (every
+-- package, not just the kernel) since the name is fully-qualified.
+kernelExemptTypeNames :: S.Set Core.Name
+kernelExemptTypeNames = S.fromList
+  [Core.Name "hydra.error.checking.UntypedLambdaError"]
+
+-- | Term definitions exempt from #575 semantic validation. etaExpandTypedTerm
+-- contains a deliberate `Logic.ifElse false ...` inference hack that lets the
+-- inferencer assign `list<Type>` to an otherwise-typeless empty list; excising
+-- it causes bootstrap-from-json (Java target) to fail with "expected
+-- list<hydra.core.Type> but found list<unit>". Validate.Core's
+-- constant-condition rule flags it but the hack is load-bearing; see the
+-- comment in Sources/Kernel/Terms/Reduction.hs. Applied globally (every
+-- package, not just the kernel) since the name is fully-qualified.
+kernelExemptTermNames :: S.Set Core.Name
+kernelExemptTermNames = S.fromList
+  [Core.Name "hydra.reduction.etaExpandTypedTerm"]
 
 main :: IO ()
 main = do
@@ -131,15 +154,6 @@ main = do
   putStrLn "=== Generate Hydra JSON modules ==="
   putStrLn ""
 
-  -- Normative kernel-module validation. Runs BEFORE inference:
-  --   * hydra.validate.packaging.kernelModule -- structural module checks
-  --   * hydra.validate.core.type_   -- per-TypeDefinition type-tree checks
-  --   * hydra.validate.core.term    -- per-TermDefinition term-tree checks
-  -- For term-level checks we use the same graph the inferencer would
-  -- build (modulesToGraph kernelModules kernelModules), so no extra
-  -- graph construction is required beyond what inference already does.
-  -- validateKernelModulesOrExit kernelModules -- temporarily disabled for #368 bootstrap recovery
-
   -- Native hosts own the DSL→JSON path for hydra-jvm, hydra-java, and hydra-python
   -- (#344, #505). Their canonical JSON is produced by the Java driver
   -- (bin/generate-hydra-java-from-java.sh, Phase 5 of sync.sh). We still load their
@@ -186,20 +200,9 @@ main = do
   -- Undeclared cross-module dependency check (#574). Runs over the
   -- hand-written universe (not just kernelModules) since a referenced
   -- name's owning module may live in a different package -- the
-  -- motivating incident (#555) was itself cross-package. Deliberately
-  -- independent of validateKernelModulesOrExit below (which is currently
-  -- disabled) -- this check must run regardless of that gate's status.
+  -- motivating incident (#555) was itself cross-package.
   --
-  -- isExcludedFromUndeclaredDepsCheck reuses the isNativeOwned /
-  -- isDerivedEncodeDecode namespace predicates (defined below) as a
-  -- PROVISIONAL default, pending a separate, broader decision on whether
-  -- and how derived modules (hydra.dsl.*/encode.*/decode.*) should be
-  -- subject to validation at all -- see the coordination log for #574 (a
-  -- follow-up issue is expected to generalize this). Until that lands,
-  -- excluding this class here is a defensible default because it mirrors
-  -- how update-json-main already treats them elsewhere (native/derived
-  -- modules are loaded only to seed the inference universe, never
-  -- re-validated/re-inferred as if hand-written):
+  -- isExcludedFromUndeclaredDepsCheck excludes:
   --   * isNativeOwned (hydra.jvm.*/java.*/python.*): native-host packages
   --     with no Haskell DSL source; their JSON is loaded only to seed the
   --     inference universe and can embed literal cross-namespace variable
@@ -207,17 +210,74 @@ main = do
   --     hydra.python.coder.json definitions entry literally named
   --     "hydra.environment.reorderDefs", which corrupted the check's
   --     name-to-owner map when included in its universe).
-  --   * isDerivedEncodeDecode (hydra.encode.*/hydra.decode.*): synthesized
-  --     modules whose moduleDependencies is computed by
-  --     Encoding.encodeModule/Decoding.decodeModule from the SOURCE
-  --     module's declared deps, but never includes the source's own raw
-  --     namespace -- even though the generated body embeds literal type
-  --     references into it (e.g. hydra.encode.paths references
-  --     hydra.core.Field/.Name/.Term/etc. with hydra.core absent from its
-  --     declared deps by construction, not by omission). Not a real gap.
-  let isExcludedFromUndeclaredDepsCheck m = isNativeOwned m || isDerivedEncodeDecode m
+  --   * isDerivedModule (hydra.dsl.*/encode.*/decode.*), the #575 GLOBAL
+  --     derived-module policy (shared with the structural/semantic passes
+  --     below): synthesized modules whose moduleDependencies is computed by
+  --     Encoding.encodeModule/Decoding.decodeModule from the SOURCE module's
+  --     declared deps, but never includes the source's own raw namespace --
+  --     even though the generated body embeds literal type references into
+  --     it (e.g. hydra.encode.paths references hydra.core.Field/.Name/.Term/
+  --     etc. with hydra.core absent from its declared deps by construction,
+  --     not by omission). Not a real gap. (#574 originally scoped this
+  --     exclusion to isDerivedEncodeDecode specifically, pending the #575
+  --     broader decision on derived-module validation policy -- now
+  --     resolved: isDerivedModule is that decision, applied uniformly here
+  --     and in the structural/semantic passes below. hydra.dsl.* wrappers
+  --     are additionally covered now, not just encode/decode.)
+  let isExcludedFromUndeclaredDepsCheck m = isNativeOwned m || isDerivedModule m
       undeclaredDepsUniverse = filter (not . isExcludedFromUndeclaredDepsCheck) universe
   checkUndeclaredDependenciesOrExit undeclaredDepsUniverse
+
+  -- Pre-inference validation (#575): structural (packaging) + semantic
+  -- (core, typed=False) checks need only module shape, so they run before
+  -- any inference. Every package in the routing map is validated, not just
+  -- the kernel -- packagesFromRouting groups 'universe' by the same routing
+  -- that determines dist/json layout, so a package here can never disagree
+  -- with where its own JSON lives. Native-owned packages
+  -- (hydra-jvm/java/python) ARE included here since their DSL-side modules
+  -- (loaded to seed inference, see isNativeOwned above) still have real
+  -- structural shape worth checking; only their WRITE is skipped later, not
+  -- their validation. Structural checks run ONLY here, not post-inference:
+  -- module shape is authored, not affected by inference, so a second run
+  -- would be pure redundancy. Distinct from checkUndeclaredDependenciesOrExit
+  -- above (#574): that check resolves cross-module name references against
+  -- a whole-universe owner map and is NOT part of kernelPackagingRuleNames /
+  -- kernelDefaultPackagingProfile (by the #574 author's own design -- see
+  -- Validate/Packaging.hs's kernelUniverseUndeclaredDependencies doc
+  -- comment), so validatePackagesStructural below cannot and does not
+  -- double-run it; the two checks are complementary, not overlapping.
+  --
+  -- validatePackagesStructural selects each package's own profile via
+  -- packagingProfileFor/strictPackagingPackages (Hydra.Generation): only
+  -- hydra-kernel is held to the fully-fatal kernelDefaultPackagingProfile
+  -- for now; every other package gets kernelPackagingProfileWithDocWarnings
+  -- (documentation-completeness demoted to a warning) while its own
+  -- pre-existing documentation backlog is remediated. See #575 and #512.
+  --
+  -- exemptTypeNames/exemptTermNames carry forward the kernel's own
+  -- inference/eta-expansion hacks (UntypedLambdaError, etaExpandTypedTerm --
+  -- see their definitions below at kernelExemptTypeNames/kernelExemptTermNames)
+  -- applied GLOBALLY across every package: both names are fully-qualified,
+  -- so a same-name collision in a non-kernel package is not possible, and a
+  -- single call across every package is simpler than splitting by package.
+  let allPkgs = packagesFromRouting routingMap universe
+  reportAndExitOnFailure "pre-inference (packaging)" $
+    validatePackagesStructural allPkgs
+  -- Native-owned packages (hydra-jvm/java/python) are excluded here for the
+  -- same reason 'validatePackagesStructural' excludes them
+  -- ('nativeOwnedPackagingPackages' doc comment): their on-disk JSON, loaded
+  -- via isNativeOwned above only to seed the inference universe, is
+  -- legitimately stale at this point in the pipeline -- sync.sh's Phase 1.5
+  -- (auto-heal, #406) runs AFTER this driver. Without this filter, a broken
+  -- synthesizer bug already fixed in the native DSL source (e.g. a variable-
+  -- shadowing fix in hydra-java's Coder.java) still reports as a failure
+  -- here every single sync, since this fatal gate never sees the healed
+  -- JSON. Their DSL-shape is still worth checking -- see the doc comment on
+  -- 'nativeOwnedPackagingPackages' -- just not as part of THIS fatal gate.
+  let semanticPkgs = packagesFromRouting routingMap (filter (not . isNativeOwned) universe)
+  reportAndExitOnFailure "pre-inference (core)" $
+    validatePackagesSemantic ValidateCore.kernelDefaultCoreProfile False
+      kernelExemptTypeNames kernelExemptTermNames semanticPkgs
 
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."
   when (excluded > 0) $
@@ -231,6 +291,72 @@ main = do
     (\e -> do
       putStrLn $ "Error: " ++ show (e :: SomeException)
       return False)
+
+  -- Post-inference validation (#575): semantic (core) checks ONLY, against
+  -- INFERRED types. writeModulesJsonPackageSplit discards inferred modules
+  -- in-memory to bound peak memory, so there is no return-value path for
+  -- typed modules -- reload the just-written JSON from disk via
+  -- loadModulesFromJson instead. loadModulesFromJson joins its basePath
+  -- directly with each module's dotted path (<basePath>/<ns-as-path>.json),
+  -- which is only correct for a single-package basePath (its other caller,
+  -- loadNativePackageModulesTagged, passes a package-specific dir) -- so
+  -- writeUniverse (spanning every package) must be reloaded PER PACKAGE, each
+  -- with its own package-specific basePath, mirroring
+  -- namespaceToPackageJsonDirIn. A prior version of this call passed the
+  -- shared dist/json ROOT for every module regardless of owning package,
+  -- which produced <root>/hydra/paths.json for hydra.paths (owned by
+  -- hydra-kernel, correct location
+  -- <root>/hydra-kernel/src/main/json/hydra/paths.json) -- a crash on every
+  -- real sync, since hydra.paths always exists. Only meaningful if the write
+  -- succeeded. Structural (packaging) checks do NOT rerun here -- see the
+  -- pre-inference call site's comment above. typedUniverse is loaded only
+  -- for writeUniverse's modules (the ones this driver actually wrote), so
+  -- native-owned packages (hydra-jvm/java/python) are correctly absent from
+  -- post-inference validation: their JSON is written by separate native
+  -- drivers this file never touches, so there is nothing fresh to reload.
+  --
+  -- ALSO append synthesizedEncodeDecode (the in-memory hydra.encode.*/
+  -- hydra.decode.* modules built at the top of main, doInfer=False) to the
+  -- GRAPH CONTEXT (not the validated set -- see below): many non-derived
+  -- modules legitimately call derived encode/decode functions (e.g.
+  -- hydra.codegen.moduleToJson calls hydra.encode.packaging.module), and
+  -- those derived modules' own JSON is written later by
+  -- writeDerivedJsonPackageSplit (after this validation call), so it is not
+  -- on disk yet to reload. universe already includes synthesizedEncodeDecode
+  -- for the identical reason at the PRE-inference stage (see its own
+  -- in-main comment) -- typedUniverse needs the same modules in scope for
+  -- term-reference resolution to succeed at the POST-inference stage too.
+  --
+  -- But do NOT validate synthesizedEncodeDecode's own definitions under
+  -- typed=True: these modules are doInfer=False by design (the synthesizer,
+  -- not HM inference, populates their term annotations -- see the doc
+  -- comment where synthesizedEncodeDecode is built), and their polymorphic
+  -- functions' lambda domains are DELIBERATELY bare type-parameter
+  -- references (e.g. decode<a> has a lambda domain literally `a`), never
+  -- monomorphized. Checking them with typed=True (which T8 interprets as
+  -- "every lambda domain must now be fully resolved") produces a false
+  -- positive for every polymorphic derived function -- confirmed uniform
+  -- across all of them, not isolated bugs. They are still validated with
+  -- typed=False at the PRE-inference call site above, which is the correct
+  -- mode for synthesizer-populated (not inferred) term annotations.
+  CM.when result $
+    do
+      writtenTypedMods <- fmap L.concat $
+        CM.forM (groupByPackageIn routingMap writeUniverse) $ \(pkg, pkgMods) ->
+          loadModulesFromJson (distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json")
+            universe (map Kernel.moduleName pkgMods)
+      let typedUniverse = writtenTypedMods ++ synthesizedEncodeDecode
+          synthesizedTypeNames = S.fromList
+            [ Packaging.typeDefinitionName td
+            | m <- synthesizedEncodeDecode, Packaging.DefinitionType td <- Packaging.moduleDefinitions m ]
+          synthesizedTermNames = S.fromList
+            [ Packaging.termDefinitionName td
+            | m <- synthesizedEncodeDecode, Packaging.DefinitionTerm td <- Packaging.moduleDefinitions m ]
+      reportAndExitOnFailure "post-inference (core)" $
+        validatePackagesSemantic ValidateCore.kernelDefaultCoreProfile True
+          (S.union kernelExemptTypeNames synthesizedTypeNames)
+          (S.union kernelExemptTermNames synthesizedTermNames)
+          (packagesFromRouting routingMap typedUniverse)
 
   putStrLn ""
   putStrLn "Generating derived modules (DSL + encode + decode) to JSON..."
@@ -263,13 +389,14 @@ main = do
 -- dependencies (hydra.validate.packaging.checkUndeclaredDependencies /
 -- kernelUniverseUndeclaredDependencies; see #574): a module referencing a
 -- name owned by another module which is not among its declared
--- moduleDependencies. Unlike 'validateKernelModulesOrExit', this runs over
--- the WHOLE universe (all packages), not just kernelModules -- the
--- motivating incident (#555) was itself cross-package, so a single-package
--- check would not have caught it. Deliberately wired as its own call, not
--- routed through validateKernelModulesOrExit (which is currently disabled;
--- see the comment above) -- this check must run regardless of that gate's
--- status.
+-- moduleDependencies. Runs over the WHOLE universe (all packages), not
+-- scoped to a single 'Package' -- the motivating incident (#555) was itself
+-- cross-package, so a single-package check would not have caught it. Wired
+-- as its own call, independent of the #575 structural/semantic passes
+-- (see the pre-inference call site's comment) -- this check resolves
+-- cross-module name references against a whole-universe owner map, a
+-- fundamentally different shape of check from the per-'Package' structural
+-- rules.
 checkUndeclaredDependenciesOrExit :: [Kernel.Module] -> IO ()
 checkUndeclaredDependenciesOrExit mods = do
     putStrLn $ "Checking " ++ show (length mods)
@@ -289,113 +416,33 @@ checkUndeclaredDependenciesOrExit mods = do
         putStrLn "=== FAILED: undeclared cross-module dependencies ==="
         exitFailure
 
--- | Run packaging + core validation against every kernel module.
---
---   * hydra.validate.packaging.kernelModule -- structural rules on the
---     module (naming, ordering, namespaces, docs, etc.)
---   * hydra.validate.core.type_ -- per-TypeDefinition type-tree validity
---     (no empty annotations, no nested annotations, no duplicate fields,
---     etc.). Run with the type scheme's quantified variables as the
---     in-scope set, plus every kernel type-definition name.
---   * hydra.validate.core.term -- per-TermDefinition term-tree validity
---     (no empty term annotations, no duplicate let bindings, no shadowing,
---     no undefined term variables, etc.). Run with `typed = False` since
---     this validation precedes inference, and against the graph the
---     inferencer itself would build.
---
---   Reports all failures (per-module aggregated) and exits failure if any
---   module had any error.
-validateKernelModulesOrExit :: [Kernel.Module] -> IO ()
-validateKernelModulesOrExit mods = do
-    putStrLn $ "Validating " ++ show (length mods)
-               ++ " kernel modules (hydra.validate.packaging + hydra.validate.core)..."
-    hFlush stdout
-    let graph = modulesToGraph mods mods
-    let pkgFailures  = [(m, e) | m <- mods, Just e <- [ValidatePackaging.kernelModule m]]
-    let typeFailures = [(m, td, e) | m <- mods
-                                  , td <- typeDefs m
-                                  , Just e <- [validateTypeDef td]]
-    let termFailures = [(m, td, e) | m <- mods
-                                  , td <- termDefs m
-                                  , Just e <- [validateTermDef graph td]]
-    let pkgN  = length pkgFailures
-    let typeN = length typeFailures
-    let termN = length termFailures
-    if pkgN == 0 && typeN == 0 && termN == 0
-      then do
-        putStrLn $ "  All " ++ show (length mods) ++ " kernel modules valid."
-        putStrLn ""
-      else do
-        putStrLn $ "  " ++ show pkgN ++ " packaging failure(s), "
-                       ++ show typeN ++ " core-type failure(s), "
-                       ++ show termN ++ " core-term failure(s):"
-        mapM_ reportPkgFailure  pkgFailures
-        mapM_ reportTypeFailure typeFailures
-        mapM_ reportTermFailure termFailures
-        putStrLn ""
-        putStrLn "=== FAILED: kernel module validation ==="
-        exitFailure
-  where
-    -- Set of every type-definition name across all kernel modules. Used as
-    -- the "in-scope" vocabulary when validating individual types: nominal
-    -- references like `hydra.core.Name` look like TypeVariable nodes to
-    -- Validate.Core.type_, which would otherwise flag them as "undefined".
-    -- Forall-bound names are added on top per-definition.
-    kernelTypeNames = S.fromList
-      [Packaging.typeDefinitionName td
-        | m <- mods
-        , Packaging.DefinitionType td <- Packaging.moduleDefinitions m]
-    -- Type definitions exempt from validation. UntypedLambdaError is
-    -- currently `T.record []` and should migrate to `T.wrap T.unit`, but
-    -- the change ripples through encode/decode/DSL helpers + every host
-    -- language and is sized as its own change. Tracked separately.
-    exemptTypeNames = S.fromList
-      [Core.Name "hydra.error.checking.UntypedLambdaError"]
-    -- Term definitions exempt from validation. etaExpandTypedTerm contains
-    -- a deliberate `Logic.ifElse false ...` inference hack that lets the
-    -- inferencer assign `list<Type>` to an otherwise-typeless empty list;
-    -- excising it causes bootstrap-from-json (Java target) to fail with
-    -- "expected list<hydra.core.Type> but found list<unit>". Validate.Core's
-    -- constant-condition rule flags it but the hack is load-bearing; see
-    -- the comment in Sources/Kernel/Terms/Reduction.hs.
-    exemptTermNames = S.fromList
-      [Core.Name "hydra.reduction.etaExpandTypedTerm"]
-    typeDefs m =
-      [td | Packaging.DefinitionType td <- Packaging.moduleDefinitions m
-          , not (S.member (Packaging.typeDefinitionName td) exemptTypeNames)]
-    termDefs m =
-      [td | Packaging.DefinitionTerm td <- Packaging.moduleDefinitions m
-          , not (S.member (Packaging.termDefinitionName td) exemptTermNames)]
-    -- Empty ValidationResult, used as the starting accumulator for the
-    -- profile-aware validators.
-    emptyResult :: Kernel.ValidationResult e
-    emptyResult = Kernel.ValidationResult [] []
-    validateTypeDef td =
-      let Core.TypeScheme vs body _ = Packaging.typeDefinitionBody td
-          inScope = S.union kernelTypeNames (S.fromList vs)
-          vr = ValidateCore.type_ ValidateCore.kernelDefaultCoreProfile emptyResult inScope body
-      in case Kernel.validationResultErrors vr of
-           []    -> Nothing
-           err:_ -> Just err
-    -- typed = False: pre-inference, lambdas have no domain annotations and
-    -- term variables don't yet have known types, so type-variable-binding
-    -- checks (System F mode) would fire spuriously.
-    validateTermDef graph td =
-      let vr = ValidateCore.term ValidateCore.kernelDefaultCoreProfile False graph (Packaging.termDefinitionBody td)
-      in case Kernel.validationResultErrors vr of
-           []    -> Nothing
-           err:_ -> Just err
-    reportPkgFailure (m, err) = do
-      putStrLn $ "  [packaging] " ++ Packaging.unModuleName (Kernel.moduleName m)
-                       ++ ": " ++ ShowErrorPackaging.invalidModuleError err
-    reportTypeFailure (m, td, err) = do
-      putStrLn $ "  [core/type] " ++ Packaging.unModuleName (Kernel.moduleName m)
-                       ++ "." ++ Core.unName (Packaging.typeDefinitionName td)
-                       ++ ": " ++ ShowErrorCore.invalidTypeError err
-    reportTermFailure (m, td, err) = do
-      putStrLn $ "  [core/term] " ++ Packaging.unModuleName (Kernel.moduleName m)
-                       ++ "." ++ Core.unName (Packaging.termDefinitionName td)
-                       ++ ": " ++ ShowErrorCore.invalidTermError err
+-- Kernel-only validateKernelModulesOrExit (disabled since 2def8d1d95,
+-- misattributed to #368) replaced by the generic pre/post-inference
+-- validatePackagesStructural/validatePackagesSemantic calls above, covering
+-- every package. See #575.
+
+-- | Report a 'ValidationFindings' result; exit failure if it is non-empty.
+-- 'label' identifies the pass (e.g. "pre-inference (packaging)") in output.
+reportAndExitOnFailure :: String -> ValidationFindings -> IO ()
+reportAndExitOnFailure label findings = do
+  hFlush stdout
+  if validationFindingsNull findings
+    then putStrLn $ "  Validation (" ++ label ++ "): all packages valid."
+    else do
+      let ValidationFindings pkgFailures typeFailures termFailures = findings
+      putStrLn $ "  Validation (" ++ label ++ "): "
+        ++ show (length pkgFailures) ++ " packaging failure(s), "
+        ++ show (length typeFailures) ++ " core-type failure(s), "
+        ++ show (length termFailures) ++ " core-term failure(s):"
+      mapM_ (\(pkg, e) -> putStrLn $ "  [packaging] " ++ Packaging.unPackageName (Packaging.packageName pkg)
+               ++ ": " ++ ShowErrorPackaging.invalidPackageError e) pkgFailures
+      mapM_ (\(m, td, e) -> putStrLn $ "  [core/type] " ++ Packaging.unModuleName (Kernel.moduleName m)
+               ++ "." ++ Core.unName (Packaging.typeDefinitionName td) ++ ": " ++ ShowErrorCore.invalidTypeError e) typeFailures
+      mapM_ (\(m, td, e) -> putStrLn $ "  [core/term] " ++ Packaging.unModuleName (Kernel.moduleName m)
+               ++ "." ++ Core.unName (Packaging.termDefinitionName td) ++ ": " ++ ShowErrorCore.invalidTermError e) termFailures
+      putStrLn ""
+      putStrLn $ "=== FAILED: " ++ label ++ " validation ==="
+      exitFailure
 
 -- | Parse an optional --dist-root argument. Retains the older --output-dir
 -- flag name for call-site compatibility (it is interpreted as a dist-json

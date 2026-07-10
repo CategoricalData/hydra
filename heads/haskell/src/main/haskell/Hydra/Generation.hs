@@ -23,6 +23,11 @@ import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Inference as Inference
+import qualified Hydra.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Validate.Core as ValidateCore
+-- Hydra.Kernel re-exports Hydra.Error.Core (InvalidTypeError, InvalidTermError)
+-- but NOT Hydra.Error.Packaging (InvalidPackageError) -- import it explicitly.
+import Hydra.Error.Packaging (InvalidPackageError)
 
 import qualified Control.Exception as E
 import qualified Control.Monad as CM
@@ -131,6 +136,207 @@ generateSourcesWithTransform transform printDefinitions lang doInfer basePath un
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
+
+-- ============================================================================
+-- Package-level validation support (#575)
+-- ============================================================================
+
+-- | A derived module: one whose content is synthesizer-generated rather than
+-- hand-authored, and which is therefore exempt from structural/packaging
+-- validation rules (their definitions lists follow a semantic grouping, not
+-- the alphabetical convention 'checkDefinitionOrdering' enforces on
+-- hand-written modules). Covers the DSL wrapper (hydra.dsl.*) and
+-- encode/decode (hydra.encode.*/hydra.decode.*) families. This is the single
+-- source of truth for the derived-module exemption; callers that need to
+-- distinguish structural exemption from semantic-check applicability should
+-- use this predicate to gate 'ValidatePackaging' rules only, not
+-- 'ValidateCore' rules (derived modules remain subject to those — a broken
+-- synthesizer output should still surface as a validation failure).
+isDerivedModule :: Module -> Bool
+isDerivedModule m =
+  L.isPrefixOf "hydra.dsl." ns || L.isPrefixOf "hydra.encode." ns || L.isPrefixOf "hydra.decode." ns
+  where
+    ns = unModuleName (moduleName m)
+
+-- | Build a 'Package' value for each package in a routing map, wrapping the
+-- given modules under that package's name. Metadata and dependencies are
+-- left empty ('Nothing' / '[]'): no packaging-validation rule
+-- ('checkConflictingModuleNames', 'checkDuplicateModuleNames',
+-- 'checkPackageNameConvention') consults them, only 'packageName' and
+-- 'packageModules'. Grouping is delegated to 'groupByPackageIn', the same
+-- routing logic that determines where each module's JSON is written, so a
+-- package here can never disagree with where that package's dist/json
+-- directory lives.
+packagesFromRouting :: RoutingMap -> [Module] -> [Package]
+packagesFromRouting routingMap mods =
+  [ Package (PackageName pkg) Nothing [] pkgMods
+  | (pkg, pkgMods) <- groupByPackageIn routingMap mods ]
+
+-- | Structural (packaging) findings for one package: the package and its
+-- 'InvalidPackageError' (module-level findings are already lifted into
+-- package-level findings by 'ValidatePackaging.package').
+type PackageFailure = (Package, InvalidPackageError)
+
+-- | Semantic (core) findings for one type definition.
+type TypeFailure = (Module, TypeDefinition, InvalidTypeError)
+
+-- | Semantic (core) findings for one term definition.
+type TermFailure = (Module, TermDefinition, InvalidTermError)
+
+-- | The full set of findings from one validation pass. Structural and
+-- semantic findings are reported separately because they run as two
+-- cleanly-separated passes at two different sync phases (#575): structural
+-- (packaging) runs pre-inference only via 'validatePackagesStructural'
+-- (module shape doesn't change across inference, so a post-inference rerun
+-- would be pure redundancy); semantic (core) runs via
+-- 'validatePackagesSemantic', called once pre-inference (typed=False) and
+-- once post-inference (typed=True) against the reloaded, now-typed modules.
+data ValidationFindings = ValidationFindings
+  { validationPackageFailures :: [PackageFailure]
+  , validationTypeFailures    :: [TypeFailure]
+  , validationTermFailures    :: [TermFailure]
+  } deriving (Eq, Show)
+
+validationFindingsNull :: ValidationFindings -> Bool
+validationFindingsNull (ValidationFindings pkgs types terms) =
+  null pkgs && null types && null terms
+
+-- | Packages held to the full 'ValidatePackaging.kernelDefaultPackagingProfile'
+-- (every rule, including documentation completeness, is fatal). Every other
+-- package uses 'ValidatePackaging.kernelPackagingProfileWithDocWarnings'
+-- instead (#575): re-enabling comprehensive validation surfaced a large,
+-- pre-existing documentation-completeness backlog outside the kernel, and
+-- treating it as fatal everywhere at once would turn every sync fleet-wide
+-- red until fully remediated. hydra-kernel is held to the full bar from the
+-- start per policy; other packages are added here as their own backlogs are
+-- remediated, expanding the fully-fatal set incrementally rather than
+-- gating the whole fleet on the total backlog at once.
+--
+-- This is an INTERIM mechanism. The intended long-term home for per-package
+-- validation configuration is a typed 'PackageValidationConfiguration' (see
+-- issue #512) declared in each package's package.json -- richer than a
+-- strict/relaxed toggle, supporting per-rule severities and parameters
+-- (e.g. "allow underscores in names", "exempt deprecated definitions from
+-- documentation"). This hardcoded list is deliberately the simplest thing
+-- that implements today's actual policy without blocking on that design.
+strictPackagingPackages :: [PackageName]
+strictPackagingPackages = [PackageName "hydra-kernel"]
+
+-- | Packages whose dist/json is written by a separate NATIVE driver
+-- (bin/generate-hydra-java-from-java.sh, -python-from-python.sh), not by
+-- this driver's own write pass (see 'isNativeOwned' in update-json-main's
+-- Main.hs). Their on-disk JSON is loaded here only to seed the inference
+-- universe ('loadNativePackageModulesTagged') and is legitimately stale at
+-- this point in the pipeline: sync.sh's Phase 1.5 (auto-heal, #406) runs
+-- AFTER this driver and is what brings their JSON current. Structurally
+-- validating that stale JSON here would fail on staleness the pipeline
+-- itself hasn't resolved yet, not on a real defect — so these packages are
+-- excluded from 'validatePackagesStructural' entirely. Their own DSL
+-- source's structural shape is a legitimate concern, but needs a hook in
+-- the native drivers themselves (out of #575's scope; see #580).
+nativeOwnedPackagingPackages :: [PackageName]
+nativeOwnedPackagingPackages = PackageName <$> ["hydra-jvm", "hydra-java", "hydra-python"]
+
+-- | Select the packaging 'ValidationProfile' for a package: the full,
+-- fatal-on-everything profile for packages in 'strictPackagingPackages',
+-- the documentation-relaxed profile for every other package.
+packagingProfileFor :: Package -> ValidationProfile
+packagingProfileFor pkg
+  | packageName pkg `elem` strictPackagingPackages = ValidatePackaging.kernelDefaultPackagingProfile
+  | otherwise = ValidatePackaging.kernelPackagingProfileWithDocWarnings
+
+-- | Structural (packaging) validation against a list of packages. Runs
+-- PRE-INFERENCE ONLY: module shape (definition names, ordering, docs,
+-- conflicts) is authored and does not change across inference, so there is
+-- no post-inference call for this — running it twice would be pure
+-- redundant work with zero additional signal. Derived modules
+-- (hydra.dsl.*/encode.*/decode.*) are exempted per 'isDerivedModule': their
+-- definitions are synthesizer-ordered, not alphabetical, so packaging
+-- convention rules would spuriously fail on them. Native-owned packages
+-- ('nativeOwnedPackagingPackages') are excluded entirely — their JSON is
+-- stale-by-design at this pipeline point, see that binding's doc comment.
+--
+-- Each package is validated under its OWN profile via 'packagingProfileFor'
+-- rather than one profile shared by every package -- see
+-- 'strictPackagingPackages' for the current fatal-vs-warning policy.
+validatePackagesStructural :: [Package] -> ValidationFindings
+validatePackagesStructural pkgs =
+  ValidationFindings pkgFailures [] []
+  where
+    emptyPkgResult :: ValidationResult InvalidPackageError
+    emptyPkgResult = ValidationResult [] []
+    pkgFailures =
+      [ (pkg, e)
+      | pkg <- pkgs
+      , packageName pkg `notElem` nativeOwnedPackagingPackages
+      , let structuralPkg = pkg { packageModules = filter (not . isDerivedModule) (packageModules pkg) }
+      , e <- validationResultErrors
+               (ValidatePackaging.package (packagingProfileFor pkg) emptyPkgResult structuralPkg) ]
+
+-- | Semantic (core) type/term-tree validation against a list of packages,
+-- INCLUDING derived modules (hydra.dsl.*/encode.*/decode.*) — a broken
+-- synthesizer output is a real bug and must still surface; #575's accepted
+-- policy is structural-exempt, semantic-accountable.
+--
+-- 'typed' controls whether term validation runs in pre-inference mode
+-- (lambdas lack domain annotations, term variables lack known types; pass
+-- 'False') or post-inference mode against already-typed modules (pass
+-- 'True'). Type-definition validation is unaffected by 'typed': a type
+-- definition's own TypeScheme is authored, not inferred, so it is checked
+-- identically in both phases. Callers typically run this pass at BOTH
+-- phases (typed=False pre-inference, typed=True post-inference against
+-- modules reloaded via 'loadModulesFromJson'), since each phase can surface
+-- different findings: pre-inference catches authoring-shape defects
+-- (duplicate fields, empty annotations) before inference can obscure them;
+-- post-inference catches defects that only exist once types are resolved.
+--
+-- 'exemptTypeNames' / 'exemptTermNames' let a caller carry forward
+-- definition-specific exemptions (e.g. the kernel's UntypedLambdaError /
+-- etaExpandTypedTerm carve-outs) without hard-coding them here — this
+-- module has no kernel-specific knowledge.
+validatePackagesSemantic ::
+     ValidationProfile
+  -> Bool             -- ^ typed (post-inference term validation)
+  -> S.Set Name        -- ^ exemptTypeNames
+  -> S.Set Name        -- ^ exemptTermNames
+  -> [Package]
+  -> ValidationFindings
+validatePackagesSemantic profile typed exemptTypeNames exemptTermNames pkgs =
+  ValidationFindings [] typeFailures termFailures
+  where
+    allMods = L.concatMap packageModules pkgs
+    graph = modulesToGraph allMods allMods
+    typeDefsOf m =
+      [ td | DefinitionType td <- moduleDefinitions m
+           , not (S.member (typeDefinitionName td) exemptTypeNames) ]
+    termDefsOf m =
+      [ td | DefinitionTerm td <- moduleDefinitions m
+           , not (S.member (termDefinitionName td) exemptTermNames) ]
+    emptyCoreResult :: ValidationResult e
+    emptyCoreResult = ValidationResult [] []
+    validateTypeDef td =
+      let TypeScheme vs body _ = typeDefinitionBody td
+          inScope = S.union allTypeNames (S.fromList vs)
+          vr = ValidateCore.type_ profile emptyCoreResult inScope body
+      in case validationResultErrors vr of
+           []    -> Nothing
+           err:_ -> Just err
+    validateTermDef td =
+      let vr = ValidateCore.term profile typed graph (termDefinitionBody td)
+      in case validationResultErrors vr of
+           []    -> Nothing
+           err:_ -> Just err
+    -- Every type-definition name across all packages, used as the in-scope
+    -- vocabulary so nominal references (e.g. hydra.core.Name) aren't
+    -- mistaken for undefined type variables. Mirrors the kernel-only
+    -- version's kernelTypeNames, generalized across every validated package.
+    allTypeNames = S.fromList
+      [ typeDefinitionName td
+      | m <- allMods, DefinitionType td <- moduleDefinitions m ]
+    typeFailures =
+      [ (m, td, e) | m <- allMods, td <- typeDefsOf m, Just e <- [validateTypeDef td] ]
+    termFailures =
+      [ (m, td, e) | m <- allMods, td <- termDefsOf m, Just e <- [validateTermDef td] ]
 
 -- | Convert a Definition to the Binding shape that elementsToGraph (and other
 -- Binding-based kernel APIs) expects. A DefinitionTerm carries directly across;
