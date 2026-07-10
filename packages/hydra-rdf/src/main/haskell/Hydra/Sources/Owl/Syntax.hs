@@ -64,8 +64,8 @@ module_ = Module {
       dataComplementOf,
       dataOneOf,
       datatypeRestriction,
-      datatypeRestriction_Constraint,
-      datatypeRestriction_ConstrainingFacet,
+      datatypeRestrictionConstraint,
+      datatypeRestrictionConstrainingFacet,
       classExpression,
       objectIntersectionOf,
       objectUnionOf,
@@ -135,20 +135,26 @@ module_ = Module {
 
 -- AnnotationSubject := IRI | AnonymousIndividual
 annotationSubject :: TypeDefinition
-annotationSubject = define "AnnotationSubject" $ T.union [
+annotationSubject = define "AnnotationSubject" $
+  doc "An OWL annotation subject: an IRI or an anonymous individual" $
+  T.union [
   "iri">: rdf "Iri",
   "anonymousIndividual">: owl "AnonymousIndividual"]
 
 -- AnnotationValue := AnonymousIndividual | IRI | Literal
 annotationValue :: TypeDefinition
-annotationValue = define "AnnotationValue" $ T.union [
+annotationValue = define "AnnotationValue" $
+  doc "An OWL annotation value: an anonymous individual, IRI, or literal" $
+  T.union [
   "anonymousIndividual">: owl "AnonymousIndividual",
   "iri">: rdf "Iri",
   "literal">: rdf "Literal"]
 
 -- Declaration := 'Declaration' '(' axiomAnnotations Entity ')'
 declaration :: TypeDefinition
-declaration = define "Declaration" $ withAnns [
+declaration = define "Declaration" $
+  doc "An OWL entity declaration" $
+  withAnns [
   "entity">: owl "Entity"]
 
 -- Entity :=
@@ -159,7 +165,9 @@ declaration = define "Declaration" $ withAnns [
 --     'AnnotationProperty' '(' AnnotationProperty ')' |
 --     'NamedIndividual' '(' NamedIndividual ')'
 entity :: TypeDefinition
-entity = define "Entity" $ simpleUnion [
+entity = define "Entity" $
+  doc "An OWL entity: a class, datatype, object/data/annotation property, or named individual" $
+  simpleUnion [
   "AnnotationProperty",
   "Class",
   "DataProperty",
@@ -174,7 +182,9 @@ nonNegativeInteger :: Type
 nonNegativeInteger = T.bigint
 
 objectPropertyConstraint :: String -> TypeDefinition
-objectPropertyConstraint lname = define lname $ T.record [
+objectPropertyConstraint lname = define lname $
+  doc "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property" $
+  T.record [
   "annotations">: T.list $ owl "Annotation",
   "property">: owl "ObjectPropertyExpression"]
 
@@ -185,7 +195,9 @@ objectPropertyConstraint lname = define lname $ T.record [
 --        axioms
 --     ')'
 ontology :: TypeDefinition
-ontology = define "Ontology" $ T.record [ -- note: omitting IRI and version
+ontology = define "Ontology" $
+  doc "An OWL ontology: a set of imports, annotations, and axioms" $
+  T.record [ -- note: omitting IRI and version
   "directImports">: T.list $ owl "Ontology",
   "annotations">: T.list $ owl "Annotation",
   "axioms">: T.list $ owl "Axiom"]
@@ -222,7 +234,9 @@ xsd = typeref $ XmlSchema.ns
 
 -- Annotation := 'Annotation' '(' annotationAnnotations AnnotationProperty AnnotationValue ')'
 annotation :: TypeDefinition
-annotation = define "Annotation" $ withAnns [
+annotation = define "Annotation" $
+  doc "An OWL annotation on an axiom, consisting of a property and value" $
+  withAnns [
   "property">: owl "AnnotationProperty",
   "value">: owl "AnnotationValue"]
 
@@ -230,14 +244,18 @@ annotation = define "Annotation" $ withAnns [
 
 -- AnnotationAssertion := 'AnnotationAssertion' '(' axiomAnnotations AnnotationProperty AnnotationSubject AnnotationValue ')'
 annotationAssertion :: TypeDefinition
-annotationAssertion = define "AnnotationAssertion" $ withAnns [
+annotationAssertion = define "AnnotationAssertion" $
+  doc "An OWL annotation assertion axiom" $
+  withAnns [
   "property">: owl "AnnotationProperty",
   "subject">: owl "AnnotationSubject",
   "value">: owl "AnnotationValue"]
 
 -- AnnotationAxiom := AnnotationAssertion | SubAnnotationPropertyOf | AnnotationPropertyDomain | AnnotationPropertyRange
 annotationAxiom :: TypeDefinition
-annotationAxiom = define "AnnotationAxiom" $ simpleUnion [
+annotationAxiom = define "AnnotationAxiom" $
+  doc "An OWL annotation axiom" $
+  simpleUnion [
   "AnnotationAssertion",
   "AnnotationPropertyDomain",
   "AnnotationPropertyRange",
@@ -245,23 +263,31 @@ annotationAxiom = define "AnnotationAxiom" $ simpleUnion [
 
 -- AnnotationProperty := IRI
 annotationProperty :: TypeDefinition
-annotationProperty = define "AnnotationProperty" $ T.wrap T.unit
+annotationProperty = define "AnnotationProperty" $
+  doc "An OWL annotation property, identified by an IRI" $
+  T.wrap T.unit
 
 -- AnnotationPropertyDomain := 'AnnotationPropertyDomain' '(' axiomAnnotations AnnotationProperty IRI ')'
 annotationPropertyDomain :: TypeDefinition
-annotationPropertyDomain = define "AnnotationPropertyDomain" $ withAnns [
+annotationPropertyDomain = define "AnnotationPropertyDomain" $
+  doc "An OWL axiom asserting the domain of an annotation property" $
+  withAnns [
   "property">: owl "AnnotationProperty",
   "iri">: rdf "Iri"]
 
 -- AnnotationPropertyRange := 'AnnotationPropertyRange' '(' axiomAnnotations AnnotationProperty IRI ')'
 annotationPropertyRange :: TypeDefinition
-annotationPropertyRange = define "AnnotationPropertyRange" $ withAnns [
+annotationPropertyRange = define "AnnotationPropertyRange" $
+  doc "An OWL axiom asserting the range of an annotation property" $
+  withAnns [
   "property">: owl "AnnotationProperty",
   "iri">: rdf "Iri"]
 
 -- AnonymousIndividual := nodeID
 anonymousIndividual :: TypeDefinition
-anonymousIndividual = define "AnonymousIndividual" $ T.wrap T.unit
+anonymousIndividual = define "AnonymousIndividual" $
+  doc "An OWL anonymous individual, identified by a blank node id" $
+  T.wrap T.unit
 
 -- Literal := typedLiteral | stringLiteralNoLanguage | stringLiteralWithLanguage
 -- typedLiteral := lexicalForm '^^' Datatype
@@ -274,7 +300,9 @@ anonymousIndividual = define "AnonymousIndividual" $ T.wrap T.unit
 --     ObjectPropertyAssertion | NegativeObjectPropertyAssertion |
 --     DataPropertyAssertion | NegativeDataPropertyAssertion
 assertion :: TypeDefinition
-assertion = define "Assertion" $ simpleUnion [
+assertion = define "Assertion" $
+  doc "An OWL assertion axiom about individuals" $
+  simpleUnion [
   "ClassAssertion",
   "DataPropertyAssertion",
   "DifferentIndividuals",
@@ -290,6 +318,7 @@ asymmetricObjectProperty = objectPropertyConstraint "AsymmetricObjectProperty"
 -- Axiom := Declaration | ClassAxiom | ObjectPropertyAxiom | DataPropertyAxiom | DatatypeDefinition | HasKey | Assertion | AnnotationAxiom
 axiom :: TypeDefinition
 axiom = define "Axiom" $
+  doc "An OWL axiom" $
   see "https://www.w3.org/TR/owl2-syntax/#Axioms" $
   simpleUnion [
     "AnnotationAxiom",
@@ -303,13 +332,17 @@ axiom = define "Axiom" $
 
 -- ClassAssertion := 'ClassAssertion' '(' axiomAnnotations ClassExpression Individual ')'
 classAssertion :: TypeDefinition
-classAssertion = define "ClassAssertion" $ withAnns [
+classAssertion = define "ClassAssertion" $
+  doc "An OWL axiom asserting that an individual belongs to a class" $
+  withAnns [
   "class">: owl "ClassExpression",
   "individual">: owl "Individual"]
 
 -- ClassAxiom := SubClassOf | EquivalentClasses | DisjointClasses | DisjointUnion
 classAxiom :: TypeDefinition
-classAxiom = define "ClassAxiom" $ simpleUnion [
+classAxiom = define "ClassAxiom" $
+  doc "An OWL axiom about classes" $
+  simpleUnion [
   "DisjointClasses",
   "DisjointUnion",
   "EquivalentClasses",
@@ -323,7 +356,9 @@ classAxiom = define "ClassAxiom" $ simpleUnion [
 --     DataSomeValuesFrom | DataAllValuesFrom | DataHasValue |
 --     DataMinCardinality | DataMaxCardinality | DataExactCardinality
 classExpression :: TypeDefinition
-classExpression = define "ClassExpression" $ simpleUnion [
+classExpression = define "ClassExpression" $
+  doc "An OWL class expression" $
+  simpleUnion [
   "Class",
   "DataSomeValuesFrom",
   "DataAllValuesFrom",
@@ -345,49 +380,62 @@ classExpression = define "ClassExpression" $ simpleUnion [
 -- Class := IRI
 class_ :: TypeDefinition
 class_ = define "Class" $
+  doc "An OWL class, identified by an IRI" $
   see "https://www.w3.org/TR/owl2-syntax/#Classes" $ T.wrap T.unit
 
 -- DataAllValuesFrom := 'DataAllValuesFrom' '(' DataPropertyExpression { DataPropertyExpression } DataRange ')'
 dataAllValuesFrom :: TypeDefinition
-dataAllValuesFrom = define "DataAllValuesFrom" $ T.record [
+dataAllValuesFrom = define "DataAllValuesFrom" $
+  doc "An OWL universal data property restriction" $
+  T.record [
   "property">: nonemptyList $ owl "DataPropertyExpression",
   "range">: owl "DataRange"]
 
 -- DataComplementOf := 'DataComplementOf' '(' DataRange ')'
 dataComplementOf :: TypeDefinition
 dataComplementOf = define "DataComplementOf" $
+  doc "An OWL data range which is the complement of another data range" $
   see "https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges" $
   T.wrap $ owl "DataRange"
 
 -- DataExactCardinality := 'DataExactCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
 dataExactCardinality :: TypeDefinition
-dataExactCardinality = define "DataExactCardinality" $ T.record [
+dataExactCardinality = define "DataExactCardinality" $
+  doc "An OWL exact-cardinality restriction on a data property" $
+  T.record [
   "bound">: nonNegativeInteger,
   "property">: owl "DataPropertyExpression",
   "range">: T.list $ owl "DataRange"]
 
 -- DataHasValue := 'DataHasValue' '(' DataPropertyExpression Literal ')'
 dataHasValue :: TypeDefinition
-dataHasValue = define "DataHasValue" $ T.record [
+dataHasValue = define "DataHasValue" $
+  doc "An OWL data property restriction requiring a specific literal value" $
+  T.record [
   "property">: owl "DataPropertyExpression",
   "value">: rdf "Literal"]
 
 -- DataIntersectionOf := 'DataIntersectionOf' '(' DataRange DataRange { DataRange } ')'
 dataIntersectionOf :: TypeDefinition
 dataIntersectionOf = define "DataIntersectionOf" $
+  doc "An OWL data range which is the intersection of two or more data ranges" $
   see "https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges" $
   T.wrap $ twoOrMoreList $ owl "DataRange"
 
 -- DataMaxCardinality := 'DataMaxCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
 dataMaxCardinality :: TypeDefinition
-dataMaxCardinality = define "DataMaxCardinality" $ T.record [
+dataMaxCardinality = define "DataMaxCardinality" $
+  doc "An OWL maximum-cardinality restriction on a data property" $
+  T.record [
   "bound">: nonNegativeInteger,
   "property">: owl "DataPropertyExpression",
   "range">: T.list $ owl "DataRange"]
 
 -- DataMinCardinality := 'DataMinCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
 dataMinCardinality :: TypeDefinition
-dataMinCardinality = define "DataMinCardinality" $ T.record [
+dataMinCardinality = define "DataMinCardinality" $
+  doc "An OWL minimum-cardinality restriction on a data property" $
+  T.record [
   "bound">: nonNegativeInteger,
   "property">: owl "DataPropertyExpression",
   "range">: T.list $ owl "DataRange"]
@@ -395,16 +443,21 @@ dataMinCardinality = define "DataMinCardinality" $ T.record [
 -- DataOneOf := 'DataOneOf' '(' Literal { Literal } ')'
 dataOneOf :: TypeDefinition
 dataOneOf = define "DataOneOf" $
+  doc "An OWL data range enumerating one or more literals" $
   see "https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals" $
   T.wrap $ nonemptyList $ rdf "Literal"
 
 -- DataProperty := IRI
 dataProperty :: TypeDefinition
-dataProperty = define "DataProperty" $ T.wrap T.unit
+dataProperty = define "DataProperty" $
+  doc "An OWL data property, identified by an IRI" $
+  T.wrap T.unit
 
 -- DataPropertyAssertion := 'DataPropertyAssertion' '(' axiomAnnotations DataPropertyExpression sourceIndividual targetValue ')'
 dataPropertyAssertion :: TypeDefinition
-dataPropertyAssertion = define "DataPropertyAssertion" $ withAnns [
+dataPropertyAssertion = define "DataPropertyAssertion" $
+  doc "An OWL axiom asserting a data property relationship between an individual and a literal" $
+  withAnns [
   "property">: owl "DataPropertyExpression",
   "source">: owl "Individual",
   "target">: owl "Individual"]
@@ -413,7 +466,9 @@ dataPropertyAssertion = define "DataPropertyAssertion" $ withAnns [
 --     SubDataPropertyOf | EquivalentDataProperties | DisjointDataProperties |
 --     DataPropertyDomain | DataPropertyRange | FunctionalDataProperty
 dataPropertyAxiom :: TypeDefinition
-dataPropertyAxiom = define "DataPropertyAxiom" $ simpleUnion [
+dataPropertyAxiom = define "DataPropertyAxiom" $
+  doc "An OWL axiom about data properties" $
+  simpleUnion [
   "DataPropertyAxiom",
   "DataPropertyRange",
   "DisjointDataProperties",
@@ -423,17 +478,23 @@ dataPropertyAxiom = define "DataPropertyAxiom" $ simpleUnion [
 
 -- DataPropertyDomain := 'DataPropertyDomain' '(' axiomAnnotations DataPropertyExpression ClassExpression ')'
 dataPropertyDomain :: TypeDefinition
-dataPropertyDomain = define "DataPropertyDomain" $ withAnns [
+dataPropertyDomain = define "DataPropertyDomain" $
+  doc "An OWL axiom asserting the domain of a data property" $
+  withAnns [
   "property">: owl "DataPropertyExpression",
   "domain">: owl "ClassExpression"]
 
 -- DataPropertyExpression := DataProperty
 dataPropertyExpression :: TypeDefinition
-dataPropertyExpression = define "DataPropertyExpression" $ T.wrap $ owl "DataProperty"
+dataPropertyExpression = define "DataPropertyExpression" $
+  doc "An OWL data property expression" $
+  T.wrap $ owl "DataProperty"
 
 -- DataPropertyRange := 'DataPropertyRange' '(' axiomAnnotations DataPropertyExpression DataRange ')'
 dataPropertyRange :: TypeDefinition
-dataPropertyRange = define "DataPropertyRange" $ withAnns [
+dataPropertyRange = define "DataPropertyRange" $
+  doc "An OWL axiom asserting the range of a data property" $
+  withAnns [
   "property">: owl "DataPropertyExpression",
   "range">: owl "ClassExpression"]
 
@@ -446,6 +507,7 @@ dataPropertyRange = define "DataPropertyRange" $ withAnns [
 --     DatatypeRestriction
 dataRange :: TypeDefinition
 dataRange = define "DataRange" $
+  doc "An OWL data range" $
   see "https://www.w3.org/TR/owl2-syntax/#Data_Ranges" $
   simpleUnion [
     "DataComplementOf",
@@ -457,19 +519,24 @@ dataRange = define "DataRange" $
 
 -- DataSomeValuesFrom := 'DataSomeValuesFrom' '(' DataPropertyExpression { DataPropertyExpression } DataRange ')'
 dataSomeValuesFrom :: TypeDefinition
-dataSomeValuesFrom = define "DataSomeValuesFrom" $ T.record [
+dataSomeValuesFrom = define "DataSomeValuesFrom" $
+  doc "An OWL existential data property restriction" $
+  T.record [
   "property">: nonemptyList $ owl "DataPropertyExpression",
   "range">: owl "DataRange"]
 
 -- DataUnionOf := 'DataUnionOf' '(' DataRange DataRange { DataRange } ')'
 dataUnionOf :: TypeDefinition
 dataUnionOf = define "DataUnionOf" $
+  doc "An OWL data range which is the union of two or more data ranges" $
   see "https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges" $
   T.wrap $ twoOrMoreList $ owl "DataRange"
 
 -- DatatypeDefinition := 'DatatypeDefinition' '(' axiomAnnotations Datatype DataRange ')'
 datatypeDefinition :: TypeDefinition
-datatypeDefinition = define "DatatypeDefinition" $ withAnns [
+datatypeDefinition = define "DatatypeDefinition" $
+  doc "An OWL axiom defining a datatype in terms of a data range" $
+  withAnns [
   "datatype">: owl "Datatype",
   "range">: owl "DataRange"]
 
@@ -478,13 +545,15 @@ datatypeDefinition = define "DatatypeDefinition" $ withAnns [
 -- restrictionValue := Literal
 datatypeRestriction :: TypeDefinition
 datatypeRestriction = define "DatatypeRestriction" $
+  doc "An OWL datatype restricted by one or more constraining facets" $
   see "https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions" $
   T.record [
     "datatype">: owl "Datatype",
-    "constraints">: nonemptyList $ owl "DatatypeRestriction_Constraint"]
+    "constraints">: nonemptyList $ owl "DatatypeRestrictionConstraint"]
 
-datatypeRestriction_ConstrainingFacet :: TypeDefinition
-datatypeRestriction_ConstrainingFacet = define "DatatypeRestriction_ConstrainingFacet" $
+datatypeRestrictionConstrainingFacet :: TypeDefinition
+datatypeRestrictionConstrainingFacet = define "DatatypeRestrictionConstrainingFacet" $
+  doc "A constraining facet used in an OWL datatype restriction" $
   T.union [
     "xmlSchema">:
       note ("XML Schema constraining facets are treated as a special case in this model " ++
@@ -492,14 +561,17 @@ datatypeRestriction_ConstrainingFacet = define "DatatypeRestriction_Constraining
       xsd "ConstrainingFacet",
     "other">: rdf "Iri"]
 
-datatypeRestriction_Constraint :: TypeDefinition
-datatypeRestriction_Constraint = define "DatatypeRestriction_Constraint" $ T.record [
-  "constrainingFacet">: owl "DatatypeRestriction_ConstrainingFacet",
+datatypeRestrictionConstraint :: TypeDefinition
+datatypeRestrictionConstraint = define "DatatypeRestrictionConstraint" $
+  doc "A single constraining facet and its restriction value in an OWL datatype restriction" $
+  T.record [
+  "constrainingFacet">: owl "DatatypeRestrictionConstrainingFacet",
   "restrictionValue">: rdf "Literal"]
 
 -- Datatype := IRI
 datatype_ :: TypeDefinition
 datatype_ = define "Datatype" $
+  doc "An OWL datatype, identified by an IRI" $
   see "https://www.w3.org/TR/owl2-syntax/#Datatypes" $
   T.union [
     "xmlSchema">:
@@ -510,28 +582,37 @@ datatype_ = define "Datatype" $
 
 -- DifferentIndividuals := 'DifferentIndividuals' '(' axiomAnnotations Individual Individual { Individual } ')'
 differentIndividuals :: TypeDefinition
-differentIndividuals = define "DifferentIndividuals" $ withAnns [
+differentIndividuals = define "DifferentIndividuals" $
+  doc "An OWL axiom asserting that two or more individuals are pairwise distinct" $
+  withAnns [
   "individuals">: twoOrMoreList $ owl "Individual"]
 
 -- DisjointClasses := 'DisjointClasses' '(' axiomAnnotations ClassExpression ClassExpression { ClassExpression } ')'
 disjointClasses :: TypeDefinition
-disjointClasses = define "DisjointClasses" $ withAnns [
+disjointClasses = define "DisjointClasses" $
+  doc "An OWL axiom asserting that two or more classes are pairwise disjoint" $
+  withAnns [
   "classes">: twoOrMoreList $ owl "ClassExpression"]
 
 -- DisjointDataProperties := 'DisjointDataProperties' '(' axiomAnnotations DataPropertyExpression DataPropertyExpression { DataPropertyExpression } ')'
 disjointDataProperties :: TypeDefinition
-disjointDataProperties = define "DisjointDataProperties" $ withAnns [
+disjointDataProperties = define "DisjointDataProperties" $
+  doc "An OWL axiom asserting that two or more data properties are pairwise disjoint" $
+  withAnns [
   "properties">: twoOrMoreList $ owl "DataPropertyExpression"]
 
 -- DisjointObjectProperties := 'DisjointObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression { ObjectPropertyExpression } ')'
 disjointObjectProperties :: TypeDefinition
-disjointObjectProperties = define "DisjointObjectProperties" $ withAnns [
+disjointObjectProperties = define "DisjointObjectProperties" $
+  doc "An OWL axiom asserting that two or more object properties are pairwise disjoint" $
+  withAnns [
   "properties">: twoOrMoreList $ owl "ObjectPropertyExpression"]
 
 -- DisjointUnion := 'DisjointUnion' '(' axiomAnnotations Class disjointClassExpressions ')'
 -- disjointClassExpressions := ClassExpression ClassExpression { ClassExpression }
 disjointUnion :: TypeDefinition
 disjointUnion = define "DisjointUnion" $
+  doc "An OWL axiom asserting that a class is the disjoint union of other class expressions" $
   see "https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions" $
   withAnns [
     "class">: owl "Class",
@@ -539,22 +620,30 @@ disjointUnion = define "DisjointUnion" $
 
 -- EquivalentClasses := 'EquivalentClasses' '(' axiomAnnotations ClassExpression ClassExpression { ClassExpression } ')'
 equivalentClasses :: TypeDefinition
-equivalentClasses = define "EquivalentClasses" $ withAnns [
+equivalentClasses = define "EquivalentClasses" $
+  doc "An OWL axiom asserting that two or more classes are equivalent" $
+  withAnns [
   "classes">: twoOrMoreList $ owl "ClassExpression"]
 
 -- EquivalentDataProperties := 'EquivalentDataProperties' '(' axiomAnnotations DataPropertyExpression DataPropertyExpression { DataPropertyExpression } ')'
 equivalentDataProperties :: TypeDefinition
-equivalentDataProperties = define "EquivalentDataProperties" $ withAnns [
+equivalentDataProperties = define "EquivalentDataProperties" $
+  doc "An OWL axiom asserting that two or more data properties are equivalent" $
+  withAnns [
   "properties">: twoOrMoreList $ owl "DataPropertyExpression"]
 
 -- EquivalentObjectProperties := 'EquivalentObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression { ObjectPropertyExpression } ')'
 equivalentObjectProperties :: TypeDefinition
-equivalentObjectProperties = define "EquivalentObjectProperties" $ withAnns [
+equivalentObjectProperties = define "EquivalentObjectProperties" $
+  doc "An OWL axiom asserting that two or more object properties are equivalent" $
+  withAnns [
   "properties">: twoOrMoreList $ owl "ObjectPropertyExpression"]
 
 -- FunctionalDataProperty := 'FunctionalDataProperty' '(' axiomAnnotations DataPropertyExpression ')'
 functionalDataProperty :: TypeDefinition
-functionalDataProperty = define "FunctionalDataProperty" $ withAnns [
+functionalDataProperty = define "FunctionalDataProperty" $
+  doc "An OWL axiom asserting that a data property is functional" $
+  withAnns [
   "property">: owl "DataPropertyExpression"]
 
 -- FunctionalObjectProperty := 'FunctionalObjectProperty' '(' axiomAnnotations ObjectPropertyExpression ')'
@@ -564,6 +653,7 @@ functionalObjectProperty = objectPropertyConstraint "FunctionalObjectProperty"
 -- HasKey := 'HasKey' '(' axiomAnnotations ClassExpression '(' { ObjectPropertyExpression } ')' '(' { DataPropertyExpression } ')' ')'
 hasKey :: TypeDefinition
 hasKey = define "HasKey" $
+  doc "An OWL axiom asserting that a set of properties functions as a key for a class" $
   see "https://www.w3.org/TR/owl2-syntax/#Keys" $
   withAnns [
     "class">: owl "ClassExpression",
@@ -572,7 +662,9 @@ hasKey = define "HasKey" $
 
 -- Individual := NamedIndividual | AnonymousIndividual
 individual :: TypeDefinition
-individual = define "Individual" $ T.union [
+individual = define "Individual" $
+  doc "An OWL individual: a named individual or an anonymous individual" $
+  T.union [
   "named">: owl "NamedIndividual",
   "anonymous">: owl "AnonymousIndividual"]
 
@@ -582,13 +674,17 @@ inverseFunctionalObjectProperty = objectPropertyConstraint "InverseFunctionalObj
 
 -- InverseObjectProperties := 'InverseObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression ')'
 inverseObjectProperties :: TypeDefinition
-inverseObjectProperties = define "InverseObjectProperties" $ withAnns [
+inverseObjectProperties = define "InverseObjectProperties" $
+  doc "An OWL axiom asserting that two object properties are inverses of each other" $
+  withAnns [
   "property1">: owl "ObjectPropertyExpression",
   "property2">: owl "ObjectPropertyExpression"]
 
 -- InverseObjectProperty := 'ObjectInverseOf' '(' ObjectProperty ')'
 inverseObjectProperty :: TypeDefinition
-inverseObjectProperty = define "InverseObjectProperty" $ T.wrap $ owl "ObjectProperty"
+inverseObjectProperty = define "InverseObjectProperty" $
+  doc "The inverse of an OWL object property" $
+  T.wrap $ owl "ObjectProperty"
 
 -- IrreflexiveObjectProperty := 'IrreflexiveObjectProperty' '(' axiomAnnotations ObjectPropertyExpression ')'
 irreflexiveObjectProperty :: TypeDefinition
@@ -596,35 +692,46 @@ irreflexiveObjectProperty = objectPropertyConstraint "IrreflexiveObjectProperty"
 
 -- NamedIndividual := IRI
 namedIndividual :: TypeDefinition
-namedIndividual = define "NamedIndividual" $ T.wrap T.unit
+namedIndividual = define "NamedIndividual" $
+  doc "An OWL named individual, identified by an IRI" $
+  T.wrap T.unit
 
 -- NegativeDataPropertyAssertion := 'NegativeDataPropertyAssertion' '(' axiomAnnotations DataPropertyExpression sourceIndividual targetValue ')'
 negativeDataPropertyAssertion :: TypeDefinition
-negativeDataPropertyAssertion = define "NegativeDataPropertyAssertion" $ withAnns [
+negativeDataPropertyAssertion = define "NegativeDataPropertyAssertion" $
+  doc "An OWL axiom asserting that a data property relationship does NOT hold" $
+  withAnns [
   "property">: owl "DataPropertyExpression",
   "source">: owl "Individual",
   "target">: owl "Individual"]
 
 -- NegativeObjectPropertyAssertion := 'NegativeObjectPropertyAssertion' '(' axiomAnnotations ObjectPropertyExpression sourceIndividual targetIndividual ')'
 negativeObjectPropertyAssertion :: TypeDefinition
-negativeObjectPropertyAssertion = define "NegativeObjectPropertyAssertion" $ withAnns [
+negativeObjectPropertyAssertion = define "NegativeObjectPropertyAssertion" $
+  doc "An OWL axiom asserting that an object property relationship does NOT hold" $
+  withAnns [
   "property">: owl "ObjectPropertyExpression",
   "source">: owl "Individual",
   "target">: owl "Individual"]
 
 -- ObjectAllValuesFrom := 'ObjectAllValuesFrom' '(' ObjectPropertyExpression ClassExpression ')'
 objectAllValuesFrom :: TypeDefinition
-objectAllValuesFrom = define "ObjectAllValuesFrom" $ T.record [
+objectAllValuesFrom = define "ObjectAllValuesFrom" $
+  doc "An OWL universal object property restriction" $
+  T.record [
   "property">: owl "ObjectPropertyExpression",
   "class">: owl "ClassExpression"]
 
 -- ObjectComplementOf := 'ObjectComplementOf' '(' ClassExpression ')'
 objectComplementOf :: TypeDefinition
-objectComplementOf = define "ObjectComplementOf" $ T.wrap $ owl "ClassExpression"
+objectComplementOf = define "ObjectComplementOf" $
+  doc "An OWL class expression which is the complement of another class expression" $
+  T.wrap $ owl "ClassExpression"
 
 -- ObjectExactCardinality := 'ObjectExactCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
 objectExactCardinality :: TypeDefinition
 objectExactCardinality = define "ObjectExactCardinality" $
+  doc "An OWL exact-cardinality restriction on an object property" $
   see "https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality" $
   T.record [
     "bound">: nonNegativeInteger,
@@ -633,21 +740,28 @@ objectExactCardinality = define "ObjectExactCardinality" $
 
 -- ObjectHasSelf := 'ObjectHasSelf' '(' ObjectPropertyExpression ')'
 objectHasSelf :: TypeDefinition
-objectHasSelf = define "ObjectHasSelf" $ T.wrap $ owl "ObjectPropertyExpression"
+objectHasSelf = define "ObjectHasSelf" $
+  doc "An OWL class expression restricting an object property to self-relationships" $
+  T.wrap $ owl "ObjectPropertyExpression"
 
 -- ObjectHasValue := 'ObjectHasValue' '(' ObjectPropertyExpression Individual ')'
 objectHasValue :: TypeDefinition
-objectHasValue = define "ObjectHasValue" $ T.record [
+objectHasValue = define "ObjectHasValue" $
+  doc "An OWL object property restriction requiring a specific individual value" $
+  T.record [
   "property">: owl "ObjectPropertyExpression",
   "individual">: owl "Individual"]
 
 -- ObjectIntersectionOf := 'ObjectIntersectionOf' '(' ClassExpression ClassExpression { ClassExpression } ')'
 objectIntersectionOf :: TypeDefinition
-objectIntersectionOf = define "ObjectIntersectionOf" $ T.wrap $ twoOrMoreList $ owl "ClassExpression"
+objectIntersectionOf = define "ObjectIntersectionOf" $
+  doc "An OWL class expression which is the intersection of two or more class expressions" $
+  T.wrap $ twoOrMoreList $ owl "ClassExpression"
 
 -- ObjectMaxCardinality := 'ObjectMaxCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
 objectMaxCardinality :: TypeDefinition
 objectMaxCardinality = define "ObjectMaxCardinality" $
+  doc "An OWL maximum-cardinality restriction on an object property" $
   see "https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality" $
   T.record [
     "bound">: nonNegativeInteger,
@@ -657,6 +771,7 @@ objectMaxCardinality = define "ObjectMaxCardinality" $
 -- ObjectMinCardinality := 'ObjectMinCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
 objectMinCardinality :: TypeDefinition
 objectMinCardinality = define "ObjectMinCardinality" $
+  doc "An OWL minimum-cardinality restriction on an object property" $
   see "https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality" $
   T.record [
     "bound">: nonNegativeInteger,
@@ -665,16 +780,21 @@ objectMinCardinality = define "ObjectMinCardinality" $
 
 -- ObjectOneOf := 'ObjectOneOf' '(' Individual { Individual }')'
 objectOneOf :: TypeDefinition
-objectOneOf = define "ObjectOneOf" $ T.wrap $ nonemptyList $ owl "Individual"
+objectOneOf = define "ObjectOneOf" $
+  doc "An OWL class expression enumerating one or more individuals" $
+  T.wrap $ nonemptyList $ owl "Individual"
 
 -- ObjectProperty := IRI
 objectProperty :: TypeDefinition
 objectProperty = define "ObjectProperty" $
+  doc "An OWL object property, identified by an IRI" $
   see "https://www.w3.org/TR/owl2-syntax/#Object_Properties" $ T.wrap T.unit
 
 -- ObjectPropertyAssertion := 'ObjectPropertyAssertion' '(' axiomAnnotations ObjectPropertyExpression sourceIndividual targetIndividual ')'
 objectPropertyAssertion :: TypeDefinition
-objectPropertyAssertion = define "ObjectPropertyAssertion" $ withAnns [
+objectPropertyAssertion = define "ObjectPropertyAssertion" $
+  doc "An OWL axiom asserting an object property relationship between two individuals" $
+  withAnns [
   "property">: owl "ObjectPropertyExpression",
   "source">: owl "Individual",
   "target">: owl "Individual"]
@@ -688,7 +808,9 @@ objectPropertyAssertion = define "ObjectPropertyAssertion" $ withAnns [
 --     SymmetricObjectProperty | AsymmetricObjectProperty |
 --     TransitiveObjectProperty
 objectPropertyAxiom :: TypeDefinition
-objectPropertyAxiom = define "ObjectPropertyAxiom" $ simpleUnion [
+objectPropertyAxiom = define "ObjectPropertyAxiom" $
+  doc "An OWL axiom about object properties" $
+  simpleUnion [
   "AsymmetricObjectProperty",
   "DisjointObjectProperties",
   "EquivalentObjectProperties",
@@ -706,6 +828,7 @@ objectPropertyAxiom = define "ObjectPropertyAxiom" $ simpleUnion [
 -- ObjectPropertyDomain := 'ObjectPropertyDomain' '(' axiomAnnotations ObjectPropertyExpression ClassExpression ')'
 objectPropertyDomain :: TypeDefinition
 objectPropertyDomain = define "ObjectPropertyDomain" $
+  doc "An OWL axiom asserting the domain of an object property" $
   see "https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain" $
   withAnns [
     "property">: owl "ObjectPropertyExpression",
@@ -713,13 +836,16 @@ objectPropertyDomain = define "ObjectPropertyDomain" $
 
 -- ObjectPropertyExpression := ObjectProperty | InverseObjectProperty
 objectPropertyExpression :: TypeDefinition
-objectPropertyExpression = define "ObjectPropertyExpression" $ T.union [
+objectPropertyExpression = define "ObjectPropertyExpression" $
+  doc "An OWL object property expression: an object property or its inverse" $
+  T.union [
   "object">: owl "ObjectProperty",
   "inverseObject">: owl "InverseObjectProperty"]
 
 -- ObjectPropertyRange := 'ObjectPropertyRange' '(' axiomAnnotations ObjectPropertyExpression ClassExpression ')'
 objectPropertyRange :: TypeDefinition
 objectPropertyRange = define "ObjectPropertyRange" $
+  doc "An OWL axiom asserting the range of an object property" $
   see "https://www.w3.org/TR/owl2-syntax/#Object_Property_Range" $
   withAnns [
     "property">: owl "ObjectPropertyExpression",
@@ -727,13 +853,17 @@ objectPropertyRange = define "ObjectPropertyRange" $
 
 -- ObjectSomeValuesFrom := 'ObjectSomeValuesFrom' '(' ObjectPropertyExpression ClassExpression ')'
 objectSomeValuesFrom :: TypeDefinition
-objectSomeValuesFrom = define "ObjectSomeValuesFrom" $ T.record [
+objectSomeValuesFrom = define "ObjectSomeValuesFrom" $
+  doc "An OWL existential object property restriction" $
+  T.record [
   "property">: owl "ObjectPropertyExpression",
   "class">: owl "ClassExpression"]
 
 -- ObjectUnionOf := 'ObjectUnionOf' '(' ClassExpression ClassExpression { ClassExpression } ')'
 objectUnionOf :: TypeDefinition
-objectUnionOf = define "ObjectUnionOf" $ T.wrap $ twoOrMoreList $ owl "ClassExpression"
+objectUnionOf = define "ObjectUnionOf" $
+  doc "An OWL class expression which is the union of two or more class expressions" $
+  T.wrap $ twoOrMoreList $ owl "ClassExpression"
 
 -- ReflexiveObjectProperty := 'ReflexiveObjectProperty' '(' axiomAnnotations ObjectPropertyExpression ')'
 reflexiveObjectProperty :: TypeDefinition
@@ -744,12 +874,16 @@ reflexiveObjectProperty = objectPropertyConstraint "ReflexiveObjectProperty"
 -- targetValue := Literal
 -- SameIndividual := 'SameIndividual' '(' axiomAnnotations Individual Individual { Individual } ')'
 sameIndividual :: TypeDefinition
-sameIndividual = define "SameIndividual" $ withAnns [
+sameIndividual = define "SameIndividual" $
+  doc "An OWL axiom asserting that two or more individuals are the same" $
+  withAnns [
   "individuals">: twoOrMoreList $ owl "Individual"]
 
 -- SubAnnotationPropertyOf := 'SubAnnotationPropertyOf' '(' axiomAnnotations subAnnotationProperty superAnnotationProperty ')'
 subAnnotationPropertyOf :: TypeDefinition
-subAnnotationPropertyOf = define "SubAnnotationPropertyOf" $ withAnns [
+subAnnotationPropertyOf = define "SubAnnotationPropertyOf" $
+  doc "An OWL axiom asserting an annotation-property subsumption relationship" $
+  withAnns [
   "subProperty">: owl "AnnotationProperty",
   "superProperty">: owl "AnnotationProperty"]
 
@@ -760,13 +894,17 @@ subAnnotationPropertyOf = define "SubAnnotationPropertyOf" $ withAnns [
 -- subClassExpression := ClassExpression
 -- superClassExpression := ClassExpression
 subClassOf :: TypeDefinition
-subClassOf = define "SubClassOf" $ withAnns [
+subClassOf = define "SubClassOf" $
+  doc "An OWL axiom asserting a subclass relationship" $
+  withAnns [
   "subClass">: owl "ClassExpression",
   "superClass">: owl "ClassExpression"]
 
 -- SubDataPropertyOf := 'SubDataPropertyOf' '(' axiomAnnotations subDataPropertyExpression superDataPropertyExpression ')'
 subDataPropertyOf :: TypeDefinition
-subDataPropertyOf = define "SubDataPropertyOf" $ withAnns [
+subDataPropertyOf = define "SubDataPropertyOf" $
+  doc "An OWL axiom asserting a data-property subsumption relationship" $
+  withAnns [
   "subProperty">: owl "DataPropertyExpression",
   "superProperty">: owl "DataPropertyExpression"]
 -- subDataPropertyExpression := DataPropertyExpression
@@ -774,7 +912,9 @@ subDataPropertyOf = define "SubDataPropertyOf" $ withAnns [
 
 -- SubObjectPropertyOf := 'SubObjectPropertyOf' '(' axiomAnnotations subObjectPropertyExpression superObjectPropertyExpression ')'
 subObjectPropertyOf :: TypeDefinition
-subObjectPropertyOf = define "SubObjectPropertyOf" $ withAnns [
+subObjectPropertyOf = define "SubObjectPropertyOf" $
+  doc "An OWL axiom asserting an object-property subsumption relationship" $
+  withAnns [
   "subProperty">: nonemptyList $ owl "ObjectPropertyExpression",
   "superProperty">: owl "ObjectPropertyExpression"]
 -- subObjectPropertyExpression := ObjectPropertyExpression | propertyExpressionChain

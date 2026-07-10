@@ -28,21 +28,21 @@ module_ = Module {
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html"))}
   where
     definitions = [
-      id_,
-      graph_,
-      stmt,
-      equalityPair,
+      attrList,
       attrStmt,
       attrType,
-      attrList,
+      compassPt,
       edgeStmt,
+      equalityPair,
+      graph_,
+      id_,
+      nodeId,
       nodeOrSubgraph,
       nodeStmt,
-      nodeId,
       port,
+      stmt,
       subgraph,
-      subgraphId,
-      compassPt]
+      subgraphId]
 
 attrList :: TypeDefinition
 attrList = define "AttrList" $

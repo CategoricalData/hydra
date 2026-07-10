@@ -29,6 +29,7 @@ module_ = Module {
       ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc."))}
   where
     definitions = [
+      adjacentEdge,
       bigDecimalValue,
       compositeTypedValue,
       dateTime,
@@ -37,7 +38,6 @@ module_ = Module {
       edgeLabel,
       floatValue,
       map_,
-      adjacentEdge,
       primitiveTypedValue,
       propertyKey,
       typeName_,
@@ -50,6 +50,7 @@ module_ = Module {
 
 adjacentEdge :: TypeDefinition
 adjacentEdge = define "AdjacentEdge" $
+  doc "A GraphSON edge as referenced from an adjacent vertex, with its own properties" $
   T.record [
     "id">: gson "Value",
     "vertexId">: gson "Value",
@@ -57,20 +58,24 @@ adjacentEdge = define "AdjacentEdge" $
 
 bigDecimalValue :: TypeDefinition
 bigDecimalValue = define "BigDecimalValue" $
+  doc "A GraphSON big-decimal value, represented as a string" $
   T.wrap T.string
 
 compositeTypedValue :: TypeDefinition
 compositeTypedValue = define "CompositeTypedValue" $
+  doc "A GraphSON composite value tagged with a GraphSON type name" $
   T.record [
     "type">: gson "TypeName",
     "fields">: gson "Map"]
 
 dateTime :: TypeDefinition
 dateTime = define "DateTime" $
+  doc "A GraphSON date-time value, represented as a string" $
   T.wrap T.string
 
 doubleValue :: TypeDefinition
 doubleValue = define "DoubleValue" $
+  doc "A GraphSON double-precision floating-point value, including IEEE special values" $
   T.union [
     "finite">: T.float64,
     "infinity">: T.unit,
@@ -79,14 +84,17 @@ doubleValue = define "DoubleValue" $
 
 duration :: TypeDefinition
 duration = define "Duration" $
+  doc "A GraphSON duration value, represented as a string" $
   T.wrap T.string
 
 edgeLabel :: TypeDefinition
 edgeLabel = define "EdgeLabel" $
+  doc "A GraphSON edge label, represented as a string" $
   T.wrap T.string
 
 floatValue :: TypeDefinition
 floatValue = define "FloatValue" $
+  doc "A GraphSON single-precision floating-point value, including IEEE special values" $
   T.union [
     "finite">: T.float32,
     "infinity">: T.unit,
@@ -98,28 +106,34 @@ gson = typeref ns
 
 map_ :: TypeDefinition
 map_ = define "Map" $
+  doc "A GraphSON map, represented as a list of key/value pairs" $
   T.wrap $ T.list $ gson "ValuePair"
 
 primitiveTypedValue :: TypeDefinition
 primitiveTypedValue = define "PrimitiveTypedValue" $
+  doc "A GraphSON primitive value tagged with a GraphSON type name" $
   T.record [
     "type">: gson "TypeName",
     "value">: T.string]
 
 propertyKey :: TypeDefinition
 propertyKey = define "PropertyKey" $
+  doc "A GraphSON property key, represented as a string" $
   T.wrap T.string
 
 typeName_ :: TypeDefinition
 typeName_ = define "TypeName" $
+  doc "A GraphSON type name, represented as a string" $
   T.wrap T.string
 
 uuid_ :: TypeDefinition
 uuid_ = define "Uuid" $
+  doc "A GraphSON UUID value, represented as a string" $
   T.wrap T.string
 
 valuePair :: TypeDefinition
 valuePair = define "ValuePair" $
+  doc "A key/value pair in a GraphSON map" $
   T.record [
     "first">: gson "Value",
     "second">: gson "Value"]
@@ -140,6 +154,7 @@ valuePair = define "ValuePair" $
 --   * VertexProperty
 value_ :: TypeDefinition
 value_ = define "Value" $
+  doc "A GraphSON value, covering the subset of GraphSON value types this model supports" $
   T.union [
     "bigDecimal">: gson "BigDecimalValue",
     "bigInteger">: T.bigint,
@@ -165,6 +180,7 @@ value_ = define "Value" $
 
 vertex :: TypeDefinition
 vertex = define "Vertex" $
+  doc "A GraphSON vertex, with its incident edges and properties" $
   T.record [
     "id">: gson "Value",
     "label">: T.optional $ gson "VertexLabel",
@@ -174,10 +190,12 @@ vertex = define "Vertex" $
 
 vertexLabel :: TypeDefinition
 vertexLabel = define "VertexLabel" $
+  doc "A GraphSON vertex label, represented as a string" $
   T.wrap T.string
 
 vertexPropertyValue :: TypeDefinition
 vertexPropertyValue = define "VertexPropertyValue" $
+  doc "A GraphSON vertex property value, with an optional property id" $
   T.record [
     "id">: T.optional $ gson "Value",
     "value">: gson "Value"]

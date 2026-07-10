@@ -32,7 +32,7 @@ module_ = Module {
       executableDocument,
       executableDefinition,
       operationDefinition,
-      operationDefinition_Sequence,
+      operationDefinitionSequence,
       operationType,
       selectionSet,
       selection,
@@ -50,9 +50,9 @@ module_ = Module {
       nullValue,
       enumValue,
       listValue,
-      listValue_Sequence,
+      listValueSequence,
       objectValue,
-      objectValue_Sequence,
+      objectValueSequence,
       objectField,
       variablesDefinition,
       variable,
@@ -70,7 +70,7 @@ module_ = Module {
       typeSystemExtension,
       schemaDefinition,
       schemaExtension,
-      schemaExtension_Sequence,
+      schemaExtensionSequence,
       rootOperationTypeDefinition,
       description,
       typeDefinition,
@@ -79,47 +79,47 @@ module_ = Module {
       scalarTypeExtension,
       objectTypeDefinition,
       objectTypeExtension,
-      objectTypeExtension_Sequence,
-      objectTypeExtension_Sequence2,
-      objectTypeExtension_Sequence3,
+      objectTypeExtensionSequence,
+      objectTypeExtensionSequence2,
+      objectTypeExtensionSequence3,
       implementsInterfaces,
-      implementsInterfaces_Sequence,
-      implementsInterfaces_Sequence2,
+      implementsInterfacesSequence,
+      implementsInterfacesSequence2,
       fieldsDefinition,
       fieldDefinition,
       argumentsDefinition,
       inputValueDefinition,
       interfaceTypeDefinition,
-      interfaceTypeDefinition_Sequence,
-      interfaceTypeDefinition_Sequence2,
+      interfaceTypeDefinitionSequence,
+      interfaceTypeDefinitionSequence2,
       interfaceTypeExtension,
-      interfaceTypeExtension_Sequence,
-      interfaceTypeExtension_Sequence2,
-      interfaceTypeExtension_Sequence3,
+      interfaceTypeExtensionSequence,
+      interfaceTypeExtensionSequence2,
+      interfaceTypeExtensionSequence3,
       unionTypeDefinition,
       unionMemberTypes,
-      unionMemberTypes_Sequence,
-      unionMemberTypes_Sequence2,
+      unionMemberTypesSequence,
+      unionMemberTypesSequence2,
       unionTypeExtension,
-      unionTypeExtension_Sequence,
-      unionTypeExtension_Sequence2,
+      unionTypeExtensionSequence,
+      unionTypeExtensionSequence2,
       enumTypeDefinition,
       enumValuesDefinition,
       enumValueDefinition,
       enumTypeExtension,
-      enumTypeExtension_Sequence,
-      enumTypeExtension_Sequence2,
+      enumTypeExtensionSequence,
+      enumTypeExtensionSequence2,
       inputObjectTypeDefinition,
-      inputObjectTypeDefinition_Sequence,
-      inputObjectTypeDefinition_Sequence2,
+      inputObjectTypeDefinitionSequence,
+      inputObjectTypeDefinitionSequence2,
       inputFieldsDefinition,
       inputObjectTypeExtension,
-      inputObjectTypeExtension_Sequence,
-      inputObjectTypeExtension_Sequence2,
+      inputObjectTypeExtensionSequence,
+      inputObjectTypeExtensionSequence2,
       directiveDefinition,
       directiveLocations,
-      directiveLocations_Sequence,
-      directiveLocations_Sequence2,
+      directiveLocationsSequence,
+      directiveLocationsSequence2,
       directiveLocation,
       executableDirectiveLocation,
       typeSystemDirectiveLocation]
@@ -236,11 +236,11 @@ listType = define "ListType" $ T.wrap $ gql "Type"
 listValue :: TypeDefinition
 listValue = define "ListValue" $
   T.union [
-    "sequence">: gql "ListValue_Sequence",
+    "seq">: gql "ListValueSequence",
     "sequence2">: T.list $ gql "Value"]
 
-listValue_Sequence :: TypeDefinition
-listValue_Sequence = define "ListValue_Sequence" $ T.record []
+listValueSequence :: TypeDefinition
+listValueSequence = define "ListValueSequence" T.unit
 
 namedType :: TypeDefinition
 namedType = define "NamedType" $ T.wrap $ gql "Name"
@@ -263,20 +263,20 @@ objectField = define "ObjectField" $
 objectValue :: TypeDefinition
 objectValue = define "ObjectValue" $
   T.union [
-    "sequence">: gql "ObjectValue_Sequence",
+    "seq">: gql "ObjectValueSequence",
     "sequence2">: T.list $ gql "ObjectField"]
 
-objectValue_Sequence :: TypeDefinition
-objectValue_Sequence = define "ObjectValue_Sequence" $ T.record []
+objectValueSequence :: TypeDefinition
+objectValueSequence = define "ObjectValueSequence" T.unit
 
 operationDefinition :: TypeDefinition
 operationDefinition = define "OperationDefinition" $
   T.union [
-    "sequence">: gql "OperationDefinition_Sequence",
+    "seq">: gql "OperationDefinitionSequence",
     "SelectionSet">: gql "SelectionSet"]
 
-operationDefinition_Sequence :: TypeDefinition
-operationDefinition_Sequence = define "OperationDefinition_Sequence" $
+operationDefinitionSequence :: TypeDefinition
+operationDefinitionSequence = define "OperationDefinitionSequence" $
   T.record [
     "OperationType">: gql "OperationType",
     "Name">: T.optional $ gql "Name",
@@ -357,18 +357,18 @@ enumTypeDefinition = define "EnumTypeDefinition" $
 enumTypeExtension :: TypeDefinition
 enumTypeExtension = define "EnumTypeExtension" $
   T.union [
-    "sequence">: gql "EnumTypeExtension_Sequence",
-    "sequence2">: gql "EnumTypeExtension_Sequence2"]
+    "seq">: gql "EnumTypeExtensionSequence",
+    "seq2">: gql "EnumTypeExtensionSequence2"]
 
-enumTypeExtension_Sequence :: TypeDefinition
-enumTypeExtension_Sequence = define "EnumTypeExtension_Sequence" $
+enumTypeExtensionSequence :: TypeDefinition
+enumTypeExtensionSequence = define "EnumTypeExtensionSequence" $
   T.record [
     "Name">: gql "Name",
     "Directives">: T.optional $ gql "Directives",
     "EnumValuesDefinition">: gql "EnumValuesDefinition"]
 
-enumTypeExtension_Sequence2 :: TypeDefinition
-enumTypeExtension_Sequence2 = define "EnumTypeExtension_Sequence2" $
+enumTypeExtensionSequence2 :: TypeDefinition
+enumTypeExtensionSequence2 = define "EnumTypeExtensionSequence2" $
   T.record [
     "Name">: gql "Name",
     "Directives">: gql "Directives"]
@@ -398,17 +398,17 @@ fieldsDefinition = define "FieldsDefinition" $ T.wrap $ T.list $ gql "FieldDefin
 implementsInterfaces :: TypeDefinition
 implementsInterfaces = define "ImplementsInterfaces" $
   T.union [
-    "sequence">: gql "ImplementsInterfaces_Sequence",
-    "sequence2">: gql "ImplementsInterfaces_Sequence2"]
+    "seq">: gql "ImplementsInterfacesSequence",
+    "seq2">: gql "ImplementsInterfacesSequence2"]
 
-implementsInterfaces_Sequence :: TypeDefinition
-implementsInterfaces_Sequence = define "ImplementsInterfaces_Sequence" $
+implementsInterfacesSequence :: TypeDefinition
+implementsInterfacesSequence = define "ImplementsInterfacesSequence" $
   T.record [
     "ImplementsInterfaces">: gql "ImplementsInterfaces",
     "NamedType">: gql "NamedType"]
 
-implementsInterfaces_Sequence2 :: TypeDefinition
-implementsInterfaces_Sequence2 = define "ImplementsInterfaces_Sequence2" $
+implementsInterfacesSequence2 :: TypeDefinition
+implementsInterfacesSequence2 = define "ImplementsInterfacesSequence2" $
   T.record [
     "Amp">: T.optional T.unit,
     "NamedType">: gql "NamedType"]
@@ -419,19 +419,19 @@ inputFieldsDefinition = define "InputFieldsDefinition" $ T.wrap $ T.list $ gql "
 inputObjectTypeDefinition :: TypeDefinition
 inputObjectTypeDefinition = define "InputObjectTypeDefinition" $
   T.union [
-    "sequence">: gql "InputObjectTypeDefinition_Sequence",
-    "sequence2">: gql "InputObjectTypeDefinition_Sequence2"]
+    "seq">: gql "InputObjectTypeDefinitionSequence",
+    "seq2">: gql "InputObjectTypeDefinitionSequence2"]
 
-inputObjectTypeDefinition_Sequence :: TypeDefinition
-inputObjectTypeDefinition_Sequence = define "InputObjectTypeDefinition_Sequence" $
+inputObjectTypeDefinitionSequence :: TypeDefinition
+inputObjectTypeDefinitionSequence = define "InputObjectTypeDefinitionSequence" $
   T.record [
     "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
     "Directives">: T.optional $ gql "Directives",
     "InputFieldsDefinition">: gql "InputFieldsDefinition"]
 
-inputObjectTypeDefinition_Sequence2 :: TypeDefinition
-inputObjectTypeDefinition_Sequence2 = define "InputObjectTypeDefinition_Sequence2" $
+inputObjectTypeDefinitionSequence2 :: TypeDefinition
+inputObjectTypeDefinitionSequence2 = define "InputObjectTypeDefinitionSequence2" $
   T.record [
     "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
@@ -440,18 +440,18 @@ inputObjectTypeDefinition_Sequence2 = define "InputObjectTypeDefinition_Sequence
 inputObjectTypeExtension :: TypeDefinition
 inputObjectTypeExtension = define "InputObjectTypeExtension" $
   T.union [
-    "sequence">: gql "InputObjectTypeExtension_Sequence",
-    "sequence2">: gql "InputObjectTypeExtension_Sequence2"]
+    "seq">: gql "InputObjectTypeExtensionSequence",
+    "seq2">: gql "InputObjectTypeExtensionSequence2"]
 
-inputObjectTypeExtension_Sequence :: TypeDefinition
-inputObjectTypeExtension_Sequence = define "InputObjectTypeExtension_Sequence" $
+inputObjectTypeExtensionSequence :: TypeDefinition
+inputObjectTypeExtensionSequence = define "InputObjectTypeExtensionSequence" $
   T.record [
     "Name">: gql "Name",
     "Directives">: T.optional $ gql "Directives",
     "InputFieldsDefinition">: gql "InputFieldsDefinition"]
 
-inputObjectTypeExtension_Sequence2 :: TypeDefinition
-inputObjectTypeExtension_Sequence2 = define "InputObjectTypeExtension_Sequence2" $
+inputObjectTypeExtensionSequence2 :: TypeDefinition
+inputObjectTypeExtensionSequence2 = define "InputObjectTypeExtensionSequence2" $
   T.record [
     "Name">: gql "Name",
     "Directives">: gql "Directives"]
@@ -468,11 +468,11 @@ inputValueDefinition = define "InputValueDefinition" $
 interfaceTypeDefinition :: TypeDefinition
 interfaceTypeDefinition = define "InterfaceTypeDefinition" $
   T.union [
-    "sequence">: gql "InterfaceTypeDefinition_Sequence",
-    "sequence2">: gql "InterfaceTypeDefinition_Sequence2"]
+    "seq">: gql "InterfaceTypeDefinitionSequence",
+    "seq2">: gql "InterfaceTypeDefinitionSequence2"]
 
-interfaceTypeDefinition_Sequence :: TypeDefinition
-interfaceTypeDefinition_Sequence = define "InterfaceTypeDefinition_Sequence" $
+interfaceTypeDefinitionSequence :: TypeDefinition
+interfaceTypeDefinitionSequence = define "InterfaceTypeDefinitionSequence" $
   T.record [
     "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
@@ -480,8 +480,8 @@ interfaceTypeDefinition_Sequence = define "InterfaceTypeDefinition_Sequence" $
     "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
-interfaceTypeDefinition_Sequence2 :: TypeDefinition
-interfaceTypeDefinition_Sequence2 = define "InterfaceTypeDefinition_Sequence2" $
+interfaceTypeDefinitionSequence2 :: TypeDefinition
+interfaceTypeDefinitionSequence2 = define "InterfaceTypeDefinitionSequence2" $
   T.record [
     "Description">: T.optional $ gql "Description",
     "Name">: gql "Name",
@@ -491,27 +491,27 @@ interfaceTypeDefinition_Sequence2 = define "InterfaceTypeDefinition_Sequence2" $
 interfaceTypeExtension :: TypeDefinition
 interfaceTypeExtension = define "InterfaceTypeExtension" $
   T.union [
-    "sequence">: gql "InterfaceTypeExtension_Sequence",
-    "sequence2">: gql "InterfaceTypeExtension_Sequence2",
-    "sequence3">: gql "InterfaceTypeExtension_Sequence3"]
+    "seq">: gql "InterfaceTypeExtensionSequence",
+    "seq2">: gql "InterfaceTypeExtensionSequence2",
+    "seq3">: gql "InterfaceTypeExtensionSequence3"]
 
-interfaceTypeExtension_Sequence :: TypeDefinition
-interfaceTypeExtension_Sequence = define "InterfaceTypeExtension_Sequence" $
+interfaceTypeExtensionSequence :: TypeDefinition
+interfaceTypeExtensionSequence = define "InterfaceTypeExtensionSequence" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
     "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
-interfaceTypeExtension_Sequence2 :: TypeDefinition
-interfaceTypeExtension_Sequence2 = define "InterfaceTypeExtension_Sequence2" $
+interfaceTypeExtensionSequence2 :: TypeDefinition
+interfaceTypeExtensionSequence2 = define "InterfaceTypeExtensionSequence2" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
     "Directives">: gql "Directives"]
 
-interfaceTypeExtension_Sequence3 :: TypeDefinition
-interfaceTypeExtension_Sequence3 = define "InterfaceTypeExtension_Sequence3" $
+interfaceTypeExtensionSequence3 :: TypeDefinition
+interfaceTypeExtensionSequence3 = define "InterfaceTypeExtensionSequence3" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: gql "ImplementsInterfaces"]
@@ -528,27 +528,27 @@ objectTypeDefinition = define "ObjectTypeDefinition" $
 objectTypeExtension :: TypeDefinition
 objectTypeExtension = define "ObjectTypeExtension" $
   T.union [
-    "sequence">: gql "ObjectTypeExtension_Sequence",
-    "sequence2">: gql "ObjectTypeExtension_Sequence2",
-    "sequence3">: gql "ObjectTypeExtension_Sequence3"]
+    "seq">: gql "ObjectTypeExtensionSequence",
+    "seq2">: gql "ObjectTypeExtensionSequence2",
+    "seq3">: gql "ObjectTypeExtensionSequence3"]
 
-objectTypeExtension_Sequence :: TypeDefinition
-objectTypeExtension_Sequence = define "ObjectTypeExtension_Sequence" $
+objectTypeExtensionSequence :: TypeDefinition
+objectTypeExtensionSequence = define "ObjectTypeExtensionSequence" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
     "Directives">: T.optional $ gql "Directives",
     "FieldsDefinition">: gql "FieldsDefinition"]
 
-objectTypeExtension_Sequence2 :: TypeDefinition
-objectTypeExtension_Sequence2 = define "ObjectTypeExtension_Sequence2" $
+objectTypeExtensionSequence2 :: TypeDefinition
+objectTypeExtensionSequence2 = define "ObjectTypeExtensionSequence2" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: T.optional $ gql "ImplementsInterfaces",
     "Directives">: T.optional $ gql "Directives"]
 
-objectTypeExtension_Sequence3 :: TypeDefinition
-objectTypeExtension_Sequence3 = define "ObjectTypeExtension_Sequence3" $
+objectTypeExtensionSequence3 :: TypeDefinition
+objectTypeExtensionSequence3 = define "ObjectTypeExtensionSequence3" $
   T.record [
     "Name">: gql "Name",
     "ImplementsInterfaces">: gql "ImplementsInterfaces"]
@@ -582,11 +582,11 @@ schemaDefinition = define "SchemaDefinition" $
 schemaExtension :: TypeDefinition
 schemaExtension = define "SchemaExtension" $
   T.union [
-    "sequence">: gql "SchemaExtension_Sequence",
+    "seq">: gql "SchemaExtensionSequence",
     "sequence2">: gql "Directives"]
 
-schemaExtension_Sequence :: TypeDefinition
-schemaExtension_Sequence = define "SchemaExtension_Sequence" $
+schemaExtensionSequence :: TypeDefinition
+schemaExtensionSequence = define "SchemaExtensionSequence" $
   T.record [
     "Directives">: T.optional $ gql "Directives",
     "RootOperationTypeDefinition">: gql "RootOperationTypeDefinition"]
@@ -640,17 +640,17 @@ typeSystemExtensionDocument = define "TypeSystemExtensionDocument" $
 unionMemberTypes :: TypeDefinition
 unionMemberTypes = define "UnionMemberTypes" $
   T.union [
-    "sequence">: gql "UnionMemberTypes_Sequence",
-    "sequence2">: gql "UnionMemberTypes_Sequence2"]
+    "seq">: gql "UnionMemberTypesSequence",
+    "seq2">: gql "UnionMemberTypesSequence2"]
 
-unionMemberTypes_Sequence :: TypeDefinition
-unionMemberTypes_Sequence = define "UnionMemberTypes_Sequence" $
+unionMemberTypesSequence :: TypeDefinition
+unionMemberTypesSequence = define "UnionMemberTypesSequence" $
   T.record [
     "UnionMemberTypes">: gql "UnionMemberTypes",
     "NamedType">: gql "NamedType"]
 
-unionMemberTypes_Sequence2 :: TypeDefinition
-unionMemberTypes_Sequence2 = define "UnionMemberTypes_Sequence2" $
+unionMemberTypesSequence2 :: TypeDefinition
+unionMemberTypesSequence2 = define "UnionMemberTypesSequence2" $
   T.record [
     "Or">: T.optional T.unit,
     "NamedType">: gql "NamedType"]
@@ -666,18 +666,18 @@ unionTypeDefinition = define "UnionTypeDefinition" $
 unionTypeExtension :: TypeDefinition
 unionTypeExtension = define "UnionTypeExtension" $
   T.union [
-    "sequence">: gql "UnionTypeExtension_Sequence",
-    "sequence2">: gql "UnionTypeExtension_Sequence2"]
+    "seq">: gql "UnionTypeExtensionSequence",
+    "seq2">: gql "UnionTypeExtensionSequence2"]
 
-unionTypeExtension_Sequence :: TypeDefinition
-unionTypeExtension_Sequence = define "UnionTypeExtension_Sequence" $
+unionTypeExtensionSequence :: TypeDefinition
+unionTypeExtensionSequence = define "UnionTypeExtensionSequence" $
   T.record [
     "Name">: gql "Name",
     "Directives">: T.optional $ gql "Directives",
     "UnionMemberTypes">: gql "UnionMemberTypes"]
 
-unionTypeExtension_Sequence2 :: TypeDefinition
-unionTypeExtension_Sequence2 = define "UnionTypeExtension_Sequence2" $
+unionTypeExtensionSequence2 :: TypeDefinition
+unionTypeExtensionSequence2 = define "UnionTypeExtensionSequence2" $
   T.record [
     "Name">: gql "Name",
     "Directives">: gql "Directives"]
@@ -702,17 +702,17 @@ directiveLocation = define "DirectiveLocation" $
 directiveLocations :: TypeDefinition
 directiveLocations = define "DirectiveLocations" $
   T.union [
-    "sequence">: gql "DirectiveLocations_Sequence",
-    "sequence2">: gql "DirectiveLocations_Sequence2"]
+    "seq">: gql "DirectiveLocationsSequence",
+    "seq2">: gql "DirectiveLocationsSequence2"]
 
-directiveLocations_Sequence :: TypeDefinition
-directiveLocations_Sequence = define "DirectiveLocations_Sequence" $
+directiveLocationsSequence :: TypeDefinition
+directiveLocationsSequence = define "DirectiveLocationsSequence" $
   T.record [
     "DirectiveLocations">: gql "DirectiveLocations",
     "DirectiveLocation">: gql "DirectiveLocation"]
 
-directiveLocations_Sequence2 :: TypeDefinition
-directiveLocations_Sequence2 = define "DirectiveLocations_Sequence2" $
+directiveLocationsSequence2 :: TypeDefinition
+directiveLocationsSequence2 = define "DirectiveLocationsSequence2" $
   T.record [
     "Or">: T.optional T.unit,
     "DirectiveLocation">: gql "DirectiveLocation"]

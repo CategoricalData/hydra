@@ -1086,7 +1086,7 @@ vectorLiteral = define "VectorLiteral" $
 wildcardPattern :: TypeDefinition
 wildcardPattern = define "WildcardPattern" $
   doc "A wildcard pattern that matches any value" $
-  T.record []
+  T.unit
 
 
 -- ================================================================================================

@@ -482,7 +482,7 @@ encryptionWithColumnKey = define "EncryptionWithColumnKey" $
       T.optional T.binary]
 
 encryptionWithFooterKey :: TypeDefinition
-encryptionWithFooterKey = define "EncryptionWithFooterKey" $ T.record []
+encryptionWithFooterKey = define "EncryptionWithFooterKey" T.unit
 
 fieldRepetitionType :: TypeDefinition
 fieldRepetitionType = define "FieldRepetitionType" $
@@ -560,7 +560,7 @@ fileMetaData = define "FileMetaData" $
       T.optional T.binary]
 
 indexPageHeader :: TypeDefinition
-indexPageHeader = define "IndexPageHeader" $ T.record []
+indexPageHeader = define "IndexPageHeader" T.unit
 
 intType :: TypeDefinition
 intType = define "IntType" $

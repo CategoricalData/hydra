@@ -109,8 +109,8 @@ module_ = Module {
       toDefinition nodeStmtToExpr,
       toDefinition portToExpr,
       toDefinition stmtToExpr,
-      toDefinition subgraphToExpr,
-      toDefinition subgraphIdToExpr]
+      toDefinition subgraphIdToExpr,
+      toDefinition subgraphToExpr]
 
 
 attrListToExpr :: TypedTermDefinition (Dot.AttrList -> Expr)

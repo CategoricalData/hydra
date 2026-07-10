@@ -113,16 +113,19 @@ coqArrow = define "coqArrow" $
 -- | Build a Coq Ident from a string.
 coqIdent :: TypedTermDefinition (String -> C.Ident)
 coqIdent = define "coqIdent" $
+  doc "Build a Coq Ident from a string" $
   lambda "s" $ wrap C._Ident $ wrap C._String $ var "s"
 
 -- | Build a Coq Name (optional Ident) from a string.
 coqName :: TypedTermDefinition (String -> C.Name)
 coqName = define "coqName" $
+  doc "Build a Coq Name (optional Ident) from a string" $
   lambda "s" $ wrap C._Name $ just (coqIdent @@ var "s")
 
 -- | Build a simple Coq Qualid from a string (no field-path components).
 coqQualid :: TypedTermDefinition (String -> C.Qualid)
 coqQualid = define "coqQualid" $
+  doc "Build a simple Coq Qualid from a string (no field-path components)" $
   lambda "s" $ record C._Qualid [
     C._Qualid_id>>: coqIdent @@ var "s",
     C._Qualid_fieldIds>>: list ([] :: [TypedTerm C.FieldIdent])]
@@ -184,6 +187,7 @@ coqTermQualid = define "coqTermQualid" $
 -- | Wrap a Term as a Type.
 coqTypeTerm :: TypedTermDefinition (C.Term -> C.Type)
 coqTypeTerm = define "coqTypeTerm" $
+  doc "Wrap a Term as a Type" $
   lambda "t" $ wrap C._Type $ var "t"
 
 -- | Encode a (name, Type) pair as a Coq Sentence containing an Axiom declaration.

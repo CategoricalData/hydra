@@ -165,6 +165,7 @@ analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
 -- outer-to-inner order. Stops at the first non-forall type.
 collectForallParams :: TypedTermDefinition (Type -> [Name])
 collectForallParams = def "collectForallParams" $
+  doc "Collect the bound parameter names from a chain of nested foralls, in outer-to-inner order; stops at the first non-forall type" $
   lambda "t" $
     "dt" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "dt") (Just $ list ([] :: [TypedTerm Name])) [
@@ -184,6 +185,7 @@ collectForallParams = def "collectForallParams" $
 -- parameters).
 collectImports :: TypedTermDefinition (ModuleName -> Type -> S.Set Name)
 collectImports = def "collectImports" $
+  doc "Collect the names of every type referenced in a type tree that belongs to a different namespace than the current module, for computing the imports needed at the top of the emitted .ts file" $
   lambda "currentNs" $ lambda "t" $
     "vars" <~ (Variables.freeVariablesInType @@ var "t") $
     filterNonLocalNames @@ var "currentNs" @@ var "vars"
@@ -196,6 +198,7 @@ collectImports = def "collectImports" $
 -- supplements that by walking the term tree.
 collectInnerTypeImports :: TypedTermDefinition (ModuleName -> Term -> S.Set Name)
 collectInnerTypeImports = def "collectInnerTypeImports" $
+  doc "Collect type imports referenced inside a term tree (lambda bodies, type applications, let-binding schemes), supplementing the top-level typeScheme walk" $
   lambda "currentNs" $ lambda "term" $
     "subs" <~ (Rewriting.subterms @@ var "term") $
     -- Recursively gather type names from this term plus all subterms.
@@ -232,6 +235,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
 -- generated `export const` definitions or to runtime lib primitives).
 collectTermImports :: TypedTermDefinition (ModuleName -> Term -> S.Set Name)
 collectTermImports = def "collectTermImports" $
+  doc "Like collectImports but walks a Term, gathering free term-level variables that resolve to a different module" $
   lambda "currentNs" $ lambda "t" $
     "vars" <~ (Variables.freeVariablesInTerm @@ var "t") $
     filterNonLocalNames @@ var "currentNs" @@ var "vars"

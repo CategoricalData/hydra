@@ -33,8 +33,8 @@ module_ = Module {
   where
     definitions = [
       atlasAttribute,
-      atlasAttributeDef_Cardinality,
-      atlasAttributeDef_IndexType,
+      atlasAttributeDefCardinality,
+      atlasAttributeDefIndexType,
       atlasBaseType,
       atlasConstraint,
       atlasEntity,
@@ -52,7 +52,7 @@ atlasAttribute = define "AtlasAttributeDef" $
     "name">: T.optional T.string,
     "typeName">: T.optional T.string,
     "isOptional">: T.boolean,
-    "cardinality">: T.optional $ atlas "AtlasAttributeDef_Cardinality",
+    "cardinality">: T.optional $ atlas "AtlasAttributeDefCardinality",
     "valuesMinCount">: T.int32,
     "valuesMaxCount">: T.int32,
     "isUnique">: T.boolean,
@@ -61,16 +61,20 @@ atlasAttribute = define "AtlasAttributeDef" $
     "defaultValue">: T.optional T.string,
     "description">: T.optional T.string,
     "searchWeight">: T.int32,
-    "indexType">: T.optional $ atlas "AtlasAttributeDef_IndexType",
+    "indexType">: T.optional $ atlas "AtlasAttributeDefIndexType",
     "constraints">: T.list $ atlas "AtlasConstraintDef",
     "options">: T.map T.string T.string,
     "displayName">: T.optional T.string]
 
-atlasAttributeDef_Cardinality :: TypeDefinition
-atlasAttributeDef_Cardinality = define "AtlasAttributeDef_Cardinality" $ T.enum ["single", "list", "set"]
+atlasAttributeDefCardinality :: TypeDefinition
+atlasAttributeDefCardinality = define "AtlasAttributeDefCardinality" $
+  doc "The cardinality of an Atlas attribute: single-valued, a list, or a set" $
+  T.enum ["single", "list", "set"]
 
-atlasAttributeDef_IndexType :: TypeDefinition
-atlasAttributeDef_IndexType = define "AtlasAttributeDef_IndexType" $ T.enum ["default", "string"]
+atlasAttributeDefIndexType :: TypeDefinition
+atlasAttributeDefIndexType = define "AtlasAttributeDefIndexType" $
+  doc "The index type of an Atlas attribute" $
+  T.enum ["default", "string"]
 
 atlasBaseType :: TypeDefinition
 atlasBaseType = define "AtlasBaseTypeDef" $
@@ -134,7 +138,9 @@ atlasStruct = define "AtlasStructDef" $
     "attributeDefs">: T.list $ atlas "AtlasAttributeDef"]
 
 typeCategory :: TypeDefinition
-typeCategory = define "TypeCategory" $ T.enum [
+typeCategory = define "TypeCategory" $
+  doc "The category of an Atlas type definition" $
+  T.enum [
   "primitive", "objectIdType", "enum", "struct", "classification", "entity", "array", "map", "relationship", "businessMetadata"]
 
 xsd :: String -> Type

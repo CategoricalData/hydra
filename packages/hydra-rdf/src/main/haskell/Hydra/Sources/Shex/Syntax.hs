@@ -24,14 +24,14 @@ module_ = Module {
   where
     definitions = [
       shexDoc,
-      shexDoc_Sequence_Option,
-      shexDoc_Sequence_Option_Alts,
+      shexDocSequenceOption,
+      shexDocSequenceOptionAlts,
       directive,
       baseDecl,
       prefixDecl,
       notStartAction,
-      notStartAction_ShapeExprDecl,
-      notStartAction_ShapeExprDecl_Alts,
+      notStartActionShapeExprDecl,
+      notStartActionShapeExprDeclAlts,
       startActions,
       statement,
       shapeExpression,
@@ -43,31 +43,31 @@ module_ = Module {
       shapeNot,
       inlineShapeNot,
       shapeAtom,
-      shapeAtom_Sequence,
+      shapeAtomSequence,
       inlineShapeAtom,
-      inlineShapeAtom_Sequence,
-      inlineShapeAtom_Sequence2,
+      inlineShapeAtomSequence,
+      inlineShapeAtomSequence2,
       shapeOrRef,
       inlineShapeOrRef,
       nodeConstraint,
-      nodeConstraint_Sequence2,
-      nodeConstraint_Sequence3,
-      nodeConstraint_Sequence4,
-      nodeConstraint_Sequence5,
+      nodeConstraintSequence2,
+      nodeConstraintSequence3,
+      nodeConstraintSequence4,
+      nodeConstraintSequence5,
       nonLiteralKind,
       xsFacet,
       stringFacet,
-      stringFacet_Sequence,
+      stringFacetSequence,
       stringLength,
       numericFacet,
-      numericFacet_Sequence,
-      numericFacet_Sequence2,
+      numericFacetSequence,
+      numericFacetSequence2,
       numericRange,
       numericLength,
       shapeDefinition,
-      shapeDefinition_ListOfAlts_Elmt,
+      shapeDefinitionListOfAltsElmt,
       inlineShapeDefinition,
-      inlineShapeDefinition_ListOfAlts_Elmt,
+      inlineShapeDefinitionListOfAltsElmt,
       extraPropertySet,
       tripleExpression,
       oneOfTripleExpr,
@@ -77,8 +77,8 @@ module_ = Module {
       singleElementGroup,
       multiElementGroup,
       unaryTripleExpr,
-      unaryTripleExpr_Sequence,
-      unaryTripleExpr_Sequence_Alts,
+      unaryTripleExprSequence,
+      unaryTripleExprSequenceAlts,
       bracketedTripleExpr,
       tripleConstraint,
       cardinality,
@@ -86,14 +86,14 @@ module_ = Module {
       valueSet,
       valueSetValue,
       iriRange,
-      iriRange_Sequence,
+      iriRangeSequence,
       exclusion,
       include,
       annotation,
-      annotation_Alts,
+      annotationAlts,
       semanticActions,
       codeDecl,
-      codeDecl_Alts,
+      codeDeclAlts,
       literal,
       predicate,
       datatype_,
@@ -101,7 +101,7 @@ module_ = Module {
       tripleExprLabel,
       numericLiteral,
       rdfLiteral,
-      rdfLiteral_Alts_Option,
+      rdfLiteralAltsOption,
       booleanLiteral,
       string_,
       iri,
@@ -109,54 +109,54 @@ module_ = Module {
       blankNode,
       includeSet,
       code,
-      code_Elmt,
+      codeElmt,
       repeatRange,
-      repeatRange_Sequence_Option_Option_Option,
+      repeatRangeSequenceOptionOptionOption,
       rdfType,
       iriRef,
-      iriRef_Elmt,
+      iriRefElmt,
       pnameNs,
       pnameLn,
       atpNameNs,
       atpNameLn,
       regexp,
-      regexp_ListOfAlts_Elmt,
+      regexpListOfAltsElmt,
       blankNodeLabel,
-      blankNodeLabel_Alts,
-      blankNodeLabel_ListOfAlts_Option_Elmt,
+      blankNodeLabelAlts,
+      blankNodeLabelListOfAltsOptionElmt,
       langTag,
       integer_,
       decimal,
       double_,
       stringLiteral1,
-      stringLiteral1_Elmt,
+      stringLiteral1Elmt,
       stringLiteral2,
-      stringLiteral2_Elmt,
+      stringLiteral2Elmt,
       stringLiteralLong1,
-      stringLiteralLong1_Elmt,
-      stringLiteralLong1_Elmt_Sequence,
-      stringLiteralLong1_Elmt_Sequence_Alts_Option,
-      stringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence,
+      stringLiteralLong1Elmt,
+      stringLiteralLong1ElmtSequence,
+      stringLiteralLong1ElmtSequenceAltsOption,
+      stringLiteralLong1ElmtSequenceAltsOptionSequence,
       stringLiteralLong2,
-      stringLiteralLong2_Elmt,
-      stringLiteralLong2_Elmt_Sequence,
-      stringLiteralLong2_Elmt_Sequence_Alts_Option,
-      stringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence,
+      stringLiteralLong2Elmt,
+      stringLiteralLong2ElmtSequence,
+      stringLiteralLong2ElmtSequenceAltsOption,
+      stringLiteralLong2ElmtSequenceAltsOptionSequence,
       uchar,
-      uchar_Sequence,
-      uchar_Sequence2,
+      ucharSequence,
+      ucharSequence2,
       echar,
       pnCharsBase,
       pnCharsU,
       pnChars,
       pnPrefix,
-      pnPrefix_Sequence_Option,
-      pnPrefix_Sequence_Option_Alts,
+      pnPrefixSequenceOption,
+      pnPrefixSequenceOptionAlts,
       pnLocal,
-      pnLocal_Alts,
-      pnLocal_Sequence_Option,
-      pnLocal_Sequence_Option_ListOfAlts_Elmt,
-      pnLocal_Sequence_Option_Alts,
+      pnLocalAlts,
+      pnLocalSequenceOption,
+      pnLocalSequenceOptionListOfAltsElmt,
+      pnLocalSequenceOptionAlts,
       plx,
       percent,
       hex,
@@ -167,10 +167,10 @@ annotation :: TypeDefinition
 annotation = define "Annotation" $
   T.record [
     "Predicate">: shex "Predicate",
-    "alts">: shex "Annotation_Alts"]
+    "alts">: shex "AnnotationAlts"]
 
-annotation_Alts :: TypeDefinition
-annotation_Alts = define "Annotation_Alts" $
+annotationAlts :: TypeDefinition
+annotationAlts = define "AnnotationAlts" $
   T.union [
     "Iri">: shex "Iri",
     "Literal">: shex "Literal"]
@@ -198,18 +198,18 @@ blankNode = define "BlankNode" $ T.wrap $ shex "BlankNodeLabel"
 blankNodeLabel :: TypeDefinition
 blankNodeLabel = define "BlankNodeLabel" $
   T.record [
-    "alts">: shex "BlankNodeLabel_Alts",
-    "ListOfAlts">: T.optional (T.list (shex "BlankNodeLabel_ListOfAlts_Option_Elmt")),
+    "alts">: shex "BlankNodeLabelAlts",
+    "ListOfAlts">: T.optional (T.list (shex "BlankNodeLabelListOfAltsOptionElmt")),
     "PnChars">: shex "PnChars"]
 
-blankNodeLabel_Alts :: TypeDefinition
-blankNodeLabel_Alts = define "BlankNodeLabel_Alts" $
+blankNodeLabelAlts :: TypeDefinition
+blankNodeLabelAlts = define "BlankNodeLabelAlts" $
   T.union [
     "PnCharsU">: shex "PnCharsU",
     "regex">: T.string]
 
-blankNodeLabel_ListOfAlts_Option_Elmt :: TypeDefinition
-blankNodeLabel_ListOfAlts_Option_Elmt = define "BlankNodeLabel_ListOfAlts_Option_Elmt" $
+blankNodeLabelListOfAltsOptionElmt :: TypeDefinition
+blankNodeLabelListOfAltsOptionElmt = define "BlankNodeLabelListOfAltsOptionElmt" $
   T.union [
     "PnChars">: shex "PnChars",
     "Period">: T.unit]
@@ -241,23 +241,23 @@ cardinality = define "Cardinality" $
 
 -- [58] Code
 code :: TypeDefinition
-code = define "Code" $ T.wrap $ T.list $ shex "Code_Elmt"
+code = define "Code" $ T.wrap $ T.list $ shex "CodeElmt"
 
 -- [53] CodeDecl ::= '%' Iri (Code | "%")
 codeDecl :: TypeDefinition
 codeDecl = define "CodeDecl" $
   T.record [
     "Iri">: shex "Iri",
-    "alts">: shex "CodeDecl_Alts"]
+    "alts">: shex "CodeDeclAlts"]
 
-codeDecl_Alts :: TypeDefinition
-codeDecl_Alts = define "CodeDecl_Alts" $
+codeDeclAlts :: TypeDefinition
+codeDeclAlts = define "CodeDeclAlts" $
   T.union [
     "Code">: shex "Code",
     "Percnt">: T.unit]
 
-code_Elmt :: TypeDefinition
-code_Elmt = define "Code_Elmt" $
+codeElmt :: TypeDefinition
+codeElmt = define "CodeElmt" $
   T.union [
     "regex">: T.string,
     "sequence">: T.string,
@@ -324,19 +324,19 @@ inlineShapeAnd = define "InlineShapeAnd" $
 inlineShapeAtom :: TypeDefinition
 inlineShapeAtom = define "InlineShapeAtom" $
   T.union [
-    "sequence">: shex "InlineShapeAtom_Sequence",
-    "sequence2">: shex "InlineShapeAtom_Sequence2",
+    "seq">: shex "InlineShapeAtomSequence",
+    "seq2">: shex "InlineShapeAtomSequence2",
     "sequence3">: shex "ShapeExpression",
     "Period">: T.unit]
 
-inlineShapeAtom_Sequence :: TypeDefinition
-inlineShapeAtom_Sequence = define "InlineShapeAtom_Sequence" $
+inlineShapeAtomSequence :: TypeDefinition
+inlineShapeAtomSequence = define "InlineShapeAtomSequence" $
   T.record [
     "NodeConstraint">: shex "NodeConstraint",
     "InlineShapeOrRef">: T.optional (shex "InlineShapeOrRef")]
 
-inlineShapeAtom_Sequence2 :: TypeDefinition
-inlineShapeAtom_Sequence2 = define "InlineShapeAtom_Sequence2" $
+inlineShapeAtomSequence2 :: TypeDefinition
+inlineShapeAtomSequence2 = define "InlineShapeAtomSequence2" $
   T.record [
     "InlineShapeOrRef">: shex "InlineShapeOrRef",
     "NodeConstraint">: T.optional (shex "NodeConstraint")]
@@ -345,11 +345,11 @@ inlineShapeAtom_Sequence2 = define "InlineShapeAtom_Sequence2" $
 inlineShapeDefinition :: TypeDefinition
 inlineShapeDefinition = define "InlineShapeDefinition" $
   T.record [
-    "listOfAlts">: T.list (shex "InlineShapeDefinition_ListOfAlts_Elmt"),
+    "listOfAlts">: T.list (shex "InlineShapeDefinitionListOfAltsElmt"),
     "TripleExpression">: T.optional (shex "TripleExpression")]
 
-inlineShapeDefinition_ListOfAlts_Elmt :: TypeDefinition
-inlineShapeDefinition_ListOfAlts_Elmt = define "InlineShapeDefinition_ListOfAlts_Elmt" $
+inlineShapeDefinitionListOfAltsElmt :: TypeDefinition
+inlineShapeDefinitionListOfAltsElmt = define "InlineShapeDefinitionListOfAltsElmt" $
   T.union [
     "IncludeSet">: shex "IncludeSet",
     "ExtraPropertySet">: shex "ExtraPropertySet",
@@ -404,21 +404,21 @@ iri = define "Iri" $
 iriRange :: TypeDefinition
 iriRange = define "IriRange" $
   T.union [
-    "sequence">: shex "IriRange_Sequence",
+    "seq">: shex "IriRangeSequence",
     "sequence2">: T.list (shex "Exclusion")]
 
-iriRange_Sequence :: TypeDefinition
-iriRange_Sequence = define "IriRange_Sequence" $
+iriRangeSequence :: TypeDefinition
+iriRangeSequence = define "IriRangeSequence" $
   T.record [
     "Iri">: shex "Iri",
     "Sequence">: T.optional (T.list (shex "Exclusion"))]
 
 -- [18t] IriRef
 iriRef :: TypeDefinition
-iriRef = define "IriRef" $ T.wrap $ T.list $ shex "IriRef_Elmt"
+iriRef = define "IriRef" $ T.wrap $ T.list $ shex "IriRefElmt"
 
-iriRef_Elmt :: TypeDefinition
-iriRef_Elmt = define "IriRef_Elmt" $
+iriRefElmt :: TypeDefinition
+iriRefElmt = define "IriRefElmt" $
   T.union [
     "regex">: T.string,
     "Uchar">: shex "Uchar"]
@@ -455,32 +455,32 @@ nodeConstraint :: TypeDefinition
 nodeConstraint = define "NodeConstraint" $
   T.union [
     "sequence">: T.list (shex "XsFacet"),
-    "sequence2">: shex "NodeConstraint_Sequence2",
-    "sequence3">: shex "NodeConstraint_Sequence3",
-    "sequence4">: shex "NodeConstraint_Sequence4",
-    "sequence5">: shex "NodeConstraint_Sequence5",
+    "seq2">: shex "NodeConstraintSequence2",
+    "seq3">: shex "NodeConstraintSequence3",
+    "seq4">: shex "NodeConstraintSequence4",
+    "seq5">: shex "NodeConstraintSequence5",
     "listOfXsFacet">: T.list (shex "XsFacet")]
 
-nodeConstraint_Sequence2 :: TypeDefinition
-nodeConstraint_Sequence2 = define "NodeConstraint_Sequence2" $
+nodeConstraintSequence2 :: TypeDefinition
+nodeConstraintSequence2 = define "NodeConstraintSequence2" $
   T.record [
     "NonLiteralKind">: shex "NonLiteralKind",
     "listOfStringFacet">: T.list (shex "StringFacet")]
 
-nodeConstraint_Sequence3 :: TypeDefinition
-nodeConstraint_Sequence3 = define "NodeConstraint_Sequence3" $
+nodeConstraintSequence3 :: TypeDefinition
+nodeConstraintSequence3 = define "NodeConstraintSequence3" $
   T.record [
     "Datatype">: shex "Datatype",
     "listOfXsFacet">: T.list (shex "XsFacet")]
 
-nodeConstraint_Sequence4 :: TypeDefinition
-nodeConstraint_Sequence4 = define "NodeConstraint_Sequence4" $
+nodeConstraintSequence4 :: TypeDefinition
+nodeConstraintSequence4 = define "NodeConstraintSequence4" $
   T.record [
     "ValueSet">: shex "ValueSet",
     "listOfXsFacet">: T.list (shex "XsFacet")]
 
-nodeConstraint_Sequence5 :: TypeDefinition
-nodeConstraint_Sequence5 = define "NodeConstraint_Sequence5" $
+nodeConstraintSequence5 :: TypeDefinition
+nodeConstraintSequence5 = define "NodeConstraintSequence5" $
   T.record [
     "ValueSet">: shex "ValueSet",
     "listOfXsFacet">: T.list (shex "XsFacet")]
@@ -498,16 +498,16 @@ notStartAction :: TypeDefinition
 notStartAction = define "NotStartAction" $
   T.union [
     "start">: shex "ShapeExpression",
-    "shapeExprDecl">: shex "NotStartAction_ShapeExprDecl"]
+    "declaration">: shex "NotStartActionShapeExprDecl"]
 
-notStartAction_ShapeExprDecl :: TypeDefinition
-notStartAction_ShapeExprDecl = define "NotStartAction_ShapeExprDecl" $
+notStartActionShapeExprDecl :: TypeDefinition
+notStartActionShapeExprDecl = define "NotStartActionShapeExprDecl" $
   T.record [
     "ShapeExprLabel">: shex "ShapeExprLabel",
-    "alts">: shex "NotStartAction_ShapeExprDecl_Alts"]
+    "alts">: shex "NotStartActionShapeExprDeclAlts"]
 
-notStartAction_ShapeExprDecl_Alts :: TypeDefinition
-notStartAction_ShapeExprDecl_Alts = define "NotStartAction_ShapeExprDecl_Alts" $
+notStartActionShapeExprDeclAlts :: TypeDefinition
+notStartActionShapeExprDeclAlts = define "NotStartActionShapeExprDeclAlts" $
   T.union [
     "ShapeExpression">: shex "ShapeExpression",
     "EXTERNAL">: T.unit]
@@ -516,17 +516,17 @@ notStartAction_ShapeExprDecl_Alts = define "NotStartAction_ShapeExprDecl_Alts" $
 numericFacet :: TypeDefinition
 numericFacet = define "NumericFacet" $
   T.union [
-    "sequence">: shex "NumericFacet_Sequence",
-    "sequence2">: shex "NumericFacet_Sequence2"]
+    "seq">: shex "NumericFacetSequence",
+    "seq2">: shex "NumericFacetSequence2"]
 
-numericFacet_Sequence :: TypeDefinition
-numericFacet_Sequence = define "NumericFacet_Sequence" $
+numericFacetSequence :: TypeDefinition
+numericFacetSequence = define "NumericFacetSequence" $
   T.record [
     "NumericRange">: shex "NumericRange",
     "NumericLiteral">: shex "NumericLiteral"]
 
-numericFacet_Sequence2 :: TypeDefinition
-numericFacet_Sequence2 = define "NumericFacet_Sequence2" $
+numericFacetSequence2 :: TypeDefinition
+numericFacetSequence2 = define "NumericFacetSequence2" $
   T.record [
     "NumericLength">: shex "NumericLength",
     "Integer">: shex "Integer"]
@@ -602,36 +602,36 @@ pnCharsU = define "PnCharsU" $
 pnLocal :: TypeDefinition
 pnLocal = define "PnLocal" $
   T.record [
-    "alts">: shex "PnLocal_Alts",
-    "Sequence">: T.optional (shex "PnLocal_Sequence_Option")]
+    "alts">: shex "PnLocalAlts",
+    "Sequence">: T.optional (shex "PnLocalSequenceOption")]
 
 -- [173s] PnLocalEsc
 pnLocalEsc :: TypeDefinition
 pnLocalEsc = define "PnLocalEsc" $ T.wrap T.string
 
-pnLocal_Alts :: TypeDefinition
-pnLocal_Alts = define "PnLocal_Alts" $
+pnLocalAlts :: TypeDefinition
+pnLocalAlts = define "PnLocalAlts" $
   T.union [
     "PnCharsU">: shex "PnCharsU",
     "Colon">: T.unit,
     "regex">: T.string,
     "Plx">: shex "Plx"]
 
-pnLocal_Sequence_Option :: TypeDefinition
-pnLocal_Sequence_Option = define "PnLocal_Sequence_Option" $
+pnLocalSequenceOption :: TypeDefinition
+pnLocalSequenceOption = define "PnLocalSequenceOption" $
   T.record [
-    "listOfAlts">: T.list (shex "PnLocal_Sequence_Option_ListOfAlts_Elmt"),
-    "alts">: shex "PnLocal_Sequence_Option_Alts"]
+    "listOfAlts">: T.list (shex "PnLocalSequenceOptionListOfAltsElmt"),
+    "alts">: shex "PnLocalSequenceOptionAlts"]
 
-pnLocal_Sequence_Option_Alts :: TypeDefinition
-pnLocal_Sequence_Option_Alts = define "PnLocal_Sequence_Option_Alts" $
+pnLocalSequenceOptionAlts :: TypeDefinition
+pnLocalSequenceOptionAlts = define "PnLocalSequenceOptionAlts" $
   T.union [
     "PnChars">: shex "PnChars",
     "Colon">: T.unit,
     "Plx">: shex "Plx"]
 
-pnLocal_Sequence_Option_ListOfAlts_Elmt :: TypeDefinition
-pnLocal_Sequence_Option_ListOfAlts_Elmt = define "PnLocal_Sequence_Option_ListOfAlts_Elmt" $
+pnLocalSequenceOptionListOfAltsElmt :: TypeDefinition
+pnLocalSequenceOptionListOfAltsElmt = define "PnLocalSequenceOptionListOfAltsElmt" $
   T.union [
     "PnChars">: shex "PnChars",
     "Period">: T.unit,
@@ -643,16 +643,16 @@ pnPrefix :: TypeDefinition
 pnPrefix = define "PnPrefix" $
   T.record [
     "PnCharsBase">: shex "PnCharsBase",
-    "Sequence">: T.optional (shex "PnPrefix_Sequence_Option")]
+    "Sequence">: T.optional (shex "PnPrefixSequenceOption")]
 
-pnPrefix_Sequence_Option :: TypeDefinition
-pnPrefix_Sequence_Option = define "PnPrefix_Sequence_Option" $
+pnPrefixSequenceOption :: TypeDefinition
+pnPrefixSequenceOption = define "PnPrefixSequenceOption" $
   T.record [
-    "alts">: shex "PnPrefix_Sequence_Option_Alts",
+    "alts">: shex "PnPrefixSequenceOptionAlts",
     "PnChars">: shex "PnChars"]
 
-pnPrefix_Sequence_Option_Alts :: TypeDefinition
-pnPrefix_Sequence_Option_Alts = define "PnPrefix_Sequence_Option_Alts" $
+pnPrefixSequenceOptionAlts :: TypeDefinition
+pnPrefixSequenceOptionAlts = define "PnPrefixSequenceOptionAlts" $
   T.union [
     "PnChars">: shex "PnChars",
     "Period">: T.unit]
@@ -694,10 +694,10 @@ rdfLiteral :: TypeDefinition
 rdfLiteral = define "RdfLiteral" $
   T.record [
     "String">: shex "String",
-    "Alts">: T.optional (shex "RdfLiteral_Alts_Option")]
+    "Alts">: T.optional (shex "RdfLiteralAltsOption")]
 
-rdfLiteral_Alts_Option :: TypeDefinition
-rdfLiteral_Alts_Option = define "RdfLiteral_Alts_Option" $
+rdfLiteralAltsOption :: TypeDefinition
+rdfLiteralAltsOption = define "RdfLiteralAltsOption" $
   T.union [
     "LangTag">: shex "LangTag",
     "sequence">: shex "Datatype"]
@@ -710,11 +710,11 @@ rdfType = define "RdfType" $ T.wrap T.unit
 regexp :: TypeDefinition
 regexp = define "Regexp" $
   T.record [
-    "listOfAlts">: T.list (shex "Regexp_ListOfAlts_Elmt"),
+    "listOfAlts">: T.list (shex "RegexpListOfAltsElmt"),
     "listOfRegex">: T.list T.string]
 
-regexp_ListOfAlts_Elmt :: TypeDefinition
-regexp_ListOfAlts_Elmt = define "Regexp_ListOfAlts_Elmt" $
+regexpListOfAltsElmt :: TypeDefinition
+regexpListOfAltsElmt = define "RegexpListOfAltsElmt" $
   T.union [
     "regex">: T.string,
     "sequence">: T.string,
@@ -725,10 +725,10 @@ repeatRange :: TypeDefinition
 repeatRange = define "RepeatRange" $
   T.record [
     "Integer">: shex "Integer",
-    "Sequence">: T.optional (T.optional (T.optional (shex "RepeatRange_Sequence_Option_Option_Option")))]
+    "Sequence">: T.optional (T.optional (T.optional (shex "RepeatRangeSequenceOptionOptionOption")))]
 
-repeatRange_Sequence_Option_Option_Option :: TypeDefinition
-repeatRange_Sequence_Option_Option_Option = define "RepeatRange_Sequence_Option_Option_Option" $
+repeatRangeSequenceOptionOptionOption :: TypeDefinition
+repeatRangeSequenceOptionOptionOption = define "RepeatRangeSequenceOptionOptionOption" $
   T.union [
     "Integer">: shex "Integer",
     "Ast">: T.unit]
@@ -752,13 +752,13 @@ shapeAnd = define "ShapeAnd" $
 shapeAtom :: TypeDefinition
 shapeAtom = define "ShapeAtom" $
   T.union [
-    "sequence">: shex "ShapeAtom_Sequence",
+    "seq">: shex "ShapeAtomSequence",
     "ShapeOrRef">: shex "ShapeOrRef",
     "sequence2">: shex "ShapeExpression",
     "Period">: T.unit]
 
-shapeAtom_Sequence :: TypeDefinition
-shapeAtom_Sequence = define "ShapeAtom_Sequence" $
+shapeAtomSequence :: TypeDefinition
+shapeAtomSequence = define "ShapeAtomSequence" $
   T.record [
     "NodeConstraint">: shex "NodeConstraint",
     "ShapeOrRef">: T.optional (shex "ShapeOrRef")]
@@ -767,13 +767,13 @@ shapeAtom_Sequence = define "ShapeAtom_Sequence" $
 shapeDefinition :: TypeDefinition
 shapeDefinition = define "ShapeDefinition" $
   T.record [
-    "listOfAlts">: T.list (shex "ShapeDefinition_ListOfAlts_Elmt"),
+    "listOfAlts">: T.list (shex "ShapeDefinitionListOfAltsElmt"),
     "TripleExpression">: T.optional (shex "TripleExpression"),
     "listOfAnnotation">: T.list (shex "Annotation"),
     "SemanticActions">: shex "SemanticActions"]
 
-shapeDefinition_ListOfAlts_Elmt :: TypeDefinition
-shapeDefinition_ListOfAlts_Elmt = define "ShapeDefinition_ListOfAlts_Elmt" $
+shapeDefinitionListOfAltsElmt :: TypeDefinition
+shapeDefinitionListOfAltsElmt = define "ShapeDefinitionListOfAltsElmt" $
   T.union [
     "IncludeSet">: shex "IncludeSet",
     "ExtraPropertySet">: shex "ExtraPropertySet",
@@ -821,17 +821,17 @@ shexDoc :: TypeDefinition
 shexDoc = define "ShexDoc" $
   T.record [
     "listOfDirective">: T.list (shex "Directive"),
-    "Sequence">: T.optional (shex "ShexDoc_Sequence_Option"),
+    "Sequence">: T.optional (shex "ShexDocSequenceOption"),
     "PrefixDecl">: shex "PrefixDecl"]
 
-shexDoc_Sequence_Option :: TypeDefinition
-shexDoc_Sequence_Option = define "ShexDoc_Sequence_Option" $
+shexDocSequenceOption :: TypeDefinition
+shexDocSequenceOption = define "ShexDocSequenceOption" $
   T.record [
-    "alts">: shex "ShexDoc_Sequence_Option_Alts",
+    "alts">: shex "ShexDocSequenceOptionAlts",
     "listOfStatement">: T.list (shex "Statement")]
 
-shexDoc_Sequence_Option_Alts :: TypeDefinition
-shexDoc_Sequence_Option_Alts = define "ShexDoc_Sequence_Option_Alts" $
+shexDocSequenceOptionAlts :: TypeDefinition
+shexDocSequenceOptionAlts = define "ShexDocSequenceOptionAlts" $
   T.union [
     "NotStartAction">: shex "NotStartAction",
     "StartActions">: shex "StartActions"]
@@ -858,11 +858,11 @@ statement = define "Statement" $
 stringFacet :: TypeDefinition
 stringFacet = define "StringFacet" $
   T.union [
-    "sequence">: shex "StringFacet_Sequence",
+    "seq">: shex "StringFacetSequence",
     "Regexp">: shex "Regexp"]
 
-stringFacet_Sequence :: TypeDefinition
-stringFacet_Sequence = define "StringFacet_Sequence" $
+stringFacetSequence :: TypeDefinition
+stringFacetSequence = define "StringFacetSequence" $
   T.record [
     "StringLength">: shex "StringLength",
     "Integer">: shex "Integer"]
@@ -877,10 +877,10 @@ stringLength = define "StringLength" $
 
 -- [156s] StringLiteral1
 stringLiteral1 :: TypeDefinition
-stringLiteral1 = define "StringLiteral1" $ T.wrap $ T.list $ shex "StringLiteral1_Elmt"
+stringLiteral1 = define "StringLiteral1" $ T.wrap $ T.list $ shex "StringLiteral1Elmt"
 
-stringLiteral1_Elmt :: TypeDefinition
-stringLiteral1_Elmt = define "StringLiteral1_Elmt" $
+stringLiteral1Elmt :: TypeDefinition
+stringLiteral1Elmt = define "StringLiteral1Elmt" $
   T.union [
     "regex">: T.string,
     "Echar">: shex "Echar",
@@ -888,10 +888,10 @@ stringLiteral1_Elmt = define "StringLiteral1_Elmt" $
 
 -- [157s] StringLiteral2
 stringLiteral2 :: TypeDefinition
-stringLiteral2 = define "StringLiteral2" $ T.wrap $ T.list $ shex "StringLiteral2_Elmt"
+stringLiteral2 = define "StringLiteral2" $ T.wrap $ T.list $ shex "StringLiteral2Elmt"
 
-stringLiteral2_Elmt :: TypeDefinition
-stringLiteral2_Elmt = define "StringLiteral2_Elmt" $
+stringLiteral2Elmt :: TypeDefinition
+stringLiteral2Elmt = define "StringLiteral2Elmt" $
   T.union [
     "regex">: T.string,
     "Echar">: shex "Echar",
@@ -899,57 +899,57 @@ stringLiteral2_Elmt = define "StringLiteral2_Elmt" $
 
 -- [158s] StringLiteralLong1
 stringLiteralLong1 :: TypeDefinition
-stringLiteralLong1 = define "StringLiteralLong1" $ T.wrap $ T.list $ shex "StringLiteralLong1_Elmt"
+stringLiteralLong1 = define "StringLiteralLong1" $ T.wrap $ T.list $ shex "StringLiteralLong1Elmt"
 
-stringLiteralLong1_Elmt :: TypeDefinition
-stringLiteralLong1_Elmt = define "StringLiteralLong1_Elmt" $
+stringLiteralLong1Elmt :: TypeDefinition
+stringLiteralLong1Elmt = define "StringLiteralLong1Elmt" $
   T.union [
-    "sequence">: shex "StringLiteralLong1_Elmt_Sequence",
+    "seq">: shex "StringLiteralLong1ElmtSequence",
     "Echar">: shex "Echar",
     "Uchar">: shex "Uchar"]
 
-stringLiteralLong1_Elmt_Sequence :: TypeDefinition
-stringLiteralLong1_Elmt_Sequence = define "StringLiteralLong1_Elmt_Sequence" $
+stringLiteralLong1ElmtSequence :: TypeDefinition
+stringLiteralLong1ElmtSequence = define "StringLiteralLong1ElmtSequence" $
   T.record [
-    "Alts">: T.optional (shex "StringLiteralLong1_Elmt_Sequence_Alts_Option"),
+    "Alts">: T.optional (shex "StringLiteralLong1ElmtSequenceAltsOption"),
     "regex">: T.string]
 
-stringLiteralLong1_Elmt_Sequence_Alts_Option :: TypeDefinition
-stringLiteralLong1_Elmt_Sequence_Alts_Option = define "StringLiteralLong1_Elmt_Sequence_Alts_Option" $
+stringLiteralLong1ElmtSequenceAltsOption :: TypeDefinition
+stringLiteralLong1ElmtSequenceAltsOption = define "StringLiteralLong1ElmtSequenceAltsOption" $
   T.union [
     "Apos">: T.unit,
-    "sequence">: shex "StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence"]
+    "seq">: shex "StringLiteralLong1ElmtSequenceAltsOptionSequence"]
 
-stringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence :: TypeDefinition
-stringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence = define "StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence" $
-  T.record []
+stringLiteralLong1ElmtSequenceAltsOptionSequence :: TypeDefinition
+stringLiteralLong1ElmtSequenceAltsOptionSequence = define "StringLiteralLong1ElmtSequenceAltsOptionSequence" $
+  T.unit
 
 -- [159s] StringLiteralLong2
 stringLiteralLong2 :: TypeDefinition
-stringLiteralLong2 = define "StringLiteralLong2" $ T.wrap $ T.list $ shex "StringLiteralLong2_Elmt"
+stringLiteralLong2 = define "StringLiteralLong2" $ T.wrap $ T.list $ shex "StringLiteralLong2Elmt"
 
-stringLiteralLong2_Elmt :: TypeDefinition
-stringLiteralLong2_Elmt = define "StringLiteralLong2_Elmt" $
+stringLiteralLong2Elmt :: TypeDefinition
+stringLiteralLong2Elmt = define "StringLiteralLong2Elmt" $
   T.union [
-    "sequence">: shex "StringLiteralLong2_Elmt_Sequence",
+    "seq">: shex "StringLiteralLong2ElmtSequence",
     "Echar">: shex "Echar",
     "Uchar">: shex "Uchar"]
 
-stringLiteralLong2_Elmt_Sequence :: TypeDefinition
-stringLiteralLong2_Elmt_Sequence = define "StringLiteralLong2_Elmt_Sequence" $
+stringLiteralLong2ElmtSequence :: TypeDefinition
+stringLiteralLong2ElmtSequence = define "StringLiteralLong2ElmtSequence" $
   T.record [
-    "Alts">: T.optional (shex "StringLiteralLong2_Elmt_Sequence_Alts_Option"),
+    "Alts">: T.optional (shex "StringLiteralLong2ElmtSequenceAltsOption"),
     "regex">: T.string]
 
-stringLiteralLong2_Elmt_Sequence_Alts_Option :: TypeDefinition
-stringLiteralLong2_Elmt_Sequence_Alts_Option = define "StringLiteralLong2_Elmt_Sequence_Alts_Option" $
+stringLiteralLong2ElmtSequenceAltsOption :: TypeDefinition
+stringLiteralLong2ElmtSequenceAltsOption = define "StringLiteralLong2ElmtSequenceAltsOption" $
   T.union [
     "Quot">: T.unit,
-    "sequence">: shex "StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence"]
+    "seq">: shex "StringLiteralLong2ElmtSequenceAltsOptionSequence"]
 
-stringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence :: TypeDefinition
-stringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence = define "StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence" $
-  T.record []
+stringLiteralLong2ElmtSequenceAltsOptionSequence :: TypeDefinition
+stringLiteralLong2ElmtSequenceAltsOptionSequence = define "StringLiteralLong2ElmtSequenceAltsOptionSequence" $
+  T.unit
 
 -- [135s] String
 string_ :: TypeDefinition
@@ -986,19 +986,19 @@ tripleExpression = define "TripleExpression" $ T.wrap $ shex "OneOfTripleExpr"
 uchar :: TypeDefinition
 uchar = define "Uchar" $
   T.union [
-    "sequence">: shex "Uchar_Sequence",
-    "sequence2">: shex "Uchar_Sequence2"]
+    "seq">: shex "UcharSequence",
+    "seq2">: shex "UcharSequence2"]
 
-uchar_Sequence :: TypeDefinition
-uchar_Sequence = define "Uchar_Sequence" $
+ucharSequence :: TypeDefinition
+ucharSequence = define "UcharSequence" $
   T.record [
     "Hex">: shex "Hex",
     "Hex2">: shex "Hex",
     "Hex3">: shex "Hex",
     "Hex4">: shex "Hex"]
 
-uchar_Sequence2 :: TypeDefinition
-uchar_Sequence2 = define "Uchar_Sequence2" $
+ucharSequence2 :: TypeDefinition
+ucharSequence2 = define "UcharSequence2" $
   T.record [
     "Hex">: shex "Hex",
     "Hex2">: shex "Hex",
@@ -1013,17 +1013,17 @@ uchar_Sequence2 = define "Uchar_Sequence2" $
 unaryTripleExpr :: TypeDefinition
 unaryTripleExpr = define "UnaryTripleExpr" $
   T.union [
-    "sequence">: shex "UnaryTripleExpr_Sequence",
+    "seq">: shex "UnaryTripleExprSequence",
     "Include">: shex "Include"]
 
-unaryTripleExpr_Sequence :: TypeDefinition
-unaryTripleExpr_Sequence = define "UnaryTripleExpr_Sequence" $
+unaryTripleExprSequence :: TypeDefinition
+unaryTripleExprSequence = define "UnaryTripleExprSequence" $
   T.record [
     "Sequence">: T.optional (shex "TripleExprLabel"),
-    "alts">: shex "UnaryTripleExpr_Sequence_Alts"]
+    "alts">: shex "UnaryTripleExprSequenceAlts"]
 
-unaryTripleExpr_Sequence_Alts :: TypeDefinition
-unaryTripleExpr_Sequence_Alts = define "UnaryTripleExpr_Sequence_Alts" $
+unaryTripleExprSequenceAlts :: TypeDefinition
+unaryTripleExprSequenceAlts = define "UnaryTripleExprSequenceAlts" $
   T.union [
     "TripleConstraint">: shex "TripleConstraint",
     "BracketedTripleExpr">: shex "BracketedTripleExpr"]

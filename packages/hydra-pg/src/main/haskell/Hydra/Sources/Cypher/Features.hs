@@ -29,7 +29,12 @@ module_ = Module {
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
       ++ " Current as of August 2024."))}
   where
-    definitions = featureSetToType <$> flatten openCypherFeatures
+    -- Sorted by DSL definition name (not traversal order): 'flatten' is a
+    -- pre-order (parent-first) walk, so the root FeatureSet's own type
+    -- ("CypherFeatures") would otherwise precede its alphabetically-earlier
+    -- children (e.g. "ArithmeticFeatures"), violating the alphabetical
+    -- definitions-list convention.
+    definitions = L.sortOn typeDefinitionName (featureSetToType <$> flatten openCypherFeatures)
       where
         flatten fs = if L.null children then [] else (fs:(L.concat (flatten <$> children)))
           where

@@ -76,11 +76,11 @@ module_ = Module {
       toDefinition sentenceContentToExpr,
       toDefinition sentenceToExpr,
       toDefinition sortToExpr,
-      toDefinition termToExpr,
       toDefinition term0ToExpr,
-      toDefinition term1ToExpr,
-      toDefinition term10ToExpr,
       toDefinition term100ToExpr,
+      toDefinition term10ToExpr,
+      toDefinition term1ToExpr,
+      toDefinition termToExpr,
       toDefinition theoremBodyToExpr,
       toDefinition typeToExpr]
 

@@ -26,17 +26,17 @@ module_ = Module {
       relation,
       variable,
       program,
-      program_Elmt,
+      programElmt,
       fact,
       rule_,
       atom,
       atomList,
-      atomList_Multiple,
+      atomListMultiple,
       term,
       termList,
-      termList_Multiple,
+      termListMultiple,
       constantList,
-      constantList_Multiple]
+      constantListMultiple]
 
 atom :: TypeDefinition
 atom = define "Atom" $
@@ -48,10 +48,10 @@ atomList :: TypeDefinition
 atomList = define "AtomList" $
   T.union [
     "single">: dl "Atom",
-    "multiple">: dl "AtomList_Multiple"]
+    "many">: dl "AtomListMultiple"]
 
-atomList_Multiple :: TypeDefinition
-atomList_Multiple = define "AtomList_Multiple" $
+atomListMultiple :: TypeDefinition
+atomListMultiple = define "AtomListMultiple" $
   T.record [
     "Atom">: dl "Atom",
     "AtomList">: dl "AtomList"]
@@ -63,10 +63,10 @@ constantList :: TypeDefinition
 constantList = define "ConstantList" $
   T.union [
     "single">: dl "Constant",
-    "multiple">: dl "ConstantList_Multiple"]
+    "many">: dl "ConstantListMultiple"]
 
-constantList_Multiple :: TypeDefinition
-constantList_Multiple = define "ConstantList_Multiple" $
+constantListMultiple :: TypeDefinition
+constantListMultiple = define "ConstantListMultiple" $
   T.record [
     "Constant">: dl "Constant",
     "ConstantList">: dl "ConstantList"]
@@ -81,10 +81,10 @@ fact = define "Fact" $
     "ConstantList">: dl "ConstantList"]
 
 program :: TypeDefinition
-program = define "Program" $ T.wrap $ T.list $ dl "Program_Elmt"
+program = define "Program" $ T.wrap $ T.list $ dl "ProgramElmt"
 
-program_Elmt :: TypeDefinition
-program_Elmt = define "Program_Elmt" $
+programElmt :: TypeDefinition
+programElmt = define "ProgramElmt" $
   T.union [
     "Fact">: dl "Fact",
     "Rule">: dl "Rule"]
@@ -108,10 +108,10 @@ termList :: TypeDefinition
 termList = define "TermList" $
   T.union [
     "single">: dl "Term",
-    "multiple">: dl "TermList_Multiple"]
+    "many">: dl "TermListMultiple"]
 
-termList_Multiple :: TypeDefinition
-termList_Multiple = define "TermList_Multiple" $
+termListMultiple :: TypeDefinition
+termListMultiple = define "TermListMultiple" $
   T.record [
     "Term">: dl "Term",
     "TermList">: dl "TermList"]

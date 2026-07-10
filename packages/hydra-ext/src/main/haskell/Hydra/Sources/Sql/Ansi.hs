@@ -57,12 +57,12 @@ module_ = Module {
       booleanPredicand,
       booleanPrimary,
       booleanTerm,
-      booleanTerm_And,
+      booleanTermAnd,
       booleanTest,
-      booleanTest_Sequence_Option,
+      booleanTestSequenceOption,
       booleanType,
       booleanValueExpression,
-      booleanValueExpression_Or,
+      booleanValueExpressionOr,
       caseExpression,
       castSpecification,
       characterSetSpecification,
@@ -73,8 +73,8 @@ module_ = Module {
       collectionValueExpression,
       columnConstraintDefinition,
       columnDefinition,
-      columnDefinition_TypeOrDomain_Option,
-      columnDefinition_DefaultOrIdentityOrGeneration_Option,
+      columnDefinitionTypeOrDomainOption,
+      columnDefinitionDefaultOrIdentityOrGenerationOption,
       columnNameList,
       columnOptions,
       columnReference,
@@ -90,9 +90,9 @@ module_ = Module {
       datetimeValueExpression,
       defaultClause,
       exactNumericType,
-      exactNumericType_Numeric_Option,
-      exactNumericType_Decimal_Option,
-      exactNumericType_Dec_Option,
+      exactNumericTypeNumericOption,
+      exactNumericTypeDecimalOption,
+      exactNumericTypeDecOption,
       fieldReference,
       fromConstructor,
       fromDefault,
@@ -126,8 +126,8 @@ module_ = Module {
       parenthesizedValueExpression,
       precision,
       predefinedType,
-      predefinedType_String,
-      predefinedType_NationalString,
+      predefinedTypeString,
+      predefinedTypeNationalString,
       predicate,
       queryExpression,
       referenceScopeCheck,
@@ -151,7 +151,7 @@ module_ = Module {
       tableCommitAction,
       tableConstraintDefinition,
       tableContentsSource,
-      tableContentsSource_Subtable,
+      tableContentsSourceSubtable,
       tableDefinition,
       tableElement,
       tableElementList,
@@ -300,10 +300,10 @@ booleanTerm :: TypeDefinition
 booleanTerm = define "BooleanTerm" $
   T.union [
     "factor">: sql "BooleanFactor",
-    "and">: sql "BooleanTerm_And"]
+    "conjunction">: sql "BooleanTermAnd"]
 
-booleanTerm_And :: TypeDefinition
-booleanTerm_And = define "BooleanTerm_And" $
+booleanTermAnd :: TypeDefinition
+booleanTermAnd = define "BooleanTermAnd" $
   T.record [
     "lhs">: sql "BooleanTerm",
     "rhs">: sql "BooleanFactor"]
@@ -312,10 +312,10 @@ booleanTest :: TypeDefinition
 booleanTest = define "BooleanTest" $
   T.record [
     "BooleanPrimary">: sql "BooleanPrimary",
-    "Sequence">: T.optional (sql "BooleanTest_Sequence_Option")]
+    "Sequence">: T.optional (sql "BooleanTestSequenceOption")]
 
-booleanTest_Sequence_Option :: TypeDefinition
-booleanTest_Sequence_Option = define "BooleanTest_Sequence_Option" $
+booleanTestSequenceOption :: TypeDefinition
+booleanTestSequenceOption = define "BooleanTestSequenceOption" $
   T.record [
     "NOT">: T.optional T.unit,
     "TruthValue">: sql "TruthValue"]
@@ -327,10 +327,10 @@ booleanValueExpression :: TypeDefinition
 booleanValueExpression = define "BooleanValueExpression" $
   T.union [
     "term">: sql "BooleanTerm",
-    "or">: sql "BooleanValueExpression_Or"]
+    "disjunction">: sql "BooleanValueExpressionOr"]
 
-booleanValueExpression_Or :: TypeDefinition
-booleanValueExpression_Or = define "BooleanValueExpression_Or" $
+booleanValueExpressionOr :: TypeDefinition
+booleanValueExpressionOr = define "BooleanValueExpressionOr" $
   T.record [
     "lhs">: sql "BooleanValueExpression",
     "rhs">: sql "BooleanTerm"]
@@ -384,21 +384,21 @@ columnDefinition :: TypeDefinition
 columnDefinition = define "ColumnDefinition" $
   T.record [
     "name">: sql "ColumnName",
-    "typeOrDomain">: T.optional (sql "ColumnDefinition_TypeOrDomain_Option"),
+    "typeOrDomain">: T.optional (sql "ColumnDefinitionTypeOrDomainOption"),
     "refScope">: T.optional (sql "ReferenceScopeCheck"),
-    "defaultOrIdentityOrGeneration">: T.optional (sql "ColumnDefinition_DefaultOrIdentityOrGeneration_Option"),
+    "defaultOrIdentityOrGeneration">: T.optional (sql "ColumnDefinitionDefaultOrIdentityOrGenerationOption"),
     "constraints">: T.list (sql "ColumnConstraintDefinition"),
     "collate">: T.optional (sql "CollateClause")]
 
-columnDefinition_DefaultOrIdentityOrGeneration_Option :: TypeDefinition
-columnDefinition_DefaultOrIdentityOrGeneration_Option = define "ColumnDefinition_DefaultOrIdentityOrGeneration_Option" $
+columnDefinitionDefaultOrIdentityOrGenerationOption :: TypeDefinition
+columnDefinitionDefaultOrIdentityOrGenerationOption = define "ColumnDefinitionDefaultOrIdentityOrGenerationOption" $
   T.union [
     "DefaultClause">: sql "DefaultClause",
     "IdentityColumnSpecification">: sql "IdentityColumnSpecification",
     "GenerationClause">: sql "GenerationClause"]
 
-columnDefinition_TypeOrDomain_Option :: TypeDefinition
-columnDefinition_TypeOrDomain_Option = define "ColumnDefinition_TypeOrDomain_Option" $
+columnDefinitionTypeOrDomainOption :: TypeDefinition
+columnDefinitionTypeOrDomainOption = define "ColumnDefinitionTypeOrDomainOption" $
   T.union [
     "DataType">: sql "DataType",
     "DomainName">: sql "DomainName"]
@@ -476,28 +476,28 @@ defaultClause = define "DefaultClause" $ T.wrap T.unit
 exactNumericType :: TypeDefinition
 exactNumericType = define "ExactNumericType" $
   T.union [
-    "numeric">: T.optional (sql "ExactNumericType_Numeric_Option"),
-    "decimal">: T.optional (sql "ExactNumericType_Decimal_Option"),
-    "dec">: T.optional (sql "ExactNumericType_Dec_Option"),
+    "numeric">: T.optional (sql "ExactNumericTypeNumericOption"),
+    "decimal">: T.optional (sql "ExactNumericTypeDecimalOption"),
+    "dec">: T.optional (sql "ExactNumericTypeDecOption"),
     "smallint">: T.unit,
     "integer">: T.unit,
     "int">: T.unit,
     "bigint">: T.unit]
 
-exactNumericType_Dec_Option :: TypeDefinition
-exactNumericType_Dec_Option = define "ExactNumericType_Dec_Option" $
+exactNumericTypeDecOption :: TypeDefinition
+exactNumericTypeDecOption = define "ExactNumericTypeDecOption" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.optional (sql "Scale")]
 
-exactNumericType_Decimal_Option :: TypeDefinition
-exactNumericType_Decimal_Option = define "ExactNumericType_Decimal_Option" $
+exactNumericTypeDecimalOption :: TypeDefinition
+exactNumericTypeDecimalOption = define "ExactNumericTypeDecimalOption" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.optional (sql "Scale")]
 
-exactNumericType_Numeric_Option :: TypeDefinition
-exactNumericType_Numeric_Option = define "ExactNumericType_Numeric_Option" $
+exactNumericTypeNumericOption :: TypeDefinition
+exactNumericTypeNumericOption = define "ExactNumericTypeNumericOption" $
   T.record [
     "Precision">: sql "Precision",
     "Sequence">: T.optional (sql "Scale")]
@@ -653,22 +653,22 @@ precision = define "Precision" $ T.wrap $ sql "UnsignedInteger"
 predefinedType :: TypeDefinition
 predefinedType = define "PredefinedType" $
   T.union [
-    "string">: sql "PredefinedType_String",
-    "nationalString">: sql "PredefinedType_NationalString",
+    "stringType">: sql "PredefinedTypeString",
+    "nationalStringType">: sql "PredefinedTypeNationalString",
     "blob">: sql "BinaryLargeObjectStringType",
     "numeric">: sql "NumericType",
     "boolean">: sql "BooleanType",
     "datetime">: sql "DatetimeType",
     "interval">: sql "IntervalType"]
 
-predefinedType_NationalString :: TypeDefinition
-predefinedType_NationalString = define "PredefinedType_NationalString" $
+predefinedTypeNationalString :: TypeDefinition
+predefinedTypeNationalString = define "PredefinedTypeNationalString" $
   T.record [
     "type">: sql "NationalCharacterStringType",
     "collate">: T.optional (sql "CollateClause")]
 
-predefinedType_String :: TypeDefinition
-predefinedType_String = define "PredefinedType_String" $
+predefinedTypeString :: TypeDefinition
+predefinedTypeString = define "PredefinedTypeString" $
   T.record [
     "type">: sql "CharacterStringType",
     "characters">: T.optional (sql "CharacterSetSpecification"),
@@ -746,11 +746,11 @@ tableContentsSource :: TypeDefinition
 tableContentsSource = define "TableContentsSource" $
   T.union [
     "list">: sql "TableElementList",
-    "subtable">: sql "TableContentsSource_Subtable",
+    "subtableOf">: sql "TableContentsSourceSubtable",
     "subquery">: sql "AsSubqueryClause"]
 
-tableContentsSource_Subtable :: TypeDefinition
-tableContentsSource_Subtable = define "TableContentsSource_Subtable" $
+tableContentsSourceSubtable :: TypeDefinition
+tableContentsSourceSubtable = define "TableContentsSourceSubtable" $
   T.record [
     "type">: sql "PathResolvedUserDefinedTypeName",
     "subtable">: T.optional (sql "SubtableClause"),

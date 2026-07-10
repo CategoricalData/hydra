@@ -85,11 +85,11 @@ module_ = Module {
       toDefinition encodeTypeDefinition,
       toDefinition encodeValType,
       toDefinition extractLambdaParams,
-      toDefinition peelLambdaApp,
       toDefinition extractParamTypes,
       toDefinition extractSignature,
       toDefinition hexEscapeString,
       toDefinition moduleToWasm,
+      toDefinition peelLambdaApp,
       toDefinition stringDataSegment]
 
 
@@ -111,6 +111,7 @@ module_ = Module {
 -- that type.
 buildFieldOffsets :: TypedTermDefinition (Graph -> M.Map Name [(Name, Int)])
 buildFieldOffsets = def "buildFieldOffsets" $
+  doc "Build a module-level field-offset table from a Graph, mapping each record type to its (fieldName, byteOffset) pairs in declaration order" $
   lambda "g" $
     -- Return Just [FieldType] if the stripped type is a record; Nothing otherwise.
     -- Handles two layers of Forall + one Annotated wrapper, which covers the kernel.
@@ -161,6 +162,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
 -- snake form, the last one wins (deterministic by Maps.toList order).
 buildFunctionSignatures :: TypedTermDefinition (InferenceContext -> Graph -> [TermDefinition] -> M.Map String ([W.ValType], [W.ValType]))
 buildFunctionSignatures = def "buildFunctionSignatures" $
+  doc "Build a universe-wide map from snake-cased function names to Wasm signatures" $
   "cx" ~> "g" ~> lambda "termDefs" $
     -- Helper: given a (Name, TypeScheme) pair, produce a (snakeName, signature) pair
     -- or Nothing on failure.
@@ -197,6 +199,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
 -- it's used to initialize the runtime bump allocator.
 buildStringOffsets :: TypedTermDefinition ([String] -> (M.Map String Int, Int))
 buildStringOffsets = def "buildStringOffsets" $
+  doc "Build a map from string literal to byte offset in the module's string data segment, plus the next 16-byte-aligned offset past the end of the segment" $
   lambda "strs" $
     "step" <~ (lambda "acc" $ lambda "s" $
       "m" <~ Pairs.first (var "acc") $
@@ -223,6 +226,7 @@ buildStringOffsets = def "buildStringOffsets" $
 -- indexes here are raw integers (not byte offsets), unlike `buildFieldOffsets`.
 buildVariantIndexes :: TypedTermDefinition (Graph -> M.Map Name [(Name, Int)])
 buildVariantIndexes = def "buildVariantIndexes" $
+  doc "Build a universe-wide map from union type name to its variants' (name, tagIndex) pairs in declaration order" $
   lambda "g" $
     -- Return Just [FieldType] if the stripped type is a union; Nothing otherwise.
     "unionFieldsOf" <~ (lambda "t" $

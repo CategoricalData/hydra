@@ -51,7 +51,9 @@ module_ = Module {
 -- | Language constraints for Coq.
 -- Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features.
 coqLanguage :: TypedTermDefinition Language
-coqLanguage = define "coqLanguage" $ lets [
+coqLanguage = define "coqLanguage" $
+  doc "Language constraints for Coq; Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features" $
+  lets [
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBoolean,
       Variants.literalVariantFloat,
@@ -133,6 +135,7 @@ coqLanguage = define "coqLanguage" $ lets [
 -- plus a few stdlib names that appear as Hydra-generated lambda parameter names.
 coqReservedWords :: TypedTermDefinition (S.Set String)
 coqReservedWords = define "coqReservedWords" $
+  doc "Reserved words that must be renamed when used as Coq variable or binding names" $
   Sets.fromList $ list $ fmap string reservedWords
   where
     reservedWords = [
@@ -165,6 +168,7 @@ coqReservedWords = define "coqReservedWords" $
 -- that set is tracked separately via `coqReservedWords`.
 coqStrippedReservedWords :: TypedTermDefinition (S.Set String)
 coqStrippedReservedWords = define "coqStrippedReservedWords" $
+  doc "Reserved words that must be renamed when they appear as a stripped-local form of a cross-module Hydra reference" $
   Sets.fromList $ list $ fmap string reservedWords
   where
     reservedWords = [

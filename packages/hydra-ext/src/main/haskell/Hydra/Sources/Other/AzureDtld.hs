@@ -41,21 +41,21 @@ module_ = Module {
       field,
       integerOrString,
       interface_,
-      interface_Contents,
+      interfaceContents,
       iri,
       mapKey,
       mapValue,
       property_,
       relationship,
       schema,
-      schema_Array,
-      schema_Complex,
-      schema_Enum,
-      schema_Interface,
-      schema_Interface_Type,
-      schema_Map,
-      schema_Object,
-      schema_Primitive,
+      schemaArray,
+      schemaComplex,
+      schemaEnum,
+      schemaInterface,
+      schemaInterfaceType,
+      schemaMap,
+      schemaObject,
+      schemaPrimitive,
       telemetry,
       unit_]
 
@@ -196,7 +196,7 @@ interface_ = define "Interface" $ T.record [
     doc (
       "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, " ++
       "and/or Components) of this interface") $
-    T.optional $ boundedSet Nothing (Just 300) $ dtld "Interface_Contents",
+    T.optional $ boundedSet Nothing (Just 300) $ dtld "InterfaceContents",
   descriptionField,
   displayNameField,
   "extends">: -- Note: there is a maximum depth of 10 levels, not captured here
@@ -206,10 +206,10 @@ interface_ = define "Interface" $ T.record [
     T.optional $ boundedSet Nothing (Just 2) $ dtld "Interface",
   "schemas">:
     doc "A set of IRIs or objects that refer to the reusable schemas within this interface." $
-    T.optional $ T.set $ dtld "Schema_Interface"]
+    T.optional $ T.set $ dtld "SchemaInterface"]
 
-interface_Contents :: TypeDefinition
-interface_Contents = define "Interface_Contents" $ T.union [
+interfaceContents :: TypeDefinition
+interfaceContents = define "InterfaceContents" $ T.union [
   "command">: dtld "Command",
   "component">: dtld "Component",
   "property">: dtld "Property",
@@ -312,8 +312,8 @@ schema = define "Schema" $
     "in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema " ++
     "definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf.") $
   T.union [
-    "primitive">: dtld "Schema_Primitive",
-    "complex">: dtld "Schema_Complex"]
+    "primitive">: dtld "SchemaPrimitive",
+    "complex">: dtld "SchemaComplex"]
 
 schemaField :: String -> FieldType
 schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema"
@@ -321,8 +321,8 @@ schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema
 schemaInterfaceField :: String -> FieldType
 schemaInterfaceField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Interface"
 
-schema_Array :: TypeDefinition
-schema_Array = define "Schema_Array" $
+schemaArray :: TypeDefinition
+schemaArray = define "SchemaArray" $
   doc (
     "An Array describes an indexable data type where each element is of the same schema. " ++
     "An Array elements' schema can itself be a primitive or complex schema.") $
@@ -336,21 +336,21 @@ schema_Array = define "Schema_Array" $
     descriptionField,
     displayNameField]
 
-schema_Complex :: TypeDefinition
-schema_Complex = define "Schema_Complex" $
+schemaComplex :: TypeDefinition
+schemaComplex = define "SchemaComplex" $
   doc ("Complex schemas are designed for supporting complex data types made up of primitive data types. " ++
        "Currently the following complex schemas are provided: Array, Enum, Map, and Object. " ++
        "A complex schema can be specified directly as the value in a schema statement or " ++
        "described in the interface schemas set and referenced in the schema statement.") $
   T.union [
     -- Note: interface schemas are currently special, and are not included in this union
-    "array">: dtld "Schema_Array",
-    "enum">: dtld "Schema_Enum",
-    "map">: dtld "Schema_Map",
-    "object">: dtld "Schema_Object"]
+    "array">: dtld "SchemaArray",
+    "enum">: dtld "SchemaEnum",
+    "map">: dtld "SchemaMap",
+    "object">: dtld "SchemaObject"]
 
-schema_Enum :: TypeDefinition
-schema_Enum = define "Schema_Enum" $
+schemaEnum :: TypeDefinition
+schemaEnum = define "SchemaEnum" $
   doc (
     "An Enum describes a data type with a set of named labels that map to values. The values in an Enum " ++
     "can be either integers or strings, but the labels are always strings.") $
@@ -367,8 +367,8 @@ schema_Enum = define "Schema_Enum" $
     descriptionField,
     displayNameField]
 
-schema_Interface :: TypeDefinition
-schema_Interface = define "Schema_Interface" $
+schemaInterface :: TypeDefinition
+schemaInterface = define "SchemaInterface" $
   doc (
     "Within an interface definition, complex schemas may be defined for reusability across " ++
     "Telemetry, Properties, and Commands. This is designed to promote readability and improved " ++
@@ -378,20 +378,20 @@ schema_Interface = define "Schema_Interface" $
     idField True 2048 "The globally unique identifier for the schema",
     "type">:
       doc "The type of complex schema. This must refer to one of the complex schema classes (Array, Enum, Map, or Object)." $
-      dtld "Schema_Interface_Type",
+      dtld "SchemaInterfaceType",
     commentField,
     descriptionField,
     displayNameField]
 
-schema_Interface_Type :: TypeDefinition
-schema_Interface_Type = define "Schema_Interface_Type" $ T.union [
-  "array">: dtld "Schema_Array",
-  "enum">: dtld "Schema_Enum",
-  "map">: dtld "Schema_Map",
-  "object">: dtld "Schema_Object"]
+schemaInterfaceType :: TypeDefinition
+schemaInterfaceType = define "SchemaInterfaceType" $ T.union [
+  "array">: dtld "SchemaArray",
+  "enum">: dtld "SchemaEnum",
+  "map">: dtld "SchemaMap",
+  "object">: dtld "SchemaObject"]
 
-schema_Map :: TypeDefinition
-schema_Map = define "Schema_Map" $
+schemaMap :: TypeDefinition
+schemaMap = define "SchemaMap" $
   doc ("A Map describes a data type of key-value pairs where the values share the same schema. " ++
        "The key in a Map must be a string. The values in a Map can be any schema.") $
   T.record [
@@ -407,8 +407,8 @@ schema_Map = define "Schema_Map" $
     descriptionField,
     displayNameField]
 
-schema_Object :: TypeDefinition
-schema_Object = define "Schema_Object" $
+schemaObject :: TypeDefinition
+schemaObject = define "SchemaObject" $
   doc (
     "An Object describes a data type made up of named fields (like a struct in C). " ++
     "The fields in an Object map can be primitive or complex schemas.") $
@@ -422,8 +422,8 @@ schema_Object = define "Schema_Object" $
     descriptionField,
     displayNameField]
 
-schema_Primitive :: TypeDefinition
-schema_Primitive = define "Schema_Primitive" $
+schemaPrimitive :: TypeDefinition
+schemaPrimitive = define "SchemaPrimitive" $
   doc (
     "A full set of primitive data types are provided and can be specified directly as the value " ++
     "in a schema statement in a digital twin interface.") $

@@ -202,7 +202,9 @@ aliasDecl = define "AliasDecl" $ T.record [
   "type">: go "Type"]
 
 annotatedDeclaration :: TypeDefinition
-annotatedDeclaration = define "AnnotatedDeclaration" $ T.record [
+annotatedDeclaration = define "AnnotatedDeclaration" $
+  doc "A top-level Go declaration together with its preceding comment" $
+  T.record [
   "comment">: T.string,
   "declaration">: go "TopLevelDecl"]
 
@@ -496,7 +498,9 @@ go :: String -> Type
 go = typeref ns
 
 goModule :: TypeDefinition
-goModule = define "Module" $ T.record [
+goModule = define "Module" $
+  doc "A Go source file: a package clause, imports, and top-level declarations" $
+  T.record [
   "package">: go "PackageClause",
   "imports">: T.list $ go "ImportDecl",
   "declarations">: T.list $ go "TopLevelDecl"]
@@ -691,7 +695,10 @@ namedField = define "NamedField" $ T.record [
 operand :: TypeDefinition
 operand = define "Operand" $ T.union [
   "literal">: go "Literal",
-  "name">: go "OperandName",
+  -- Note: field named "named" rather than "name" to avoid a constructor-name
+  -- collision with the separately defined OperandName record type below (see
+  -- the analogous Type/TypeName fix above for the same pattern).
+  "named">: go "OperandName",
   "paren">: go "Expression"]
 
 -- Hydra: Operand name with optional type arguments
@@ -1024,7 +1031,11 @@ typeTerm = define "TypeTerm" $ T.record [
 -- Type      = TypeName [ TypeArgs ] | TypeLit | "(" Type ")" .
 type_ :: TypeDefinition
 type_ = define "Type" $ T.union [
-  "name">: go "TypeName",
+  -- Note: field named "named" rather than "name" to avoid a constructor-name
+  -- collision: the synthesized variant constructor for a "name" field on the
+  -- "Type" union would be "TypeName", which conflicts with the separately
+  -- defined TypeName record type above.
+  "named">: go "TypeName",
   "literal">: go "TypeLit",
   "paren">: go "Type"]
 

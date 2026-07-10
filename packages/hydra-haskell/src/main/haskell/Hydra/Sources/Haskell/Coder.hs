@@ -108,9 +108,6 @@ module_ = Module {
   where
     ns = ModuleName "hydra.haskell.coder"
     definitions = [
-      toDefinition includeTypeDefinitions,
-      toDefinition useCoreImport,
-      toDefinition keyHaskellVar,
       toDefinition adaptTypeToHaskellAndEncode,
       toDefinition constantForFieldName,
       toDefinition constantForTypeName,
@@ -122,16 +119,18 @@ module_ = Module {
       toDefinition encodeProjection,
       toDefinition encodeStandaloneCases,
       toDefinition encodeTerm,
-      toDefinition encodeUnwrap,
       toDefinition encodeType,
       toDefinition encodeTypeWithClassAssertions,
+      toDefinition encodeUnwrap,
       toDefinition extendMetaForTerm,
       toDefinition extendMetaForType,
       toDefinition findOrdVariables,
       toDefinition gatherMetadata,
       toDefinition getImplicitTypeClasses,
-      toDefinition moduleToHaskellModule,
+      toDefinition includeTypeDefinitions,
+      toDefinition keyHaskellVar,
       toDefinition moduleToHaskell,
+      toDefinition moduleToHaskellModule,
       toDefinition nameDecls,
       toDefinition setMetaUsesByteString,
       toDefinition setMetaUsesInt,
@@ -141,7 +140,8 @@ module_ = Module {
 --      toDefinition toTypeDeclarations,
       toDefinition toTypeDeclarationsFrom,
       toDefinition typeDecl,
-      toDefinition typeSchemeConstraintsToClassMap]
+      toDefinition typeSchemeConstraintsToClassMap,
+      toDefinition useCoreImport]
 
 adaptTypeToHaskellAndEncode :: TypedTermDefinition (HaskellNamespaces -> Type -> InferenceContext -> Graph -> Either Error H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
@@ -849,6 +849,7 @@ nameDecls = haskellCoderDefinition "nameDecls" $
 
 setMetaUsesByteString :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesByteString = haskellCoderDefinition "setMetaUsesByteString" $
+  doc "Set the usesByteString flag in Haskell module metadata" $
   "b" ~> "m" ~>
     record HE._HaskellModuleMetadata [
       HE._HaskellModuleMetadata_usesByteString>>: var "b",
@@ -861,6 +862,7 @@ setMetaUsesByteString = haskellCoderDefinition "setMetaUsesByteString" $
 
 setMetaUsesInt :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesInt = haskellCoderDefinition "setMetaUsesInt" $
+  doc "Set the usesInt flag in Haskell module metadata" $
   "b" ~> "m" ~>
     record HE._HaskellModuleMetadata [
       HE._HaskellModuleMetadata_usesByteString>>:
@@ -873,6 +875,7 @@ setMetaUsesInt = haskellCoderDefinition "setMetaUsesInt" $
 
 setMetaUsesMap :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesMap = haskellCoderDefinition "setMetaUsesMap" $
+  doc "Set the usesMap flag in Haskell module metadata" $
   "b" ~> "m" ~>
     record HE._HaskellModuleMetadata [
       HE._HaskellModuleMetadata_usesByteString>>:
@@ -885,6 +888,7 @@ setMetaUsesMap = haskellCoderDefinition "setMetaUsesMap" $
 
 setMetaUsesSet :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesSet = haskellCoderDefinition "setMetaUsesSet" $
+  doc "Set the usesSet flag in Haskell module metadata" $
   "b" ~> "m" ~>
     record HE._HaskellModuleMetadata [
       HE._HaskellModuleMetadata_usesByteString>>:

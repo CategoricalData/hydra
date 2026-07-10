@@ -66,7 +66,6 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "Lisp code generator: converts Hydra type and term modules to Lisp AST")}
   where
     definitions = [
-      toDefinition Environment.reorderDefs,
       toDefinition dialectCadr,
       toDefinition dialectCar,
       toDefinition dialectConstructorPrefix,
@@ -116,6 +115,7 @@ def = definitionInModule module_
 -- Clojure: "second", others: "cadr"
 dialectCadr :: TypedTermDefinition (L.Dialect -> String)
 dialectCadr = def "dialectCadr" $
+  doc "Dialect-aware name for \"cadr\" (second element of a list); Clojure uses \"second\", other dialects use \"cadr\"" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "cadr") [
     L._Dialect_clojure>>: constant $ string "second"]
 
@@ -123,6 +123,7 @@ dialectCadr = def "dialectCadr" $
 -- Clojure: "first", others: "car"
 dialectCar :: TypedTermDefinition (L.Dialect -> String)
 dialectCar = def "dialectCar" $
+  doc "Dialect-aware name for \"car\" (first element of a list); Clojure uses \"first\", other dialects use \"car\"" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "car") [
     L._Dialect_clojure>>: constant $ string "first"]
 
@@ -130,6 +131,7 @@ dialectCar = def "dialectCar" $
 -- Clojure: "->", others: "make-"
 dialectConstructorPrefix :: TypedTermDefinition (L.Dialect -> String)
 dialectConstructorPrefix = def "dialectConstructorPrefix" $
+  doc "Dialect-aware constructor prefix for record types; Clojure uses \"->\", other dialects use \"make-\"" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "make-") [
     L._Dialect_clojure>>: constant $ string "->"]
 
@@ -137,6 +139,7 @@ dialectConstructorPrefix = def "dialectConstructorPrefix" $
 -- Clojure: "=", Common Lisp/Emacs Lisp: "equal", Scheme: "equal?"
 dialectEqual :: TypedTermDefinition (L.Dialect -> String)
 dialectEqual = def "dialectEqual" $
+  doc "Dialect-aware name for \"equal?\" (equality test): Clojure uses \"=\", Common Lisp/Emacs Lisp use \"equal\", Scheme uses \"equal?\"" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ string "equal?") [
     L._Dialect_clojure>>: constant $ string "=",
     L._Dialect_commonLisp>>: constant $ string "equal",
@@ -147,6 +150,7 @@ dialectEqual = def "dialectEqual" $
 -- bindings and emit letfn for cyclic groups.
 dialectSupportsLetrec :: TypedTermDefinition (L.Dialect -> Bool)
 dialectSupportsLetrec = def "dialectSupportsLetrec" $
+  doc "Whether a dialect provides a native letrec (mutually recursive let); Clojure has only sequential let" $
   lambda "d" $ cases L._Dialect (var "d") (Just $ boolean True) [
     L._Dialect_clojure>>: constant $ boolean False]
 
@@ -155,6 +159,7 @@ dialectSupportsLetrec = def "dialectSupportsLetrec" $
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
 encodeApplication :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
 encodeApplication = def "encodeApplication" $
+  doc "Encode a function application, detecting ifElse and other lazy primitives; transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E)" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
     -- Helper: encode a normal (non-special) application. Wrapped in a 0-arg
