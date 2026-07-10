@@ -734,6 +734,12 @@ const literalsPrimitives = (): readonly Primitive[] => [
     (g, args) =>
       bind(need(args, 0, "stringToBinary"), (a0) =>
         bind(dString(g, a0), (s) => right(tBinary(libLiterals.stringToBinary(s)))))),
+  // binaryToBytes: binary -> [int32] (byte values 0-255). Impl in overlay literals.ts.
+  prim("hydra.lib.literals.binaryToBytes", scheme(tyFn(tyBinary, tyList(tyInt32))),
+    (g, args) =>
+      bind(need(args, 0, "binaryToBytes"), (a0) =>
+        bind(dBinary(g, a0) as Either<HydraError, unknown>, (b) =>
+          right({ tag: "list", value: libLiterals.binaryToBytes(b as Uint8Array | string).map((n) => tInt(n)) } as never)))),
   // === Width-specialized integer / float primitives ===
   //
   // The kernel exposes `intNToBigint` and `bigintToIntN` for each width
@@ -2050,9 +2056,13 @@ const textPrimitives = (): readonly Primitive[] => [
         if (lit.tag !== "binary") return left({ tag: "other", value: "decodeUtf8: expected binary literal" } as never);
         const raw = lit.value;
         try {
-          const str = raw instanceof Uint8Array
-            ? new TextDecoder("utf-8", { fatal: true }).decode(raw)
-            : typeof raw === "string" ? raw : String(raw);
+          // Binary literals carry either a Uint8Array (native path) or a base64 string
+          // (the JSON/interpreter convention, mirroring overlay text.ts / hashing.ts). Normalize
+          // to bytes before a strict UTF-8 decode so invalid UTF-8 throws → left.
+          const bytes = raw instanceof Uint8Array
+            ? raw
+            : Buffer.from(typeof raw === "string" ? raw : String(raw), "base64");
+          const str = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
           return right({ tag: "either", value: { tag: "right", value: tString(str) } } as never);
         } catch {
           return right({ tag: "either", value: { tag: "left", value: tString("UTF-8 decode error") } } as never);
