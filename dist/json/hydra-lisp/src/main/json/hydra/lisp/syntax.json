@@ -1234,7 +1234,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"record": []},
+              "body": "unit",
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A wildcard pattern that matches any value"}}}]}}}}}},
     {

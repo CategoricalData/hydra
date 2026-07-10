@@ -327,6 +327,25 @@ kernelPackage pkg =
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) pkg))
 
+-- | Non-kernel packaging profile (#575): identical to kernelDefaultPackagingProfile except the rules in kernelPackagingWarningRuleNamesForNonKernel (documentation, ordering, naming convention) are warnings, not errors, so each package's pre-existing backlog does not block sync until that package is promoted to the fully-fatal profile.
+kernelPackagingProfileWithDocWarnings :: Validation.ValidationProfile
+kernelPackagingProfileWithDocWarnings =
+    Validation.ValidationProfile {
+      Validation.validationProfileErrorRules = (Sets.fromList [
+        Core.Name "hydra.error.packaging.InvalidModuleError.conflictingVariantName",
+        (Core.Name "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName"),
+        (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"),
+        (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention"),
+        (Core.Name "hydra.error.packaging.InvalidPackageError.conflictingModuleName"),
+        (Core.Name "hydra.error.packaging.InvalidPackageError.duplicateModuleName"),
+        (Core.Name "hydra.error.packaging.InvalidPackageError.invalidPackageName")]),
+      Validation.validationProfileWarningRules = (Sets.fromList [
+        Core.Name "hydra.error.packaging.InvalidModuleError.missingDocumentation",
+        (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder"),
+        (Core.Name "hydra.error.packaging.InvalidModuleError.invalidDefinitionName")]),
+      Validation.validationProfileMaxErrors = 1,
+      Validation.validationProfileMaxWarnings = 10000}
+
 -- | Check every module in the given universe for undeclared cross-module dependencies, returning every finding.
 kernelUniverseUndeclaredDependencies :: [Packaging.Module] -> S.Set Core.Name -> [ErrorPackaging.InvalidPackageError]
 kernelUniverseUndeclaredDependencies universe primNames =

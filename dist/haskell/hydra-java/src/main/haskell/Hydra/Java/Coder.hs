@@ -73,6 +73,7 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Attach comments derived from a field's annotations to a class body declaration
 addComment :: Syntax.ClassBodyDeclaration -> Core.FieldType -> t0 -> Graph.Graph -> Either Errors.Error Syntax.ClassBodyDeclarationWithComments
 addComment decl field cx g =
     Eithers.map (\c -> Syntax.ClassBodyDeclarationWithComments {
@@ -128,10 +129,10 @@ applyJavaArg expr jarg =
       jarg])
 
 applyOvergenSubstToTermAnnotations :: M.Map Core.Name Core.Type -> Core.Term -> t0 -> Graph.Graph -> Either t1 Core.Term
-applyOvergenSubstToTermAnnotations subst term0 cx g = Right (applyOvergenSubstToTermAnnotations_go subst g term0)
+applyOvergenSubstToTermAnnotations subst term0 cx g = Right (applyOvergenSubstToTermAnnotationsGo subst g term0)
 
-applyOvergenSubstToTermAnnotations_go :: M.Map Core.Name Core.Type -> Graph.Graph -> Core.Term -> Core.Term
-applyOvergenSubstToTermAnnotations_go subst cx term =
+applyOvergenSubstToTermAnnotationsGo :: M.Map Core.Name Core.Type -> Graph.Graph -> Core.Term -> Core.Term
+applyOvergenSubstToTermAnnotationsGo subst cx term =
     case term of
       Core.TermAnnotated v0 ->
         let inner = Core.annotatedTermBody v0
@@ -141,33 +142,33 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
                       let t_ = substituteTypeVarsWithTypes subst t
                       in (Maps.insert Constants.keyType (EncodeCore.type_ t_) ann)) (DecodeCore.type_ cx typeTerm))
         in (Core.TermAnnotated (Core.AnnotatedTerm {
-          Core.annotatedTermBody = (applyOvergenSubstToTermAnnotations_go subst cx inner),
+          Core.annotatedTermBody = (applyOvergenSubstToTermAnnotationsGo subst cx inner),
           Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap ann_)}))
       Core.TermApplication v0 -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationFunction v0)),
-        Core.applicationArgument = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationArgument v0))})
+        Core.applicationFunction = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.applicationFunction v0)),
+        Core.applicationArgument = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.applicationArgument v0))})
       Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.lambdaParameter v0),
         Core.lambdaDomain = (Optionals.map (\d -> substituteTypeVarsWithTypes subst d) (Core.lambdaDomain v0)),
-        Core.lambdaBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.lambdaBody v0))})
+        Core.lambdaBody = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.lambdaBody v0))})
       Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
         Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-        Core.caseStatementDefault = (Optionals.map (\d -> applyOvergenSubstToTermAnnotations_go subst cx d) (Core.caseStatementDefault v0)),
+        Core.caseStatementDefault = (Optionals.map (\d -> applyOvergenSubstToTermAnnotationsGo subst cx d) (Core.caseStatementDefault v0)),
         Core.caseStatementCases = (Lists.map (\fld -> Core.CaseAlternative {
           Core.caseAlternativeName = (Core.caseAlternativeName fld),
-          Core.caseAlternativeHandler = (applyOvergenSubstToTermAnnotations_go subst cx (Core.caseAlternativeHandler fld))}) (Core.caseStatementCases v0))})
+          Core.caseAlternativeHandler = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.caseAlternativeHandler fld))}) (Core.caseStatementCases v0))})
       Core.TermLet v0 -> Core.TermLet (Core.Let {
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
-          Core.bindingTerm = (applyOvergenSubstToTermAnnotations_go subst cx (Core.bindingTerm b)),
+          Core.bindingTerm = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.bindingTerm b)),
           Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Core.letBindings v0)),
-        Core.letBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.letBody v0))})
+        Core.letBody = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.letBody v0))})
       Core.TermTypeApplication v0 -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-        Core.typeApplicationTermBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.typeApplicationTermBody v0)),
+        Core.typeApplicationTermBody = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.typeApplicationTermBody v0)),
         Core.typeApplicationTermType = (substituteTypeVarsWithTypes subst (Core.typeApplicationTermType v0))})
       Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
-        Core.typeLambdaBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.typeLambdaBody v0))})
+        Core.typeLambdaBody = (applyOvergenSubstToTermAnnotationsGo subst cx (Core.typeLambdaBody v0))})
       _ -> term
 
 applySubstFull :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
@@ -302,7 +303,7 @@ bindingsToStatements env bindings cx g0 =
           g = JavaEnvironment.javaEnvironmentGraph env
           flatBindings = dedupBindings (JavaEnvironment.aliasesInScopeJavaVars aliases) (flattenBindings bindings)
           gExtended =
-                  Scoping.extendGraphForLet (\g2 -> \b -> Logic.ifElse (Predicates.isComplexBinding g2 b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) g (Core.Let {
+                  Scoping.extendGraphForLet (\g1 -> \b -> Logic.ifElse (Predicates.isComplexBinding g1 b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) g (Core.Let {
                     Core.letBindings = flatBindings,
                     Core.letBody = (Core.TermVariable (Core.Name "dummy"))})
           bindingVars = Sets.fromList (Lists.map (\b -> Core.bindingName b) flatBindings)

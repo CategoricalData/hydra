@@ -443,33 +443,6 @@
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of fields as a string"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.show.core.floatType",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.FloatType"}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "ft",
-                "domain": {"variable": "hydra.core.FloatType"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.core.FloatType",
-                        "cases": [
-                          {
-                            "name": "float32",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "float32"}}}}},
-                          {
-                            "name": "float64",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "float64"}}}}}]}},
-                    "argument": {"variable": "ft"}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a float type as a string"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.show.core.float",
         "signature": {
           "typeParameters": [],
@@ -517,6 +490,33 @@
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a float value as a string"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.show.core.floatType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.FloatType"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ft",
+                "domain": {"variable": "hydra.core.FloatType"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.FloatType",
+                        "cases": [
+                          {
+                            "name": "float32",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "float32"}}}}},
+                          {
+                            "name": "float64",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "float64"}}}}}]}},
+                    "argument": {"variable": "ft"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a float type as a string"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.show.core.injection",
         "signature": {
           "typeParameters": [],
@@ -556,44 +556,6 @@
                                 {"literal": {"string": ")"}},
                                 {"application": {"function": {"variable": "hydra.show.core.fields"}, "argument": {"list": [{"variable": "f"}]}}}]}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an injection as a string"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.show.core.integerType",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.IntegerType"}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "it",
-                "domain": {"variable": "hydra.core.IntegerType"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.core.IntegerType",
-                        "cases": [
-                          {
-                            "name": "bigint",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "bigint"}}}}},
-                          {"name": "int8", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int8"}}}}},
-                          {"name": "int16", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int16"}}}}},
-                          {"name": "int32", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int32"}}}}},
-                          {"name": "int64", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int64"}}}}},
-                          {"name": "uint8", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint8"}}}}},
-                          {
-                            "name": "uint16",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint16"}}}}},
-                          {
-                            "name": "uint32",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint32"}}}}},
-                          {
-                            "name": "uint64",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint64"}}}}}]}},
-                    "argument": {"variable": "it"}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an integer type as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.show.core.integer",
@@ -732,6 +694,44 @@
                                     "argument": {"literal": {"string": ":uint64"}}}}}}}]}},
                     "argument": {"variable": "iv"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an integer value as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.show.core.integerType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.IntegerType"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "it",
+                "domain": {"variable": "hydra.core.IntegerType"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.IntegerType",
+                        "cases": [
+                          {
+                            "name": "bigint",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "bigint"}}}}},
+                          {"name": "int8", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int8"}}}}},
+                          {"name": "int16", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int16"}}}}},
+                          {"name": "int32", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int32"}}}}},
+                          {"name": "int64", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "int64"}}}}},
+                          {"name": "uint8", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint8"}}}}},
+                          {
+                            "name": "uint16",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint16"}}}}},
+                          {
+                            "name": "uint32",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint32"}}}}},
+                          {
+                            "name": "uint64",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "uint64"}}}}}]}},
+                    "argument": {"variable": "it"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an integer type as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.show.core.lambda",

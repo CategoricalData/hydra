@@ -74,50 +74,57 @@
           "typeLambda": {
             "parameter": "t0",
             "body": {
-              "lambda": {
-                "parameter": "decl",
-                "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
+              "annotated": {
                 "body": {
                   "lambda": {
-                    "parameter": "field",
-                    "domain": {"variable": "hydra.core.FieldType"},
+                    "parameter": "decl",
+                    "domain": {"variable": "hydra.java.syntax.ClassBodyDeclaration"},
                     "body": {
                       "lambda": {
-                        "parameter": "cx",
-                        "domain": {"variable": "t0"},
+                        "parameter": "field",
+                        "domain": {"variable": "hydra.core.FieldType"},
                         "body": {
                           "lambda": {
-                            "parameter": "g",
-                            "domain": {"variable": "hydra.graph.Graph"},
+                            "parameter": "cx",
+                            "domain": {"variable": "t0"},
                             "body": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"optional": {"literal": "string"}}}},
-                                            "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
-                                        "type": {"variable": "hydra.errors.Error"}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "c",
-                                        "domain": {"optional": {"literal": "string"}},
-                                        "body": {
-                                          "record": {
-                                            "typeName": "hydra.java.syntax.ClassBodyDeclarationWithComments",
-                                            "fields": [{"name": "value", "term": {"variable": "decl"}}, {"name": "comments", "term": {"variable": "c"}}]}}}}}},
-                                "argument": {
+                              "lambda": {
+                                "parameter": "g",
+                                "domain": {"variable": "hydra.graph.Graph"},
+                                "body": {
                                   "application": {
                                     "function": {
                                       "application": {
                                         "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"optional": {"literal": "string"}}}},
+                                                "type": {"variable": "hydra.java.syntax.ClassBodyDeclarationWithComments"}}},
+                                            "type": {"variable": "hydra.errors.Error"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "c",
+                                            "domain": {"optional": {"literal": "string"}},
+                                            "body": {
+                                              "record": {
+                                                "typeName": "hydra.java.syntax.ClassBodyDeclarationWithComments",
+                                                "fields": [{"name": "value", "term": {"variable": "decl"}}, {"name": "comments", "term": {"variable": "c"}}]}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.annotations.commentsFromFieldType"}, "type": {"variable": "t0"}}},
-                                            "argument": {"variable": "cx"}}},
-                                        "argument": {"variable": "g"}}},
-                                    "argument": {"variable": "field"}}}}}}}}}}}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.annotations.commentsFromFieldType"}, "type": {"variable": "t0"}}},
+                                                "argument": {"variable": "cx"}}},
+                                            "argument": {"variable": "g"}}},
+                                        "argument": {"variable": "field"}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Attach comments derived from a field's annotations to a class body declaration"}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.java.coder.analyzeJavaFunction",
@@ -933,14 +940,14 @@
                                                 "function": {
                                                   "application": {
                                                     "function": {
-                                                      "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                      "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                     "argument": {"variable": "g"}}},
                                                 "argument": {"variable": "term0"}}}}},
                                         "type": {"variable": "t1"}}},
                                     "type": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}}}},
     {
       "term": {
-        "name": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go",
+        "name": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -1085,7 +1092,7 @@
                                                           "function": {
                                                             "application": {
                                                               "function": {
-                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                               "argument": {"variable": "cx"}}},
                                                           "argument": {"variable": "inner"}}}},
                                                     {
@@ -1113,7 +1120,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {
@@ -1126,7 +1133,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {
@@ -1179,7 +1186,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {"function": {"project": {"typeName": "hydra.core.Lambda", "fieldName": "body"}}, "argument": {"variable": "lam"}}}}}}]}}}}}}}},
@@ -1223,7 +1230,7 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "function": {
-                                                                        "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                                        "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                                       "argument": {"variable": "cx"}}},
                                                                   "argument": {"variable": "d"}}}}}}},
                                                       "argument": {
@@ -1261,7 +1268,7 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                                               "argument": {"variable": "cx"}}},
                                                                           "argument": {
                                                                             "application": {
@@ -1315,7 +1322,7 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                                                "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                                               "argument": {"variable": "cx"}}},
                                                                           "argument": {
                                                                             "application": {"function": {"project": {"typeName": "hydra.core.Binding", "fieldName": "term"}}, "argument": {"variable": "b"}}}}}},
@@ -1332,7 +1339,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {"function": {"project": {"typeName": "hydra.core.Let", "fieldName": "body"}}, "argument": {"variable": "lt"}}}}}}]}}}}}}}},
@@ -1358,7 +1365,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {
@@ -1402,7 +1409,7 @@
                                                       "function": {
                                                         "application": {
                                                           "function": {
-                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotations_go"}, "argument": {"variable": "subst"}}},
+                                                            "application": {"function": {"variable": "hydra.java.coder.applyOvergenSubstToTermAnnotationsGo"}, "argument": {"variable": "subst"}}},
                                                           "argument": {"variable": "cx"}}},
                                                       "argument": {
                                                         "application": {"function": {"project": {"typeName": "hydra.core.TypeLambda", "fieldName": "body"}}, "argument": {"variable": "tl"}}}}}}]}}}}}}}}]}},
@@ -2323,7 +2330,7 @@
                                             "function": {"variable": "hydra.scoping.extendGraphForLet"},
                                             "argument": {
                                               "lambda": {
-                                                "parameter": "g",
+                                                "parameter": "g1",
                                                 "domain": {"variable": "hydra.graph.Graph"},
                                                 "body": {
                                                   "lambda": {
@@ -2339,7 +2346,7 @@
                                                                   "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.Term"}}}},
                                                                 "argument": {
                                                                   "application": {
-                                                                    "function": {"application": {"function": {"variable": "hydra.predicates.isComplexBinding"}, "argument": {"variable": "g"}}},
+                                                                    "function": {"application": {"function": {"variable": "hydra.predicates.isComplexBinding"}, "argument": {"variable": "g1"}}},
                                                                     "argument": {"variable": "b"}}}}},
                                                             "argument": {
                                                               "optional": {

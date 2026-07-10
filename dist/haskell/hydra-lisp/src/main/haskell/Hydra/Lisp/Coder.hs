@@ -57,24 +57,28 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
+-- | Dialect-aware name for "cadr" (second element of a list); Clojure uses "second", other dialects use "cadr"
 dialectCadr :: Syntax.Dialect -> String
 dialectCadr d =
     case d of
       Syntax.DialectClojure -> "second"
       _ -> "cadr"
 
+-- | Dialect-aware name for "car" (first element of a list); Clojure uses "first", other dialects use "car"
 dialectCar :: Syntax.Dialect -> String
 dialectCar d =
     case d of
       Syntax.DialectClojure -> "first"
       _ -> "car"
 
+-- | Dialect-aware constructor prefix for record types; Clojure uses "->", other dialects use "make-"
 dialectConstructorPrefix :: Syntax.Dialect -> String
 dialectConstructorPrefix d =
     case d of
       Syntax.DialectClojure -> "->"
       _ -> "make-"
 
+-- | Dialect-aware name for "equal?" (equality test): Clojure uses "=", Common Lisp/Emacs Lisp use "equal", Scheme uses "equal?"
 dialectEqual :: Syntax.Dialect -> String
 dialectEqual d =
     case d of
@@ -83,12 +87,14 @@ dialectEqual d =
       Syntax.DialectEmacsLisp -> "equal"
       _ -> "equal?"
 
+-- | Whether a dialect provides a native letrec (mutually recursive let); Clojure has only sequential let
 dialectSupportsLetrec :: Syntax.Dialect -> Bool
 dialectSupportsLetrec d =
     case d of
       Syntax.DialectClojure -> False
       _ -> True
 
+-- | Encode a function application, detecting ifElse and other lazy primitives; transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E)
 encodeApplication :: Syntax.Dialect -> t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either t1 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 

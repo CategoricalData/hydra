@@ -602,7 +602,7 @@
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional statistics for the data in this page"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data page header"}}}]}}}}}},
-    {"type": {"name": "hydra.parquet.format.IndexPageHeader", "body": {"variables": [], "body": {"record": []}}}},
+    {"type": {"name": "hydra.parquet.format.IndexPageHeader", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "hydra.parquet.format.DictionaryPageHeader",
@@ -1082,7 +1082,7 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Byte offset from beginning of file to Bloom filter data."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Description for column metadata"}}}]}}}}}},
-    {"type": {"name": "hydra.parquet.format.EncryptionWithFooterKey", "body": {"variables": [], "body": {"record": []}}}},
+    {"type": {"name": "hydra.parquet.format.EncryptionWithFooterKey", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithColumnKey",

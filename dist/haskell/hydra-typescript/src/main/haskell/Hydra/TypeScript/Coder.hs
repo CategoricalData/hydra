@@ -68,6 +68,7 @@ import qualified Data.Set as S
 analyzeTypeScriptFunction :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either t0 (Typing.FunctionStructure Graph.Graph)
 analyzeTypeScriptFunction cx g term = Analysis.analyzeFunctionTerm cx tsEnvGetGraph tsEnvSetGraph g term
 
+-- | Collect the bound parameter names from a chain of nested foralls, in outer-to-inner order; stops at the first non-forall type
 collectForallParams :: Core.Type -> [Core.Name]
 collectForallParams t =
 
@@ -76,12 +77,14 @@ collectForallParams t =
         Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0))
         _ -> []
 
+-- | Collect the names of every type referenced in a type tree that belongs to a different namespace than the current module, for computing the imports needed at the top of the emitted .ts file
 collectImports :: Packaging.ModuleName -> Core.Type -> S.Set Core.Name
 collectImports currentNs t =
 
       let vars = Variables.freeVariablesInType t
       in (filterNonLocalNames currentNs vars)
 
+-- | Collect type imports referenced inside a term tree (lambda bodies, type applications, let-binding schemes), supplementing the top-level typeScheme walk
 collectInnerTypeImports :: Packaging.ModuleName -> Core.Term -> S.Set Core.Name
 collectInnerTypeImports currentNs term =
 
@@ -96,6 +99,7 @@ collectInnerTypeImports currentNs term =
           childVars = Lists.foldl (\acc -> \s -> Sets.union acc (collectInnerTypeImports currentNs s)) Sets.empty subs
       in (filterNonLocalNames currentNs (Sets.union ownVars childVars))
 
+-- | Like collectImports but walks a Term, gathering free term-level variables that resolve to a different module
 collectTermImports :: Packaging.ModuleName -> Core.Term -> S.Set Core.Name
 collectTermImports currentNs t =
 

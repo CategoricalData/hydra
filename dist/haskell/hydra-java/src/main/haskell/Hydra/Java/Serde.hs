@@ -80,8 +80,8 @@ arrayAccessToExpr _ = Serialization.cst "STUB:ArrayAccess"
 arrayCreationExpressionToExpr :: Syntax.ArrayCreationExpression -> Ast.Expr
 arrayCreationExpressionToExpr ace =
     case ace of
-      Syntax.ArrayCreationExpressionWithoutInitializer_ _ -> Serialization.cst "STUB:ArrayCreationExpression"
-      Syntax.ArrayCreationExpressionWithInitializer_ v0 -> case v0 of
+      Syntax.ArrayCreationExpressionNoInit _ -> Serialization.cst "STUB:ArrayCreationExpression"
+      Syntax.ArrayCreationExpressionWithInit v0 -> case v0 of
         Syntax.ArrayCreationExpressionWithInitializerPrimitive v1 ->
           let pt = Syntax.arrayCreationExpressionWithInitializer_PrimitiveType v1
               ai = Syntax.arrayCreationExpressionWithInitializer_PrimitiveArray v1

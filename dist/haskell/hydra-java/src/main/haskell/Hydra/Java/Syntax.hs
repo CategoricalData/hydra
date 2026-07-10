@@ -2858,15 +2858,15 @@ newtype MethodReference_Array =
 _MethodReference_Array = Core.Name "hydra.java.syntax.MethodReference_Array"
 
 data ArrayCreationExpression =
-  ArrayCreationExpressionWithoutInitializer_ ArrayCreationExpressionWithoutInitializer |
-  ArrayCreationExpressionWithInitializer_ ArrayCreationExpressionWithInitializer
+  ArrayCreationExpressionNoInit ArrayCreationExpressionWithoutInitializer |
+  ArrayCreationExpressionWithInit ArrayCreationExpressionWithInitializer
   deriving (Eq, Ord, Read, Show)
 
 _ArrayCreationExpression = Core.Name "hydra.java.syntax.ArrayCreationExpression"
 
-_ArrayCreationExpression_withoutInitializer = Core.Name "withoutInitializer"
+_ArrayCreationExpression_noInit = Core.Name "noInit"
 
-_ArrayCreationExpression_withInitializer = Core.Name "withInitializer"
+_ArrayCreationExpression_withInit = Core.Name "withInit"
 
 data ArrayCreationExpressionWithoutInitializer =
   ArrayCreationExpressionWithoutInitializerPrimitive ArrayCreationExpressionWithoutInitializer_Primitive |

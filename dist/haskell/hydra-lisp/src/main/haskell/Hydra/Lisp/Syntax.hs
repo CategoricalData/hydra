@@ -734,9 +734,7 @@ _LiteralPattern = Core.Name "hydra.lisp.syntax.LiteralPattern"
 _LiteralPattern_value = Core.Name "value"
 
 -- | A wildcard pattern that matches any value
-data WildcardPattern =
-  WildcardPattern {}
-  deriving (Eq, Ord, Read, Show)
+type WildcardPattern = ()
 
 _WildcardPattern = Core.Name "hydra.lisp.syntax.WildcardPattern"
 

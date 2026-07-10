@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
+-- | A top-level Go declaration together with its preceding comment
 data AnnotatedDeclaration =
   AnnotatedDeclaration {
     annotatedDeclarationComment :: String,
@@ -20,6 +21,7 @@ _AnnotatedDeclaration_comment = Core.Name "comment"
 
 _AnnotatedDeclaration_declaration = Core.Name "declaration"
 
+-- | A Go source file: a package clause, imports, and top-level declarations
 data Module =
   Module {
     modulePackage :: PackageClause,
@@ -365,14 +367,14 @@ _Receiver_name = Core.Name "name"
 _Receiver_type = Core.Name "type"
 
 data Type =
-  TypeName_ TypeName |
+  TypeNamed TypeName |
   TypeLiteral TypeLit |
   TypeParen Type
   deriving (Eq, Ord, Read, Show)
 
 _Type = Core.Name "hydra.go.syntax.Type"
 
-_Type_name = Core.Name "name"
+_Type_named = Core.Name "named"
 
 _Type_literal = Core.Name "literal"
 
@@ -853,7 +855,7 @@ _CallExpr_arguments = Core.Name "arguments"
 
 data Operand =
   OperandLiteral Literal |
-  OperandName_ OperandName |
+  OperandNamed OperandName |
   OperandParen Expression
   deriving (Eq, Ord, Read, Show)
 
@@ -861,7 +863,7 @@ _Operand = Core.Name "hydra.go.syntax.Operand"
 
 _Operand_literal = Core.Name "literal"
 
-_Operand_name = Core.Name "name"
+_Operand_named = Core.Name "named"
 
 _Operand_paren = Core.Name "paren"
 

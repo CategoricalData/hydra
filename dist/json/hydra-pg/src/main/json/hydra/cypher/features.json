@@ -8,6 +8,283 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.cypher.features.AggregateFunctionFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "avg",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The avg() function / AVG. Returns the average of a set of DURATION values.; Returns the average of a set of FLOAT values.; Returns the average of a set of INTEGER values."}}}]}}}},
+                  {
+                    "name": "collect",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The collect() function / COLLECT. Returns a list containing the values returned by an expression."}}}]}}}},
+                  {
+                    "name": "count",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The count() function / COUNT. Returns the number of values or rows."}}}]}}}},
+                  {
+                    "name": "max",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The max() function / MAX. Returns the maximum value in a set of values."}}}]}}}},
+                  {
+                    "name": "min",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The min() function / MIN. Returns the minimum value in a set of values."}}}]}}}},
+                  {
+                    "name": "percentileCont",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The percentileCont() function. Returns the percentile of a value over a group using linear interpolation."}}}]}}}},
+                  {
+                    "name": "percentileDisc",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The percentileDisc() function. Returns the nearest FLOAT value to the given percentile over a group using a rounding method.; Returns the nearest INTEGER value to the given percentile over a group using a rounding method."}}}]}}}},
+                  {
+                    "name": "stdev",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The stdev() function. Returns the standard deviation for the given value over a group for a sample of a population."}}}]}}}},
+                  {
+                    "name": "stdevp",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The stdevp() function. Returns the standard deviation for the given value over a group for an entire population."}}}]}}}},
+                  {
+                    "name": "sum",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The sum() function / SUM. Returns the sum of a set of DURATION values.; Returns the sum of a set of FLOAT values.; Returns the sum of a set of INTEGER values."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aggregate functions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ArithmeticFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "plus",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The + operator"}}}]}}}},
+                  {
+                    "name": "minus",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The - operator"}}}]}}}},
+                  {
+                    "name": "multiply",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * operator"}}}]}}}},
+                  {
+                    "name": "divide",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The / operator"}}}]}}}},
+                  {
+                    "name": "modulus",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The % operator"}}}]}}}},
+                  {
+                    "name": "powerOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ^ operator"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arithmetic operations"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.AtomFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "caseExpression",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CASE expressions"}}}]}}}},
+                  {
+                    "name": "count",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The COUNT (*) expression"}}}]}}}},
+                  {
+                    "name": "existentialSubquery",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Existential subqueries"}}}]}}}},
+                  {
+                    "name": "functionInvocation",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function invocation"}}}]}}}},
+                  {
+                    "name": "parameter",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameter expressions"}}}]}}}},
+                  {
+                    "name": "patternComprehension",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pattern comprehensions"}}}]}}}},
+                  {
+                    "name": "patternPredicate",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship patterns as subexpressions"}}}]}}}},
+                  {
+                    "name": "variable",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Variable expressions (note: included by most if not all implementations)."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Various kinds of atomic expressions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ComparisonFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "equal",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The = comparison operator"}}}]}}}},
+                  {
+                    "name": "greaterThan",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The > comparison operator"}}}]}}}},
+                  {
+                    "name": "greaterThanOrEqual",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The >= comparison operator"}}}]}}}},
+                  {
+                    "name": "lessThan",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The < comparison operator"}}}]}}}},
+                  {
+                    "name": "lessThanOrEqual",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The <= comparison operator"}}}]}}}},
+                  {
+                    "name": "notEqual",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The <> comparison operator"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Comparison operators and functions"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.cypher.features.CypherFeatures",
         "body": {
           "variables": [],
@@ -183,7 +460,7 @@
                         "string": "A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.cypher.features.ArithmeticFeatures",
+        "name": "hydra.cypher.features.DatabaseFunctionFeatures",
         "body": {
           "variables": [],
           "body": {
@@ -191,96 +468,7 @@
               "body": {
                 "record": [
                   {
-                    "name": "plus",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The + operator"}}}]}}}},
-                  {
-                    "name": "minus",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The - operator"}}}]}}}},
-                  {
-                    "name": "multiply",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * operator"}}}]}}}},
-                  {
-                    "name": "divide",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The / operator"}}}]}}}},
-                  {
-                    "name": "modulus",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The % operator"}}}]}}}},
-                  {
-                    "name": "powerOf",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ^ operator"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arithmetic operations"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.AtomFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "caseExpression",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CASE expressions"}}}]}}}},
-                  {
-                    "name": "count",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The COUNT (*) expression"}}}]}}}},
-                  {
-                    "name": "existentialSubquery",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Existential subqueries"}}}]}}}},
-                  {
-                    "name": "functionInvocation",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function invocation"}}}]}}}},
-                  {
-                    "name": "parameter",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameter expressions"}}}]}}}},
-                  {
-                    "name": "patternComprehension",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pattern comprehensions"}}}]}}}},
-                  {
-                    "name": "patternPredicate",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship patterns as subexpressions"}}}]}}}},
-                  {
-                    "name": "variable",
+                    "name": "dbNameFromElementId",
                     "type": {
                       "annotated": {
                         "body": {"literal": "boolean"},
@@ -288,54 +476,10 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Variable expressions (note: included by most if not all implementations)."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Various kinds of atomic expressions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.ComparisonFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "equal",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The = comparison operator"}}}]}}}},
-                  {
-                    "name": "greaterThan",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The > comparison operator"}}}]}}}},
-                  {
-                    "name": "greaterThanOrEqual",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The >= comparison operator"}}}]}}}},
-                  {
-                    "name": "lessThan",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The < comparison operator"}}}]}}}},
-                  {
-                    "name": "lessThanOrEqual",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The <= comparison operator"}}}]}}}},
-                  {
-                    "name": "notEqual",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The <> comparison operator"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Comparison operators and functions"}}}]}}}}}},
+                              "value": {
+                                "literal": {
+                                  "string": "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Database functions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.features.DeleteFeatures",
@@ -466,150 +610,6 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Standard Cypher functions"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.cypher.features.AggregateFunctionFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "avg",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The avg() function / AVG. Returns the average of a set of DURATION values.; Returns the average of a set of FLOAT values.; Returns the average of a set of INTEGER values."}}}]}}}},
-                  {
-                    "name": "collect",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {"string": "The collect() function / COLLECT. Returns a list containing the values returned by an expression."}}}]}}}},
-                  {
-                    "name": "count",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The count() function / COUNT. Returns the number of values or rows."}}}]}}}},
-                  {
-                    "name": "max",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The max() function / MAX. Returns the maximum value in a set of values."}}}]}}}},
-                  {
-                    "name": "min",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The min() function / MIN. Returns the minimum value in a set of values."}}}]}}}},
-                  {
-                    "name": "percentileCont",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {"string": "The percentileCont() function. Returns the percentile of a value over a group using linear interpolation."}}}]}}}},
-                  {
-                    "name": "percentileDisc",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The percentileDisc() function. Returns the nearest FLOAT value to the given percentile over a group using a rounding method.; Returns the nearest INTEGER value to the given percentile over a group using a rounding method."}}}]}}}},
-                  {
-                    "name": "stdev",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The stdev() function. Returns the standard deviation for the given value over a group for a sample of a population."}}}]}}}},
-                  {
-                    "name": "stdevp",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The stdevp() function. Returns the standard deviation for the given value over a group for an entire population."}}}]}}}},
-                  {
-                    "name": "sum",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The sum() function / SUM. Returns the sum of a set of DURATION values.; Returns the sum of a set of FLOAT values.; Returns the sum of a set of INTEGER values."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aggregate functions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.DatabaseFunctionFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "dbNameFromElementId",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Database functions"}}}]}}}}}},
-    {
-      "type": {
         "name": "hydra.cypher.features.GenAIFunctionFeatures",
         "body": {
           "variables": [],
@@ -686,6 +686,29 @@
                                 "literal": {
                                   "string": "The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph functions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ListFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "listComprehension",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Basic list comprehensions"}}}]}}}},
+                  {
+                    "name": "listRange",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List range comprehensions (e.g. [1..10])"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List functionality"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.features.ListFunctionFeatures",
@@ -838,6 +861,67 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List functions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.cypher.features.LiteralFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "boolean",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Boolean literals (note: included by most if not all implementations)."}}}]}}}},
+                  {
+                    "name": "double",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Double-precision floating-point literals"}}}]}}}},
+                  {
+                    "name": "integer",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Integer literals"}}}]}}}},
+                  {
+                    "name": "list",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List literals"}}}]}}}},
+                  {
+                    "name": "map",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Map literals"}}}]}}}},
+                  {
+                    "name": "null",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NULL literal"}}}]}}}},
+                  {
+                    "name": "string",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "String literals (note: included by most if not all implementations)."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Various types of literal values"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.cypher.features.LoadCSVFunctionFeatures",
         "body": {
           "variables": [],
@@ -928,6 +1012,167 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The sqrt() function. Returns the square root of a FLOAT."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logarithmic functions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.LogicalFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "and",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The AND operator"}}}]}}}},
+                  {
+                    "name": "not",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NOT operator"}}}]}}}},
+                  {
+                    "name": "or",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The OR operator"}}}]}}}},
+                  {
+                    "name": "xor",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XOR operator"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical operations"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.MatchFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "match",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The basic (non-optional) MATCH clause"}}}]}}}},
+                  {
+                    "name": "optionalMatch",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "OPTIONAL MATCH"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Match queries"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.MergeFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "merge",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The basic MERGE clause"}}}]}}}},
+                  {
+                    "name": "mergeOnCreate",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "MERGE with the ON CREATE action"}}}]}}}},
+                  {
+                    "name": "mergeOnMatch",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "MERGE with the ON MATCH action"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Merge operations"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.NodePatternFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "multipleLabels",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Specifying multiple labels in a node pattern"}}}]}}}},
+                  {
+                    "name": "parameter",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Specifying a parameter as part of a node pattern"}}}]}}}},
+                  {
+                    "name": "propertyMap",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Specifying a key/value map of properties in a node pattern"}}}]}}}},
+                  {
+                    "name": "variableNode",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Binding a variable to a node in a node pattern (note: included by most if not all implementations)."}}}]}}}},
+                  {
+                    "name": "wildcardLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Omitting labels from a node pattern"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Node patterns"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.NullFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "isNull",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The IS NULL operator"}}}]}}}},
+                  {
+                    "name": "isNotNull",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The IS NOT NULL operator"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.features.NumericFunctionFeatures",
@@ -1021,6 +1266,23 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Numeric functions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.cypher.features.PathFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "shortestPath",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The shortestPath() function"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path functions only found in OpenCypher"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.cypher.features.PredicateFunctionFeatures",
         "body": {
           "variables": [],
@@ -1096,6 +1358,313 @@
                                 "literal": {
                                   "string": "The single() function. Returns true if the predicate holds for exactly one of the elements in the given LIST<ANY>."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Predicate functions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ProcedureCallFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "inQueryCall",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CALL within a query"}}}]}}}},
+                  {
+                    "name": "standaloneCall",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Standalone / top-level CALL"}}}]}}}},
+                  {
+                    "name": "yield",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The YIELD clause in CALL"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Procedure calls"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ProjectionFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "limit",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LIMIT clause"}}}]}}}},
+                  {
+                    "name": "orderBy",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ORDER BY clause"}}}]}}}},
+                  {
+                    "name": "projectDistinct",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DISTINCT keyword"}}}]}}}},
+                  {
+                    "name": "projectAll",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * projection"}}}]}}}},
+                  {
+                    "name": "projectAs",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The AS keyword"}}}]}}}},
+                  {
+                    "name": "skip",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SKIP clause"}}}]}}}},
+                  {
+                    "name": "sortOrder",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The ASC/ASCENDING and DESC/DESCENDING keywords"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Projections"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.QuantifierFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "all",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ALL quantifier"}}}]}}}},
+                  {
+                    "name": "any",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ANY quantifier"}}}]}}}},
+                  {
+                    "name": "none",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NONE quantifier"}}}]}}}},
+                  {
+                    "name": "single",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SINGLE quantifier"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Quantifier expressions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.RangeLiteralFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "bounds",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Range literals with both lower and upper bounds"}}}]}}}},
+                  {
+                    "name": "exactRange",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Range literals providing an exact number of repetitions"}}}]}}}},
+                  {
+                    "name": "lowerBound",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals with a lower bound (only)"}}}]}}}},
+                  {
+                    "name": "starRange",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * range literal"}}}]}}}},
+                  {
+                    "name": "upperBound",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals with an upper bound (only)"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals within relationship patterns"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.ReadingFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "union",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNION operator"}}}]}}}},
+                  {
+                    "name": "unionAll",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNION ALL operator"}}}]}}}},
+                  {
+                    "name": "unwind",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNWIND clause"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Specific syntax related to reading data from the graph."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.RelationshipDirectionFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "both",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The two-headed arrow (<-[]->) relationship direction"}}}]}}}},
+                  {
+                    "name": "left",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The left arrow (<-[]-) relationship direction"}}}]}}}},
+                  {
+                    "name": "neither",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The headless arrow (-[]-) relationship direction"}}}]}}}},
+                  {
+                    "name": "right",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The right arrow (-[]->) relationship direction"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship directions / arrow patterns"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.RelationshipPatternFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "multipleTypes",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Specifying a disjunction of multiple types in a relationship pattern"}}}]}}}},
+                  {
+                    "name": "variableRelationship",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Binding a variable to a relationship in a relationship pattern (note: included by most if not all implementations)."}}}]}}}},
+                  {
+                    "name": "wildcardType",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Omitting types from a relationship pattern"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship patterns"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.RemoveFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "byLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE Variable:NodeLabels"}}}]}}}},
+                  {
+                    "name": "byProperty",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE PropertyExpression"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE operations"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.features.ScalarFunctionFeatures",
@@ -1352,6 +1921,47 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Scalar functions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.cypher.features.SetFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "propertyEquals",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Defining a set using PropertyExpression = Expression"}}}]}}}},
+                  {
+                    "name": "variableEquals",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable = Expression"}}}]}}}},
+                  {
+                    "name": "variablePlusEquals",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable += Expression"}}}]}}}},
+                  {
+                    "name": "variableWithNodeLabels",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable:NodeLabels"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set definitions"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.cypher.features.SpatialFunctionFeatures",
         "body": {
           "variables": [],
@@ -1396,6 +2006,45 @@
                                 "literal": {
                                   "string": "The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Spatial functions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.cypher.features.StringFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "contains",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The contains() function / CONTAINS"}}}]}}}},
+                  {
+                    "name": "endsWith",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The endsWith() function / ENDS WITH"}}}]}}}},
+                  {
+                    "name": "in",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The in() function / IN"}}}]}}}},
+                  {
+                    "name": "startsWith",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The startsWith() function / STARTS WITH"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "String functions/keywords only found in OpenCypher"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.features.StringFunctionFeatures",
@@ -2114,6 +2763,38 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Trigonometric functions"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.cypher.features.UpdatingFeatures",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "create",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The CREATE clause"}}}]}}}},
+                  {
+                    "name": "set",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SET clause"}}}]}}}},
+                  {
+                    "name": "with",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Multi-part queries using WITH"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Specific syntax related to updating data in the graph"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.cypher.features.VectorFunctionFeatures",
         "body": {
           "variables": [],
@@ -2145,685 +2826,4 @@
                               "value": {
                                 "literal": {
                                   "string": "The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Vector functions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.ListFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "listComprehension",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Basic list comprehensions"}}}]}}}},
-                  {
-                    "name": "listRange",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List range comprehensions (e.g. [1..10])"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List functionality"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.LiteralFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "boolean",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Boolean literals (note: included by most if not all implementations)."}}}]}}}},
-                  {
-                    "name": "double",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Double-precision floating-point literals"}}}]}}}},
-                  {
-                    "name": "integer",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Integer literals"}}}]}}}},
-                  {
-                    "name": "list",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "List literals"}}}]}}}},
-                  {
-                    "name": "map",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Map literals"}}}]}}}},
-                  {
-                    "name": "null",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NULL literal"}}}]}}}},
-                  {
-                    "name": "string",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "String literals (note: included by most if not all implementations)."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Various types of literal values"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.LogicalFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "and",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The AND operator"}}}]}}}},
-                  {
-                    "name": "not",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NOT operator"}}}]}}}},
-                  {
-                    "name": "or",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The OR operator"}}}]}}}},
-                  {
-                    "name": "xor",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XOR operator"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical operations"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.MatchFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "match",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The basic (non-optional) MATCH clause"}}}]}}}},
-                  {
-                    "name": "optionalMatch",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "OPTIONAL MATCH"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Match queries"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.MergeFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "merge",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The basic MERGE clause"}}}]}}}},
-                  {
-                    "name": "mergeOnCreate",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "MERGE with the ON CREATE action"}}}]}}}},
-                  {
-                    "name": "mergeOnMatch",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "MERGE with the ON MATCH action"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Merge operations"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.NodePatternFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "multipleLabels",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Specifying multiple labels in a node pattern"}}}]}}}},
-                  {
-                    "name": "parameter",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Specifying a parameter as part of a node pattern"}}}]}}}},
-                  {
-                    "name": "propertyMap",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Specifying a key/value map of properties in a node pattern"}}}]}}}},
-                  {
-                    "name": "variableNode",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {"string": "Binding a variable to a node in a node pattern (note: included by most if not all implementations)."}}}]}}}},
-                  {
-                    "name": "wildcardLabel",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Omitting labels from a node pattern"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Node patterns"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.NullFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "isNull",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The IS NULL operator"}}}]}}}},
-                  {
-                    "name": "isNotNull",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The IS NOT NULL operator"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "IS NULL / IS NOT NULL checks"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.PathFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "shortestPath",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The shortestPath() function"}}}]}}}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path functions only found in OpenCypher"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.ProcedureCallFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "inQueryCall",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CALL within a query"}}}]}}}},
-                  {
-                    "name": "standaloneCall",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Standalone / top-level CALL"}}}]}}}},
-                  {
-                    "name": "yield",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The YIELD clause in CALL"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Procedure calls"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.ProjectionFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "limit",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LIMIT clause"}}}]}}}},
-                  {
-                    "name": "orderBy",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ORDER BY clause"}}}]}}}},
-                  {
-                    "name": "projectDistinct",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DISTINCT keyword"}}}]}}}},
-                  {
-                    "name": "projectAll",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * projection"}}}]}}}},
-                  {
-                    "name": "projectAs",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The AS keyword"}}}]}}}},
-                  {
-                    "name": "skip",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SKIP clause"}}}]}}}},
-                  {
-                    "name": "sortOrder",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The ASC/ASCENDING and DESC/DESCENDING keywords"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Projections"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.QuantifierFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "all",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ALL quantifier"}}}]}}}},
-                  {
-                    "name": "any",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ANY quantifier"}}}]}}}},
-                  {
-                    "name": "none",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The NONE quantifier"}}}]}}}},
-                  {
-                    "name": "single",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SINGLE quantifier"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Quantifier expressions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.RangeLiteralFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "bounds",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Range literals with both lower and upper bounds"}}}]}}}},
-                  {
-                    "name": "exactRange",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Range literals providing an exact number of repetitions"}}}]}}}},
-                  {
-                    "name": "lowerBound",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals with a lower bound (only)"}}}]}}}},
-                  {
-                    "name": "starRange",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The * range literal"}}}]}}}},
-                  {
-                    "name": "upperBound",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals with an upper bound (only)"}}}]}}}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range literals within relationship patterns"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.ReadingFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "union",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNION operator"}}}]}}}},
-                  {
-                    "name": "unionAll",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNION ALL operator"}}}]}}}},
-                  {
-                    "name": "unwind",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The UNWIND clause"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Specific syntax related to reading data from the graph."}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.RelationshipDirectionFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "both",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The two-headed arrow (<-[]->) relationship direction"}}}]}}}},
-                  {
-                    "name": "left",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The left arrow (<-[]-) relationship direction"}}}]}}}},
-                  {
-                    "name": "neither",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The headless arrow (-[]-) relationship direction"}}}]}}}},
-                  {
-                    "name": "right",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The right arrow (-[]->) relationship direction"}}}]}}}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship directions / arrow patterns"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.RelationshipPatternFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "multipleTypes",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Specifying a disjunction of multiple types in a relationship pattern"}}}]}}}},
-                  {
-                    "name": "variableRelationship",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "Binding a variable to a relationship in a relationship pattern (note: included by most if not all implementations)."}}}]}}}},
-                  {
-                    "name": "wildcardType",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Omitting types from a relationship pattern"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Relationship patterns"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.RemoveFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "byLabel",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE Variable:NodeLabels"}}}]}}}},
-                  {
-                    "name": "byProperty",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE PropertyExpression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "REMOVE operations"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.SetFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "propertyEquals",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Defining a set using PropertyExpression = Expression"}}}]}}}},
-                  {
-                    "name": "variableEquals",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable = Expression"}}}]}}}},
-                  {
-                    "name": "variablePlusEquals",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable += Expression"}}}]}}}},
-                  {
-                    "name": "variableWithNodeLabels",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Defining a set using Variable:NodeLabels"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set definitions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.StringFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "contains",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The contains() function / CONTAINS"}}}]}}}},
-                  {
-                    "name": "endsWith",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The endsWith() function / ENDS WITH"}}}]}}}},
-                  {
-                    "name": "in",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The in() function / IN"}}}]}}}},
-                  {
-                    "name": "startsWith",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The startsWith() function / STARTS WITH"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "String functions/keywords only found in OpenCypher"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.cypher.features.UpdatingFeatures",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "create",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The CREATE clause"}}}]}}}},
-                  {
-                    "name": "set",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SET clause"}}}]}}}},
-                  {
-                    "name": "with",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Multi-part queries using WITH"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Specific syntax related to updating data in the graph"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Vector functions"}}}]}}}}}}]}

@@ -1943,8 +1943,8 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "withoutInitializer", "type": {"variable": "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer"}},
-              {"name": "withInitializer", "type": {"variable": "hydra.java.syntax.ArrayCreationExpressionWithInitializer"}}]}}}},
+              {"name": "noInit", "type": {"variable": "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer"}},
+              {"name": "withInit", "type": {"variable": "hydra.java.syntax.ArrayCreationExpressionWithInitializer"}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer",

@@ -365,7 +365,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}},
+                  "argument": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -378,7 +378,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}},
+                    "argument": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -417,7 +417,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}}},
+                "argument": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -455,27 +455,27 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.datalog.syntax.Program"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.program_ElmtProgram_Elmt",
+        "name": "hydra.dsl.datalog.syntax.programElmtProgramElmt",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Program_Elmt"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ProgramElmt"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.Program_Elmt"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.ProgramElmt"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.program_ElmtFact",
+        "name": "hydra.dsl.datalog.syntax.programElmtFact",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -486,7 +486,7 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -508,7 +508,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Program_Elmt"}}}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ProgramElmt"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -523,10 +523,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the Fact variant of hydra.datalog.syntax.Program_Elmt"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the Fact variant of hydra.datalog.syntax.ProgramElmt"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.program_ElmtRule",
+        "name": "hydra.dsl.datalog.syntax.programElmtRule",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -537,7 +537,7 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -559,7 +559,7 @@
                               "fields": [
                                 {
                                   "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.Program_Elmt"}}}}},
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ProgramElmt"}}}}},
                                 {
                                   "name": "field",
                                   "term": {
@@ -574,7 +574,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the Rule variant of hydra.datalog.syntax.Program_Elmt"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the Rule variant of hydra.datalog.syntax.ProgramElmt"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.factFact",
@@ -1828,14 +1828,14 @@
                   "value": {"literal": {"string": "DSL injection for the single variant of hydra.datalog.syntax.AtomList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomListMultiple",
+        "name": "hydra.dsl.datalog.syntax.atomListMany",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1846,7 +1846,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -1868,7 +1868,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "multiple"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "many"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -1876,30 +1876,30 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.AtomList"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the many variant of hydra.datalog.syntax.AtomList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_MultipleAtomList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.atomListMultipleAtomListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.atomListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -1915,7 +1915,7 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1942,7 +1942,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -1967,17 +1967,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_MultipleAtom",
+        "name": "hydra.dsl.datalog.syntax.atomListMultipleAtom",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1988,7 +1988,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2014,7 +2014,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Atom"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2023,17 +2023,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the Atom field of hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the Atom field of hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_MultipleAtomList",
+        "name": "hydra.dsl.datalog.syntax.atomListMultipleAtomList",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2044,7 +2044,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2070,7 +2070,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "AtomList"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2079,17 +2079,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the AtomList field of hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the AtomList field of hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_MultipleWithAtom",
+        "name": "hydra.dsl.datalog.syntax.atomListMultipleWithAtom",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2098,14 +2098,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2125,7 +2125,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2167,7 +2167,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "AtomList"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2176,17 +2176,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the Atom field of hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the Atom field of hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.atomList_MultipleWithAtomList",
+        "name": "hydra.dsl.datalog.syntax.atomListMultipleWithAtomList",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2195,14 +2195,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2222,7 +2222,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2256,7 +2256,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.AtomListMultiple"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Atom"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2273,7 +2273,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the AtomList field of hydra.datalog.syntax.AtomList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the AtomList field of hydra.datalog.syntax.AtomListMultiple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.termTerm",
@@ -2466,14 +2466,14 @@
                   "value": {"literal": {"string": "DSL injection for the single variant of hydra.datalog.syntax.TermList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termListMultiple",
+        "name": "hydra.dsl.datalog.syntax.termListMany",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2484,7 +2484,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2506,7 +2506,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "multiple"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "many"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -2514,30 +2514,30 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.TermList"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the many variant of hydra.datalog.syntax.TermList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_MultipleTermList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.termListMultipleTermListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.termListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -2553,7 +2553,7 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -2580,7 +2580,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2605,17 +2605,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_MultipleTerm",
+        "name": "hydra.dsl.datalog.syntax.termListMultipleTerm",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2626,7 +2626,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2652,7 +2652,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Term"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2661,17 +2661,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the Term field of hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the Term field of hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_MultipleTermList",
+        "name": "hydra.dsl.datalog.syntax.termListMultipleTermList",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2682,7 +2682,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2708,7 +2708,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "TermList"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2717,17 +2717,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the TermList field of hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the TermList field of hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_MultipleWithTerm",
+        "name": "hydra.dsl.datalog.syntax.termListMultipleWithTerm",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2736,14 +2736,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2763,7 +2763,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2805,7 +2805,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "TermList"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2814,17 +2814,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the Term field of hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the Term field of hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.termList_MultipleWithTermList",
+        "name": "hydra.dsl.datalog.syntax.termListMultipleWithTermList",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2833,14 +2833,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}},
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.datalog.syntax.TermListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2860,7 +2860,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2894,7 +2894,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.TermListMultiple"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Term"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2911,7 +2911,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the TermList field of hydra.datalog.syntax.TermList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the TermList field of hydra.datalog.syntax.TermListMultiple"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.datalog.syntax.constantListConstantList",
@@ -2985,7 +2985,7 @@
                   "value": {"literal": {"string": "DSL injection for the single variant of hydra.datalog.syntax.ConstantList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantListMultiple",
+        "name": "hydra.dsl.datalog.syntax.constantListMany",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -2994,7 +2994,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                  "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -3007,7 +3007,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                    "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -3029,7 +3029,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "multiple"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "many"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -3037,10 +3037,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the multiple variant of hydra.datalog.syntax.ConstantList"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the many variant of hydra.datalog.syntax.ConstantList"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_MultipleConstantList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.constantListMultipleConstantListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [],
@@ -3048,21 +3048,21 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedName"},
-                "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_Multiple",
+        "name": "hydra.dsl.datalog.syntax.constantListMultiple",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3080,7 +3080,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -3107,7 +3107,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -3132,10 +3132,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL constructor for hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_MultipleConstant",
+        "name": "hydra.dsl.datalog.syntax.constantListMultipleConstant",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3144,7 +3144,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                  "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -3157,7 +3157,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                    "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -3183,7 +3183,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Constant"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -3192,10 +3192,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the Constant field of hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the Constant field of hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_MultipleConstantList",
+        "name": "hydra.dsl.datalog.syntax.constantListMultipleConstantList",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3204,7 +3204,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                  "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -3217,7 +3217,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                    "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -3243,7 +3243,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                               {
                                                 "name": "fieldName",
                                                 "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ConstantList"}}}}}]}}}}}},
@@ -3254,10 +3254,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the ConstantList field of hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the ConstantList field of hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_MultipleWithConstant",
+        "name": "hydra.dsl.datalog.syntax.constantListMultipleWithConstant",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3266,7 +3266,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                  "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -3277,7 +3277,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -3286,7 +3286,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                    "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -3306,7 +3306,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -3348,7 +3348,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                                                             {
                                                                               "name": "fieldName",
                                                                               "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ConstantList"}}}}}]}}}}}},
@@ -3359,10 +3359,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the Constant field of hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the Constant field of hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.datalog.syntax.constantList_MultipleWithConstantList",
+        "name": "hydra.dsl.datalog.syntax.constantListMultipleWithConstantList",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3371,7 +3371,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                  "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -3382,7 +3382,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -3391,7 +3391,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}},
+                    "argument": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -3411,7 +3411,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -3445,7 +3445,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantList_Multiple"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.datalog.syntax.ConstantListMultiple"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Constant"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -3462,4 +3462,4 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the ConstantList field of hydra.datalog.syntax.ConstantList_Multiple"}}}]}}}}}]}
+                  "value": {"literal": {"string": "DSL updater for the ConstantList field of hydra.datalog.syntax.ConstantListMultiple"}}}]}}}}}]}

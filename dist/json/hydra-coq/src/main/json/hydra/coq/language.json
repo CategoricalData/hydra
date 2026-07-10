@@ -39,319 +39,344 @@
         "name": "hydra.coq.language.coqLanguage",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.coders.Language"}}},
         "body": {
-          "let": {
-            "bindings": [
-              {
-                "name": "literalVariants",
-                "term": {
-                  "application": {
-                    "function": {
-                      "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.LiteralVariant"}}},
-                    "argument": {
-                      "list": [
-                        {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "boolean", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "float", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "integer", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "string", "term": "unit"}}}]}}},
-                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
-              {
-                "name": "floatTypes",
-                "term": {
-                  "application": {
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}},
-                    "argument": {"list": [{"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}]}}},
-                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.FloatType"}}}},
-              {
-                "name": "integerTypes",
-                "term": {
-                  "application": {
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.IntegerType"}}},
-                    "argument": {"list": [{"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "bigint", "term": "unit"}}}]}}},
-                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
-              {
-                "name": "termVariants",
-                "term": {
-                  "application": {
-                    "function": {
-                      "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TermVariant"}}},
-                    "argument": {
-                      "list": [
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "application", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "either", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "cases", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "lambda", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "project", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "unwrap", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "typeApplication", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "typeLambda", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "let", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "list", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "literal", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "map", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "optional", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "pair", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "record", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "set", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "inject", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "unit", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "variable", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
-                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
-              {
-                "name": "typeVariants",
-                "term": {
-                  "application": {
-                    "function": {
-                      "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
-                    "argument": {
-                      "list": [
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "annotated", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "list", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "literal", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "map", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "optional", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "pair", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "record", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "set", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "union", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "unit", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "variable", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "void", "term": "unit"}}},
-                        {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
-                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
-              {
-                "name": "typePredicate",
-                "term": {
-                  "typeLambda": {
-                    "parameter": "t0",
-                    "body": {"lambda": {"parameter": "_", "domain": {"variable": "t0"}, "body": {"literal": {"boolean": true}}}}}},
-                "typeScheme": {"variables": ["t0"], "body": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "boolean"}}}}}],
+          "annotated": {
             "body": {
-              "record": {
-                "typeName": "hydra.coders.Language",
-                "fields": [
+              "let": {
+                "bindings": [
                   {
-                    "name": "name",
-                    "term": {"wrap": {"typeName": "hydra.coders.LanguageName", "body": {"literal": {"string": "hydra.coq"}}}}},
-                  {
-                    "name": "constraints",
-                    "term": {
-                      "record": {
-                        "typeName": "hydra.coders.LanguageConstraints",
-                        "fields": [
-                          {"name": "literalVariants", "term": {"variable": "literalVariants"}},
-                          {"name": "floatTypes", "term": {"variable": "floatTypes"}},
-                          {"name": "integerTypes", "term": {"variable": "integerTypes"}},
-                          {"name": "termVariants", "term": {"variable": "termVariants"}},
-                          {"name": "typeVariants", "term": {"variable": "typeVariants"}},
-                          {
-                            "name": "types",
-                            "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}]}}},
-                  {
-                    "name": "supportedFeatures",
+                    "name": "literalVariants",
                     "term": {
                       "application": {
                         "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.coders.LanguageFeature"}}},
+                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.LiteralVariant"}}},
                         "argument": {
                           "list": [
-                            {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "partialApplication", "term": "unit"}}},
-                            {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedCaseStatements", "term": "unit"}}},
-                            {
-                              "inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedPolymorphicLetBindings", "term": "unit"}}}]}}}},
+                            {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "boolean", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "float", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "integer", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "string", "term": "unit"}}}]}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
                   {
-                    "name": "caseConventions",
+                    "name": "floatTypes",
                     "term": {
-                      "record": {
-                        "typeName": "hydra.coders.CaseConventions",
-                        "fields": [
-                          {
-                            "name": "constant",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}},
-                          {
-                            "name": "directory",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
-                          {
-                            "name": "enumValue",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
-                          {
-                            "name": "field",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
-                          {
-                            "name": "file",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
-                          {
-                            "name": "module",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
-                          {
-                            "name": "term",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
-                          {
-                            "name": "termVariable",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
-                          {
-                            "name": "type",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
-                          {
-                            "name": "typeVariable",
-                            "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}]}}},
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}},
+                        "argument": {"list": [{"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}]}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.FloatType"}}}},
                   {
-                    "name": "defaultFileExtension",
-                    "term": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "v"}}}}}]}}}}}},
+                    "name": "integerTypes",
+                    "term": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.IntegerType"}}},
+                        "argument": {"list": [{"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "bigint", "term": "unit"}}}]}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
+                  {
+                    "name": "termVariants",
+                    "term": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TermVariant"}}},
+                        "argument": {
+                          "list": [
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "application", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "either", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "cases", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "lambda", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "project", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "unwrap", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "typeApplication", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "typeLambda", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "let", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "list", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "literal", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "map", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "optional", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "pair", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "record", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "set", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "inject", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "unit", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "variable", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
+                  {
+                    "name": "typeVariants",
+                    "term": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                        "argument": {
+                          "list": [
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "annotated", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "list", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "literal", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "map", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "optional", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "pair", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "record", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "set", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "union", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "unit", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "variable", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "void", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
+                  {
+                    "name": "typePredicate",
+                    "term": {
+                      "typeLambda": {
+                        "parameter": "t0",
+                        "body": {"lambda": {"parameter": "_", "domain": {"variable": "t0"}, "body": {"literal": {"boolean": true}}}}}},
+                    "typeScheme": {"variables": ["t0"], "body": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "boolean"}}}}}],
+                "body": {
+                  "record": {
+                    "typeName": "hydra.coders.Language",
+                    "fields": [
+                      {
+                        "name": "name",
+                        "term": {"wrap": {"typeName": "hydra.coders.LanguageName", "body": {"literal": {"string": "hydra.coq"}}}}},
+                      {
+                        "name": "constraints",
+                        "term": {
+                          "record": {
+                            "typeName": "hydra.coders.LanguageConstraints",
+                            "fields": [
+                              {"name": "literalVariants", "term": {"variable": "literalVariants"}},
+                              {"name": "floatTypes", "term": {"variable": "floatTypes"}},
+                              {"name": "integerTypes", "term": {"variable": "integerTypes"}},
+                              {"name": "termVariants", "term": {"variable": "termVariants"}},
+                              {"name": "typeVariants", "term": {"variable": "typeVariants"}},
+                              {
+                                "name": "types",
+                                "term": {"typeApplication": {"body": {"variable": "typePredicate"}, "type": {"variable": "hydra.core.Type"}}}}]}}},
+                      {
+                        "name": "supportedFeatures",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.coders.LanguageFeature"}}},
+                            "argument": {
+                              "list": [
+                                {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "partialApplication", "term": "unit"}}},
+                                {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedCaseStatements", "term": "unit"}}},
+                                {
+                                  "inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedPolymorphicLetBindings", "term": "unit"}}}]}}}},
+                      {
+                        "name": "caseConventions",
+                        "term": {
+                          "record": {
+                            "typeName": "hydra.coders.CaseConventions",
+                            "fields": [
+                              {
+                                "name": "constant",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}},
+                              {
+                                "name": "directory",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
+                              {
+                                "name": "enumValue",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
+                              {
+                                "name": "field",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
+                              {
+                                "name": "file",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
+                              {
+                                "name": "module",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
+                              {
+                                "name": "term",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
+                              {
+                                "name": "termVariable",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
+                              {
+                                "name": "type",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
+                              {
+                                "name": "typeVariable",
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}]}}},
+                      {
+                        "name": "defaultFileExtension",
+                        "term": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "v"}}}}}]}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Language constraints for Coq; Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.language.coqReservedWords",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"set": {"literal": "string"}}}},
         "body": {
-          "application": {
-            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
-            "argument": {
-              "list": [
-                {"literal": {"string": "as"}},
-                {"literal": {"string": "at"}},
-                {"literal": {"string": "cofix"}},
-                {"literal": {"string": "do"}},
-                {"literal": {"string": "else"}},
-                {"literal": {"string": "end"}},
-                {"literal": {"string": "exists"}},
-                {"literal": {"string": "exists2"}},
-                {"literal": {"string": "fix"}},
-                {"literal": {"string": "for"}},
-                {"literal": {"string": "forall"}},
-                {"literal": {"string": "fun"}},
-                {"literal": {"string": "if"}},
-                {"literal": {"string": "IF"}},
-                {"literal": {"string": "in"}},
-                {"literal": {"string": "let"}},
-                {"literal": {"string": "match"}},
-                {"literal": {"string": "mod"}},
-                {"literal": {"string": "open"}},
-                {"literal": {"string": "Prop"}},
-                {"literal": {"string": "return"}},
-                {"literal": {"string": "Set"}},
-                {"literal": {"string": "then"}},
-                {"literal": {"string": "Type"}},
-                {"literal": {"string": "using"}},
-                {"literal": {"string": "where"}},
-                {"literal": {"string": "with"}},
-                {"literal": {"string": "Axiom"}},
-                {"literal": {"string": "Class"}},
-                {"literal": {"string": "Coercion"}},
-                {"literal": {"string": "Context"}},
-                {"literal": {"string": "Definition"}},
-                {"literal": {"string": "Fixpoint"}},
-                {"literal": {"string": "Hypothesis"}},
-                {"literal": {"string": "Inductive"}},
-                {"literal": {"string": "Instance"}},
-                {"literal": {"string": "Lemma"}},
-                {"literal": {"string": "Module"}},
-                {"literal": {"string": "Notation"}},
-                {"literal": {"string": "Proof"}},
-                {"literal": {"string": "Qed"}},
-                {"literal": {"string": "Record"}},
-                {"literal": {"string": "Require"}},
-                {"literal": {"string": "Import"}},
-                {"literal": {"string": "Section"}},
-                {"literal": {"string": "End"}},
-                {"literal": {"string": "Theorem"}},
-                {"literal": {"string": "Example"}},
-                {"literal": {"string": "Variable"}},
-                {"literal": {"string": "Variables"}},
-                {"literal": {"string": "cons"}},
-                {"literal": {"string": "pair"}},
-                {"literal": {"string": "nil"}},
-                {"literal": {"string": "list"}},
-                {"literal": {"string": "option"}},
-                {"literal": {"string": "prod"}},
-                {"literal": {"string": "sum"}},
-                {"literal": {"string": "unit"}},
-                {"literal": {"string": "bool"}},
-                {"literal": {"string": "nat"}},
-                {"literal": {"string": "string"}},
-                {"literal": {"string": "term"}},
-                {"literal": {"string": "literal"}},
-                {"literal": {"string": "graph"}},
-                {"literal": {"string": "element"}}]}}}}},
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
+                "argument": {
+                  "list": [
+                    {"literal": {"string": "as"}},
+                    {"literal": {"string": "at"}},
+                    {"literal": {"string": "cofix"}},
+                    {"literal": {"string": "do"}},
+                    {"literal": {"string": "else"}},
+                    {"literal": {"string": "end"}},
+                    {"literal": {"string": "exists"}},
+                    {"literal": {"string": "exists2"}},
+                    {"literal": {"string": "fix"}},
+                    {"literal": {"string": "for"}},
+                    {"literal": {"string": "forall"}},
+                    {"literal": {"string": "fun"}},
+                    {"literal": {"string": "if"}},
+                    {"literal": {"string": "IF"}},
+                    {"literal": {"string": "in"}},
+                    {"literal": {"string": "let"}},
+                    {"literal": {"string": "match"}},
+                    {"literal": {"string": "mod"}},
+                    {"literal": {"string": "open"}},
+                    {"literal": {"string": "Prop"}},
+                    {"literal": {"string": "return"}},
+                    {"literal": {"string": "Set"}},
+                    {"literal": {"string": "then"}},
+                    {"literal": {"string": "Type"}},
+                    {"literal": {"string": "using"}},
+                    {"literal": {"string": "where"}},
+                    {"literal": {"string": "with"}},
+                    {"literal": {"string": "Axiom"}},
+                    {"literal": {"string": "Class"}},
+                    {"literal": {"string": "Coercion"}},
+                    {"literal": {"string": "Context"}},
+                    {"literal": {"string": "Definition"}},
+                    {"literal": {"string": "Fixpoint"}},
+                    {"literal": {"string": "Hypothesis"}},
+                    {"literal": {"string": "Inductive"}},
+                    {"literal": {"string": "Instance"}},
+                    {"literal": {"string": "Lemma"}},
+                    {"literal": {"string": "Module"}},
+                    {"literal": {"string": "Notation"}},
+                    {"literal": {"string": "Proof"}},
+                    {"literal": {"string": "Qed"}},
+                    {"literal": {"string": "Record"}},
+                    {"literal": {"string": "Require"}},
+                    {"literal": {"string": "Import"}},
+                    {"literal": {"string": "Section"}},
+                    {"literal": {"string": "End"}},
+                    {"literal": {"string": "Theorem"}},
+                    {"literal": {"string": "Example"}},
+                    {"literal": {"string": "Variable"}},
+                    {"literal": {"string": "Variables"}},
+                    {"literal": {"string": "cons"}},
+                    {"literal": {"string": "pair"}},
+                    {"literal": {"string": "nil"}},
+                    {"literal": {"string": "list"}},
+                    {"literal": {"string": "option"}},
+                    {"literal": {"string": "prod"}},
+                    {"literal": {"string": "sum"}},
+                    {"literal": {"string": "unit"}},
+                    {"literal": {"string": "bool"}},
+                    {"literal": {"string": "nat"}},
+                    {"literal": {"string": "string"}},
+                    {"literal": {"string": "term"}},
+                    {"literal": {"string": "literal"}},
+                    {"literal": {"string": "graph"}},
+                    {"literal": {"string": "element"}}]}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Reserved words that must be renamed when used as Coq variable or binding names"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.language.coqStrippedReservedWords",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"set": {"literal": "string"}}}},
         "body": {
-          "application": {
-            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
-            "argument": {
-              "list": [
-                {"literal": {"string": "as"}},
-                {"literal": {"string": "at"}},
-                {"literal": {"string": "cofix"}},
-                {"literal": {"string": "do"}},
-                {"literal": {"string": "else"}},
-                {"literal": {"string": "end"}},
-                {"literal": {"string": "exists"}},
-                {"literal": {"string": "exists2"}},
-                {"literal": {"string": "fix"}},
-                {"literal": {"string": "for"}},
-                {"literal": {"string": "forall"}},
-                {"literal": {"string": "fun"}},
-                {"literal": {"string": "if"}},
-                {"literal": {"string": "IF"}},
-                {"literal": {"string": "in"}},
-                {"literal": {"string": "let"}},
-                {"literal": {"string": "match"}},
-                {"literal": {"string": "mod"}},
-                {"literal": {"string": "Prop"}},
-                {"literal": {"string": "return"}},
-                {"literal": {"string": "Set"}},
-                {"literal": {"string": "then"}},
-                {"literal": {"string": "Type"}},
-                {"literal": {"string": "using"}},
-                {"literal": {"string": "where"}},
-                {"literal": {"string": "with"}},
-                {"literal": {"string": "Axiom"}},
-                {"literal": {"string": "Class"}},
-                {"literal": {"string": "Coercion"}},
-                {"literal": {"string": "Context"}},
-                {"literal": {"string": "Definition"}},
-                {"literal": {"string": "Fixpoint"}},
-                {"literal": {"string": "Hypothesis"}},
-                {"literal": {"string": "Inductive"}},
-                {"literal": {"string": "Instance"}},
-                {"literal": {"string": "Lemma"}},
-                {"literal": {"string": "Module"}},
-                {"literal": {"string": "Notation"}},
-                {"literal": {"string": "Proof"}},
-                {"literal": {"string": "Qed"}},
-                {"literal": {"string": "Record"}},
-                {"literal": {"string": "Require"}},
-                {"literal": {"string": "Import"}},
-                {"literal": {"string": "Section"}},
-                {"literal": {"string": "End"}},
-                {"literal": {"string": "Theorem"}},
-                {"literal": {"string": "Example"}},
-                {"literal": {"string": "Variable"}},
-                {"literal": {"string": "Variables"}},
-                {"literal": {"string": "bool"}},
-                {"literal": {"string": "nat"}},
-                {"literal": {"string": "list"}},
-                {"literal": {"string": "option"}},
-                {"literal": {"string": "prod"}},
-                {"literal": {"string": "sum"}},
-                {"literal": {"string": "unit"}},
-                {"literal": {"string": "string"}},
-                {"literal": {"string": "String"}},
-                {"literal": {"string": "Empty_set"}},
-                {"literal": {"string": "true"}},
-                {"literal": {"string": "false"}},
-                {"literal": {"string": "None"}},
-                {"literal": {"string": "Some"}},
-                {"literal": {"string": "nil"}},
-                {"literal": {"string": "cons"}},
-                {"literal": {"string": "pair"}},
-                {"literal": {"string": "inl"}},
-                {"literal": {"string": "inr"}},
-                {"literal": {"string": "tt"}},
-                {"literal": {"string": "graph"}}]}}}}}]}
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
+                "argument": {
+                  "list": [
+                    {"literal": {"string": "as"}},
+                    {"literal": {"string": "at"}},
+                    {"literal": {"string": "cofix"}},
+                    {"literal": {"string": "do"}},
+                    {"literal": {"string": "else"}},
+                    {"literal": {"string": "end"}},
+                    {"literal": {"string": "exists"}},
+                    {"literal": {"string": "exists2"}},
+                    {"literal": {"string": "fix"}},
+                    {"literal": {"string": "for"}},
+                    {"literal": {"string": "forall"}},
+                    {"literal": {"string": "fun"}},
+                    {"literal": {"string": "if"}},
+                    {"literal": {"string": "IF"}},
+                    {"literal": {"string": "in"}},
+                    {"literal": {"string": "let"}},
+                    {"literal": {"string": "match"}},
+                    {"literal": {"string": "mod"}},
+                    {"literal": {"string": "Prop"}},
+                    {"literal": {"string": "return"}},
+                    {"literal": {"string": "Set"}},
+                    {"literal": {"string": "then"}},
+                    {"literal": {"string": "Type"}},
+                    {"literal": {"string": "using"}},
+                    {"literal": {"string": "where"}},
+                    {"literal": {"string": "with"}},
+                    {"literal": {"string": "Axiom"}},
+                    {"literal": {"string": "Class"}},
+                    {"literal": {"string": "Coercion"}},
+                    {"literal": {"string": "Context"}},
+                    {"literal": {"string": "Definition"}},
+                    {"literal": {"string": "Fixpoint"}},
+                    {"literal": {"string": "Hypothesis"}},
+                    {"literal": {"string": "Inductive"}},
+                    {"literal": {"string": "Instance"}},
+                    {"literal": {"string": "Lemma"}},
+                    {"literal": {"string": "Module"}},
+                    {"literal": {"string": "Notation"}},
+                    {"literal": {"string": "Proof"}},
+                    {"literal": {"string": "Qed"}},
+                    {"literal": {"string": "Record"}},
+                    {"literal": {"string": "Require"}},
+                    {"literal": {"string": "Import"}},
+                    {"literal": {"string": "Section"}},
+                    {"literal": {"string": "End"}},
+                    {"literal": {"string": "Theorem"}},
+                    {"literal": {"string": "Example"}},
+                    {"literal": {"string": "Variable"}},
+                    {"literal": {"string": "Variables"}},
+                    {"literal": {"string": "bool"}},
+                    {"literal": {"string": "nat"}},
+                    {"literal": {"string": "list"}},
+                    {"literal": {"string": "option"}},
+                    {"literal": {"string": "prod"}},
+                    {"literal": {"string": "sum"}},
+                    {"literal": {"string": "unit"}},
+                    {"literal": {"string": "string"}},
+                    {"literal": {"string": "String"}},
+                    {"literal": {"string": "Empty_set"}},
+                    {"literal": {"string": "true"}},
+                    {"literal": {"string": "false"}},
+                    {"literal": {"string": "None"}},
+                    {"literal": {"string": "Some"}},
+                    {"literal": {"string": "nil"}},
+                    {"literal": {"string": "cons"}},
+                    {"literal": {"string": "pair"}},
+                    {"literal": {"string": "inl"}},
+                    {"literal": {"string": "inr"}},
+                    {"literal": {"string": "tt"}},
+                    {"literal": {"string": "graph"}}]}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Reserved words that must be renamed when they appear as a stripped-local form of a cross-module Hydra reference"}}}]}}}}}]}

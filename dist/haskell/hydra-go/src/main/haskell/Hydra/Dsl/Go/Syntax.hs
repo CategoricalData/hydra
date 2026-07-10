@@ -4061,18 +4061,9 @@ operandLiteral x =
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
--- | DSL injection for the name variant of hydra.go.syntax.Operand
-operandName :: Typed.TypedTerm Syntax.OperandName -> Typed.TypedTerm Syntax.Operand
-operandName x =
-    Typed.TypedTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.go.syntax.Operand"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "name"),
-        Core.fieldTerm = (Typed.unTypedTerm x)}}))
-
 -- | DSL constructor for hydra.go.syntax.OperandName
-operandName2 :: Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.OperandName
-operandName2 name typeArgs =
+operandName :: Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.OperandName
+operandName name typeArgs =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.go.syntax.OperandName"),
       Core.recordFields = [
@@ -4138,6 +4129,15 @@ operandNameWithTypeArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeArgs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL injection for the named variant of hydra.go.syntax.Operand
+operandNamed :: Typed.TypedTerm Syntax.OperandName -> Typed.TypedTerm Syntax.Operand
+operandNamed x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.go.syntax.Operand"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "named"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
 -- | DSL name token for hydra.go.syntax.Operand
 operandOperand :: Typed.TypedName Syntax.Operand
@@ -6059,18 +6059,9 @@ typeLiteral x =
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
--- | DSL injection for the name variant of hydra.go.syntax.Type
-typeName :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm Syntax.Type
-typeName x =
-    Typed.TypedTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.go.syntax.Type"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "name"),
-        Core.fieldTerm = (Typed.unTypedTerm x)}}))
-
 -- | DSL constructor for hydra.go.syntax.TypeName
-typeName2 :: Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.TypeName
-typeName2 name typeArgs =
+typeName :: Typed.TypedTerm Syntax.QualifiedIdent -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.TypeName
+typeName name typeArgs =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.go.syntax.TypeName"),
       Core.recordFields = [
@@ -6136,6 +6127,15 @@ typeNameWithTypeArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeArgs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL injection for the named variant of hydra.go.syntax.Type
+typeNamed :: Typed.TypedTerm Syntax.TypeName -> Typed.TypedTerm Syntax.Type
+typeNamed x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.go.syntax.Type"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "named"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
 -- | DSL constructor for hydra.go.syntax.TypeParamDecl
 typeParamDecl :: Typed.TypedTerm [Syntax.Identifier] -> Typed.TypedTerm Syntax.TypeConstraint -> Typed.TypedTerm Syntax.TypeParamDecl

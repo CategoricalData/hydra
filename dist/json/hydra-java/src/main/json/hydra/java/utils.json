@@ -1103,7 +1103,7 @@
                                 "inject": {
                                   "typeName": "hydra.java.syntax.ArrayCreationExpression",
                                   "field": {
-                                    "name": "withInitializer",
+                                    "name": "withInit",
                                     "term": {
                                       "inject": {
                                         "typeName": "hydra.java.syntax.ArrayCreationExpressionWithInitializer",

@@ -18,7 +18,7 @@
                   {"name": "name", "type": {"optional": {"literal": "string"}}},
                   {"name": "typeName", "type": {"optional": {"literal": "string"}}},
                   {"name": "isOptional", "type": {"literal": "boolean"}},
-                  {"name": "cardinality", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}},
+                  {"name": "cardinality", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}},
                   {"name": "valuesMinCount", "type": {"literal": {"integer": "int32"}}},
                   {"name": "valuesMaxCount", "type": {"literal": {"integer": "int32"}}},
                   {"name": "isUnique", "type": {"literal": "boolean"}},
@@ -27,7 +27,7 @@
                   {"name": "defaultValue", "type": {"optional": {"literal": "string"}}},
                   {"name": "description", "type": {"optional": {"literal": "string"}}},
                   {"name": "searchWeight", "type": {"literal": {"integer": "int32"}}},
-                  {"name": "indexType", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}},
+                  {"name": "indexType", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}},
                   {"name": "constraints", "type": {"list": {"variable": "hydra.atlas.AtlasConstraintDef"}}},
                   {"name": "options", "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}},
                   {"name": "displayName", "type": {"optional": {"literal": "string"}}}]},
@@ -38,14 +38,27 @@
                     "value": {"literal": {"string": "class that captures details of a struct-attribute."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasAttributeDef_Cardinality",
+        "name": "hydra.atlas.AtlasAttributeDefCardinality",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "single", "type": "unit"}, {"name": "list", "type": "unit"}, {"name": "set", "type": "unit"}]}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "single", "type": "unit"}, {"name": "list", "type": "unit"}, {"name": "set", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The cardinality of an Atlas attribute: single-valued, a list, or a set"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.atlas.AtlasAttributeDef_IndexType",
-        "body": {"variables": [], "body": {"union": [{"name": "default", "type": "unit"}, {"name": "string", "type": "unit"}]}}}},
+        "name": "hydra.atlas.AtlasAttributeDefIndexType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "default", "type": "unit"}, {"name": "string", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The index type of an Atlas attribute"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.atlas.AtlasBaseTypeDef",
@@ -168,14 +181,18 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "primitive", "type": "unit"},
-              {"name": "objectIdType", "type": "unit"},
-              {"name": "enum", "type": "unit"},
-              {"name": "struct", "type": "unit"},
-              {"name": "classification", "type": "unit"},
-              {"name": "entity", "type": "unit"},
-              {"name": "array", "type": "unit"},
-              {"name": "map", "type": "unit"},
-              {"name": "relationship", "type": "unit"},
-              {"name": "businessMetadata", "type": "unit"}]}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "primitive", "type": "unit"},
+                  {"name": "objectIdType", "type": "unit"},
+                  {"name": "enum", "type": "unit"},
+                  {"name": "struct", "type": "unit"},
+                  {"name": "classification", "type": "unit"},
+                  {"name": "entity", "type": "unit"},
+                  {"name": "array", "type": "unit"},
+                  {"name": "map", "type": "unit"},
+                  {"name": "relationship", "type": "unit"},
+                  {"name": "businessMetadata", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The category of an Atlas type definition"}}}]}}}}}}]}

@@ -114,13 +114,16 @@
           "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.coq.syntax.Ident"}}},
         "body": {
-          "lambda": {
-            "parameter": "s",
-            "domain": {"literal": "string"},
+          "annotated": {
             "body": {
-              "wrap": {
-                "typeName": "hydra.coq.syntax.Ident",
-                "body": {"wrap": {"typeName": "hydra.coq.syntax.String", "body": {"variable": "s"}}}}}}}}},
+              "lambda": {
+                "parameter": "s",
+                "domain": {"literal": "string"},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.coq.syntax.Ident",
+                    "body": {"wrap": {"typeName": "hydra.coq.syntax.String", "body": {"variable": "s"}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Build a Coq Ident from a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.coder.coqName",
@@ -129,13 +132,20 @@
           "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.coq.syntax.Name"}}},
         "body": {
-          "lambda": {
-            "parameter": "s",
-            "domain": {"literal": "string"},
+          "annotated": {
             "body": {
-              "wrap": {
-                "typeName": "hydra.coq.syntax.Name",
-                "body": {"optional": {"application": {"function": {"variable": "hydra.coq.coder.coqIdent"}, "argument": {"variable": "s"}}}}}}}}}},
+              "lambda": {
+                "parameter": "s",
+                "domain": {"literal": "string"},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.coq.syntax.Name",
+                    "body": {"optional": {"application": {"function": {"variable": "hydra.coq.coder.coqIdent"}, "argument": {"variable": "s"}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a Coq Name (optional Ident) from a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.coder.coqQualid",
@@ -144,19 +154,26 @@
           "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.coq.syntax.Qualid"}}},
         "body": {
-          "lambda": {
-            "parameter": "s",
-            "domain": {"literal": "string"},
+          "annotated": {
             "body": {
-              "record": {
-                "typeName": "hydra.coq.syntax.Qualid",
-                "fields": [
-                  {
-                    "name": "id",
-                    "term": {"application": {"function": {"variable": "hydra.coq.coder.coqIdent"}, "argument": {"variable": "s"}}}},
-                  {
-                    "name": "fieldIds",
-                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.coq.syntax.FieldIdent"}}}}]}}}}}},
+              "lambda": {
+                "parameter": "s",
+                "domain": {"literal": "string"},
+                "body": {
+                  "record": {
+                    "typeName": "hydra.coq.syntax.Qualid",
+                    "fields": [
+                      {
+                        "name": "id",
+                        "term": {"application": {"function": {"variable": "hydra.coq.coder.coqIdent"}, "argument": {"variable": "s"}}}},
+                      {
+                        "name": "fieldIds",
+                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.coq.syntax.FieldIdent"}}}}]}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build a simple Coq Qualid from a string (no field-path components)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.coder.coqTermApp",
@@ -367,10 +384,13 @@
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.coq.syntax.Term"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.coq.syntax.Type"}}},
         "body": {
-          "lambda": {
-            "parameter": "t",
-            "domain": {"variable": "hydra.coq.syntax.Term"},
-            "body": {"wrap": {"typeName": "hydra.coq.syntax.Type", "body": {"variable": "t"}}}}}}},
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.coq.syntax.Term"},
+                "body": {"wrap": {"typeName": "hydra.coq.syntax.Type", "body": {"variable": "t"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a Term as a Type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.coder.encodeAxiomDefinitionPair",

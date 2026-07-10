@@ -815,13 +815,22 @@ arrayAccess_VariantPrimary x =
 arrayCreationExpressionArrayCreationExpression :: Typed.TypedName Syntax.ArrayCreationExpression
 arrayCreationExpressionArrayCreationExpression = Typed.TypedName (Core.Name "hydra.java.syntax.ArrayCreationExpression")
 
--- | DSL injection for the withInitializer variant of hydra.java.syntax.ArrayCreationExpression
-arrayCreationExpressionWithInitializer :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer -> Typed.TypedTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionWithInitializer x =
+-- | DSL injection for the noInit variant of hydra.java.syntax.ArrayCreationExpression
+arrayCreationExpressionNoInit :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer -> Typed.TypedTerm Syntax.ArrayCreationExpression
+arrayCreationExpressionNoInit x =
     Typed.TypedTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "withInitializer"),
+        Core.fieldName = (Core.Name "noInit"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL injection for the withInit variant of hydra.java.syntax.ArrayCreationExpression
+arrayCreationExpressionWithInit :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithInitializer -> Typed.TypedTerm Syntax.ArrayCreationExpression
+arrayCreationExpressionWithInit x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "withInit"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
 -- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithInitializer
@@ -1086,15 +1095,6 @@ arrayCreationExpressionWithInitializer_PrimitiveWithType original newVal =
               Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionFieldName = (Core.Name "array")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
-
--- | DSL injection for the withoutInitializer variant of hydra.java.syntax.ArrayCreationExpression
-arrayCreationExpressionWithoutInitializer :: Typed.TypedTerm Syntax.ArrayCreationExpressionWithoutInitializer -> Typed.TypedTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionWithoutInitializer x =
-    Typed.TypedTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "withoutInitializer"),
-        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
 -- | DSL name token for hydra.java.syntax.ArrayCreationExpressionWithoutInitializer
 arrayCreationExpressionWithoutInitializerArrayCreationExpressionWithoutInitializer :: Typed.TypedName Syntax.ArrayCreationExpressionWithoutInitializer

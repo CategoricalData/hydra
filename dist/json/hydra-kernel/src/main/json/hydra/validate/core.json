@@ -3424,41 +3424,64 @@
                                           "let": {
                                             "bindings": [
                                               {
-                                                "name": "undefined",
+                                                "name": "resolvedNames",
                                                 "term": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.difference"}, "type": {"variable": "hydra.core.Name"}}},
-                                                        "argument": {"variable": "freeVars"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "typeVariables"}},
+                                                            "argument": {"variable": "cx"}}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "typeVariables"}},
-                                                        "argument": {"variable": "cx"}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.keys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                            "argument": {
+                                                              "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}}}}}},
                                                 "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.Name"}}}}],
                                             "body": {
-                                              "application": {
-                                                "function": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "undefined",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.difference"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "argument": {"variable": "freeVars"}}},
+                                                        "argument": {"variable": "resolvedNames"}}},
+                                                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.Name"}}}}],
+                                                "body": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
-                                                            "type": {"optional": {"variable": "t1"}}}},
-                                                        "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"optional": {"variable": "t1"}}}},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                "argument": {"variable": "undefined"}}}}}}},
-                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t1"}}}}},
-                                                "argument": {
-                                                  "lambda": {
-                                                    "parameter": "firstUndefined",
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "body": {"application": {"function": {"variable": "mkError"}, "argument": {"variable": "firstUndefined"}}}}}}}}}}}}}}}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                    "argument": {"variable": "undefined"}}}}}}},
+                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t1"}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "firstUndefined",
+                                                        "domain": {"variable": "hydra.core.Name"},
+                                                        "body": {"application": {"function": {"variable": "mkError"}, "argument": {"variable": "firstUndefined"}}}}}}}}}}}}}}}}}}}}},
                     "annotation": {
                       "map": [
                         {
@@ -3513,41 +3536,64 @@
                                           "let": {
                                             "bindings": [
                                               {
-                                                "name": "undefined",
+                                                "name": "resolvedNames",
                                                 "term": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.difference"}, "type": {"variable": "hydra.core.Name"}}},
-                                                        "argument": {"variable": "freeVars"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "typeVariables"}},
+                                                            "argument": {"variable": "cx"}}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "typeVariables"}},
-                                                        "argument": {"variable": "cx"}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.keys"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                            "argument": {
+                                                              "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}}}}}},
                                                 "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.Name"}}}}],
                                             "body": {
-                                              "application": {
-                                                "function": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "undefined",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.difference"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "argument": {"variable": "freeVars"}}},
+                                                        "argument": {"variable": "resolvedNames"}}},
+                                                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.Name"}}}}],
+                                                "body": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
-                                                            "type": {"optional": {"variable": "t1"}}}},
-                                                        "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"optional": {"variable": "t1"}}}},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                "argument": {"variable": "undefined"}}}}}}},
-                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t1"}}}}},
-                                                "argument": {
-                                                  "lambda": {
-                                                    "parameter": "firstUndefined",
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "body": {"application": {"function": {"variable": "mkError"}, "argument": {"variable": "firstUndefined"}}}}}}}}}}}}}}}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                    "argument": {"variable": "undefined"}}}}}}},
+                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t1"}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "firstUndefined",
+                                                        "domain": {"variable": "hydra.core.Name"},
+                                                        "body": {"application": {"function": {"variable": "mkError"}, "argument": {"variable": "firstUndefined"}}}}}}}}}}}}}}}}}}}}},
                     "annotation": {
                       "map": [
                         {

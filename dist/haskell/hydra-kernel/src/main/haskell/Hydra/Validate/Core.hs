@@ -251,7 +251,8 @@ checkUndefinedTypeVariablesInType :: t0 -> Graph.Graph -> Core.Type -> (Core.Nam
 checkUndefinedTypeVariablesInType path cx typ mkError =
 
       let freeVars = Variables.freeVariablesInType typ
-          undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
+          resolvedNames = Sets.union (Graph.graphTypeVariables cx) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes cx)))
+          undefined = Sets.difference freeVars resolvedNames
       in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 
 -- | Check a type scheme for type variables not bound by the scheme or the current scope
@@ -259,7 +260,8 @@ checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme 
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
 
       let freeVars = Variables.freeVariablesInTypeScheme ts
-          undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
+          resolvedNames = Sets.union (Graph.graphTypeVariables cx) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes cx)))
+          undefined = Sets.difference freeVars resolvedNames
       in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
 
 -- | Return an error if the given type is TypeVoid

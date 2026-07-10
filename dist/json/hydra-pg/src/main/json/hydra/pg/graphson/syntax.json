@@ -7,156 +7,307 @@
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
-      "type": {"name": "hydra.pg.graphson.syntax.BigDecimalValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.AdjacentEdge",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+                  {"name": "vertexId", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+                  {
+                    "name": "properties",
+                    "type": {
+                      "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON edge as referenced from an adjacent vertex, with its own properties"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.pg.graphson.syntax.BigDecimalValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON big-decimal value, represented as a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.CompositeTypedValue",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
-              {"name": "fields", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
+                  {"name": "fields", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON composite value tagged with a GraphSON type name"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.DateTime", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.DateTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON date-time value, represented as a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.DoubleValue",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "finite", "type": {"literal": {"float": "float64"}}},
-              {"name": "infinity", "type": "unit"},
-              {"name": "negativeInfinity", "type": "unit"},
-              {"name": "notANumber", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "finite", "type": {"literal": {"float": "float64"}}},
+                  {"name": "infinity", "type": "unit"},
+                  {"name": "negativeInfinity", "type": "unit"},
+                  {"name": "notANumber", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON double-precision floating-point value, including IEEE special values"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.Duration", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.Duration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON duration value, represented as a string"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.EdgeLabel", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.EdgeLabel",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON edge label, represented as a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.FloatValue",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "finite", "type": {"literal": {"float": "float32"}}},
-              {"name": "infinity", "type": "unit"},
-              {"name": "negativeInfinity", "type": "unit"},
-              {"name": "notANumber", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "finite", "type": {"literal": {"float": "float32"}}},
+                  {"name": "infinity", "type": "unit"},
+                  {"name": "negativeInfinity", "type": "unit"},
+                  {"name": "notANumber", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON single-precision floating-point value, including IEEE special values"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Map",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}}}}},
-    {
-      "type": {
-        "name": "hydra.pg.graphson.syntax.AdjacentEdge",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {"name": "vertexId", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {
-                "name": "properties",
-                "type": {
-                  "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON map, represented as a list of key/value pairs"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.PrimitiveTypedValue",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
-              {"name": "value", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
+                  {"name": "value", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON primitive value tagged with a GraphSON type name"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.PropertyKey", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.PropertyKey",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON property key, represented as a string"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.TypeName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.pg.graphson.syntax.Uuid", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.TypeName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON type name, represented as a string"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.pg.graphson.syntax.Uuid",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON UUID value, represented as a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Value",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "bigDecimal", "type": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"}},
-              {"name": "bigInteger", "type": {"literal": {"integer": "bigint"}}},
-              {"name": "binary", "type": {"literal": "string"}},
-              {"name": "boolean", "type": {"literal": "boolean"}},
-              {"name": "byte", "type": {"literal": {"integer": "uint8"}}},
-              {"name": "char", "type": {"literal": {"integer": "uint32"}}},
-              {"name": "composite", "type": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"}},
-              {"name": "dateTime", "type": {"variable": "hydra.pg.graphson.syntax.DateTime"}},
-              {"name": "double", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}},
-              {"name": "duration", "type": {"variable": "hydra.pg.graphson.syntax.Duration"}},
-              {"name": "float", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}},
-              {"name": "integer", "type": {"literal": {"integer": "int32"}}},
-              {"name": "list", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-              {"name": "long", "type": {"literal": {"integer": "int64"}}},
-              {"name": "map", "type": {"variable": "hydra.pg.graphson.syntax.Map"}},
-              {"name": "null", "type": "unit"},
-              {"name": "primitive", "type": {"variable": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}},
-              {"name": "set", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-              {"name": "short", "type": {"literal": {"integer": "int16"}}},
-              {"name": "string", "type": {"literal": "string"}},
-              {"name": "uuid", "type": {"variable": "hydra.pg.graphson.syntax.Uuid"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "bigDecimal", "type": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"}},
+                  {"name": "bigInteger", "type": {"literal": {"integer": "bigint"}}},
+                  {"name": "binary", "type": {"literal": "string"}},
+                  {"name": "boolean", "type": {"literal": "boolean"}},
+                  {"name": "byte", "type": {"literal": {"integer": "uint8"}}},
+                  {"name": "char", "type": {"literal": {"integer": "uint32"}}},
+                  {"name": "composite", "type": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"}},
+                  {"name": "dateTime", "type": {"variable": "hydra.pg.graphson.syntax.DateTime"}},
+                  {"name": "double", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}},
+                  {"name": "duration", "type": {"variable": "hydra.pg.graphson.syntax.Duration"}},
+                  {"name": "float", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}},
+                  {"name": "integer", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "list", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                  {"name": "long", "type": {"literal": {"integer": "int64"}}},
+                  {"name": "map", "type": {"variable": "hydra.pg.graphson.syntax.Map"}},
+                  {"name": "null", "type": "unit"},
+                  {"name": "primitive", "type": {"variable": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}},
+                  {"name": "set", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                  {"name": "short", "type": {"literal": {"integer": "int16"}}},
+                  {"name": "string", "type": {"literal": "string"}},
+                  {"name": "uuid", "type": {"variable": "hydra.pg.graphson.syntax.Uuid"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON value, covering the subset of GraphSON value types this model supports"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.ValuePair",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "first", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {"name": "second", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "first", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+                  {"name": "second", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value pair in a GraphSON map"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Vertex",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {"name": "label", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
-              {
-                "name": "inEdges",
-                "type": {
-                  "map": {
-                    "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
-                    "values": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
-                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
-              {
-                "name": "outEdges",
-                "type": {
-                  "map": {
-                    "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
-                    "values": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
-                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
-              {
-                "name": "properties",
-                "type": {
-                  "map": {
-                    "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
-                    "values": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}},
-                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+                  {"name": "label", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
+                  {
+                    "name": "inEdges",
+                    "type": {
+                      "map": {
+                        "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
+                        "values": {
+                          "annotated": {
+                            "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
+                            "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
+                  {
+                    "name": "outEdges",
+                    "type": {
+                      "map": {
+                        "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
+                        "values": {
+                          "annotated": {
+                            "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
+                            "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
+                  {
+                    "name": "properties",
+                    "type": {
+                      "map": {
+                        "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
+                        "values": {
+                          "annotated": {
+                            "body": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}},
+                            "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON vertex, with its incident edges and properties"}}}]}}}}}},
     {
-      "type": {"name": "hydra.pg.graphson.syntax.VertexLabel", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+      "type": {
+        "name": "hydra.pg.graphson.syntax.VertexLabel",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON vertex label, represented as a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.VertexPropertyValue",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-              {"name": "value", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]}}}}]}
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"optional": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                  {"name": "value", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphSON vertex property value, with an optional property id"}}}]}}}}}}]}

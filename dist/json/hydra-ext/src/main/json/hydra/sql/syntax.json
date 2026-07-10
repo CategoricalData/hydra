@@ -125,10 +125,10 @@
           "body": {
             "union": [
               {"name": "factor", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}},
-              {"name": "and", "type": {"variable": "hydra.sql.syntax.BooleanTerm_And"}}]}}}},
+              {"name": "conjunction", "type": {"variable": "hydra.sql.syntax.BooleanTermAnd"}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTerm_And",
+        "name": "hydra.sql.syntax.BooleanTermAnd",
         "body": {
           "variables": [],
           "body": {
@@ -143,10 +143,10 @@
           "body": {
             "record": [
               {"name": "BooleanPrimary", "type": {"variable": "hydra.sql.syntax.BooleanPrimary"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.BooleanTest_Sequence_Option"}}}]}}}},
+              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.BooleanTestSequenceOption"}}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanTest_Sequence_Option",
+        "name": "hydra.sql.syntax.BooleanTestSequenceOption",
         "body": {
           "variables": [],
           "body": {
@@ -162,10 +162,10 @@
           "body": {
             "union": [
               {"name": "term", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
-              {"name": "or", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression_Or"}}]}}}},
+              {"name": "disjunction", "type": {"variable": "hydra.sql.syntax.BooleanValueExpressionOr"}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.BooleanValueExpression_Or",
+        "name": "hydra.sql.syntax.BooleanValueExpressionOr",
         "body": {
           "variables": [],
           "body": {
@@ -227,16 +227,16 @@
           "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
-              {"name": "typeOrDomain", "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinition_TypeOrDomain_Option"}}},
+              {"name": "typeOrDomain", "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption"}}},
               {"name": "refScope", "type": {"optional": {"variable": "hydra.sql.syntax.ReferenceScopeCheck"}}},
               {
                 "name": "defaultOrIdentityOrGeneration",
-                "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option"}}},
+                "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption"}}},
               {"name": "constraints", "type": {"list": {"variable": "hydra.sql.syntax.ColumnConstraintDefinition"}}},
               {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnDefinition_TypeOrDomain_Option",
+        "name": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption",
         "body": {
           "variables": [],
           "body": {
@@ -245,7 +245,7 @@
               {"name": "DomainName", "type": {"variable": "hydra.sql.syntax.DomainName"}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option",
+        "name": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption",
         "body": {
           "variables": [],
           "body": {
@@ -338,16 +338,16 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "numeric", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericType_Numeric_Option"}}},
-              {"name": "decimal", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericType_Decimal_Option"}}},
-              {"name": "dec", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericType_Dec_Option"}}},
+              {"name": "numeric", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeNumericOption"}}},
+              {"name": "decimal", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecimalOption"}}},
+              {"name": "dec", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecOption"}}},
               {"name": "smallint", "type": "unit"},
               {"name": "integer", "type": "unit"},
               {"name": "int", "type": "unit"},
               {"name": "bigint", "type": "unit"}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Numeric_Option",
+        "name": "hydra.sql.syntax.ExactNumericTypeNumericOption",
         "body": {
           "variables": [],
           "body": {
@@ -356,7 +356,7 @@
               {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Decimal_Option",
+        "name": "hydra.sql.syntax.ExactNumericTypeDecimalOption",
         "body": {
           "variables": [],
           "body": {
@@ -365,7 +365,7 @@
               {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.ExactNumericType_Dec_Option",
+        "name": "hydra.sql.syntax.ExactNumericTypeDecOption",
         "body": {
           "variables": [],
           "body": {
@@ -484,8 +484,8 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "string", "type": {"variable": "hydra.sql.syntax.PredefinedType_String"}},
-              {"name": "nationalString", "type": {"variable": "hydra.sql.syntax.PredefinedType_NationalString"}},
+              {"name": "stringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeString"}},
+              {"name": "nationalStringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeNationalString"}},
               {"name": "blob", "type": {"variable": "hydra.sql.syntax.BinaryLargeObjectStringType"}},
               {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericType"}},
               {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanType"}},
@@ -493,7 +493,7 @@
               {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalType"}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedType_String",
+        "name": "hydra.sql.syntax.PredefinedTypeString",
         "body": {
           "variables": [],
           "body": {
@@ -503,7 +503,7 @@
               {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedType_NationalString",
+        "name": "hydra.sql.syntax.PredefinedTypeNationalString",
         "body": {
           "variables": [],
           "body": {
@@ -584,11 +584,11 @@
           "body": {
             "union": [
               {"name": "list", "type": {"variable": "hydra.sql.syntax.TableElementList"}},
-              {"name": "subtable", "type": {"variable": "hydra.sql.syntax.TableContentsSource_Subtable"}},
+              {"name": "subtableOf", "type": {"variable": "hydra.sql.syntax.TableContentsSourceSubtable"}},
               {"name": "subquery", "type": {"variable": "hydra.sql.syntax.AsSubqueryClause"}}]}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.TableContentsSource_Subtable",
+        "name": "hydra.sql.syntax.TableContentsSourceSubtable",
         "body": {
           "variables": [],
           "body": {

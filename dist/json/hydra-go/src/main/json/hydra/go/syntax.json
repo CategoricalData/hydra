@@ -12,19 +12,33 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "comment", "type": {"literal": "string"}},
-              {"name": "declaration", "type": {"variable": "hydra.go.syntax.TopLevelDecl"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "comment", "type": {"literal": "string"}},
+                  {"name": "declaration", "type": {"variable": "hydra.go.syntax.TopLevelDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A top-level Go declaration together with its preceding comment"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.go.syntax.Module",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "package", "type": {"variable": "hydra.go.syntax.PackageClause"}},
-              {"name": "imports", "type": {"list": {"variable": "hydra.go.syntax.ImportDecl"}}},
-              {"name": "declarations", "type": {"list": {"variable": "hydra.go.syntax.TopLevelDecl"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "package", "type": {"variable": "hydra.go.syntax.PackageClause"}},
+                  {"name": "imports", "type": {"list": {"variable": "hydra.go.syntax.ImportDecl"}}},
+                  {"name": "declarations", "type": {"list": {"variable": "hydra.go.syntax.TopLevelDecl"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}}}}},
     {"type": {"name": "hydra.go.syntax.Identifier", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {"name": "hydra.go.syntax.IntLit", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
@@ -286,7 +300,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.TypeName"}},
+              {"name": "named", "type": {"variable": "hydra.go.syntax.TypeName"}},
               {"name": "literal", "type": {"variable": "hydra.go.syntax.TypeLit"}},
               {"name": "paren", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
     {
@@ -608,7 +622,7 @@
           "body": {
             "union": [
               {"name": "literal", "type": {"variable": "hydra.go.syntax.Literal"}},
-              {"name": "name", "type": {"variable": "hydra.go.syntax.OperandName"}},
+              {"name": "named", "type": {"variable": "hydra.go.syntax.OperandName"}},
               {"name": "paren", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
     {
       "type": {

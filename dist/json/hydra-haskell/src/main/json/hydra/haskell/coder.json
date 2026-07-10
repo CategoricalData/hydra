@@ -55,42 +55,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.haskell.coder.includeTypeDefinitions",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "boolean"}}},
-        "body": {
-          "annotated": {
-            "body": {"literal": {"boolean": false}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Whether to include type definitions in generated Haskell modules"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.coder.useCoreImport",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "boolean"}}},
-        "body": {
-          "annotated": {
-            "body": {"literal": {"boolean": true}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Whether to use the Hydra core import in generated modules"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.coder.keyHaskellVar",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}},
-        "body": {
-          "annotated": {
-            "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "haskellVar"}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "The key used to track Haskell variable depth in annotations"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.haskell.coder.adaptTypeToHaskellAndEncode",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
@@ -4071,67 +4035,6 @@
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra term as a Haskell expression"}}}]}}}}}}},
     {
       "term": {
-        "name": "hydra.haskell.coder.encodeUnwrap",
-        "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
-              "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "hydra.haskell.syntax.Expression"}}}}},
-        "body": {
-          "typeLambda": {
-            "parameter": "t0",
-            "body": {
-              "annotated": {
-                "body": {
-                  "lambda": {
-                    "parameter": "namespaces",
-                    "domain": {
-                      "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
-                    "body": {
-                      "lambda": {
-                        "parameter": "name",
-                        "domain": {"variable": "hydra.core.Name"},
-                        "body": {
-                          "typeApplication": {
-                            "body": {
-                              "typeApplication": {
-                                "body": {
-                                  "either": {
-                                    "right": {
-                                      "inject": {
-                                        "typeName": "hydra.haskell.syntax.Expression",
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "application": {
-                                              "function": {
-                                                "application": {"function": {"variable": "hydra.haskell.utils.elementReference"}, "argument": {"variable": "namespaces"}}},
-                                              "argument": {
-                                                "application": {
-                                                  "function": {
-                                                    "application": {
-                                                      "function": {"variable": "hydra.names.qname"},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "application": {
-                                                              "function": {
-                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                              "argument": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": ""}}}}}},
-                                                          "argument": {"application": {"function": {"variable": "hydra.names.moduleNameOf"}, "argument": {"variable": "name"}}}}}}},
-                                                  "argument": {"application": {"function": {"variable": "hydra.haskell.utils.newtypeAccessorName"}, "argument": {"variable": "name"}}}}}}}}}}}},
-                                "type": {"variable": "t0"}}},
-                            "type": {"variable": "hydra.haskell.syntax.Expression"}}}}}}},
-                "annotation": {
-                  "map": [
-                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an unwrap term as a Haskell expression"}}}]}}}}}}},
-    {
-      "term": {
         "name": "hydra.haskell.coder.encodeType",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
@@ -5604,6 +5507,67 @@
                           "value": {"literal": {"string": "Encode a Hydra type as a Haskell type with typeclass assertions"}}}]}}}}}}}}},
     {
       "term": {
+        "name": "hydra.haskell.coder.encodeUnwrap",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "hydra.haskell.syntax.Expression"}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "namespaces",
+                    "domain": {
+                      "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "name",
+                        "domain": {"variable": "hydra.core.Name"},
+                        "body": {
+                          "typeApplication": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "either": {
+                                    "right": {
+                                      "inject": {
+                                        "typeName": "hydra.haskell.syntax.Expression",
+                                        "field": {
+                                          "name": "variable",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "application": {"function": {"variable": "hydra.haskell.utils.elementReference"}, "argument": {"variable": "namespaces"}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {"variable": "hydra.names.qname"},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                              "argument": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": ""}}}}}},
+                                                          "argument": {"application": {"function": {"variable": "hydra.names.moduleNameOf"}, "argument": {"variable": "name"}}}}}}},
+                                                  "argument": {"application": {"function": {"variable": "hydra.haskell.utils.newtypeAccessorName"}, "argument": {"variable": "name"}}}}}}}}}}}},
+                                "type": {"variable": "t0"}}},
+                            "type": {"variable": "hydra.haskell.syntax.Expression"}}}}}}},
+                "annotation": {
+                  "map": [
+                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encode an unwrap term as a Haskell expression"}}}]}}}}}}},
+    {
+      "term": {
         "name": "hydra.haskell.coder.extendMetaForTerm",
         "signature": {
           "typeParameters": [],
@@ -6210,84 +6174,28 @@
                   "value": {"literal": {"string": "Get implicit typeclass constraints for type variables that need Ord"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.haskell.coder.moduleToHaskellModule",
-        "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.haskell.syntax.Module"}}}}},
+        "name": "hydra.haskell.coder.includeTypeDefinitions",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "boolean"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
-            "body": {
-              "annotated": {
-                "body": {
-                  "lambda": {
-                    "parameter": "mod",
-                    "domain": {"variable": "hydra.packaging.Module"},
-                    "body": {
-                      "lambda": {
-                        "parameter": "defs",
-                        "domain": {"list": {"variable": "hydra.packaging.Definition"}},
-                        "body": {
-                          "lambda": {
-                            "parameter": "cx",
-                            "domain": {"variable": "t0"},
-                            "body": {
-                              "lambda": {
-                                "parameter": "g",
-                                "domain": {"variable": "hydra.graph.Graph"},
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {
-                                                  "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
-                                            "type": {"variable": "hydra.haskell.syntax.Module"}}},
-                                        "argument": {
-                                          "application": {
-                                            "function": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.haskell.utils.namespacesForModule"}, "type": {"variable": "t0"}}},
-                                                    "argument": {"variable": "mod"}}},
-                                                "argument": {"variable": "cx"}}},
-                                            "argument": {"variable": "g"}}}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "namespaces",
-                                        "domain": {
-                                          "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
-                                        "body": {
-                                          "application": {
-                                            "function": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.haskell.coder.constructModule"}, "type": {"variable": "t0"}}},
-                                                            "argument": {"variable": "namespaces"}}},
-                                                        "argument": {"variable": "mod"}}},
-                                                    "argument": {"variable": "defs"}}},
-                                                "argument": {"variable": "cx"}}},
-                                            "argument": {"variable": "g"}}}}}}}}}}}}}}},
-                "annotation": {
-                  "map": [
-                    {
-                      "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Convert a Hydra module and definitions to a Haskell module AST"}}}]}}}}}}},
+          "annotated": {
+            "body": {"literal": {"boolean": false}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether to include type definitions in generated Haskell modules"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.haskell.coder.keyHaskellVar",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}},
+        "body": {
+          "annotated": {
+            "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "haskellVar"}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The key used to track Haskell variable depth in annotations"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.moduleToHaskell",
@@ -6402,6 +6310,86 @@
                     {
                       "key": {"variable": "description"},
                       "value": {"literal": {"string": "Convert a Hydra module to Haskell source code as a filepath-to-content map"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.haskell.coder.moduleToHaskellModule",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.haskell.syntax.Module"}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mod",
+                    "domain": {"variable": "hydra.packaging.Module"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "defs",
+                        "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                        "body": {
+                          "lambda": {
+                            "parameter": "cx",
+                            "domain": {"variable": "t0"},
+                            "body": {
+                              "lambda": {
+                                "parameter": "g",
+                                "domain": {"variable": "hydra.graph.Graph"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {
+                                                  "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}}}},
+                                            "type": {"variable": "hydra.haskell.syntax.Module"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.haskell.utils.namespacesForModule"}, "type": {"variable": "t0"}}},
+                                                    "argument": {"variable": "mod"}}},
+                                                "argument": {"variable": "cx"}}},
+                                            "argument": {"variable": "g"}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "namespaces",
+                                        "domain": {
+                                          "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.haskell.syntax.ModuleName"}}},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.haskell.coder.constructModule"}, "type": {"variable": "t0"}}},
+                                                            "argument": {"variable": "namespaces"}}},
+                                                        "argument": {"variable": "mod"}}},
+                                                    "argument": {"variable": "defs"}}},
+                                                "argument": {"variable": "cx"}}},
+                                            "argument": {"variable": "g"}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Hydra module and definitions to a Haskell module AST"}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.nameDecls",
@@ -6657,36 +6645,43 @@
             {"name": "arg1", "type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
         "body": {
-          "lambda": {
-            "parameter": "b",
-            "domain": {"literal": "boolean"},
+          "annotated": {
             "body": {
               "lambda": {
-                "parameter": "m",
-                "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "parameter": "b",
+                "domain": {"literal": "boolean"},
                 "body": {
-                  "record": {
-                    "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
-                    "fields": [
-                      {"name": "usesByteString", "term": {"variable": "b"}},
-                      {
-                        "name": "usesInt",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesMap",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesSet",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
-                            "argument": {"variable": "m"}}}}]}}}}}}}},
+                  "lambda": {
+                    "parameter": "m",
+                    "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                    "body": {
+                      "record": {
+                        "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
+                        "fields": [
+                          {"name": "usesByteString", "term": {"variable": "b"}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
+                                "argument": {"variable": "m"}}}}]}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set the usesByteString flag in Haskell module metadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.setMetaUsesInt",
@@ -6697,36 +6692,43 @@
             {"name": "arg1", "type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
         "body": {
-          "lambda": {
-            "parameter": "b",
-            "domain": {"literal": "boolean"},
+          "annotated": {
             "body": {
               "lambda": {
-                "parameter": "m",
-                "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "parameter": "b",
+                "domain": {"literal": "boolean"},
                 "body": {
-                  "record": {
-                    "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
-                    "fields": [
-                      {
-                        "name": "usesByteString",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
-                            "argument": {"variable": "m"}}}},
-                      {"name": "usesInt", "term": {"variable": "b"}},
-                      {
-                        "name": "usesMap",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesSet",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
-                            "argument": {"variable": "m"}}}}]}}}}}}}},
+                  "lambda": {
+                    "parameter": "m",
+                    "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                    "body": {
+                      "record": {
+                        "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
+                                "argument": {"variable": "m"}}}},
+                          {"name": "usesInt", "term": {"variable": "b"}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
+                                "argument": {"variable": "m"}}}}]}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set the usesInt flag in Haskell module metadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.setMetaUsesMap",
@@ -6737,36 +6739,43 @@
             {"name": "arg1", "type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
         "body": {
-          "lambda": {
-            "parameter": "b",
-            "domain": {"literal": "boolean"},
+          "annotated": {
             "body": {
               "lambda": {
-                "parameter": "m",
-                "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "parameter": "b",
+                "domain": {"literal": "boolean"},
                 "body": {
-                  "record": {
-                    "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
-                    "fields": [
-                      {
-                        "name": "usesByteString",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesInt",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
-                            "argument": {"variable": "m"}}}},
-                      {"name": "usesMap", "term": {"variable": "b"}},
-                      {
-                        "name": "usesSet",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
-                            "argument": {"variable": "m"}}}}]}}}}}}}},
+                  "lambda": {
+                    "parameter": "m",
+                    "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                    "body": {
+                      "record": {
+                        "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
+                                "argument": {"variable": "m"}}}},
+                          {"name": "usesMap", "term": {"variable": "b"}},
+                          {
+                            "name": "usesSet",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesSet"}},
+                                "argument": {"variable": "m"}}}}]}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set the usesMap flag in Haskell module metadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.setMetaUsesSet",
@@ -6777,36 +6786,43 @@
             {"name": "arg1", "type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
         "body": {
-          "lambda": {
-            "parameter": "b",
-            "domain": {"literal": "boolean"},
+          "annotated": {
             "body": {
               "lambda": {
-                "parameter": "m",
-                "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                "parameter": "b",
+                "domain": {"literal": "boolean"},
                 "body": {
-                  "record": {
-                    "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
-                    "fields": [
-                      {
-                        "name": "usesByteString",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesInt",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
-                            "argument": {"variable": "m"}}}},
-                      {
-                        "name": "usesMap",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
-                            "argument": {"variable": "m"}}}},
-                      {"name": "usesSet", "term": {"variable": "b"}}]}}}}}}}},
+                  "lambda": {
+                    "parameter": "m",
+                    "domain": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
+                    "body": {
+                      "record": {
+                        "typeName": "hydra.haskell.environment.HaskellModuleMetadata",
+                        "fields": [
+                          {
+                            "name": "usesByteString",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesByteString"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesInt",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesInt"}},
+                                "argument": {"variable": "m"}}}},
+                          {
+                            "name": "usesMap",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.haskell.environment.HaskellModuleMetadata", "fieldName": "usesMap"}},
+                                "argument": {"variable": "m"}}}},
+                          {"name": "usesSet", "term": {"variable": "b"}}]}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Set the usesSet flag in Haskell module metadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.coder.toDataDeclaration",
@@ -9262,4 +9278,16 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Project type scheme constraints to a map of type variables to typeclass names"}}}]}}}}}}}]}
+                      "value": {"literal": {"string": "Project type scheme constraints to a map of type variables to typeclass names"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.haskell.coder.useCoreImport",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"boolean": true}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether to use the Hydra core import in generated modules"}}}]}}}}}]}

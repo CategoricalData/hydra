@@ -10412,7 +10412,7 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.go.syntax.Type"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.go.syntax.typeName",
+        "name": "hydra.dsl.go.syntax.typeNamed",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -10451,7 +10451,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "named"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -10459,7 +10459,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the name variant of hydra.go.syntax.Type"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the named variant of hydra.go.syntax.Type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.go.syntax.typeLiteral",
@@ -10577,7 +10577,7 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.go.syntax.TypeName"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.go.syntax.typeName2",
+        "name": "hydra.dsl.go.syntax.typeName",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -22014,7 +22014,7 @@
                   "value": {"literal": {"string": "DSL injection for the literal variant of hydra.go.syntax.Operand"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.go.syntax.operandName",
+        "name": "hydra.dsl.go.syntax.operandNamed",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -22054,7 +22054,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "named"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -22062,7 +22062,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the name variant of hydra.go.syntax.Operand"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the named variant of hydra.go.syntax.Operand"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.go.syntax.operandParen",
@@ -22134,7 +22134,7 @@
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.go.syntax.OperandName"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.go.syntax.operandName2",
+        "name": "hydra.dsl.go.syntax.operandName",
         "signature": {
           "typeParameters": [],
           "parameters": [

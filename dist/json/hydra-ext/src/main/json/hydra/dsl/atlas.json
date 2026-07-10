@@ -52,7 +52,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}},
+                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}},
               "isLazy": false},
             {
               "name": "arg4",
@@ -91,7 +91,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}},
+                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}},
               "isLazy": false},
             {
               "name": "arg13",
@@ -134,7 +134,7 @@
                             "domain": {
                               "application": {
                                 "function": {"variable": "hydra.typed.TypedTerm"},
-                                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}},
+                                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}},
                             "body": {
                               "lambda": {
                                 "parameter": "valuesMinCount",
@@ -173,7 +173,7 @@
                                                                 "domain": {
                                                                   "application": {
                                                                     "function": {"variable": "hydra.typed.TypedTerm"},
-                                                                    "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}},
+                                                                    "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}},
                                                                 "body": {
                                                                   "lambda": {
                                                                     "parameter": "constraints",
@@ -525,7 +525,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}}},
+                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1030,7 +1030,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}}},
+                "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -3009,7 +3009,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}},
+                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -3027,7 +3027,7 @@
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}},
+                        "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -8252,7 +8252,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}},
+                  "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -8270,7 +8270,7 @@
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}},
+                        "argument": {"optional": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -10588,7 +10588,7 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.atlas.AtlasAttributeDef"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalityAtlasAttributeDef_Cardinality",
+        "name": "hydra.dsl.atlas.atlasAttributeDefCardinalityAtlasAttributeDefCardinality",
         "signature": {
           "typeParameters": [],
           "parameters": [],
@@ -10596,21 +10596,21 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedName"},
-                "argument": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                "argument": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefCardinality"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDefCardinality"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalitySingle",
+        "name": "hydra.dsl.atlas.atlasAttributeDefCardinalitySingle",
         "signature": {
           "typeParameters": [],
           "parameters": [],
@@ -10618,7 +10618,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                "argument": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -10635,7 +10635,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
                             {
                               "name": "field",
                               "term": {
@@ -10648,10 +10648,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the single variant of hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the single variant of hydra.atlas.AtlasAttributeDefCardinality"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalityList",
+        "name": "hydra.dsl.atlas.atlasAttributeDefCardinalityList",
         "signature": {
           "typeParameters": [],
           "parameters": [],
@@ -10659,7 +10659,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                "argument": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -10676,7 +10676,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
                             {
                               "name": "field",
                               "term": {
@@ -10689,10 +10689,10 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the list variant of hydra.atlas.AtlasAttributeDefCardinality"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_CardinalitySet",
+        "name": "hydra.dsl.atlas.atlasAttributeDefCardinalitySet",
         "signature": {
           "typeParameters": [],
           "parameters": [],
@@ -10700,7 +10700,7 @@
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                "argument": {"variable": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -10717,7 +10717,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_Cardinality"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefCardinality"}}}}},
                             {
                               "name": "field",
                               "term": {
@@ -10730,36 +10730,36 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.atlas.AtlasAttributeDef_Cardinality"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the set variant of hydra.atlas.AtlasAttributeDefCardinality"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_IndexTypeAtlasAttributeDef_IndexType",
+        "name": "hydra.dsl.atlas.atlasAttributeDefIndexTypeAtlasAttributeDefIndexType",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefIndexType"}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDef_IndexType"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL name token for hydra.atlas.AtlasAttributeDefIndexType"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_IndexTypeDefault",
+        "name": "hydra.dsl.atlas.atlasAttributeDefIndexTypeDefault",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -10776,7 +10776,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefIndexType"}}}}},
                             {
                               "name": "field",
                               "term": {
@@ -10789,16 +10789,16 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the default variant of hydra.atlas.AtlasAttributeDef_IndexType"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the default variant of hydra.atlas.AtlasAttributeDefIndexType"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.atlas.atlasAttributeDef_IndexTypeString",
+        "name": "hydra.dsl.atlas.atlasAttributeDefIndexTypeString",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.atlas.AtlasAttributeDefIndexType"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -10815,7 +10815,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDef_IndexType"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.atlas.AtlasAttributeDefIndexType"}}}}},
                             {
                               "name": "field",
                               "term": {
@@ -10828,7 +10828,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.atlas.AtlasAttributeDef_IndexType"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.atlas.AtlasAttributeDefIndexType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.atlas.atlasBaseTypeDefAtlasBaseTypeDef",

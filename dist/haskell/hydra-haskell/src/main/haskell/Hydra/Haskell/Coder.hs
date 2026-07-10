@@ -620,6 +620,7 @@ nameDecls namespaces name typ =
                     in (constantForFieldName name fname, (Core.unName fname))
       in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
+-- | Set the usesByteString flag in Haskell module metadata
 setMetaUsesByteString :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
 setMetaUsesByteString b m =
     Environment.HaskellModuleMetadata {
@@ -628,6 +629,7 @@ setMetaUsesByteString b m =
       Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
       Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
 
+-- | Set the usesInt flag in Haskell module metadata
 setMetaUsesInt :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
 setMetaUsesInt b m =
     Environment.HaskellModuleMetadata {
@@ -636,6 +638,7 @@ setMetaUsesInt b m =
       Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
       Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
 
+-- | Set the usesMap flag in Haskell module metadata
 setMetaUsesMap :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
 setMetaUsesMap b m =
     Environment.HaskellModuleMetadata {
@@ -644,6 +647,7 @@ setMetaUsesMap b m =
       Environment.haskellModuleMetadataUsesMap = b,
       Environment.haskellModuleMetadataUsesSet = (Environment.haskellModuleMetadataUsesSet m)}
 
+-- | Set the usesSet flag in Haskell module metadata
 setMetaUsesSet :: Bool -> Environment.HaskellModuleMetadata -> Environment.HaskellModuleMetadata
 setMetaUsesSet b m =
     Environment.HaskellModuleMetadata {

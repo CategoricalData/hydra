@@ -9,10 +9,10 @@
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}}}}},
+        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}}},
     {
       "type": {
-        "name": "hydra.datalog.syntax.Program_Elmt",
+        "name": "hydra.datalog.syntax.ProgramElmt",
         "body": {
           "variables": [],
           "body": {
@@ -54,10 +54,10 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}]}}}},
+              {"name": "many", "type": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}]}}}},
     {
       "type": {
-        "name": "hydra.datalog.syntax.AtomList_Multiple",
+        "name": "hydra.datalog.syntax.AtomListMultiple",
         "body": {
           "variables": [],
           "body": {
@@ -81,10 +81,10 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
-              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}]}}}},
+              {"name": "many", "type": {"variable": "hydra.datalog.syntax.TermListMultiple"}}]}}}},
     {
       "type": {
-        "name": "hydra.datalog.syntax.TermList_Multiple",
+        "name": "hydra.datalog.syntax.TermListMultiple",
         "body": {
           "variables": [],
           "body": {
@@ -99,10 +99,10 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {"name": "multiple", "type": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}]}}}},
+              {"name": "many", "type": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}]}}}},
     {
       "type": {
-        "name": "hydra.datalog.syntax.ConstantList_Multiple",
+        "name": "hydra.datalog.syntax.ConstantListMultiple",
         "body": {
           "variables": [],
           "body": {

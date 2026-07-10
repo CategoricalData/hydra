@@ -21397,58 +21397,6 @@
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.lisp.syntax.LiteralPattern"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.lisp.syntax.wildcardPatternWildcardPattern",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.lisp.syntax.WildcardPattern"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.WildcardPattern"}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.lisp.syntax.WildcardPattern"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.lisp.syntax.wildcardPattern",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.WildcardPattern"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.Term",
-                    "field": {
-                      "name": "record",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.Record",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.WildcardPattern"}}}}},
-                            {"name": "fields", "term": {"list": []}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for hydra.lisp.syntax.WildcardPattern"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.dsl.lisp.syntax.literalLiteral",
         "signature": {
           "typeParameters": [],

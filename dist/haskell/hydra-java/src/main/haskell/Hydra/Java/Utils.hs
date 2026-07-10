@@ -191,7 +191,7 @@ javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayIn
 javaArrayCreation primType minit =
 
       let init_ = Optionals.cases minit (Syntax.ArrayInitializer []) (\i -> i)
-      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionWithInitializer_ (Syntax.ArrayCreationExpressionWithInitializerPrimitive (Syntax.ArrayCreationExpressionWithInitializer_Primitive {
+      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionWithInit (Syntax.ArrayCreationExpressionWithInitializerPrimitive (Syntax.ArrayCreationExpressionWithInitializer_Primitive {
         Syntax.arrayCreationExpressionWithInitializer_PrimitiveType = primType,
         Syntax.arrayCreationExpressionWithInitializer_PrimitiveDims = [],
         Syntax.arrayCreationExpressionWithInitializer_PrimitiveArray = init_})))))

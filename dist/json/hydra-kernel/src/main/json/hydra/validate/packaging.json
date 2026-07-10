@@ -2837,6 +2837,79 @@
                       "string": "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'."}}}]}}}}},
     {
       "term": {
+        "name": "hydra.validate.packaging.kernelPackagingProfileWithDocWarnings",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.validation.ValidationProfile"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.validation.ValidationProfile",
+                "fields": [
+                  {
+                    "name": "errorRules",
+                    "term": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                        "argument": {
+                          "list": [
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.conflictingVariantName"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.definitionNotInModuleName"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError.conflictingModuleName"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError.duplicateModuleName"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError.invalidPackageName"}}}}]}}}},
+                  {
+                    "name": "warningRules",
+                    "term": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                        "argument": {
+                          "list": [
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.missingDocumentation"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder"}}}},
+                            {
+                              "wrap": {
+                                "typeName": "hydra.core.Name",
+                                "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleError.invalidDefinitionName"}}}}]}}}},
+                  {"name": "maxErrors", "term": {"literal": {"integer": {"int32": 1}}}},
+                  {"name": "maxWarnings", "term": {"literal": {"integer": {"int32": 10000}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Non-kernel packaging profile (#575): identical to kernelDefaultPackagingProfile except the rules in kernelPackagingWarningRuleNamesForNonKernel (documentation, ordering, naming convention) are warnings, not errors, so each package's pre-existing backlog does not block sync until that package is promoted to the fully-fatal profile."}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.validate.packaging.kernelUniverseUndeclaredDependencies",
         "signature": {
           "typeParameters": [],

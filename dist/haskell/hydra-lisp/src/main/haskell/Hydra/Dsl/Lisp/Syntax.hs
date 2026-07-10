@@ -4778,14 +4778,3 @@ vectorLiteralWithElements original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
-
--- | DSL constructor for hydra.lisp.syntax.WildcardPattern
-wildcardPattern :: Typed.TypedTerm Syntax.WildcardPattern
-wildcardPattern =
-    Typed.TypedTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.lisp.syntax.WildcardPattern"),
-      Core.recordFields = []}))
-
--- | DSL name token for hydra.lisp.syntax.WildcardPattern
-wildcardPatternWildcardPattern :: Typed.TypedName Syntax.WildcardPattern
-wildcardPatternWildcardPattern = Typed.TypedName (Core.Name "hydra.lisp.syntax.WildcardPattern")

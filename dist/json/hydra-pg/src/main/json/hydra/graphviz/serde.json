@@ -866,6 +866,44 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.graphviz.serde.subgraphIdToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.SubgraphId"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "sid",
+                "domain": {"variable": "hydra.graphviz.dot.SubgraphId"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.serialization.spaceSep"},
+                    "argument": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "subgraph"}}}}}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "hydra.graphviz.serde.idToExpr"}}},
+                                "argument": {"application": {"function": {"unwrap": "hydra.graphviz.dot.SubgraphId"}, "argument": {"variable": "sid"}}}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.graphviz.serde.subgraphToExpr",
         "signature": {
           "typeParameters": [],
@@ -946,42 +984,4 @@
                                       "application": {
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {"variable": "body"}}}]}}}}}}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.graphviz.serde.subgraphIdToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphviz.dot.SubgraphId"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "sid",
-                "domain": {"variable": "hydra.graphviz.dot.SubgraphId"},
-                "body": {
-                  "application": {
-                    "function": {"variable": "hydra.serialization.spaceSep"},
-                    "argument": {
-                      "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
-                        "argument": {
-                          "list": [
-                            {
-                              "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "subgraph"}}}}}},
-                            {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
-                                        "type": {"variable": "hydra.ast.Expr"}}},
-                                    "argument": {"variable": "hydra.graphviz.serde.idToExpr"}}},
-                                "argument": {"application": {"function": {"unwrap": "hydra.graphviz.dot.SubgraphId"}, "argument": {"variable": "sid"}}}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph identifier to an expression"}}}]}}}}}]}
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]}}}}}]}

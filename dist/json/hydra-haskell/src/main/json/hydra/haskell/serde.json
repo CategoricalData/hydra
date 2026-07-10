@@ -172,60 +172,6 @@
                   "value": {"literal": {"string": "Convert an application pattern to an AST expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.haskell.serde.constraintToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.Constraint"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "sert",
-                "domain": {"variable": "hydra.haskell.syntax.Constraint"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.haskell.syntax.Constraint",
-                        "cases": [
-                          {
-                            "name": "class",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "cls",
-                                "domain": {"variable": "hydra.haskell.syntax.ClassConstraint"},
-                                "body": {
-                                  "application": {"function": {"variable": "hydra.haskell.serde.classConstraintToExpr"}, "argument": {"variable": "cls"}}}}}},
-                          {
-                            "name": "tuple",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "serts",
-                                "domain": {"list": {"variable": "hydra.haskell.syntax.Constraint"}},
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {"function": {"variable": "hydra.serialization.parenList"}, "argument": {"literal": {"boolean": false}}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}},
-                                            "argument": {"variable": "hydra.haskell.serde.constraintToExpr"}}},
-                                        "argument": {"variable": "serts"}}}}}}}}]}},
-                    "argument": {"variable": "sert"}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a type class constraint to an AST expression"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.haskell.serde.caseExpressionToExpr",
         "signature": {
           "typeParameters": [],
@@ -401,112 +347,58 @@
                   "value": {"literal": {"string": "Convert a class constraint to an AST expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.haskell.serde.recordExpressionToExpr",
+        "name": "hydra.haskell.serde.constraintToExpr",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.RecordExpression"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.Constraint"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "constructRecord",
-                "domain": {"variable": "hydra.haskell.syntax.RecordExpression"},
+                "parameter": "sert",
+                "domain": {"variable": "hydra.haskell.syntax.Constraint"},
                 "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "name",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.syntax.RecordExpression", "fieldName": "name"}},
-                            "argument": {"variable": "constructRecord"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Name"}}},
-                      {
-                        "name": "updates",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.haskell.syntax.RecordExpression", "fieldName": "fields"}},
-                            "argument": {"variable": "constructRecord"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.haskell.syntax.FieldUpdate"}}}},
-                      {
-                        "name": "fromUpdate",
-                        "term": {
-                          "lambda": {
-                            "parameter": "update",
-                            "domain": {"variable": "hydra.haskell.syntax.FieldUpdate"},
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "fn",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.haskell.syntax.FieldUpdate", "fieldName": "name"}},
-                                        "argument": {"variable": "update"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Name"}}},
-                                  {
-                                    "name": "val",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.haskell.syntax.FieldUpdate", "fieldName": "value"}},
-                                        "argument": {"variable": "update"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Expression"}}}],
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.haskell.syntax.Constraint",
+                        "cases": [
+                          {
+                            "name": "class",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "cls",
+                                "domain": {"variable": "hydra.haskell.syntax.ClassConstraint"},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.haskell.serde.classConstraintToExpr"}, "argument": {"variable": "cls"}}}}}},
+                          {
+                            "name": "tuple",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "serts",
+                                "domain": {"list": {"variable": "hydra.haskell.syntax.Constraint"}},
                                 "body": {
                                   "application": {
                                     "function": {
+                                      "application": {"function": {"variable": "hydra.serialization.parenList"}, "argument": {"literal": {"boolean": false}}}},
+                                    "argument": {
                                       "application": {
                                         "function": {
-                                          "application": {"function": {"variable": "hydra.serialization.ifx"}, "argument": {"variable": "hydra.haskell.operators.defineOp"}}},
-                                        "argument": {"application": {"function": {"variable": "hydra.haskell.serde.nameToExpr"}, "argument": {"variable": "fn"}}}}},
-                                    "argument": {"application": {"function": {"variable": "hydra.haskell.serde.expressionToExpr"}, "argument": {"variable": "val"}}}}}}}}},
-                        "typeScheme": {
-                          "variables": [],
-                          "body": {"function": {"domain": {"variable": "hydra.haskell.syntax.FieldUpdate"}, "codomain": {"variable": "hydra.ast.Expr"}}}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.serialization.commaSep"},
-                                "argument": {"variable": "hydra.serialization.halfBlockStyle"}}},
-                            "argument": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.FieldUpdate"}}},
-                                        "type": {"variable": "hydra.ast.Expr"}}},
-                                    "argument": {"variable": "fromUpdate"}}},
-                                "argument": {"variable": "updates"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
-                    "body": {
-                      "application": {
-                        "function": {"variable": "hydra.serialization.spaceSep"},
-                        "argument": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                "argument": {"application": {"function": {"variable": "hydra.haskell.serde.nameToExpr"}, "argument": {"variable": "name"}}}}},
-                            "argument": {
-                              "list": [
-                                {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "application": {"function": {"variable": "hydra.serialization.brackets"}, "argument": {"variable": "hydra.serialization.curlyBraces"}}},
-                                        "argument": {"variable": "hydra.serialization.halfBlockStyle"}}},
-                                    "argument": {"variable": "body"}}}]}}}}}}}}},
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}},
+                                            "argument": {"variable": "hydra.haskell.serde.constraintToExpr"}}},
+                                        "argument": {"variable": "serts"}}}}}}}}]}},
+                    "argument": {"variable": "sert"}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a record construction expression to an AST expression"}}}]}}}}},
+                  "value": {"literal": {"string": "Convert a type class constraint to an AST expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.constructorToExpr",
@@ -1511,6 +1403,107 @@
                   "value": {"literal": {"string": "Convert a field declaration to an AST expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.haskell.serde.haddockEntityRef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.packaging.EntityReference",
+                "cases": [
+                  {
+                    "name": "definition",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "d",
+                        "domain": {"variable": "hydra.packaging.DefinitionReference"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "'"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "cases": {
+                                            "typeName": "hydra.packaging.DefinitionReference",
+                                            "cases": [
+                                              {
+                                                "name": "primitive",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
+                                              {
+                                                "name": "term",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
+                                              {
+                                                "name": "type",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}}]}},
+                                        "argument": {"variable": "d"}}}}},
+                                "argument": {"literal": {"string": "'"}}}}}}}}},
+                  {
+                    "name": "module",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "m",
+                        "domain": {"variable": "hydra.packaging.ModuleName"},
+                        "body": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "m"}}}}}},
+                  {
+                    "name": "package",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "p",
+                        "domain": {"variable": "hydra.packaging.PackageName"},
+                        "body": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "p"}}}}}},
+                  {
+                    "name": "termExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                "argument": {"literal": {"string": "@"}}}}}}}}},
+                  {
+                    "name": "typeExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                "argument": {"literal": {"string": "@"}}}}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.haskell.serde.ifExpressionToExpr",
         "signature": {
           "typeParameters": [],
@@ -1627,31 +1620,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Convert an if-then-else expression to an AST expression"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.serde.namedImportExportToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.NamedImportExport"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "spec",
-                "domain": {"variable": "hydra.haskell.syntax.NamedImportExport"},
-                "body": {
-                  "application": {
-                    "function": {"variable": "hydra.haskell.serde.nameToExpr"},
-                    "argument": {
-                      "application": {
-                        "function": {"project": {"typeName": "hydra.haskell.syntax.NamedImportExport", "fieldName": "name"}},
-                        "argument": {"variable": "spec"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert an import/export specification to an AST expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.importToExpr",
@@ -2418,6 +2386,31 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Haskell name to an AST expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.haskell.serde.namedImportExportToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.NamedImportExport"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "spec",
+                "domain": {"variable": "hydra.haskell.syntax.NamedImportExport"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.haskell.serde.nameToExpr"},
+                    "argument": {
+                      "application": {
+                        "function": {"project": {"typeName": "hydra.haskell.syntax.NamedImportExport", "fieldName": "name"}},
+                        "argument": {"variable": "spec"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert an import/export specification to an AST expression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.haskell.serde.patternToExpr",
         "signature": {
           "typeParameters": [],
@@ -2510,6 +2503,114 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a pattern to an AST expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.haskell.serde.recordExpressionToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.haskell.syntax.RecordExpression"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "constructRecord",
+                "domain": {"variable": "hydra.haskell.syntax.RecordExpression"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "name",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.haskell.syntax.RecordExpression", "fieldName": "name"}},
+                            "argument": {"variable": "constructRecord"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Name"}}},
+                      {
+                        "name": "updates",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.haskell.syntax.RecordExpression", "fieldName": "fields"}},
+                            "argument": {"variable": "constructRecord"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.haskell.syntax.FieldUpdate"}}}},
+                      {
+                        "name": "fromUpdate",
+                        "term": {
+                          "lambda": {
+                            "parameter": "update",
+                            "domain": {"variable": "hydra.haskell.syntax.FieldUpdate"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "fn",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.haskell.syntax.FieldUpdate", "fieldName": "name"}},
+                                        "argument": {"variable": "update"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Name"}}},
+                                  {
+                                    "name": "val",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.haskell.syntax.FieldUpdate", "fieldName": "value"}},
+                                        "argument": {"variable": "update"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.haskell.syntax.Expression"}}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {"function": {"variable": "hydra.serialization.ifx"}, "argument": {"variable": "hydra.haskell.operators.defineOp"}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.haskell.serde.nameToExpr"}, "argument": {"variable": "fn"}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.haskell.serde.expressionToExpr"}, "argument": {"variable": "val"}}}}}}}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"function": {"domain": {"variable": "hydra.haskell.syntax.FieldUpdate"}, "codomain": {"variable": "hydra.ast.Expr"}}}}},
+                      {
+                        "name": "body",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.serialization.commaSep"},
+                                "argument": {"variable": "hydra.serialization.halfBlockStyle"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.haskell.syntax.FieldUpdate"}}},
+                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                    "argument": {"variable": "fromUpdate"}}},
+                                "argument": {"variable": "updates"}}}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {"application": {"function": {"variable": "hydra.haskell.serde.nameToExpr"}, "argument": {"variable": "name"}}}}},
+                            "argument": {
+                              "list": [
+                                {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {"function": {"variable": "hydra.serialization.brackets"}, "argument": {"variable": "hydra.serialization.curlyBraces"}}},
+                                        "argument": {"variable": "hydra.serialization.halfBlockStyle"}}},
+                                    "argument": {"variable": "body"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a record construction expression to an AST expression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.haskell.serde.rightHandSideToExpr",
         "signature": {
           "typeParameters": [],
@@ -2547,107 +2648,6 @@
                     "argument": {"application": {"function": {"unwrap": "hydra.haskell.syntax.Statement"}, "argument": {"variable": "stmt"}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an AST expression"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.haskell.serde.haddockEntityRef",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "cases": {
-                "typeName": "hydra.packaging.EntityReference",
-                "cases": [
-                  {
-                    "name": "definition",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "d",
-                        "domain": {"variable": "hydra.packaging.DefinitionReference"},
-                        "body": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "'"}}}},
-                            "argument": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat2"},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "cases": {
-                                            "typeName": "hydra.packaging.DefinitionReference",
-                                            "cases": [
-                                              {
-                                                "name": "primitive",
-                                                "handler": {
-                                                  "lambda": {
-                                                    "parameter": "n",
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
-                                              {
-                                                "name": "term",
-                                                "handler": {
-                                                  "lambda": {
-                                                    "parameter": "n",
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
-                                              {
-                                                "name": "type",
-                                                "handler": {
-                                                  "lambda": {
-                                                    "parameter": "n",
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}}]}},
-                                        "argument": {"variable": "d"}}}}},
-                                "argument": {"literal": {"string": "'"}}}}}}}}},
-                  {
-                    "name": "module",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "m",
-                        "domain": {"variable": "hydra.packaging.ModuleName"},
-                        "body": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "m"}}}}}},
-                  {
-                    "name": "package",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "p",
-                        "domain": {"variable": "hydra.packaging.PackageName"},
-                        "body": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "p"}}}}}},
-                  {
-                    "name": "termExpr",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "s",
-                        "domain": {"literal": "string"},
-                        "body": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
-                                "argument": {"literal": {"string": "@"}}}}}}}}},
-                  {
-                    "name": "typeExpr",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "s",
-                        "domain": {"literal": "string"},
-                        "body": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
-                                "argument": {"literal": {"string": "@"}}}}}}}}}]}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax"}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.toHaskellComments",
