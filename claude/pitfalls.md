@@ -44,14 +44,17 @@ Note that `hydra-bench` is also opt-in for the JSON regen — it requires
 `--include-bench` on `update-json-main` and `update-json-manifest` (set by
 `bin/sync-bench.sh`). The default `bin/sync.sh` does not regenerate it.
 
-A common surprise: editing a Java-coder DSL source under
-`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` and running
+A common surprise: editing a Lisp-coder DSL source under
+`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/Coder.hs` and running
 `sync-haskell.sh` regenerates the JSON correctly but leaves
-`dist/haskell/hydra-java/.../Coder.hs` at its old contents. The runtime Java
-codegen is loaded from `dist/haskell/hydra-java/`, so subsequent
-`bin/sync-packages.sh hydra-kernel --targets java` runs use the *old* coder
+`dist/haskell/hydra-lisp/.../Coder.hs` at its old contents. The runtime Lisp
+codegen is loaded from `dist/haskell/hydra-lisp/`, so subsequent
+`bin/sync-packages.sh hydra-kernel --targets clojure` runs use the *old* coder
 and produce the *old* output. Symptom: source-level fix appears not to take
-effect.
+effect. (This trap no longer applies to the Java/Python/Scala coders: their
+Haskell DSL copies were deleted — #346/#509 — and the native
+`packages/hydra-{java,python,scala}/src/main/{java,python,scala}/...` sources
+are now the sole source of truth; see the Phase-5 entry below.)
 
 If you've edited a DSL source under any non-baseline package and the
 corresponding `dist/haskell/<pkg>/` file hasn't picked up your change, run
@@ -138,10 +141,14 @@ symbol is still absent/old in the JSON, it's stale regardless of source state. (
 making a `coder.json` change invalidate downstream digests even without a native-source edit —
 is worth a follow-up issue; the bug_406_stale_json Phase-1.5 auto-heal does not cover this case.)
 
-**Post-0.16 cleanup:** once the legacy Haskell DSL copies for hydra-java/hydra-python are
-deleted, the native generators become the sole writers of `dist/json/hydra-<lang>/`. The
-native DSL→JSON step should then move *ahead* of Phase 2, and the Phase-5 re-assemble block
-can be deleted entirely — there will be no producer-ordering left to reconcile.
+**Post-deletion cleanup (now unblocked, not yet done):** the legacy Haskell DSL copies for
+hydra-java/hydra-python *have* been deleted (#346; hydra-scala via #509), so the native
+generators are already the sole writers of `dist/json/hydra-<lang>/`. The interim dual-write
+state this entry describes no longer exists. The promised simplification — moving the native
+DSL→JSON step *ahead* of Phase 2 and deleting the Phase-5 re-assemble block entirely — is now
+unblocked but has **not** been done: `bin/sync.sh` still runs Phase 5 last and still carries the
+dual-write comments (around lines 712–715) as if the deletion were pending. That cleanup wants a
+tracking issue.
 
 ### Scoped `bin/sync.sh --hosts X --targets X` is narrow — cross-language dists are not populated
 
@@ -835,7 +842,7 @@ non-empty description.
 
 ### `unary_function` is shallow — it only extracts the outer call
 
-In `Hydra.Dsl.Meta.Phantoms`, `unary_function f` builds a TTerm representing
+In `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `unary_function f` builds a TTerm representing
 a unary lambda by calling `f (var "x")` and pattern-matching the result as
 `TermApplication (lhs, _)`, then returning `lhs`. If `f` does more than a
 single application (e.g. composes two operations), only the outer-most

@@ -1,20 +1,21 @@
 # Creating a new Hydra implementation
 
-Hydra currently has five complete implementations:
+Hydra currently has six complete implementations:
 [Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell),
 [Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java),
 [Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python),
-[Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala), and
+[Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala),
+[Hydra-TypeScript](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-typescript), and
 [Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp).
 Hydra-Lisp has four dialects (Clojure, Scheme, Common Lisp, and Emacs Lisp) sharing a coder and serializer
 but with distinct bootstrapping heads.
-All five implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs),
+All six implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs),
 support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib),
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
-The five implementations are mutually self-hosting: each can load Hydra modules from a
+The six implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
 (see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/demos/bootstrapping)).
-Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all five
+Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all six
 languages is semantically equivalent.
 
 A sixth implementation, [Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go),
@@ -50,10 +51,10 @@ Look at other syntax models for inspiration:
   Based on Haskell language specification
 - [JSON syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs) - Simple data format
 
-**Extended languages** (in per-language packages):
-- [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Syntax.hs) - Based on standardized grammar
-- [Python syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Syntax.hs) - Python 3 grammar
-- [Scala syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala/Meta.hs) - Scala meta model
+**Extended languages** (in per-language packages, authored host-native — Java/Python/Scala):
+- [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Syntax.java) - Based on standardized grammar
+- [Python syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/python/hydra/sources/python/syntax.py) - Python 3 grammar
+- [Scala syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-scala/src/main/scala/hydra/sources/scala/Syntax.scala) - Scala meta model
 
 Note that the Java and Python syntax models follow the best practice of using specific versions of standardized
 grammars as the source of truth.
@@ -113,16 +114,16 @@ set of language constraints, then refining them as you get to know the target la
 - [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Language.hs) - Very constrained (no functions)
 
 **Extended languages**:
-- [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Language.hs) - OOP language
-- [Python constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs) - Dynamic language
+- [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Language.java) - OOP language
+- [Python constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/python/hydra/sources/python/language.py) - Dynamic language
 
 It is preferable to use the DSL, as that allows the language constraints to be propagated into each Hydra
 implementation through code generation.
 
 **Note**: It is conventional in Hydra to define a list of reserved words for the target language in the same module as
 the language constraints.
-See for example the `reservedWordsDef` element in the [Java
-constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Language.hs),
+See for example the reserved-words definition in the [Java
+constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Language.java),
 or `reservedWords` in the
 [Haskell constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Language.hs).
 

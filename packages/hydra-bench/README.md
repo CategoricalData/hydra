@@ -13,7 +13,7 @@ the actual measurement.
 ## What it provides
 
 - **`hydra.bench.linearChain`** — depth-N monomorphic chain of `walker0` …
-  `walker399`, each cases on `_Term` variants and recurses to the previous
+  `walker799`, each cases on `_Term` variants and recurses to the previous
   walker. Stresses depth-of-recursion in type inference.
 - **`hydra.bench.polymorphicChain`** — depth-N chain with `forall`-typed
   signatures. Stresses type-variable substitution and unification.

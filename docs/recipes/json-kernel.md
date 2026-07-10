@@ -46,8 +46,11 @@ dist/json/hydra-kernel/src/test/json/
 
 **Per-package modules** (e.g. `dist/json/hydra-java/src/main/json/`):
 Each package gets its own directory with a `manifest.json` listing its modules.
-Current packages: `hydra-kernel`, `hydra-haskell`, `hydra-java`, `hydra-python`,
-`hydra-scala`, `hydra-lisp`, `hydra-pg`, `hydra-rdf`, `hydra-bench` (opt-in).
+Current packages: `hydra-kernel`, `hydra-build`, `hydra-haskell`, `hydra-jvm`, `hydra-java`,
+`hydra-python`, `hydra-scala`, `hydra-typescript`, `hydra-lisp`, `hydra-pg`, `hydra-rdf`,
+`hydra-bench` (opt-in).
+The `dist/json/` tree also carries the head-bud and extension trees (`hydra-coq`, `hydra-go`,
+`hydra-wasm`, `hydra-ext`).
 
 Each file contains a single module encoded as JSON, using Hydra's type-directed JSON encoding.
 

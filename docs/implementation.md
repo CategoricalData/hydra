@@ -538,7 +538,7 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 ### Organization
 
-Primitives are organized into **17 library modules** by category. Each module
+Primitives are organized into **18 library modules** by category. Each module
 lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
 and is **the** canonical registry for its module name:
 
@@ -549,6 +549,7 @@ and is **the** canonical registry for its module name:
 | **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
 | **hydra.lib.files** | 11 | `readFile`, `writeFile`, `status` (effectful) |
+| **hydra.lib.hashing** | 2 | `sha256`, `sha256Hex` |
 | **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
 | **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
@@ -562,7 +563,7 @@ and is **the** canonical registry for its module name:
 | **hydra.lib.system** | 6 | `execute`, `getEnvironment` (effectful) |
 | **hydra.lib.text** | 2 | `decodeUtf8`, `encodeUtf8` |
 
-**Total: 267 primitive functions.**
+**Total: 269 primitive functions.**
 
 ### Three-level definition structure
 

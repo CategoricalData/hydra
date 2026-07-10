@@ -97,6 +97,7 @@ The Modern graph and its schema are currently authored as Hydra terms in
 HydraPop's Java source (`net.fortytwo.hydra.hydrapop.ExampleGraphs`),
 encoded to JSON via Hydra's Java JSON encoder, and committed to
 `HydraPop/src/gen-main/json/`. HydraPop is expected to be folded into
-`bindings/java/hydra-tinkerpop` over time; when that happens, this demo
-should pick up the relocated files automatically (the `generate.sh`
+the `overlay/java/hydra-pg` overlay (the host-native home of the
+TinkerPop/Gremlin bridge, per #511) over time; when that happens, this
+demo should pick up the relocated files automatically (the `generate.sh`
 search path will need a one-line update).

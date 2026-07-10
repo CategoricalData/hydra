@@ -191,7 +191,7 @@ base64 strings). `hydra.lib.literals.binaryToString` is the identity for string 
 
 - **TypeScript-as-host.** Today TypeScript is a target only. Adding TS-as-host
   requires meta-level DSL builders (`hydra/dsl/*.ts` analogues of
-  `Hydra.Dsl.Meta.*`) plus a TS source-import path equivalent to
+  `Hydra.Overlay.Haskell.Dsl.Typed.*`) plus a TS source-import path equivalent to
   `transform-haskell-dsl-to-json`. The Scala and Lisp heads also lack this today;
   not a blocker for parity with them.
 - **Primitive coverage parity.** A handful of inference edge cases tagged

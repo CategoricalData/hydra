@@ -186,7 +186,7 @@ and host bindings.
 
 #### Writing the `comments` field
 
-Conventions established across the 13 `hydra.lib.*` module names (#319):
+Conventions established across the 18 `hydra.lib.*` module names (#319):
 
 - **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
   (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
@@ -575,7 +575,7 @@ private static List<PrimitiveFunction> charsPrimitives() {
 `PrimitiveFunction.toNative()` builds a `PrimitiveDefinition` from the host-side
 `name()` and `type()` (via `Scoping.typeSchemeToTermSignature`) and pairs it
 with the host implementation. Hand-written PrimitiveDefinition constructions
-in the Java head use the kernel's current 10-field shape; the helper does the
+in the Java head use the kernel's current 6-field shape; the helper does the
 expansion for you.
 
 #### Python
@@ -692,13 +692,13 @@ When adding a new primitive function:
   - [ ] **(If applicable)** Default implementation inline as the last argument to `defineWithDefault`
 - [ ] **Haskell**
   - [ ] Native implementation in `Hydra.Overlay.Haskell.Lib.<Library>`
-  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Dsl.Libraries`
-  - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
+  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Overlay.Haskell.Libraries`
+  - [ ] DSL wrapper generated at `Hydra.Dsl.Lib.<Library>` (no manual step — see Step 4)
 - [ ] **Java**
   - [ ] `PrimitiveFunction` class in `hydra.lib.<library>` (its `name()` returns `hydra.lib.<Lib>.<fn>().name`)
   - [ ] Registration in `Libraries.java`
 - [ ] **Python**
-  - [ ] Function in `hydra.python.lib.<library>`
+  - [ ] Function in `hydra.overlay.python.lib.<library>`
   - [ ] Registration in `hydra.sources.libraries` (name via `def_<library>.<fn>.name`)
 - [ ] **Common test suite** (required)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`

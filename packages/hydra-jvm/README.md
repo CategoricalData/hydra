@@ -30,12 +30,14 @@ packages/hydra-jvm/
 
 Generated artifacts land under `dist/json/hydra-jvm/` (JSON) and are then
 assembled into target-language packages by the host-specific sync steps.
-There is no `dist/java/hydra-jvm/` runtime tree; the Java head imports the
-package sources directly from `packages/hydra-jvm/src/main/java/`.
+Phase 5 of `bin/sync.sh` generates a full `dist/java/hydra-jvm/` tree (the
+generated `hydra.jvm.serde` module plus a synthesized `hydra.dsl.jvm.*`
+wrapper), matching the other JVM packages.
 
 ## Publishing
 
-`hydra-jvm` is listed in `PUBLISHED_HOSTS` in `bin/lib/hydra-packages.py`.
-When the package is ready to publish, add it to the Java Maven build
-(`dist/java/hydra-jvm/build.gradle`) and declare it as a dependency in
-`hydra-java`'s published `build.gradle`.
+`hydra-jvm` is an already-published package. It is listed in `PUBLISHED_HOSTS`
+in `bin/lib/hydra-packages.py`, ships its own `dist/java/hydra-jvm/build.gradle`,
+and is part of both the Java (Maven Central, `heads/java/bin/publish-maven.sh`)
+and Scala (`heads/scala/bin/publish-sbt.sh`) publish sets — the shared JVM base
+that `hydra-java` and `hydra-scala` depend on.

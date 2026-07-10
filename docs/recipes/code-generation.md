@@ -215,10 +215,10 @@ The procedural how-to for running sync continues below.
 ## Host-native self-host scripts
 
 `hydra-java` and `hydra-python` are authored in their own host languages
-(Java and Python respectively, with legacy Haskell sources retained as a
-backup through the 0.15 line — scheduled for removal during 0.16
-development; see [Overview](#overview)). The two corresponding scripts
-run Phase 1 directly from the host-native sources, no Haskell required:
+(Java and Python respectively), and are now the sole source of truth: the
+legacy Haskell DSL copies have been deleted (#346/#509; see
+[Overview](#overview)). The two corresponding scripts run Phase 1 directly
+from the host-native sources, no Haskell required:
 
 ```bash
 # Regenerate dist/json/hydra-java/ from the Java DSL sources
@@ -468,7 +468,8 @@ Key options:
 | `--include-tests` | Also generate test modules |
 | `--kernel-only` | Only generate kernel modules |
 | `--types-only` | Only generate type-defining modules |
-| `--synthesize-sources` | *(removed in #448 — encode/decode modules are now synthesized in-memory, not written to dist)* |
+| `--ext-only` | Only generate ext demo modules from hydra-pg / hydra-rdf |
+| `--synthesize-sources` | Also synthesize decoder/encoder DSL source modules (`Hydra.Sources.Decode.*`, `Hydra.Sources.Encode.*`) from the loaded kernel type modules |
 | `--dist-json-root <dir>` | JSON root (default: `../../dist/json`) |
 
 For non-Haskell hosts, each implementation has its own bootstrap

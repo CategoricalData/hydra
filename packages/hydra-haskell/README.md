@@ -296,21 +296,21 @@ alice = Terms.record [
 ```
 
 **Phantom-typed DSLs**
-([Hydra/Dsl/Meta/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs)) -
+([Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs)) -
 Compile-time type safety:
 ```haskell
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 
 safeFn :: TTerm (Int -> String)
 safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
 ```
 
 **Library DSLs**
-([Hydra/Dsl/Meta/Lib](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib)) -
+([Hydra/Dsl/Lib](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib)) -
 Wrappers for primitive functions:
 ```haskell
-import Hydra.Dsl.Meta.Lib.Lists as Lists
-import Hydra.Dsl.Meta.Lib.Strings as Strings
+import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Strings as Strings
 
 example = Lists.map (Strings.toUpper) (list ["hello", "world"])
 ```

@@ -31,7 +31,7 @@ See the [GenPG README](../demos/genpg/README.md) for setup, usage, and code gene
 ## Bootstrapping (everything-to-everything code generation)
 
 The bootstrapping demo validates Hydra's self-hosting capability.
-All eight complete host implementations (Haskell, Java, Python, Scala, TypeScript, and the four Lisp
+All nine complete host implementations (Haskell, Java, Python, Scala, TypeScript, and the four Lisp
 dialects — Clojure, Common Lisp, Scheme, Emacs Lisp) independently load Hydra modules from a
 language-independent JSON representation and regenerate code for any target language.
 The default demo uses Haskell, Java, and Python as both hosts and targets,
@@ -56,12 +56,12 @@ usage, architecture details, and known limitations.
 ## ValidatePG (property graph validation)
 
 ValidatePG validates property graphs against a schema, exercising every validation condition
-in `hydra.pg.validation` (missing required properties, type mismatches, unknown labels,
+in `hydra.validate.pg` (missing required properties, type mismatches, unknown labels,
 wrong edge endpoints, etc.).
 
 The demo is **translingual**: a single set of example data (a schema and twelve graphs encoded
 as JSON via `hydra.encode.pg.model`) is consumed by drivers in Haskell, Java, and Python.
-Each driver decodes the JSON, runs `hydra.pg.validation.validateGraph`, and prints the results.
+Each driver decodes the JSON, runs `hydra.validate.pg.validateGraph`, and prints the results.
 An orchestrator script runs all three, compares their output, and displays a timing summary.
 
 See the [ValidatePG README](../demos/validatepg/README.md) for setup and usage.

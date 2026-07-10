@@ -1,7 +1,7 @@
 # Hydra-PG
 
 `hydra-pg` is the translingual support package for the property graph data model in Hydra.
-It is generated into Haskell, Java, and Python from a common set of DSL sources, and depends
+It is generated into Haskell, Java, Python, and TypeScript from a common set of DSL sources, and depends
 on `hydra-kernel` and `hydra-rdf`.
 
 For background on Hydra's approach to property graphs, see the

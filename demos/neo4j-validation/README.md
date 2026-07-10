@@ -26,9 +26,10 @@ The same Hydra validation runs identically in both hosts; only the
 client-interfacing layer (the driver calls and the driver-to-Hydra mapping)
 differs, and that layer lives here in the demo.
 
-> The client-interfacing logic is in the demo **for now**. Once #511 lands
-> (folding `bindings/` into `overlay/`), it will move to a reusable
-> `overlay/{java,python}/hydra-neo4j` so applications get it without copying.
+> The client-interfacing logic is in the demo **for now**. The bindings→overlay
+> fold has landed (#511), so relocating this layer to a reusable
+> `overlay/{java,python}/hydra-neo4j` (so applications get it without copying)
+> is now a pending follow-up (deferred, cf. #434).
 
 ## Prerequisites
 

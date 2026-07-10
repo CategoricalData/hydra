@@ -141,7 +141,7 @@ def "Term" $
 
 ### Step 2: Verify DSL Constructors
 
-**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs`
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs`
 
 For term constructors, check that term-level constructors exist in the DSL:
 
@@ -343,7 +343,7 @@ definitions = [
 If using library functions:
 
 ```haskell
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
 ```
 
 ---
@@ -432,7 +432,7 @@ _Term_either>>: "e" ~> Eithers.either_
 **Add import:**
 
 ```haskell
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
 ```
 
 **Verification:** Check your constructor appears in the file:
@@ -465,7 +465,7 @@ _Term_either>>: "et" ~> Eithers.either_
   (var "et")
 ```
 
-Add import: `import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers`
+Add import: `import qualified Hydra.Dsl.Lib.Eithers as Eithers`
 
 #### 5.2: Other traversal files
 
@@ -946,7 +946,7 @@ ulimit -n 4096; stack test
 
 ### Source Files (Sometimes Modified)
 
-- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs` - Add DSL constructors if missing (#473)
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs` - Add DSL constructors if missing (#473)
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
 - [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` - Register library functions (#473)
 
@@ -1254,7 +1254,7 @@ stack build
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| Type unification error (5 fields vs 6 fields) | DSL source files not updated | Update `Hydra.Dsl.Meta.*` helper module AND all `Hydra.Sources.*` files that construct the record |
+| Type unification error (5 fields vs 6 fields) | DSL source files not updated | Update `Hydra.Overlay.Haskell.Dsl.Typed.*` helper module AND all `Hydra.Sources.*` files that construct the record |
 | `No such field: xyz` | Field constant not defined | Add `_RecordName_fieldName` constant in the type definition file |
 | Pattern match failure | Generated record constructor missing field | Update generated file's data definition and all construction sites |
 | "With" helper loses data | Forgot to pass through new field in existing "with" helpers | Update ALL `recordWithX` functions to include the new field |
@@ -1671,7 +1671,7 @@ This is a rename *plus* a new type, with two extra concerns beyond the rename pl
    alternatives are built with the same `>>:` operator as record/union fields
    (`(>>:) :: Name -> t -> Field`), used at ~8000 sites. Rather than introduce a new
    operator and rewrite them, retarget the *funnel* — the `cases`/`match` helpers in
-   `Dsl/Terms.hs` and `Dsl/Meta/{Phantoms,DeepCore}.hs` — to map `Field →
+   `Dsl/Terms.hs` and `Dsl/Typed/{Phantoms,DeepCore}.hs` — to map `Field →
    CaseAlternative` internally (`match` keeps its `[Field]` parameter; `DeepCore.cases`
    takes `[CaseAlternative]` via a new `DeepCore.caseAlternative` builder). Call sites
    stay byte-identical. Discriminate carefully: a generic `forField`/`rewriteField`

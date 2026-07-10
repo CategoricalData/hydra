@@ -5,7 +5,7 @@ or running the cross-host test matrix.
 If you only want to **use** Hydra as a library from your own project, see
 [Getting started](getting-started.md) instead.
 
-Hydra spans eight language implementations.
+Hydra spans nine language implementations.
 You do not need all of them to be productive — most contributor workflows only need a subset.
 This guide groups prerequisites into scopes so you can install the minimum you need and add the rest later.
 
@@ -19,7 +19,7 @@ or GitHub authoring.
 |------|--------|------------------|
 | **Kernel** | Haskell host (plus system Python for build scripts) | `stack test`, `heads/haskell/bin/sync-haskell.sh` (Phase 1) |
 | **Triad** | Kernel + Java + Python | `/sync-default`, `/bootstrap` default, `/test` default |
-| **Full matrix** | Triad + Scala + four Lisp dialects | `/sync` (all × all), `/bootstrap all`, all 8 fully-hosting languages |
+| **Full matrix** | Triad + Scala + four Lisp dialects | `/sync` (all × all), `/bootstrap all`, all 8 host toolchains (TypeScript, the ninth host, syncs as a kernel-only target — no separate toolchain) |
 | **Go bud** | Optional Go target | `/sync-go` |
 | **Authoring** | Optional ops tools | Issue/PR interaction, releases |
 
@@ -131,7 +131,7 @@ Python 3 from Tier 1 covers both pipeline helpers and the Python target itself; 
 This regenerates the Haskell, Java, and Python distributions and runs the Haskell test suite.
 Target-language tests run via `./bin/test.sh` (default scope is the triad).
 
-## Tier 3 — Full matrix (8 fully-hosting languages)
+## Tier 3 — Full matrix (8 host toolchains; 9 fully-hosting languages)
 
 Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and issue #409
 ("Everything-to-everything bootstrapping run").

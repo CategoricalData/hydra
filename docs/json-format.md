@@ -532,7 +532,7 @@ files under `heads/typescript/` and `heads/wasm/`, which follow npm's own schema
 | `packageFormatVersion` | integer | yes | Schema version of this descriptor. Currently `1`. |
 | `name` | string | yes | The package name (matches the directory, e.g. `hydra-kernel`). |
 | `description` | string | yes | One-line human-readable summary; flows into per-language package metadata. |
-| `sourceLanguage` | string | yes | The host language the package's DSL sources are authored in (today always `haskell`). |
+| `sourceLanguage` | string | yes | The host language the package's DSL sources are authored in. Most packages use `haskell`; the `hydra-java`/`hydra-jvm`, `hydra-python`, and `hydra-scala` packages declare their host-native source language (`java`, `python`, `scala`). |
 | `dependencies` | array of string | yes | Other package names this package depends on; build order is a topological sort over these edges. May be empty. |
 | `targetLanguages` | array of string | no | Restricts which target languages the package is regenerated to. Omitted means every target. |
 

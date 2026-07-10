@@ -21,7 +21,7 @@ implementation status).
 The Java, Python, and Scala coder DSL sources (`packages/hydra-{java,python,scala}/`) are
 authored in Java, Python, and Scala respectively (host-native), and are now the **sole** source of truth:
 the Haskell DSL copies under `packages/hydra-{java,python,scala}/src/main/haskell/` have been
-**deleted** (#346 for Java/Python; #509 for Scala).
+**deleted** (#346 for Java/Python; the Scala conversion landed in commit b01f1d34c6).
 The `hydra-jvm` package (`packages/hydra-jvm/`) is also authored in Java (host-native) and shares
 the same generation pipeline.
 The native sources are authoritative for the generated output: the main sync regenerates

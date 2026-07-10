@@ -73,17 +73,19 @@ declaring every primitive in that namespace as a `PrimitiveDefinition`
 (name, description, signature, isPure / isTotal flags, and an optional
 cross-compilable default implementation in Hydra terms).
 
-The 13 namespaces — `Chars`, `Eithers`, `Equality`, `Lists`, `Literals`,
-`Logic`, `Maps`, `Math`, `Maybes`, `Pairs`, `Regex`, `Sets`, `Strings` —
-together declare 241 primitives. See
+The 18 namespaces — `Chars`, `Effects`, `Eithers`, `Equality`, `Files`,
+`Hashing`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Optionals`, `Pairs`,
+`Regex`, `Sets`, `Strings`, `System`, `Text` — together declare ~269 primitives
+(see the lexicon for the authoritative count). See
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
 for the full signature list, and
 [`docs/recipes/adding-primitives.md`](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
 for the recipe to add a new one.
 
 Host-side primitive registries — including the Haskell-side
-[`Hydra/Dsl/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs)
-(in `overlay/haskell` since #473) that pairs each native implementation with a
+[`Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs)
+(in `overlay/haskell` since #473, relocated under the `hydra.overlay.<lang>.*`
+namespace by #501) that pairs each native implementation with a
 primitive name — are distinct from this canonical registry: they provide
 host-specific implementations and **derive** each primitive's name from its
 generated `PrimitiveDefinition` (the single source of truth), rather than
@@ -98,7 +100,7 @@ live in adjacent directories:
 |-------|------|
 | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`            | Kernel DSL sources (this package) |
 | `heads/haskell/src/main/haskell/Hydra/Dsl/`                        | Hand-written Haskell DSL helpers used to write the sources |
-| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
+| `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
 | `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core.hs`, `Hydra/Graph.hs`, etc.) |
 | `dist/java/hydra-kernel/`                               | Generated Java kernel (`hydra.core.*`, `hydra.graph.*`, etc.) |
 | `dist/python/hydra-kernel/`                             | Generated Python kernel |

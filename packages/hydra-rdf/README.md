@@ -1,7 +1,7 @@
 # Hydra-RDF
 
 `hydra-rdf` is the translingual RDF support package for Hydra. It is generated into
-Haskell, Java, and Python from a common set of DSL sources, and depends only on `hydra-kernel`.
+Haskell, Java, Python, and TypeScript from a common set of DSL sources, and depends only on `hydra-kernel`.
 
 For background on how Hydra relates to RDF and SHACL, see the
 [RDF wiki page](https://github.com/CategoricalData/hydra/wiki/RDF).

@@ -73,7 +73,7 @@ module_ = Module {
     moduleDefinitions = definitions,
     moduleDependencies = unqualifiedDep <$>
       ([DependencyModule1.ns, DependencyModule2.ns] L.++ kernelTypesModuleNames),
-    moduleDescription = Just "Description of this module"}
+    moduleMetadata = descriptionMetadata (Just "Description of this module")}
   where
     definitions = [
       toDefinition myFunction1,
@@ -714,7 +714,7 @@ you need to rewrite every consumer of the old types to use the new one, often wi
    - Replace field accessors with the new type's accessors
    - Update DSL helper calls (constructor, `with*` helpers, field projections)
 
-4. **Update DSL helpers** in `Dsl/Meta/`. Delete old constructors and accessors, add new ones or rename as appropriate.
+4. **Update DSL helpers** in `Hydra/Overlay/Haskell/Dsl/Typed/`. Delete old constructors and accessors, add new ones or rename as appropriate.
 
 5. **Delete the old type** once no consumers remain.
    Remove it from the type definition source and the module's element list.
@@ -774,7 +774,7 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 3. Manually patch **all** record construction sites in the generated tree to supply the new field —
    search for `TypeName {` across `dist/haskell/`
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
-5. Update the DSL helpers (e.g., `Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
+5. Update the DSL helpers (e.g., `Hydra/Overlay/Haskell/Dsl/Typed/Graph.hs`) — constructor, accessors, and all `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
 7. `stack build` to verify everything compiles
 8. Regenerate cleanly — the generated files will now replace your manual patches
@@ -1044,7 +1044,7 @@ Adding a primitive requires updates to **six files**:
    find_ = define "find" $ ...
    ```
 
-5. **`Hydra.Dsl.Meta.Lib.Lists`** - The DSL helper:
+5. **`Hydra.Dsl.Lib.Lists`** - The DSL helper:
    ```haskell
    find :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm (Maybe a)
    find = primitive2 _lists_find
@@ -1080,7 +1080,7 @@ Adding a primitive requires updates to **six files**:
    graphElements :: [Core.Binding]
    ```
 
-3. **Updated DSL helpers** in `Hydra/Dsl/Meta/Graph.hs`:
+3. **Updated DSL helpers** in `Hydra/Overlay/Haskell/Dsl/Typed/Graph.hs`:
    ```haskell
    -- Updated function signatures to use [Binding] instead of M.Map Name Binding
    graph :: ...
@@ -1119,14 +1119,14 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs` - Generated type
 
 **DSL Helpers:**
-- `Hydra/Dsl/Meta/Graph.hs` - Graph construction helpers
+- `Hydra/Overlay/Haskell/Dsl/Typed/Graph.hs` - Graph construction helpers
 
 **New Primitive (6 files):**
 - `Hydra/Lib/Lists.hs`
 - `Hydra/Staging/Lib/Names.hs`
 - `Hydra/Sources/Libraries.hs`
 - `Hydra/Sources/Eval/Lib/Lists.hs`
-- `Hydra/Dsl/Meta/Lib/Lists.hs`
+- `Hydra/Dsl/Lib/Lists.hs`
 - `Hydra/Eval/Lib/Lists.hs` (generated)
 
 **Kernel Terms (Sources + Generated):**

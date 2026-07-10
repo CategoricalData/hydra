@@ -110,17 +110,17 @@ Copy it from an existing source module such as the
 [Haskell Coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs).
 The block has these sections:
 
-1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Dsl.Meta.Phantoms`,
-   `Hydra.Dsl.Meta.Lib.Strings`
+1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`,
+   `Hydra.Dsl.Lib.Strings`
 2. **Qualified DSL imports** — `Hydra.Dsl.*` modules (Bootstrap, Annotations, Grammars, LiteralTypes, Literals, Types,
    Terms, etc.)
 3. **Qualified generated DSL imports** —
    `Hydra.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.).
    These provide constructors, accessors, and updaters for all Hydra types.
-4. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` wrapper modules (Core, Graph, Base, Terms, Types,
+4. **Qualified meta DSL imports** — `Hydra.Overlay.Haskell.Dsl.Typed.*` wrapper modules (Core, Graph, Base, Terms, Types,
    Variants, etc.). These re-export the generated DSLs and add custom helpers such as AsTerm-flexible overrides and
    expression conversion utilities.
-5. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
+5. **Qualified library DSL imports** — `Hydra.Dsl.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps,
    Math, Optionals, Pairs, Sets)
 5. **Qualified kernel sources imports** —
    `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
@@ -144,7 +144,7 @@ module_ = Module {
     moduleDependencies = unqualifiedDep <$>
       ([Reduction.ns, Rewriting.ns, GraphsonSyntax.ns, JsonModel.ns]
        L.++ KernelTypes.kernelTypesModuleNames),
-    moduleDescription = Just "Description of the module."}
+    moduleMetadata = descriptionMetadata (Just "Description of the module.")}
   where
     definitions = [
       toDefinition function1,
@@ -423,7 +423,7 @@ list [a, b, c]
 
 ### Map/list operations
 
-Use the DSL wrappers from `Hydra.Dsl.Meta.Lib.*`:
+Use the DSL wrappers from `Hydra.Dsl.Lib.*`:
 
 ```haskell
 -- Raw: map f xs
@@ -583,7 +583,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
    - `Maps.values` doesn't exist — use `Maps.elems`
    - `Lists.any` doesn't exist — use foldl with `Logic.or`
 
-   When in doubt, check the actual exports in `Hydra.Dsl.Meta.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
+   When in doubt, check the actual exports in `Hydra.Dsl.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
 
 9. **`inject` takes direct arguments, not `@@`**: The `inject` function takes three Haskell arguments directly:
 
@@ -847,10 +847,10 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     ```
 
 24. **`Graph` module accessors**: To access graph state fields like `graphPrimitives`,
-    import `Hydra.Dsl.Meta.Graph` and use the accessor functions:
+    import `Hydra.Overlay.Haskell.Dsl.Typed.Graph` and use the accessor functions:
 
     ```haskell
-    import qualified Hydra.Dsl.Meta.Graph as Graph
+    import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph as Graph
 
     -- In DSL code:
     "g" <<~ Monads.getState $
@@ -951,7 +951,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     define the type in a Types module and the functions in a separate Terms module that depends on it.
 
 40. **`Prelude hiding ((++))` and Haskell-level string operations**: Most DSL source modules import `Prelude hiding
-    ((++))` because `Hydra.Dsl.Meta.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
+    ((++))` because `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms` exports its own `(++)` for `TypedTerm String` concatenation.
     This means you cannot use Haskell's native `(++)` for regular `String` concatenation in DSL helper functions.
     Use `(<>)` instead, which works on any `Semigroup` including `String`:
 

@@ -116,13 +116,12 @@ The `bootstrap-from-json` executable generates kernel modules, default-impl modu
 and generation tests in a single invocation:
 
 ```bash
-stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests +RTS -K256M -A32M -RTS
+stack exec bootstrap-from-json -- --target python --include-coders --include-tests +RTS -K256M -A32M -RTS
 ```
 
 You can omit flags to generate only a subset:
 - Without `--include-coders`: skip coder modules
-- Without `--include-tests`: skip kernel tests
-- Without `--include-gentests`: skip generation tests
+- Without `--include-tests`: skip kernel tests and generation tests (both are produced by `--include-tests`)
 
 ### Step 3: Run Python tests
 

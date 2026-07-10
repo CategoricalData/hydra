@@ -123,6 +123,7 @@ the following files:
 | `heads/java/build.gradle` | `version = '0.15.0'` |
 | `demos/bootstrapping/resources/java/build.gradle` | `version = '0.15.0'` |
 | `packages/hydra-scala/build.sbt` | `version := "0.15.0"` |
+| `demos/bootstrapping/resources/scala/build.sbt` | `version := "0.15.0"` |
 | `heads/python/pyproject.toml` | `version = "0.15.0"` |
 | `demos/bootstrapping/resources/python/pyproject.toml` | `version = "0.15.0"` |
 | `heads/typescript/package.json` | `"version": "0.15.0"` |
@@ -192,11 +193,12 @@ and produces the upload-ready artifacts in `release-artifacts/`:
 2. **Haskell tests** — `stack test` in `heads/haskell`.
 3. **Java tests** — `./gradlew test` from the root (requires Java 11+).
 4. **Python tests** — `pytest` plus `ruff check` and `ruff format --check`.
-5. **Scala tests** — `sbt test` in `packages/hydra-scala`.
-6. **Lisp tests** — runs `run-tests.sh` for each dialect (Clojure, Common Lisp, Emacs Lisp, Scheme).
-7. **JSON kernel** — verifies the exported JSON kernel round-trips correctly.
-8. **Lexicon freshness** — `docs/hydra-lexicon.txt` matches the current Haskell kernel.
-9. **Per-package Hackage sdists on case-sensitive filesystem** —
+5. **TypeScript tests** — the TypeScript head's own test suite.
+6. **Scala tests** — `sbt test` in `packages/hydra-scala`.
+7. **Lisp tests** — runs `run-tests.sh` for each dialect (Clojure, Common Lisp, Emacs Lisp, Scheme).
+8. **JSON kernel** — verifies the exported JSON kernel round-trips correctly.
+9. **Lexicon freshness** — `docs/hydra-lexicon.txt` matches the current Haskell kernel.
+10. **Per-package Hackage sdists on case-sensitive filesystem** —
    the Hackage build infrastructure runs on Linux (case-sensitive ext4),
    while macOS HFS+/APFS hides duplicate-with-different-case directory clashes.
    Hydra publishes a per-package Hackage distribution for **every** Hydra Haskell
@@ -211,13 +213,13 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    ("file name does not match module name") errors without a full compile.
    The publish script also asserts the publish set is **dependency-closed**
    (no published package may depend on an unpublished Hydra package).
-10. **Per-package Haddock-for-Hackage docs** —
+11. **Per-package Haddock-for-Hackage docs** —
    builds a Haddock tarball per package from the validated sdists.
    Hackage's auto-doc-builder is best-effort and frequently fails on packages
    with many transitive deps, so we pre-build locally and upload via
    `cabal upload --documentation --publish` after release
    (see "Haskell releases" below).
-11. **Canonical source archive + checksum + signature** —
+12. **Canonical source archive + checksum + signature** —
    a single `git archive` tarball of the tracked source at `HEAD`
    (`hydra-<version>-src.tar.gz`), plus a SHA-512 checksum and a detached GPG
    signature. This is the **release of record**: the per-registry artifacts
@@ -227,6 +229,11 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    `HYDRA_RELEASE_SIGNING_KEY` (else gpg's default); a missing key degrades to a
    warning so the script stays runnable outside a real release, but a real release
    must be signed. See "Verifying a release" below.
+13. **Per-host published-package self-containment** —
+   runs each host's `verify-distribution.sh` gate, which builds that host's
+   publish-set packages from the `dist/` tree alone and proves they are
+   self-contained when consumed as published artifacts, in isolation from the
+   worktree (see the `verify-distribution.sh` row in the script reference below).
 
 On success the script writes, for each of `hydra-kernel`, `hydra-haskell`, `hydra`:
 
@@ -335,7 +342,7 @@ Do not emphasize temporary namespaces such as `net.fortytwo.hydra` in link text;
 
 The per-registry artifacts below — Hackage sdists, Maven Central jars, PyPI wheels, conda packages —
 are **convenience binaries**: downstream of, and secondary to, the canonical signed source archive
-(see [Release preparation](#release-preparation) Step 11 and [Verifying a release](#verifying-a-release)).
+(see [Release preparation](#release-preparation) Step 12 and [Verifying a release](#verifying-a-release)).
 The source archive is the release of record; the registry artifacts are how consumers obtain usable
 packages without running the codegen toolchain themselves.
 
@@ -442,23 +449,29 @@ The published artifacts under group `net.fortytwo.hydra.java` (#519) are:
 | Artifact | Description | `api` dependencies |
 |----------|-------------|--------------------|
 | `hydra-kernel` | Core types, terms, DSL, eval, primitives + the Java runtime support classes (`hydra.util.*`, `hydra.lib.*`, `hydra.dsl.*`, `hydra.tools.*`, plus `Adapters`/`Coders`). Self-contained; downstream packages depend on this. | (none) |
+| `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-haskell` | Haskell syntax and coder (generates Haskell code from Hydra schemas). | `hydra-kernel` |
+| `hydra-jvm` | JVM serde support shared by the JVM coders. | `hydra-kernel` |
 | `hydra-java` | Java syntax, serde, and coder (generates Java code from Hydra schemas). | `hydra-kernel` |
 | `hydra-python` | Python syntax and coder. | `hydra-kernel` |
 | `hydra-scala` | Scala syntax and coder. | `hydra-kernel` |
 | `hydra-lisp` | Lisp syntax and the shared coder for the four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme). | `hydra-kernel` |
 | `hydra-typescript` | TypeScript syntax and coder. | `hydra-kernel` |
-| `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
+| `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 
 Starting with 0.16.1, the publish set covers a Java/Maven artifact for **every official Hydra
 target language** — one coder package per implementation family
 (`hydra-haskell`/`-java`/`-python`/`-scala`/`-lisp`/`-typescript`, covering all nine of the
-implementation languages), plus the `hydra-kernel` base and the `hydra-pg`/`hydra-rdf` domain
-packages (#468). The set is encoded in two places that must stay in sync: `batch_emit_packages()`
-in `bin/lib/assemble-common.sh` (which packages the batch assembler emits a `build.gradle` for) and
-`PUBLISHED_HOSTS` in `bin/lib/hydra-packages.py` (which packages resolve to a published host
-version). The newer `hydra-coq`, `hydra-go`, and `hydra-wasm` targets do NOT yet qualify.
+implementation languages), plus the `hydra-kernel` base, the `hydra-build`/`hydra-jvm` support
+packages, and the `hydra-pg`/`hydra-rdf` domain packages (#468, #505, #508). The authoritative Java
+publish set lives in `PUBLISH_SET` in `heads/java/bin/publish-maven.sh`. Two related sets are
+*intentionally narrower* and no longer identical to it: `batch_emit_packages()` in
+`bin/lib/assemble-common.sh` (the coder packages the batch assembler emits a `build.gradle` for —
+kernel plus the six coders, omitting `hydra-jvm`/`hydra-build`/`hydra-pg`/`hydra-rdf`) and
+`PUBLISHED_HOSTS` in `bin/lib/hydra-packages.py` (which packages resolve to a published *host*
+version — now including `hydra-jvm`). The newer `hydra-coq`, `hydra-go`, and `hydra-wasm` targets
+do NOT yet qualify.
 
 `hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) is intentionally NOT in the Java
 publish set due to a known Java-coder limitation with parametric union case-elimination on
@@ -539,7 +552,7 @@ The following are Java-specific release steps:
     strict, so a plain `gradle build` keeps failing on #449 until it is fixed). Remove the flag and
     the init script once #449 lands.
   * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
-    Find the nine deployments, verify they have passed validation, then click "Publish" on each.
+    Find the eleven deployments, verify they have passed validation, then click "Publish" on each.
 
 It will take a short time (a couple of minutes) for validation,
 and a longer time (as little as 15 minutes, or as much as nearly an hour) for promotion,
@@ -564,12 +577,14 @@ Starting with 0.17, the Scala release ships **per-package Maven artifacts** unde
 mirroring the Java publish set.
 Each `dist/scala/<pkg>/` directory is a self-contained, publishable sbt build with a generated
 `build.sbt` and `project/`.
-The published artifacts are the same nine as the Java set:
+The published artifacts mirror the Java set (with `hydra-pg` still excluded, below):
 
 | Artifact | Description | `libraryDependencies` |
 |----------|-------------|-----------------------|
 | `hydra-kernel_3` | Core types, terms, DSL, eval, primitives + Scala runtime support. Self-contained. | (none) |
+| `hydra-build_3` | Build/packaging model shared across coders. | `hydra-kernel_3` |
 | `hydra-haskell_3` | Haskell syntax and coder. | `hydra-kernel_3` |
+| `hydra-jvm_3` | JVM serde support shared by the JVM coders. | `hydra-kernel_3` |
 | `hydra-java_3` | Java syntax, serde, and coder. | `hydra-kernel_3` |
 | `hydra-python_3` | Python syntax and coder. | `hydra-kernel_3` |
 | `hydra-scala_3` | Scala syntax and coder. | `hydra-kernel_3`, `hydra-java_3` |
@@ -613,7 +628,7 @@ The following are Scala-specific release steps:
   leaves-first (so downstream builds resolve fresh siblings), then runs `sbt publishSigned`
   per package in topological order.
 * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
-  Find the nine deployments, verify they have passed validation, then click "Publish" on each
+  Find the ten deployments, verify they have passed validation, then click "Publish" on each
   (leaves first).
 * **Self-containment gate (#537):** `heads/scala/bin/verify-distribution.sh` publishes the publish
   set to a temp Ivy repo (`sbt --ivy <tmp>`) and builds a throwaway sbt consumer against the
@@ -652,13 +667,14 @@ The published wheels are:
 | Distribution | Description | `dependencies` |
 |--------------|-------------|----------------|
 | `hydra-kernel` | Core types, terms, DSL, eval, primitives + Python runtime support (`hydra.lib.*`, `hydra.dsl.*`, `hydra.sources.*`, `hydra.tools`). Self-contained. | (none) |
+| `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
 | `hydra-ext` _(not yet published)_ | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
 | `hydra-python` | Python syntax, serde, and coder. | `hydra-kernel` |
 
 `hydra-ext` is **not** in the current publish set — it is outside the standard sync matrix and has
-not shipped to PyPI (see the publish steps below). The other four are the active set.
+not shipped to PyPI (see the publish steps below). The other five are the active set.
 
 Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and
 `hydra.json:currentVersion` by `bin/lib/generate-python-package-build.py`.
@@ -678,10 +694,10 @@ The following are Python-specific release steps:
   twine check wheels/*                        # validate metadata (recommended pre-flight)
   heads/python/bin/publish-pypi.sh --upload   # build + twine upload
   ```
-  The publish set is `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`. **`hydra-ext` is
-  excluded** — it is not in the standard sync matrix (so `dist/python/hydra-ext/` is not generated)
-  and was not in the 0.15 PyPI release. (The "published wheels" table above lists it
-  aspirationally; the actual publish set is these four.)
+  The publish set is `hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-python`.
+  **`hydra-ext` is excluded** — it is not in the standard sync matrix (so `dist/python/hydra-ext/`
+  is not generated) and was not in the 0.15 PyPI release. (The "published wheels" table above lists
+  it aspirationally; the actual publish set is these five.)
   * **Builder portability.** The script prefers `uv build` (hermetic, needs no preinstalled
     `build` module) and falls back to `python3 -m build`. Plain `python -m build` fails with
     `No module named build.__main__` on an interpreter without the `build` package — prefer `uv`.
@@ -819,6 +835,7 @@ The published packages are:
 | Package | Description | `dependencies` |
 |---------|-------------|----------------|
 | `hydra-kernel` | Core types, terms, DSL, eval, primitives + TypeScript runtime support (`hydra/runtime.ts`, `hydra/lib/*.ts`, `hydra/primitives.ts`). Self-contained. | (none) |
+| `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-typescript` | TypeScript syntax and coder. | `hydra-kernel` |

@@ -62,7 +62,7 @@ demos/
 │       └── RdfDemo.java              # Java RDF/SHACL driver
 └── ...
 
-# Generated outputs land under the standard 0.15 dist tree:
+# Generated outputs land under the standard dist tree:
 dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/        # PG model, GraphSON, mapping
 dist/python/hydra-pg/src/main/python/hydra/pg/          # Python PG runtime
 dist/java/hydra-pg/src/main/java/hydra/pg/              # Java PG runtime
@@ -231,7 +231,7 @@ Take the generated prompt and:
 1. Copy it into your favorite LLM chat interface
    ([ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), etc.; Claude was used in the video)
 2. Copy the LLM-generated files to their expected locations under
-   `demos/src/main/haskell/Hydra/Sources/Demos/GenPG/Examples/Health`
+   `demos/src/main/haskell/Hydra/Demos/Genpg/Examples/Health`
 
 Just overwrite the files which are already checked in at that location.
 Feel free to use any file system integration available in your tool to avoid manual copy-and-paste.

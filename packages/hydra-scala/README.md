@@ -6,7 +6,7 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
 
 ## Features
 
-- **150 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7
+- **~260 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7
 - **Bootstrapping host**: loads Hydra modules from JSON and generates Haskell, Java, Python, and Scala
 - **The full `hydra.lib.*` primitive library** (see
   [docs/hydra-lexicon.txt](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)

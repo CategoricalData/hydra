@@ -10,7 +10,7 @@ Tests are written in Hydra's term-encoded DSL in [packages/hydra-kernel/src/main
 and code-generated into each target language.
 
 **The normal way to add tests** is to write them directly in the [Sources/Test][sources-test] directory using the
-[TTerms][tterms] and [TTypes][ttypes] DSLs.
+[typed Terms][tterms] and [typed Types][ttypes] DSLs.
 This recipe covers that workflow, plus a special section on migrating existing Haskell-specific tests to the common
 suite.
 
@@ -19,7 +19,7 @@ For more context on Hydra's testing strategy, see [Testing in Hydra](https://git
 ## Prerequisites
 
 - Familiarity with [Hydra's core concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
-- Understanding of term-encoded DSLs ([TTerms][tterms], [TTypes][ttypes])
+- Understanding of term-encoded DSLs ([typed Terms][tterms], [typed Types][ttypes])
 - Knowledge of the area you're testing (e.g., type inference, library functions, formatting)
 
 ## Adding new tests (normal workflow)
@@ -30,14 +30,14 @@ This is the standard way to add tests to the common test suite.
 
 Test modules are organized in [Hydra/Sources/Test/][sources-test]:
 
-- **Type checking tests**: [Checking.hs][test-checking]
+- **Type checking tests**: [Checking/*.hs][test-checking] (Fundamentals, AlgebraicTypes, NominalTypes, etc.)
 - **Type inference tests**: [Inference/*.hs][test-inference] (AlgebraicTypes, NominalTypes, Fundamentals, etc.)
 - **Library function tests**: [Lib/*.hs][test-lib] (Lists, Strings, etc.)
 - **Formatting tests**: [Formatting.hs][test-formatting]
 - etc.
 
 [sources-test]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test
-[test-checking]: https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Checking.hs
+[test-checking]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Checking
 [test-inference]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Inference
 [test-lib]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib
 [test-formatting]: https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Formatting.hs
@@ -46,12 +46,12 @@ See [Testing.md](https://github.com/CategoricalData/hydra/wiki/Testing#test-cate
 
 ### 2. Verify DSL coverage (rarely needed)
 
-The [TTerms][tterms] and [TTypes][ttypes] DSLs should already have the constructors you need.
+The [typed Terms][tterms] and [typed Types][ttypes] DSLs should already have the constructors you need.
 Only extend them if absolutely necessary - changes to these modules can break existing code for other users.
 
 If you must add DSL functions:
 
-In [TTerms.hs][tterms]:
+In [Typed/Terms.hs][tterms]:
 ```haskell
 -- Example: Adding constructors for Either
 left :: TypedTerm Term -> TypedTerm Term
@@ -61,14 +61,15 @@ right :: TypedTerm Term -> TypedTerm Term
 right t = Core.termEither $ Phantoms.right t
 ```
 
-In [TTypes.hs][ttypes]:
+In [Typed/Types.hs][ttypes]:
 ```haskell
 -- Example: Adding a type constructor
 either :: TypedTerm Type -> TypedTerm Type -> TypedTerm Type
 either leftType rightType = Core.typeFunction _Either [leftType, rightType]
 ```
 
-Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TypedTerm` phantom types.
+Pattern: Import `qualified Hydra.Overlay.Haskell.Dsl.Typed.Core as Core`, use `Core.*` functions, return `TypedTerm`
+phantom types.
 
 **Note**: As Hydra matures, DSL extensions should become increasingly rare.
 Most new tests can be written using existing DSL functions.
@@ -80,18 +81,23 @@ Open the appropriate test module in
 and add test cases using the term-encoded DSL.
 The test helper functions vary by test type:
 
-**Type checking tests** (`Checking.hs`) - Use `checkWithType`:
+**Type checking tests** (`Checking/*.hs`) - Use `checkTest`:
 ```haskell
-checkWithType "test name" []  -- environment (type bindings)
-  (inputTerm)                 -- term to type check
-  (expectedOutputTerm)        -- term after type annotation
-  (expectedType)              -- inferred type
+checkTest "test name" []       -- tags
+  (inputTerm)                  -- term to type check
+  (expectedOutputTerm)         -- term after type annotation
+  (expectedType)               -- inferred type
 ```
 
-**Type inference tests** (`Inference/*.hs`) - Use `inferWithType`:
+**Type inference tests** (`Inference/*.hs`) - Use `expectMono` / `expectPoly`:
 ```haskell
-inferWithType "test name" []
+expectMono 1 []                -- case index, tags
   (inputTerm)
+  (expectedType)               -- monomorphic result type
+
+expectPoly 1 []                -- case index, tags
+  (inputTerm)
+  ["t0"]                       -- quantified type variables
   (expectedType)
 ```
 
@@ -102,18 +108,18 @@ primCase "test name" DefLists.reverse  -- the PrimitiveDefinition; its name flow
   (intList [3, 2, 1])                -- expected result
 ```
 
-**Formatting tests** (`Formatting.hs`) - Use `caseConversionCase`:
+**Formatting tests** (`Formatting.hs`) - Use `testCase`:
 ```haskell
-caseConversionCase "test name"
-  _caseConversion_lowerSnakeCase
-  _caseConversion_upperCamelCase
+testCase 1                     -- case index
+  CaseConventionLowerSnake     -- source convention
+  CaseConventionCamel          -- target convention
   "hello_world"
-  "HelloWorld"
+  "helloWorld"
 ```
 
 **Example: Type checking test**
 ```haskell
-checkWithType "apply function to function" []
+checkTest "apply function to function" []
   (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x"] $
         var "apply" @@ var "double")
   (letsTyped [
@@ -171,7 +177,7 @@ Common issues when tests fail:
 - Look at similar passing tests in the same module for patterns
 
 **Missing DSL functions:**
-- Add to [TTerms.hs][tterms] or [TTypes.hs][ttypes] as needed
+- Add to [Typed/Terms.hs][tterms] or [Typed/Types.hs][ttypes] as needed
 - Ensure consistency with `Terms` and `Types` when migrating
 
 ## Migrating existing Haskell-specific tests
@@ -199,20 +205,20 @@ Migrate tests when:
 2. **Check for missing DSL functions** - Find `Terms.*` calls in the spec file:
    ```bash
    grep -o 'Terms\.[a-z][a-zA-Z0-9]*' CheckingSpec.hs | sort -u > /tmp/terms_used.txt
-   grep -o '^[a-z][a-zA-Z0-9]* ::' TTerms.hs | sed 's/ :://' | sort > /tmp/tterms_have.txt
+   grep -o '^[a-z][a-zA-Z0-9]* ::' Typed/Terms.hs | sed 's/ :://' | sort > /tmp/tterms_have.txt
    comm -23 /tmp/terms_used.txt /tmp/tterms_have.txt
    ```
 
-3. **Add missing DSL functions** - Add to [TTerms.hs][tterms] or [TTypes.hs][ttypes] as needed
+3. **Add missing DSL functions** - Add to [Typed/Terms.hs][tterms] or [Typed/Types.hs][ttypes] as needed
 
 4. **Translate test cases** - Key differences:
 
-   | Spec file (Terms/Types) | Common suite (TTerms/TTypes) |
+   | Spec file (Terms/Types) | Common suite (typed Terms/Types) |
    |-------------------------|------------------------------|
    | `Terms.lambda "x"` | `lambda "x"` |
    | `Types.int32` | `T.int32` |
    | Direct `Term` values | `TypedTerm Term` phantom types |
-   | Haskell test framework calls | `checkWithType`, `primCase`, etc. |
+   | Haskell test framework calls | `checkTest`, `primCase`, etc. |
 
 5. **Migrate in batches** - Add 5-10 test cases at a time
 
@@ -226,9 +232,9 @@ cd heads/haskell
 # 1. Find missing DSL functions
 grep -o 'Terms\.[a-z][a-zA-Z0-9]*' src/test/haskell/Hydra/CheckingSpec.hs | sort -u
 
-# 2. Add missing functions to TTerms.hs and TTypes.hs
+# 2. Add missing functions to Typed/Terms.hs and Typed/Types.hs
 
-# 3. Migrate a batch of test cases to Sources/Test/Checking.hs
+# 3. Migrate a batch of test cases to Sources/Test/Checking/
 
 # 4. Build and test
 stack build && stack test
@@ -240,7 +246,8 @@ stack build && stack test
 
 1. **Write tests directly in [Sources/Test][sources-test]** - This is the normal workflow; only migrate when necessary
 2. **Use descriptive test names** - Make test names clear and specific
-3. **Keep DSLs consistent** - [TTerms][tterms] should mirror Terms, [TTypes][ttypes] should mirror Types when migrating
+3. **Keep DSLs consistent** - [typed Terms][tterms] should mirror Terms, [typed Types][ttypes] should mirror Types
+   when migrating
 4. **Test in small increments** - Build and test frequently to catch issues early
 5. **Follow existing patterns** - Look at similar tests in the same module for guidance
 6. **Document complex cases** - Add comments for non-obvious type checking or inference scenarios
@@ -306,16 +313,16 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 
 ## Key files
 
-- [TTerms.hs][tterms] - Term-encoded term constructors
-- [TTypes.hs][ttypes] - Term-encoded type constructors
+- [Typed/Terms.hs][tterms] - Term-encoded term constructors
+- [Typed/Types.hs][ttypes] - Term-encoded type constructors
 - [Sources/Test/][sources-test] - All common test suite modules
-  - [Checking.hs][test-checking] - Type checking tests
+  - [Checking/][test-checking] - Type checking tests
   - [Inference/][test-inference] - Type inference tests
   - [Lib/][test-lib] - Library primitive tests
 - [TestSuiteSpec.hs][test-suite-spec] - Test runner framework
 - [*Spec.hs files][spec-files] - Haskell-specific tests (migration sources)
 
-[tterms]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/TTerms.hs
-[ttypes]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/TTypes.hs
+[tterms]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Terms.hs
+[ttypes]: https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Types.hs
 [test-suite-spec]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs
 [spec-files]: https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/test/haskell/Hydra

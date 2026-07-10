@@ -275,11 +275,11 @@ translation is restricted to the native path.
 Because `actual`/`expected` hold a term of the field's value type, author them with builders
 that produce a term *of that type*:
 
-- **Value-typed builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Dsl.Meta.Literals` — e.g.
+- **Value-typed builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Overlay.Haskell.Dsl.Literals` — e.g.
   `Literals.string :: String -> TypedTerm String`, `Phantoms.primitive`, `Phantoms.@@`)
   produce a term of its own value type: `Literals.string "x"` is a `string`,
   `readFile (path "f")` is an `effect<string>`. Use these for the `actual`/`expected` fields.
-- **Reified-AST builders** (`Hydra.Dsl.Meta.Terms` — e.g. `Terms.string`, which is
+- **Reified-AST builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Terms` — e.g. `Terms.string`, which is
   `termLiteral (literalString …)`, and `Terms.primitive`, which is `termVariable
   (encodeName …)`) produce a term whose *type* is `hydra.core.Term` — a `Term`-valued AST.
   These are for slots that genuinely take `hydra.core.Term` data, e.g. the argument the

@@ -15,8 +15,10 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 ## Getting Started
 
 Hydra-Java requires Java 11 or later. The Gradle wrapper lives at
-`heads/java/gradlew`; all subprojects (`hydra-java`, `hydra-rdf4j`,
-`hydra-neo4j`, `hydra-pg-dsl`) are configured from there.
+`heads/java/gradlew`; the only Gradle subproject is `hydra-java` (its
+`projectDir` points at `packages/hydra-java`). The former `hydra-rdf4j`,
+`hydra-neo4j`, and `hydra-pg-dsl` binding subprojects were folded into
+`overlay/{java,python}/hydra-{pg,rdf}` per #511.
 
 ```bash
 cd heads/java
@@ -128,8 +130,7 @@ Hydra's Java code is split across three locations
 
 - **This package** (`packages/hydra-java/src/main/java/hydra/sources/java/`) — the Java coder
   DSL sources (written in Java). These are the source of truth for the `hydra.java.*` modules
-  (Syntax, Language, Coder, Serde, Names, Utils, Environment, Testing, plus the
-  hand-written `JavaHelpers` and `SourceDsl` support classes).
+  (Coder, Environment, Gradle, Language, Manifest, Names, Serde, Syntax, Testing, Utils).
 
 - **Java kernel overlay** ([`overlay/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java))
   — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
@@ -429,7 +430,7 @@ case Field(var name, var term) -> ...
 ```
 
 Raising the floor to Java 21 affects every downstream consumer of
-generated Hydra code (the `bindings/java/*` adapters, hydrapop,
+generated Hydra code (the `overlay/java/hydra-{pg,rdf}` adapters, hydrapop,
 demo projects, external integrations that haven't been surveyed).
 The benefit is substantial but the cost is a coordinated platform
 bump that needs explicit buy-in. Until then, `hydra-java` stays on
