@@ -248,9 +248,14 @@ upward). `integration` and `main` are passive, typically with no attached
 session. `staging` is the only intermediate tier with active checks — its
 session runs a repeating loop: pull from `integration` (and, when directed, a
 named remote branch) → `/sync` → `/test` → `/bootstrap` → push to `origin/main`
-(with user confirmation) → monitor CI, fixing failures and re-running the failing
-step until green. Don't promote up the chain reflexively; wait for each tier to
-drain its current batch.
+→ monitor CI, fixing failures and re-running the failing step until green.
+**Staging's push to `origin/main` is NOT user-gated** — landing validated batches
+is the entire purpose of the staging tier and part of its charter, unlike
+feature-agent pushes or GitHub writes (which stay user-gated). The guardrails are
+intrinsic to the cycle, not a confirmation step: the pre-push `WIP:`-scan, the
+cross-machine claim + read-before-push, and no force-push of a shared branch (see
+[branch-flow.md § Cadence](claude/branch-flow.md#cadence)). Don't
+promote up the chain reflexively; wait for each tier to drain its current batch.
 
 For the full sequence, cadence rules, conflict patterns, and the staging
 session's sync → test → bootstrap → push → monitor-CI loop, see
