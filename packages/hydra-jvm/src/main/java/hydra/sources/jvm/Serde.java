@@ -32,9 +32,14 @@ public class Serde {
         return define(NS, localName, body);
     }
 
-    public static final Def escapeJavaChar = def(
-        "escapeJavaChar",
-        () -> lambda("c",
+    /** Fluent form: {@code def("name").doc("...").to(() -> body)}. See Defs.DefBuilder. */
+    private static hydra.overlay.java.dsl.meta.Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
+
+    public static final Def escapeJavaChar = def("escapeJavaChar")
+        .doc("Escape a single character for inclusion in a Java string or char literal")
+        .to(() -> lambda("c",
                 Logic.ifElse(
                     Equality.equal(var("c"), int32(34)),
                     string("\\\""),

@@ -187,7 +187,7 @@ resolveExprRef name st =
 
 -- | Extract a TypeName from a Type (for use in composite literals).
 typeToTypeName :: Go.Type -> Go.TypeName
-typeToTypeName (Go.TypeName_ tn) = tn
+typeToTypeName (Go.TypeNamed tn) = tn
 typeToTypeName _ = Go.TypeName (Go.QualifiedIdent Nothing (Go.Identifier "any")) []
 
 -- | Construct a Go Identifier.
@@ -200,23 +200,23 @@ goQualIdent mpkg name = Go.QualifiedIdent mpkg (goIdent name)
 
 -- | Construct a simple (unqualified) Go type name with no type arguments.
 goSimpleTypeName :: String -> Go.Type
-goSimpleTypeName name = Go.TypeName_ $ Go.TypeName (goQualIdent Nothing name) []
+goSimpleTypeName name = Go.TypeNamed $ Go.TypeName (goQualIdent Nothing name) []
 
 -- | Construct a qualified Go type name with optional type arguments.
 goQualTypeName :: Maybe String -> String -> [Go.Type] -> Go.Type
-goQualTypeName mpkg name targs = Go.TypeName_ $ Go.TypeName
+goQualTypeName mpkg name targs = Go.TypeNamed $ Go.TypeName
   (goQualIdent (goIdent <$> mpkg) name) targs
 
 -- | Construct a Go expression that is a simple name reference.
 goNameExpr :: String -> Go.Expression
 goNameExpr name = Go.ExpressionUnary $ Go.UnaryExprPrimary $
-  Go.PrimaryExprOperand $ Go.OperandName_ $
+  Go.PrimaryExprOperand $ Go.OperandNamed $
     Go.OperandName (goQualIdent Nothing name) []
 
 -- | Construct a Go expression that is a qualified name reference.
 goQualNameExpr :: String -> String -> Go.Expression
 goQualNameExpr pkg name = Go.ExpressionUnary $ Go.UnaryExprPrimary $
-  Go.PrimaryExprOperand $ Go.OperandName_ $
+  Go.PrimaryExprOperand $ Go.OperandNamed $
     Go.OperandName (goQualIdent (Just $ goIdent pkg) name) []
 
 -- | Construct a function call expression.
@@ -227,7 +227,7 @@ goCall fun args = Go.ExpressionUnary $ Go.UnaryExprPrimary $
 -- | Construct a call expression from a simple name.
 goCallName :: String -> [Go.Expression] -> Go.Expression
 goCallName name args = goCall
-  (Go.PrimaryExprOperand $ Go.OperandName_ $ Go.OperandName (goQualIdent Nothing name) [])
+  (Go.PrimaryExprOperand $ Go.OperandNamed $ Go.OperandName (goQualIdent Nothing name) [])
   args
 
 -- | Construct a selector expression (e.g., x.Field).
@@ -237,7 +237,7 @@ goSelector expr field = Go.PrimaryExprSelector $ Go.SelectorExpr expr (goIdent f
 -- | Construct a field access on a name (e.g., v.Field).
 goFieldAccess :: String -> String -> Go.Expression
 goFieldAccess varName field = Go.ExpressionUnary $ Go.UnaryExprPrimary $
-  goSelector (Go.PrimaryExprOperand $ Go.OperandName_ $
+  goSelector (Go.PrimaryExprOperand $ Go.OperandNamed $
     Go.OperandName (goQualIdent Nothing varName) []) field
 
 -- | Construct a Go string literal expression.
@@ -475,7 +475,7 @@ encodeIntegerValue iv st = case iv of
     if i >= -2^63 && i < 2^63
       then do
         -- Fits in int64: big.NewInt(n)
-        let newIntExpr = Go.PrimaryExprOperand $ Go.OperandName_ $
+        let newIntExpr = Go.PrimaryExprOperand $ Go.OperandNamed $
               Go.OperandName (goQualIdent (Just $ goIdent "big") "NewInt") []
         pure (goCall newIntExpr [goIntLitExpr i], st')
       else do
@@ -823,7 +823,7 @@ encodeTermInner cx g term st = case term of
           goShortVar "_v" ve,
           goReturn [Go.ExpressionUnary $ Go.UnaryExprOp $
             Go.UnaryOperation Go.UnaryOpAddressOf
-              (Go.UnaryExprPrimary $ Go.PrimaryExprOperand $ Go.OperandName_ $
+              (Go.UnaryExprPrimary $ Go.PrimaryExprOperand $ Go.OperandNamed $
                 Go.OperandName (goQualIdent Nothing "_v") [])]])) [], st')
   Core.TermPair p -> do
     (fe, st1) <- encodeTerm cx g (fst p) st
@@ -1095,7 +1095,7 @@ encodeProjection cx g proj marg st = do
           [goReturn [Go.ExpressionUnary $ Go.UnaryExprPrimary $
             goSelector (Go.PrimaryExprTypeAssertion $
               Go.TypeAssertionExpr
-                (Go.PrimaryExprOperand $ Go.OperandName_ $
+                (Go.PrimaryExprOperand $ Go.OperandNamed $
                   Go.OperandName (goQualIdent Nothing "v") [])
                 recType) fname]], st1)
       Just arg -> do
@@ -1145,7 +1145,7 @@ encodeCases cx g cs marg st = do
             switchStmt = Go.StatementSwitch $ Go.SwitchStmtType $ Go.TypeSwitchStmt
               Nothing
               (Go.TypeSwitchGuard (Just $ goIdent "v")
-                (Go.PrimaryExprOperand $ Go.OperandName_ $
+                (Go.PrimaryExprOperand $ Go.OperandNamed $
                   Go.OperandName (goQualIdent Nothing "x") []))
               allArms
         case marg of
@@ -1741,17 +1741,17 @@ isQualifiedName name = case qualifiedNameModuleName (qualifyName name) of
 -- Only simple named types can be used in IndexExpr. Composite types ([]any, func, etc.)
 -- can't be represented as expressions in the current Go AST.
 isSimpleGoType :: Go.Type -> Bool
-isSimpleGoType (Go.TypeName_ _) = True
+isSimpleGoType (Go.TypeNamed _) = True
 isSimpleGoType _ = False
 
 typeToExpr :: Go.Type -> Go.Expression
-typeToExpr (Go.TypeName_ tn) =
+typeToExpr (Go.TypeNamed tn) =
   Go.ExpressionUnary $ Go.UnaryExprPrimary $
-    Go.PrimaryExprOperand $ Go.OperandName_ $
+    Go.PrimaryExprOperand $ Go.OperandNamed $
       Go.OperandName (Go.typeNameName tn) []
 typeToExpr _ =
   Go.ExpressionUnary $ Go.UnaryExprPrimary $
-    Go.PrimaryExprOperand $ Go.OperandName_ $
+    Go.PrimaryExprOperand $ Go.OperandNamed $
       Go.OperandName (goQualIdent Nothing "any") []
 
 -- | Wrap an expression in a type assertion: expr.(GoType)

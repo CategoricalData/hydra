@@ -191,6 +191,7 @@ public class Coder {
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
     public static final Def addComment = def("addComment")
+        .doc("Attach comments derived from a field's annotations to a class body declaration")
         .lam("decl").lam("field").lam("cx").lam("g")
         .to(() ->
                 Eithers.map(
@@ -413,12 +414,12 @@ public class Coder {
         .to(() ->
                 right(
                     apply(
-                        ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                        ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                         var("subst"),
                         var("g"),
                         var("term0"))));
 
-    public static final Def applyOvergenSubstToTermAnnotations_go = def("applyOvergenSubstToTermAnnotations_go")
+    public static final Def applyOvergenSubstToTermAnnotationsGo = def("applyOvergenSubstToTermAnnotationsGo")
         .lam("subst").lam("cx").lam("term")
         .to(() ->
                 casesWithDefault(Term.TYPE_,
@@ -462,7 +463,7 @@ public class Coder {
                                         field(
                                             AnnotatedTerm.BODY,
                                             apply(
-                                                ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                                ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                                 var("subst"),
                                                 var("cx"),
                                                 var("inner"))),
@@ -478,14 +479,14 @@ public class Coder {
                                     field(
                                         Application.FUNCTION,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(Application.TYPE_, Application.FUNCTION, "app"))),
                                     field(
                                         Application.ARGUMENT,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(Application.TYPE_, Application.ARGUMENT, "app"))))))),
@@ -510,7 +511,7 @@ public class Coder {
                                     field(
                                         Lambda.BODY,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(Lambda.TYPE_, Lambda.BODY, "lam"))))))),
@@ -528,7 +529,7 @@ public class Coder {
                                         Optionals.map(
                                             lambda("d",
                                                 apply(
-                                                    ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                                    ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                                     var("subst"),
                                                     var("cx"),
                                                     var("d"))),
@@ -544,7 +545,7 @@ public class Coder {
                                                     field(
                                                         CaseAlternative.HANDLER,
                                                         apply(
-                                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                                             var("subst"),
                                                             var("cx"),
                                                             proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "fld"))))),
@@ -566,7 +567,7 @@ public class Coder {
                                                     field(
                                                         Binding.TERM,
                                                         apply(
-                                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                                             var("subst"),
                                                             var("cx"),
                                                             proj(Binding.TYPE_, Binding.TERM, "b"))),
@@ -577,7 +578,7 @@ public class Coder {
                                     field(
                                         Let.BODY,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(Let.TYPE_, Let.BODY, "lt"))))))),
@@ -590,7 +591,7 @@ public class Coder {
                                     field(
                                         TypeApplicationTerm.BODY,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"))),
@@ -612,7 +613,7 @@ public class Coder {
                                     field(
                                         TypeLambda.BODY,
                                         apply(
-                                            ref(Coder.applyOvergenSubstToTermAnnotations_go),
+                                            ref(Coder.applyOvergenSubstToTermAnnotationsGo),
                                             var("subst"),
                                             var("cx"),
                                             proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl")))))))));
@@ -1012,11 +1013,11 @@ public class Coder {
     field("gExtended",
                         hydra.dsl.Scoping.extendGraphForLet(
                             lambda(
-                                "g",
+                                "g1",
                                 "b",
                                 Logic.ifElse(
                                     hydra.dsl.Predicates.isComplexBinding(
-                                        var("g"),
+                                        var("g1"),
                                         var("b")),
                                     just(
                                         inject(Term.TYPE_,
@@ -13742,7 +13743,7 @@ public class Coder {
             applyCastIfSafe,
             applyJavaArg,
             applyOvergenSubstToTermAnnotations,
-            applyOvergenSubstToTermAnnotations_go,
+            applyOvergenSubstToTermAnnotationsGo,
             applySubstFull,
             applySubstSimple,
             arraysCompareExpr,

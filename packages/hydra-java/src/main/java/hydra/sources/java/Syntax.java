@@ -907,7 +907,13 @@ public class Syntax {
     }
 
     private static Definition arrayCreationExpressionDef() {
-        return typeDefHere("ArrayCreationExpression", Types.union(Types.field("withoutInitializer", java("ArrayCreationExpressionWithoutInitializer")), Types.field("withInitializer", java("ArrayCreationExpressionWithInitializer"))));
+        // Note: fields named "noInit"/"withInit" rather than "withoutInitializer"/
+        // "withInitializer" to avoid a constructor-name collision: the synthesized variant
+        // constructor for a "withoutInitializer"/"withInitializer" field on the
+        // "ArrayCreationExpression" union would be "ArrayCreationExpressionWithoutInitializer"/
+        // "ArrayCreationExpressionWithInitializer", which conflict with the separately
+        // defined types of the same names below.
+        return typeDefHere("ArrayCreationExpression", Types.union(Types.field("noInit", java("ArrayCreationExpressionWithoutInitializer")), Types.field("withInit", java("ArrayCreationExpressionWithInitializer"))));
     }
 
     private static Definition arrayCreationExpressionWithoutInitializerDef() {

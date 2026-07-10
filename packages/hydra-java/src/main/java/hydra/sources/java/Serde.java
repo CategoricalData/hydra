@@ -316,12 +316,12 @@ public class Serde {
                 cases(ArrayCreationExpression.TYPE_,
                     var("ace"),
                     field(
-                        ArrayCreationExpression.WITHOUT_INITIALIZER,
+                        ArrayCreationExpression.NO_INIT,
                         constant(
                             hydra.dsl.Serialization.cst(
                                 string("STUB:ArrayCreationExpression")))),
                     field(
-                        ArrayCreationExpression.WITH_INITIALIZER,
+                        ArrayCreationExpression.WITH_INIT,
                         lambda("wi",
                             cases(ArrayCreationExpressionWithInitializer.TYPE_,
                                 var("wi"),

@@ -587,7 +587,7 @@ public class Utils {
                         inject(Primary.TYPE_,
                             Primary.ARRAY_CREATION,
                             inject(ArrayCreationExpression.TYPE_,
-                                ArrayCreationExpression.WITH_INITIALIZER,
+                                ArrayCreationExpression.WITH_INIT,
                                 inject(
                                     ArrayCreationExpressionWithInitializer.TYPE_,
                                     ArrayCreationExpressionWithInitializer.PRIMITIVE,

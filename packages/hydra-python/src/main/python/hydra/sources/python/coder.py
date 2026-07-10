@@ -2259,13 +2259,13 @@ def _encode_float_value():
                 field("float32",
                     lam(
                         "f",
-                        _local("encodeFloatValue_encodeFloat32")(var("f")),
+                        _local("encodeFloatValueEncodeFloat32")(var("f")),
                     ),
                 ),
                 field("float64",
                     lam(
                         "f",
-                        _local("encodeFloatValue_encodeFloat64")(var("f")),
+                        _local("encodeFloatValueEncodeFloat64")(var("f")),
                     ),
                 ),
             ],
@@ -2284,17 +2284,17 @@ def _encode_float_value_encode_float32():
             Logic.if_else(
                 Equality.equal(var("s"), string("NaN")),
                 right(
-                    _local("encodeFloatValue_pySpecialFloat")(string("nan"))
+                    _local("encodeFloatValuePySpecialFloat")(string("nan"))
                 ),
                 Logic.if_else(
                     Equality.equal(var("s"), string("Infinity")),
                     right(
-                        _local("encodeFloatValue_pySpecialFloat")(string("inf"))
+                        _local("encodeFloatValuePySpecialFloat")(string("inf"))
                     ),
                     Logic.if_else(
                         Equality.equal(var("s"), string("-Infinity")),
                         right(
-                            _local("encodeFloatValue_pySpecialFloat")(string("-inf"))
+                            _local("encodeFloatValuePySpecialFloat")(string("-inf"))
                         ),
                         right(
                             _kref.utils_py_atom_to_py_expression(PySyn.atom_number(
@@ -2308,7 +2308,7 @@ def _encode_float_value_encode_float32():
             ),
         ),
     )
-    return (_def("encodeFloatValue_encodeFloat32")
+    return (_def("encodeFloatValueEncodeFloat32")
         .to(body))
 
 
@@ -2320,22 +2320,22 @@ def _encode_float_value_encode_float64():
             Logic.if_else(
                 Equality.equal(var("s"), string("NaN")),
                 right(
-                    _local("encodeFloatValue_pySpecialFloat")(string("nan"))
+                    _local("encodeFloatValuePySpecialFloat")(string("nan"))
                 ),
                 Logic.if_else(
                     Equality.equal(var("s"), string("Infinity")),
                     right(
-                        _local("encodeFloatValue_pySpecialFloat")(string("inf"))
+                        _local("encodeFloatValuePySpecialFloat")(string("inf"))
                     ),
                     Logic.if_else(
                         Equality.equal(var("s"), string("-Infinity")),
                         right(
-                            _local("encodeFloatValue_pySpecialFloat")(string("-inf"))
+                            _local("encodeFloatValuePySpecialFloat")(string("-inf"))
                         ),
                         Logic.if_else(
                             Equality.equal(var("s"), string("-0.0")),
                             right(
-                                _local("encodeFloatValue_pySpecialFloat")(string("-0.0"))
+                                _local("encodeFloatValuePySpecialFloat")(string("-0.0"))
                             ),
                             right(
                                 _kref.utils_py_atom_to_py_expression(PySyn.atom_number(
@@ -2350,7 +2350,7 @@ def _encode_float_value_encode_float64():
             ),
         ),
     )
-    return (_def("encodeFloatValue_encodeFloat64")
+    return (_def("encodeFloatValueEncodeFloat64")
         .to(body))
 
 
@@ -2361,7 +2361,7 @@ def _encode_float_value_py_special_float():
                 [_kref.utils_single_quoted_string(var("value"))]
             )),
     )
-    return (_def("encodeFloatValue_pySpecialFloat")
+    return (_def("encodeFloatValuePySpecialFloat")
         .to(body))
 
 
@@ -8101,36 +8101,12 @@ def _wrap_in_nullary_lambda():
 # Module assembly (incremental; defs added as ported)
 # ----------------------------------------------------------------------
 
-def _load_environment_reorder_defs():
-    """Load hydra.environment.reorderDefs as a Definition by reading the kernel JSON.
-
-    Mirrors Haskell's `toDefinition Environment.reorderDefs`, which re-exports the
-    Environment.reorderDefs definition into hydra.python.coder's definitions list.
-    """
-    import os
-    from hydra.generation import bootstrap_graph, bootstrap_schema_map, parse_json_file, decode_module
-    base = os.path.join(
-        os.path.dirname(__file__),
-        "../../../../../../../..",
-        "dist/json/hydra-kernel/src/main/json",
-    )
-    file_path = os.path.normpath(os.path.join(base, "hydra/environment.json"))
-    json_val = parse_json_file(file_path)
-    mod = decode_module(bootstrap_graph(), bootstrap_schema_map(), json_val)
-    for d in mod.definitions:
-        from hydra.packaging import DefinitionTerm
-        if isinstance(d, DefinitionTerm) and d.value.name.value == "hydra.environment.reorderDefs":
-            return d
-    raise RuntimeError("hydra.environment.reorderDefs not found in kernel JSON")
-
-
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.name,
         _PLACEHOLDER.metadata,
         _PLACEHOLDER.dependencies,
         (
-            _load_environment_reorder_defs(),
             to_definition(_analyze_python_function()),
             to_definition(_class_variant_pattern_unit()),
             to_definition(_class_variant_pattern_with_capture()),

@@ -160,7 +160,7 @@ receiverToExpr (Go.Receiver mname typ) = parenList False $ case mname of
 
 typeToExpr :: Go.Type -> Ast.Expr
 typeToExpr typ = case typ of
-  Go.TypeName_ tn -> typeNameToExpr tn
+  Go.TypeNamed tn -> typeNameToExpr tn
   Go.TypeLiteral lit -> typeLitToExpr lit
   Go.TypeParen t -> parens (typeToExpr t)
 
@@ -361,7 +361,7 @@ callExprToExpr (Go.CallExpr func args) = noSep [primaryExprToExpr func, argument
 operandToExpr :: Go.Operand -> Ast.Expr
 operandToExpr op = case op of
   Go.OperandLiteral l -> literalToExpr l
-  Go.OperandName_ n -> operandNameToExpr n
+  Go.OperandNamed n -> operandNameToExpr n
   Go.OperandParen e -> parens (expressionToExpr e)
 
 operandNameToExpr :: Go.OperandName -> Ast.Expr
