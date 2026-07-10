@@ -322,8 +322,9 @@ encodeTerm cx g currentNs term =
       Core.TermWrap v0 -> tsObject [
         ("value", (encodeTerm cx g currentNs (Core.wrappedTermBody v0)))]
       Core.TermLet v0 ->
-        let bindings = sortBindingsTopologically (Core.letBindings v0)
-            body = Core.letBody v0
+        let lt2 = thunkLazyLet v0
+            bindings = sortBindingsTopologically (Core.letBindings lt2)
+            body = Core.letBody lt2
             encodedBody = encodeTerm cx g currentNs body
             bindingStmts = Lists.map (\b -> encodeBindingAsStatement cx g currentNs b) bindings
             returnStmt = Syntax.StatementReturn (Just encodedBody)
@@ -580,6 +581,21 @@ flattenApplication t =
           in (head_, (Lists.concat2 prevArgs (Lists.singleton (Core.applicationArgument v0))))
         _ -> (t, [])
 
+forceLazyRefs :: S.Set Core.Name -> Core.Term -> Core.Term
+forceLazyRefs targets0 term0 =
+    Rewriting.rewriteTermWithContext (\recurse0 -> \targets -> \term -> case term of
+      Core.TermVariable v0 -> Logic.ifElse (Sets.member v0 targets) (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermVariable v0),
+        Core.applicationArgument = Core.TermUnit})) term
+      Core.TermLambda v0 ->
+        let innerTargets = Sets.delete (Core.lambdaParameter v0) targets
+        in (recurse0 innerTargets term)
+      Core.TermLet v0 ->
+        let boundNames = Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0))
+            innerTargets = Sets.difference targets boundNames
+        in (recurse0 innerTargets term)
+      _ -> recurse0 targets term) targets0 term0
+
 functionDeclarationFromTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
 functionDeclarationFromTerm cx g currentNs lname term _mScheme =
 
@@ -595,8 +611,11 @@ functionDeclarationFromTerm cx g currentNs lname term _mScheme =
                     Typing.functionStructureEnvironment = g}) (\ok -> ok) fsE
           fsParams = Typing.functionStructureParams fs
           fsDoms = Typing.functionStructureDomains fs
-          fsBindings = Typing.functionStructureBindings fs
-          fsBody = Typing.functionStructureBody fs
+          fsBindings0 = Typing.functionStructureBindings fs
+          fsBody0 = Typing.functionStructureBody fs
+          thunked = thunkLazyBindings fsBindings0 fsBody0
+          fsBindings = Pairs.first thunked
+          fsBody = Pairs.second thunked
           fsEnv = Typing.functionStructureEnvironment fs
           domPad = Core.TypeVariable (Core.Name "_")
           fsDomsPadded = Lists.concat2 fsDoms (Lists.replicate (Math.sub (Lists.length fsParams) (Lists.length fsDoms)) domPad)
@@ -664,6 +683,21 @@ importsToText kind currentNs names =
 lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
 lazyFlagsForPrimitive g name =
     Optionals.cases (Maps.lookup name (Graph.graphPrimitives g)) [] (\prim -> Lists.map (\p -> Typing.parameterIsLazy p) (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))))
+
+letBindingIsThunkCandidate :: Core.Binding -> Bool
+letBindingIsThunkCandidate b =
+
+      let dterm = Strip.deannotateAndDetypeTerm (Core.bindingTerm b)
+          isLambda =
+                  case dterm of
+                    Core.TermLambda _ -> True
+                    _ -> False
+          freeVars = Variables.freeVariablesInTerm (Core.bindingTerm b)
+          callsShow =
+                  Lists.foldl (\acc -> \n -> Logic.or acc (Optionals.cases (Names.moduleNameOf n) False (\mn -> Equality.equal (Lists.take 2 (Strings.splitOn "." (Packaging.unModuleName mn))) [
+                    "hydra",
+                    "show"]))) False (Sets.toList freeVars)
+      in (Logic.and (Logic.not isLambda) callsShow)
 
 mkDocComment :: Maybe String -> Maybe Syntax.DocumentationComment
 mkDocComment mdesc =
@@ -887,6 +921,33 @@ termHeadVariable t =
         Core.TermVariable v0 -> Just v0
         Core.TermTypeApplication v0 -> termHeadVariable (Core.typeApplicationTermBody v0)
         _ -> Nothing
+
+thunkLazyBindings :: [Core.Binding] -> Core.Term -> ([Core.Binding], Core.Term)
+thunkLazyBindings bindings body =
+
+      let candidates = Lists.filter (\b -> letBindingIsThunkCandidate b) bindings
+      in (Logic.ifElse (Lists.null candidates) (bindings, body) (
+        let targets = Sets.fromList (Lists.map Core.bindingName candidates)
+            wrapCandidate =
+                    \b -> Logic.ifElse (letBindingIsThunkCandidate b) (Core.Binding {
+                      Core.bindingName = (Core.bindingName b),
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "_"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (forceLazyRefs targets (Core.bindingTerm b))})),
+                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Core.Binding {
+                      Core.bindingName = (Core.bindingName b),
+                      Core.bindingTerm = (forceLazyRefs targets (Core.bindingTerm b)),
+                      Core.bindingTypeScheme = (Core.bindingTypeScheme b)})
+        in (Lists.map wrapCandidate bindings, (forceLazyRefs targets body))))
+
+thunkLazyLet :: Core.Let -> Core.Let
+thunkLazyLet lt =
+
+      let result = thunkLazyBindings (Core.letBindings lt) (Core.letBody lt)
+      in Core.Let {
+        Core.letBindings = (Pairs.first result),
+        Core.letBody = (Pairs.second result)}
 
 tsArray :: [Syntax.Expression] -> Syntax.Expression
 tsArray elems = Syntax.ExpressionArray (Lists.map (\e -> Syntax.ArrayElementExpression e) elems)

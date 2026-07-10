@@ -204,6 +204,20 @@ const convert = (j: unknown): unknown => {
         return { tag: armName, value: [convert(r.first), convert(r.second)] as const };
       }
     }
+    // TypeLiteral (`{literal: <LiteralType>}`): the payload is a LiteralType.
+    // Its unit-valued arms (string, boolean, binary, decimal) serialize in
+    // Aeson's compact string form as a bare word, e.g. `{literal: "string"}`
+    // = TypeLiteral(LiteralType.string). convert()'s NULLARY_UNION_ARMS set
+    // deliberately excludes these words (they collide with ordinary string
+    // data elsewhere — see bug_564), so the bare word survives unconverted
+    // and reaches show/inference as a malformed `{tag:"literal", value:"string"}`
+    // instead of `{tag:"literal", value:{tag:"string"}}`. Here we have type
+    // context (we know rhs is a LiteralType), so promoting a bare-string
+    // payload to `{tag: rhs}` is safe. Non-string payloads (integer/float,
+    // which carry a width) fall through to the generic convert(rhs). (#564)
+    if (armName === "literal" && typeof rhs === "string") {
+      return { tag: armName, value: { tag: rhs } };
+    }
     return { tag: armName, value: convert(rhs) };
   }
   // Otherwise it's a record. Recurse over values; rewrite a few field names

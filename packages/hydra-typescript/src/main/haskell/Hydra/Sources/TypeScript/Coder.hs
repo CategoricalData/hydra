@@ -87,6 +87,10 @@ module_ = Module {
       toDefinition filterNonLocalNames,
       toDefinition encodeLiteralType,
       toDefinition encodeBindingAsStatement,
+      toDefinition letBindingIsThunkCandidate,
+      toDefinition forceLazyRefs,
+      toDefinition thunkLazyLet,
+      toDefinition thunkLazyBindings,
       toDefinition encodeParam,
       toDefinition tsEnvGetGraph,
       toDefinition tsEnvSetGraph,
@@ -267,6 +271,126 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
           @@ (Optionals.bind (Core.bindingTypeScheme (var "b"))
                 ("ts" ~> just (Core.typeSchemeBody (var "ts"))))) $
         inject TS._Statement TS._Statement_functionDeclaration (var "innerFunDecl")]
+
+-- | True when a let-binding's value should be thunked to preserve Haskell's
+-- lazy evaluation. A non-lambda binding whose right-hand side calls a
+-- `hydra.show.*` function (e.g. `show.core.type_`) is dangerous to build
+-- eagerly: TypeScript is strict, so the `const` is evaluated on entry to the
+-- enclosing function even when the binding is only referenced in a fallback
+-- position (an `ifElse` else-branch or a `cases` default). The Haskell source
+-- never forces it on a successful path; a show call on a malformed value can
+-- throw. Lambda-valued bindings are already emitted as hoisted `function`
+-- declarations (lazy by construction), so only non-lambda bindings qualify.
+-- Mirrors the Java coder, which lambda-lifts `joinTypes.cannotUnify` into a
+-- helper invoked only on failure. See issue #564.
+letBindingIsThunkCandidate :: TypedTermDefinition (Binding -> Bool)
+letBindingIsThunkCandidate = def "letBindingIsThunkCandidate" $
+  "b" ~>
+    -- Strip type lambdas / type applications as well as annotations: a
+    -- polymorphic binding (e.g. adaptTerm's `rewrite`, which is forall-typed)
+    -- is wrapped in `Term_typeLambda` after inference, so `deannotateTerm`
+    -- alone would leave the wrapper in place and misclassify a lambda-valued
+    -- binding as a non-lambda — causing it to be wrongly thunked (a spurious
+    -- `\_ -> ...` param prepended, e.g. `rewrite(undefined)`). See #564.
+    "dterm" <~ (Strip.deannotateAndDetypeTerm @@ (Core.bindingTerm (var "b"))) $
+    "isLambda" <~ (cases _Term (var "dterm")
+      (Just false) [
+      _Term_lambda>>: constant true]) $
+    "freeVars" <~ (Variables.freeVariablesInTerm @@ (Core.bindingTerm (var "b"))) $
+    "callsShow" <~ (Lists.foldl
+      (lambda "acc" $ lambda "n" $
+        Logic.or (var "acc")
+          (Optionals.cases (Names.moduleNameOf @@ var "n")
+            false
+            (lambda "mn" $
+              Equality.equal
+                (Lists.take (int32 2)
+                  (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "mn")))
+                (list [string "hydra", string "show"]))))
+      false
+      (Sets.toList (var "freeVars" :: TypedTerm (S.Set Name)))) $
+    Logic.and (Logic.not (var "isLambda")) (var "callsShow")
+
+-- | Rewrite free occurrences of the given `targets` names from `x` to
+-- `x(undefined)` — forcing a thunked binding created by `thunkLazyLet`.
+-- Shadowing is respected: descending into a lambda or let that rebinds a
+-- target name drops that name from the active set, so inner references (which
+-- bind to the shadowing definition, not the thunk) are left untouched.
+forceLazyRefs :: TypedTermDefinition (S.Set Name -> Term -> Term)
+forceLazyRefs = def "forceLazyRefs" $
+  "targets0" ~> "term0" ~>
+    Rewriting.rewriteTermWithContext
+      @@ ("recurse0" ~> "targets" ~> "term" ~>
+           cases _Term (var "term")
+             -- Default: structurally recurse, threading the same active
+             -- target set to every child.
+             (Just (var "recurse0" @@ var "targets" @@ var "term")) [
+             -- A forced reference: `x` becomes `x(undefined)`. Returned
+             -- directly (a leaf); the framework does not re-descend into it.
+             _Term_variable>>: "n" ~>
+               Logic.ifElse (Sets.member (var "n") (var "targets" :: TypedTerm (S.Set Name)))
+                 (Core.termApplication (Core.application
+                   (Core.termVariable (var "n")) Core.termUnit))
+                 (var "term"),
+             -- A lambda rebinding a target shadows the thunk: drop that name
+             -- from the active set before descending into the whole node.
+             _Term_lambda>>: "l" ~>
+               "innerTargets" <~ (Sets.delete (Core.lambdaParameter (var "l"))
+                 (var "targets" :: TypedTerm (S.Set Name))) $
+               var "recurse0" @@ var "innerTargets" @@ var "term",
+             -- A nested let rebinding target names likewise shadows them.
+             _Term_let>>: "lt" ~>
+               "boundNames" <~ ((Sets.fromList
+                 (Lists.map (reify Core.bindingName) (Core.letBindings (var "lt"))))
+                 :: TypedTerm (S.Set Name)) $
+               "innerTargets" <~ (Sets.difference
+                 (var "targets" :: TypedTerm (S.Set Name)) (var "boundNames")) $
+               var "recurse0" @@ var "innerTargets" @@ var "term"])
+      @@ var "targets0"
+      @@ var "term0"
+
+-- | Given a `Let`, thunk every binding for which `letBindingIsThunkCandidate`
+-- holds: wrap the candidate's value in a nullary `\_ -> value` lambda (so it
+-- emits as a lazy hoisted `function`) and rewrite all forced references to it
+-- (in sibling bindings and the body) to `name(undefined)` via `forceLazyRefs`.
+-- Non-candidate bindings and the body are otherwise untouched. This is the
+-- TypeScript analogue of Java's lambda-lifting of lazy let-bindings. See #564.
+-- The kernel's `joinTypes.cannotUnify` is the motivating case: a top-level
+-- function whose let-bindings are lifted out of the lambda, so this transform
+-- is applied to the lifted `(bindings, body)` in `functionDeclarationFromTerm`
+-- as well as to inline `Term_let`s.
+thunkLazyLet :: TypedTermDefinition (Let -> Let)
+thunkLazyLet = def "thunkLazyLet" $
+  "lt" ~>
+    "result" <~ (thunkLazyBindings
+      @@ (Core.letBindings (var "lt")) @@ (Core.letBody (var "lt"))) $
+    Core.let_ (Pairs.first (var "result")) (Pairs.second (var "result"))
+
+-- | The bindings+body core of `thunkLazyLet`, factored out so both the
+-- `Term_let` encoder and the lifted-binding path in `functionDeclarationFromTerm`
+-- can share it. Returns the transformed `(bindings, body)` pair; a no-op when no
+-- binding is a thunk candidate.
+thunkLazyBindings :: TypedTermDefinition ([Binding] -> Term -> ([Binding], Term))
+thunkLazyBindings = def "thunkLazyBindings" $
+  "bindings" ~> "body" ~>
+    "candidates" <~ (Lists.filter
+      (lambda "b" $ letBindingIsThunkCandidate @@ var "b") (var "bindings")) $
+    Logic.ifElse (Lists.null (var "candidates"))
+      (pair (var "bindings") (var "body"))
+      ("targets" <~ (Sets.fromList
+         (Lists.map (reify Core.bindingName) (var "candidates"))) $
+       "wrapCandidate" <~ (lambda "b" $
+         Logic.ifElse (letBindingIsThunkCandidate @@ var "b")
+           (Core.bindingWithTerm (var "b")
+             (Core.termLambda (Core.lambda
+               (Core.name (string "_"))
+               (nothing :: TypedTerm (Maybe Type))
+               (forceLazyRefs @@ var "targets" @@ (Core.bindingTerm (var "b"))))))
+           (Core.bindingWithTerm (var "b")
+             (forceLazyRefs @@ var "targets" @@ (Core.bindingTerm (var "b"))))) $
+       pair
+         (Lists.map (var "wrapCandidate") (var "bindings"))
+         (forceLazyRefs @@ var "targets" @@ var "body"))
 
 -- | Emit a fully-applied primitive call with selected arguments wrapped
 -- in `() => expr` thunks. The `lazyFlags` list parallels `args`:
@@ -702,8 +826,11 @@ encodeTerm = def "encodeTerm" $
        -- `encodeBindingAsStatement`, which emits `function name(...)`
        -- for lambda-valued bindings (so recursive let works through
        -- function-name hoisting) and `const name = expr;` otherwise.
-       "bindings" <~ (sortBindingsTopologically @@ Core.letBindings (var "lt")) $
-       "body" <~ Core.letBody (var "lt") $
+       -- First thunk any lazy show-calling bindings to preserve Haskell
+       -- laziness (see #564 / thunkLazyLet).
+       "lt2" <~ (thunkLazyLet @@ var "lt") $
+       "bindings" <~ (sortBindingsTopologically @@ Core.letBindings (var "lt2")) $
+       "body" <~ Core.letBody (var "lt2") $
        "encodedBody" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "body") $
        "bindingStmts" <~ Lists.map
          (lambda "b" $ encodeBindingAsStatement @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "b")
@@ -1247,8 +1374,14 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
       (var "fsE") $
     "fsParams" <~ (project _FunctionStructure _FunctionStructure_params @@ var "fs") $
     "fsDoms" <~ (project _FunctionStructure _FunctionStructure_domains @@ var "fs") $
-    "fsBindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
-    "fsBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+    "fsBindings0" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+    "fsBody0" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+    -- Thunk any lazy let-bindings (e.g. joinTypes.cannotUnify) lifted out of
+    -- the lambda body, so a show-call binding is not evaluated eagerly on a
+    -- successful path. See #564.
+    "thunked" <~ (thunkLazyBindings @@ var "fsBindings0" @@ var "fsBody0") $
+    "fsBindings" <~ (Pairs.first (var "thunked")) $
+    "fsBody" <~ (Pairs.second (var "thunked")) $
     "fsEnv" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
     -- Pad `fsDoms` with a Type_variable "_" sentinel up to fsParams length:
     -- eta-expanded params (from kernel adapt's doExpand) come back with
