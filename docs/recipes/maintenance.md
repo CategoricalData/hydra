@@ -1226,8 +1226,11 @@ To run all checks in sequence (invoked via `/maintenance` in CLAUDE.md):
 5. Run `Validate.Packaging.kernelPackage` against `Sources.kernelModules`
    (i.e. the kernel-quality validator suite, including `checkDefinitionOrdering`,
    `checkDefinitionDocumentation`, `checkDefinitionNameConvention`, etc.).
-   This step belongs in `/sync-haskell` and may move there in the future;
-   until it does, run it as part of `/maintenance`.
+   As of #575 this same validation family also runs automatically during `/sync`
+   (see the [Validation wiki page](https://github.com/CategoricalData/hydra/wiki/Validation)
+   for the full constraint catalog and the per-package profile split); this manual
+   step remains useful for isolating findings to a single run against `kernelModules`
+   specifically, outside the full sync.
    The validator must be invoked only on the hand-written Source modules
    (`Sources.kernelModules`); do not pass in generator-derived modules
    (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
@@ -1281,7 +1284,7 @@ If no changes affect generated files or tests, skip the sync.
 | Stale generated files | After refactoring (renames, deletes, splits) |
 | Design violations | Periodically, before release, after adding sync-script patches |
 | Coding style (body order vs list order) | After large changes, before release |
-| Kernel package validation (`kernelPackage`) | Every maintenance pass; ideally part of `/sync-haskell` |
+| Kernel package validation (`kernelPackage`) | Every maintenance pass; also runs automatically as part of `/sync` (see the [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation)) |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
 | `.cabal` exposed-modules | After deleting generated Haskell modules |

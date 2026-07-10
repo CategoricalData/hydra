@@ -246,6 +246,12 @@ strictly in order, but any phase can short-circuit independently.
 | 4. Cross-host coders | per-host assemblers | `dist/<host>/hydra-<target>/` for every (host, target) with host ≠ haskell |
 | 5. Native DSL → JSON for hydra-java, hydra-python, hydra-scala | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python,scala}/` from host-native sources |
 
+Phase 1 also runs package and module validation (`update-json-main`'s pre-inference structural/
+semantic checks, plus the undeclared-cross-module-dependency gate) before the JSON it produces feeds
+later phases; a validation failure is fatal and stops the sync. See the
+[Validation wiki page](https://github.com/CategoricalData/hydra/wiki/Validation) for the full
+constraint catalog and the profiles that decide which findings are hard errors.
+
 Phase 1.5 closes a warm/cold asymmetry from #344 that
 [#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic.
 `dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
@@ -864,3 +870,4 @@ Both pieces are independent and can land separately. The T-side is closer to don
 - [#343 Finalize JSON format](https://github.com/CategoricalData/hydra/issues/343) — `encoderId` was introduced here; closed.
 - [#344 Native DSL sources for hydra-java and hydra-python](https://github.com/CategoricalData/hydra/issues/344) — drives Phase 5.
 - [#233 Per-package DSL wrappers](https://github.com/CategoricalData/hydra/issues/233) — cross-referenced from #347 because of the `dslTypeModules` ↔ `writeDslHaskell` gap.
+- [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation) — the package/module/term/type validation framework enforced during Phase 1.
