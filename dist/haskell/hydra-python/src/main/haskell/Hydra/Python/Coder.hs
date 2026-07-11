@@ -668,23 +668,23 @@ encodeFieldType cx env fieldType =
 encodeFloatValue :: Core.FloatValue -> Either t0 Syntax.Expression
 encodeFloatValue fv =
     case fv of
-      Core.FloatValueFloat32 v0 -> encodeFloatValue_encodeFloat32 v0
-      Core.FloatValueFloat64 v0 -> encodeFloatValue_encodeFloat64 v0
+      Core.FloatValueFloat32 v0 -> encodeFloatValueEncodeFloat32 v0
+      Core.FloatValueFloat64 v0 -> encodeFloatValueEncodeFloat64 v0
 
-encodeFloatValue_encodeFloat32 :: Float -> Either t0 Syntax.Expression
-encodeFloatValue_encodeFloat32 v =
+encodeFloatValueEncodeFloat32 :: Float -> Either t0 Syntax.Expression
+encodeFloatValueEncodeFloat32 v =
 
       let s = Literals.showFloat32 v
-      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToFloat64 v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValuePySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValuePySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValuePySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToFloat64 v))))))))
 
-encodeFloatValue_encodeFloat64 :: Double -> Either t0 Syntax.Expression
-encodeFloatValue_encodeFloat64 v =
+encodeFloatValueEncodeFloat64 :: Double -> Either t0 Syntax.Expression
+encodeFloatValueEncodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Logic.ifElse (Equality.equal s "-0.0") (Right (encodeFloatValue_pySpecialFloat "-0.0")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValuePySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValuePySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValuePySpecialFloat "-inf")) (Logic.ifElse (Equality.equal s "-0.0") (Right (encodeFloatValuePySpecialFloat "-0.0")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat v))))))))
 
-encodeFloatValue_pySpecialFloat :: String -> Syntax.Expression
-encodeFloatValue_pySpecialFloat value =
+encodeFloatValuePySpecialFloat :: String -> Syntax.Expression
+encodeFloatValuePySpecialFloat value =
     Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "float")) [
       Utils.singleQuotedString value]
 
