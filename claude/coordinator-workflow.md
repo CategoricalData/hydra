@@ -229,6 +229,20 @@ scattering it across every agent — lets agents run fully autonomously up
 to handoff, and is why a well-run issue agent rarely needs the human directly
 while staging does.
 
+**Human-gated means *outward* actions, not fixing.** The gated set is narrow: pushing to
+`main`, GitHub writes (file/close/comment/label), merges, and the actual release
+(tag/publish). **Fixing a failure is never in that set** — it is the default and the
+requirement (CLAUDE.md Hard Rule #1), and it needs no approval no matter how deep,
+pre-existing, non-CI-gated, or time-consuming the fix is. Do **not** interrupt the
+autonomous run to ask the human "should I fix this, or defer it / land anyway / is this
+good enough?" — that non-question wastes hours (it has, repeatedly) and the answer is
+always *fix*. When a spawned agent checkpoints upward with a fix-vs-defer question, the
+coordinator/staging answer is "keep fixing to green," relayed immediately — never
+forwarded to the human. The genuine exception is a design decision the code cannot
+resolve (two incompatible valid approaches, a real API/behavior change a human must
+choose); there, propose a recommended path and keep moving unless truly blocked. See
+[[feedback_never_stop_to_ask_whether_to_fix]].
+
 ## Filing issues: mandatory parent, always user-gated
 
 When any agent (child or coordinator) needs to file a new GitHub issue:

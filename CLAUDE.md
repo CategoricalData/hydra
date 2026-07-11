@@ -439,9 +439,21 @@ Key rules:
 These are non-negotiable and tend to be violated under pressure.
 Ordered roughly by violation frequency — the first few are the ones every session is at risk of hitting.
 
-1. **Never proceed with failures.** If tests fail, investigate and fix before moving on.
-   Don't skip, don't ask whether to investigate, don't propose workarounds.
-   The answer is always: fix the errors first.
+1. **Never proceed with failures. Never stop to ask whether to fix one.** If tests fail,
+   investigate and fix before moving on. Don't skip, don't ask whether to investigate,
+   don't propose workarounds. The answer is always: fix the errors first.
+   **Do not turn a fixable error into a "fix vs. defer / land anyway / is this good enough"
+   question** — for the user or a spawned agent. Fixing is not a decision that needs approval;
+   it is the default and the requirement. A failure being *pre-existing, not a regression,
+   not CI-gated, "deep," multi-layer, or hours of work* is **not** a reason to stop — those are
+   just the cost of fixing, which we pay. Keep the work moving (armed loop / detached run)
+   until it is green; never park overnight waiting on "permission to fix." The **only**
+   legitimate escalation about a fix is a genuine design decision the code cannot resolve
+   (two incompatible valid approaches, or a real API/behavior change a human must choose) —
+   and even then, state your recommended path and keep going unless truly blocked. Depth and
+   scope estimates set your check-in cadence; they never justify asking whether to proceed.
+   (Every "should I fix this or call it good?" this project has seen wasted hours. See
+   [[feedback_never_stop_to_ask_whether_to_fix]].)
 2. **Haskell must pass first.** Always ensure `stack test` passes in `heads/haskell`
    before syncing downstream implementations. A downstream failure traced to a
    Haskell-side bug burns hours of cross-host investigation that the Haskell test
