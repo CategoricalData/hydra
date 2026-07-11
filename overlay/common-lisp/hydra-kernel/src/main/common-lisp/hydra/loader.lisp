@@ -59,7 +59,8 @@
              "overlay/common_lisp/lib/maps.lisp" "overlay/common_lisp/lib/math.lisp"
              "overlay/common_lisp/lib/optionals.lisp" "overlay/common_lisp/lib/pairs.lisp"
              "overlay/common_lisp/lib/regex.lisp" "overlay/common_lisp/lib/sets.lisp"
-             "overlay/common_lisp/lib/strings.lisp" "overlay/common_lisp/lib/text.lisp"))
+             "overlay/common_lisp/lib/strings.lisp" "overlay/common_lisp/lib/system.lisp"
+             "overlay/common_lisp/lib/text.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
 ;; Note: prims.lisp and overlay/common_lisp/lib/libraries.lisp must be loaded AFTER

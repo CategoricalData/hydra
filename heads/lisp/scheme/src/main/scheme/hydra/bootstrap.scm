@@ -209,10 +209,11 @@
 (force-output (current-output-port))
 ;; Load bytevector compatibility shim (provides snap-to-float32). Migrated to dist by #434 (see above).
 (hydra-load-native-lib (string-append *gen-main-base* "../scheme/bytevector.sld"))
-;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/.
+;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/;
+;; #501 relocated them again to hydra/overlay/scheme/lib/ (hydra.overlay.scheme.* namespace).
 (for-each
   (lambda (f)
-    (hydra-load-native-lib (string-append *gen-main-base* "scheme/lib/" f)))
+    (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/lib/" f)))
   '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
     "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
     "optionals.scm" "pairs.scm" "regex.scm"))
@@ -295,7 +296,7 @@
 ;; %load-path (so only the registry's `def:`-prefixed import sees them), not a flat global load. Deferred;
 ;; scheme-host self-host is validated only up to gen (the driver lib pass + redirect are unit-tested and
 ;; the relocated-path loaders are fixed). See project_473_self_host_lib_pass_gap / the plan doc.
-(hydra-load-native-lib (string-append *gen-main-base* "lib/libraries.scm"))
+(hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
 ;; with field names where the accessor needs to be a first-class procedure
