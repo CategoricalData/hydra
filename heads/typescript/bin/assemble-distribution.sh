@@ -40,6 +40,11 @@ symlink_hydra_tree() {
         while IFS= read -r sfile; do
             rel="${sfile#$src_hydra/}"
             dest="$dest_hydra/$rel"
+            # Link when the dest is absent or a DANGLING symlink. `-e` follows symlinks (false for a
+            # broken link), so `! -e` reattaches a stale link whose target has since been
+            # (re)generated — e.g. hydra.test.build.modules.ts linked before hydra-build emitted it,
+            # which otherwise leaves testSuite.ts's `../test/build/modules.js` import unresolved
+            # under tsc --strict. Own real files and already-valid symlinks are left untouched.
             if [ ! -e "$dest" ]; then
                 mkdir -p "$(dirname "$dest")"
                 ln -sf "$sfile" "$dest"

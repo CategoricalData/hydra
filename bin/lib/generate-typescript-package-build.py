@@ -82,7 +82,7 @@ def render_package_json(
       "import": "./dist/{mod}.js",
       "types": "./dist/{mod}.d.ts"
     }},
-    "./*": {{
+    "./dist/*.js": {{
       "import": "./dist/*.js",
       "types": "./dist/*.d.ts"
     }}
