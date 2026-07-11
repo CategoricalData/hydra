@@ -312,8 +312,11 @@
 ;; def-module DATA over the impl). Primitive NAME strings are dotted "hydra.lib..." and untouched by the
 ;; underscore rename. See project_473_self_host_lib_pass_gap.
 (defparameter *lib-subs*
-  '("chars" "eithers" "equality" "hashing" "lists" "literals" "logic" "maps"
-    "math" "optionals" "pairs" "regex" "sets" "strings"))
+  ;; Every hydra.lib.<sub> whose impls are relocated to hydra.<lang>.lib.<sub> (#473). Must include the
+  ;; effectful/newer libs (effects/files/system #494/#498, text) or their consumers keep calling the
+  ;; def-modules -> "'PrimitiveDefinition' object is not callable" (python target). Excludes defaults.
+  '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
+    "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
 
 (defun lib-module-p (m)
   (let* ((mn (funcall 'hydra_packaging_module-name m))
@@ -370,13 +373,37 @@
                                     (concatenate 'string (string #\Newline) ":hydra.lib." sub)
                                     (string #\Newline))))))
 
-(defun redirect-lib-calls (lang-dir)
-  "#473 redirect over a generated dir (Common Lisp flat-namespace form)."
+(defun redirect-python-dotted (s)
+  "Rewrite dotted Python consumer references hydra.lib.<sub> -> hydra.overlay.python.lib.<sub> and
+   hydra.test.test_env -> hydra.overlay.python.test_env, protecting quoted primitive-NAME strings.
+   Mirrors the Scala host's redirectDotted; needed for the common-lisp->python cross-host target
+   (redirect-cl handles only the flat Common-Lisp identifier form)."
+  (let* ((sentinel "@@HYDRA_LIB_NAME@@")
+         (out (string-replace-all s "\"hydra.lib." (concatenate 'string "\"" sentinel))))
+    (dolist (sub *lib-subs*)
+      (let ((old (concatenate 'string "hydra.lib." sub))
+            (new (concatenate 'string "hydra.overlay.python.lib." sub)))
+        ;; Match each delimiter that can follow the module name so both usages
+        ;; (hydra.lib.lists.cons) and import lines (import hydra.lib.lists\n) get rewritten. Mirrors
+        ;; the Scala host's redirectDotted delimiter set.
+        (dolist (delim (list "." (string #\Newline) " " ")" "," ":" (string #\Return)))
+          (setf out (string-replace-all out
+                                        (concatenate 'string old delim)
+                                        (concatenate 'string new delim))))))
+    (setf out (string-replace-all out "hydra.test.test_env" "hydra.overlay.python.test_env"))
+    (string-replace-all out sentinel "hydra.lib.")))
+
+(defun redirect-lib-calls (lang-dir target)
+  "#473 redirect over a generated dir. For a Common-Lisp target, rename the flat hydra_lib_<sub>_
+   identifiers; for a dotted target (python), rewrite the dotted hydra.lib.<sub> + hydra.test.test_env
+   references to their hydra.overlay.python.* impls."
   (dolist (path (directory (merge-pathnames "**/*.*" (pathname (concatenate 'string lang-dir "/")))))
     (when (and (pathname-name path) (not (lib-def-path-p path)))
       (let ((s (read-file-string path)))
-        (when (and s (or (search "hydra_lib_" s) (search ":hydra.lib." s)))
-          (let ((out (redirect-cl s)))
+        (when (and s (or (search "hydra_lib_" s) (search "hydra.lib." s) (search "hydra.test.test" s)))
+          (let ((out (if (string= target "python")
+                         (redirect-python-dotted s)
+                         (redirect-cl s))))
             (when (string/= out s) (write-file-string path out))))))))
 
 ;; --- Main ---
@@ -522,10 +549,12 @@
               ;; hydra_lib_<sub>_ are renamed to hydra_overlay_common_lisp_lib_<sub>_ and the def-module :use token dropped.
               (unless (string= *target* "haskell")
                 (redirect-lib-calls (format nil "~A/common-lisp-to-~A/src/main/~A"
-                                            *output-base* *target* subdir))
+                                            *output-base* *target* subdir)
+                                    *target*)
                 (when *include-tests*
                   (redirect-lib-calls (format nil "~A/common-lisp-to-~A/src/test/~A"
-                                              *output-base* *target* subdir))))
+                                              *output-base* *target* subdir)
+                                      *target*)))
 
               (format t "~%==========================================~%")
               (format t "Done: ~A main + ~A test files~%" file-count test-file-count)
