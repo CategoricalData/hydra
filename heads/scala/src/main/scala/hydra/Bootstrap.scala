@@ -259,8 +259,13 @@ end bootstrap
 object BootstrapHelpers:
 
   /** The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473). */
-  private val libSubs = Seq("chars", "eithers", "equality", "hashing", "lists", "literals", "logic", "maps",
-    "math", "optionals", "pairs", "regex", "sets", "strings")
+  // Every hydra.lib.<sub> whose primitive IMPLEMENTATIONS are relocated to hydra.<lang>.lib.<sub>
+  // (#473) and therefore need consumer call-sites redirected. Must include the effectful/newer libs
+  // (effects/files/system #494/#498, text) or their generated test consumers (test/lib/{effects,files,
+  // system}.py) keep calling the hydra.lib.<sub> def-modules -> "'PrimitiveDefinition' object is not
+  // callable". NOTE: hydra.lib.defaults is intentionally excluded — it has no relocated overlay impl.
+  private val libSubs = Seq("chars", "effects", "eithers", "equality", "files", "hashing", "lists",
+    "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text")
 
   private def isLibModule(m: hydra.packaging.Module): Boolean =
     m.name.startsWith("hydra.lib.")
@@ -300,6 +305,18 @@ object BootstrapHelpers:
           val s = readFile(f)
           if s.contains("hydra.lib.") then
             val out = redirectDotted(s, "overlay.scala")
+            if out != s then writeFile(f, out)
+      case "python" =>
+        // Python consumes the hydra.lib.* def-modules like scala/clojure: its generated
+        // consumers reference hydra.lib.<sub>.<fn> (the PrimitiveDefinition data, not callable).
+        // Redirect them to the relocated impls at hydra.overlay.python.lib.<sub>. Without this the
+        // cell fails at runtime with "'PrimitiveDefinition' object is not callable" (e.g. scoping.py
+        // calling hydra.lib.lists.cons). Mirrors the scala/clojure cases; the python-native host
+        // driver already emits the redirected form.
+        for f <- files if !isLibDefFile(f) do
+          val s = readFile(f)
+          if s.contains("hydra.lib.") then
+            val out = redirectDotted(s, "overlay.python")
             if out != s then writeFile(f, out)
       case "clojure" =>
         for f <- files if !isLibDefFile(f) do
