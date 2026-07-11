@@ -4,7 +4,7 @@
 
    IMPORTANT: This module must be loaded AFTER preload/load-gen-main! has been called,
    so that all generated kernel symbols are globalized into clojure.core."
-  (:require [hydra.lib.libraries :as libraries]
+  (:require [hydra.overlay.clojure.libraries :as libraries]
             [clojure.data.json :as json])
   (:import [java.io File]))
 

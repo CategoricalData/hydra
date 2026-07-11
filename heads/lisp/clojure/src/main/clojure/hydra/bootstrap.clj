@@ -11,7 +11,7 @@
      --include-tests        Also load and generate kernel test modules
      --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)
      --types-only           Only generate type-defining modules"
-  (:require [hydra.lib.preload :as preload])
+  (:require [hydra.overlay.clojure.preload :as preload])
   (:gen-class))
 
 (defn- format-time [millis]

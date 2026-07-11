@@ -1,8 +1,8 @@
 (ns hydra.profile-gen
   "Profile code generation to find bottlenecks.
    Usage: clojure -M -m hydra.profile-gen --target python --json-dir <path>"
-  (:require [hydra.lib.preload :as preload]
-            [hydra.lib.libraries :as libraries]
+  (:require [hydra.overlay.clojure.preload :as preload]
+            [hydra.overlay.clojure.libraries :as libraries]
             [clojure.data.json :as json])
   (:gen-class))
 
