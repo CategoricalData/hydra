@@ -29,8 +29,11 @@
 ;; def-modules (lib pass) and redirect generated consumer call-sites to hydra.<lang>.lib.* (redirect).
 ;; See project_473_self_host_lib_pass_gap.
 (def ^:private lib-subs
-  ["chars" "eithers" "equality" "hashing" "lists" "literals" "logic" "maps"
-   "math" "optionals" "pairs" "regex" "sets" "strings"])
+  ;; Every hydra.lib.<sub> whose impls are relocated to hydra.<lang>.lib.<sub> (#473). Must include the
+  ;; effectful/newer libs (effects/files/system #494/#498, text) or their consumers keep calling the
+  ;; def-modules -> "'PrimitiveDefinition' object is not callable". Excludes defaults (no relocated impl).
+  ["chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
+   "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"])
 
 (defn- lib-module? [m]
   (let [ns (:name m)] (.startsWith ^String (if (string? ns) ns (:value ns)) "hydra.lib.")))
@@ -64,27 +67,38 @@
   (.contains (.replace (.getPath f) java.io.File/separatorChar \/) "/hydra/lib/"))
 
 (defn- redirect-dotted
-  "Rewrite consumer require namespaces hydra.lib.<sub> -> hydra.overlay.clojure.lib.<sub>, protecting quoted
-   primitive-NAME strings (\"hydra.lib...\")."
-  [^String s]
+  "Rewrite consumer references from the un-relocated hydra.lib.<sub> / hydra.test.testEnv namespaces to
+   their relocated impls under hydra.overlay.<lang-seg>.* for the TARGET language (lang-seg is
+   e.g. \"overlay.clojure\" or \"overlay.python\"). Protects quoted primitive-NAME strings. Mirrors the
+   Scala host's redirectDotted; needed for cross-host targets (e.g. clojure->python) as well as
+   clojure self-host — without it the target's generated consumers call the def-modules
+   (\"'PrimitiveDefinition' object is not callable\") and import the pre-#501 hydra.test.test_env path
+   (ModuleNotFoundError)."
+  [^String s ^String lang-seg]
   (let [sentinel "@@HYDRA_LIB_NAME@@"
         protected (.replace s "\"hydra.lib." (str "\"" sentinel))
         rewritten (reduce (fn [^String acc sub]
-                            (.replace acc (str "hydra.lib." sub) (str "hydra.overlay.clojure.lib." sub)))
+                            (.replace acc (str "hydra.lib." sub) (str "hydra." lang-seg ".lib." sub)))
                           protected
-                          lib-subs)]
-    (.replace rewritten sentinel "hydra.lib.")))
+                          lib-subs)
+        ;; #501: the hand-written testEnv module lives at hydra.overlay.<lang>.testEnv (test_env). The
+        ;; DSL emits references to the un-relocated hydra.test.testEnv; relocate them for the target.
+        with-testenv (-> rewritten
+                         (.replace "hydra.test.test_env" (str "hydra." lang-seg ".test_env"))
+                         (.replace "hydra.test.testEnv" (str "hydra." lang-seg ".testEnv")))]
+    (.replace with-testenv sentinel "hydra.lib.")))
 
 (defn- redirect-lib-calls
-  "#473 redirect over a generated dir (Clojure self-host only)."
-  [lang-dir]
+  "#473 redirect over a generated dir, relocating hydra.lib.* + hydra.test.testEnv to the target
+   language's hydra.overlay.<lang>.* namespace."
+  [lang-dir lang-seg]
   (let [dir (java.io.File. ^String lang-dir)]
     (when (.isDirectory dir)
       (doseq [^java.io.File f (all-files-under dir)]
         (when-not (lib-def-file? f)
           (let [s (slurp f)]
-            (when (.contains s "hydra.lib.")
-              (let [out (redirect-dotted s)]
+            (when (or (.contains s "hydra.lib.") (.contains s "hydra.test.test"))
+              (let [out (redirect-dotted s lang-seg)]
                 (when (not= out s) (spit f out))))))))))
 
 (defn- parse-args [args]
@@ -368,8 +382,21 @@
                               _ (println "Loading test modules from JSON...")
                               _ (flush)
                               test-ns (read-manifest json-dir "testModules")
-                              test-mods (load-mods test-json-dir test-ns)
-                              all-universe (into (vec main-mods) test-mods)
+                              ;; #546/#547: the kernel test suite references hydra.test.build.* ->
+                              ;; hydra.build.* (Option A). Load hydra-build's main modules into the
+                              ;; universe and its OWN test modules (hydra.test.build.*, which live in
+                              ;; the hydra-build package's test tree, not hydra-kernel's), else
+                              ;; cross-host gen fails with "Unknown variable:
+                              ;; hydra.test.build.modules.allTests". Mirrors the Java/Scala/CL fix (#553).
+                              build-main-mods (load-package-main dist-json-root "hydra-build" read-manifest load-mods)
+                              build-main-dir (str dist-json-root "/hydra-build/src/main/json")
+                              build-test-dir (str dist-json-root "/hydra-build/src/test/json")
+                              build-test-ns (vec (read-manifest build-main-dir "testModules"))
+                              build-test-mods (if (seq build-test-ns)
+                                                (load-mods build-test-dir build-test-ns)
+                                                [])
+                              test-mods (into (load-mods test-json-dir test-ns) build-test-mods)
+                              all-universe (into (into (vec main-mods) build-main-mods) test-mods)
                               ;; Filter skip-emit test namespaces (e.g.
                               ;; hydra.test.testEnv): these are type-only stubs
                               ;; whose hand-written per-language counterparts
@@ -397,11 +424,17 @@
                             count))
                         0)
                       ;; #473 redirect — run LAST over every generated dir (main + test) so consumer
-                      ;; require namespaces hydra.lib.* are rewritten to hydra.overlay.clojure.lib.*.
-                      _ (when (= target "clojure")
-                          (redirect-lib-calls (str out-dir "/src/main/" (:subdir coder-info)))
+                      ;; references hydra.lib.* + hydra.test.testEnv are rewritten to the TARGET
+                      ;; language's hydra.overlay.<lang>.* namespace. Dotted-namespace targets only
+                      ;; (clojure self-host, python); flat/Lisp targets have their own redirect paths.
+                      lang-seg (case target
+                                 "clojure" "overlay.clojure"
+                                 "python" "overlay.python"
+                                 nil)
+                      _ (when lang-seg
+                          (redirect-lib-calls (str out-dir "/src/main/" (:subdir coder-info)) lang-seg)
                           (when (:include-tests opts)
-                            (redirect-lib-calls (str out-dir "/src/test/" (:subdir coder-info)))))
+                            (redirect-lib-calls (str out-dir "/src/test/" (:subdir coder-info)) lang-seg)))
                       total-time (- (System/currentTimeMillis) total-start)]
 
                   (println "==========================================")

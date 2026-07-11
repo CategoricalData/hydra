@@ -16,6 +16,7 @@
             [hydra.overlay.clojure.lib.regex :as regex]
             [hydra.overlay.clojure.lib.sets :as sets]
             [hydra.overlay.clojure.lib.strings :as strings]
+            [hydra.overlay.clojure.lib.system :as system]
             [hydra.overlay.clojure.lib.text :as text]))
 
 (defn- prim-name
@@ -724,6 +725,46 @@
                                      [] s bin)}))
 
 ;; ============================================================
+;; System (#498)
+;; ============================================================
+;;
+;; The hydra.lib.system.* effectful primitives (execute/exit/getEnvironment/...) whose real I/O lives
+;; in hydra.overlay.clojure.lib.system, reached via the bootstrap redirect. Nominal kernel types
+;; (Command, ProcessResult, SystemError, EnvironmentVariable, StatusCode, Timespec, FilePath) are
+;; referenced by name; the type schemes are registered for inference name-resolution. Without this,
+;; cross-host generation of hydra.test.lib.system fails with "Unknown variable:
+;; hydra.lib.system.getEnvironment" (the def-module data is present but the primitive is unregistered).
+(defn register-system []
+  (let [s (p/tc-string)
+        unit (p/tc-unit)
+        eff (fn [c] (p/tc-effect c))
+        cmd (p/tc-named "hydra.system.Command")
+        procResult (p/tc-named "hydra.system.ProcessResult")
+        sysErr (p/tc-named "hydra.error.system.SystemError")
+        envVar (p/tc-named "hydra.system.EnvironmentVariable")
+        statusCode (p/tc-named "hydra.system.StatusCode")
+        timespec (p/tc-named "hydra.time.Timespec")
+        filePath (p/tc-named "hydra.file.FilePath")]
+    {(prim-name 'hydra.lib.system/hydra_lib_system_execute) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_execute)
+                                     system/hydra_lib_system_execute
+                                     [] cmd (eff (p/tc-either sysErr procResult)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_exit) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_exit)
+                                     system/hydra_lib_system_exit
+                                     [] statusCode (eff unit))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_environment) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_environment)
+                                     (fn [] system/hydra_lib_system_get_environment)
+                                     [] (eff (p/tc-map envVar s)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_environment_variable) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_get_environment_variable)
+                                     system/hydra_lib_system_get_environment_variable
+                                     [] envVar (eff (p/tc-optional s)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_time) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_time)
+                                     (fn [] system/hydra_lib_system_get_time)
+                                     [] (eff timespec))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory)
+                                     (fn [] system/hydra_lib_system_get_working_directory)
+                                     [] (eff (p/tc-either sysErr filePath)))}))
+
+;; ============================================================
 ;; ============================================================
 ;; Annotations (term-level functions registered as primitives)
 ;; ============================================================
@@ -831,5 +872,6 @@
    (register-regex)
    (register-sets)
    (register-strings)
+   (register-system)
    (register-text)
    (register-annotations)))
