@@ -179,14 +179,30 @@ import _root_.java.io.File
     println(s"  Source: $testJsonDir")
     stepStart = System.currentTimeMillis()
     val testNamespaces = Generation.readManifestField(kernelMainDir, "testModules")
-    val testMods = Generation.loadModulesFromJson(testJsonDir, schemaMap, testNamespaces)
+    var testMods = Generation.loadModulesFromJson(testJsonDir, schemaMap, testNamespaces)
+
+    // #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+    // (Option A). When emitting tests, hydra-build's main modules must be in the
+    // universe so those refs type-check, and hydra-build's OWN test modules
+    // (hydra.test.build.*, which live in the hydra-build package's test tree, not
+    // hydra-kernel's) must be loaded too — otherwise cross-host generation fails with
+    // "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+    // bootstrap-from-json / Java Bootstrap.java fix (#553).
+    val buildMainMods = BootstrapHelpers.loadPackageMain(distJsonRoot, "hydra-build", schemaMap)
+    val buildMainDir = BootstrapHelpers.packageMainDir(distJsonRoot, "hydra-build")
+    val buildTestJsonDir = distJsonRoot + File.separator + "hydra-build" +
+      File.separator + "src" + File.separator + "test" + File.separator + "json"
+    val buildTestNs = Generation.readManifestField(buildMainDir, "testModules")
+    if buildTestNs.nonEmpty then
+      testMods = testMods ++ Generation.loadModulesFromJson(buildTestJsonDir, schemaMap, buildTestNs)
+
     stepTime = System.currentTimeMillis() - stepStart
     val testBindings = testMods.map(_.definitions.size).sum
     println(s"  Loaded ${testMods.size} test modules ($testBindings bindings).")
     println(s"  Time: ${Generation.formatTime(stepTime)}")
     println()
 
-    val allUniverse = allMainMods ++ testMods
+    val allUniverse = allMainMods ++ buildMainMods ++ testMods
 
     // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
     // type-only stubs in the DSL whose hand-written per-language counterparts

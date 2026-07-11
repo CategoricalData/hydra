@@ -465,8 +465,34 @@
                                                (subseq *json-dir* (+ pos 13)))
                                              *json-dir*)))
                        (test-ns (coerce (read-manifest-field *json-dir* "testModules") 'list))
-                       (test-mods (load-modules-from-json test-json-dir2 test-ns))
-                       (all-universe (append all-mods test-mods))
+                       ;; #546/#547: the kernel test suite references hydra.test.build.* ->
+                       ;; hydra.build.* (Option A). Load hydra-build's main modules into the
+                       ;; universe and its OWN test modules (hydra.test.build.*, which live in
+                       ;; the hydra-build package's test tree, not hydra-kernel's), else
+                       ;; cross-host gen fails with "Unknown variable:
+                       ;; hydra.test.build.modules.allTests". Mirrors the Java/Scala fix (#553).
+                       (build-main-json-dir (let ((pos (search "hydra-kernel" *json-dir*)))
+                                              (if pos
+                                                  (concatenate 'string
+                                                    (subseq *json-dir* 0 pos)
+                                                    "hydra-build"
+                                                    (subseq *json-dir* (+ pos 12)))
+                                                  *json-dir*)))
+                       (build-test-json-dir (let ((pos (search "src/main/json" build-main-json-dir)))
+                                              (if pos
+                                                  (concatenate 'string
+                                                    (subseq build-main-json-dir 0 pos)
+                                                    "src/test/json"
+                                                    (subseq build-main-json-dir (+ pos 13)))
+                                                  build-main-json-dir)))
+                       (build-main-mods (load-package-main dist-json-root "hydra-build"))
+                       (build-test-ns (coerce (read-manifest-field build-main-json-dir "testModules") 'list))
+                       (build-test-mods (if build-test-ns
+                                            (load-modules-from-json build-test-json-dir build-test-ns)
+                                            '()))
+                       (test-mods (append (load-modules-from-json test-json-dir2 test-ns)
+                                          build-test-mods))
+                       (all-universe (append all-mods build-main-mods test-mods))
                        ;; Filter skip-emit test namespaces (e.g.
                        ;; hydra.test.testEnv): these are type-only stubs whose
                        ;; hand-written per-language counterparts are the
