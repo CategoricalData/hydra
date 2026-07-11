@@ -45,17 +45,16 @@ cp "$HYDRA_SCALA_PKG/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/nul
 echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
-    # Copy lib/ directory (the primitive registry Libraries.scala). The #473 lib pass also
-    # emits the hydra.lib.* PrimitiveDefinition def-modules here at gen time.
-    if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/lib" ]; then
-        cp -r "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/lib" "$OUTPUT_DIR/src/main/scala/hydra/"
-    fi
-    # Copy scala/lib/ (the native primitive IMPLEMENTATIONS, relocated to hydra.scala.lib.* by
-    # #473 Step 0). The generated consumers + registry call these; without them the cell fails to
-    # compile with "value scala is not a member of hydra". (Pre-#473 the impls lived in hydra/lib.)
-    if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/scala/lib" ]; then
-        mkdir -p "$OUTPUT_DIR/src/main/scala/hydra/scala"
-        cp -r "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/scala/lib" "$OUTPUT_DIR/src/main/scala/hydra/scala/"
+    # Copy the hydra.overlay.scala.* runtime (native primitive IMPLEMENTATIONS + Libraries.scala
+    # registry). #501 moved these under hydra/overlay/scala/ (was hydra/scala/lib pre-#501, and
+    # hydra/lib pre-#473). The generated consumers + registry call hydra.overlay.scala.lib.*;
+    # without them the cell fails to compile with "value overlay is not a member of hydra".
+    # Blanket-copy the whole overlay subtree (as the Java/Python cells do) so it stays correct
+    # across future namespace moves rather than cherry-picking paths that a rename can orphan.
+    # (The hydra.lib.* PrimitiveDefinition def-modules are NOT here — they are generated into
+    # dist/scala/hydra-kernel/hydra/lib/ and arrive via the dist copy above.)
+    if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/overlay" ]; then
+        cp -r "$HYDRA_SCALA_OVERLAY/src/main/scala/hydra/overlay" "$OUTPUT_DIR/src/main/scala/hydra/"
     fi
 fi
 
