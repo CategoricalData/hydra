@@ -148,10 +148,13 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
    ((numberp obj) (list :number (float obj)))
    ((stringp obj) (list :string obj))
    ((hash-table-p obj)
-    ;; JSON object → Hydra object (alist of string keys to hydra-json values)
+    ;; JSON object → Hydra object (list of (key value) pairs, matching the
+    ;; Hydra `Pair k v` term shape that hydra.lib.maps.from_list expects —
+    ;; NOT a dotted cons cell, which shifts every downstream field lookup by
+    ;; one level (#586).
     (let ((pairs nil))
       (maphash (lambda (k v)
-                 (push (cons k (bootstrap-json-to-hydra v)) pairs))
+                 (push (list k (bootstrap-json-to-hydra v)) pairs))
                obj)
       (list :object (nreverse pairs))))
    ((vectorp obj)
