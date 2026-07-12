@@ -11,10 +11,24 @@
 ;;;   --include-tests       Also generate test modules
 
 (require 'cl-lib)
+(require 'bytecomp)
 
 ;; Increase limits for deeply nested generated code
 (setq max-lisp-eval-depth 100000)
 (setq max-specpdl-size 100000)
+
+;; Suppress byte-compile-style warnings globally for this batch run. Loading
+;; generated kernel modules evaluates deeply nested lambda literals via
+;; `(eval form t)` (see loader.el's hydra-load-file); under lexical-binding,
+;; `eval` routes lambda literals through cconv.el's closure-conversion, which
+;; performs unused-variable analysis and prints a "not left unused" warning
+;; to stdout on every occurrence -- not once per definition, but once per
+;; EVAL of the enclosing top-level form, and the loader's forward-reference
+;; retry mechanism (up to 10 passes per form) re-evals unresolved forms,
+;; multiplying this further. On the self-hosted kernel this produced tens of
+;; millions of warning lines (format + stdout I/O per occurrence), dominating
+;; wall time independent of the actual computation (#586).
+(setq byte-compile-warnings nil)
 
 ;; ============================================================================
 ;; Command-line argument parsing
