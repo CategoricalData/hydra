@@ -2,101 +2,95 @@
 
 (require 'cl-lib)
 
-;; Maps are backed by Emacs `make-hash-table :test 'equal`, with
-;; copy-on-write semantics on each mutating operation (insert, delete,
-;; union, alter, …). This mirrors the persistent-collection facade
-;; pattern used in hydra-java (#359), hydra-python (#362), and the
-;; hash-table iteration that hydra-common-lisp's RB-tree maps support
-;; via `generic-compare`.
+;; Maps are backed by a cons-prepended alist of (k . v) pairs, structurally
+;; shared between versions: `insert`/`delete`/`alter` prepend a new entry (or
+;; a tombstone) in O(1) without copying the existing list, so old references
+;; stay valid and cheap (persistent-map semantics). Newer entries shadow
+;; older ones with the same key; a plain `assoc` walk (`hydra-map-lookup`)
+;; finds the most recent entry first, so single lookups stay correct without
+;; deduplication.
 ;;
-;; The empty map is represented as `nil` (back-compat with prior
-;; alist-based code that passes nil for an empty map). Any value-bearing
-;; map is a hash-table. `alist-lookup` etc. are kept as compatibility
-;; helpers, but all entry points accept either representation on read.
+;; Read operations that need a canonical view (to_list, keys, elems, foreach,
+;; size, bimap, filter, map, map_keys, union) call `hydra-map-dedup`, which
+;; walks once, keeps only the first (= most recent) occurrence of each key,
+;; and drops delete-tombstones. This mirrors the "sorted alists made
+;; from_list/insert quadratic -- fatally slow for the bootstrap codegen
+;; pipeline" fix already applied to the Scheme host (overlay/scheme/.../lib/
+;; maps.scm, which switched sorted alists to Guile's vhash for the same
+;; reason). The prior Emacs Lisp implementation used `make-hash-table` with
+;; `copy-hash-table` on every insert/delete -- O(n) per mutation, making a
+;; sequential n-key fold-insert O(n^2); confirmed by benchmark (#586: 8000
+;; sequential inserts took 5.4s in a superlinear ~n^1.5-n^2 curve, dominating
+;; the self-hosted EL kernel's own type-inference/codegen passes, which build
+;; environment/substitution maps via exactly that fold-insert pattern).
 ;;
-;; Iteration helpers (to_list, keys, elems) return entries in
-;; key-sorted order (via `generic-compare`), matching Haskell
-;; Data.Map semantics so that downstream serialization is
-;; deterministic.
+;; The empty map is represented as `nil`. Any value-bearing map is a list of
+;; (k . v) pairs (most recent first) possibly containing shadowed/tombstoned
+;; entries pending dedup. A tombstone is a cons of key to the sentinel
+;; `hydra-map-tombstone`.
+;;
+;; Iteration helpers (to_list, keys, elems) return entries in key-sorted
+;; order (via `generic-compare`), matching Haskell Data.Map semantics so
+;; that downstream serialization is deterministic.
+
+(defconst hydra-map-tombstone (make-symbol "hydra-map-tombstone")
+  "Sentinel value marking a deleted key in the pending (undeduplicated) list.")
 
 (defun hydra-map-p (m)
-  "True if M is a hash-table-backed map (not the nil empty map)."
-  (hash-table-p m))
-
-(defun hydra-map-empty-p (m)
-  "True if M represents the empty map (nil or empty hash-table)."
-  (or (null m) (and (hash-table-p m) (zerop (hash-table-count m)))))
-
-(defun hydra-map-size (m)
-  (cond
-   ((null m) 0)
-   ((hash-table-p m) (hash-table-count m))
-   ;; legacy alist
-   ((listp m) (length m))
-   (t (error "hydra-map-size: not a map: %S" m))))
+  "True if M is a non-empty map (a cons)."
+  (consp m))
 
 (defun hydra-map-lookup (k m)
   "Return the cons-cell (k . v) if k is present in M, else nil.
-   Accepts hash-table, nil, or legacy alist for M."
-  (cond
-   ((null m) nil)
-   ((hash-table-p m)
-    (let ((v (gethash k m :hydra-not-found)))
-      (if (eq v :hydra-not-found) nil (cons k v))))
-   ((listp m) (assoc k m))
-   (t (error "hydra-map-lookup: not a map: %S" m))))
+   Walks M from the front (most recent entries first), so the first match
+   for K is authoritative; a tombstone match means K is deleted."
+  (let ((entry (assoc k m)))
+    (if (and entry (eq (cdr entry) hydra-map-tombstone))
+        nil
+      entry)))
 
-(defun hydra-map-to-hash (m)
-  "Return a hash-table view of M. Copies if M is a hash-table, builds
-   from alist or empty if not. Result is always safe to mutate."
-  (cond
-   ((null m) (make-hash-table :test 'equal))
-   ((hash-table-p m) (copy-hash-table m))
-   ((listp m)
-    (let ((h (make-hash-table :test 'equal :size (max 1 (length m)))))
-      (dolist (entry m h)
-        (puthash (car entry) (cdr entry) h))))
-   (t (error "hydra-map-to-hash: not a map: %S" m))))
+(defun hydra-map-dedup (m)
+  "Return M's entries as a list of (k . v) pairs, most-recent value per key,
+   tombstones dropped, in unspecified order."
+  (let ((seen (make-hash-table :test 'equal))
+        (acc nil))
+    (dolist (entry m (nreverse acc))
+      (let ((k (car entry)))
+        (unless (gethash k seen)
+          (puthash k t seen)
+          (unless (eq (cdr entry) hydra-map-tombstone)
+            (push entry acc)))))))
+
+(defun hydra-map-empty-p (m)
+  "True if M represents the empty map."
+  (null (hydra-map-dedup m)))
+
+(defun hydra-map-size (m)
+  (length (hydra-map-dedup m)))
 
 (defun hydra-map-foreach (f m)
-  "Call F on each (k . v) pair in M (any representation)."
-  (cond
-   ((null m) nil)
-   ((hash-table-p m) (maphash (lambda (k v) (funcall f k v)) m))
-   ((listp m) (dolist (entry m) (funcall f (car entry) (cdr entry))))
-   (t (error "hydra-map-foreach: not a map: %S" m))))
+  "Call F on each (k . v) pair in M's deduplicated view."
+  (dolist (entry (hydra-map-dedup m))
+    (funcall f (car entry) (cdr entry))))
 
 (defun hydra-map-sorted-pairs (m)
   "Return entries of M as a list of (k . v) pairs sorted by key via
    `generic-compare`. Order is deterministic and matches CL/Java
    serialization order."
-  (let ((pairs nil))
-    (hydra-map-foreach (lambda (k v) (push (cons k v) pairs)) m)
-    (sort pairs (lambda (a b) (< (generic-compare (car a) (car b)) 0)))))
+  (sort (hydra-map-dedup m)
+        (lambda (a b) (< (generic-compare (car a) (car b)) 0))))
 
-;; Back-compat shims for any code still calling the alist helpers
-;; directly. New code should use the hash-table-aware variants above.
+;; Back-compat shims for any code still calling the alist helpers directly.
 (defun alist-lookup (key alist)
   (hydra-map-lookup key alist))
 
 (defun alist-insert (key val m)
-  "Return M with key→val inserted, copy-on-write."
-  (let ((h (hydra-map-to-hash m)))
-    (puthash key val h)
-    h))
+  "Return M with key -> val inserted. O(1): prepends without copying."
+  (cons (cons key val) m))
 
 (defun alist-delete (key m)
-  "Return M with key removed, copy-on-write."
-  (cond
-   ((null m) nil)
-   ((hash-table-p m)
-    (if (eq (gethash key m :hydra-not-found) :hydra-not-found)
-        m
-      (let ((h (copy-hash-table m)))
-        (remhash key h)
-        h)))
-   ((listp m) (cl-remove-if (lambda (entry) (equal key (car entry))) m))
-   (t (error "alist-delete: not a map: %S" m))))
+  "Return M with key removed. O(1): prepends a tombstone without copying."
+  (cons (cons key hydra-map-tombstone) m))
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
 (defun alter-is-nothing-p (m)
@@ -135,9 +129,9 @@
     "Map a function over the keys and values of a map."
     (lambda (fv)
       (lambda (m)
-        (let ((result (make-hash-table :test 'equal :size (max 1 (hydra-map-size m)))))
+        (let (result)
           (hydra-map-foreach
-           (lambda (k v) (puthash (funcall fk k) (funcall fv v) result))
+           (lambda (k v) (push (cons (funcall fk k) (funcall fv v)) result))
            m)
           result)))))
 
@@ -163,9 +157,9 @@
   (lambda (pred)
     "Filter a map based on values."
     (lambda (m)
-      (let ((result (make-hash-table :test 'equal)))
+      (let (result)
         (hydra-map-foreach
-         (lambda (k v) (when (funcall pred v) (puthash k v result)))
+         (lambda (k v) (when (funcall pred v) (push (cons k v) result)))
          m)
         result))))
 
@@ -174,9 +168,9 @@
   (lambda (pred)
     "Filter a map based on key-value pairs."
     (lambda (m)
-      (let ((result (make-hash-table :test 'equal)))
+      (let (result)
         (hydra-map-foreach
-         (lambda (k v) (when (funcall (funcall pred k) v) (puthash k v result)))
+         (lambda (k v) (when (funcall (funcall pred k) v) (push (cons k v) result)))
          m)
         result))))
 
@@ -195,9 +189,9 @@
 (defvar hydra_overlay_emacs_lisp_lib_maps_from_list
   (lambda (pairs)
     "Create a map from a list of key-value pairs."
-    (let ((result (make-hash-table :test 'equal :size (max 1 (length pairs)))))
+    (let (result)
       (dolist (p pairs result)
-        (puthash (car p) (cadr p) result)))))
+        (push (cons (car p) (cadr p)) result)))))
 
 ;; insert :: k -> v -> Map k v -> Map k v
 (defvar hydra_overlay_emacs_lisp_lib_maps_insert
@@ -228,9 +222,9 @@
   (lambda (f)
     "Map a function over a map."
     (lambda (m)
-      (let ((result (make-hash-table :test 'equal :size (max 1 (hydra-map-size m)))))
+      (let (result)
         (hydra-map-foreach
-         (lambda (k v) (puthash k (funcall f v) result))
+         (lambda (k v) (push (cons k (funcall f v)) result))
          m)
         result))))
 
@@ -239,9 +233,9 @@
   (lambda (f)
     "Map a function over the keys of a map."
     (lambda (m)
-      (let ((result (make-hash-table :test 'equal :size (max 1 (hydra-map-size m)))))
+      (let (result)
         (hydra-map-foreach
-         (lambda (k v) (puthash (funcall f k) v result))
+         (lambda (k v) (push (cons (funcall f k) v) result))
          m)
         result))))
 
@@ -263,9 +257,7 @@
   (lambda (k)
     "Create a map with a single key-value pair."
     (lambda (v)
-      (let ((h (make-hash-table :test 'equal :size 1)))
-        (puthash k v h)
-        h))))
+      (list (cons k v)))))
 
 ;; size :: Map k v -> Int
 (defvar hydra_overlay_emacs_lisp_lib_maps_size
@@ -286,9 +278,9 @@
   (lambda (m1)
     "Union two maps, with the first taking precedence."
     (lambda (m2)
-      (let ((result (hydra-map-to-hash m2)))
-        ;; m1 entries overwrite m2 entries (left-biased)
-        (hydra-map-foreach (lambda (k v) (puthash k v result)) m1)
-        result))))
+      ;; m1's entries are prepended (most recent), so they shadow m2's
+      ;; entries of the same key in the deduplicated view -- O(size m1),
+      ;; no copy of m2.
+      (append m1 m2))))
 
 (provide 'hydra.lib.maps)
