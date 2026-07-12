@@ -17,6 +17,54 @@
 (setq max-lisp-eval-depth 100000)
 (setq max-specpdl-size 100000)
 
+;; Raise the GC threshold for this batch run. The default (~800KB) triggers a
+;; full GC pass on nearly every allocation-heavy operation during self-hosted
+;; kernel load/codegen (deeply nested term/type structures, thousands of
+;; interned symbols); on an unlucky GC timing this can manifest as a long,
+;; silent, CPU-pegged stall with no forward log progress (#586). 512MB trades
+;; peak RSS for far fewer GC pauses -- standard practice for large batch Elisp
+;; loads, not a workaround for a specific bug.
+;; #586 diagnostic: HYDRA_GC_THRESHOLD_MB overrides the value in MB (or "default"
+;; to leave Emacs's built-in ~800KB threshold untouched), to A/B the threshold
+;; against the intermittent RSS-blowup rate. Remove the override once root-caused.
+(let ((override (getenv "HYDRA_GC_THRESHOLD_MB")))
+  (cond
+   ((equal override "default") nil)  ; leave Emacs default untouched
+   (override (setq gc-cons-threshold (* (string-to-number override) 1024 1024)))
+   (t (setq gc-cons-threshold (* 512 1024 1024)))))
+
+;; Optional: attach the Emacs profiler around kernel loading (HYDRA_PROFILE_LOAD=1)
+;; to capture a call-stack sample if this phase stalls, instead of only being able
+;; to observe pegged CPU with no further information (#586 diagnostic).
+(defvar bootstrap-profile-load (equal (getenv "HYDRA_PROFILE_LOAD") "1"))
+(when bootstrap-profile-load
+  (require 'profiler)
+  (profiler-start 'cpu))
+
+;; Diagnostic (#586): track cumulative time spent in GC vs. wall clock, printed
+;; periodically to stderr via a counter incremented on every GC. Distinguishes
+;; "pathologically GC-bound" (gc-elapsed climbing in lockstep with wall time)
+;; from "genuinely slow application logic" (gc-elapsed flat while wall time
+;; grows) when a stall is observed live.
+(defvar bootstrap-gc-count 0)
+(when (equal (getenv "HYDRA_GC_DIAGNOSTIC") "1")
+  (add-hook 'post-gc-hook
+    (lambda ()
+      (setq bootstrap-gc-count (1+ bootstrap-gc-count))
+      (let ((since-start (float-time (time-subtract (current-time) before-init-time))))
+        (message "[gc-diag] gcs=%d gc-elapsed=%.2fs since-start=%.2fs gc-pct=%.1f%% threshold=%d"
+                 bootstrap-gc-count gc-elapsed since-start
+                 (if (> since-start 0) (* 100.0 (/ gc-elapsed since-start)) 0.0)
+                 gc-cons-threshold)))))
+
+;; Diagnostic (#586): SIGUSR2 drops into the Lisp debugger even mid-computation
+;; (checked at interpreter safe-points, unlike timers which only fire between
+;; top-level forms / at explicit yield points) -- `kill -USR2 <pid>` from another
+;; shell on a stalled batch process prints a live backtrace to stdout/stderr,
+;; which native OS-level stack sampling (`sample`/lldb) cannot obtain for a
+;; batch Emacs process in this environment. No-op unless actually signaled.
+(setq debug-on-event 'sigusr2)
+
 ;; Suppress byte-compile-style warnings globally for this batch run. Loading
 ;; generated kernel modules evaluates deeply nested lambda literals via
 ;; `(eval form t)` (see loader.el's hydra-load-file); under lexical-binding,
@@ -136,6 +184,13 @@
 (hydra-set-function-bindings)
 
 (princ "Kernel loaded.\n")
+
+(when bootstrap-profile-load
+  (profiler-stop)
+  (princ "Profiler report for kernel load (HYDRA_PROFILE_LOAD=1):\n")
+  (profiler-report)
+  (profiler-report-write-profile
+    (concat (or (getenv "HYDRA_PROFILE_OUT") "/tmp") "/hydra-el-kernel-load.profile")))
 
 ;; ============================================================================
 ;; JSON to Hydra conversion
@@ -363,12 +418,29 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
 
     ;; Load main modules
     (princ (format "\nStep 1: Loading main modules from JSON...\n"))
+    (when bootstrap-profile-load
+      (profiler-start 'cpu))
     (let* ((all-ns (bootstrap-read-manifest-field bootstrap-json-dir "mainModules"))
            (all-mods (bootstrap-load-modules-from-json bootstrap-json-dir all-ns))
            (total-bindings (cl-reduce #'+ (mapcar (lambda (m)
                                                     (length (cdr (assoc :definitions m))))
                                                   all-mods))))
       (princ (format "  Loaded %d modules (%d bindings).\n" (length all-mods) total-bindings))
+
+      ;; #586 diagnostic: exit right after main-module JSON decode, matching the
+      ;; exact heap/compile state of the real run, to isolate the intermittent
+      ;; RSS blowup from the codegen phase that normally follows. Remove once
+      ;; root-caused.
+      (when (equal (getenv "HYDRA_EXIT_AFTER_MODULES") "1")
+        (princ "HYDRA_EXIT_AFTER_MODULES=1: exiting after module load.\n")
+        (kill-emacs 0))
+
+      (when bootstrap-profile-load
+        (profiler-stop)
+        (princ "Profiler report for main-module JSON loading (HYDRA_PROFILE_LOAD=1):\n")
+        (profiler-report)
+        (profiler-report-write-profile
+          (concat (or (getenv "HYDRA_PROFILE_OUT") "/tmp") "/hydra-el-module-load.profile")))
 
       ;; Filter if needed
       (let* ((mods-to-generate
