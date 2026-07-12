@@ -12,12 +12,32 @@
 # Each dist/typescript/<pkg>/ is a self-contained npm package directory
 # with a generated package.json and tsconfig.build.json (written by
 # bin/lib/generate-typescript-package-build.py via assemble-distribution.sh).
+#
+# assemble-distribution.sh's symlink_hydra_tree symlinks the kernel (and, for
+# hydra-pg, hydra-rdf) `.ts` tree into each downstream package's own source
+# tree, so tsc can compile/typecheck it self-contained. tsc has no `include`/
+# `exclude` option that stops it from emitting a file that's transitively
+# imported by an included root (confirmed: both only prune the initial root
+# set, not the full program), so the compile step below unavoidably emits JS/
+# d.ts for those symlinked sources too. Those files are also compiled as one
+# flat tsc program, so cross-file imports between own and symlinked sources
+# come out as plain relative specifiers (e.g. `from "../annotations.js"`),
+# with no notion that some of them are logically a separate npm package.
+# bin/lib/prune-typescript-foreign-modules.py (#584) fixes both: it deletes
+# the emitted duplicates for symlinked sources after compiling and before
+# packing, AND rewrites the retained modules' relative imports of those
+# sources to the sibling package's public `dist/*.js` subpath export, so
+# each package's tarball ships only its own modules and resolves the rest
+# via its `hydra-kernel`/`hydra-rdf` npm dependency at runtime.
+#
 # This script:
 #   1. Checks the publish set is dependency-closed.
 #   2. Compiles each package's TypeScript sources to JS + .d.ts via tsc.
-#   3. Runs `npm pack` to produce a tarball in <out>/.
-#   4. Smoke-tests the packed tarball in an isolated node env.
-#   5. (With --upload) runs `npm publish` for each package in leaves-first order.
+#   3. Prunes compiled duplicates of symlinked (non-own) sources and rewrites
+#      the surviving modules' imports of them (#584).
+#   4. Runs `npm pack` to produce a tarball in <out>/.
+#   5. Smoke-tests the packed tarball in an isolated node env.
+#   6. (With --upload) runs `npm publish` for each package in leaves-first order.
 #
 # npm uploads are permanent: once <pkg>@<version> is published it cannot be
 # re-uploaded. Use --dry-run (default) to verify packaging before committing.
@@ -154,6 +174,12 @@ for pkg in "${PUBLISH_SET[@]}"; do
             --typeRoots "$HYDRA_TS_HEAD/node_modules/@types"
     )
 
+    # Prune compiled output for symlinked (non-own) sources, e.g. the kernel
+    # tree symlinked in for self-contained compilation, and rewrite the
+    # retained modules' relative imports of those foreign sources to point
+    # at the sibling npm package's public subpath export instead (#584).
+    python3 "$HYDRA_ROOT/bin/lib/prune-typescript-foreign-modules.py" "$pkgdir"
+
     # Pack into a tarball
     echo "  Packing..."
     (cd "$pkgdir" && npm pack --pack-destination "$OUT_DIR" 2>/dev/null)
@@ -177,14 +203,47 @@ trap 'rm -rf "$SMOKE_DIR"' EXIT
     npm install --no-audit --no-fund --loglevel=error \
         "$OUT_DIR"/*.tgz 2>/dev/null
 
-    # Verify the kernel's top-level core module imports cleanly.
-    # Use the bare "." export (main entry), not a subpath — the "./*" pattern
-    # maps "hydra-kernel/X" to "./dist/X.js", so "hydra-kernel/dist/hydra/core.js"
-    # would double-nest to "./dist/dist/hydra/core.js.js".
+    # Verify the kernel's top-level core module imports cleanly via its bare
+    # "." export (main entry). hydra-kernel is the only package with a real
+    # single-module entry point; the other four are multi-module namespace
+    # packages whose package.json currently guesses a nonexistent main file
+    # (a separate, pre-existing bug independent of #584 — see the plan doc /
+    # follow-up issue), so they're smoke-tested via a representative subpath
+    # import instead — this is also how a real consumer uses them today.
     node --input-type=module <<'EOF'
 import { } from 'hydra-kernel';
 console.log('hydra-kernel: OK');
 EOF
+
+    # For each downstream package, import an own module that itself imports
+    # across the package boundary (into hydra-kernel and, for hydra-pg, also
+    # hydra-rdf) — this is exactly what the #584 fix (prune + rewrite) must
+    # get right: the import must resolve via the installed sibling npm
+    # package now that the package's own duplicate copy is pruned.
+    #
+    # Deliberately a `case` lookup, not `declare -A`: associative arrays are
+    # a bash-4+ feature, but this script's `#!/usr/bin/env bash` shebang
+    # doesn't guarantee bash 4 — macOS ships bash 3.2 as /bin/bash (last
+    # GPLv2 release; Apple never upgraded it), which is what a clean PATH
+    # resolves to. Under `set -u`, bash 3.2 misparses `declare -A ... ([k]=v)`
+    # and dies with "unbound variable" on the array syntax itself.
+    cross_import_subpath() {
+        case "$1" in
+            hydra-build) echo "dist/hydra/build/reconcile.js" ;;
+            hydra-rdf) echo "dist/hydra/rdf/serde.js" ;;
+            hydra-pg) echo "dist/hydra/pg/rdf/mappings.js" ;;
+            hydra-typescript) echo "dist/hydra/typeScript/coder.js" ;;
+        esac
+    }
+    for pkg in "${PUBLISH_SET[@]}"; do
+        [ "$pkg" = "hydra-kernel" ] && continue
+        [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        subpath="$(cross_import_subpath "$pkg")"
+        node --input-type=module <<EOF
+import { } from '$pkg/$subpath';
+console.log('$pkg ($subpath): OK');
+EOF
+    done
 )
 echo "  Smoke gate: PASS"
 echo ""
