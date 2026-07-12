@@ -291,15 +291,16 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
   (let* ((bs-graph (bootstrap-graph))
          (cx (funcall 'make-hydra_typing_inference_context 0 nil))
          (do-infer (nth 0 flags))
-         (do-expand (nth 1 flags))
-         (do-hoist-case (nth 2 flags))
-         (do-hoist-poly (nth 3 flags))
          (t0 (float-time))
+         ;; generateSourceFiles takes 7 curried args (printDefinitions lang doInfer
+         ;; bsGraph universeModules modsToGenerate cx) — doExpand/doHoistCaseStatements/
+         ;; doHoistPolymorphicLetBindings are derived internally from lang.supportedFeatures,
+         ;; not passed in. Applying extra args here over-saturates the curried function,
+         ;; funcalling its (fully-evaluated) Either result as if it were a function (#586).
          (result (condition-case err
-                     (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
-                       (funcall (funcall
-                         (symbol-value 'hydra_codegen_generate_source_files)
-                         coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
+                     (funcall (funcall (funcall (funcall (funcall (funcall
+                       (funcall (symbol-value 'hydra_codegen_generate_source_files)
+                         coder) language) do-infer)
                        bs-graph) universe-mods) mods-to-generate) cx)
                    (error (princ (format "  GENERATE ERROR: %s\n" err)) (list :left (format "%s" err)))))
          (t1 (float-time)))
