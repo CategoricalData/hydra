@@ -954,8 +954,24 @@
         (let ((form (read port)))
           (unless (eof-object? form)
             (cond
-              ;; Strip define-library: extract (begin ...) body forms
+              ;; Strip define-library: eval ONLY its (only (guile) ...) import clauses, then its
+              ;; (begin ...) body. The effectful impls (overlay/scheme/lib/{files,system}) need
+              ;; (import (only (guile) getcwd chdir getenv environ ...)) for POSIX I/O builtins not in
+              ;; R7RS. Everything else is deliberately skipped, matching the original flat loader: the
+              ;; kernel is flat-loaded (so (hydra ...) imports would double-load record types) and other
+              ;; SRFI/scheme bindings (e.g. srfi-60/151 bitwise) are provided ambiently by bootstrap.scm's
+              ;; use-modules — eval'ing those imports here would fail on guile builds lacking the module.
               ((and (pair? form) (eq? (car form) 'define-library))
+               (for-each
+                 (lambda (clause)
+                   (when (and (pair? clause) (eq? (car clause) 'import))
+                     (for-each
+                       (lambda (imp)
+                         (when (and (pair? imp) (eq? (car imp) 'only)
+                                    (pair? (cdr imp)) (pair? (cadr imp)) (eq? (car (cadr imp)) 'guile))
+                           (eval (list 'import imp) (interaction-environment))))
+                       (cdr clause))))
+                 (cddr form))
                (let find-begin ((rest (cddr form)))
                  (cond
                    ((null? rest) #t)
@@ -964,6 +980,43 @@
                    (else (find-begin (cdr rest))))))
               ;; Non-library forms: evaluate directly
               (else (eval form (interaction-environment))))
+            (loop)))))))
+
+(define (hydra-load-def-module path)
+  "Load a generated hydra.lib.* PrimitiveDefinition def-module, renaming each of its exported symbols
+   X -> def:X and evaluating the (begin ...) body flat in the interaction environment (#473).
+
+   The registry (overlay/scheme/libraries.scm) needs, per primitive, BOTH the PrimitiveDefinition
+   DATA (as def:hydra_lib_<sub>_<fn>) and the impl PROCEDURE (as hydra_lib_<sub>_<fn>, provided by the
+   flat-loaded overlay/scheme/lib/* impls). Loading the def-modules as real R7RS libraries fails: their
+   (make-hydra_packaging_primitive_definition ...) bodies would use the library-scoped record type,
+   which the flat-loaded registry's hydra_packaging_primitive_definition-name accessor does not accept
+   ('Wrong type argument'). Flat-loading here reuses the kernel's already-loaded record constructors, so
+   there is no duplicate record type; the def: prefix keeps the DATA from colliding with the impl
+   PROCEDUREs (which are relocated to distinct names post-#501)."
+  (call-with-input-file path
+    (lambda (port)
+      (let loop ()
+        (let ((form (read port)))
+          (unless (eof-object? form)
+            (when (and (pair? form) (eq? (car form) 'define-library))
+              (let* ((exports (let find-exports ((rest (cddr form)))
+                                (cond
+                                  ((null? rest) '())
+                                  ((and (pair? (car rest)) (eq? (caar rest) 'export)) (cdar rest))
+                                  (else (find-exports (cdr rest))))))
+                     ;; rename map: each exported symbol X -> def:X
+                     (renames (map (lambda (s) (cons s (string->symbol (string-append "def:" (symbol->string s)))))
+                                   exports)))
+                (let find-begin ((rest (cddr form)))
+                  (cond
+                    ((null? rest) #t)
+                    ((and (pair? (car rest)) (eq? (caar rest) 'begin))
+                     (for-each
+                       (lambda (body-form)
+                         (eval (rewrite-form body-form renames '()) (interaction-environment)))
+                       (cdar rest)))
+                    (else (find-begin (cdr rest)))))))
             (loop)))))))
 
 (define (hydra-load-file-if-exists path)
@@ -1003,6 +1056,12 @@
            "classes.scm"
            "constants.scm"
            "paths.scm"
+           ;; POSIX type modules (#494/#498): needed by the effectful hydra.lib.{files,system} impls
+           ;; + their def-modules (e.g. make-hydra_time_timespec). Dependency order: time (leaf) ->
+           ;; file (imports hydra.time) -> system (imports hydra.file).
+           "time.scm"
+           "file.scm"
+           "system.scm"
            ;; Core operations
            "formatting.scm"
            "rewriting.scm"
@@ -1032,6 +1091,17 @@
            "show/error/core.scm"
            "show/errors.scm"
            "show/error/packaging.scm"
+           ;; docs + the remaining show/* modules: the code generators reference e.g.
+           ;; hydra.show.docs.renderDocStringWith. Missing from the historical list because the
+           ;; scheme host was validated only up to gen with a narrower module set.
+           "docs.scm"
+           "read/docs.scm"
+           "show/docs.scm"
+           "show/graph.scm"
+           "show/paths.scm"
+           "show/typing.scm"
+           "show/util.scm"
+           "show/variants.scm"
            "validation.scm"
            "validate/core.scm"
            "validate/packaging.scm"

@@ -8,7 +8,7 @@
           (scheme file)
           (scheme write)
           (only (guile)
-                mkdir rmdir rename-file copy-file resolve-module eval
+                mkdir rmdir rename-file copy-file resolve-module module-variable eval
                 opendir readdir closedir
                 stat stat:type stat:size stat:mtime stat:mtimensec
                 stat:atime stat:atimensec stat:ctime stat:ctimensec))
@@ -218,8 +218,18 @@
     ;; The generated (hydra file) record constructor is a macro in the loaded env (see the analogous
     ;; note in hydra.overlay.scheme.lib.system), so FileStatus is built by eval'ing the constructor
     ;; form inside the owning module rather than calling it as a procedure.
+    ;;
+    ;; Two loading models both need to work here (#585): see the identical env-for-rec dispatch and
+    ;; rationale in hydra.overlay.scheme.lib.system (bootstrap.scm flat-loads into
+    ;; interaction-environment; run-tests.scm loads real R7RS modules where the ctor macros live in
+    ;; the resolved module instead).
+    (define (env-for-rec modname sym)
+      (let ((m (resolve-module modname #:ensure #f)))
+        (if (and m (module-variable m sym))
+            m
+            (interaction-environment))))
     (define (make-rec modname ctor . args)
-      (eval (cons ctor (map (lambda (a) (list 'quote a)) args)) (resolve-module modname)))
+      (eval (cons ctor (map (lambda (a) (list 'quote a)) args)) (env-for-rec modname ctor)))
 
     (define (path-is-directory? path)
       (eq? (stat:type (stat path)) 'directory))

@@ -27,6 +27,19 @@
     (and (>= slen plen)
          (equal? prefix (substring str 0 plen)))))
 
+(define (string-replace-first str needle replacement)
+  "Replace the first occurrence of NEEDLE in STR with REPLACEMENT (or return STR unchanged)."
+  (let* ((nlen (string-length needle))
+         (slen (string-length str))
+         (pos (let loop ((i 0))
+                (cond
+                  ((> (+ i nlen) slen) #f)
+                  ((equal? (substring str i (+ i nlen)) needle) i)
+                  (else (loop (+ i 1)))))))
+    (if pos
+        (string-append (substring str 0 pos) replacement (substring str (+ pos nlen) slen))
+        str)))
+
 ;; ============================================================================
 ;; Command-line argument parsing
 ;; ============================================================================
@@ -209,14 +222,25 @@
 (force-output (current-output-port))
 ;; Load bytevector compatibility shim (provides snap-to-float32). Migrated to dist by #434 (see above).
 (hydra-load-native-lib (string-append *gen-main-base* "../scheme/bytevector.sld"))
+;; POSIX type modules (#494/#498) must load BEFORE the effectful impls below: the system/files impls
+;; construct hydra.time.Timespec / hydra.file.* records at load time (e.g. get_time -> make-rec (hydra
+;; time) make-hydra_time_timespec ...), so their record constructors must already be bound. These are
+;; re-loaded (idempotently) as part of hydra-load-gen-main later; loading the leaf type modules early
+;; here is harmless. Dependency order: time (leaf) -> file (imports hydra.time) -> system (imports file).
+(for-each
+  (lambda (m) (hydra-load-native-lib (string-append *gen-main-base* m)))
+  '("core.scm" "time.scm" "file.scm" "system.scm"))
 ;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/;
 ;; #501 relocated them again to hydra/overlay/scheme/lib/ (hydra.overlay.scheme.* namespace).
 (for-each
   (lambda (f)
     (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/lib/" f)))
-  '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
-    "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
-    "optionals.scm" "pairs.scm" "regex.scm"))
+  ;; All hydra.overlay.scheme.lib.* impls (the registry references every one's impl procedure).
+  ;; Must include the effectful/newer libs (effects/files/system #494/#498, hashing, text) or the
+  ;; registry fails with "Unbound variable: hydra_lib_<sub>_<fn>".
+  '("chars.scm" "effects.scm" "eithers.scm" "equality.scm" "files.scm" "hashing.scm" "lists.scm"
+    "literals.scm" "logic.scm" "maps.scm" "math.scm" "optionals.scm" "pairs.scm" "regex.scm"
+    "sets.scm" "strings.scm" "system.scm" "text.scm"))
 
 ;; Load core modules via loader
 (hydra-load-gen-main *gen-main-base*)
@@ -288,14 +312,16 @@
 (display "  Loading prims...\n")
 (force-output (current-output-port))
 (hydra-load-native-lib (string-append *gen-main-base* "prims.scm"))
-;; #473 KNOWN GAP (scheme-host self-host): the registry (libraries.scm) imports the generated
-;; hydra.lib.* PrimitiveDefinition def-modules under a `def:` prefix. Flat-preloading those def-modules
-;; pollutes the global namespace — their exported hydra_lib_<sub>_<fn> symbols (PrimitiveDefinition DATA)
-;; shadow the host kernel's impl calls of the same flat name ("Wrong type to apply: PrimitiveDefinition").
-;; The correct fix is to make the (hydra lib <sub>) def-modules resolvable as R7RS libraries via Guile's
-;; %load-path (so only the registry's `def:`-prefixed import sees them), not a flat global load. Deferred;
-;; scheme-host self-host is validated only up to gen (the driver lib pass + redirect are unit-tested and
-;; the relocated-path loaders are fixed). See project_473_self_host_lib_pass_gap / the plan doc.
+;; #473: the registry (overlay/scheme/libraries.scm) references, per primitive, the PrimitiveDefinition
+;; DATA as def:hydra_lib_<sub>_<fn>. Flat-load each generated hydra.lib.* def-module with its exports
+;; renamed X -> def:X (hydra-load-def-module), reusing the flat-loaded kernel record constructors so the
+;; registry's hydra_packaging_primitive_definition-name accessor accepts them. The `def:` prefix keeps
+;; the DATA distinct from the impl PROCEDUREs (hydra_lib_<sub>_<fn>, loaded from overlay/scheme/lib/*).
+(for-each
+  (lambda (sub)
+    (hydra-load-def-module (string-append *gen-main-base* "lib/" sub ".scm")))
+  '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
+    "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
 (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
@@ -511,16 +537,32 @@
 ;; ============================================================================
 
 (define (ensure-directory-exists path)
-  "Ensure the directory for a file path exists."
-  ;; Extract directory part (everything up to last /)
+  "Ensure the directory for a file path exists, creating parents as needed.
+   Uses Guile's native `mkdir` component-by-component rather than shelling out
+   to `mkdir -p`: on macOS `(system* \"mkdir\" ...)` resolving the bare name via
+   PATH can crash with SIGSEGV during posix_spawn, silently leaving the deep
+   directory (e.g. hydra/test/checking/) uncreated so the subsequent open-file
+   fails. Native mkdir avoids the subprocess entirely and is fully portable."
+  ;; Extract directory part (everything up to and including the last /).
   (let ((len (string-length path)))
     (let loop ((i (- len 1)))
       (cond
         ((< i 0) #t)
         ((char=? (string-ref path i) #\/)
-         (let ((dir (substring path 0 (+ i 1))))
-           (system* "mkdir" "-p" dir)))
+         (mkdir-recursive (substring path 0 i)))
         (else (loop (- i 1)))))))
+
+(define (mkdir-recursive dir)
+  "Create DIR and all missing parent directories. No-op for existing dirs."
+  (when (and (> (string-length dir) 0)
+             (not (file-exists? dir)))
+    ;; Recurse into the parent first, then create this level.
+    (let ((slash (string-rindex dir #\/)))
+      (when (and slash (> slash 0))
+        (mkdir-recursive (substring dir 0 slash))))
+    ;; Guard against a race where a sibling write created it meanwhile.
+    (unless (file-exists? dir)
+      (mkdir dir))))
 
 (define (write-file-content path content)
   "Write content to a file, ensuring directory exists."
@@ -587,8 +629,11 @@
 ;; so they resolve to the relocated impls. Flat call identifiers hydra_lib_<sub>_<fn> stay (resolved via
 ;; the relocated import's export). See project_473_self_host_lib_pass_gap.
 (define lib-subs
-  '("chars" "eithers" "equality" "hashing" "lists" "literals" "logic" "maps"
-    "math" "optionals" "pairs" "regex" "sets" "strings"))
+  ;; Every hydra.lib.<sub> whose impls are relocated (#473). Must include the effectful/newer libs
+  ;; (effects/files/system #494/#498, text) or their consumers keep calling the def-modules
+  ;; ("'PrimitiveDefinition' object is not callable" for the python target). Excludes defaults.
+  '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
+    "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
 
 (define (lib-module? m)
   (let* ((mn (hydra_packaging_module-name m))
@@ -615,14 +660,27 @@
 
 ;; string-replace-all: replace every occurrence of `from` with `to` in `s`.
 (define (string-replace-all s from to)
+  ;; Linear-time: accumulate output chunks in a list and concatenate once at the
+  ;; end. The previous implementation rebuilt the accumulator with string-append
+  ;; on every character, making each call O(n^2); with ~108 passes per file
+  ;; (18 lib-subs x 6 delimiters) the redirect pass over the large generated
+  ;; test modules (e.g. nominal_types.py ~250KB) spun for over an hour. Copying
+  ;; unmatched runs in one substring keeps each call O(n).
   (let ((flen (string-length from))
         (slen (string-length s)))
-    (let loop ((i 0) (acc ""))
-      (cond
-        ((> (+ i flen) slen) (string-append acc (substring s i slen)))
-        ((string=? (substring s i (+ i flen)) from)
-         (loop (+ i flen) (string-append acc to)))
-        (else (loop (+ i 1) (string-append acc (substring s i (+ i 1)))))))))
+    (if (= flen 0)
+        s
+        (let loop ((i 0) (run-start 0) (chunks '()))
+          (cond
+            ((> (+ i flen) slen)
+             (string-concatenate
+               (reverse (cons (substring s run-start slen) chunks))))
+            ((string=? (substring s i (+ i flen)) from)
+             ;; Flush the unmatched run [run-start, i), then emit the replacement.
+             (loop (+ i flen)
+                   (+ i flen)
+                   (cons to (cons (substring s run-start i) chunks))))
+            (else (loop (+ i 1) run-start chunks)))))))
 
 ;; Rewrite (hydra lib <sub>) -> (hydra scheme lib <sub>) in a consumer file. Primitive NAME strings are
 ;; dotted "hydra.lib..." (untouched by this space-form rewrite), so no protect/restore is needed.
@@ -670,14 +728,52 @@
              #t)))
     acc))
 
-;; #473 redirect over a generated dir: rewrite consumer imports to the relocated impl library.
+;; Dotted-target (python) redirect: rewrite hydra.lib.<sub> -> hydra.overlay.python.lib.<sub> and
+;; hydra.test.test_env -> hydra.overlay.python.test_env in the generated python. Mirrors the
+;; Scala/Clojure/CL host fix; redirect-scheme handles only the scheme-target S-expr form.
+(define (redirect-python-dotted s)
+  ;; Match each delimiter that can follow the module name so both usages (hydra.lib.lists.cons) and
+  ;; import lines (import hydra.lib.lists\n) get rewritten. Mirrors the Scala host's redirectDotted.
+  ;;
+  ;; CRITICAL: protect quoted primitive-NAME string literals. Primitives are registered under their
+  ;; canonical name Name("hydra.lib.chars.isAlphaNum"); the runtime looks them up by that exact
+  ;; string. Only the dotted CALL paths (hydra.overlay.python.lib.chars.is_alpha_num) get relocated —
+  ;; the name literals must stay canonical, or the evaluator can't resolve the primitive and leaves
+  ;; the application unreduced (e.g. "expected 'true' but got '(...isAlphaNum @ 97:int32)'"). Use the
+  ;; Scala host's sentinel trick: stash `"hydra.lib.` (with the leading quote) before redirecting,
+  ;; then restore it afterward. Mirrors Bootstrap.scala redirectDotted.
+  (let* ((soh (string (integer->char 1)))
+         (sentinel (string-append soh "HYDRA_LIB_NAME_LITERAL" soh))
+         (protected (string-replace-all s "\"hydra.lib." (string-append "\"" sentinel)))
+         (redirected
+           (let loop ((subs lib-subs) (acc protected))
+             (if (null? subs)
+                 (string-replace-all acc "hydra.test.test_env" "hydra.overlay.python.test_env")
+                 (let ((old (string-append "hydra.lib." (car subs)))
+                       (new (string-append "hydra.overlay.python.lib." (car subs))))
+                   (let dloop ((delims (list "." (string #\newline) " " ")" "," ":")) (a acc))
+                     (if (null? delims)
+                         (loop (cdr subs) a)
+                         (dloop (cdr delims)
+                                (string-replace-all a
+                                                    (string-append old (car delims))
+                                                    (string-append new (car delims)))))))))))
+    (string-replace-all redirected sentinel "hydra.lib.")))
+
+;; #473 redirect over a generated dir. For the scheme target, rewrite (hydra lib *) S-expr imports to
+;; the relocated impl library; for the python target, rewrite the dotted hydra.lib.* + hydra.test.test_env
+;; references to their hydra.overlay.python.* impls.
 (define (redirect-lib-calls lang-dir)
   (for-each
     (lambda (path)
       (when (not (lib-def-path? path))
         (let ((s (read-file-content path)))
-          (when (and s (string-contains-substr? s "(hydra lib "))
-            (let ((out (redirect-scheme s)))
+          (when (and s (or (string-contains-substr? s "(hydra lib ")
+                           (string-contains-substr? s "hydra.lib.")
+                           (string-contains-substr? s "hydra.test.test")))
+            (let ((out (if (string=? *target* "python")
+                           (redirect-python-dotted s)
+                           (redirect-scheme s))))
               (when (not (string=? out s))
                 (write-file-content path out)))))))
     (list-files-recursive lang-dir)))
@@ -766,8 +862,23 @@
                                             (substring *json-dir* (+ pos nlen) jlen))
                              *json-dir*)))
                      (test-ns (read-manifest-field *json-dir* "testModules"))
-                     (test-mods (load-modules-from-json test-json-dir test-ns))
-                     (all-universe (append all-mods test-mods))
+                     ;; #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+                     ;; (Option A). Load hydra-build's main modules into the universe and its OWN test
+                     ;; modules (hydra.test.build.*, which live in the hydra-build package's test tree,
+                     ;; not hydra-kernel's), else cross-host gen fails with
+                     ;; "Unknown variable: hydra.test.build.modules.allTests". Mirrors the
+                     ;; Java/Scala/Clojure/CL host fix (#553). Derive hydra-build's json dirs by
+                     ;; substituting the package name in *json-dir* / test-json-dir.
+                     (build-main-json-dir (string-replace-first *json-dir* "hydra-kernel" "hydra-build"))
+                     (build-test-json-dir (string-replace-first test-json-dir "hydra-kernel" "hydra-build"))
+                     (build-main-ns (read-manifest-field build-main-json-dir "mainModules"))
+                     (build-main-mods (load-modules-from-json build-main-json-dir build-main-ns))
+                     (build-test-ns (read-manifest-field build-main-json-dir "testModules"))
+                     (build-test-mods (if (and build-test-ns (not (null? build-test-ns)))
+                                          (load-modules-from-json build-test-json-dir build-test-ns)
+                                          '()))
+                     (test-mods (append (load-modules-from-json test-json-dir test-ns) build-test-mods))
+                     (all-universe (append all-mods build-main-mods test-mods))
                      ;; Filter skip-emit test namespaces (e.g.
                      ;; hydra.test.testEnv): these are type-only stubs whose
                      ;; hand-written per-language counterparts are the source

@@ -17,7 +17,7 @@
                 getcwd chdir access? X_OK getenv environ
                 gettimeofday mkstemp! port-filename status:exit-val OPEN_READ
                 with-error-to-file delete-file file-exists? string-index
-                primitive-exit open-file resolve-module eval)
+                primitive-exit open-file resolve-module module-variable eval)
           (only (ice-9 popen) open-pipe* close-pipe)
           (only (ice-9 binary-ports) get-bytevector-all)
           (only (rnrs bytevectors) bytevector-length bytevector-u8-ref make-bytevector))
@@ -55,10 +55,23 @@
     ;; so they are invoked by eval'ing the form inside the owning module rather than called as procedures.
     ;; make-rec: (make-rec '(hydra system) 'make-X a b ...) constructs a record from runtime values.
     ;; rec-ref:  (rec-ref '(hydra system) 'X-field rec) reads a field of a record.
+    ;;
+    ;; Two loading models both need to work here (#585): bootstrap.scm flat-loads every generated
+    ;; module's forms into (interaction-environment) (no real (hydra system)/(hydra time) module is
+    ;; ever populated), while run-tests.scm loads generated modules as real R7RS libraries via Guile's
+    ;; module system (the ctor/accessor macros live in the real, resolved module, not in
+    ;; interaction-environment). resolve-module with #:ensure #f returns #f rather than a vivified
+    ;; empty module when the target was never populated, so probe for the actual binding and dispatch:
+    ;; use the resolved module when it holds it, otherwise fall back to interaction-environment.
+    (define (env-for-rec modname sym)
+      (let ((m (resolve-module modname #:ensure #f)))
+        (if (and m (module-variable m sym))
+            m
+            (interaction-environment))))
     (define (make-rec modname ctor . args)
-      (eval (cons ctor (map (lambda (a) (list 'quote a)) args)) (resolve-module modname)))
+      (eval (cons ctor (map (lambda (a) (list 'quote a)) args)) (env-for-rec modname ctor)))
     (define (rec-ref modname acc rec)
-      (eval (list acc (list 'quote rec)) (resolve-module modname)))
+      (eval (list acc (list 'quote rec)) (env-for-rec modname acc)))
 
     (define (bytevector->binary bv)
       (let ((v (make-vector (bytevector-length bv))))

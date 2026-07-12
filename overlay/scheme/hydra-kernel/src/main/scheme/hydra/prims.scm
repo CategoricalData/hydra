@@ -3,6 +3,7 @@
           (hydra core)
           (hydra graph)
           (hydra packaging)
+          (hydra typing)
           (hydra scoping)
           (hydra extract core)
           (hydra overlay scheme lib maps)
@@ -19,7 +20,7 @@
           tc-effect tc-unit tc-named
           tc-variable tc-term tc-comparison
           tc-function tc-function-with-reduce
-          prim0 prim1 prim2 prim3)
+          prim0 prim1 prim2 prim3 lazy-args)
   (begin
 
     ;; ============================================================================
@@ -500,5 +501,44 @@
                                     (let ((result (((hydra_graph_term_coder-decode output) prim-cx)
                                                     (((compute (cadr r1)) (cadr r2)) (cadr r3)))))
                                       (wrap-other-error prim-cx result)))))))))))))))
+
+    ;; Mirror of Hydra.Dsl.Prims.lazyArgs / Clojure's lazy-args: mark the value parameters at the
+    ;; given (0-based) positions of a primitive's signature as lazy. Used at prim*-based
+    ;; registration sites in libraries.scm to record which arguments coders must thunk in hosts
+    ;; that distinguish strict from lazy evaluation (#391, #585). Without this, the Python coder's
+    ;; wrapLazyArguments (which reads isLazy from graph_primitives(g), the single source of truth
+    ;; per #391) silently treats every registry-built primitive as fully strict, eagerly evaluating
+    ;; both branches of e.g. if_else/optionals.cases and causing infinite recursion or spurious
+    ;; TypeError: Unsupported Term on self-recursive definitions.
+    (define (lazy-args idxs prim)
+      (let* ((idx-set idxs)
+             (def0 (hydra_graph_primitive-definition prim))
+             (sig (hydra_packaging_primitive_definition-signature def0))
+             (params (hydra_typing_term_signature-parameters sig))
+             (marked (let loop ((ps params) (i 0) (acc '()))
+                       (if (null? ps)
+                           (reverse acc)
+                           (let ((p (car ps)))
+                             (loop (cdr ps) (+ i 1)
+                                   (cons (if (memv i idx-set)
+                                             (make-hydra_typing_parameter
+                                               (hydra_typing_parameter-name p)
+                                               (hydra_typing_parameter-description p)
+                                               (hydra_typing_parameter-type p)
+                                               #t)
+                                             p)
+                                         acc))))))
+             (sig2 (make-hydra_typing_term_signature
+                     (hydra_typing_term_signature-type_parameters sig)
+                     marked
+                     (hydra_typing_term_signature-result sig)))
+             (def2 (make-hydra_packaging_primitive_definition
+                     (hydra_packaging_primitive_definition-name def0)
+                     (hydra_packaging_primitive_definition-metadata def0)
+                     sig2
+                     (hydra_packaging_primitive_definition-is_pure def0)
+                     (hydra_packaging_primitive_definition-is_total def0)
+                     (hydra_packaging_primitive_definition-default_implementation def0))))
+        (make-hydra_graph_primitive def2 (hydra_graph_primitive-implementation prim))))
 
 ))
