@@ -37,14 +37,17 @@ ENGINES_NODE = ">=20"
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 
 # For hydra-kernel the main entry point exports the top-level core module.
-# For other packages we use the package's own top-level namespace file.
+# Other packages are multi-module namespace directories with no single
+# umbrella file (matching the shipping Python PEP 420 namespace-package
+# model) — they have no "." export; consumers import specific submodules
+# via the "./dist/*.js" subpath export instead.
 PKG_MAIN_MODULE: dict[str, str] = {
     "hydra-kernel": "hydra/core",
 }
 
 
-def main_module(pkg_name: str) -> str:
-    return PKG_MAIN_MODULE.get(pkg_name, f"hydra/{pkg_name.removeprefix('hydra-')}")
+def main_module(pkg_name: str) -> str | None:
+    return PKG_MAIN_MODULE.get(pkg_name)
 
 
 def render_package_json(
@@ -69,20 +72,27 @@ def render_package_json(
     safe_desc = description.replace('"', '\\"')
     readme_field = f',\n  "readme": "{readme_rel}"' if readme_rel else ""
 
+    main_types_fields = (
+        f'\n  "main": "./dist/{mod}.js",\n  "types": "./dist/{mod}.d.ts",' if mod else ""
+    )
+    dot_export = (
+        f"""    ".": {{
+      "import": "./dist/{mod}.js",
+      "types": "./dist/{mod}.d.ts"
+    }},
+"""
+        if mod
+        else ""
+    )
+
     return f"""\
 {{
   "name": "{name}",
   "version": "{version}",
   "description": "{safe_desc}",
-  "type": "module",
-  "main": "./dist/{mod}.js",
-  "types": "./dist/{mod}.d.ts",
+  "type": "module",{main_types_fields}
   "exports": {{
-    ".": {{
-      "import": "./dist/{mod}.js",
-      "types": "./dist/{mod}.d.ts"
-    }},
-    "./dist/*.js": {{
+{dot_export}    "./dist/*.js": {{
       "import": "./dist/*.js",
       "types": "./dist/*.d.ts"
     }}

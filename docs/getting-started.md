@@ -227,8 +227,13 @@ with TypeScript type declarations included.
 npm install hydra-kernel
 ```
 
-The root export is the kernel's `hydra/core` module; every other module is available as a
-subpath export (e.g. `hydra-kernel/hydra/validate/core`, `hydra-kernel/hydra/lib/lists`).
+`hydra-kernel`'s root export is the kernel's `hydra/core` module; every other module is
+available as a subpath export (e.g. `hydra-kernel/dist/hydra/validate/core.js`).
+
+`hydra-typescript`, `hydra-pg`, and `hydra-rdf` are namespace packages with no single
+umbrella module, so they have no root (`.`) export — `import "hydra-rdf"` fails by design.
+Import specific submodules by subpath instead, e.g.
+`import { ... } from "hydra-rdf/dist/hydra/rdf/syntax.js"`.
 
 ### Check a literal type
 
