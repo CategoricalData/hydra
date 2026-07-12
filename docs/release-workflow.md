@@ -63,7 +63,7 @@ missing or wrongly-scoped credential surfaces only at upload time (often as a
 |----------|---------------|-------|
 | **Hackage** | A Hackage account that is a **maintainer** of `hydra`, `hydra-kernel`, `hydra-haskell`; `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
 | **Maven Central** | A **Sonatype Central Portal** account with publish rights for the `net.fortytwo.hydra` namespace, plus a GPG signing key. Credentials in `~/.gradle/gradle.properties` (`sonatypeUsername`/`sonatypePassword` + `signing.*`). **JDK 17+** to run Gradle (see Java releases). | <https://central.sonatype.com/> |
-| **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest). Token goes in `~/.pypirc` or is pasted at the `twine`/`uv` prompt. | <https://pypi.org/manage/projects/> (confirm you own the projects) |
+| **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest, and is required for a first-time publish of a not-yet-existing project such as `hydra-build`). **Preferred: put the token in `~/.pypirc` (`chmod 600`)** — `twine`/`publish-pypi.sh --upload` read it with no prompt. See the Authentication step under [Python releases](#python-releases). | <https://pypi.org/manage/projects/> (confirm you own the projects) |
 | **Maven Central (Scala/sbt)** | Same Sonatype Central Portal account as Java (publish rights for `net.fortytwo.hydra`), plus a GPG signing key. Credentials in `~/.sbt/1.0/sonatype.sbt` (`sonatypeUsername`/`sonatypePassword`) or env vars `SONATYPE_USERNAME`/`SONATYPE_PASSWORD`; GPG via sbt-pgp (reads `~/.gnupg` by default). **JDK 11+** required. | <https://central.sonatype.com/> |
 | **npm** | An npm account that is **Owner** of `hydra-kernel`, `hydra-rdf`, `hydra-pg`, and `hydra-typescript` on npmjs.com; an **Automation** token with Read and Publish access (set as `NPM_TOKEN` env var) or an active `npm login` session. | <https://www.npmjs.com/> |
 | **conda-forge** | Listed in the `recipe/` maintainers of [`hydra-python-feedstock`](https://github.com/conda-forge/hydra-python-feedstock); updates go via PR to that repo. | the feedstock repo |
@@ -686,6 +686,26 @@ The following are Python-specific release steps:
 
 * Set up your Python environment as described in the
   [Hydra-Python README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/README.md).
+* **Authentication — `~/.pypirc` is the standard method.** `publish-pypi.sh --upload` calls
+  `twine`, which reads credentials from `~/.pypirc` with no prompt or inline token. Create it once
+  per release (delete or revoke the token afterward if you regenerate per-release):
+  ```ini
+  [pypi]
+    username = __token__
+    password = pypi-AgE...        # your PyPI API token, including the "pypi-" prefix
+  ```
+  Then **lock it down** — twine and other tools read it, and it is world-readable by default:
+  ```bash
+  chmod 600 ~/.pypirc            # required; a 644 ~/.pypirc leaks the token to any local reader
+  ```
+  With that in place, `--upload` needs no `TWINE_*` env vars. Alternatives, if you prefer not to
+  persist the token: export `TWINE_USERNAME=__token__ TWINE_PASSWORD=<token>` for one shell
+  (use `read -rs TWINE_PASSWORD` so the token never lands in shell history), or store it in the OS
+  keychain via the `keyring` library (`keyring set https://upload.pypi.org/legacy/ __token__`).
+  **First-time-publish caveat:** a **project-scoped** token cannot create a brand-new project on
+  PyPI, so the very first upload of a not-yet-published package (e.g. `hydra-build`) needs an
+  **account-scoped** token (revoke it afterward) or a pre-created project. The other four packages
+  already exist, so project-scoped tokens suffice for them.
 * **Use the orchestrator** `heads/python/bin/publish-pypi.sh` (analogous to the Haskell/Java
   scripts). It checks dependency closure, builds wheel + sdist for each package into `wheels/`,
   and (with `--upload`) `twine upload`s them. Default is build-only:
