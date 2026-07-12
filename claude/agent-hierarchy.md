@@ -662,6 +662,21 @@ Design against "found out by accident."
    never migrate this channel to a Discord-echoed surface.) The mechanism matters less than the invariant:
    *no staging agent starts a red-CI fix or a push without first checking
    whether another machine already has it in flight.*
+
+   **Keep two separate wiki clones, one per branch — do not toggle a single clone
+   between branches.** The wiki repo carries both user-facing content (on `master`:
+   `Releases.md`, `Concepts.md`, …) and the fleet log (on `coordination`:
+   `STATE.md`/`LOG.md`). Checking a single clone out to `coordination`, editing, then
+   forgetting to switch back has repeatedly risked committing a real content page onto
+   the coordination log (and vice versa). The standing layout (adopted 2026-07-12):
+   - `hydra/wiki/` stays on `master` — all user-facing wiki edits happen here.
+   - `hydra/coordination/` is a **separate clone pinned to `coordination`** — all
+     `STATE.md`/`LOG.md` fleet-log commits happen here. Create it once with
+     `git clone --branch coordination git@github.com:CategoricalData/hydra.wiki.git coordination`.
+   Post coordination entries in `../coordination`; author content in `../wiki`. This
+   removes the branch-toggle entirely. (The boundary has held so far — a merge-base
+   check on 2026-07-12 found zero content-page commits ever made on `coordination` —
+   but the two-clone layout is what keeps it that way.)
 3. **Serialize pushes; parallelize everything else.** Validation (sync, test,
    bootstrap) is expensive and machine-local — let all machines do it
    concurrently. Only the *push* must be serialized against `origin/main`. A
