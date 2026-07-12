@@ -424,4 +424,46 @@
                                              (funcall (funcall (funcall compute (cadr r1)) (cadr r2)) (cadr r3)))))
                         (wrap-other-error hydra-prim-cx result))))))))))))))
 
+;; Mirror of Hydra.Dsl.Prims.lazyArgs / Clojure's lazy-args / Scheme's lazy-args (#391,
+;; #585, #586): mark the value parameters at the given (0-based) positions of a
+;; primitive's signature as lazy. Used at prim*-based registration sites in libraries.el
+;; to record which arguments coders must thunk in hosts that distinguish strict from
+;; lazy evaluation. Without this, the hand-rolled prim0-prim3 registry helpers silently
+;; default every parameter to strict, so a target coder's isLazy-driven thunk-wrapping
+;; (which reads is_lazy from graph_primitives(g), the single source of truth per #391)
+;; treats every registry-built primitive as fully strict -- eagerly evaluating both
+;; branches of e.g. if_else/optionals.cases regardless of which is taken, causing
+;; infinite recursion on self-recursive definitions and O(2^depth) blowup in any
+;; self-hosted interpretation that walks the resulting eagerly-expanded terms.
+(defun lazy-args (idxs prim)
+  (let* ((def0 (hydra_graph_primitive-definition prim))
+         (sig (hydra_packaging_primitive_definition-signature def0))
+         (params (hydra_typing_term_signature-parameters sig))
+         (marked (let ((i 0))
+                   (mapcar (lambda (p)
+                             (prog1
+                                 (if (memq i idxs)
+                                     (make-hydra_typing_parameter
+                                      (hydra_typing_parameter-name p)
+                                      (hydra_typing_parameter-description p)
+                                      (hydra_typing_parameter-type p)
+                                      t)
+                                   p)
+                               (setq i (1+ i))))
+                           params)))
+         (sig2 (make-hydra_typing_term_signature
+                (hydra_typing_term_signature-type_parameters sig)
+                marked
+                (hydra_typing_term_signature-result sig)))
+         (def2 (make-hydra_packaging_primitive_definition
+                (hydra_packaging_primitive_definition-name def0)
+                (hydra_packaging_primitive_definition-metadata def0)
+                sig2
+                (hydra_packaging_primitive_definition-is_pure def0)
+                (hydra_packaging_primitive_definition-is_total def0)
+                (hydra_packaging_primitive_definition-default_implementation def0))))
+    (make-hydra_graph_primitive
+     def2
+     (hydra_graph_primitive-implementation prim))))
+
 (provide 'hydra-prims)
