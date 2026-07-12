@@ -206,9 +206,9 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 ;; Module loading from JSON
 ;; ============================================================================
 
-(defun bootstrap-load-module-from-json (bs-graph schema-map ns-str)
-  "Load a single module from its JSON file."
-  (let* ((file-path (format "%s/%s.json" bootstrap-json-dir (bootstrap-namespace-to-path ns-str)))
+(defun bootstrap-load-module-from-json (bs-graph schema-map json-dir ns-str)
+  "Load a single module from its JSON file under JSON-DIR."
+  (let* ((file-path (format "%s/%s.json" json-dir (bootstrap-namespace-to-path ns-str)))
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
          (mod-type (list :variable "hydra.packaging.Module"))
@@ -239,7 +239,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
         (schema-map (bootstrap-schema-map)))
     (mapcar (lambda (ns)
               (princ (format "  Loaded: %s\n" ns))
-              (bootstrap-load-module-from-json bs-graph schema-map ns))
+              (bootstrap-load-module-from-json bs-graph schema-map json-dir ns))
             namespaces)))
 
 ;; ============================================================================
