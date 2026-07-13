@@ -64,6 +64,10 @@ import _root_.java.io.File
   // Backward compatibility: accept an old-style --json-dir ending in
   // <pkg>/src/main/json and strip down to the dist/json root.
   val distJsonRoot = BootstrapHelpers.legacyJsonDirToRoot(jsonDirArg.get)
+  // #568: repo root (parent of dist/json's parent dist/), used to locate overlay/<lang>/ lib
+  // directories for the existence-based redirect sub-list. Falls back to libSubsFallback in
+  // BootstrapHelpers.libSubsForTarget() if this guess is wrong.
+  val repoRoot = new File(distJsonRoot).getAbsoluteFile.getParentFile.getParentFile.getPath
   val targetCap = tgt.capitalize
   val outDir = outBase + File.separator + "scala-to-" + tgt
 
@@ -242,9 +246,9 @@ import _root_.java.io.File
   // #473 redirect — run LAST, over every generated dir (main + test), so consumer call-sites written by
   // any pass have their hydra.lib.* impl references rewritten to hydra.<lang>.lib.*. See the lib-pass note.
   if tgt != "haskell" then
-    BootstrapHelpers.redirectLibCalls(tgt, outMain + File.separator + tgt)
+    BootstrapHelpers.redirectLibCalls(repoRoot, tgt, outMain + File.separator + tgt)
     if includeTests then
-      BootstrapHelpers.redirectLibCalls(tgt, outDir + File.separator + "src/test" + File.separator + tgt)
+      BootstrapHelpers.redirectLibCalls(repoRoot, tgt, outDir + File.separator + "src/test" + File.separator + tgt)
 
   val totalTime = System.currentTimeMillis() - totalStart
   val testStr = if includeTests then s" + $testFileCount test" else ""
@@ -258,14 +262,34 @@ end bootstrap
 /** Helpers for walking the per-package dist/json/ layout. */
 object BootstrapHelpers:
 
-  /** The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473). */
-  // Every hydra.lib.<sub> whose primitive IMPLEMENTATIONS are relocated to hydra.<lang>.lib.<sub>
-  // (#473) and therefore need consumer call-sites redirected. Must include the effectful/newer libs
-  // (effects/files/system #494/#498, text) or their generated test consumers (test/lib/{effects,files,
-  // system}.py) keep calling the hydra.lib.<sub> def-modules -> "'PrimitiveDefinition' object is not
-  // callable". NOTE: hydra.lib.defaults is intentionally excluded — it has no relocated overlay impl.
-  private val libSubs = Seq("chars", "effects", "eithers", "equality", "files", "hashing", "lists",
+  /** Fallback hydra.lib.* sub-namespaces, used only if libSubsForTarget()'s overlay-directory
+   *  existence check can't reach the source tree (e.g. a relocated/packaged invocation). */
+  private val libSubsFallback = Seq("chars", "effects", "eithers", "equality", "files", "hashing", "lists",
     "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text")
+
+  private def overlayDirSegment(target: String): String = target match
+    case "common-lisp" => "common_lisp"
+    case "emacs-lisp"  => "emacs_lisp"
+    case other         => other
+
+  /** #568 structural fix: derive the redirectable hydra.lib.<sub> sub-namespaces for TARGET by
+   *  checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually
+   *  exist, rather than maintaining a hand-written allowlist. Existence on disk IS the signal for
+   *  "this host ships a native impl for this sub" — correct by construction for any future
+   *  hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+   *  none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
+   *  libSubsFallback if the overlay source tree isn't reachable from repoRoot. */
+  def libSubsForTarget(repoRoot: String, target: String): Seq[String] =
+    val seg = overlayDirSegment(target)
+    val libDir = new File(Seq(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target,
+      "hydra", "overlay", seg, "lib").mkString(File.separator))
+    if !libDir.isDirectory then libSubsFallback
+    else
+      val entries = Option(libDir.listFiles()).getOrElse(Array.empty[File])
+      val subs = entries.toSeq.map { f =>
+        if f.isDirectory then f.getName else f.getName.replaceFirst("\\.[^.]+$", "")
+      }.filterNot(name => name.equalsIgnoreCase("Libraries") || name == "__init__" || name == "PrimitiveType")
+      if subs.isEmpty then libSubsFallback else subs
 
   private def isLibModule(m: hydra.packaging.Module): Boolean =
     m.name.startsWith("hydra.lib.")
@@ -291,20 +315,25 @@ object BootstrapHelpers:
       case "emacs-lisp" => Generation.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods)
       case _ => ()
 
-  /** #473 redirect: rewrite generated CONSUMER references from hydra.lib.<sub> to the relocated
-   *  hydra.<lang>.lib.<sub> impl namespace. Per-dialect shapes mirror bootstrap-from-json/Main.hs:
-   *  dotted (scala/clojure), R7RS space-form (scheme), flat-symbol (common-lisp/emacs). Primitive
-   *  NAME strings ("hydra.lib...") and the hand-written registry are left untouched. No-op for java. */
-  def redirectLibCalls(target: String, langDir: String): Unit =
+  /** #473/#568 redirect: rewrite generated CONSUMER references from hydra.lib.<sub> to the
+   *  relocated hydra.<lang>.lib.<sub> impl namespace. Per-dialect shapes mirror
+   *  bootstrap-from-json/Main.hs: dotted (scala/python/clojure), R7RS space-form (scheme),
+   *  flat-symbol (common-lisp/emacs-lisp). Primitive NAME strings ("hydra.lib...") and the
+   *  hand-written registry are left untouched. No-op for java/typescript (typescript's coder
+   *  resolves lib references via a generated import alias, never raw dotted call-site text). The
+   *  sub-list comes from libSubsForTarget()'s overlay-directory existence check (#568), not a
+   *  hand-maintained allowlist. */
+  def redirectLibCalls(repoRoot: String, target: String, langDir: String): Unit =
     val dir = new File(langDir)
     if !dir.isDirectory then return
     val files = allFilesUnder(dir)
+    val subs = libSubsForTarget(repoRoot, target)
     target match
       case "scala" =>
         for f <- files if !isLibDefFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
-            val out = redirectDotted(s, "overlay.scala")
+            val out = redirectDotted(s, "overlay.scala", subs)
             if out != s then writeFile(f, out)
       case "python" =>
         // Python consumes the hydra.lib.* def-modules like scala/clojure: its generated
@@ -316,27 +345,27 @@ object BootstrapHelpers:
         for f <- files if !isLibDefFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
-            val out = redirectDotted(s, "overlay.python")
+            val out = redirectDotted(s, "overlay.python", subs)
             if out != s then writeFile(f, out)
       case "clojure" =>
         for f <- files if !isLibDefFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
-            val out = redirectDotted(s, "overlay.clojure")
+            val out = redirectDotted(s, "overlay.clojure", subs)
             if out != s then writeFile(f, out)
       case "scheme" =>
         for f <- files do
           val s = readFile(f)
           if s.contains("(hydra lib ") then
             var out = s
-            for sub <- libSubs do out = out.replace(s"(hydra lib $sub)", s"(hydra overlay scheme lib $sub)")
+            for sub <- subs do out = out.replace(s"(hydra lib $sub)", s"(hydra overlay scheme lib $sub)")
             if out != s then writeFile(f, out)
       case "common-lisp" =>
         for f <- files do
           val s = readFile(f)
           if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
             var out = s
-            for sub <- libSubs do
+            for sub <- subs do
               out = out.replace(s"hydra_lib_${sub}_", s"hydra_overlay_common_lisp_lib_${sub}_")
               out = out.replace(s" :hydra.lib.$sub", "")
             if out != s then writeFile(f, out)
@@ -345,17 +374,17 @@ object BootstrapHelpers:
           val s = readFile(f)
           if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
             var out = s
-            for sub <- libSubs do
+            for sub <- subs do
               out = out.replace(s"hydra_lib_${sub}_", s"hydra_overlay_emacs_lisp_lib_${sub}_")
               out = out.replace(s" :hydra.lib.$sub", "")
             if out != s then writeFile(f, out)
-      case _ => () // java + haskell: no redirect
+      case _ => () // java + typescript + haskell: no redirect
 
-  /** Dotted-language redirect (scala/clojure), protecting quoted primitive-NAME strings. */
-  private def redirectDotted(s: String, langSeg: String): String =
+  /** Dotted-language redirect (scala/python/clojure), protecting quoted primitive-NAME strings. */
+  private def redirectDotted(s: String, langSeg: String, subs: Seq[String]): String =
     val sentinel = "@@HYDRA_LIB_NAME@@" // improbable token; never appears in generated source
     var out = s.replace("\"hydra.lib.", "\"" + sentinel)
-    for sub <- libSubs do
+    for sub <- subs do
       val old = "hydra.lib." + sub
       val nw = "hydra." + langSeg + ".lib." + sub
       out = out.replace(old + ".", nw + ".")

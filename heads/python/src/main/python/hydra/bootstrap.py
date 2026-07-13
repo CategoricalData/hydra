@@ -17,6 +17,7 @@ Options:
 import argparse
 import json
 import os
+import re
 import sys
 import time
 
@@ -34,9 +35,41 @@ from hydra.generation import (
 # --include-coders is set.
 _CODER_PACKAGES = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
 
-# The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
-_LIB_SUBS = ["chars", "effects", "eithers", "equality", "files", "hashing", "lists", "literals",
-             "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text"]
+# Fallback hydra.lib.* sub-namespaces, used only if _lib_subs_for_target()'s overlay-directory
+# existence check can't reach the source tree (e.g. a relocated/packaged invocation).
+_LIB_SUBS_FALLBACK = ["chars", "effects", "eithers", "equality", "files", "hashing", "lists",
+                      "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets",
+                      "strings", "system", "text"]
+
+_OVERLAY_DIR_SEGMENT = {"common-lisp": "common_lisp", "emacs-lisp": "emacs_lisp"}
+
+
+def _overlay_dir_segment(target):
+    return _OVERLAY_DIR_SEGMENT.get(target, target)
+
+
+def _lib_subs_for_target(repo_root, target):
+    """#568 structural fix: derive the redirectable hydra.lib.<sub> sub-namespaces for TARGET by
+    checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually
+    exist, rather than maintaining a hand-written allowlist. Existence on disk IS the signal for
+    "this host ships a native impl for this sub" -- correct by construction for any future
+    hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+    none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
+    _LIB_SUBS_FALLBACK if the overlay source tree isn't reachable from repo_root.
+    """
+    seg = _overlay_dir_segment(target)
+    lib_dir = os.path.join(repo_root, "overlay", target, "hydra-kernel", "src", "main", target,
+                            "hydra", "overlay", seg, "lib")
+    if not os.path.isdir(lib_dir):
+        return _LIB_SUBS_FALLBACK
+    subs = []
+    for name in os.listdir(lib_dir):
+        path = os.path.join(lib_dir, name)
+        sub = name if os.path.isdir(path) else os.path.splitext(name)[0]
+        if sub.lower() in ("libraries",) or sub in ("__init__", "PrimitiveType"):
+            continue
+        subs.append(sub)
+    return subs or _LIB_SUBS_FALLBACK
 
 # Lisp dialect arg -> (coder dialect name, file extension). Module-level so the #473 lib pass can
 # reach it as well as main().
@@ -86,49 +119,100 @@ def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
         write_lisp_dialect(lang_dir, dialect_name, ext, lib_universe, lib_mods)
 
 
-def _redirect_lib_calls(target, lang_dir):
-    """#473 redirect: rewrite generated CONSUMER call-sites hydra.lib.<sub>.<fn> ->
-    hydra.<lang>.lib.<sub>.<fn> so they resolve to the relocated native impls.
-
-    Primitive NAME occurrences inside string literals (canonical "hydra.lib..." names) must stay
-    canonical, so quote-prefixed occurrences are protected by an improbable sentinel, the rest
-    redirected, then restored. No-op for Java (def-modules are capitalized classes that don't
-    collide with lowercase impl subpackages). Mirrors redirectFor in bootstrap-from-json/Main.hs for
-    the dotted languages (Python/Scala/Clojure).
+def _is_lib_def_or_registry_file(p_slash):
+    """Files under hydra/lib/ are the lib-pass def-modules; the overlay Libraries registry
+    (overlay/<lang>/.../Libraries.<ext>, copied into the generated tree as
+    hydra/overlay/<lang>/Libraries.<ext>) deliberately imports BOTH the relocated impl and the
+    def-module (aliased, for `def_X.fn.name`). Neither must be redirected. #569 Defect B fix: the
+    previous guard checked "sources/libraries.py" (wrong directory -- never matched the actual
+    generated path "hydra/overlay/<lang>/Libraries.py"), so the registry's def-module import got
+    wrongly redirected onto the impl, breaking `.name` member access.
     """
-    lang_seg = {"python": "overlay.python", "scala": "overlay.scala", "clojure": "overlay.clojure"}.get(target)
-    if lang_seg is None:
-        return  # java + others: no dotted-path redirect needed here
+    if "/hydra/lib/" in p_slash:
+        return True
+    m = re.search(r"/hydra/overlay/[^/]+/(Libraries|libraries)\.[^/]+$", p_slash)
+    return m is not None
+
+
+def _redirect_dotted(s, lang_seg, subs):
+    """Dotted-language redirect (python/scala/clojure), protecting quoted primitive-NAME strings."""
     sentinel = "@@HYDRA_LIB_NAME@@"  # improbable token; never appears in generated source
+    out = s.replace('"hydra.lib.', '"' + sentinel)
+    for sub in subs:
+        old = "hydra.lib." + sub
+        new = "hydra." + lang_seg + ".lib." + sub
+        out = out.replace(old + ".", new + ".")
+        out = out.replace(old + "\n", new + "\n")
+        out = out.replace(old + " ", new + " ")
+        out = out.replace("hydra.lib import " + sub, "hydra." + lang_seg + ".lib import " + sub)
+    return out.replace(sentinel, "hydra.lib.")
+
+
+def _redirect_scheme(s, subs):
+    """Scheme (R7RS) redirect: `(hydra lib <sub>)` -> `(hydra overlay scheme lib <sub>)`. Call
+    sites use the flattened identifier hydra_lib_<sub>_<fn> (unchanged, resolved via the renamed
+    import); primitive NAME strings are dotted "hydra.lib..." (untouched by this rewrite)."""
+    out = s
+    for sub in subs:
+        out = out.replace(f"(hydra lib {sub})", f"(hydra overlay scheme lib {sub})")
+    return out
+
+
+def _redirect_lisp_flat(s, subs, lang_seg):
+    """Common Lisp / Emacs Lisp redirect: rename consumer call sites
+    hydra_lib_<sub>_ -> hydra_overlay_<lang_seg>_lib_<sub>_, and drop the def-module
+    ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses."""
+    out = s
+    for sub in subs:
+        out = out.replace(f"hydra_lib_{sub}_", f"hydra_overlay_{lang_seg}_lib_{sub}_")
+    for sub in subs:
+        out = out.replace(f" :hydra.lib.{sub}", "")
+    return out
+
+
+def _redirect_lib_calls(repo_root, target, lang_dir):
+    """#473/#568 redirect: rewrite generated CONSUMER call-sites so they resolve to the relocated
+    native hydra.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
+    (PrimitiveDefinition data, not callable). Dispatches per target's actual reference shape,
+    mirroring redirectFor / redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs:
+    dotted (python/scala/clojure), R7RS sexp (scheme), flat identifier (common-lisp/emacs-lisp).
+    No-op for java/typescript/haskell (typescript's coder resolves lib references via a generated
+    import alias, never raw dotted call-site text). The sub-list comes from
+    _lib_subs_for_target()'s overlay-directory existence check (#568), not a hand-maintained
+    allowlist.
+    """
+    if target in ("java", "typescript", "haskell"):
+        return
     if not os.path.isdir(lang_dir):
         return
+    subs = _lib_subs_for_target(repo_root, target)
+    dotted_seg = {"python": "overlay.python", "scala": "overlay.scala", "clojure": "overlay.clojure"}.get(target)
     for dirpath, _dirs, files in os.walk(lang_dir):
         for fn in files:
             p = os.path.join(dirpath, fn)
             p_slash = p.replace(os.sep, "/")
-            # Skip the lib-pass def-module dir (hydra/lib/): those modules must keep their canonical
-            # hydra.lib.* paths (redirecting them would relocate the def-modules onto the impls — see the
-            # Scala self-host case). Also skip the hand-written registry overlay
-            # (hydra/sources/libraries.py), which deliberately imports BOTH the relocated impl
-            # (`from hydra.<lang>.lib import chars`) and the def-module (`from hydra.lib import chars as
-            # def_chars`, for `def_chars.X.name` derivation); redirecting its def-module import would
-            # point def_chars at the impl module (no .name). The Haskell driver keeps both canonical by
-            # never transforming them (lib pass runs with no redirect; registry is overlay-copied).
-            if "/hydra/lib/" in p_slash or "sources/libraries.py" in p_slash:
+            if _is_lib_def_or_registry_file(p_slash):
                 continue
             with open(p, "r", encoding="utf-8") as fh:
                 s = fh.read()
-            if "hydra.lib." not in s:
+            if dotted_seg is not None:
+                if "hydra.lib." not in s:
+                    continue
+                out = _redirect_dotted(s, dotted_seg, subs)
+            elif target == "scheme":
+                if "(hydra lib " not in s:
+                    continue
+                out = _redirect_scheme(s, subs)
+            elif target == "common-lisp":
+                if "hydra_lib_" not in s and ":hydra.lib." not in s:
+                    continue
+                out = _redirect_lisp_flat(s, subs, "common_lisp")
+            elif target == "emacs-lisp":
+                if "hydra_lib_" not in s and ":hydra.lib." not in s:
+                    continue
+                out = _redirect_lisp_flat(s, subs, "emacs_lisp")
+            else:
                 continue
-            out = s.replace('"hydra.lib.', '"' + sentinel)  # protect quoted primitive-NAME strings
-            for sub in _LIB_SUBS:
-                old = "hydra.lib." + sub
-                new = "hydra." + lang_seg + ".lib." + sub
-                out = out.replace(old + ".", new + ".")
-                out = out.replace(old + "\n", new + "\n")
-                out = out.replace(old + " ", new + " ")
-                out = out.replace("hydra.lib import " + sub, "hydra." + lang_seg + ".lib import " + sub)
-            out = out.replace(sentinel, "hydra.lib.")
             if out != s:
                 with open(p, "w", encoding="utf-8") as fh:
                     fh.write(out)
@@ -229,6 +313,10 @@ def main():
     # Backward compatibility: accept an old-style --json-dir ending in
     # <pkg>/src/main/json and strip down to the dist/json root.
     dist_json_root = _legacy_json_dir_to_root(args.json_dir)
+    # #568: repo root (parent of dist/json's parent dist/), used to locate overlay/<lang>/ lib
+    # directories for the existence-based redirect sub-list. Falls back to _LIB_SUBS_FALLBACK in
+    # _lib_subs_for_target() if this guess is wrong.
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(dist_json_root)))
 
     target_cap = args.target.capitalize()
     out_dir = os.path.join(args.output, f"python-to-{args.target}")
@@ -472,9 +560,9 @@ def main():
     # written by any pass (main, lib, test, ext-for-tests) have their hydra.lib.* impl references
     # rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
     if args.target != "haskell":
-        _redirect_lib_calls(args.target, os.path.join(out_main, args.target))
+        _redirect_lib_calls(repo_root, args.target, os.path.join(out_main, args.target))
         if args.include_tests:
-            _redirect_lib_calls(args.target, os.path.join(out_dir, "src/test", args.target))
+            _redirect_lib_calls(repo_root, args.target, os.path.join(out_dir, "src/test", args.target))
 
     total_time = time.time() - total_start
 

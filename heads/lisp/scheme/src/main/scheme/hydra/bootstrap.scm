@@ -78,6 +78,28 @@
   (display "Usage: guile --no-auto-compile -s bootstrap.scm -- --target <target> --json-dir <path> [OPTIONS]\n")
   (exit 1))
 
+;; #568: repo root, used to locate overlay/<lang>/ lib directories for the existence-based
+;; redirect sub-list. *json-dir* is conventionally <dist-json-root>/hydra-kernel/src/main/json
+;; (see invoke-scheme-host.sh's default); strip that 4-segment suffix if present, then go up one
+;; more level from dist/json to the repo root. Falls back to lib-subs-fallback in
+;; lib-subs-for-target if this guess is wrong.
+(define (strip-trailing-segments path n)
+  (let loop ((p path) (k n))
+    (if (= k 0) p
+        (let ((slash (let scan ((i (- (string-length p) 1)))
+                        (cond ((< i 0) #f)
+                              ((char=? (string-ref p i) #\/) i)
+                              (else (scan (- i 1)))))))
+          (if slash (loop (substring p 0 slash) (- k 1)) p)))))
+(define *repo-root*
+  (let* ((trimmed (if (string-suffix? "/" *json-dir*)
+                       (substring *json-dir* 0 (- (string-length *json-dir*) 1))
+                       *json-dir*))
+         (dist-json-root (if (string-suffix? "/hydra-kernel/src/main/json" trimmed)
+                              (strip-trailing-segments trimmed 4)
+                              trimmed)))
+    (strip-trailing-segments dist-json-root 1)))
+
 ;; ============================================================================
 ;; Load the Hydra Scheme kernel
 ;; ============================================================================
@@ -628,12 +650,49 @@
 ;; (lib pass), and (2) redirect generated consumer imports (hydra lib <sub>) -> (hydra scheme lib <sub>)
 ;; so they resolve to the relocated impls. Flat call identifiers hydra_lib_<sub>_<fn> stay (resolved via
 ;; the relocated import's export). See project_473_self_host_lib_pass_gap.
-(define lib-subs
-  ;; Every hydra.lib.<sub> whose impls are relocated (#473). Must include the effectful/newer libs
-  ;; (effects/files/system #494/#498, text) or their consumers keep calling the def-modules
-  ;; ("'PrimitiveDefinition' object is not callable" for the python target). Excludes defaults.
+(define lib-subs-fallback
+  ;; Fallback hydra.lib.* sub-namespaces, used only if lib-subs-for-target's overlay-directory
+  ;; existence check can't reach the source tree (e.g. a relocated/packaged invocation).
   '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
     "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
+
+(define (overlay-dir-segment target)
+  (cond ((string=? target "common-lisp") "common_lisp")
+        ((string=? target "emacs-lisp") "emacs_lisp")
+        (else target)))
+
+;; #568 structural fix: derive the redirectable hydra.lib.<sub> sub-namespaces for TARGET by
+;; checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually exist,
+;; rather than maintaining a hand-written allowlist. Existence on disk IS the signal for "this
+;; host ships a native impl for this sub" -- correct by construction for any future
+;; hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+;; none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
+;; lib-subs-fallback if the overlay source tree isn't reachable from *repo-root*.
+(define (strip-extension name)
+  (let ((dot (let scan ((i (- (string-length name) 1)))
+               (cond ((< i 0) #f)
+                     ((char=? (string-ref name i) #\.) i)
+                     (else (scan (- i 1)))))))
+    (if dot (substring name 0 dot) name)))
+
+(define (lib-subs-for-target repo-root target)
+  (let* ((seg (overlay-dir-segment target))
+         (lib-dir (string-append repo-root "/overlay/" target "/hydra-kernel/src/main/" target
+                                  "/hydra/overlay/" seg "/lib")))
+    (if (not (file-exists? lib-dir))
+        lib-subs-fallback
+        (let* ((entries (scandir lib-dir (lambda (n) (not (member n '("." ".."))))))
+               (subs (filter (lambda (s)
+                               (not (or (string-ci=? s "Libraries")
+                                        (string=? s "__init__")
+                                        (string=? s "PrimitiveType"))))
+                             (map (lambda (n)
+                                    (let ((full (string-append lib-dir "/" n)))
+                                      (if (and (file-exists? full) (eq? (stat:type (stat full)) 'directory))
+                                          n
+                                          (strip-extension n))))
+                                  entries))))
+          (if (null? subs) lib-subs-fallback subs)))))
 
 (define (lib-module? m)
   (let* ((mn (hydra_packaging_module-name m))
@@ -682,28 +741,49 @@
                    (cons to (cons (substring s run-start i) chunks))))
             (else (loop (+ i 1) run-start chunks)))))))
 
-;; Rewrite (hydra lib <sub>) -> (hydra scheme lib <sub>) in a consumer file. Primitive NAME strings are
-;; dotted "hydra.lib..." (untouched by this space-form rewrite), so no protect/restore is needed.
-(define (redirect-scheme s)
-  (let loop ((subs lib-subs) (acc s))
-    (if (null? subs)
+;; Rewrite (hydra lib <sub>) -> (hydra overlay scheme lib <sub>) in a consumer file. Primitive NAME
+;; strings are dotted "hydra.lib..." (untouched by this space-form rewrite), so no protect/restore
+;; is needed.
+(define (redirect-scheme s subs)
+  (let loop ((remaining subs) (acc s))
+    (if (null? remaining)
         acc
-        (loop (cdr subs)
+        (loop (cdr remaining)
               (string-replace-all acc
-                                  (string-append "(hydra lib " (car subs) ")")
-                                  (string-append "(hydra scheme lib " (car subs) ")"))))))
+                                  (string-append "(hydra lib " (car remaining) ")")
+                                  (string-append "(hydra overlay scheme lib " (car remaining) ")"))))))
 
-;; Files under hydra/lib/ are the lib-pass def-modules (must keep (hydra lib *)) and the hand-written
-;; registry; never redirect these.
-(define (lib-def-path? path)
-  (let ((needle "/hydra/lib/")
-        (plen (string-length path))
-        (nlen 11))
+(define (string-contains-at? s needle i)
+  (let ((nlen (string-length needle)))
+    (and (<= (+ i nlen) (string-length s))
+         (string=? (substring s i (+ i nlen)) needle))))
+
+;; Files under hydra/lib/ are the lib-pass def-modules (must keep (hydra lib *)); the overlay
+;; Libraries registry (overlay/<lang>/.../Libraries.<ext>, copied into the generated tree as
+;; hydra/overlay/<lang>/Libraries.<ext>) deliberately imports BOTH the relocated impl and the
+;; def-module -- never redirect it either. #569 Defect B: the previous guard (in sibling drivers)
+;; checked "sources/libraries." (wrong directory, never matched the actual generated path),
+;; wrongly redirecting the registry's def-module import onto the impl.
+(define (path-contains? path needle)
+  (let ((plen (string-length path)) (nlen (string-length needle)))
     (let loop ((i 0))
       (cond
         ((> (+ i nlen) plen) #f)
-        ((string=? (substring path i (+ i nlen)) needle) #t)
+        ((string-contains-at? path needle i) #t)
         (else (loop (+ i 1)))))))
+
+(define (basename path)
+  (let ((slash (let scan ((i (- (string-length path) 1)))
+                 (cond ((< i 0) -1)
+                       ((char=? (string-ref path i) #\/) i)
+                       (else (scan (- i 1)))))))
+    (substring path (+ slash 1) (string-length path))))
+
+(define (lib-def-path? path)
+  (or (path-contains? path "/hydra/lib/")
+      (and (path-contains? path "/hydra/overlay/")
+           (let ((b (basename path)))
+             (or (string-prefix? "Libraries." b) (string-prefix? "libraries." b))))))
 
 ;; Read an entire file as a string (Guile (ice-9 textual-ports)).
 (define (read-file-content path)
@@ -728,55 +808,90 @@
              #t)))
     acc))
 
-;; Dotted-target (python) redirect: rewrite hydra.lib.<sub> -> hydra.overlay.python.lib.<sub> and
-;; hydra.test.test_env -> hydra.overlay.python.test_env in the generated python. Mirrors the
+;; Dotted-target (python/clojure) redirect: rewrite hydra.lib.<sub> -> hydra.<lang-seg>.lib.<sub>
+;; and hydra.test.test_env -> hydra.<lang-seg>.test_env in the generated source. Mirrors the
 ;; Scala/Clojure/CL host fix; redirect-scheme handles only the scheme-target S-expr form.
-(define (redirect-python-dotted s)
+(define (redirect-dotted s subs lang-seg)
   ;; Match each delimiter that can follow the module name so both usages (hydra.lib.lists.cons) and
   ;; import lines (import hydra.lib.lists\n) get rewritten. Mirrors the Scala host's redirectDotted.
   ;;
   ;; CRITICAL: protect quoted primitive-NAME string literals. Primitives are registered under their
   ;; canonical name Name("hydra.lib.chars.isAlphaNum"); the runtime looks them up by that exact
-  ;; string. Only the dotted CALL paths (hydra.overlay.python.lib.chars.is_alpha_num) get relocated —
-  ;; the name literals must stay canonical, or the evaluator can't resolve the primitive and leaves
-  ;; the application unreduced (e.g. "expected 'true' but got '(...isAlphaNum @ 97:int32)'"). Use the
-  ;; Scala host's sentinel trick: stash `"hydra.lib.` (with the leading quote) before redirecting,
-  ;; then restore it afterward. Mirrors Bootstrap.scala redirectDotted.
+  ;; string. Only the dotted CALL paths get relocated — the name literals must stay canonical, or
+  ;; the evaluator can't resolve the primitive and leaves the application unreduced (e.g.
+  ;; "expected 'true' but got '(...isAlphaNum @ 97:int32)'"). Use the Scala host's sentinel trick:
+  ;; stash `"hydra.lib.` (with the leading quote) before redirecting, then restore it afterward.
+  ;; Mirrors Bootstrap.scala redirectDotted.
   (let* ((soh (string (integer->char 1)))
          (sentinel (string-append soh "HYDRA_LIB_NAME_LITERAL" soh))
          (protected (string-replace-all s "\"hydra.lib." (string-append "\"" sentinel)))
          (redirected
-           (let loop ((subs lib-subs) (acc protected))
-             (if (null? subs)
-                 (string-replace-all acc "hydra.test.test_env" "hydra.overlay.python.test_env")
-                 (let ((old (string-append "hydra.lib." (car subs)))
-                       (new (string-append "hydra.overlay.python.lib." (car subs))))
+           (let loop ((remaining subs) (acc protected))
+             (if (null? remaining)
+                 (string-replace-all acc "hydra.test.test_env" (string-append "hydra." lang-seg ".test_env"))
+                 (let ((old (string-append "hydra.lib." (car remaining)))
+                       (new (string-append "hydra." lang-seg ".lib." (car remaining))))
                    (let dloop ((delims (list "." (string #\newline) " " ")" "," ":")) (a acc))
                      (if (null? delims)
-                         (loop (cdr subs) a)
+                         (loop (cdr remaining) a)
                          (dloop (cdr delims)
                                 (string-replace-all a
                                                     (string-append old (car delims))
                                                     (string-append new (car delims)))))))))))
     (string-replace-all redirected sentinel "hydra.lib.")))
 
-;; #473 redirect over a generated dir. For the scheme target, rewrite (hydra lib *) S-expr imports to
-;; the relocated impl library; for the python target, rewrite the dotted hydra.lib.* + hydra.test.test_env
-;; references to their hydra.overlay.python.* impls.
+;; Common Lisp / Emacs Lisp redirect: rename consumer call sites
+;; hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
+;; ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses.
+(define (redirect-lisp-flat s subs lang-seg)
+  (let* ((renamed (let loop ((remaining subs) (acc s))
+                     (if (null? remaining)
+                         acc
+                         (loop (cdr remaining)
+                               (string-replace-all acc
+                                                   (string-append "hydra_lib_" (car remaining) "_")
+                                                   (string-append "hydra_overlay_" lang-seg "_lib_" (car remaining) "_")))))))
+    (let loop ((remaining subs) (acc renamed))
+      (if (null? remaining)
+          acc
+          (loop (cdr remaining)
+                (string-replace-all acc (string-append " :hydra.lib." (car remaining)) ""))))))
+
+;; #473/#568 redirect over a generated dir, rewriting generated CONSUMER call-sites so they
+;; resolve to the relocated native impls instead of the hydra.lib.* def-modules. Dispatches per
+;; *target*'s actual reference shape: scheme (its own R7RS sexp form), python (dotted),
+;; common-lisp/emacs-lisp (flat identifier). No-op for java/haskell (and any target this driver
+;; does not itself support, e.g. scala/typescript, which resolve-coder rejects earlier). The
+;; sub-list comes from lib-subs-for-target's overlay-directory existence check (#568), not a
+;; hand-maintained allowlist.
 (define (redirect-lib-calls lang-dir)
-  (for-each
-    (lambda (path)
-      (when (not (lib-def-path? path))
-        (let ((s (read-file-content path)))
-          (when (and s (or (string-contains-substr? s "(hydra lib ")
-                           (string-contains-substr? s "hydra.lib.")
-                           (string-contains-substr? s "hydra.test.test")))
-            (let ((out (if (string=? *target* "python")
-                           (redirect-python-dotted s)
-                           (redirect-scheme s))))
-              (when (not (string=? out s))
-                (write-file-content path out)))))))
-    (list-files-recursive lang-dir)))
+  (unless (or (string=? *target* "java") (string=? *target* "haskell"))
+    (let ((subs (lib-subs-for-target *repo-root* *target*)))
+      (for-each
+        (lambda (path)
+          (when (not (lib-def-path? path))
+            (let ((s (read-file-content path)))
+              (cond
+                ((and s (string=? *target* "scheme") (string-contains-substr? s "(hydra lib "))
+                 (let ((out (redirect-scheme s subs)))
+                   (when (not (string=? out s)) (write-file-content path out))))
+                ((and s (string=? *target* "python")
+                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.test.test")))
+                 (let ((out (redirect-dotted s subs "overlay.python")))
+                   (when (not (string=? out s)) (write-file-content path out))))
+                ((and s (string=? *target* "clojure")
+                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.test.test")))
+                 (let ((out (redirect-dotted s subs "overlay.clojure")))
+                   (when (not (string=? out s)) (write-file-content path out))))
+                ((and s (string=? *target* "common-lisp")
+                      (or (string-contains-substr? s "hydra_lib_") (string-contains-substr? s ":hydra.lib.")))
+                 (let ((out (redirect-lisp-flat s subs "common_lisp")))
+                   (when (not (string=? out s)) (write-file-content path out))))
+                ((and s (string=? *target* "emacs-lisp")
+                      (or (string-contains-substr? s "hydra_lib_") (string-contains-substr? s ":hydra.lib.")))
+                 (let ((out (redirect-lisp-flat s subs "emacs_lisp")))
+                   (when (not (string=? out s)) (write-file-content path out))))))))
+        (list-files-recursive lang-dir)))))
 
 ;; ============================================================================
 ;; Main

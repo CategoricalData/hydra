@@ -96,6 +96,10 @@ public class Bootstrap {
         // Backward compatibility: accept an old-style --json-dir ending in
         // <pkg>/src/main/json and strip down to the dist/json root.
         String distJsonRoot = legacyJsonDirToRoot(jsonDirArg);
+        // #568: repo root (parent of dist/json's parent dist/), used to locate overlay/<lang>/
+        // lib directories for the existence-based redirect sub-list. Falls back to LIB_SUBS_FALLBACK
+        // in libSubsForTarget() if this guess is wrong (e.g. a relocated/packaged invocation).
+        String repoRoot = Paths.get(distJsonRoot).toAbsolutePath().getParent().getParent().toString();
 
         String targetCap = target.substring(0, 1).toUpperCase() + target.substring(1);
         String outDir = outBase + File.separator + "java-to-" + target;
@@ -396,9 +400,9 @@ public class Bootstrap {
         // written by any pass (main, lib, test, ext-for-tests) have their hydra.lib.* impl references
         // rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
         if (!target.equals("haskell")) {
-            redirectLibCalls(target, outMain + File.separator + target);
+            redirectLibCalls(repoRoot, target, outMain + File.separator + target);
             if (includeTests) {
-                redirectLibCalls(target, outDir + File.separator + "src/test" + File.separator + target);
+                redirectLibCalls(repoRoot, target, outDir + File.separator + "src/test" + File.separator + target);
             }
         }
 
@@ -473,21 +477,52 @@ public class Bootstrap {
     }
 
     // The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
-    private static final List<String> LIB_SUBS = Arrays.asList(
-            "chars", "eithers", "equality", "hashing", "lists", "literals", "logic", "maps",
-            "math", "optionals", "pairs", "regex", "sets", "strings");
+    // #569/#568: this is the FALLBACK used only if the target's overlay lib directory can't be
+    // read from disk (e.g. a packaged/relocated dist without the source tree present). The
+    // primary signal is libSubsForTarget()'s filesystem existence check below, which is
+    // correct-by-construction for any future hydra.lib.<sub> whether or not it has a relocated
+    // overlay impl (see hydra.lib.defaults, #549/#565/#568) and needs no by-name maintenance.
+    private static final List<String> LIB_SUBS_FALLBACK = Arrays.asList(
+            "chars", "effects", "eithers", "equality", "files", "hashing", "lists", "literals",
+            "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text");
 
-    // The effectful lib sub-namespaces (#286) have native impls in Python only
-    // (hydra.overlay.python.lib.{effects,files,text}); other hosts lack hydra.overlay.<lang>.lib.{effects,files,text},
-    // so redirecting their call sites would dangle. Restrict the effectful redirect to Python.
-    private static final List<String> LIB_SUBS_PYTHON;
-    static {
-        List<String> subs = new ArrayList<>(LIB_SUBS);
-        subs.add("effects");
-        subs.add("files");
-        subs.add("system");
-        subs.add("text");
-        LIB_SUBS_PYTHON = subs;
+    // Per-target overlay-lib-directory relative path segment, keyed by the flat-namespace
+    // convention each dialect's overlay tree uses (dashes/camelCase collapse to lower_snake
+    // for the two-word dialects). Mirrors the langSeg values used by redirectLibCalls.
+    private static String overlayDirSegment(String target) {
+        switch (target) {
+            case "common-lisp": return "common_lisp";
+            case "emacs-lisp":  return "emacs_lisp";
+            default:            return target; // java, python, scala, typescript, clojure, scheme
+        }
+    }
+
+    /**
+     * #568 structural fix: derive the redirectable hydra.lib.<sub> sub-namespaces for TARGET by
+     * checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually
+     * exist, rather than maintaining a hand-written allowlist per target. A sub only needs
+     * redirecting if the target host ships a native impl for it; existence on disk IS that
+     * signal. Falls back to LIB_SUBS_FALLBACK if the overlay source tree isn't reachable
+     * (repoRoot guess wrong, or a packaged/relocated invocation) so behavior degrades to the old
+     * static-list approach rather than silently skipping the redirect.
+     */
+    private static List<String> libSubsForTarget(String repoRoot, String target) {
+        String seg = overlayDirSegment(target);
+        java.nio.file.Path libDir = Paths.get(repoRoot, "overlay", target, "hydra-kernel", "src", "main",
+                target, "hydra", "overlay", seg, "lib");
+        if (!Files.isDirectory(libDir)) return LIB_SUBS_FALLBACK;
+        List<String> subs = new ArrayList<>();
+        File[] entries = libDir.toFile().listFiles();
+        if (entries == null) return LIB_SUBS_FALLBACK;
+        for (File f : entries) {
+            String name = f.isDirectory() ? f.getName() : f.getName().replaceFirst("\\.[^.]+$", "");
+            // Exclude the hand-written registry file/dir (Libraries.*, libraries.*) and any
+            // other non-sub file (e.g. Python's __init__.py, Java's PrimitiveType.java) —
+            // real sub-namespace entries are lowercase and match a hydra.lib.<sub> module name.
+            if (name.equalsIgnoreCase("Libraries") || name.equals("__init__") || name.equals("PrimitiveType")) continue;
+            subs.add(name);
+        }
+        return subs.isEmpty() ? LIB_SUBS_FALLBACK : subs;
     }
 
     private static boolean isLibModule(Module m) {
@@ -530,55 +565,140 @@ public class Bootstrap {
     }
 
     /**
-     * #473 redirect: rewrite generated CONSUMER call-sites hydra.lib.<sub>.<fn> ->
-     * hydra.<lang>.lib.<sub>.<fn> so they resolve to the relocated native impls. Primitive NAME
-     * occurrences inside string literals (canonical "hydra.lib..." names) must stay canonical, so
-     * quote-prefixed occurrences are protected by a sentinel, the rest redirected, then restored.
-     * No-op for Java (def-modules are capitalized classes that don't collide with lowercase impl
-     * subpackages, and consumer calls already target the impl classes). Mirrors redirectFor /
-     * redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs. (Scheme/Lisp dialects use
-     * different reference shapes; handled here for the dotted languages — Python/Scala/Clojure.)
+     * #473/#568/#569 redirect: rewrite generated CONSUMER call-sites so they resolve to the
+     * relocated native hydra.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
+     * (PrimitiveDefinition data, not callable). Dispatches per target's actual reference shape,
+     * mirroring redirectFor / redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs:
+     *   - dotted (python/scala/clojure): hydra.lib.<sub> -> hydra.overlay.<lang>.lib.<sub>
+     *   - scheme (R7RS sexp libraries):  (hydra lib <sub>) -> (hydra overlay scheme lib <sub>)
+     *   - common-lisp/emacs-lisp (flat): hydra_lib_<sub>_ -> hydra_overlay_<lang>_lib_<sub>_,
+     *     and the def-module :use token is dropped from consumer defpackage clauses.
+     *   - java/typescript/haskell: no-op. Java's def-modules are capitalized classes that don't
+     *     collide with lowercase impl subpackages; TypeScript's coder resolves lib references via
+     *     a generated local import alias (see importsToText's overlay path remap), never emitting
+     *     raw dotted "hydra.lib.<sub>" text at call sites, so there is nothing to redirect here.
+     * #568: the sub-list comes from libSubsForTarget()'s overlay-directory existence check, not a
+     * hand-maintained allowlist, so a future hydra.lib.<sub> routes correctly with no driver change
+     * (hydra.lib.defaults has no overlay counterpart and is therefore never redirected, replacing
+     * the old by-name exclusion).
      */
-    private static void redirectLibCalls(String target, String langDir) {
-        String langSeg;
-        switch (target) {
-            case "python":  langSeg = "overlay.python"; break;
-            case "scala":   langSeg = "overlay.scala"; break;
-            case "clojure": langSeg = "overlay.clojure"; break;
-            default: return; // java + others: no dotted-path redirect needed here
-        }
-        final String sentinel = "@@HYDRA_LIB_NAME@@"; // improbable token; never appears in generated source
+    private static void redirectLibCalls(String repoRoot, String target, String langDir) {
+        if (target.equals("java") || target.equals("typescript") || target.equals("haskell")) return;
         java.nio.file.Path root = Paths.get(langDir);
         if (!Files.isDirectory(root)) return;
+        List<String> subs = libSubsForTarget(repoRoot, target);
         try {
             List<java.nio.file.Path> files = new ArrayList<>();
             Files.walk(root).filter(Files::isRegularFile).forEach(files::add);
-            for (java.nio.file.Path p : files) {
-                String pSlash = p.toString().replace(File.separatorChar, '/');
-                // Skip the lib-pass def-module dir (hydra/lib/) — those keep canonical hydra.lib.* paths
-                // (redirecting would relocate def-modules onto the impls; see the Scala self-host case) —
-                // and the hand-written registry overlay (hydra/sources/libraries.*), which deliberately
-                // imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`). The
-                // Haskell driver keeps both canonical by never transforming them.
-                if (pSlash.contains("/hydra/lib/") || pSlash.contains("sources/libraries.")) continue;
-                String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
-                if (!s.contains("hydra.lib.")) continue;
-                // protect quoted primitive-NAME strings
-                String out = s.replace("\"hydra.lib.", "\"" + sentinel);
-                List<String> subs = "python".equals(target) ? LIB_SUBS_PYTHON : LIB_SUBS;
-                for (String sub : subs) {
-                    out = out.replace("hydra.lib." + sub + ".",  "hydra." + langSeg + ".lib." + sub + ".");
-                    out = out.replace("hydra.lib." + sub + "\n", "hydra." + langSeg + ".lib." + sub + "\n");
-                    out = out.replace("hydra.lib." + sub + " ",  "hydra." + langSeg + ".lib." + sub + " ");
-                    out = out.replace("hydra.lib import " + sub, "hydra." + langSeg + ".lib import " + sub);
-                }
-                out = out.replace(sentinel, "hydra.lib.");
-                if (!out.equals(s)) {
-                    Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-                }
+            switch (target) {
+                case "python":
+                case "scala":
+                case "clojure":
+                    redirectDottedFiles(files, subs, "overlay." + target);
+                    break;
+                case "scheme":
+                    redirectSchemeFiles(files, subs);
+                    break;
+                case "common-lisp":
+                    redirectLispFlatFiles(files, subs, "common_lisp");
+                    break;
+                case "emacs-lisp":
+                    redirectLispFlatFiles(files, subs, "emacs_lisp");
+                    break;
+                default:
+                    break;
             }
         } catch (java.io.IOException e) {
             throw new RuntimeException("Lib-call redirect failed under " + langDir, e);
+        }
+    }
+
+    /** Files under hydra/lib/ are the lib-pass def-modules; the overlay Libraries registry
+     *  (overlay/<lang>/.../Libraries.<ext>, copied into the generated tree as
+     *  hydra/overlay/<lang>/Libraries.<ext>) deliberately imports BOTH the relocated impl and the
+     *  def-module (aliased, for `def_X.fn.name`). Neither must be redirected. #569 Defect B fix:
+     *  the previous guard checked "sources/libraries." (lowercase, wrong directory), which never
+     *  matched the actual generated path "hydra/overlay/<lang>/Libraries.<ext>" (capitalized) —
+     *  so the registry's def-module import got wrongly redirected onto the impl, breaking `.name`
+     *  member access (e.g. Scala: "value name is not a member of Int => Int", 242 errors). */
+    private static boolean isLibDefOrRegistryFile(String pSlash) {
+        return pSlash.contains("/hydra/lib/") || pSlash.matches(".*/hydra/overlay/[^/]+/[Ll]ibraries\\.[^/]+$");
+    }
+
+    /** Dotted-language redirect (python/scala/clojure): hydra.lib.<sub> -> hydra.<langSeg>.lib.<sub>,
+     *  protecting quoted primitive-NAME string literals via a sentinel. Mirrors redirectFor /
+     *  redirectDotted in bootstrap-from-json/Main.hs and heads/scala/.../Bootstrap.scala. */
+    private static void redirectDottedFiles(List<java.nio.file.Path> files, List<String> subs, String langSeg)
+            throws java.io.IOException {
+        final String sentinel = "@@HYDRA_LIB_NAME@@";
+        for (java.nio.file.Path p : files) {
+            String pSlash = p.toString().replace(File.separatorChar, '/');
+            if (isLibDefOrRegistryFile(pSlash)) continue;
+            String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+            if (!s.contains("hydra.lib.")) continue;
+            String out = s.replace("\"hydra.lib.", "\"" + sentinel);
+            for (String sub : subs) {
+                out = out.replace("hydra.lib." + sub + ".",  "hydra." + langSeg + ".lib." + sub + ".");
+                out = out.replace("hydra.lib." + sub + ";",  "hydra." + langSeg + ".lib." + sub + ";");
+                out = out.replace("hydra.lib." + sub + "\n", "hydra." + langSeg + ".lib." + sub + "\n");
+                out = out.replace("hydra.lib." + sub + " ",  "hydra." + langSeg + ".lib." + sub + " ");
+                out = out.replace("hydra.lib import " + sub, "hydra." + langSeg + ".lib import " + sub);
+            }
+            out = out.replace(sentinel, "hydra.lib.");
+            if (!out.equals(s)) {
+                Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+        }
+    }
+
+    /** Scheme (R7RS) redirect: library/import headers use the space-separated form
+     *  `(hydra lib <sub>)`, not dotted. Redirect to `(hydra overlay scheme lib <sub>)`. Call sites
+     *  use the flattened identifier hydra_lib_<sub>_<fn> (unchanged — resolved via the renamed
+     *  import); primitive NAME strings are dotted "hydra.lib..." (untouched by this rewrite).
+     *  Mirrors redirectSchemeFor in bootstrap-from-json/Main.hs. */
+    private static void redirectSchemeFiles(List<java.nio.file.Path> files, List<String> subs)
+            throws java.io.IOException {
+        for (java.nio.file.Path p : files) {
+            String pSlash = p.toString().replace(File.separatorChar, '/');
+            if (isLibDefOrRegistryFile(pSlash)) continue;
+            String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+            if (!s.contains("(hydra lib ")) continue;
+            String out = s;
+            for (String sub : subs) {
+                out = out.replace("(hydra lib " + sub + ")", "(hydra overlay scheme lib " + sub + ")");
+            }
+            if (!out.equals(s)) {
+                Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+        }
+    }
+
+    /** Common Lisp / Emacs Lisp redirect: both are flat-namespace dialects where native primitive
+     *  impls are plain `defvar hydra_overlay_<lang>_lib_<sub>_<fn>` symbols (no per-module
+     *  package), and generated consumers emit a defpackage `(:use ... :hydra.lib.<sub> ...)`
+     *  clause per referenced lib. Two-part fix, mirroring redirectLispFlat in
+     *  bootstrap-from-json/Main.hs: (1) rename consumer CALL sites
+     *  hydra_lib_<sub>_ -> hydra_overlay_<langSeg>_lib_<sub>_ so calls hit the relocated impls, and
+     *  (2) drop the ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses, so
+     *  consumers no longer import the real (post-lib-pass) def-module package over the impl.
+     *  Primitive NAME strings are dotted "hydra.lib..." and untouched by the underscore rename. */
+    private static void redirectLispFlatFiles(List<java.nio.file.Path> files, List<String> subs, String langSeg)
+            throws java.io.IOException {
+        for (java.nio.file.Path p : files) {
+            String pSlash = p.toString().replace(File.separatorChar, '/');
+            if (isLibDefOrRegistryFile(pSlash)) continue;
+            String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+            if (!s.contains("hydra_lib_") && !s.contains(":hydra.lib.")) continue;
+            String out = s;
+            for (String sub : subs) {
+                out = out.replace("hydra_lib_" + sub + "_", "hydra_overlay_" + langSeg + "_lib_" + sub + "_");
+            }
+            for (String sub : subs) {
+                out = out.replace(" :hydra.lib." + sub, "");
+            }
+            if (!out.equals(s)) {
+                Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
         }
     }
 }
