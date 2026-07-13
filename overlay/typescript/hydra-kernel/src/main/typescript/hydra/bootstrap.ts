@@ -338,6 +338,27 @@ const main = async (): Promise<void> => {
     } else {
       console.log(`  Loaded ${mainJsonFiles.length} JSON files (no test tree at ${testJsonDir})`);
     }
+    // #546/#547/#575/#588: the kernel test suite references hydra.test.build.* ->
+    // hydra.build.* (Option A). hydra-build's main modules must be in the universe
+    // so those refs type-check, and hydra-build's OWN test modules
+    // (hydra.test.build.*, which live in the hydra-build package's test tree, not
+    // hydra-kernel's) must be loaded too — otherwise cross-host generation fails
+    // with "Unknown variable: hydra.test.build.modules.allTests". Mirrors the
+    // Python/Scala/Common-Lisp bootstrap fix (#553/#575).
+    if (distJsonRoot) {
+      const buildMainDir = join(distJsonRoot, "hydra-build", "src", "main", "json");
+      if (existsSync(buildMainDir)) {
+        const buildMainFiles = readJsonTree(buildMainDir).map((f) => ({ ...f, pkg: "hydra-build" }));
+        mainJsonFiles.push(...buildMainFiles);
+        console.log(`  Loaded ${buildMainFiles.length} additional JSON files from hydra-build`);
+      }
+      const buildTestDir = join(distJsonRoot, "hydra-build", "src", "test", "json");
+      if (existsSync(buildTestDir)) {
+        const buildTestFiles = readJsonTree(buildTestDir).map((f) => ({ ...f, pkg: "hydra-build" }));
+        testJsonFiles.push(...buildTestFiles);
+        console.log(`  Loaded ${buildTestFiles.length} additional test JSON files from hydra-build`);
+      }
+    }
   } else {
     console.log(`  Loaded ${mainJsonFiles.length} JSON files`);
   }
@@ -438,33 +459,40 @@ const main = async (): Promise<void> => {
   // the same redirect when emitting other hosts (e.g. ts -> python). Applied to the
   // main and test (consumer) passes only, never the lib pass (which emits hydra.lib.*).
   // For #507.
-  const baseLibSubs = ["chars","eithers","equality","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"];
-  const effectfulSubs = ["effects","files","system","text"];
-  // Per-target sub list: hosts with native effectful impls also redirect those.
-  const libSubsByTarget: Record<string, string[]> = {
-    java:          baseLibSubs,
-    python:        [...baseLibSubs, ...effectfulSubs],
-    scala:         [...baseLibSubs, ...effectfulSubs],
-    clojure:       [...baseLibSubs, ...effectfulSubs],
-    scheme:        [...baseLibSubs, ...effectfulSubs],
-    "common-lisp": [...baseLibSubs, ...effectfulSubs],
-    "emacs-lisp":  [...baseLibSubs, ...effectfulSubs],
-    typescript:    [...baseLibSubs, ...effectfulSubs],
-    haskell:       [],
-    go:            [],
-  };
+  //
+  // #568/#569/#588: the redirectable subs are derived from the TARGET's own overlay lib
+  // directory (which hydra.lib.<sub> impls it actually ships), not a hand-maintained
+  // allowlist — a by-name list silently drops future subs (this is how TS's list ended
+  // up missing "hashing": #524 registered it in every host driver except this one).
+  // Mirrors libSubsForTarget in heads/java/src/main/java/hydra/Bootstrap.java (#569).
+  const LIB_SUBS_FALLBACK = ["chars","effects","eithers","equality","files","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings","system","text"];
   const langSegByTarget: Record<string, string> = {
     "common-lisp": "common_lisp",
     "emacs-lisp":  "emacs_lisp",
   };
+  const nonSubEntryNames = new Set(["libraries", "Libraries", "__init__", "PrimitiveType"]);
+  const libSubsForTarget = (target: string): string[] => {
+    if (target === "haskell" || target === "go") return [];
+    const langSeg = langSegByTarget[target] ?? target;
+    if (!distJsonRoot) return LIB_SUBS_FALLBACK;
+    const repoRoot = resolve(distJsonRoot, "..", "..");
+    const libDir = join(repoRoot, "overlay", target, "hydra-kernel", "src", "main", target, "hydra", "overlay", langSeg, "lib");
+    if (!existsSync(libDir)) return LIB_SUBS_FALLBACK;
+    const entries = readdirSync(libDir);
+    const subs = entries
+      .map((e) => (statSync(join(libDir, e)).isDirectory() ? e : e.replace(/\.[^.]+$/, "")))
+      .filter((name) => !nonSubEntryNames.has(name));
+    return subs.length > 0 ? subs : LIB_SUBS_FALLBACK;
+  };
+  const targetLibSubs = libSubsForTarget(opts.target);
   const redirectLibRefs = (src: string): string => {
-    const subs = libSubsByTarget[opts.target] ?? [];
+    const subs = targetLibSubs;
     if (subs.length === 0) return src;
     const langSeg = langSegByTarget[opts.target] ?? opts.target;
     const oldPfx = "hydra.lib.";
     const newPfx = "hydra.overlay." + langSeg + ".lib.";
     // Protect string literals "hydra.lib.X" (data, not import refs) from rewriting.
-    const sentinel = " HYDRALIBNAME ";
+    const sentinel = " HYDRALIBNAME ";
     let s = src.split("\"hydra.lib.").join("\"" + sentinel);
     for (const sub of subs) {
       // member access, import-terminators, and "from hydra.lib import X" (python).
@@ -522,6 +550,12 @@ const main = async (): Promise<void> => {
   // (`Hydra.Haskell.*`).
   const emitPkgs = new Set<string>(["hydra-kernel"]);
   if (opts.target === "haskell") emitPkgs.add("hydra-haskell");
+  // hydra-build's test modules (hydra.test.build.*) ARE emitted alongside the
+  // kernel's own test modules, mirroring Python's bootstrap.py where test_mods
+  // (kernel + hydra-build test namespaces) are generated together into out_test.
+  // hydra-build's main modules, by contrast, stay universe-only — the main pass
+  // still targets only hydra-kernel (+ hydra-haskell for target=haskell).
+  const emitTestPkgs = new Set<string>([...emitPkgs, "hydra-build"]);
   const mainMods = modulesByPath.filter((m) => !m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
   // Skip-emit: hydra.test.testEnv is hand-written (it builds the primitives map
   // with implementations via standardPrimitives() — see overlay test/.../testEnv.ts).
@@ -532,7 +566,7 @@ const main = async (): Promise<void> => {
   const moduleNameOf = (mod: unknown): string =>
     (mod as { name?: { value?: string } } | null)?.name?.value ?? "";
   const testMods = modulesByPath
-    .filter((m) => m.isTest && emitPkgs.has(m.pkg))
+    .filter((m) => m.isTest && emitTestPkgs.has(m.pkg))
     .map((m) => m.module)
     .filter((mod) => !testSkipEmitModuleNames.has(moduleNameOf(mod)));
   const mainFileCount = writeOne(false, mainMods, allModules);
