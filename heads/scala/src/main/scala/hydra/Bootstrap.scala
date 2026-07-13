@@ -399,9 +399,14 @@ object BootstrapHelpers:
    *  def-module on top of the hand-written impl at hydra.overlay.scala.lib.* and shadow its generic
    *  methods with the def-module's `lazy val`s — "does not take type parameters"). The Haskell driver
    *  keeps these canonical by running the lib pass with NO redirect.
-   *  Consumers that need redirecting live everywhere EXCEPT hydra/lib/. */
+   *  Consumers that need redirecting live everywhere EXCEPT hydra/lib/ and the overlay
+   *  registry file hydra/overlay/<seg>/Libraries.<ext> — the registry deliberately imports
+   *  BOTH the relocated impl and the def-module (for `def.fn.name`), so redirecting its
+   *  `hydra.lib.<sub>.<fn>.name` references onto the impl (which has no `.name`) breaks
+   *  compilation (#569 Defect B; mirrors the Java driver's isLibDefOrRegistryFile). */
   private def isLibDefFile(f: File): Boolean =
-    f.getPath.replace(File.separatorChar, '/').contains("/hydra/lib/")
+    val p = f.getPath.replace(File.separatorChar, '/')
+    p.contains("/hydra/lib/") || p.matches(".*/hydra/overlay/[^/]+/[Ll]ibraries\\.[^/]+$")
 
   private def allFilesUnder(dir: File): Seq[File] =
     val here = Option(dir.listFiles()).getOrElse(Array.empty[File]).toSeq
