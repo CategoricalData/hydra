@@ -53,6 +53,13 @@ done
 if [ -d "$HYDRA_SCHEME_DIST/src/test/scheme/hydra" ]; then
     cp -r "$HYDRA_SCHEME_DIST/src/test/scheme/hydra" "$OUTPUT_DIR/src/test/scheme/"
 fi
+# Overlay head-only hand-written test file not present in dist: test_runner_body.scm, the body
+# included by run-tests.scm via (include "src/test/scheme/hydra/test_runner_body.scm"). Mirrors
+# setup-common-lisp-target.sh / setup-emacs-lisp-target.sh copying test_runner.{lisp,el} from the head.
+mkdir -p "$OUTPUT_DIR/src/test/scheme/hydra"
+if [ -f "$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test_runner_body.scm" ]; then
+    cp "$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test_runner_body.scm" "$OUTPUT_DIR/src/test/scheme/hydra/test_runner_body.scm"
+fi
 
 # #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
 # referenced by the kernel testSuite but absent from the hydra-kernel dist tree.

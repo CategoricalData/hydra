@@ -95,25 +95,23 @@
 (setq hydra_test_test_graph_test_context (hydra-empty-context))
 
 ;; #546: load hydra-build's test modules (hydra.test.build.*) BEFORE
-;; hydra-load-gen-test. The kernel loader list no longer names test/build/*.el,
-;; but the generated kernel test suite aggregate (test/test_suite.el, loaded
-;; inside hydra-load-gen-test) references hydra_test_build_*_all_tests, so those
-;; symbols must already be defined — otherwise the retry loop aborts with
-;; "Symbol's value as variable is void: hydra_test_build_modules_all_tests".
-;; Load from hydra-build's own dist test tree when it is a separate directory;
-;; in the bootstrap-demo flat layout the build test modules are copied into the
-;; SHARED hydra-gen-test-dir/test/build/, so load from there instead (they are
-;; NOT part of hydra-load-gen-test's manifest and would otherwise never load).
-;; Mirrors the unconditional build/*.lisp load in the Common-Lisp run-tests.lisp.
-(let ((build-base (if (and hydra-build-gen-test-dir
-                           (not (string= hydra-build-gen-test-dir hydra-gen-test-dir)))
-                      hydra-build-gen-test-dir
-                    hydra-gen-test-dir)))
-  (dolist (f '("test/build/modules.el"
-               "test/build/reconcile.el"
-               "test/build/routing.el"))
-    (let ((path (expand-file-name f build-base)))
-      (when (file-exists-p path) (hydra-load-file path))))
+;; hydra-load-gen-test. The kernel loader list (hydra-load-gen-test) deliberately
+;; omits test/build/*.el, but the generated kernel test suite aggregate
+;; (test/test_suite.el, loaded inside hydra-load-gen-test) references
+;; hydra_test_build_*_all_tests, so those symbols must already be defined.
+;; They live in hydra-build's own dist test tree (hydra-build-gen-test-dir) in the
+;; normal layout, but in the bootstrap-demo FLAT layout everything shares one tree
+;; (hydra-build-gen-test-dir == hydra-gen-test-dir, or is nil). Try both bases so
+;; the flat layout is covered too; #444: previously the (not (string= ...)) guard
+;; skipped the flat case entirely, leaving the symbols void.
+(let ((bases (delete-dups
+              (delq nil (list hydra-gen-test-dir hydra-build-gen-test-dir)))))
+  (dolist (base bases)
+    (dolist (f '("test/build/modules.el"
+                 "test/build/reconcile.el"
+                 "test/build/routing.el"))
+      (let ((path (expand-file-name f base)))
+        (when (file-exists-p path) (hydra-load-file path)))))
   (hydra-set-function-bindings))
 
 ;; Load remaining gen-test modules (test cases that reference the graph)
