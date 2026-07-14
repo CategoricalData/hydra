@@ -401,8 +401,10 @@ public class Bootstrap {
         // rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
         if (!target.equals("haskell")) {
             redirectLibCalls(repoRoot, target, outMain + File.separator + target);
+            redirectTestEnv(target, outMain + File.separator + target);
             if (includeTests) {
                 redirectLibCalls(repoRoot, target, outDir + File.separator + "src/test" + File.separator + target);
+                redirectTestEnv(target, outDir + File.separator + "src/test" + File.separator + target);
             }
         }
 
@@ -622,7 +624,15 @@ public class Bootstrap {
      *  so the registry's def-module import got wrongly redirected onto the impl, breaking `.name`
      *  member access (e.g. Scala: "value name is not a member of Int => Int", 242 errors). */
     private static boolean isLibDefOrRegistryFile(String pSlash) {
-        return pSlash.contains("/hydra/lib/") || pSlash.matches(".*/hydra/overlay/[^/]+/[Ll]ibraries\\.[^/]+$");
+        // The overlay Libraries registry sits directly under hydra/overlay/<lang>/ for scheme/clojure
+        // (Libraries.scm/.clj) but one level deeper under hydra/overlay/<lang>/lib/ for the flat Lisp
+        // dialects (common_lisp/lib/libraries.lisp, emacs_lisp/lib/libraries.el). Both must be protected
+        // from the lib-call redirect: the registry passes canonical hydra_lib_<sub>_<fn> symbols to
+        // (prim-name ...) to derive the registered primitive NAME, which must stay canonical — rewriting
+        // it to hydra_overlay_<lang>_lib_... mis-registers the primitive and breaks name lookup (the
+        // #444 common-lisp/emacs-lisp test-graph TYPE-ERROR). The optional lib/ segment covers both.
+        return pSlash.contains("/hydra/lib/")
+            || pSlash.matches(".*/hydra/overlay/[^/]+/(lib/)?[Ll]ibraries\\.[^/]+$");
     }
 
     /** Dotted-language redirect (python/scala/clojure): hydra.lib.<sub> -> hydra.<langSeg>.lib.<sub>,
@@ -699,6 +709,47 @@ public class Bootstrap {
             if (!out.equals(s)) {
                 Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             }
+        }
+    }
+
+    /**
+     * #444/#456-class test-env redirect for the Lisp targets. The hand-written test environment
+     * hydra.test.testEnv is skip-emitted from generated output (see testSkipEmit) and supplied by
+     * overlay/&lt;lang&gt;/ under the renamed namespace hydra.overlay.&lt;lang&gt;.test.testEnv (#501).
+     * Generated test modules still reference it by its canonical name, so redirect the code
+     * reference (NOT quoted primitive-name strings, which never contain "test.testEnv") to the
+     * overlay namespace for the dialects whose tests resolve testEnv BY MODULE REFERENCE:
+     *   - clojure: dotted `hydra.test.testEnv` -&gt; `hydra.overlay.clojure.test.testEnv`
+     *   - scheme:  R7RS library form `(hydra test testEnv)` -&gt; `(hydra overlay scheme test testEnv)`,
+     *              plus the dotted form for any residual dotted references
+     * common-lisp / emacs-lisp load the hand-written test_env explicitly via their run-tests loader
+     * (see run-tests.lisp / run-tests.el), so they need no code redirect here — their loader path is
+     * fixed separately. Mirrors redirectClojureTestEnv / redirectSchemeTestEnv in
+     * heads/haskell/src/exec/bootstrap-from-json/Main.hs. This is the Java-host parity fix for the
+     * #444/#456 host-X-can't-produce-Lisp-target bug class.
+     */
+    private static void redirectTestEnv(String target, String langDir) {
+        if (!target.equals("clojure") && !target.equals("scheme")) return;
+        java.nio.file.Path root = Paths.get(langDir);
+        if (!Files.isDirectory(root)) return;
+        try {
+            List<java.nio.file.Path> files = new ArrayList<>();
+            Files.walk(root).filter(Files::isRegularFile).forEach(files::add);
+            for (java.nio.file.Path p : files) {
+                String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+                String out = s;
+                if (target.equals("scheme")) {
+                    out = out.replace("(hydra test testEnv)", "(hydra overlay scheme test testEnv)");
+                    out = out.replace("hydra.test.testEnv", "hydra.overlay.scheme.test.testEnv");
+                } else { // clojure
+                    out = out.replace("hydra.test.testEnv", "hydra.overlay.clojure.test.testEnv");
+                }
+                if (!out.equals(s)) {
+                    Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Test-env redirect failed under " + langDir, e);
         }
     }
 }
