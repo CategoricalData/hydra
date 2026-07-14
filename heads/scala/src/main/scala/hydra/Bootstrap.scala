@@ -247,8 +247,10 @@ import _root_.java.io.File
   // any pass have their hydra.lib.* impl references rewritten to hydra.<lang>.lib.*. See the lib-pass note.
   if tgt != "haskell" then
     BootstrapHelpers.redirectLibCalls(repoRoot, tgt, outMain + File.separator + tgt)
+    BootstrapHelpers.redirectTestEnvCalls(tgt, outMain + File.separator + tgt)
     if includeTests then
       BootstrapHelpers.redirectLibCalls(repoRoot, tgt, outDir + File.separator + "src/test" + File.separator + tgt)
+      BootstrapHelpers.redirectTestEnvCalls(tgt, outDir + File.separator + "src/test" + File.separator + tgt)
 
   val totalTime = System.currentTimeMillis() - totalStart
   val testStr = if includeTests then s" + $testFileCount test" else ""
@@ -330,7 +332,7 @@ object BootstrapHelpers:
     val subs = libSubsForTarget(repoRoot, target)
     target match
       case "scala" =>
-        for f <- files if !isLibDefFile(f) do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
             val out = redirectDotted(s, "overlay.scala", subs)
@@ -342,26 +344,26 @@ object BootstrapHelpers:
         // cell fails at runtime with "'PrimitiveDefinition' object is not callable" (e.g. scoping.py
         // calling hydra.lib.lists.cons). Mirrors the scala/clojure cases; the python-native host
         // driver already emits the redirected form.
-        for f <- files if !isLibDefFile(f) do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
             val out = redirectDotted(s, "overlay.python", subs)
             if out != s then writeFile(f, out)
       case "clojure" =>
-        for f <- files if !isLibDefFile(f) do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
             val out = redirectDotted(s, "overlay.clojure", subs)
             if out != s then writeFile(f, out)
       case "scheme" =>
-        for f <- files do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("(hydra lib ") then
             var out = s
             for sub <- subs do out = out.replace(s"(hydra lib $sub)", s"(hydra overlay scheme lib $sub)")
             if out != s then writeFile(f, out)
       case "common-lisp" =>
-        for f <- files do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
             var out = s
@@ -370,7 +372,7 @@ object BootstrapHelpers:
               out = out.replace(s" :hydra.lib.$sub", "")
             if out != s then writeFile(f, out)
       case "emacs-lisp" =>
-        for f <- files do
+        for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
           if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
             var out = s
@@ -379,6 +381,29 @@ object BootstrapHelpers:
               out = out.replace(s" :hydra.lib.$sub", "")
             if out != s then writeFile(f, out)
       case _ => () // java + typescript + haskell: no redirect
+
+  /** #444/#456 testEnv redirect: the hand-written test environment hydra.test.testEnv is
+   *  skip-emitted from generated output. For CLOJURE, the hand-written counterpart lives in
+   *  overlay/clojure/ under the renamed namespace hydra.overlay.clojure.test.testEnv (#501), so the
+   *  generated test modules — which still reference the canonical name — must be rewritten to the
+   *  overlay namespace, mirroring redirectClojureTestEnv in
+   *  heads/haskell/.../bootstrap-from-json/Main.hs. Scheme / Common Lisp / Emacs Lisp keep their
+   *  hand-written test_env at the CANONICAL location: scheme's overlay library is (hydra test
+   *  test_env) and CL/EL define the canonical flat symbols hydra_test_test_env_* directly, so the
+   *  generated references resolve without a redirect (their loader supplies the file). No-op for
+   *  every other target. */
+  def redirectTestEnvCalls(target: String, langDir: String): Unit =
+    val dir = new File(langDir)
+    if !dir.isDirectory then return
+    val files = allFilesUnder(dir)
+    target match
+      case "clojure" =>
+        for f <- files do
+          val s = readFile(f)
+          if s.contains("hydra.test.testEnv") then
+            val out = s.replace("hydra.test.testEnv", "hydra.overlay.clojure.test.testEnv")
+            if out != s then writeFile(f, out)
+      case _ => ()
 
   /** Dotted-language redirect (scala/python/clojure), protecting quoted primitive-NAME strings. */
   private def redirectDotted(s: String, langSeg: String, subs: Seq[String]): String =
@@ -407,6 +432,18 @@ object BootstrapHelpers:
   private def isLibDefFile(f: File): Boolean =
     val p = f.getPath.replace(File.separatorChar, '/')
     p.contains("/hydra/lib/") || p.matches(".*/hydra/overlay/[^/]+/[Ll]ibraries\\.[^/]+$")
+
+  /** Hand-written overlay files (path segment `/hydra/overlay/`) are copied verbatim into the cell by
+   *  the per-target setup script and are ALREADY correct — e.g. the Common-Lisp/Emacs-Lisp
+   *  `hydra/overlay/<lang>/lib/libraries.lisp` registry deliberately reads primitive NAMES from the
+   *  canonical `hydra_lib_<sub>_<fn>` PrimitiveDefinition values while binding the relocated
+   *  `hydra_overlay_<lang>_lib_*` impls. The textual lib redirect must NOT rewrite these hand-written
+   *  references (doing so turns `(prim-name hydra_lib_chars_is_alpha_num)` into a lookup on the impl
+   *  function, corrupting `standard-library` with a function-where-a-record-is-expected TYPE-ERROR).
+   *  The Haskell driver never hits this because it applies the redirect inline to GENERATED modules
+   *  only, never to copied overlays. */
+  private def isOverlayFile(f: File): Boolean =
+    f.getPath.replace(File.separatorChar, '/').contains("/hydra/overlay/")
 
   private def allFilesUnder(dir: File): Seq[File] =
     val here = Option(dir.listFiles()).getOrElse(Array.empty[File]).toSeq

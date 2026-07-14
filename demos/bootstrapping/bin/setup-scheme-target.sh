@@ -67,6 +67,20 @@ fi
 # Top-level run-tests entry point
 cp "$HYDRA_SCHEME_DIR/run-tests.scm" "$OUTPUT_DIR/" 2>/dev/null || true
 
+# Head-only test-runner helpers included by run-tests.scm (the test driver body +
+# the annotation/reduction helpers). These live in the head's own test tree, not
+# in dist/ (they are the runner, not shipped runtime), so they must be copied
+# explicitly — mirrors test-clojure-target.sh copying run_tests.clj + the hydra/
+# test helpers. Without test_runner_body.scm the run aborts with
+# "open-file: No such file or directory: .../hydra/test_runner_body.scm".
+if [ -d "$HYDRA_SCHEME_DIR/src/test/scheme/hydra" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/scheme/hydra"
+    for f in "$HYDRA_SCHEME_DIR/src/test/scheme/hydra"/test_runner*.scm \
+             "$HYDRA_SCHEME_DIR/src/test/scheme/hydra"/annotation_bindings.scm; do
+        [ -f "$f" ] && cp "$f" "$OUTPUT_DIR/src/test/scheme/hydra/"
+    done
+fi
+
 # Summary
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.scm" -o -name "*.sld" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Static resources: $STATIC_COUNT files"
