@@ -59,6 +59,11 @@ public class RemoveFile extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Remove the file at the given path (POSIX unlink).
      * @param path the file to remove

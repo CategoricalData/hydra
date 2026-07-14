@@ -52,6 +52,11 @@ public class Pure extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Lift a pure value into an effect (identity, since effects are transparent in Java).
      * @param <A> the value type

@@ -59,6 +59,11 @@ public class ReadFile extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Read the entire contents of a file as raw bytes.
      * @param path the path to read

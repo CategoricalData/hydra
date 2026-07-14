@@ -59,6 +59,11 @@ public class MapList extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Map an effect-returning function over a list, collecting the results.
      * @param <A> the input element type

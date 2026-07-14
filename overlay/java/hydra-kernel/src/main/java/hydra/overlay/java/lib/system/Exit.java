@@ -40,6 +40,11 @@ public class Exit extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Terminate the current process immediately with the given status. Does not return.
      * @param code the exit status

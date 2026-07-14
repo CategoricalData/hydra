@@ -58,6 +58,11 @@ public class Compose extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Kleisli composition: compose(f, g, x) = g(f(x)).
      * @param <A> the input type

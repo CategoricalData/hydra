@@ -68,6 +68,11 @@ public class Copy extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Copy source to destination. When recursive is false, source must be a single file. When
      * recursive is true, source may be a directory, whose entire tree is copied.

@@ -57,6 +57,11 @@ public class Map extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Map a pure function over the result of an effect.
      * @param <A> the effect result type

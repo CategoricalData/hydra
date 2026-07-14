@@ -57,6 +57,11 @@ public class Apply extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Applicative apply: apply an effectful function to an effectful argument.
      * @param <A> the argument type

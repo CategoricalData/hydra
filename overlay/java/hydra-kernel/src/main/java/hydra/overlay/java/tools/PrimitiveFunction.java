@@ -53,6 +53,19 @@ public abstract class PrimitiveFunction {
     }
 
     /**
+     * Whether this primitive is pure (referentially transparent, no observable side effects).
+     * Defaults to true; effect primitives (e.g. hydra.lib.system.getEnvironment, getTime,
+     * getWorkingDirectory, execute, exit) override this to false. Mirrors the Haskell host's
+     * impurePrimitiveInModule, which is the source of truth for primitive purity (#588: coders
+     * special-case zero-arity effect primitives on isPure, so a hardcoded true here caused the
+     * TypeScript coder to emit these as bare unevaluated references instead of calls).
+     * @return whether this primitive is pure
+     */
+    protected boolean isPure() {
+        return true;
+    }
+
+    /**
      * The primitive function as a term.
      * @return the primitive function as a Hydra term
      */
@@ -100,7 +113,7 @@ public abstract class PrimitiveFunction {
             name(),
             Optional.none(),
             signatureWithLaziness(),
-            Boolean.TRUE,
+            isPure(),
             Boolean.TRUE,
             Optional.givenNullable(hydra.lib.Defaults.defaultImplementations().get(name())));
         return new Primitive(definition, nativeImpl);

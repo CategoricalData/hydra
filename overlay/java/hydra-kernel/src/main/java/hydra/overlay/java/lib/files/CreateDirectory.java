@@ -61,6 +61,11 @@ public class CreateDirectory extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Create a directory. When recursive is true, missing parents are created and an
      * existing directory is not an error; when false, this corresponds to POSIX mkdir.

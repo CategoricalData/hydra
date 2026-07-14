@@ -37,6 +37,11 @@ public class GetTime extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Return the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix epoch).
      * @return the current time

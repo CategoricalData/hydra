@@ -41,6 +41,11 @@ public class GetEnvironment extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Return the entire environment of the current process as a map from variable name to value.
      * @return the environment map

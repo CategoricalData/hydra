@@ -66,6 +66,11 @@ public class RemoveDirectory extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Remove the directory at path. When recursive is false this corresponds to POSIX rmdir: it
      * fails unless the directory is empty. When recursive is true, the directory and its entire

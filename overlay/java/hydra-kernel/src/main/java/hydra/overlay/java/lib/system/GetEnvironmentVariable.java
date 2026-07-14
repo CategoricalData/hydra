@@ -41,6 +41,11 @@ public class GetEnvironmentVariable extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Return the value of the named environment variable, or none if it is not set.
      * @param name the variable name

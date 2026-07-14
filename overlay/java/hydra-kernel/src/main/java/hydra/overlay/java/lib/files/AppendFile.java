@@ -62,6 +62,11 @@ public class AppendFile extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Append the given raw bytes to the end of a file, creating it if it does not exist.
      * @param path the path to append to

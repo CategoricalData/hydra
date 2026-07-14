@@ -57,6 +57,11 @@ public class Bind extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Sequence two effectful computations: pass the value of the first effect to the continuation.
      * @param <A> the result type of the first effect

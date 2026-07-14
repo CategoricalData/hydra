@@ -40,6 +40,11 @@ public class GetWorkingDirectory extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Return the current working directory as a FilePath.
      * @return right(path) on success, or left(error) on failure

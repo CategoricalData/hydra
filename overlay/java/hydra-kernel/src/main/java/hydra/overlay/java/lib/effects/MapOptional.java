@@ -59,6 +59,11 @@ public class MapOptional extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Map an effect-returning function over an optional.
      * @param <A> the input type

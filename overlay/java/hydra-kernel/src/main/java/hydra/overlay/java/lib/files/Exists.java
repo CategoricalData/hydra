@@ -59,6 +59,11 @@ public class Exists extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Report whether anything exists at the given path. A missing path is right(false), not an error.
      * @param path the path to test

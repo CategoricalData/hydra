@@ -64,6 +64,11 @@ public class Status extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
      * @param path the path to inspect

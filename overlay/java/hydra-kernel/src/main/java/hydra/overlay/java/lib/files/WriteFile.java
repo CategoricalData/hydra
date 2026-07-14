@@ -61,6 +61,11 @@ public class WriteFile extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Replace the contents of a file with the given raw bytes.
      * @param path the path to write

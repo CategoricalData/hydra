@@ -64,6 +64,11 @@ public class ListDirectory extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Return the immediate entries of a directory, excluding "." and "..". The result is unordered.
      * @param path the directory to list

@@ -59,6 +59,11 @@ public class Foldl extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Left-fold over a list with a curried effect-returning function.
      * @param <A> the accumulator type

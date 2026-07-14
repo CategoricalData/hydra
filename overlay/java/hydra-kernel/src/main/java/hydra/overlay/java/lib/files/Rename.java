@@ -60,6 +60,11 @@ public class Rename extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Rename or move a file or directory from source to destination.
      * @param source the path to rename

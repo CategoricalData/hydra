@@ -50,6 +50,11 @@ public class Execute extends PrimitiveFunction {
                 "effect primitive cannot be reduced by Hydra's pure reducer: " + name().value)));
     }
 
+    @Override
+    protected boolean isPure() {
+        return false;
+    }
+
     /**
      * Run the program described by command to completion, capturing stdout, stderr, and the exit code.
      * A child that runs and exits non-zero is returned as right(result); only a failure to launch is
