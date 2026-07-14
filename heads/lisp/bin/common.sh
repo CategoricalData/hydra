@@ -212,6 +212,24 @@ scheme_post_kernel_extras() {
     # modules the coder doesn't emit. (The stubs are generated, not overlay
     # material, so they stay here.)
     local scheme_main="$out_dir/src/main/scheme"
+
+    # Step 3a: Prune dangling .sld symlinks (stale pre-#501/#473 orphans).
+    # The R7RS library-file (.sld) symlinks used to sit co-located with their .scm
+    # impls under hydra/scheme/lib/ (#473) and hydra/lib/libraries.sld. #501 relocated
+    # every impl to hydra/overlay/scheme/lib/, so those old symlinks now dangle (their
+    # .scm targets moved away). dist/scheme is gitignored, so on a warm tree the old
+    # layout persists forever: bootstrap-from-json's --prune-stale walks the .scm
+    # emission set and never touches these stray symlinks (the #401/#437 orphan pattern).
+    # setup-scheme-target.sh then does `cp -r .../hydra` and dies "No such file or
+    # directory" following the broken links. A dangling symlink in a generated dist tree
+    # is always garbage, so drop every one under the kernel hydra/ tree. Also remove any
+    # now-empty directory left behind (e.g. the vestigial hydra/scheme/lib/).
+    if [ -d "$scheme_main/hydra" ]; then
+        echo "Step 3a: Pruning dangling .sld orphans (pre-#501 layout) from $scheme_main/hydra..."
+        find "$scheme_main/hydra" -type l ! -exec test -e {} \; -delete 2>/dev/null || true
+        find "$scheme_main/hydra" -depth -type d -empty -delete 2>/dev/null || true
+    fi
+
     echo "Step 3b: Writing Scheme stub modules..."
     local stub mod_name path
     for stub in decode/graph decode/compute encode/graph encode/compute; do
