@@ -630,9 +630,15 @@ public class Bootstrap {
         // from the lib-call redirect: the registry passes canonical hydra_lib_<sub>_<fn> symbols to
         // (prim-name ...) to derive the registered primitive NAME, which must stay canonical — rewriting
         // it to hydra_overlay_<lang>_lib_... mis-registers the primitive and breaks name lookup (the
-        // #444 common-lisp/emacs-lisp test-graph TYPE-ERROR). The optional lib/ segment covers both.
+        // #444 common-lisp/emacs-lisp test-graph TYPE-ERROR). The registry may sit at any depth under
+        // hydra/overlay/<lang>/: directly (scheme/clojure Libraries.scm/.clj), under lib/ (flat Lisp
+        // dialects), or under sources/ (python overlay/python/sources/libraries.py). Match the registry
+        // regardless of intermediate segments so every host's registry is protected — python's
+        // sources/libraries.py was previously unguarded, so java→python corrupted its
+        // def_<sub>.<fn>.name references onto the impl, breaking pytest collection with
+        // "'function' object has no attribute 'name'".
         return pSlash.contains("/hydra/lib/")
-            || pSlash.matches(".*/hydra/overlay/[^/]+/(lib/)?[Ll]ibraries\\.[^/]+$");
+            || pSlash.matches(".*/hydra/overlay/[^/]+/(.*/)?[Ll]ibraries\\.[^/]+$");
     }
 
     /** Dotted-language redirect (python/scala/clojure): hydra.lib.<sub> -> hydra.<langSeg>.lib.<sub>,
