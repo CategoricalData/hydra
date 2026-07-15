@@ -121,16 +121,18 @@ def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
 
 def _is_lib_def_or_registry_file(p_slash):
     """Files under hydra/lib/ are the lib-pass def-modules; the overlay Libraries registry
-    (overlay/<lang>/.../Libraries.<ext>, copied into the generated tree as
-    hydra/overlay/<lang>/Libraries.<ext>) deliberately imports BOTH the relocated impl and the
-    def-module (aliased, for `def_X.fn.name`). Neither must be redirected. #569 Defect B fix: the
-    previous guard checked "sources/libraries.py" (wrong directory -- never matched the actual
-    generated path "hydra/overlay/<lang>/Libraries.py"), so the registry's def-module import got
-    wrongly redirected onto the impl, breaking `.name` member access.
+    deliberately imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`).
+    Neither must be redirected. #569 Defect B fix: the registry sits at different depths under
+    hydra/overlay/<lang>/ depending on the target -- directly (scala/clojure/scheme Libraries.<ext>),
+    under lib/ (flat Lisp dialects), or under sources/ (python overlay/python/sources/libraries.py).
+    Match [Ll]ibraries.<ext> at ANY depth under hydra/overlay/<lang>/ so every target's registry is
+    protected; python's sources/libraries.py was previously unguarded, so python-host generation
+    redirected its def_<sub>.<fn>.name references onto the impl, breaking pytest collection with
+    "'function' object has no attribute 'name'".
     """
     if "/hydra/lib/" in p_slash:
         return True
-    m = re.search(r"/hydra/overlay/[^/]+/(Libraries|libraries)\.[^/]+$", p_slash)
+    m = re.search(r"/hydra/overlay/[^/]+/(.*/)?(Libraries|libraries)\.[^/]+$", p_slash)
     return m is not None
 
 
