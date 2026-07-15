@@ -194,14 +194,13 @@ object Generation:
       doInfer = false,
       basePath, universe, mods)
 
-  // Scala→typescript dispatch is intentionally NOT wired here yet: the
-  // Scala-emitted typescript coder (dist/scala/hydra-typescript/.../coder.scala)
-  // has a generator bug — analyzeFunctionTerm gets Any instead of Graph at
-  // line 10 — so adding hydra-typescript to packages/hydra-scala/build.sbt
-  // breaks sbt compile. Bootstrap.scala likewise omits the "typescript" case
-  // for the same reason. Once the Scala emitter is fixed, restore writeTypeScript
-  // (mirroring writeScala flags + doHoistCaseStatements=true), add
-  // hydra-typescript to build.sbt, and add the dispatch case.
+  /** Generate TypeScript source files from modules. */
+  def writeTypeScript(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    generateSources(
+      mod => defs => cx => g => hydra.typeScript.coder.moduleToTypeScript(mod)(defs)(cx)(g),
+      hydra.typeScript.language.typeScriptLanguage,
+      doInfer = false,
+      basePath, universe, mods)
 
   /** Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp,
    *  or Emacs Lisp). Mirrors heads/java/.../Generation.java#writeLispDialect

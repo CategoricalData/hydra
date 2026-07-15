@@ -213,13 +213,13 @@ object Libraries:
 
   // --- Primitive constructors ---
 
-  private def mkPrimDef(name: String, ts: TypeScheme): hydra.packaging.PrimitiveDefinition =
+  private def mkPrimDef(name: String, ts: TypeScheme, isPure: Boolean = true, isTotal: Boolean = true): hydra.packaging.PrimitiveDefinition =
     hydra.packaging.PrimitiveDefinition(
       name,
       None,
       hydra.scoping.typeSchemeToTermSignature(ts),
-      true,
-      true,
+      isPure,
+      isTotal,
       hydra.lib.defaults.defaultImplementations.get(name))
 
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
@@ -227,6 +227,15 @@ object Libraries:
 
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
     Primitive(mkPrimDef(name, ts), impl)
+
+  // Effectful primitives (hydra.lib.{effects,files,system}.*) are impure and non-total: they perform
+  // real I/O / observable side effects, so the test framework must NOT constant-fold them (doing so
+  // breaks the effectful test cases: time/file/getEnvironment). The kernel PrimitiveDefinition carries
+  // isPure=false for these (dist/json .../hydra/lib/{files,system,effects}.json), but the Scala registry
+  // reconstructs the def from the name, so it must set purity explicitly. Mirrors the Java host's
+  // isPure()->false overrides (26d8219c51, For #494). Fixes the 4 scala→typescript effectful failures.
+  private def mkPrimEffect(name: String, ts: TypeScheme): Primitive =
+    Primitive(mkPrimDef(name, ts, isPure = false, isTotal = false), stubImpl)
 
   // Mark the given (0-based) parameter positions as lazy. The Lisp coder
   // reads parameterIsLazy to decide which arguments to wrap in `(fn [] ...)`
@@ -1253,28 +1262,28 @@ object Libraries:
     val z = tVar("z")
     Map(
       // apply: effect<x -> y> -> effect<x> -> effect<y>
-      hydra.lib.effects.apply.name -> mkPrim(hydra.lib.effects.apply.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.apply.name -> mkPrimEffect(hydra.lib.effects.apply.name, tScheme(Seq("x", "y"),
         tFun(tEffect(tFun(x, y)), tFun(tEffect(x), tEffect(y))))),
       // bind: effect<x> -> (x -> effect<y>) -> effect<y>
-      hydra.lib.effects.bind.name -> mkPrim(hydra.lib.effects.bind.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.bind.name -> mkPrimEffect(hydra.lib.effects.bind.name, tScheme(Seq("x", "y"),
         tFun(tEffect(x), tFun(tFun(x, tEffect(y)), tEffect(y))))),
       // compose: (x -> effect<y>) -> (y -> effect<z>) -> x -> effect<z>
-      hydra.lib.effects.compose.name -> mkPrim(hydra.lib.effects.compose.name, tScheme(Seq("x", "y", "z"),
+      hydra.lib.effects.compose.name -> mkPrimEffect(hydra.lib.effects.compose.name, tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEffect(y)), tFun(tFun(y, tEffect(z)), tFun(x, tEffect(z)))))),
       // foldl: (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
-      hydra.lib.effects.foldl.name -> mkPrim(hydra.lib.effects.foldl.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.foldl.name -> mkPrimEffect(hydra.lib.effects.foldl.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, tFun(y, tEffect(x))), tFun(x, tFun(tList(y), tEffect(x)))))),
       // map: (x -> y) -> effect<x> -> effect<y>
-      hydra.lib.effects.map.name -> mkPrim(hydra.lib.effects.map.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.map.name -> mkPrimEffect(hydra.lib.effects.map.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, y), tFun(tEffect(x), tEffect(y))))),
       // mapList: (x -> effect<y>) -> list<x> -> effect<list<y>>
-      hydra.lib.effects.mapList.name -> mkPrim(hydra.lib.effects.mapList.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.mapList.name -> mkPrimEffect(hydra.lib.effects.mapList.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, tEffect(y)), tFun(tList(x), tEffect(tList(y)))))),
       // mapOptional: (x -> effect<y>) -> optional<x> -> effect<optional<y>>
-      hydra.lib.effects.mapOptional.name -> mkPrim(hydra.lib.effects.mapOptional.name, tScheme(Seq("x", "y"),
+      hydra.lib.effects.mapOptional.name -> mkPrimEffect(hydra.lib.effects.mapOptional.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, tEffect(y)), tFun(tOpt(x), tEffect(tOpt(y)))))),
       // pure: x -> effect<x>
-      hydra.lib.effects.pure.name -> mkPrim(hydra.lib.effects.pure.name, tScheme(Seq("x"),
+      hydra.lib.effects.pure.name -> mkPrimEffect(hydra.lib.effects.pure.name, tScheme(Seq("x"),
         tFun(x, tEffect(x)))),
     )
 
@@ -1287,37 +1296,37 @@ object Libraries:
   private def filesPrimitives(): Map[String, Primitive] =
     Map(
       // appendFile: FilePath -> binary -> effect<either<FileError, unit>>
-      hydra.lib.files.appendFile.name -> mkPrim(hydra.lib.files.appendFile.name,
+      hydra.lib.files.appendFile.name -> mkPrimEffect(hydra.lib.files.appendFile.name,
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
       // copy: boolean -> FilePath -> FilePath -> effect<either<FileError, unit>>
-      hydra.lib.files.copy.name -> mkPrim(hydra.lib.files.copy.name,
+      hydra.lib.files.copy.name -> mkPrimEffect(hydra.lib.files.copy.name,
         tMono(tFun(tBool, tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit))))))),
       // createDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
-      hydra.lib.files.createDirectory.name -> mkPrim(hydra.lib.files.createDirectory.name,
+      hydra.lib.files.createDirectory.name -> mkPrimEffect(hydra.lib.files.createDirectory.name,
         tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
       // exists: FilePath -> effect<either<FileError, boolean>>
-      hydra.lib.files.exists.name -> mkPrim(hydra.lib.files.exists.name,
+      hydra.lib.files.exists.name -> mkPrimEffect(hydra.lib.files.exists.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBool))))),
       // listDirectory: FilePath -> effect<either<FileError, list<FilePath>>>
-      hydra.lib.files.listDirectory.name -> mkPrim(hydra.lib.files.listDirectory.name,
+      hydra.lib.files.listDirectory.name -> mkPrimEffect(hydra.lib.files.listDirectory.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tList(tFilePath)))))),
       // readFile: FilePath -> effect<either<FileError, binary>>
-      hydra.lib.files.readFile.name -> mkPrim(hydra.lib.files.readFile.name,
+      hydra.lib.files.readFile.name -> mkPrimEffect(hydra.lib.files.readFile.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBinary))))),
       // removeDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
-      hydra.lib.files.removeDirectory.name -> mkPrim(hydra.lib.files.removeDirectory.name,
+      hydra.lib.files.removeDirectory.name -> mkPrimEffect(hydra.lib.files.removeDirectory.name,
         tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
       // removeFile: FilePath -> effect<either<FileError, unit>>
-      hydra.lib.files.removeFile.name -> mkPrim(hydra.lib.files.removeFile.name,
+      hydra.lib.files.removeFile.name -> mkPrimEffect(hydra.lib.files.removeFile.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tUnit))))),
       // rename: FilePath -> FilePath -> effect<either<FileError, unit>>
-      hydra.lib.files.rename.name -> mkPrim(hydra.lib.files.rename.name,
+      hydra.lib.files.rename.name -> mkPrimEffect(hydra.lib.files.rename.name,
         tMono(tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
       // status: FilePath -> effect<either<FileError, FileStatus>>
-      hydra.lib.files.status.name -> mkPrim(hydra.lib.files.status.name,
+      hydra.lib.files.status.name -> mkPrimEffect(hydra.lib.files.status.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tFileStatus))))),
       // writeFile: FilePath -> binary -> effect<either<FileError, unit>>
-      hydra.lib.files.writeFile.name -> mkPrim(hydra.lib.files.writeFile.name,
+      hydra.lib.files.writeFile.name -> mkPrimEffect(hydra.lib.files.writeFile.name,
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
     )
 
@@ -1338,22 +1347,22 @@ object Libraries:
   private def systemPrimitives(): Map[String, Primitive] =
     Map(
       // execute: Command -> effect<either<SystemError, ProcessResult>>
-      hydra.lib.system.execute.name -> mkPrim(hydra.lib.system.execute.name,
+      hydra.lib.system.execute.name -> mkPrimEffect(hydra.lib.system.execute.name,
         tMono(tFun(tCommand, tEffect(tEither(tSystemError, tProcessResult))))),
       // exit: StatusCode -> effect<unit>
-      hydra.lib.system.exit.name -> mkPrim(hydra.lib.system.exit.name,
+      hydra.lib.system.exit.name -> mkPrimEffect(hydra.lib.system.exit.name,
         tMono(tFun(tStatusCode, tEffect(tUnit)))),
       // getEnvironment: effect<map<EnvironmentVariable, string>>
-      hydra.lib.system.getEnvironment.name -> mkPrim(hydra.lib.system.getEnvironment.name,
+      hydra.lib.system.getEnvironment.name -> mkPrimEffect(hydra.lib.system.getEnvironment.name,
         tMono(tEffect(tMap(tEnvironmentVariable, tString)))),
       // getEnvironmentVariable: EnvironmentVariable -> effect<optional<string>>
-      hydra.lib.system.getEnvironmentVariable.name -> mkPrim(hydra.lib.system.getEnvironmentVariable.name,
+      hydra.lib.system.getEnvironmentVariable.name -> mkPrimEffect(hydra.lib.system.getEnvironmentVariable.name,
         tMono(tFun(tEnvironmentVariable, tEffect(tOpt(tString))))),
       // getTime: effect<Timespec>
-      hydra.lib.system.getTime.name -> mkPrim(hydra.lib.system.getTime.name,
+      hydra.lib.system.getTime.name -> mkPrimEffect(hydra.lib.system.getTime.name,
         tMono(tEffect(tTimespec))),
       // getWorkingDirectory: effect<either<SystemError, FilePath>>
-      hydra.lib.system.getWorkingDirectory.name -> mkPrim(hydra.lib.system.getWorkingDirectory.name,
+      hydra.lib.system.getWorkingDirectory.name -> mkPrimEffect(hydra.lib.system.getWorkingDirectory.name,
         tMono(tEffect(tEither(tSystemError, tFilePath)))),
     )
 

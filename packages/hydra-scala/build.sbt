@@ -24,6 +24,7 @@ lazy val root = project
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-python" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-scala" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-lisp" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-typescript" / "src" / "main" / "scala",
       // #546: hydra-build's generated main modules (hydra.build.*), imported by
       // the generated build test modules that the kernel test suite references.
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-build" / "src" / "main" / "scala",
