@@ -52,9 +52,10 @@ KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
 # Scala publish set, leaves-first (mirror of publish-sbt.sh PUBLISH_SET).
-# hydra-pg is excluded: the generated Scala pg coder has an unresolved
-# type-variable threading bug that prevents it from compiling standalone
-# (see publish-sbt.sh for details).
+# hydra-pg is included: the Scala pg coder's type-argument specialization on the
+# multi-param hydra.pg.mapping.Schema[S,T,V,E] is fixed (#589) so hydra-pg
+# compiles standalone. Experimental targets (go/coq/wasm), benchmarks
+# (hydra-bench), and hydra-ext (coder limitation) are not published for Scala.
 PUBLISH_SET=(
     hydra-kernel
     hydra-build
@@ -66,6 +67,7 @@ PUBLISH_SET=(
     hydra-lisp
     hydra-typescript
     hydra-rdf
+    hydra-pg
 )
 # #519: Scala artifacts publish under the per-language group
 # net.fortytwo.hydra.scala (must match GROUP_ID in

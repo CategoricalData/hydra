@@ -8,11 +8,12 @@
 # cross-version suffix (_3). The group is read from the generated build.sbt.
 # The publish set is:
 #   hydra-kernel -> hydra-haskell/hydra-jvm/hydra-python/hydra-lisp/
-#   hydra-typescript/hydra-rdf; hydra-jvm -> hydra-java/hydra-scala
+#   hydra-typescript/hydra-rdf/hydra-pg; hydra-jvm -> hydra-java/hydra-scala
 # (hydra-jvm is the shared JVM base that hydra-java and hydra-scala depend on,
 # so it must be in the set for dependency closure.)
-# hydra-pg is excluded pending a fix to the generated pg-coder type error.
-# hydra-ext is also excluded (not in the standard sync matrix).
+# hydra-pg is included: the Scala pg coder's type-argument specialization on the
+# multi-param Schema[S,T,V,E] is fixed (#589) so hydra-pg compiles standalone.
+# hydra-ext is excluded (coder limitation; not in the standard sync matrix).
 #
 # Each dist/scala/<pkg>/ is a standalone sbt build whose generated build.sbt
 # carries `sbt-sonatype` + `sbt-pgp` publishing. Credentials are read from
