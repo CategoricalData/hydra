@@ -71,10 +71,11 @@ done
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# Publish set in LEAVES-FIRST topological order.
-# hydra-pg is excluded: the generated Scala pg coder has a type-variable
-# threading bug (Schema[T0,T1,T2] vs Schema[T0,core.Type,T1]) that prevents
-# it from compiling standalone. Track the fix separately before adding it.
+# Publish set in LEAVES-FIRST topological order. Mirrors the Java publish set
+# (hydra-pg included): the Scala pg coder's type-argument specialization on the
+# multi-param hydra.pg.mapping.Schema[S,T,V,E] is fixed so hydra-pg compiles
+# standalone. Experimental targets (go/coq/wasm), benchmarks (hydra-bench), and
+# hydra-ext (coder limitation) are not published for Scala.
 PUBLISH_SET=(
     hydra-kernel
     hydra-build
@@ -86,6 +87,7 @@ PUBLISH_SET=(
     hydra-lisp
     hydra-typescript
     hydra-rdf
+    hydra-pg
 )
 
 # --- Guard: sbt on PATH ------------------------------------------------------

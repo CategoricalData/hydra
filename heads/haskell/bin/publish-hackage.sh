@@ -51,22 +51,32 @@ done
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# The full publish set, in LEAVES-FIRST topological order (#376). DERIVED from the
-# hydra.json registry via `hydra-packages.py topo` (deps first) so it stays complete
-# automatically as packages are added — NO hardcoded list to fall out of sync (the
-# original 0.16 trio-only hardcoding is exactly what left the coder packages off
-# Hackage; #376). The hand-written `hydra` umbrella is not in the registry, so it is
-# appended last (it depends on kernel+haskell, both earlier in topo order). Guard 1
-# below still asserts dependency-closure, so any ordering error is caught before upload.
-# `topo` prints the packages on ONE space-separated line, so word-split with
-# `read -ra` (not `mapfile`, which is line-based and would yield a single element).
-read -ra _REGISTRY_TOPO < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" topo \
-    $("$HYDRA_ROOT/bin/lib/hydra-packages.py" list))
-if [ "${#_REGISTRY_TOPO[@]}" -eq 0 ]; then
-    echo "ERROR: could not derive publish set from hydra.json registry" >&2
-    exit 1
-fi
-PUBLISH_SET=("${_REGISTRY_TOPO[@]}" hydra)
+# Publish set in LEAVES-FIRST topological order, curated per host (the Java/Scala/
+# Python/npm channels each keep their own explicit list; Hackage does too as of
+# 0.17.1). Mirrors the Java/Scala coder set — Hackage ships the Haskell SOURCE of
+# every coder package — plus the hand-written `hydra` umbrella (which Java/Scala have
+# no analog of). Registry packages NOT published to Hackage: the experimental targets
+# hydra-go/hydra-coq/hydra-wasm ("head buds", runtime partial), hydra-bench (inference
+# benchmarks, not a consumable library), and hydra-ext (coder limitation, also excluded
+# from the Java/Python sets). Ordered deps-first; Guard 1 below asserts dependency
+# closure so any ordering/omission error is caught before upload.
+# NOTE (#573): the long-term plan is to derive all per-registry sets from registry
+# metadata (with per-registry exclusions stored in the registry) to end hand-list rot;
+# targeted for 0.18. For 0.17.1 this stays an explicit, curated list like the others.
+PUBLISH_SET=(
+    hydra-kernel
+    hydra-build
+    hydra-haskell
+    hydra-jvm
+    hydra-java
+    hydra-python
+    hydra-scala
+    hydra-lisp
+    hydra-typescript
+    hydra-rdf
+    hydra-pg
+    hydra
+)
 HACKAGE_BASE="https://hackage.haskell.org/package"
 
 # --- Guard 1: dependency closure ---------------------------------------------
