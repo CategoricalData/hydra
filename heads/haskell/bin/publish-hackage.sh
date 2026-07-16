@@ -35,12 +35,14 @@ HYDRA_ROOT="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 OUT_DIR="$HYDRA_ROOT/build/hackage"
 DO_UPLOAD=false
 DO_PUBLISH=false
+DO_LIST=false
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --out) OUT_DIR="$2"; shift 2 ;;
         --upload) DO_UPLOAD=true; shift ;;
         --publish) DO_UPLOAD=true; DO_PUBLISH=true; shift ;;
+        --list) DO_LIST=true; shift ;;
         --help|-h)
             sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
@@ -49,7 +51,11 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
+# --list defers to after PUBLISH_SET is defined (below); it prints the curated set
+# and exits before the version lookup / network guards.
+if [ "$DO_LIST" != true ]; then
+    VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
+fi
 
 # Publish set in LEAVES-FIRST topological order, curated per host (the Java/Scala/
 # Python/npm channels each keep their own explicit list; Hackage does too as of
@@ -77,6 +83,17 @@ PUBLISH_SET=(
     hydra-pg
     hydra
 )
+
+# --list: print the curated set (leaves-first, one per line) and exit, so other
+# release scripts (bin/prepare-release.sh) consume THIS set as the single source
+# of truth for the Hackage channel rather than re-deriving it from the raw registry
+# topo and drifting (that drift wrongly pulled the experimental hydra-go/coq/wasm
+# sdists into prepare-release's sdist check — #589 follow-up).
+if [ "$DO_LIST" = true ]; then
+    printf '%s\n' "${PUBLISH_SET[@]}"
+    exit 0
+fi
+
 HACKAGE_BASE="https://hackage.haskell.org/package"
 
 # --- Guard 1: dependency closure ---------------------------------------------

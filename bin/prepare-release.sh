@@ -347,19 +347,22 @@ SDIST_LOG="$LOG_DIR/hackage-sdist.log"
 SDIST_OK=true
 SDIST_WORK=""
 
-# The Hackage publish set, DERIVED from the hydra.json registry (deps-first topo
-# order) so it stays complete as packages are added — matching how
-# heads/haskell/bin/publish-hackage.sh derives PUBLISH_SET. No hardcoded list to
-# fall out of sync (the old trio-only hardcoding left the coder packages off
-# Hackage; #376). `topo` prints one space-separated line → word-split with read -ra.
-# The hand-written `hydra` umbrella is not in the registry, so append it last.
-read -ra _HACKAGE_TOPO < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" topo \
-    $("$HYDRA_ROOT/bin/lib/hydra-packages.py" list))
-if [ "${#_HACKAGE_TOPO[@]}" -eq 0 ]; then
-    echo "  FAIL: could not derive Hackage publish set from hydra.json registry"
+# The Hackage publish set is the SINGLE SOURCE OF TRUTH curated in
+# heads/haskell/bin/publish-hackage.sh (its PUBLISH_SET), consumed here via
+# `--list` so the two can never drift. That set is leaves-first and deliberately
+# EXCLUDES the experimental targets (hydra-go/coq/wasm), hydra-bench, and hydra-ext
+# — which is exactly what the sdist check below must iterate, since publish-hackage.sh
+# only assembles those packages. (An earlier registry-topo re-derivation here pulled
+# in hydra-go and failed the sdist extraction — #589 follow-up.) The `hydra` umbrella
+# is already included by publish-hackage.sh's set.
+# Word-split the newline-separated --list output. Unquoted command substitution
+# (not `read -ra`, which stops at the first newline) splits on both newlines and
+# spaces; package names contain neither spaces nor glob chars, so this is safe.
+HACKAGE_PKGS=( $("$HYDRA_ROOT/heads/haskell/bin/publish-hackage.sh" --list) )
+if [ "${#HACKAGE_PKGS[@]}" -eq 0 ]; then
+    echo "  FAIL: could not derive Hackage publish set from publish-hackage.sh --list"
     ERRORS=$((ERRORS + 1))
 fi
-HACKAGE_PKGS=("${_HACKAGE_TOPO[@]}" hydra)
 
 case "$(uname -s)" in
     Darwin)
@@ -470,7 +473,7 @@ if [ "$SDIST_OK" = true ]; then
         DOC_OK=true
     fi
 else
-    echo "  SKIP: skipped because Step 9 failed; haddock build needs buildable sdists"
+    echo "  SKIP: skipped because Step 10 (sdist build) failed; haddock needs buildable sdists"
     ERRORS=$((ERRORS + 1))
 fi
 
