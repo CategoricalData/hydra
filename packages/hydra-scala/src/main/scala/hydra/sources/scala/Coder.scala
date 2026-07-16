@@ -1271,14 +1271,14 @@ object Coder:
           applyP("hydra.lib.lists.take", v("paramCount"), v("paramNames")),
           applyP("hydra.lib.lists.take", v("paramCount"), v("doms")))),
       field("freeTypeVars",
-        applyP("hydra.lib.lists.filter",
-          lambda("v",
-            applyP("hydra.lib.logic.not",
-              applyP("hydra.lib.lists.elem",
-                int32(46),
-                applyP("hydra.lib.strings.toList", CoreDsl.unName(v("v")))))),
-          applyP("hydra.lib.sets.toList",
-            applyP("hydra.variables.freeVariablesInType", v("typ"))))),
+        applyP("hydra.lib.lists.nub",
+          applyP("hydra.lib.lists.filter",
+            lambda("v",
+              applyP("hydra.lib.logic.not",
+                applyP("hydra.lib.lists.elem",
+                  int32(46),
+                  applyP("hydra.lib.strings.toList", CoreDsl.unName(v("v")))))),
+            applyP("hydra.variables.freeVariablesInTypeOrdered", v("typ"))))),
       field("tparams",
         applyP("hydra.lib.lists.map",
           lambda("tv", applyP(localUtils("stparam"), v("tv"))),
@@ -2037,31 +2037,462 @@ object Coder:
       field("arg", CoreDsl.applicationArgument(v("app")))),
       encodeTermApplicationFunDispatch))
 
+  // ===== Type-argument over-generalization correction (#589) =====
+  //
+  // Mirrors the Java coder's correctTypeApps/detectAccumulatorUnification pipeline
+  // (packages/hydra-java/.../Coder.java). A callee's own declared TypeScheme may have type
+  // variables that are forced to unify with each other (or with a concrete ground type) by the
+  // shape of the callee's own curried domain — e.g. accumulator-style `Coder v1 v2 e` fields
+  // whose v1 slot is pinned to a concrete type at the field's own declaration (as in
+  // hydra.pg.mapping.Schema). The raw TypeApplication chain collected at a call site doesn't
+  // encode that internal redundancy, so naively encoding each collected type arg independently
+  // over-generalizes (fresh unrelated type vars where the scheme forces identity/concretization).
+  // These helpers detect and collapse that redundancy before the type args are rendered.
+
+  private val collectTypeVarsGoBody = lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      v("hydra.lib.sets.empty"),
+      field("variable", lambda("name", applyP("hydra.lib.sets.singleton", v("name")))),
+      field("function", lambda("ft",
+        applyP("hydra.lib.sets.union",
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft")))),
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.functionTypeCodomain(v("ft"))))))),
+      field("application", lambda("at",
+        applyP("hydra.lib.sets.union",
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.applicationTypeFunction(v("at")))),
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.applicationTypeArgument(v("at"))))))),
+      field("list", lambda("inner", applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", v("inner"))))),
+      field("set", lambda("inner", applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", v("inner"))))),
+      field("optional", lambda("inner", applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", v("inner"))))),
+      field("effect", lambda("inner", applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", v("inner"))))),
+      field("map", lambda("mt",
+        applyP("hydra.lib.sets.union",
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.mapTypeKeys(v("mt")))),
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.mapTypeValues(v("mt"))))))),
+      field("pair", lambda("pt",
+        applyP("hydra.lib.sets.union",
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.pairTypeFirst(v("pt")))),
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.pairTypeSecond(v("pt"))))))),
+      field("either", lambda("et",
+        applyP("hydra.lib.sets.union",
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.eitherTypeLeft(v("et")))),
+          applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.eitherTypeRight(v("et"))))))),
+      field("forall", lambda("ft", applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", CoreDsl.forallTypeBody(v("ft"))))))))
+
+  lazy val collectTypeVarsGoDef: Definition =
+    define(NS, "collectTypeVarsGo").doc("Recursively collect free type variables from a type (#589)").to(collectTypeVarsGoBody)
+
+  private val collectTypeVarsBody = lambda("typ",
+    applyP(local("collectTypeVarsGo"), applyP("hydra.strip.deannotateType", v("typ"))))
+
+  lazy val collectTypeVarsDef: Definition =
+    define(NS, "collectTypeVars").doc("Collect the set of free type variables occurring in a type (#589)").to(collectTypeVarsBody)
+
+  private val isSimpleNameBody = lambda("name",
+    applyP("hydra.lib.equality.equal",
+      applyP("hydra.lib.lists.length",
+        applyP("hydra.lib.strings.splitOn", string("."), CoreDsl.unName(v("name")))),
+      int32(1)))
+
+  lazy val isSimpleNameDef: Definition =
+    define(NS, "isSimpleName").doc("True if a type-variable name has no namespace qualifier (#589)").to(isSimpleNameBody)
+
+  private val filterByFlagsBody = lambda("xs", lambda("flags",
+    applyP("hydra.lib.lists.map",
+      lambda("p", applyP("hydra.lib.pairs.first", v("p"))),
+      applyP("hydra.lib.lists.filter",
+        lambda("p", applyP("hydra.lib.pairs.second", v("p"))),
+        applyP("hydra.lib.lists.zip", v("xs"), v("flags"))))))
+
+  lazy val filterByFlagsDef: Definition =
+    define(NS, "filterByFlags").doc("Keep elements of xs whose corresponding flag is true (#589)").to(filterByFlagsBody)
+
+  private val countFunctionParamsBody = lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      int32(0),
+      field("function", lambda("ft",
+        applyP("hydra.lib.math.add", int32(1),
+          applyP(local("countFunctionParams"), CoreDsl.functionTypeCodomain(v("ft"))))))))
+
+  lazy val countFunctionParamsDef: Definition =
+    define(NS, "countFunctionParams").doc("Count the curried function parameters of a type (#589)").to(countFunctionParamsBody)
+
+  private val peelDomainTypesBody = lambda("n", lambda("t",
+    applyP("hydra.lib.logic.ifElse",
+      applyP("hydra.lib.equality.lte", v("n"), int32(0)),
+      Phantoms.pair(emptyList, v("t")),
+      casesWithDefault("hydra.core.Type",
+        applyP("hydra.strip.deannotateType", v("t")),
+        Phantoms.pair(emptyList, v("t")),
+        field("function", lambda("ft",
+          Phantoms.let("rest",
+            applyP(local("peelDomainTypes"),
+              applyP("hydra.lib.math.sub", v("n"), int32(1)),
+              CoreDsl.functionTypeCodomain(v("ft"))),
+            Phantoms.pair(
+              applyP("hydra.lib.lists.cons", CoreDsl.functionTypeDomain(v("ft")), applyP("hydra.lib.pairs.first", v("rest"))),
+              applyP("hydra.lib.pairs.second", v("rest"))))))))))
+
+  lazy val peelDomainTypesDef: Definition =
+    define(NS, "peelDomainTypes").doc("Peel up to n curried domain types off a function type (#589)").to(peelDomainTypesBody)
+
+  private val unwrapReturnTypeBody = lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      v("t"),
+      field("function", lambda("ft", applyP(local("unwrapReturnType"), CoreDsl.functionTypeCodomain(v("ft"))))),
+      field("application", lambda("at", applyP(local("unwrapReturnType"), CoreDsl.applicationTypeArgument(v("at")))))))
+
+  lazy val unwrapReturnTypeDef: Definition =
+    define(NS, "unwrapReturnType").doc("Unwrap a (possibly curried/applied) type down to its ultimate return type (#589)").to(unwrapReturnTypeBody)
+
+  // extractInOutPair: for a domain shaped `inVar -> ... -> Pair(outVar, _)`, extract (inVar, outVar).
+  private val extractInOutPairBody = lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      emptyList,
+      field("function", lambda("ft",
+        casesWithDefault("hydra.core.Type",
+          applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft"))),
+          emptyList,
+          field("variable", lambda("inVar",
+            Phantoms.let("retType",
+              applyP(local("unwrapReturnType"), CoreDsl.functionTypeCodomain(v("ft"))),
+              casesWithDefault("hydra.core.Type",
+                applyP("hydra.strip.deannotateType", v("retType")),
+                emptyList,
+                field("pair", lambda("pt",
+                  casesWithDefault("hydra.core.Type",
+                    applyP("hydra.strip.deannotateType", CoreDsl.pairTypeFirst(v("pt"))),
+                    emptyList,
+                    field("variable", lambda("outVar",
+                      applyP("hydra.lib.lists.singleton", Phantoms.pair(v("inVar"), v("outVar")))))))))))))))))
+
+  lazy val extractInOutPairDef: Definition =
+    define(NS, "extractInOutPair").doc("Extract an (input-var, output-var) accumulator pair from a domain type (#589)").to(extractInOutPairBody)
+
+  // extractDirectReturn: for a domain shaped `inVar -> ... -> midArg -> outVar` (a nested
+  // function-typed domain directly threading a type var to an eventual output), extract pairs.
+  private val extractDirectReturnGoBody = lambda("tparamSet", lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      emptyList,
+      field("function", lambda("ft",
+        Phantoms.let(Seq(
+          field("dom", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft")))),
+          field("cod", CoreDsl.functionTypeCodomain(v("ft")))),
+          casesWithDefault("hydra.core.Type",
+            v("dom"),
+            applyP(local("extractDirectReturnGo"), v("tparamSet"), v("cod")),
+            field("variable", lambda("inVar",
+              applyP("hydra.lib.logic.ifElse",
+                applyP("hydra.lib.sets.member", v("inVar"), v("tparamSet")),
+                casesWithDefault("hydra.core.Type",
+                  applyP("hydra.strip.deannotateType", v("cod")),
+                  emptyList,
+                  field("function", lambda("ft2",
+                    Phantoms.let(Seq(
+                      field("midArg", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft2")))),
+                      field("retPart", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeCodomain(v("ft2"))))),
+                      casesWithDefault("hydra.core.Type",
+                        v("midArg"),
+                        casesWithDefault("hydra.core.Type",
+                          v("retPart"),
+                          emptyList,
+                          field("variable", lambda("outVar",
+                            applyP("hydra.lib.logic.ifElse",
+                              applyP("hydra.lib.sets.member", v("outVar"), v("tparamSet")),
+                              applyP("hydra.lib.lists.singleton", Phantoms.pair(v("inVar"), v("outVar"))),
+                              emptyList)))),
+                        field("variable", lambda("midVar",
+                          applyP("hydra.lib.logic.ifElse",
+                            applyP("hydra.lib.sets.member", v("midVar"), v("tparamSet")),
+                            emptyList,
+                            casesWithDefault("hydra.core.Type",
+                              v("retPart"),
+                              emptyList,
+                              field("variable", lambda("outVar",
+                                applyP("hydra.lib.logic.ifElse",
+                                  applyP("hydra.lib.sets.member", v("outVar"), v("tparamSet")),
+                                  applyP("hydra.lib.lists.singleton", Phantoms.pair(v("inVar"), v("outVar"))),
+                                  emptyList)))))))))))),
+                applyP(local("extractDirectReturnGo"), v("tparamSet"), v("cod"))))))))))))
+
+  lazy val extractDirectReturnGoDef: Definition =
+    define(NS, "extractDirectReturnGo").doc("Recursive worker for extractDirectReturn (#589)").to(extractDirectReturnGoBody)
+
+  private val extractDirectReturnBody = lambda("tparamSet", lambda("t",
+    applyP(local("extractDirectReturnGo"), v("tparamSet"), v("t"))))
+
+  lazy val extractDirectReturnDef: Definition =
+    define(NS, "extractDirectReturn").doc("Extract direct-return (input-var, output-var) pairs from a domain type (#589)").to(extractDirectReturnBody)
+
+  private val groupPairsByFirstBody = lambda("pairs",
+    applyP("hydra.lib.lists.foldl",
+      lambda("m", lambda("p",
+        Phantoms.let(Seq(
+          field("k", applyP("hydra.lib.pairs.first", v("p"))),
+          field("vv", applyP("hydra.lib.pairs.second", v("p")))),
+          applyP("hydra.lib.maps.alter",
+            lambda("mv",
+              applyP("hydra.lib.optionals.cases", v("mv"),
+                just(applyP("hydra.lib.lists.singleton", v("vv"))),
+                lambda("vs", just(applyP("hydra.lib.lists.concat2", v("vs"), applyP("hydra.lib.lists.singleton", v("vv"))))))),
+            v("k"), v("m"))))),
+      v("hydra.lib.maps.empty"),
+      v("pairs")))
+
+  lazy val groupPairsByFirstDef: Definition =
+    define(NS, "groupPairsByFirst").doc("Group a list of pairs into a map keyed by first component (#589)").to(groupPairsByFirstBody)
+
+  private val findPairFirstBody = lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      nothing,
+      field("pair", lambda("pt",
+        casesWithDefault("hydra.core.Type",
+          applyP("hydra.strip.deannotateType", CoreDsl.pairTypeFirst(v("pt"))),
+          nothing,
+          field("variable", lambda("vv", just(v("vv")))))))))
+
+  lazy val findPairFirstDef: Definition =
+    define(NS, "findPairFirst").doc("If t is Pair(var, _), return the first component's variable name (#589)").to(findPairFirstBody)
+
+  private val findSelfRefVarBody = lambda("grouped",
+    Phantoms.let("selfRefs",
+      applyP("hydra.lib.lists.filter",
+        lambda("entry", applyP("hydra.lib.lists.elem", applyP("hydra.lib.pairs.first", v("entry")), applyP("hydra.lib.pairs.second", v("entry")))),
+        applyP("hydra.lib.maps.toList", v("grouped"))),
+      applyP("hydra.lib.optionals.map",
+        lambda("entry", applyP("hydra.lib.pairs.first", v("entry"))),
+        applyP("hydra.lib.lists.maybeHead", v("selfRefs")))))
+
+  lazy val findSelfRefVarDef: Definition =
+    define(NS, "findSelfRefVar").doc("Find a type variable that is its own accumulator output, if any (#589)").to(findSelfRefVarBody)
+
+  private val nameMapToTypeMapBody = lambda("m",
+    applyP("hydra.lib.maps.map",
+      lambda("vv", inject("hydra.core.Type", "variable", v("vv"))),
+      v("m")))
+
+  lazy val nameMapToTypeMapDef: Definition =
+    define(NS, "nameMapToTypeMap").doc("Lift a Name->Name substitution map to a Name->Type map (#589)").to(nameMapToTypeMapBody)
+
+  private val selfRefSubstitutionProcessGroupBody = lambda("subst", lambda("inVar", lambda("outVars",
+    applyP("hydra.lib.logic.ifElse",
+      applyP("hydra.lib.lists.elem", v("inVar"), v("outVars")),
+      applyP("hydra.lib.lists.foldl",
+        lambda("s", lambda("vv",
+          applyP("hydra.lib.logic.ifElse",
+            applyP("hydra.lib.equality.equal", v("vv"), v("inVar")),
+            v("s"),
+            applyP("hydra.lib.maps.insert", v("vv"), v("inVar"), v("s"))))),
+        v("subst"), v("outVars")),
+      v("subst")))))
+
+  lazy val selfRefSubstitutionProcessGroupDef: Definition =
+    define(NS, "selfRefSubstitutionProcessGroup").doc("Unify every co-occurring var onto inVar when inVar is its own accumulator output (#589)").to(selfRefSubstitutionProcessGroupBody)
+
+  private val selfRefSubstitutionBody = lambda("grouped",
+    applyP("hydra.lib.lists.foldl",
+      lambda("subst", lambda("entry",
+        applyP(local("selfRefSubstitutionProcessGroup"), v("subst"),
+          applyP("hydra.lib.pairs.first", v("entry")), applyP("hydra.lib.pairs.second", v("entry"))))),
+      v("hydra.lib.maps.empty"),
+      applyP("hydra.lib.maps.toList", v("grouped"))))
+
+  lazy val selfRefSubstitutionDef: Definition =
+    define(NS, "selfRefSubstitution").doc("Compute the self-reference substitution over grouped accumulator pairs (#589)").to(selfRefSubstitutionBody)
+
+  private val directRefSubstitutionProcessGroupBody = lambda("directInputVars", lambda("codVar", lambda("subst", lambda("inVar", lambda("outVars",
+    Phantoms.let(Seq(
+      field("selfRefCount",
+        applyP("hydra.lib.lists.length",
+          applyP("hydra.lib.lists.filter", lambda("vv", applyP("hydra.lib.equality.equal", v("vv"), v("inVar"))), v("outVars")))),
+      field("nonSelfVars",
+        applyP("hydra.lib.lists.filter", lambda("vv", applyP("hydra.lib.logic.not", applyP("hydra.lib.equality.equal", v("vv"), v("inVar")))), v("outVars"))),
+      field("safeNonSelfVars",
+        applyP("hydra.lib.lists.filter",
+          lambda("vv",
+            applyP("hydra.lib.logic.and",
+              applyP("hydra.lib.logic.not", applyP("hydra.lib.sets.member", v("vv"), v("directInputVars"))),
+              applyP("hydra.lib.logic.not", applyP("hydra.lib.equality.equal", just(v("vv")), v("codVar"))))),
+          v("nonSelfVars")))),
+      applyP("hydra.lib.logic.ifElse",
+        applyP("hydra.lib.logic.and",
+          applyP("hydra.lib.equality.gte", v("selfRefCount"), int32(2)),
+          applyP("hydra.lib.logic.not", applyP("hydra.lib.lists.null", v("safeNonSelfVars")))),
+        applyP("hydra.lib.lists.foldl",
+          lambda("s", lambda("vv", applyP("hydra.lib.maps.insert", v("vv"), v("inVar"), v("s")))),
+          v("subst"), v("safeNonSelfVars")),
+        v("subst"))))))))
+
+  lazy val directRefSubstitutionProcessGroupDef: Definition =
+    define(NS, "directRefSubstitutionProcessGroup").doc("Unify safe co-occurring vars onto inVar for the direct-return accumulator pattern (#589)").to(directRefSubstitutionProcessGroupBody)
+
+  private val directRefSubstitutionBody = lambda("directInputVars", lambda("codVar", lambda("grouped",
+    applyP("hydra.lib.lists.foldl",
+      lambda("subst", lambda("entry",
+        applyP(local("directRefSubstitutionProcessGroup"), v("directInputVars"), v("codVar"), v("subst"),
+          applyP("hydra.lib.pairs.first", v("entry")), applyP("hydra.lib.pairs.second", v("entry"))))),
+      v("hydra.lib.maps.empty"),
+      applyP("hydra.lib.maps.toList", v("grouped"))))))
+
+  lazy val directRefSubstitutionDef: Definition =
+    define(NS, "directRefSubstitution").doc("Compute the direct-return substitution over grouped accumulator pairs (#589)").to(directRefSubstitutionBody)
+
+  private val detectAccumulatorUnificationBody = lambda("doms", lambda("cod", lambda("tparams",
+    Phantoms.let(Seq(
+      field("tparamSet", applyP("hydra.lib.sets.fromList", v("tparams"))),
+      field("allPairs", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP(local("extractInOutPair"), v("d"))))),
+      field("groupedByInput", applyP(local("groupPairsByFirst"), v("allPairs"))),
+      field("selfRefSubst", applyP(local("selfRefSubstitution"), v("groupedByInput"))),
+      field("directPairs", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP(local("extractDirectReturn"), v("tparamSet"), v("d"))))),
+      field("groupedDirect", applyP(local("groupPairsByFirst"), v("directPairs"))),
+      field("directInputVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.map", lambda("p", applyP("hydra.lib.pairs.first", v("p"))), v("directPairs")))),
+      field("codVar", casesWithDefault("hydra.core.Type", applyP("hydra.strip.deannotateType", v("cod")), nothing[Any], field("variable", lambda("vv", just(v("vv")))))),
+      field("directRefSubst", applyP(local("directRefSubstitution"), v("directInputVars"), v("codVar"), v("groupedDirect"))),
+      field("codSubst", applyP("hydra.lib.optionals.cases", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.maps.member", v("cv"), v("selfRefSubst")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.cases", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.equality.equal", v("cv"), v("refVar")), v("hydra.lib.maps.empty"), applyP("hydra.lib.maps.singleton", v("cv"), v("refVar"))))))))),
+      field("domVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP("hydra.lib.sets.toList", applyP(local("collectTypeVars"), v("d"))))))),
+      field("danglingSubst", applyP("hydra.lib.optionals.cases", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.sets.member", v("cv"), v("domVars")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.cases", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.maps.singleton", v("cv"), inject("hydra.core.Type", "variable", v("refVar")))))))))),
+      applyP("hydra.lib.maps.union", applyP("hydra.lib.maps.union", applyP("hydra.lib.maps.union", applyP(local("nameMapToTypeMap"), v("selfRefSubst")), applyP(local("nameMapToTypeMap"), v("codSubst"))), v("danglingSubst")), applyP(local("nameMapToTypeMap"), v("directRefSubst")))))))
+
+  lazy val detectAccumulatorUnificationDef: Definition =
+    define(NS, "detectAccumulatorUnification").doc("Detect callee-scheme type vars forced together/to-concrete by the callee's own domain shape (#589)").to(detectAccumulatorUnificationBody)
+
+  private val substituteTypeVarsWithTypesGoBody = lambda("subst", lambda("t",
+    casesWithDefault("hydra.core.Type",
+      applyP("hydra.strip.deannotateType", v("t")),
+      v("t"),
+      field("variable", lambda("vv",
+        applyP("hydra.lib.optionals.cases", applyP("hydra.lib.maps.lookup", v("vv"), v("subst")), v("t"), lambda("rep", v("rep"))))),
+      field("function", lambda("ft",
+        inject("hydra.core.Type", "function",
+          Phantoms.record("hydra.core.FunctionType",
+            field("domain", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.functionTypeDomain(v("ft")))),
+            field("codomain", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.functionTypeCodomain(v("ft")))))))),
+      field("application", lambda("at",
+        inject("hydra.core.Type", "application",
+          Phantoms.record("hydra.core.ApplicationType",
+            field("function", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.applicationTypeFunction(v("at")))),
+            field("argument", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.applicationTypeArgument(v("at")))))))),
+      field("list", lambda("inner", inject("hydra.core.Type", "list", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), v("inner"))))),
+      field("set", lambda("inner", inject("hydra.core.Type", "set", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), v("inner"))))),
+      field("optional", lambda("inner", inject("hydra.core.Type", "optional", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), v("inner"))))),
+      field("effect", lambda("inner", inject("hydra.core.Type", "effect", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), v("inner"))))),
+      field("map", lambda("mt",
+        inject("hydra.core.Type", "map",
+          Phantoms.record("hydra.core.MapType",
+            field("keys", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.mapTypeKeys(v("mt")))),
+            field("values", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.mapTypeValues(v("mt")))))))),
+      field("pair", lambda("pt",
+        inject("hydra.core.Type", "pair",
+          Phantoms.record("hydra.core.PairType",
+            field("first", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.pairTypeFirst(v("pt")))),
+            field("second", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.pairTypeSecond(v("pt")))))))),
+      field("either", lambda("et",
+        inject("hydra.core.Type", "either",
+          Phantoms.record("hydra.core.EitherType",
+            field("left", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.eitherTypeLeft(v("et")))),
+            field("right", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.eitherTypeRight(v("et")))))))),
+      field("forall", lambda("ft",
+        inject("hydra.core.Type", "forall",
+          Phantoms.record("hydra.core.ForallType",
+            field("parameter", CoreDsl.forallTypeParameter(v("ft"))),
+            field("body", applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), CoreDsl.forallTypeBody(v("ft")))))))))))
+
+  lazy val substituteTypeVarsWithTypesGoDef: Definition =
+    define(NS, "substituteTypeVarsWithTypesGo").doc("Recursive worker for substituteTypeVarsWithTypes (#589)").to(substituteTypeVarsWithTypesGoBody)
+
+  private val substituteTypeVarsWithTypesBody = lambda("subst", lambda("t",
+    applyP(local("substituteTypeVarsWithTypesGo"), v("subst"), applyP("hydra.strip.deannotateType", v("t")))))
+
+  lazy val substituteTypeVarsWithTypesDef: Definition =
+    define(NS, "substituteTypeVarsWithTypes").doc("Substitute type variables in t per subst (#589)").to(substituteTypeVarsWithTypesBody)
+
+  // correctTypeApps: the scheme-based half of Java's correction pipeline. Looks up the callee's
+  // own TypeScheme, detects accumulator-forced redundancy among its own type vars via
+  // detectAccumulatorUnification, and filters+rewrites the raw collected type-arg list
+  // accordingly. (Java's value-argument-driven second pass, correctTypeAppsWithArgs, is omitted
+  // here: this arm doesn't have the callee's applied value arguments in scope — see #589 plan
+  // doc for the follow-up if the scheme-based half alone proves insufficient.)
+  private val correctTypeAppsBody = lambda("name", lambda("fallbackTypeApps", lambda("g",
+    applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lexical.lookupBinding", v("g"), v("name")),
+      Phantoms.right(v("fallbackTypeApps")),
+      lambda("el",
+        applyP("hydra.lib.optionals.cases",
+          CoreDsl.bindingTypeScheme(v("el")),
+          Phantoms.right(v("fallbackTypeApps")),
+          lambda("ts",
+            Phantoms.let(Seq(
+              field("schemeType", CoreDsl.typeSchemeBody(v("ts"))),
+              field("allSchemeVars",
+                applyP("hydra.lib.lists.filter", lambda("vv", applyP(local("isSimpleName"), v("vv"))), CoreDsl.typeSchemeVariables(v("ts")))),
+              field("schemeTypeVars", applyP(local("collectTypeVars"), v("schemeType"))),
+              field("usedFlags",
+                applyP("hydra.lib.lists.map", lambda("vv", applyP("hydra.lib.sets.member", v("vv"), v("schemeTypeVars"))), v("allSchemeVars"))),
+              field("usedSchemeVars", applyP(local("filterByFlags"), v("allSchemeVars"), v("usedFlags"))),
+              field("nParams", applyP(local("countFunctionParams"), v("schemeType"))),
+              field("peeled", applyP(local("peelDomainTypes"), v("nParams"), v("schemeType"))),
+              field("calleeDoms", applyP("hydra.lib.pairs.first", v("peeled"))),
+              field("calleeCod", applyP("hydra.lib.pairs.second", v("peeled"))),
+              field("overgenSubst", applyP(local("detectAccumulatorUnification"), v("calleeDoms"), v("calleeCod"), v("usedSchemeVars"))),
+              field("keepFlags",
+                applyP("hydra.lib.lists.map",
+                  lambda("vv",
+                    applyP("hydra.lib.logic.and",
+                      applyP("hydra.lib.sets.member", v("vv"), v("schemeTypeVars")),
+                      applyP("hydra.lib.logic.not", applyP("hydra.lib.maps.member", v("vv"), v("overgenSubst"))))),
+                  v("allSchemeVars"))),
+              field("schemeVars", applyP(local("filterByFlags"), v("allSchemeVars"), v("keepFlags"))),
+              field("filteredFallback0",
+                applyP("hydra.lib.logic.ifElse",
+                  applyP("hydra.lib.equality.equal", applyP("hydra.lib.lists.length", v("allSchemeVars")), applyP("hydra.lib.lists.length", v("fallbackTypeApps"))),
+                  applyP(local("filterByFlags"), v("fallbackTypeApps"), v("keepFlags")),
+                  v("fallbackTypeApps"))),
+              field("filteredFallback",
+                applyP("hydra.lib.logic.ifElse",
+                  applyP("hydra.lib.maps.null", v("overgenSubst")),
+                  v("filteredFallback0"),
+                  applyP("hydra.lib.lists.map",
+                    lambda("t", applyP(local("substituteTypeVarsWithTypes"), v("overgenSubst"), v("t"))),
+                    v("filteredFallback0"))))),
+              Phantoms.right(v("filteredFallback"))))))))))
+
+  lazy val correctTypeAppsDef: Definition =
+    define(NS, "correctTypeApps").doc("Filter/rewrite a raw type-application list against callee-scheme over-generalization (#589)").to(correctTypeAppsBody)
+
   // typeApplication arm — full translation. Two recursive lambdas (collectTypeArgs and
   // collectTypeLambdas) are let-rec bound; Hydra's let is recursive by default, so the
   // lambda body can reference its own let-bound name.
 
   private val encodeTermTypeAppVariableInner = lambda("pname",
     applyP("hydra.lib.eithers.bind",
-      applyP("hydra.lib.eithers.mapList",
-        lambda("targ", applyP(local("encodeType"), v("cx"), v("g"), v("targ"))),
-        v("typeArgs")),
-      lambda("stypeArgs",
-        applyP("hydra.lib.optionals.cases",
-          applyP("hydra.lib.maps.lookup", v("pname"),
-            GraphDsl.graphPrimitives(v("g"))),
-          applyP("hydra.lib.eithers.bind",
-            applyP(local("encodeTerm"),
-              v("cx"), v("g"), v("substitutedBody")),
-            lambda("svar",
-              Phantoms.right(
-                applyP(localUtils("sapplyTypes"),
-                  v("svar"), v("stypeArgs"))))),
-          lambda("_prim",
-            Phantoms.right(
-              applyP(localUtils("sapplyTypes"),
-                applyP(localUtils("sprim"), v("pname")),
-                v("stypeArgs"))))))))
+      applyP(local("correctTypeApps"), v("pname"), v("typeArgs"), v("g")),
+      lambda("correctedTypeArgs",
+        applyP("hydra.lib.eithers.bind",
+          applyP("hydra.lib.eithers.mapList",
+            lambda("targ", applyP(local("encodeType"), v("cx"), v("g"), v("targ"))),
+            v("correctedTypeArgs")),
+          lambda("stypeArgs",
+            applyP("hydra.lib.optionals.cases",
+              applyP("hydra.lib.maps.lookup", v("pname"),
+                GraphDsl.graphPrimitives(v("g"))),
+              applyP("hydra.lib.eithers.bind",
+                applyP(local("encodeTerm"),
+                  v("cx"), v("g"), v("substitutedBody")),
+                lambda("svar",
+                  Phantoms.right(
+                    applyP(localUtils("sapplyTypes"),
+                      v("svar"), v("stypeArgs"))))),
+              lambda("_prim",
+                Phantoms.right(
+                  applyP(localUtils("sapplyTypes"),
+                    applyP(localUtils("sprim"), v("pname")),
+                    v("stypeArgs"))))))))))
 
   private val encodeTermTypeAppInnerDispatch =
     casesWithDefault("hydra.core.Term",
@@ -2150,7 +2581,14 @@ object Coder:
 
   val DEFINITIONS: Seq[Definition] = Seq(
     applyVarDef,
+    collectTypeVarsDef,
+    collectTypeVarsGoDef,
     constructModuleDef,
+    correctTypeAppsDef,
+    countFunctionParamsDef,
+    detectAccumulatorUnificationDef,
+    directRefSubstitutionDef,
+    directRefSubstitutionProcessGroupDef,
     dropDomainsDef,
     encodeCaseDef,
     encodeComplexTermDefDef,
@@ -2166,19 +2604,34 @@ object Coder:
     encodeUntypeApplicationTermDef,
     extractBodyDef,
     extractCodomainDef,
+    extractDirectReturnDef,
+    extractDirectReturnGoDef,
     extractDomainsDef,
+    extractInOutPairDef,
     extractLetBindingsDef,
     extractParamsDef,
     fieldToEnumCaseDef,
     fieldToParamDef,
+    filterByFlagsDef,
     findDomainDef,
     findImportsDef,
+    findPairFirstDef,
     findSdomDef,
+    findSelfRefVarDef,
+    groupPairsByFirstDef,
+    isSimpleNameDef,
     moduleToScalaDef,
+    nameMapToTypeMapDef,
+    peelDomainTypesDef,
+    selfRefSubstitutionDef,
+    selfRefSubstitutionProcessGroupDef,
     stripWrapEliminationsDef,
+    substituteTypeVarsWithTypesDef,
+    substituteTypeVarsWithTypesGoDef,
     toElImportDef,
     toPrimImportDef,
-    typeParamToTypeVarDef)
+    typeParamToTypeVarDef,
+    unwrapReturnTypeDef)
 
   val module_ : Module = Module(
     name = NS,

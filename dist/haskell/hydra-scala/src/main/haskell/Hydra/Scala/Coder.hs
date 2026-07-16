@@ -24,6 +24,7 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -83,6 +84,27 @@ applyVar fterm avar =
           Core.applicationFunction = fterm,
           Core.applicationArgument = (Core.TermVariable avar)})
 
+-- | Collect the set of free type variables occurring in a type (#589)
+collectTypeVars :: Core.Type -> S.Set Core.Name
+collectTypeVars typ = collectTypeVarsGo (Strip.deannotateType typ)
+
+-- | Recursively collect free type variables from a type (#589)
+collectTypeVarsGo :: Core.Type -> S.Set Core.Name
+collectTypeVarsGo t =
+    case (Strip.deannotateType t) of
+      Core.TypeVariable v0 -> Sets.singleton v0
+      Core.TypeFunction v0 -> Sets.union (collectTypeVarsGo (Strip.deannotateType (Core.functionTypeDomain v0))) (collectTypeVarsGo (Strip.deannotateType (Core.functionTypeCodomain v0)))
+      Core.TypeApplication v0 -> Sets.union (collectTypeVarsGo (Strip.deannotateType (Core.applicationTypeFunction v0))) (collectTypeVarsGo (Strip.deannotateType (Core.applicationTypeArgument v0)))
+      Core.TypeList v0 -> collectTypeVarsGo (Strip.deannotateType v0)
+      Core.TypeSet v0 -> collectTypeVarsGo (Strip.deannotateType v0)
+      Core.TypeOptional v0 -> collectTypeVarsGo (Strip.deannotateType v0)
+      Core.TypeEffect v0 -> collectTypeVarsGo (Strip.deannotateType v0)
+      Core.TypeMap v0 -> Sets.union (collectTypeVarsGo (Strip.deannotateType (Core.mapTypeKeys v0))) (collectTypeVarsGo (Strip.deannotateType (Core.mapTypeValues v0)))
+      Core.TypePair v0 -> Sets.union (collectTypeVarsGo (Strip.deannotateType (Core.pairTypeFirst v0))) (collectTypeVarsGo (Strip.deannotateType (Core.pairTypeSecond v0)))
+      Core.TypeEither v0 -> Sets.union (collectTypeVarsGo (Strip.deannotateType (Core.eitherTypeLeft v0))) (collectTypeVarsGo (Strip.deannotateType (Core.eitherTypeRight v0)))
+      Core.TypeForall v0 -> collectTypeVarsGo (Strip.deannotateType (Core.forallTypeBody v0))
+      _ -> Sets.empty
+
 -- | Construct a Scala package from a Hydra module and its definitions
 constructModule :: t0 -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Pkg
 constructModule cx g mod defs =
@@ -102,6 +124,74 @@ constructModule cx g mod defs =
           imports,
           typeDeclStats,
           termDeclStats])})))))
+
+-- | Filter/rewrite a raw type-application list against callee-scheme over-generalization (#589)
+correctTypeApps :: Core.Name -> [Core.Type] -> Graph.Graph -> Either t0 [Core.Type]
+correctTypeApps name fallbackTypeApps g =
+    Optionals.cases (Lexical.lookupBinding g name) (Right fallbackTypeApps) (\el -> Optionals.cases (Core.bindingTypeScheme el) (Right fallbackTypeApps) (\ts ->
+      let schemeType = Core.typeSchemeBody ts
+          allSchemeVars = Lists.filter (\vv -> isSimpleName vv) (Core.typeSchemeVariables ts)
+          schemeTypeVars = collectTypeVars schemeType
+          usedFlags = Lists.map (\vv -> Sets.member vv schemeTypeVars) allSchemeVars
+          usedSchemeVars = filterByFlags allSchemeVars usedFlags
+          nParams = countFunctionParams schemeType
+          peeled = peelDomainTypes nParams schemeType
+          calleeDoms = Pairs.first peeled
+          calleeCod = Pairs.second peeled
+          overgenSubst = detectAccumulatorUnification calleeDoms calleeCod usedSchemeVars
+          keepFlags =
+                  Lists.map (\vv -> Logic.and (Sets.member vv schemeTypeVars) (Logic.not (Maps.member vv overgenSubst))) allSchemeVars
+          schemeVars = filterByFlags allSchemeVars keepFlags
+          filteredFallback0 =
+                  Logic.ifElse (Equality.equal (Lists.length allSchemeVars) (Lists.length fallbackTypeApps)) (filterByFlags fallbackTypeApps keepFlags) fallbackTypeApps
+          filteredFallback =
+                  Logic.ifElse (Maps.null overgenSubst) filteredFallback0 (Lists.map (\t -> substituteTypeVarsWithTypes overgenSubst t) filteredFallback0)
+      in (Right filteredFallback)))
+
+-- | Count the curried function parameters of a type (#589)
+countFunctionParams :: Core.Type -> Int
+countFunctionParams t =
+    case (Strip.deannotateType t) of
+      Core.TypeFunction v0 -> Math.add 1 (countFunctionParams (Core.functionTypeCodomain v0))
+      _ -> 0
+
+-- | Detect callee-scheme type vars forced together/to-concrete by the callee's own domain shape (#589)
+detectAccumulatorUnification :: [Core.Type] -> Core.Type -> [Core.Name] -> M.Map Core.Name Core.Type
+detectAccumulatorUnification doms cod tparams =
+
+      let tparamSet = Sets.fromList tparams
+          allPairs = Lists.bind doms (\d -> extractInOutPair d)
+          groupedByInput = groupPairsByFirst allPairs
+          selfRefSubst = selfRefSubstitution groupedByInput
+          directPairs = Lists.bind doms (\d -> extractDirectReturn tparamSet d)
+          groupedDirect = groupPairsByFirst directPairs
+          directInputVars = Sets.fromList (Lists.map (\p -> Pairs.first p) directPairs)
+          codVar =
+                  case (Strip.deannotateType cod) of
+                    Core.TypeVariable v0 -> Just v0
+                    _ -> Nothing
+          directRefSubst = directRefSubstitution directInputVars codVar groupedDirect
+          codSubst =
+                  Optionals.cases (findPairFirst cod) Maps.empty (\cv -> Logic.ifElse (Maps.member cv selfRefSubst) Maps.empty (Optionals.cases (findSelfRefVar groupedByInput) Maps.empty (\refVar -> Logic.ifElse (Equality.equal cv refVar) Maps.empty (Maps.singleton cv refVar))))
+          domVars = Sets.fromList (Lists.bind doms (\d -> Sets.toList (collectTypeVars d)))
+          danglingSubst =
+                  Optionals.cases (findPairFirst cod) Maps.empty (\cv -> Logic.ifElse (Sets.member cv domVars) Maps.empty (Optionals.cases (findSelfRefVar groupedByInput) Maps.empty (\refVar -> Maps.singleton cv (Core.TypeVariable refVar))))
+      in (Maps.union (Maps.union (Maps.union (nameMapToTypeMap selfRefSubst) (nameMapToTypeMap codSubst)) danglingSubst) (nameMapToTypeMap directRefSubst))
+
+-- | Compute the direct-return substitution over grouped accumulator pairs (#589)
+directRefSubstitution :: (Eq t0, Ord t0) => (S.Set t0 -> Maybe t0 -> M.Map t0 [t0] -> M.Map t0 t0)
+directRefSubstitution directInputVars codVar grouped =
+    Lists.foldl (\subst -> \entry -> directRefSubstitutionProcessGroup directInputVars codVar subst (Pairs.first entry) (Pairs.second entry)) Maps.empty (Maps.toList grouped)
+
+-- | Unify safe co-occurring vars onto inVar for the direct-return accumulator pattern (#589)
+directRefSubstitutionProcessGroup :: (Eq t0, Ord t0) => (S.Set t0 -> Maybe t0 -> M.Map t0 t0 -> t0 -> [t0] -> M.Map t0 t0)
+directRefSubstitutionProcessGroup directInputVars codVar subst inVar outVars =
+
+      let selfRefCount = Lists.length (Lists.filter (\vv -> Equality.equal vv inVar) outVars)
+          nonSelfVars = Lists.filter (\vv -> Logic.not (Equality.equal vv inVar)) outVars
+          safeNonSelfVars =
+                  Lists.filter (\vv -> Logic.and (Logic.not (Sets.member vv directInputVars)) (Logic.not (Equality.equal (Just vv) codVar))) nonSelfVars
+      in (Logic.ifElse (Logic.and (Equality.gte selfRefCount 2) (Logic.not (Lists.null safeNonSelfVars))) (Lists.foldl (\s -> \vv -> Maps.insert vv inVar s) subst safeNonSelfVars) subst)
 
 -- | Drop N domain types from a function type, returning the remaining type
 dropDomains :: Int -> Core.Type -> Core.Type
@@ -174,7 +264,7 @@ encodeComplexTermDef cx g lname term typ =
           cod = dropDomains paramCount typ
           zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
           freeTypeVars =
-                  Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ))
+                  Lists.nub (Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Variables.freeVariablesInTypeOrdered typ))
           tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
           letBindings = extractLetBindings term
           gWithTypeVars =
@@ -386,7 +476,7 @@ encodeTerm cx g term0 =
             Core.TermProject _ -> encodeTerm cx g substitutedBody
             Core.TermCases _ -> encodeTerm cx g substitutedBody
             Core.TermUnwrap _ -> encodeTerm cx g substitutedBody
-            Core.TermVariable v1 -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs -> Optionals.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (Eithers.bind (encodeTerm cx g substitutedBody) (\svar -> Right (Utils.sapplyTypes svar stypeArgs))) (\_prim -> Right (Utils.sapplyTypes (Utils.sprim v1) stypeArgs)))
+            Core.TermVariable v1 -> Eithers.bind (correctTypeApps v1 typeArgs g) (\correctedTypeArgs -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) correctedTypeArgs) (\stypeArgs -> Optionals.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (Eithers.bind (encodeTerm cx g substitutedBody) (\svar -> Right (Utils.sapplyTypes svar stypeArgs))) (\_prim -> Right (Utils.sapplyTypes (Utils.sprim v1) stypeArgs))))
             _ -> encodeTerm cx g substitutedBody
         Core.TermTypeLambda v0 -> encodeTerm cx (Scoping.extendGraphForTypeLambda g v0) (Core.typeLambdaBody v0)
         Core.TermApplication v0 ->
@@ -787,12 +877,54 @@ extractCodomain t =
       Core.TypeForall v0 -> extractCodomain (Core.forallTypeBody v0)
       _ -> t
 
+-- | Extract direct-return (input-var, output-var) pairs from a domain type (#589)
+extractDirectReturn :: S.Set Core.Name -> Core.Type -> [(Core.Name, Core.Name)]
+extractDirectReturn tparamSet t = extractDirectReturnGo tparamSet t
+
+-- | Recursive worker for extractDirectReturn (#589)
+extractDirectReturnGo :: S.Set Core.Name -> Core.Type -> [(Core.Name, Core.Name)]
+extractDirectReturnGo tparamSet t =
+    case (Strip.deannotateType t) of
+      Core.TypeFunction v0 ->
+        let dom = Strip.deannotateType (Core.functionTypeDomain v0)
+            cod = Core.functionTypeCodomain v0
+        in case dom of
+          Core.TypeVariable v1 -> Logic.ifElse (Sets.member v1 tparamSet) (case (Strip.deannotateType cod) of
+            Core.TypeFunction v2 ->
+              let midArg = Strip.deannotateType (Core.functionTypeDomain v2)
+                  retPart = Strip.deannotateType (Core.functionTypeCodomain v2)
+              in case midArg of
+                Core.TypeVariable v3 -> Logic.ifElse (Sets.member v3 tparamSet) [] (case retPart of
+                  Core.TypeVariable v4 -> Logic.ifElse (Sets.member v4 tparamSet) (Lists.singleton (v1, v4)) []
+                  _ -> [])
+                _ -> case retPart of
+                  Core.TypeVariable v3 -> Logic.ifElse (Sets.member v3 tparamSet) (Lists.singleton (v1, v3)) []
+                  _ -> []
+            _ -> []) (extractDirectReturnGo tparamSet cod)
+          _ -> extractDirectReturnGo tparamSet cod
+      _ -> []
+
 -- | Extract domain types from a function type
 extractDomains :: Core.Type -> [Core.Type]
 extractDomains t =
     case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Lists.cons (Core.functionTypeDomain v0) (extractDomains (Core.functionTypeCodomain v0))
       Core.TypeForall v0 -> extractDomains (Core.forallTypeBody v0)
+      _ -> []
+
+-- | Extract an (input-var, output-var) accumulator pair from a domain type (#589)
+extractInOutPair :: Core.Type -> [(Core.Name, Core.Name)]
+extractInOutPair t =
+    case (Strip.deannotateType t) of
+      Core.TypeFunction v0 -> case (Strip.deannotateType (Core.functionTypeDomain v0)) of
+        Core.TypeVariable v1 ->
+          let retType = unwrapReturnType (Core.functionTypeCodomain v0)
+          in case (Strip.deannotateType retType) of
+            Core.TypePair v2 -> case (Strip.deannotateType (Core.pairTypeFirst v2)) of
+              Core.TypeVariable v3 -> Lists.singleton (v1, v3)
+              _ -> []
+            _ -> []
+        _ -> []
       _ -> []
 
 -- | Extract let bindings from a term
@@ -866,6 +998,10 @@ fieldToParam cx g ft =
         Syntax.paramDataDecltpe = (Just sftyp),
         Syntax.paramDataDefault = Nothing})))
 
+-- | Keep elements of xs whose corresponding flag is true (#589)
+filterByFlags :: [t0] -> [Bool] -> [t0]
+filterByFlags xs flags = Lists.map (\p -> Pairs.first p) (Lists.filter (\p -> Pairs.second p) (Lists.zip xs flags))
+
 -- | Find the domain type from annotations
 findDomain :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error Core.Type
 findDomain cx g meta =
@@ -879,6 +1015,15 @@ findImports cx g mod =
     Eithers.bind (Analysis.moduleDependencyModuleNames cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyModuleNames cx g False True False False mod) (\primImps -> Right (Lists.concat [
       Lists.map toElImport (Sets.toList elImps),
       (Lists.map toPrimImport (Sets.toList primImps))])))
+
+-- | If t is Pair(var, _), return the first component's variable name (#589)
+findPairFirst :: Core.Type -> Maybe Core.Name
+findPairFirst t =
+    case (Strip.deannotateType t) of
+      Core.TypePair v0 -> case (Strip.deannotateType (Core.pairTypeFirst v0)) of
+        Core.TypeVariable v1 -> Just v1
+        _ -> Nothing
+      _ -> Nothing
 
 -- | Find the Scala domain type for a function from annotations
 findSdom :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe Syntax.Type)
@@ -894,12 +1039,54 @@ findSdom cx g meta =
         _ -> Right Nothing
       _ -> Eithers.bind (encodeType cx g t) (\st -> Right (Just st))))
 
+-- | Find a type variable that is its own accumulator output, if any (#589)
+findSelfRefVar :: (Eq t0, Ord t0) => (M.Map t0 [t0] -> Maybe t0)
+findSelfRefVar grouped =
+
+      let selfRefs = Lists.filter (\entry -> Lists.elem (Pairs.first entry) (Pairs.second entry)) (Maps.toList grouped)
+      in (Optionals.map (\entry -> Pairs.first entry) (Lists.maybeHead selfRefs))
+
+-- | Group a list of pairs into a map keyed by first component (#589)
+groupPairsByFirst :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
+groupPairsByFirst pairs =
+    Lists.foldl (\m -> \p ->
+      let k = Pairs.first p
+          vv = Pairs.second p
+      in (Maps.alter (\mv -> Optionals.cases mv (Just (Lists.singleton vv)) (\vs -> Just (Lists.concat2 vs (Lists.singleton vv)))) k m)) Maps.empty pairs
+
+-- | True if a type-variable name has no namespace qualifier (#589)
+isSimpleName :: Core.Name -> Bool
+isSimpleName name = Equality.equal (Lists.length (Strings.splitOn "." (Core.unName name))) 1
+
 -- | Convert a Hydra module to Scala source code
 moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
       in (Right (Maps.singleton (Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "scala") (Packaging.moduleName mod)) s)))
+
+-- | Lift a Name->Name substitution map to a Name->Type map (#589)
+nameMapToTypeMap :: Ord t0 => (M.Map t0 Core.Name -> M.Map t0 Core.Type)
+nameMapToTypeMap m = Maps.map (\vv -> Core.TypeVariable vv) m
+
+-- | Peel up to n curried domain types off a function type (#589)
+peelDomainTypes :: Int -> Core.Type -> ([Core.Type], Core.Type)
+peelDomainTypes n t =
+    Logic.ifElse (Equality.lte n 0) ([], t) (case (Strip.deannotateType t) of
+      Core.TypeFunction v0 ->
+        let rest = peelDomainTypes (Math.sub n 1) (Core.functionTypeCodomain v0)
+        in (Lists.cons (Core.functionTypeDomain v0) (Pairs.first rest), (Pairs.second rest))
+      _ -> ([], t))
+
+-- | Compute the self-reference substitution over grouped accumulator pairs (#589)
+selfRefSubstitution :: (Eq t0, Ord t0) => (M.Map t0 [t0] -> M.Map t0 t0)
+selfRefSubstitution grouped =
+    Lists.foldl (\subst -> \entry -> selfRefSubstitutionProcessGroup subst (Pairs.first entry) (Pairs.second entry)) Maps.empty (Maps.toList grouped)
+
+-- | Unify every co-occurring var onto inVar when inVar is its own accumulator output (#589)
+selfRefSubstitutionProcessGroup :: (Eq t0, Ord t0) => (M.Map t0 t0 -> t0 -> [t0] -> M.Map t0 t0)
+selfRefSubstitutionProcessGroup subst inVar outVars =
+    Logic.ifElse (Lists.elem inVar outVars) (Lists.foldl (\s -> \vv -> Logic.ifElse (Equality.equal vv inVar) s (Maps.insert vv inVar s)) subst outVars) subst
 
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
@@ -919,6 +1106,39 @@ stripWrapEliminations t =
                 Core.applicationArgument = appArg}))
               _ -> t
           _ -> t
+      _ -> t
+
+-- | Substitute type variables in t per subst (#589)
+substituteTypeVarsWithTypes :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
+substituteTypeVarsWithTypes subst t = substituteTypeVarsWithTypesGo subst (Strip.deannotateType t)
+
+-- | Recursive worker for substituteTypeVarsWithTypes (#589)
+substituteTypeVarsWithTypesGo :: M.Map Core.Name Core.Type -> Core.Type -> Core.Type
+substituteTypeVarsWithTypesGo subst t =
+    case (Strip.deannotateType t) of
+      Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 subst) t (\rep -> rep)
+      Core.TypeFunction v0 -> Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = (substituteTypeVarsWithTypesGo subst (Core.functionTypeDomain v0)),
+        Core.functionTypeCodomain = (substituteTypeVarsWithTypesGo subst (Core.functionTypeCodomain v0))})
+      Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
+        Core.applicationTypeFunction = (substituteTypeVarsWithTypesGo subst (Core.applicationTypeFunction v0)),
+        Core.applicationTypeArgument = (substituteTypeVarsWithTypesGo subst (Core.applicationTypeArgument v0))})
+      Core.TypeList v0 -> Core.TypeList (substituteTypeVarsWithTypesGo subst v0)
+      Core.TypeSet v0 -> Core.TypeSet (substituteTypeVarsWithTypesGo subst v0)
+      Core.TypeOptional v0 -> Core.TypeOptional (substituteTypeVarsWithTypesGo subst v0)
+      Core.TypeEffect v0 -> Core.TypeEffect (substituteTypeVarsWithTypesGo subst v0)
+      Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
+        Core.mapTypeKeys = (substituteTypeVarsWithTypesGo subst (Core.mapTypeKeys v0)),
+        Core.mapTypeValues = (substituteTypeVarsWithTypesGo subst (Core.mapTypeValues v0))})
+      Core.TypePair v0 -> Core.TypePair (Core.PairType {
+        Core.pairTypeFirst = (substituteTypeVarsWithTypesGo subst (Core.pairTypeFirst v0)),
+        Core.pairTypeSecond = (substituteTypeVarsWithTypesGo subst (Core.pairTypeSecond v0))})
+      Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
+        Core.eitherTypeLeft = (substituteTypeVarsWithTypesGo subst (Core.eitherTypeLeft v0)),
+        Core.eitherTypeRight = (substituteTypeVarsWithTypesGo subst (Core.eitherTypeRight v0))})
+      Core.TypeForall v0 -> Core.TypeForall (Core.ForallType {
+        Core.forallTypeParameter = (Core.forallTypeParameter v0),
+        Core.forallTypeBody = (substituteTypeVarsWithTypesGo subst (Core.forallTypeBody v0))})
       _ -> t
 
 -- | Create an element import statement
@@ -954,3 +1174,11 @@ typeParamToTypeVar tp =
       in (Syntax.TypeVar (Syntax.VarType {
         Syntax.varTypeName = Syntax.NameType {
           Syntax.nameTypeValue = s}}))
+
+-- | Unwrap a (possibly curried/applied) type down to its ultimate return type (#589)
+unwrapReturnType :: Core.Type -> Core.Type
+unwrapReturnType t =
+    case (Strip.deannotateType t) of
+      Core.TypeFunction v0 -> unwrapReturnType (Core.functionTypeCodomain v0)
+      Core.TypeApplication v0 -> unwrapReturnType (Core.applicationTypeArgument v0)
+      _ -> t

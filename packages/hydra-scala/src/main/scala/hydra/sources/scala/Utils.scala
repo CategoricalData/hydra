@@ -66,41 +66,44 @@ object Utils:
         ScalaSyntax.dataApply(ScalaSyntax.applyData(v("fun"))(v("args"))))
 
   lazy val sapplyTypesDef: Definition =
-    define(NS, "sapplyTypes").doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B])")
+    define(NS, "sapplyTypes").doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B]); a no-op for an empty type-arg list (#589)")
       .lam("fun").lam("typeArgs").to(
-      let(Seq(
-        field("typeToStr", lambda("t",
-          applyP(local("typeToString"), v("t")))),
-        field("typeStrings",
-          applyP("hydra.lib.lists.map", v("typeToStr"), v("typeArgs"))),
-        field("typeArgStr",
-          applyP("hydra.lib.strings.cat",
-            list(
-              string("["),
-              applyP("hydra.lib.strings.intercalate", string(", "), v("typeStrings")),
-              string("]"))))),
-        casesWithDefault("hydra.scala.syntax.Data",
-          v("fun"), v("fun"),
-          field("ref", lambda("ref",
-            casesWithDefault("hydra.scala.syntax.RefData",
-              v("ref"), v("fun"),
-              field("name", lambda("dn",
-                let(Seq(
-                  field("nameStr", ScalaSyntax.nameDataValue(v("dn"))),
-                  field("rawName", ScalaSyntax.unPredefString(v("nameStr")))),
-                  applyP(local("sname"),
-                    cat2(v("rawName"), v("typeArgStr")))))),
-              field("select", lambda("sel",
-                let(Seq(
-                  field("qual", ScalaSyntax.selectDataQual(v("sel"))),
-                  field("selName", ScalaSyntax.selectDataName(v("sel"))),
-                  field("nameStr", ScalaSyntax.nameDataValue(v("selName"))),
-                  field("rawName", ScalaSyntax.unPredefString(v("nameStr")))),
-                  ScalaSyntax.dataRef(ScalaSyntax.refDataSelect(
-                    ScalaSyntax.selectData(v("qual"))(
-                      ScalaSyntax.nameData(
-                        ScalaSyntax.predefString(
-                          cat2(v("rawName"), v("typeArgStr"))))))))))))))))
+      applyP("hydra.lib.logic.ifElse",
+        applyP("hydra.lib.lists.null", v("typeArgs")),
+        v("fun"),
+        let(Seq(
+          field("typeToStr", lambda("t",
+            applyP(local("typeToString"), v("t")))),
+          field("typeStrings",
+            applyP("hydra.lib.lists.map", v("typeToStr"), v("typeArgs"))),
+          field("typeArgStr",
+            applyP("hydra.lib.strings.cat",
+              list(
+                string("["),
+                applyP("hydra.lib.strings.intercalate", string(", "), v("typeStrings")),
+                string("]"))))),
+          casesWithDefault("hydra.scala.syntax.Data",
+            v("fun"), v("fun"),
+            field("ref", lambda("ref",
+              casesWithDefault("hydra.scala.syntax.RefData",
+                v("ref"), v("fun"),
+                field("name", lambda("dn",
+                  let(Seq(
+                    field("nameStr", ScalaSyntax.nameDataValue(v("dn"))),
+                    field("rawName", ScalaSyntax.unPredefString(v("nameStr")))),
+                    applyP(local("sname"),
+                      cat2(v("rawName"), v("typeArgStr")))))),
+                field("select", lambda("sel",
+                  let(Seq(
+                    field("qual", ScalaSyntax.selectDataQual(v("sel"))),
+                    field("selName", ScalaSyntax.selectDataName(v("sel"))),
+                    field("nameStr", ScalaSyntax.nameDataValue(v("selName"))),
+                    field("rawName", ScalaSyntax.unPredefString(v("nameStr")))),
+                    ScalaSyntax.dataRef(ScalaSyntax.refDataSelect(
+                      ScalaSyntax.selectData(v("qual"))(
+                        ScalaSyntax.nameData(
+                          ScalaSyntax.predefString(
+                            cat2(v("rawName"), v("typeArgStr")))))))))))))))))
 
   lazy val sassignDef: Definition =
     define(NS, "sassign").doc("Create a Scala assignment expression")

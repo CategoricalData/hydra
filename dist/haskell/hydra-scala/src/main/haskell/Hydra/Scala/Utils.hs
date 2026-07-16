@@ -68,10 +68,10 @@ sapply fun args =
       Syntax.applyDataFun = fun,
       Syntax.applyDataArgs = args})
 
--- | Apply explicit type parameters to a Scala expression (e.g. f[A, B])
+-- | Apply explicit type parameters to a Scala expression (e.g. f[A, B]); a no-op for an empty type-arg list (#589)
 sapplyTypes :: Syntax.Data -> [Syntax.Type] -> Syntax.Data
 sapplyTypes fun typeArgs =
-
+    Logic.ifElse (Lists.null typeArgs) fun (
       let typeToStr = \t -> typeToString t
           typeStrings = Lists.map typeToStr typeArgs
           typeArgStr =
@@ -95,7 +95,7 @@ sapplyTypes fun typeArgs =
               Syntax.selectDataName = Syntax.NameData {
                 Syntax.nameDataValue = (Syntax.PredefString (Strings.cat2 rawName typeArgStr))}})))
           _ -> fun
-        _ -> fun
+        _ -> fun)
 
 -- | Create a Scala assignment expression
 sassign :: Syntax.Data -> Syntax.Data -> Syntax.Data

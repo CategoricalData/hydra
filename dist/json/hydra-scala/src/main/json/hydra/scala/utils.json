@@ -205,163 +205,177 @@
                     "parameter": "typeArgs",
                     "domain": {"list": {"variable": "hydra.scala.syntax.Type"}},
                     "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "typeToStr",
-                            "term": {
-                              "lambda": {
-                                "parameter": "t",
-                                "domain": {"variable": "hydra.scala.syntax.Type"},
-                                "body": {"application": {"function": {"variable": "hydra.scala.utils.typeToString"}, "argument": {"variable": "t"}}}}},
-                            "typeScheme": {
-                              "variables": [],
-                              "body": {"function": {"domain": {"variable": "hydra.scala.syntax.Type"}, "codomain": {"literal": "string"}}}}},
-                          {
-                            "name": "typeStrings",
-                            "term": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
-                                        "type": {"literal": "string"}}},
-                                    "argument": {"variable": "typeToStr"}}},
-                                "argument": {"variable": "typeArgs"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
-                          {
-                            "name": "typeArgStr",
-                            "term": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
-                                "argument": {
-                                  "list": [
-                                    {"literal": {"string": "["}},
-                                    {
-                                      "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
-                                        "argument": {"variable": "typeStrings"}}},
-                                    {"literal": {"string": "]"}}]}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
-                        "body": {
+                      "application": {
+                        "function": {
                           "application": {
                             "function": {
-                              "cases": {
-                                "typeName": "hydra.scala.syntax.Data",
-                                "default": {"variable": "fun"},
-                                "cases": [
-                                  {
-                                    "name": "ref",
-                                    "handler": {
-                                      "lambda": {
-                                        "parameter": "ref",
-                                        "domain": {"variable": "hydra.scala.syntax.RefData"},
-                                        "body": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.scala.syntax.Data"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                    "argument": {"variable": "typeArgs"}}}}},
+                            "argument": {"variable": "fun"}}},
+                        "argument": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "typeToStr",
+                                "term": {
+                                  "lambda": {
+                                    "parameter": "t",
+                                    "domain": {"variable": "hydra.scala.syntax.Type"},
+                                    "body": {"application": {"function": {"variable": "hydra.scala.utils.typeToString"}, "argument": {"variable": "t"}}}}},
+                                "typeScheme": {
+                                  "variables": [],
+                                  "body": {"function": {"domain": {"variable": "hydra.scala.syntax.Type"}, "codomain": {"literal": "string"}}}}},
+                              {
+                                "name": "typeStrings",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                            "type": {"literal": "string"}}},
+                                        "argument": {"variable": "typeToStr"}}},
+                                    "argument": {"variable": "typeArgs"}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                              {
+                                "name": "typeArgStr",
+                                "term": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "["}},
+                                        {
                                           "application": {
-                                            "function": {
-                                              "cases": {
-                                                "typeName": "hydra.scala.syntax.RefData",
-                                                "default": {"variable": "fun"},
-                                                "cases": [
-                                                  {
-                                                    "name": "name",
-                                                    "handler": {
-                                                      "lambda": {
-                                                        "parameter": "dn",
-                                                        "domain": {"variable": "hydra.scala.syntax.NameData"},
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "nameStr",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {"project": {"typeName": "hydra.scala.syntax.NameData", "fieldName": "value"}},
-                                                                    "argument": {"variable": "dn"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.PredefString"}}},
-                                                              {
-                                                                "name": "rawName",
-                                                                "term": {"application": {"function": {"unwrap": "hydra.scala.syntax.PredefString"}, "argument": {"variable": "nameStr"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                            "argument": {"variable": "typeStrings"}}},
+                                        {"literal": {"string": "]"}}]}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "cases": {
+                                    "typeName": "hydra.scala.syntax.Data",
+                                    "default": {"variable": "fun"},
+                                    "cases": [
+                                      {
+                                        "name": "ref",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "ref",
+                                            "domain": {"variable": "hydra.scala.syntax.RefData"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "cases": {
+                                                    "typeName": "hydra.scala.syntax.RefData",
+                                                    "default": {"variable": "fun"},
+                                                    "cases": [
+                                                      {
+                                                        "name": "name",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "dn",
+                                                            "domain": {"variable": "hydra.scala.syntax.NameData"},
                                                             "body": {
-                                                              "application": {
-                                                                "function": {"variable": "hydra.scala.utils.sname"},
-                                                                "argument": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "nameStr",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.scala.syntax.NameData", "fieldName": "value"}},
+                                                                        "argument": {"variable": "dn"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.PredefString"}}},
+                                                                  {
+                                                                    "name": "rawName",
+                                                                    "term": {"application": {"function": {"unwrap": "hydra.scala.syntax.PredefString"}, "argument": {"variable": "nameStr"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                                "body": {
                                                                   "application": {
-                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "rawName"}}},
-                                                                    "argument": {"variable": "typeArgStr"}}}}}}}}}},
-                                                  {
-                                                    "name": "select",
-                                                    "handler": {
-                                                      "lambda": {
-                                                        "parameter": "sel",
-                                                        "domain": {"variable": "hydra.scala.syntax.SelectData"},
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "qual",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {"project": {"typeName": "hydra.scala.syntax.SelectData", "fieldName": "qual"}},
-                                                                    "argument": {"variable": "sel"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.Data"}}},
-                                                              {
-                                                                "name": "selName",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {"project": {"typeName": "hydra.scala.syntax.SelectData", "fieldName": "name"}},
-                                                                    "argument": {"variable": "sel"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.NameData"}}},
-                                                              {
-                                                                "name": "nameStr",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {"project": {"typeName": "hydra.scala.syntax.NameData", "fieldName": "value"}},
-                                                                    "argument": {"variable": "selName"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.PredefString"}}},
-                                                              {
-                                                                "name": "rawName",
-                                                                "term": {"application": {"function": {"unwrap": "hydra.scala.syntax.PredefString"}, "argument": {"variable": "nameStr"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                                    "function": {"variable": "hydra.scala.utils.sname"},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "rawName"}}},
+                                                                        "argument": {"variable": "typeArgStr"}}}}}}}}}},
+                                                      {
+                                                        "name": "select",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "sel",
+                                                            "domain": {"variable": "hydra.scala.syntax.SelectData"},
                                                             "body": {
-                                                              "inject": {
-                                                                "typeName": "hydra.scala.syntax.Data",
-                                                                "field": {
-                                                                  "name": "ref",
-                                                                  "term": {
-                                                                    "inject": {
-                                                                      "typeName": "hydra.scala.syntax.RefData",
-                                                                      "field": {
-                                                                        "name": "select",
-                                                                        "term": {
-                                                                          "record": {
-                                                                            "typeName": "hydra.scala.syntax.SelectData",
-                                                                            "fields": [
-                                                                              {"name": "qual", "term": {"variable": "qual"}},
-                                                                              {
-                                                                                "name": "name",
-                                                                                "term": {
-                                                                                  "record": {
-                                                                                    "typeName": "hydra.scala.syntax.NameData",
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "value",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "typeName": "hydra.scala.syntax.PredefString",
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "rawName"}}},
-                                                                                                "argument": {"variable": "typeArgStr"}}}}}}]}}}]}}}}}}}}}}}}}]}},
-                                            "argument": {"variable": "ref"}}}}}}]}},
-                            "argument": {"variable": "fun"}}}}}}}}},
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "qual",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.scala.syntax.SelectData", "fieldName": "qual"}},
+                                                                        "argument": {"variable": "sel"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.Data"}}},
+                                                                  {
+                                                                    "name": "selName",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.scala.syntax.SelectData", "fieldName": "name"}},
+                                                                        "argument": {"variable": "sel"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.NameData"}}},
+                                                                  {
+                                                                    "name": "nameStr",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.scala.syntax.NameData", "fieldName": "value"}},
+                                                                        "argument": {"variable": "selName"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.PredefString"}}},
+                                                                  {
+                                                                    "name": "rawName",
+                                                                    "term": {"application": {"function": {"unwrap": "hydra.scala.syntax.PredefString"}, "argument": {"variable": "nameStr"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                                "body": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.scala.syntax.Data",
+                                                                    "field": {
+                                                                      "name": "ref",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.scala.syntax.RefData",
+                                                                          "field": {
+                                                                            "name": "select",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.scala.syntax.SelectData",
+                                                                                "fields": [
+                                                                                  {"name": "qual", "term": {"variable": "qual"}},
+                                                                                  {
+                                                                                    "name": "name",
+                                                                                    "term": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.scala.syntax.NameData",
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "value",
+                                                                                            "term": {
+                                                                                              "wrap": {
+                                                                                                "typeName": "hydra.scala.syntax.PredefString",
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "rawName"}}},
+                                                                                                    "argument": {"variable": "typeArgStr"}}}}}}]}}}]}}}}}}}}}}}}}]}},
+                                                "argument": {"variable": "ref"}}}}}}]}},
+                                "argument": {"variable": "fun"}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Apply explicit type parameters to a Scala expression (e.g. f[A, B])"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Apply explicit type parameters to a Scala expression (e.g. f[A, B]); a no-op for an empty type-arg list (#589)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.scala.utils.sassign",
