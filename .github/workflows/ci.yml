@@ -277,7 +277,12 @@ jobs:
   cold-clone-haskell:
     name: Cold-clone Haskell sync (no committed dist/haskell)
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # This job cold-seeds dist/haskell then runs a FULL bin/sync.sh + stack test
+    # from scratch with no warm .stack-work — the same ~2.5h workload as the
+    # `haskell` job (which budgets 300min), plus the seeder build, and it pays
+    # the full cold-clone JSON-generation cost (no incremental digest; see #592).
+    # The original 90min ceiling was an optimistic underestimate that timed out.
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
       # Pin the GHC the json-driver's stack.yaml expects (resolver lts-24.7 =>
