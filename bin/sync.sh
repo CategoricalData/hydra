@@ -309,6 +309,23 @@ if [ "$HASKELL_HOST_MODE" = "published" ]; then
 fi
 python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 
+# #376: dist/haskell/ is gitignored (untracked), so a genuinely cold checkout
+# has it ABSENT. Everything below — overlay-kernel-runtime.sh, the Phase 0
+# stack build, sync-haskell.sh's own Phase 1 — assumes dist/haskell/hydra-kernel/
+# already exists on disk as a source-dir. Detect cold-start via a sentinel
+# (a generated, non-overlay kernel module) and seed dist/haskell/ from the
+# tracked dist/json/ BEFORE anything tries to compile against it. Mirrors the
+# JAVA_JSON_SENTINEL / HYDRA_INCLUDE_JAVA_PYTHON cold-start pattern below for
+# dist/json/hydra-{java,python}.
+HASKELL_DIST_SENTINEL="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Adapt.hs"
+if [ ! -f "$HASKELL_DIST_SENTINEL" ]; then
+    echo ""
+    echo "Cold-start detected (missing dist/haskell/hydra-kernel); seeding dist/haskell/"
+    echo "from tracked dist/json/ via the published-host cold seeder (#376)..."
+    "$HYDRA_HASKELL_DIR/json-driver/bin/cold-seed-dist-haskell.sh" --repo-root "$HYDRA_ROOT"
+    echo ""
+fi
+
 # The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
 # includes hand-written runtime modules (Hydra.Overlay.Haskell.Lib.*, the umbrella Hydra.hs)
 # that live in the top-level overlay/haskell/ tree (#418). The dist Overlay/ location is
