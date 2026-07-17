@@ -477,10 +477,8 @@ overlaid/copied in by a sync script (principle 2).
   `heads/<lang>/bin/copy-kernel-runtime.sh`. TypeScript still copies from
   `heads/typescript/src` pending migration. They are not generated, so they don't
   carry the generated-file header — that's correct. The canonical edit point is
-  `overlay/<lang>/` (TypeScript: `heads/typescript/src`). Note: for Haskell,
-  `dist/haskell/` is tracked but these overlaid copies are gitignored (the scan
-  above won't see them in a clean tree); for Java/Python the whole `dist/<lang>/`
-  is gitignored. See
+  `overlay/<lang>/` (TypeScript: `heads/typescript/src`). Note: every `dist/<lang>/` tree is
+  gitignored, so the scan above won't see any of these overlaid copies in a clean tree. See
   [build-system.md §Hand-written runtime in hydra-kernel](../build-system.md#hand-written-runtime-in-hydra-kernel)
   for the catalog of paths.
 - *Lisp dialect generated files.* The Clojure, Common Lisp, Emacs Lisp, and

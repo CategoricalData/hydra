@@ -11,9 +11,12 @@ on:
 #   * The Haskell job is the "JSON build". It regenerates dist/json/
 #     from DSL sources, regenerates dist/<lang>/ for every target from
 #     the JSON, runs stack test, and fails if the regenerated dist/json/
-#     or dist/haskell/ differ from what's committed (those are the two
-#     trees tracked in git; other dist/<lang>/ trees are gitignored and
-#     only built for downstream consumption).
+#     differs from what's committed (the sole tree tracked in git; every
+#     dist/<lang>/ tree, including dist/haskell/, is gitignored and only
+#     built for downstream consumption / self-containment checks — see
+#     the determinism-diff and cold-clone-haskell jobs below for how
+#     dist/haskell/ consistency is verified without a committed tree to
+#     diff against).
 #
 #   * The regenerated dist/<lang>/ trees for java, python, scala, and
 #     each Lisp dialect are uploaded as build artifacts so the target

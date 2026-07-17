@@ -140,14 +140,12 @@ is canonical source, not generated output** — it is the language-neutral repre
 effectively the *generator* that produces `dist/json`; a consumer building from the archive builds
 *from* `dist/json`, never from an empty one. So `dist/json` must ship, and does.
 
-The only other tracked tree under `dist/` is `dist/haskell` (the per-language Haskell output, 421
-files); the remaining per-language trees (`dist/java`, `dist/python`, `dist/scala`, `dist/lisp`, …) are
-not tracked and never enter the archive. `dist/haskell` *is* regenerable from `dist/json`, so it could
-in principle be excluded via `export-ignore` to slim the archive — but doing so would make the archive
-build only if a clean checkout regenerates `dist/haskell` from `dist/json`, which is **not yet
-verified**. Rather than ship a possibly-unbuildable archive to save ~400 files, we keep the full tree
-for now. **Open:** if a leaner source/generated split is wanted before a real release, verify the
-from-`dist/json` rebuild and then add `dist/haskell/** export-ignore`.
+`dist/json` is the only tracked tree under `dist/`. Every per-language output tree is gitignored and
+regenerated from `dist/json` on each sync — on a cold clone, `dist/haskell` is seeded by the
+published-host driver (`heads/haskell/json-driver/`; see
+[build-system.md § Bootstrapping dist/haskell/ from the published host](build-system.md#bootstrapping-disthaskell-from-the-published-host)).
+This cold rebuild is verified end-to-end (a genuinely cold `git archive` checkout seeds, builds, and
+passes `stack test`), so the source archive stays buildable without any per-language tree entering it.
 
 Note also that "a consumer needs a complex multi-language toolchain to build from source" is expected
 and acceptable for a source release — convenience without the toolchain is exactly what the published

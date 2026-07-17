@@ -332,14 +332,13 @@ Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang
    `hydra/util/...`, `hydra/dsl/...`; Haskell `Hydra/Settings.hs`, `Hydra/Haskell/Lib/*`.
    Canonical edit point is `overlay/<lang>/`, NOT `dist/` (and no longer `heads/<lang>/src`
    for the big three). TypeScript still copies from `heads/typescript/src` pending migration.
-   NOTE: for Haskell, `dist/haskell/` is tracked but the overlaid copies are GITIGNORED
-   (canonical lives in `overlay/haskell/`); for Java/Python the whole `dist/<lang>/` is gitignored.
+   NOTE: every `dist/<lang>/` tree is gitignored, so the overlaid copies never show up as tracked.
 3. Hand-written skip-emit stubs whose namespace appears in
-   `testSkipEmitModuleNames` (currently `hydra.test.testEnv`):
-   `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
-   `test_env.<ext>`. The generator deliberately does NOT write these;
-   they're committed in git as hand-written bridge modules that the
-   generated test_graph imports.
+   `testSkipEmitModuleNames` (currently `hydra.test.testEnv`): `dist/haskell/.../Hydra/Test/TestEnv.hs`
+   and each other host's `test_env`/`testEnv` equivalent. The generator deliberately does NOT write
+   these; they're hand-written bridge modules that the generated test_graph imports. Canonical source
+   for each lives under `overlay/<lang>/`, overlaid into the gitignored `dist/<lang>/` on each sync —
+   same pattern as category 2 above.
 
 Any pass that walks the dist tree (prune, manifest, copy) has to keep all
 three categories alive. The mechanism for protecting (2) is the

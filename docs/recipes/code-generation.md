@@ -74,10 +74,9 @@ example, `hydra-coq` and `hydra-typescript` are coder libraries
 implemented only against the Haskell runtime, so their
 `targetLanguages` is `["haskell"]`.
 
-`dist/json/` is the tracked source of truth. `dist/haskell/` is tracked
-through the 0.15 release to support bootstrapping from a fresh clone.
-All other `dist/<lang>/` trees are regenerated from `dist/json/` and
-are not checked in.
+`dist/json/` is the tracked source of truth; every `dist/<lang>/` tree is gitignored and regenerated
+from it on each sync. On a cold clone, `dist/haskell/` is seeded by a published-host driver (see
+[build-system.md § Bootstrapping dist/haskell/ from the published host](../build-system.md#bootstrapping-disthaskell-from-the-published-host)).
 
 ## The writeXxx functions
 
