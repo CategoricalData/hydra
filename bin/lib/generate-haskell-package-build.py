@@ -283,7 +283,44 @@ library:
 """
 
 
-def render_stack_yaml() -> str:
+def transitive_hydra_deps(repo_root: str, pkg: str) -> list[str]:
+    """The full transitive set of Hydra package deps of <pkg> (excluding <pkg>).
+
+    Reads each package.json's `dependencies` recursively. Used to populate the
+    per-package stack.yaml extra-deps so a standalone `stack build` in
+    dist/haskell/<pkg>/ can resolve its siblings from Hackage (#376). Without
+    this, a package whose deps aren't in the LTS snapshot (every Hydra package)
+    can't be built on its own — which is exactly the "buildable on demand" story
+    for the unpublished packages (hydra-ext etc.)."""
+    seen: set[str] = set()
+    order: list[str] = []
+
+    def visit(p: str) -> None:
+        pkg_json = os.path.join(repo_root, "packages", p, "package.json")
+        if not os.path.isfile(pkg_json):
+            return
+        with open(pkg_json) as f:
+            deps = json.load(f).get("dependencies") or []
+        for d in deps:
+            if d not in seen:
+                seen.add(d)
+                visit(d)
+                order.append(d)
+
+    visit(pkg)
+    return order
+
+
+def render_stack_yaml(repo_root: str | None = None, pkg: str | None = None,
+                      version: str | None = None) -> str:
+    """Per-package stack.yaml. If repo_root/pkg/version are given, the package's
+    transitive Hydra deps are emitted as Hackage extra-deps pinned at <version>,
+    so the package builds standalone (#376 Default A "buildable on demand")."""
+    extra = ""
+    if repo_root and pkg and version:
+        deps = transitive_hydra_deps(repo_root, pkg)
+        if deps:
+            extra = "\n".join(f"  - {d}-{version}" for d in deps) + "\n"
     return f"""# Generated file. Do not edit.
 resolver: {RESOLVER}
 
@@ -293,8 +330,10 @@ install-ghc: false
 packages:
   - .
 
+# Transitive Hydra deps of this package, pinned at the published version so a
+# standalone `stack build` here resolves them from Hackage (#376 Default A).
 extra-deps:
-"""
+{extra}"""
 
 
 def main() -> int:
@@ -363,7 +402,7 @@ def main() -> int:
     if not args.no_stack_yaml:
         stack_path = os.path.join(out_dir, "stack.yaml")
         with open(stack_path, "w") as f:
-            f.write(render_stack_yaml())
+            f.write(render_stack_yaml(args.repo_root, args.package, version))
         print(f"  wrote {stack_path}")
 
     return 0
