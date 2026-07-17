@@ -105,34 +105,66 @@ jobs:
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
-      # #469: pointed guard for the native-coder JSON->Haskell render gate.
-      # Forces a cache miss by deleting the per-package output digest,
-      # re-runs the assembler against committed JSON, and fails on any
-      # diff. Catches the recurrence pattern where Phase 5 short-circuits
-      # but the .hs is stale w.r.t. committed dist/json — the gap closed
-      # by the digest schema change in this PR. Independent from the
-      # broader dist-diff check below: if that one passes, this is a
-      # no-op redundancy; if not, this points at the specific package.
-      - name: Force-regen and diff dist/haskell/hydra-{java,python}
+      # #469/#376: pointed guard for the native-coder JSON->Haskell render gate.
+      # Forces a cache miss by deleting the per-package output digest, re-runs
+      # the assembler against committed JSON, and fails on any diff FROM A
+      # SECOND REGENERATION IN THIS RUN — not from the committed tree, since
+      # dist/haskell/ is untracked (#376) and has no committed form to diff
+      # against. This still catches the recurrence pattern this guard was
+      # written for (Phase 5 short-circuits but the .hs would be stale w.r.t.
+      # a fresh render of the committed JSON): a real generator bug that makes
+      # rendering non-deterministic, or a stale digest that masks a JSON-driven
+      # change, shows up as a diff between the two same-input regenerations.
+      # Independent from the broader idempotency check below: if that one
+      # passes, this is a no-op redundancy; if not, this points at the
+      # specific package.
+      - name: Force-regen dist/haskell/hydra-{java,python} twice and diff
         run: |
           set -e
           for pkg in hydra-java hydra-python; do
             rm -f "dist/haskell/$pkg/build/main/digest.json"
             heads/haskell/bin/assemble-distribution.sh "$pkg"
-            if ! git diff --quiet "dist/haskell/$pkg/"; then
-              echo "::error::dist/haskell/$pkg/ differs after force-regen from committed dist/json/$pkg/."
-              echo "::error::The committed .hs is stale w.r.t. the committed JSON for this native-coder package."
-              git diff --stat "dist/haskell/$pkg/"
-              git diff "dist/haskell/$pkg/" | head -100
+            cp -r "dist/haskell/$pkg" "/tmp/dist-haskell-$pkg-pass1"
+            rm -f "dist/haskell/$pkg/build/main/digest.json"
+            heads/haskell/bin/assemble-distribution.sh "$pkg"
+            if ! diff -rq "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg"; then
+              echo "::error::dist/haskell/$pkg/ is non-deterministic: two regenerations from the same committed dist/json/$pkg/ produced different output."
+              diff -rq "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg" | head -100
               exit 1
             fi
           done
-      - name: Fail if committed dist/json or dist/haskell differs from regenerated
+      - name: Fail if committed dist/json differs from regenerated
         run: |
-          if ! git diff --quiet dist/json/ dist/haskell/; then
-            echo "::error::Generated files (dist/json/ and/or dist/haskell/) differ from the committed tree."
+          if ! git diff --quiet dist/json/; then
+            echo "::error::Generated dist/json/ differs from the committed tree."
             echo "::error::Run bin/sync.sh locally and commit the result."
-            git diff --stat dist/json/ dist/haskell/
+            git diff --stat dist/json/
+            exit 1
+          fi
+      # #376: dist/haskell/ is untracked (gitignored), so there is no committed
+      # form to diff the just-regenerated tree against. The determinism check
+      # above covers the two native-coder packages most prone to the #469
+      # digest-staleness bug; this step widens the same idempotency principle
+      # to the FULL dist/haskell/ tree (every package bin/sync.sh just
+      # produced): regenerate from the SAME committed dist/json/ a second time
+      # and diff the two outputs. A real drift bug (nondeterministic codegen, a
+      # digest-cache bug that skips a module that should have regenerated)
+      # shows up as a diff here even though there's nothing tracked to compare
+      # against. This does NOT verify dist/haskell/ matches dist/json/'s
+      # *intent* the way the old committed-tree diff did — that guarantee now
+      # comes from the cold-clone-haskell job below, which seeds from
+      # dist/json/ via the independent published-host driver and asserts it
+      # succeeds, plus stack test / verify-distribution.sh actually compiling
+      # and running the result.
+      - name: Regenerate dist/haskell a second time and diff against the first pass (determinism)
+        run: |
+          rm -rf /tmp/dist-haskell-pass1
+          cp -r dist/haskell /tmp/dist-haskell-pass1
+          bin/sync.sh --hosts all --targets all --no-tests
+          if ! diff -rq /tmp/dist-haskell-pass1 dist/haskell; then
+            echo "::error::dist/haskell/ is non-deterministic: two regenerations from the same committed dist/json/ produced different output."
+            echo "::error::This can hide real drift now that dist/haskell/ is untracked (#376) — fix the generator."
+            diff -rq /tmp/dist-haskell-pass1 dist/haskell | head -200
             exit 1
           fi
       - name: Stack tests
@@ -224,6 +256,77 @@ jobs:
         run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
         run: bin/test-regressions.sh
+
+  # #376: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —
+  # this is the job that actually proves a genuinely fresh checkout (no
+  # dist/haskell/ on disk, none of the haskell job's warm .stack-work state)
+  # can still bootstrap: the cold-only json-driver (heads/haskell/json-driver/)
+  # seeds all 16 dist/haskell/<pkg>/ trees from the COMMITTED dist/json/ using
+  # only the PUBLISHED Hackage coder packages (never a locally-built host —
+  # that's the whole point: it must work before the head can compile), then
+  # bin/sync.sh's own cold-start detection (the dist/haskell/hydra-kernel
+  # sentinel check) picks up from there to build the full host and run tests.
+  # Independent of the `haskell` job above: this checkout never runs
+  # `bin/sync.sh` with a warm dist/haskell/ already present, so a regression
+  # in the cold-seed path (missing package, wrong load flags, a coder that
+  # silently isn't on Hackage at the pinned version) fails HERE even if the
+  # warm `haskell` job's regenerate-and-diff checks stay green.
+  cold-clone-haskell:
+    name: Cold-clone Haskell sync (no committed dist/haskell)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: haskell-actions/setup@v2
+        with:
+          enable-stack: true
+          stack-version: latest
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/cache@v4
+        with:
+          path: ~/.stack
+          # Separate cache key from the `haskell` job: this job builds the
+          # json-driver's own stack project (heads/haskell/json-driver/), a
+          # different set of packages than heads/haskell/'s own stack.yaml.
+          key: stack-cold-clone-${{ hashFiles('heads/haskell/json-driver/stack.yaml', 'heads/haskell/json-driver/package.yaml') }}
+          restore-keys: stack-cold-clone-
+      - name: Confirm dist/haskell is absent on a fresh checkout
+        run: |
+          if [ -d dist/haskell ]; then
+            echo "::error::dist/haskell/ exists on a fresh checkout — expected it to be gitignored post-#376."
+            exit 1
+          fi
+          echo "confirmed: no committed dist/haskell/"
+      # This is the #376 linchpin: seed every dist/haskell/<pkg>/ tree from
+      # the committed dist/json/ using only published Hackage coders, with
+      # dist/haskell/ absent going in. Same driver bin/sync.sh's own
+      # cold-start detection calls; invoked directly here so this job's
+      # failure signal is specific to the seed step, not buried inside a
+      # full bin/sync.sh run.
+      - name: Cold-seed dist/haskell from committed dist/json (published host)
+        run: heads/haskell/json-driver/bin/cold-seed-dist-haskell.sh
+      - name: Verify all 16 package trees were seeded
+        run: |
+          FAIL=0
+          for pkg in $(python3 bin/lib/hydra-packages.py list); do
+            if [ ! -d "dist/haskell/$pkg/src/main/haskell" ]; then
+              echo "::error::missing seeded tree: dist/haskell/$pkg/src/main/haskell"
+              FAIL=1
+            fi
+            if [ ! -f "dist/haskell/$pkg/package.yaml" ]; then
+              echo "::error::missing seeded manifest: dist/haskell/$pkg/package.yaml"
+              FAIL=1
+            fi
+          done
+          test "$FAIL" = 0
+      # With dist/haskell/hydra-kernel now seeded, bin/sync.sh's cold-start
+      # sentinel check is satisfied and the rest of the pipeline runs exactly
+      # as it would on a warm tree — proving the seeded output is not just
+      # present but actually consumable by the full head build + test suite.
+      - name: Full sync + stack test from the seeded tree
+        run: bin/sync.sh --hosts haskell --targets haskell
+      - name: Verify Haskell distribution self-containment
+        run: heads/haskell/bin/verify-distribution.sh
 
   java:
     name: Java tests
