@@ -1,0 +1,10 @@
+# Build artifacts.
+.stack-work/
+stack.yaml.lock
+hydra-json-driver.cabal
+
+# headmods/ holds build-time copies of the 4 head generation modules
+# (Generation, PackageRouting, TargetFilePaths, Digest), refreshed from the
+# canonical heads/haskell/src/main/haskell source by bin/cold-seed-dist-haskell.sh
+# on every run. Generated artifact — never hand-edited, never committed.
+headmods/

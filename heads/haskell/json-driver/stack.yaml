@@ -1,0 +1,39 @@
+# Standalone #376 cold-only published-host Haskell DSL->dist seeder (Stack project).
+#
+# Haskell analog of heads/java/json-driver/. Compiles a haskell-target-only
+# seeder (app/ColdSeedMain.hs) + the head's coder-agnostic generation modules +
+# the kernel/haskell DSL authoring sources against the PUBLISHED Hydra packages
+# from Hackage (extra-deps below, pinned at 0.17.1) — NOT against any local
+# dist/haskell tree. Running the seeder emits dist/haskell/* from dist/json on a
+# cold clone, before the main host compiles. This is what lets dist/haskell be
+# untracked (#376).
+#
+# Deliberately a SEPARATE stack project (not part of heads/haskell) so the
+# hydra-* extra-deps resolve to the published Hackage artifacts rather than the
+# co-generated dist trees.
+#
+# The unpublished packages (hydra-{go,coq,wasm,ext,bench}, #589) are NOT listed
+# here — the cold seeder does not link their coders. Their dist/haskell SOURCE is
+# still seeded from dist/json via the Haskell coder.
+resolver: lts-24.7
+
+system-ghc: true
+install-ghc: false
+
+packages:
+  - .
+
+# Published Hydra packages consumed from Hackage, pinned at 0.17.1 (the version
+# at which the reduced coder set — #589 — is published).
+extra-deps:
+  - hydra-kernel-0.17.1
+  - hydra-haskell-0.17.1
+  - hydra-java-0.17.1
+  - hydra-jvm-0.17.1
+  - hydra-python-0.17.1
+  - hydra-scala-0.17.1
+  - hydra-typescript-0.17.1
+  - hydra-lisp-0.17.1
+  - hydra-rdf-0.17.1
+  - hydra-pg-0.17.1
+  - hydra-build-0.17.1

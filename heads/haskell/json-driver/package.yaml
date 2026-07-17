@@ -1,0 +1,76 @@
+# Standalone #376 cold-only published-host DSL->dist seeder. See stack.yaml for
+# rationale. Compiles a haskell-target-ONLY seeder (app/ColdSeedMain.hs) + the
+# head's coder-agnostic generation modules + the kernel/haskell DSL authoring
+# sources — against the PUBLISHED Hydra packages (stack.yaml extra-deps, pinned
+# at 0.17.1). It links ONLY published coders and never imports the unpublished
+# ext/coq/wasm/go/bench coders; it still SEEDS all 16 dist/haskell source trees
+# from dist/json (they are loaded as JSON and rendered via the Haskell coder).
+name:         hydra-json-driver
+version:      0.17.1
+author:       Joshua Shinavier <josh@fortytwo.net>
+license:      Apache-2.0
+category:     Data
+synopsis:     "Standalone cold-only published-host seeder that seeds dist/haskell from dist/json (#376)"
+github:       CategoricalData/hydra
+
+dependencies:
+  - base                          >= 4.19.0 && < 4.22
+  - aeson                         >= 2.2.0 && < 2.3
+  - bytestring                    >= 0.11.5 && < 0.13
+  - containers                    >= 0.6.7 && < 0.8
+  - directory                     >= 1.3.6 && < 1.4
+  - filepath                      >= 1.4.200 && < 1.6
+  - regex-tdfa                    >= 1.3.2 && < 1.4
+  - scientific                    >= 0.3.7 && < 0.4
+  - SHA                           >= 1.6.4 && < 1.7
+  - split                         >= 0.2.3 && < 0.3
+  - text                          >= 2.0 && < 2.2
+  - time                          >= 1.12.0 && < 1.13
+  - vector                        >= 0.13 && < 0.14
+  # Published Hydra packages (from Hackage; pinned in stack.yaml @0.17.1).
+  # ONLY the packages published at 0.17.1 — NOT hydra-{go,coq,wasm,ext,bench},
+  # which #589 deliberately excludes from Hackage (no buildable sdists). The
+  # cold seeder does not link their coders; their dist/haskell source is still
+  # seeded from JSON via the Haskell coder.
+  - hydra-kernel
+  - hydra-haskell
+  - hydra-java
+  - hydra-jvm
+  - hydra-python
+  - hydra-scala
+  - hydra-typescript
+  - hydra-lisp
+  - hydra-rdf
+  - hydra-pg
+  - hydra-build
+
+executables:
+  cold-seed-from-json:
+    main: ColdSeedMain.hs
+    source-dirs:
+      # The haskell-only cold seeder (a trimmed copy of the shared
+      # bootstrap-from-json Main: no Hydra.Go.Coder, no Hydra.ExtGeneration,
+      # no "go" dispatch; generateSourcesWithTransform from Hydra.Generation).
+      - app
+      # Head-only generation modules the cold seeder needs, EXACTLY four:
+      # Hydra.{Generation,PackageRouting,TargetFilePaths,Digest}. bin/cold-seed-
+      # dist-haskell.sh COPIES them here (gitignored, regenerated every run from the
+      # canonical ../src/main/haskell — no content drift, and copies survive
+      # git-archive/cp into a cold checkout where symlinks would not). We deliberately
+      # do NOT source-dir the whole ../src/main/haskell tree: it also contains
+      # Hydra.Coq.GenerateDriver (needs the unpublished Coq coder), Hydra.ExtGeneration
+      # (unpublished ext/wasm/coq), Hydra.Haskell.Generation, Hydra.Minimal,
+      # Hydra.Tools.* — hpack would add them all as other-modules and the build would
+      # fail on the unpublished coders. Mirrors the Java json-driver's selective
+      # `include 'hydra/Generation.java'` (which excludes hydra.GenerationTargets).
+      - headmods
+      # DSL authoring sources (Hydra.Sources.*) needed by Hydra.Sources.All +
+      # Hydra.Sources.Test.TestSuite: kernel + haskell + build. hydra-build ships
+      # the Hydra.Sources.Build.* test Sources that TestSuite imports (#546); it is
+      # a pure generated package with NO coder, so it pulls in no unpublished coder.
+      # NOT the ext/coq/wasm/go/bench DSL Sources (those packages are seeded from
+      # JSON, not compiled).
+      - ../../../packages/hydra-kernel/src/main/haskell
+      - ../../../packages/hydra-haskell/src/main/haskell
+      - ../../../packages/hydra-build/src/main/haskell
+    ghc-options: [-rtsopts]
