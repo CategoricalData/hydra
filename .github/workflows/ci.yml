@@ -280,8 +280,14 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+      # Pin the GHC the json-driver's stack.yaml expects (resolver lts-24.7 =>
+      # ghc-9.10.2). The json-driver project uses system-ghc:true/install-ghc:false,
+      # so haskell-actions/setup must provision the matching system GHC or the
+      # cold-seed `stack build` fails with S-6362 "No compiler found". The warm
+      # `haskell` job builds heads/haskell/'s own project and doesn't hit this.
       - uses: haskell-actions/setup@v2
         with:
+          ghc-version: '9.10.2'
           enable-stack: true
           stack-version: latest
       - uses: astral-sh/setup-uv@v5
