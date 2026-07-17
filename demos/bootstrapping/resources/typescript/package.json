@@ -1,6 +1,6 @@
 {
   "name": "hydra-typescript-bootstrap",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "Bootstrapped Hydra-TypeScript test target. Self-contained: does NOT reference the parent repo's dist/. Generated kernel + hand-written runtime + vitest test runner.",
   "type": "module",
   "private": true,

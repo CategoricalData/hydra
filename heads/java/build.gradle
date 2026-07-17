@@ -17,7 +17,7 @@ plugins {
 
 allprojects {
     group = 'net.fortytwo.hydra.java'
-    version = '0.17.1'
+    version = '0.17.2'
 
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
