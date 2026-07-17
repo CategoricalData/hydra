@@ -41,6 +41,7 @@
 
 module Hydra.PackageRouting (
   RoutingMap,
+  PackageManifest(..),
   buildRoutingMap,
   namespaceToPackageIn,
   namespaceToPackageMaybeIn,
@@ -48,6 +49,7 @@ module Hydra.PackageRouting (
   namespaceToPackageTestJsonDirIn,
   groupByPackageIn,
   defaultDistJsonRoot,
+  fromPairs,
 ) where
 
 import Hydra.Kernel
@@ -71,6 +73,29 @@ defaultDistJsonRoot = "../../dist/json"
 
 -- | A resolved module-to-package routing table.
 newtype RoutingMap = RoutingMap (M.Map ModuleName String)
+
+-- | A package's declared module sets, read from its manifest.json.
+--
+-- @packageManifestTestModules@, @packageManifestDslModules@, and
+-- @packageManifestEncodingModules@ are tolerant-empty fields: a package
+-- whose manifest omits one contributes nothing for it. Mirrors the
+-- Java @PackageManifest@ / Python @PackageManifest@ loaders introduced
+-- alongside this type (#560).
+data PackageManifest = PackageManifest {
+  packageManifestPackage :: String,
+  packageManifestMainModules :: [ModuleName],
+  packageManifestTestModules :: [ModuleName],
+  packageManifestDslModules :: [ModuleName],
+  packageManifestEncodingModules :: [ModuleName]
+}
+
+-- | Adapt the legacy @[(package, declaredModuleNames)]@ shape (still used by
+-- 'buildRoutingMap' callers) into 'PackageManifest' values, treating the
+-- whole declared list as main modules with no test/DSL/encoding split.
+-- A bridge for callers migrating incrementally; not needed once a caller
+-- reads 'PackageManifest' values directly from manifest.json.
+fromPairs :: [(String, [ModuleName])] -> [PackageManifest]
+fromPairs pairs = [ PackageManifest p ms [] [] [] | (p, ms) <- pairs ]
 
 -- | Build a 'RoutingMap' from each package's declared modules.
 --

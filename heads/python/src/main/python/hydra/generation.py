@@ -176,6 +176,62 @@ def read_manifest_field(base_path, field_name):
     return [ModuleName(ns) for ns in manifest[field_name]]
 
 
+def _read_manifest_field_or_empty(base_path, field_name):
+    """Read a manifest.json field as module names, or [] if missing.
+
+    Differs from read_manifest_field, which fails hard on a missing field.
+    """
+    manifest_path = os.path.join(base_path, "manifest.json")
+    if not os.path.isfile(manifest_path):
+        return []
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    field = manifest.get(field_name)
+    if not isinstance(field, list):
+        return []
+    return [ModuleName(ns) for ns in field]
+
+
+class PackageManifest:
+    """A package's declared module sets, read from its manifest.json.
+
+    package        The package name (e.g. "hydra-build"), from the
+                    manifest's "package" field.
+    main_modules    Required; fails loudly if absent (every package must
+                    declare its main modules).
+    test_modules, dsl_modules, encoding_modules
+                    Tolerant-empty: a package whose manifest omits the
+                    field contributes nothing for it.
+    """
+
+    def __init__(self, package, main_modules, test_modules, dsl_modules, encoding_modules):
+        self.package = package
+        self.main_modules = main_modules
+        self.test_modules = test_modules
+        self.dsl_modules = dsl_modules
+        self.encoding_modules = encoding_modules
+
+
+def read_package_manifest(pkg_json_dir):
+    """Read a package's manifest.json into a PackageManifest.
+
+    pkg_json_dir is the package's main JSON directory, e.g.
+    <dist_json_root>/<pkg>/src/main/json. Mirrors the field-reading
+    behavior of Hydra.Generation.loadNativePackageModulesTagged: mainModules
+    is required, testModules/mainDslModules/mainEncodingModules are read
+    tolerant-empty.
+    """
+    manifest_path = os.path.join(pkg_json_dir, "manifest.json")
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    package = manifest["package"]
+    main_modules = read_manifest_field(pkg_json_dir, "mainModules")
+    test_modules = _read_manifest_field_or_empty(pkg_json_dir, "testModules")
+    dsl_modules = _read_manifest_field_or_empty(pkg_json_dir, "mainDslModules")
+    encoding_modules = _read_manifest_field_or_empty(pkg_json_dir, "mainEncodingModules")
+    return PackageManifest(package, main_modules, test_modules, dsl_modules, encoding_modules)
+
+
 def generate_sources(coder, language, do_infer,
                      base_path, universe, modules_to_generate):
     """Generate source files and write them to disk.

@@ -383,6 +383,75 @@ public class Generation {
         return result;
     }
 
+    /**
+     * Read a manifest.json field as module names, or [] if the field or the
+     * manifest itself is missing. Differs from readManifestField, which
+     * fails hard on a missing field.
+     */
+    public static List<ModuleName> readManifestFieldOrEmpty(String basePath, String fieldName) throws IOException {
+        Path manifestPath = Paths.get(basePath, "manifest.json");
+        if (!Files.exists(manifestPath)) {
+            return java.util.Collections.emptyList();
+        }
+        Value manifestVal = parseJsonFile(manifestPath.toString());
+        Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
+        Value fieldVal = obj.get(fieldName);
+        if (!(fieldVal instanceof Value.Array)) {
+            return java.util.Collections.emptyList();
+        }
+        List<Value> arr = ((Value.Array) fieldVal).value;
+        List<ModuleName> result = new ArrayList<>(arr.size());
+        for (Value v : arr) {
+            result.add(new ModuleName(expectString(v, fieldName + " entry")));
+        }
+        return result;
+    }
+
+    /**
+     * A package's declared module sets, read from its manifest.json.
+     *
+     * mainModules is required; testModules/mainDslModules/mainEncodingModules
+     * are tolerant-empty: a package whose manifest omits the field
+     * contributes nothing for it.
+     */
+    public static class PackageManifest {
+        public final String package_;
+        public final List<ModuleName> mainModules;
+        public final List<ModuleName> testModules;
+        public final List<ModuleName> dslModules;
+        public final List<ModuleName> encodingModules;
+
+        public PackageManifest(String package_, List<ModuleName> mainModules, List<ModuleName> testModules,
+                List<ModuleName> dslModules, List<ModuleName> encodingModules) {
+            this.package_ = package_;
+            this.mainModules = mainModules;
+            this.testModules = testModules;
+            this.dslModules = dslModules;
+            this.encodingModules = encodingModules;
+        }
+    }
+
+    /**
+     * Read a package's manifest.json into a PackageManifest.
+     *
+     * pkgJsonDir is the package's main JSON directory, e.g.
+     * {@code <distJsonRoot>/<pkg>/src/main/json}. Mirrors the field-reading
+     * behavior of Hydra.Generation.loadNativePackageModulesTagged: mainModules
+     * is required, testModules/mainDslModules/mainEncodingModules are read
+     * tolerant-empty.
+     */
+    public static PackageManifest readPackageManifest(String pkgJsonDir) throws IOException {
+        String manifestPath = pkgJsonDir + File.separator + "manifest.json";
+        Value manifestVal = parseJsonFile(manifestPath);
+        Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
+        String pkg = expectString(obj.get("package"), "manifest.package");
+        List<ModuleName> mainModules = readManifestField(pkgJsonDir, "mainModules");
+        List<ModuleName> testModules = readManifestFieldOrEmpty(pkgJsonDir, "testModules");
+        List<ModuleName> dslModules = readManifestFieldOrEmpty(pkgJsonDir, "mainDslModules");
+        List<ModuleName> encodingModules = readManifestFieldOrEmpty(pkgJsonDir, "mainEncodingModules");
+        return new PackageManifest(pkg, mainModules, testModules, dslModules, encodingModules);
+    }
+
     // The cross-target source-code writers (generateSources, writeJava,
     // writePython, writeScala, writeTypeScript, writeHaskell, writeLispDialect)
     // moved to GenerationTargets (#370). They reference every target coder and so
