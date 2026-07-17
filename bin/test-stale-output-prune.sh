@@ -37,8 +37,22 @@ FAIL=0
 # Mirror test-json-content-invalidates-render.sh's #469 restore-on-exit
 # pattern: always re-run the overlay step on exit so a standalone run
 # leaves the tree buildable. Idempotent (plain cp -R), so unconditional.
+#
+# #558/#376: the haskell leg also passes --synthesize-sources (below), which
+# writes a real Hydra/Sources/{Decode,Encode}/ tree under
+# dist/haskell/hydra-kernel/src/main/haskell/ — never cleaned up by the test
+# itself, and never pruned by a later --prune-stale run scoped to a different
+# package. Because heads/haskell/package.yaml declares
+# dist/haskell/hydra-kernel/src/main/haskell as a directory-level
+# `source-dirs` entry (hpack glob, NOT an explicit module list — confirmed
+# 2026-07-17), any stray .hs file left there gets compiled into the head on
+# the next build. Remove the synthesized tree on exit alongside the overlay
+# restore, same restore-on-exit pattern, so a standalone run of this test
+# never leaves that residue behind.
 _test_558_restore_overlay() {
     "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh" >/dev/null
+    rm -rf "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode" \
+           "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode"
 }
 trap _test_558_restore_overlay EXIT
 

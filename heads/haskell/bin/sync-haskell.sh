@@ -373,13 +373,15 @@ echo ""
 echo "Checking for new files..."
 echo ""
 
-NEW_FILES=$(git status --porcelain ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+# #376: dist/haskell/ is gitignored — new files there never show up as `??`
+# in `git status`, so only dist/json/ (still tracked) is worth checking here.
+NEW_FILES=$(git status --porcelain ../../dist/json/hydra-kernel/src/main/json 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
     echo "  cd $HYDRA_HASKELL_DIR"
-    echo "  git add ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell"
+    echo "  git add ../../dist/json/hydra-kernel/src/main/json"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20
