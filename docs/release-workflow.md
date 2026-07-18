@@ -61,7 +61,7 @@ missing or wrongly-scoped credential surfaces only at upload time (often as a
 
 | Registry | What you need | Where |
 |----------|---------------|-------|
-| **Hackage** | A Hackage account that is a **maintainer** of `hydra`, `hydra-kernel`, `hydra-haskell`; `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
+| **Hackage** | A Hackage account that is a **maintainer** of every package in the curated Hackage publish set (`hydra-kernel`, `hydra-build`, `hydra-haskell`, `hydra-jvm`, `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`, `hydra-pg`, and the `hydra` umbrella — run `heads/haskell/bin/publish-hackage.sh --list` for the authoritative list); `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
 | **Maven Central** | A **Sonatype Central Portal** account with publish rights for the `net.fortytwo.hydra` namespace, plus a GPG signing key. Credentials in `~/.gradle/gradle.properties` (`sonatypeUsername`/`sonatypePassword` + `signing.*`). **JDK 17+** to run Gradle (see Java releases). | <https://central.sonatype.com/> |
 | **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest, and is required for a first-time publish of a not-yet-existing project such as `hydra-build`). **Preferred: put the token in `~/.pypirc` (`chmod 600`)** — `twine`/`publish-pypi.sh --upload` read it with no prompt. See the Authentication step under [Python releases](#python-releases). | <https://pypi.org/manage/projects/> (confirm you own the projects) |
 | **Maven Central (Scala/sbt)** | Same Sonatype Central Portal account as Java (publish rights for `net.fortytwo.hydra`), plus a GPG signing key. Credentials in `~/.sbt/1.0/sonatype.sbt` (`sonatypeUsername`/`sonatypePassword`) or env vars `SONATYPE_USERNAME`/`SONATYPE_PASSWORD`; GPG via sbt-pgp (reads `~/.gnupg` by default). **JDK 11+** required. | <https://central.sonatype.com/> |
@@ -204,9 +204,14 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    Hydra publishes a per-package Hackage distribution for **every** Hydra Haskell
    package (`hydra-kernel`, `hydra-haskell`, each generated coder — `hydra-coq`,
    `hydra-scala`, `hydra-pg`, `hydra-rdf`, … — and the `hydra` umbrella), rather
-   than one monolithic `hydra` sdist. The set is derived from the `hydra.json`
-   registry (not hardcoded), so new packages publish automatically (#376). This
-   step assembles them all (leaves first) on a
+   than one monolithic `hydra` sdist. The set is an **explicit curated list** in
+   `heads/haskell/bin/publish-hackage.sh` (`--list` prints it), deliberately
+   **excluding** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`),
+   the `hydra-bench` benchmarks, and `hydra-ext` — matching the Java/Scala coder
+   sets plus the `hydra` umbrella. (#573 tracks deriving all per-registry sets
+   from registry metadata for 0.18; until then each channel keeps its own curated
+   list, and `prepare-release.sh` consumes this one via `--list` so they cannot
+   drift.) This step assembles them all (leaves first) on a
    case-sensitive disk image (macOS) or plain temp dir (Linux) via
    `heads/haskell/bin/publish-hackage.sh`, extracts them into one
    `cabal.project`, and runs `cabal v2-build --dry-run` to catch GHC-28623
@@ -235,16 +240,31 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    self-contained when consumed as published artifacts, in isolation from the
    worktree (see the `verify-distribution.sh` row in the script reference below).
 
-On success the script writes, for each of `hydra-kernel`, `hydra-haskell`, `hydra`:
-
-- `release-artifacts/<pkg>-<version>.tar.gz`      — the Hackage sdist
-- `release-artifacts/<pkg>-<version>-docs.tar.gz` — the Haddock-for-Hackage docs
-
-and the canonical source release:
+On success the script writes the **canonical source release** — the polyglot,
+language-neutral release of record (a `git archive` of the whole repo, so it
+contains every host's sources: Haskell, Java, Python, Scala, TypeScript, Lisp):
 
 - `release-artifacts/hydra-<version>-src.tar.gz`        — the source archive (release of record)
 - `release-artifacts/hydra-<version>-src.tar.gz.sha512` — its SHA-512 checksum
 - `release-artifacts/hydra-<version>-src.tar.gz.asc`    — its detached GPG signature (if signed)
+
+plus, for each package in the curated Hackage set (`publish-hackage.sh --list`),
+staged under `dist/haskell/` (the Haskell channel's own dist tree, NOT
+`release-artifacts/`):
+
+- `dist/haskell/<pkg>-<version>.tar.gz`      — the Hackage sdist
+- `dist/haskell/<pkg>-<version>-docs.tar.gz` — the Haddock-for-Hackage docs
+
+**Only the source archive is a GitHub-release deliverable** (attach the `-src`
+trio — tarball + `.sha512` + `.asc`). The per-package Hackage sdists staged in
+`dist/haskell/`
+are *channel plumbing*: inputs to `cabal upload`, not release attachments. They
+live here only because Step 10 assembled them to verify Hackage's case-sensitive
+module-path constraint (a Haskell-specific check with no Java/Scala/Python/npm
+analog); the other channels publish directly from their own `dist/<lang>/` trees
+and stage nothing here. Do not read the Haskell sdists' presence as Haskell being
+privileged — all five registry channels are peers, each publishing its own package
+format from `dist/<lang>/`.
 
 Per-step logs land in `verify-logs/`. All checks must pass before proceeding with the release.
 
@@ -368,13 +388,18 @@ The following are Haskell-specific release steps:
   Starting with 0.16, Hydra publishes **per-package** Hackage distributions
   rather than one monolithic `hydra` package (#418), mirroring the per-package
   layout already used for Java (Maven Central) and Python (PyPI).
-  The publish set is **derived from the `hydra.json` registry** (deps-first topo
-  order) plus the hand-written `hydra` umbrella — so it always covers every Hydra
-  Haskell package and grows automatically as packages are added, with no hardcoded
-  list to fall out of sync (#376). It began as the 0.16.0 trio (`hydra-kernel`,
-  `hydra-haskell`, `hydra`); since 0.17.0 all generated coder packages
-  (`hydra-coq`, `hydra-scala`, `hydra-pg`, `hydra-rdf`, …) publish too. The set is
-  always **dependency-closed** (asserted before upload).
+  The publish set is an **explicit curated list** in `publish-hackage.sh`
+  (`--list` prints it), mirroring the per-channel curated sets that Java (Maven),
+  Scala (Maven), Python (PyPI), and npm each keep. It began as the 0.16.0 trio
+  (`hydra-kernel`, `hydra-haskell`, `hydra`); as of 0.17.1 it is the twelve-package
+  set covering the kernel, every **released** coder (`hydra-jvm`, `hydra-java`,
+  `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`,
+  `hydra-pg`), `hydra-build`, and the `hydra` umbrella. It deliberately **excludes**
+  the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`), the `hydra-bench`
+  benchmarks, and `hydra-ext` — the same exclusions the Java/Scala coder sets apply.
+  (#573 tracks deriving all per-registry sets from registry metadata for 0.18; until
+  then the list is curated per channel.) The set is always **dependency-closed**
+  (asserted before upload).
   * `bin/prepare-release.sh` already produced the upload-ready per-package sdists
     and Haddock-for-Hackage tarballs under `release-artifacts/` (one
     `<pkg>-<version>.tar.gz` + `<pkg>-<version>-docs.tar.gz` per package).
@@ -406,19 +431,21 @@ The following are Haskell-specific release steps:
     ```bash
     heads/haskell/bin/publish-hackage.sh --publish
     ```
-    Or upload manually in order (`hydra-kernel`, then `hydra-haskell`, then `hydra`):
+    Or upload manually in leaves-first order — the full curated set, `hydra-kernel`
+    first and the `hydra` umbrella last (run `publish-hackage.sh --list` for the
+    exact order):
     ```bash
-    cabal upload --publish release-artifacts/hydra-kernel-<version>.tar.gz
-    cabal upload --publish release-artifacts/hydra-haskell-<version>.tar.gz
-    cabal upload --publish release-artifacts/hydra-<version>.tar.gz
+    for pkg in $(heads/haskell/bin/publish-hackage.sh --list); do
+      cabal upload --publish dist/haskell/$pkg-<version>.tar.gz
+    done
     ```
     (or click the Upload link at <https://hackage.haskell.org/upload>). Each
     version becomes visible on its package page immediately.
   * Upload pre-built docs (same leaves-first order):
     ```bash
-    cabal upload --documentation --publish release-artifacts/hydra-kernel-<version>-docs.tar.gz
-    cabal upload --documentation --publish release-artifacts/hydra-haskell-<version>-docs.tar.gz
-    cabal upload --documentation --publish release-artifacts/hydra-<version>-docs.tar.gz
+    for pkg in $(heads/haskell/bin/publish-hackage.sh --list); do
+      cabal upload --documentation --publish dist/haskell/$pkg-<version>-docs.tar.gz
+    done
     ```
     Hackage's auto-doc-builder is unreliable for packages with many transitive
     deps, so we always upload pre-built docs rather than trusting the
