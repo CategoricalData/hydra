@@ -26,10 +26,14 @@
 #      must itself be in the publish set.
 #   2. LEAVES-FIRST ORDER: a dependency is always published before its dependents.
 #
-# Sonatype Central Portal note: `sbt publishSigned` + sbt-sonatype 3.12+
-# submits a bundle to the Central Portal as a reviewable pending deployment.
-# Nothing goes live until you log in and click "Publish" at
-# https://central.sonatype.com/publishing/deployments.
+# Sonatype Central Portal note: `sbt publishSigned` + `sonatypeBundleRelease`
+# (sbt-sonatype 3.12.2) uploads a bundle to the Central Portal and blocks polling
+# for validation. This is the ONLY task in 3.12.2 that targets the Central Portal
+# API — sonatypeBundleUpload talks to the decommissioned legacy OSSRH Nexus
+# (/service/local) and 404s, so do NOT use it. The validation poll is slow (a
+# minute or two per package) but completes; on a rare client timeout mid-poll the
+# coordinate is left locked (drop the stuck deployment in the Portal UI, re-run
+# with --skip for the already-live packages).
 #
 # Usage:
 #   publish-sbt.sh [--upload] [--package <pkg>] [--skip <pkg[,pkg...]>]
@@ -171,7 +175,16 @@ if [ "$DO_UPLOAD" = true ]; then
     done
     echo ""
 
-    echo "=== Uploading to Sonatype Central Portal (leaves first) ==="
+    # Upload + release each package via sonatypeBundleRelease. NOTE: in
+    # sbt-sonatype 3.12.2, sonatypeBundleRelease is the ONLY task that targets the
+    # Central Portal API; sonatypeBundleUpload talks to the DECOMMISSIONED legacy
+    # OSSRH Nexus (/service/local) and 404s. So we must use Release here. It
+    # uploads then blocks polling the Portal for validation — that poll is slow
+    # (a minute or two per package) but it DOES complete and publish (this is how
+    # hydra-kernel/build/haskell went live). The one hazard is a CLIENT TIMEOUT
+    # mid-poll, which leaves the coordinate locked; if that happens, drop the stuck
+    # deployment in the Portal UI and re-run with --skip for the already-live ones.
+    echo "=== Uploading + releasing to Sonatype Central Portal (leaves first) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
         [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
@@ -181,15 +194,13 @@ if [ "$DO_UPLOAD" = true ]; then
         # warnings and a BUNDLE_ZIP_ERROR; a clean dir avoids both.
         rm -rf "$HYDRA_ROOT/dist/scala/$pkg/target/sonatype-staging" \
                "$HYDRA_ROOT/dist/scala/$pkg"/target/*-bundle 2>/dev/null || true
-        echo "=== sbt publishSigned  ($pkg @ $VERSION) ==="
+        echo "=== sbt publishSigned + sonatypeBundleRelease  ($pkg @ $VERSION) ==="
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishSigned sonatypeBundleRelease )
         echo ""
     done
 
-    echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as pending deployments. ==="
-    echo "Finalize at https://central.sonatype.com/publishing/deployments —"
-    echo "verify each passed validation, then click Publish (leaves first)."
-    printf '  %s\n' "${PUBLISH_SET[@]}"
+    echo "=== Released ${#PUBLISH_SET[@]} package(s) at $VERSION to the Central Portal. ==="
+    echo "Verify at https://central.sonatype.com/publishing/deployments and on Maven Central."
 else
     # Dry run: publishLocal leaves-first (so each package can resolve its
     # Hydra siblings from the local ivy cache), then verify package builds.
