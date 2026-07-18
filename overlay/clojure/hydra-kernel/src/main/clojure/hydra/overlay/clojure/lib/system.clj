@@ -117,32 +117,3 @@
     (if (nil? cwd)
       (list :left (list :other "user.dir is not set"))
       (list :right cwd))))
-
-;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
-(def hydra_lib_system_read_stdin
-  "Read standard input until end-of-file, returning the complete contents as raw bytes."
-  (try
-    (list :right (bytes->binary (read-all System/in)))
-    (catch IOException e (list :left (list :other (message e))))))
-
-;; writeStderr :: binary -> effect<Either<SystemError, unit>>
-(def hydra_lib_system_write_stderr
-  "Write bytes to standard error."
-  (fn [bs]
-    (try
-      (let [ba (byte-array (map unchecked-byte bs))]
-        (.write System/err ^bytes ba)
-        (.flush System/err))
-      (list :right nil)
-      (catch IOException e (list :left (list :other (message e)))))))
-
-;; writeStdout :: binary -> effect<Either<SystemError, unit>>
-(def hydra_lib_system_write_stdout
-  "Write bytes to standard output."
-  (fn [bs]
-    (try
-      (let [ba (byte-array (map unchecked-byte bs))]
-        (.write System/out ^bytes ba)
-        (.flush System/out))
-      (list :right nil)
-      (catch IOException e (list :left (list :other (message e)))))))

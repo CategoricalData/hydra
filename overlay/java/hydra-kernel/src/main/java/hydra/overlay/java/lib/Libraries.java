@@ -395,10 +395,7 @@ public class Libraries {
                 new hydra.overlay.java.lib.system.GetEnvironment(),
                 new hydra.overlay.java.lib.system.GetEnvironmentVariable(),
                 new hydra.overlay.java.lib.system.GetTime(),
-                new hydra.overlay.java.lib.system.GetWorkingDirectory(),
-                new hydra.overlay.java.lib.system.ReadStdin(),
-                new hydra.overlay.java.lib.system.WriteStderr(),
-                new hydra.overlay.java.lib.system.WriteStdout());
+                new hydra.overlay.java.lib.system.GetWorkingDirectory());
     }
 
     private static List<PrimitiveFunction> textPrimitives() {

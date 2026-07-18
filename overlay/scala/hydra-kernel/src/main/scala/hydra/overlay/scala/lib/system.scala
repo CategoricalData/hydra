@@ -71,27 +71,6 @@ object system:
     try Right(System.getProperty("user.dir"))
     catch case e: Exception => Left(SystemError.other(message(e)))
 
-  /** Read standard input until end-of-file, returning the complete contents as base64-encoded bytes. */
-  def readStdin: Either[SystemError, String] =
-    try Right(java.util.Base64.getEncoder.encodeToString(readAll(System.in)))
-    catch case e: IOException => Left(SystemError.other(message(e)))
-
-  /** Write base64-encoded bytes to standard error. */
-  def writeStderr(bytes: String): Either[SystemError, Unit] =
-    try
-      System.err.write(java.util.Base64.getDecoder.decode(bytes))
-      System.err.flush()
-      Right(())
-    catch case e: IOException => Left(SystemError.other(message(e)))
-
-  /** Write base64-encoded bytes to standard output. */
-  def writeStdout(bytes: String): Either[SystemError, Unit] =
-    try
-      System.out.write(java.util.Base64.getDecoder.decode(bytes))
-      System.out.flush()
-      Right(())
-    catch case e: IOException => Left(SystemError.other(message(e)))
-
   // ---- Helpers (not primitives) ----
 
   private def readAll(in: java.io.InputStream): Array[Byte] =

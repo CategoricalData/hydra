@@ -737,7 +737,6 @@
 (defn register-system []
   (let [s (p/tc-string)
         unit (p/tc-unit)
-        bin (p/tc-binary)
         eff (fn [c] (p/tc-effect c))
         cmd (p/tc-named "hydra.system.Command")
         procResult (p/tc-named "hydra.system.ProcessResult")
@@ -763,16 +762,7 @@
                                      [] (eff timespec))
      (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory)
                                      (fn [] system/hydra_lib_system_get_working_directory)
-                                     [] (eff (p/tc-either sysErr filePath)))
-     (prim-name 'hydra.lib.system/hydra_lib_system_read_stdin) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_read_stdin)
-                                     (fn [] system/hydra_lib_system_read_stdin)
-                                     [] (eff (p/tc-either sysErr bin)))
-     (prim-name 'hydra.lib.system/hydra_lib_system_write_stderr) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_write_stderr)
-                                     system/hydra_lib_system_write_stderr
-                                     [] bin (eff (p/tc-either sysErr unit)))
-     (prim-name 'hydra.lib.system/hydra_lib_system_write_stdout) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_write_stdout)
-                                     system/hydra_lib_system_write_stdout
-                                     [] bin (eff (p/tc-either sysErr unit)))}))
+                                     [] (eff (p/tc-either sysErr filePath)))}))
 
 ;; ============================================================
 ;; ============================================================

@@ -257,7 +257,6 @@
             (envvar (tc-named "hydra.system.EnvironmentVariable"))
             (fp (tc-named "hydra.file.FilePath"))
             (str (tc-string))
-            (bin (tc-binary))
             (unit (tc-unit)))
         (let ((eff (lambda (c) (tc-effect c))))
           (list
@@ -278,16 +277,7 @@
                                                #f (eff tspec)))
             (cons (prim-name def:hydra_lib_system_get_working_directory) (prim0 (prim-name def:hydra_lib_system_get_working_directory)
                                                (lambda () hydra_lib_system_get_working_directory)
-                                               #f (eff (tc-either serr fp))))
-            (cons (prim-name def:hydra_lib_system_read_stdin) (prim0 (prim-name def:hydra_lib_system_read_stdin)
-                                               (lambda () hydra_lib_system_read_stdin)
-                                               #f (eff (tc-either serr bin))))
-            (cons (prim-name def:hydra_lib_system_write_stderr) (prim1 (prim-name def:hydra_lib_system_write_stderr)
-                                               hydra_lib_system_write_stderr
-                                               #f bin (eff (tc-either serr unit))))
-            (cons (prim-name def:hydra_lib_system_write_stdout) (prim1 (prim-name def:hydra_lib_system_write_stdout)
-                                               hydra_lib_system_write_stdout
-                                               #f bin (eff (tc-either serr unit))))))))
+                                               #f (eff (tc-either serr fp))))))))
 
     ;; ============================================================================
     ;; Lists

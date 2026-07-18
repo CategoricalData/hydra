@@ -225,7 +225,6 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (envvar (tc-named "hydra.system.EnvironmentVariable"))
         (fp (tc-named "hydra.file.FilePath"))
         (str (tc-string))
-        (bin (tc-binary))
         (unit (tc-unit)))
     (let ((eff (lambda (c) (tc-effect c))))
       (list
@@ -246,16 +245,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
                                                    nil (funcall eff tspec)))
         (cons (prim-name hydra_lib_system_get_working_directory) (prim0 (prim-name hydra_lib_system_get_working_directory)
                                                    (lambda () hydra_overlay_emacs_lisp_lib_system_get_working_directory)
-                                                   nil (funcall eff (tc-either serr fp))))
-        (cons (prim-name hydra_lib_system_read_stdin)     (prim0 (prim-name hydra_lib_system_read_stdin)
-                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_read_stdin)
-                                                   nil (funcall eff (tc-either serr bin))))
-        (cons (prim-name hydra_lib_system_write_stderr)   (prim1 (prim-name hydra_lib_system_write_stderr)
-                                                   hydra_overlay_emacs_lisp_lib_system_write_stderr
-                                                   nil bin (funcall eff (tc-either serr unit))))
-        (cons (prim-name hydra_lib_system_write_stdout)   (prim1 (prim-name hydra_lib_system_write_stdout)
-                                                   hydra_overlay_emacs_lisp_lib_system_write_stdout
-                                                   nil bin (funcall eff (tc-either serr unit))))))))
+                                                   nil (funcall eff (tc-either serr fp))))))))
 
 ;; ============================================================================
 ;; Lists

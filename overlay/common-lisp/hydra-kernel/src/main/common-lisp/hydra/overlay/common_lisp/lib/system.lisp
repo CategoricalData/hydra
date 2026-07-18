@@ -112,35 +112,3 @@
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
 (defvar hydra_overlay_common_lisp_lib_system_get_working_directory
   (list :right (namestring (truename "."))))
-
-;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect)
-(defvar hydra_overlay_common_lisp_lib_system_read_stdin
-  #+sbcl
-  (handler-case
-      (list :right (hydra-system-read-bytes sb-sys:*stdin*))
-    (error (e) (list :left (list :other (hydra-system-message e)))))
-  #-sbcl (list :left (list :other "hydra.lib.system.readStdin requires SBCL")))
-
-;; writeStderr :: binary -> effect<Either<SystemError, unit>>
-(defvar hydra_overlay_common_lisp_lib_system_write_stderr
-  (lambda (bytes)
-    #+sbcl
-    (handler-case
-        (progn
-          (write-sequence (coerce bytes '(vector (unsigned-byte 8))) sb-sys:*stderr*)
-          (finish-output sb-sys:*stderr*)
-          (list :right nil))
-      (error (e) (list :left (list :other (hydra-system-message e)))))
-    #-sbcl (list :left (list :other "hydra.lib.system.writeStderr requires SBCL"))))
-
-;; writeStdout :: binary -> effect<Either<SystemError, unit>>
-(defvar hydra_overlay_common_lisp_lib_system_write_stdout
-  (lambda (bytes)
-    #+sbcl
-    (handler-case
-        (progn
-          (write-sequence (coerce bytes '(vector (unsigned-byte 8))) sb-sys:*stdout*)
-          (finish-output sb-sys:*stdout*)
-          (list :right nil))
-      (error (e) (list :left (list :other (hydra-system-message e)))))
-    #-sbcl (list :left (list :other "hydra.lib.system.writeStdout requires SBCL"))))

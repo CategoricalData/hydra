@@ -15,7 +15,6 @@
 // generated types; we use `any` here to stay decoupled from the generated dist.
 
 import { spawnSync } from "node:child_process";
-import { readFileSync, writeSync } from "node:fs";
 import process from "node:process";
 import type { Either, Optional } from "../../../runtime.js";
 import { Left, Right, Given, None } from "../../../runtime.js";
@@ -109,38 +108,6 @@ export const getTime = (): any => {
 export const getWorkingDirectory = (): Either<any, any> => {
   try {
     return Right({ value: process.cwd() });
-  } catch (e) {
-    return Left({ tag: "other", value: e instanceof Error ? e.message : String(e) });
-  }
-};
-
-// readStdin : effect<either<SystemError, binary>>
-// Read standard input until end-of-file, returning the complete contents as base64-encoded bytes.
-export const readStdin = (): Either<any, string> => {
-  try {
-    return Right(bufferToBase64(readFileSync(0)));
-  } catch (e) {
-    return Left({ tag: "other", value: e instanceof Error ? e.message : String(e) });
-  }
-};
-
-// writeStderr : binary -> effect<either<SystemError, unit>>
-// Write base64-encoded bytes to standard error.
-export const writeStderr = (bytes: string): Either<any, void> => {
-  try {
-    writeSync(2, Buffer.from(bytes, "base64"));
-    return Right(undefined);
-  } catch (e) {
-    return Left({ tag: "other", value: e instanceof Error ? e.message : String(e) });
-  }
-};
-
-// writeStdout : binary -> effect<either<SystemError, unit>>
-// Write base64-encoded bytes to standard output.
-export const writeStdout = (bytes: string): Either<any, void> => {
-  try {
-    writeSync(1, Buffer.from(bytes, "base64"));
-    return Right(undefined);
   } catch (e) {
     return Left({ tag: "other", value: e instanceof Error ? e.message : String(e) });
   }

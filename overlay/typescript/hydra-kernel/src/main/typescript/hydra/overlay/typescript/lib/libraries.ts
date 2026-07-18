@@ -1899,15 +1899,6 @@ const systemPrimitives = (): readonly Primitive[] => {
     // getWorkingDirectory : effect<either<SystemError, FilePath>>
     effectPrim("hydra.lib.system.getWorkingDirectory",
       scheme(tyEffect(tyEither(systemError, filePath)))),
-    // readStdin : effect<either<SystemError, binary>>
-    effectPrim("hydra.lib.system.readStdin",
-      scheme(tyEffect(tyEither(systemError, tyBinary)))),
-    // writeStderr : binary -> effect<either<SystemError, unit>>
-    effectPrim("hydra.lib.system.writeStderr",
-      scheme(tyFn(tyBinary, tyEffect(tyEither(systemError, tyUnit))))),
-    // writeStdout : binary -> effect<either<SystemError, unit>>
-    effectPrim("hydra.lib.system.writeStdout",
-      scheme(tyFn(tyBinary, tyEffect(tyEither(systemError, tyUnit))))),
   ];
 };
 

@@ -21,8 +21,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.system module.")}
   where
-    definitions = [execute, exit, getEnvironment, getEnvironmentVariable, getTime, getWorkingDirectory,
-      readStdin, writeStderr, writeStdout]
+    definitions = [execute, exit, getEnvironment, getEnvironmentVariable, getTime, getWorkingDirectory]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = impurePrimitiveInModule module_
@@ -36,9 +35,6 @@ processResult      = TypeVariable (Name "hydra.system.ProcessResult")
 statusCode         = TypeVariable (Name "hydra.system.StatusCode")
 systemError        = TypeVariable (Name "hydra.error.system.SystemError")
 timespec           = TypeVariable (Name "hydra.time.Timespec")
-
-result :: Type -> Type
-result t = effect (Types.either_ systemError t)
 
 execute :: PrimitiveDefinition
 execute = define "execute" "Run a program to completion and capture its result."
@@ -105,36 +101,3 @@ getWorkingDirectory = define "getWorkingDirectory" "Get the current working dire
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/getcwd.html) -- as a FilePath. A\
   \ recoverable failure (for example POSIX EACCES, or the working directory having been removed) is\
   \ returned as left(error); success is returned as right(path)."]
-
-readStdin :: PrimitiveDefinition
-readStdin = define "readStdin" "Read the complete contents of standard input as raw bytes."
-  (sig $ TypeScheme [] (result Types.binary) Nothing)
-  ["readStdin describes an effectful computation which reads standard input (POSIX file descriptor\
-  \ 0) until end-of-file and returns the complete contents as raw bytes, with no character decoding\
-  \ or newline translation -- the POSIX read() function (XSH,\
-  \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/read.html) applied repeatedly to fd 0\
-  \ until it signals end-of-file. To interpret the result as text, decode it (e.g. via\
-  \ hydra.lib.text.decodeUtf8). A recoverable I/O failure is returned as left(error); success is\
-  \ returned as right(contents), including the empty byte string if stdin is closed or empty."]
-
-writeStderr :: PrimitiveDefinition
-writeStderr = define "writeStderr" "Write raw bytes to standard error."
-  (sig $ TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
-  ["writeStderr(bytes) describes an effectful computation which writes bytes to standard error\
-  \ (POSIX file descriptor 2), with no character encoding or newline translation -- the POSIX\
-  \ write() function (XSH,\
-  \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd\
-  \ 2 until all bytes are written. To write text, encode it first (e.g. via\
-  \ hydra.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
-  \ is returned as left(error); success is returned as right(unit)."]
-
-writeStdout :: PrimitiveDefinition
-writeStdout = define "writeStdout" "Write raw bytes to standard output."
-  (sig $ TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
-  ["writeStdout(bytes) describes an effectful computation which writes bytes to standard output\
-  \ (POSIX file descriptor 1), with no character encoding or newline translation -- the POSIX\
-  \ write() function (XSH,\
-  \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd\
-  \ 1 until all bytes are written. To write text, encode it first (e.g. via\
-  \ hydra.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
-  \ is returned as left(error); success is returned as right(unit)."]

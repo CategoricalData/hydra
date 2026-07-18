@@ -14,7 +14,6 @@ import Data.Time.Clock.POSIX (getPOSIXTime)
 import System.Exit (ExitCode(..), exitWith)
 import qualified System.Directory as Dir
 import qualified System.Environment as Env
-import qualified System.IO as SIO
 import qualified System.IO.Error as IOE
 import qualified System.Process as P
 
@@ -67,27 +66,7 @@ getWorkingDirectory =
   E.catch (Right . File.FilePath <$> Dir.getCurrentDirectory)
     (\e -> pure $ Left $ SystemError.SystemErrorOther (IOE.ioeGetErrorString (e :: IOError)))
 
--- | Read the complete contents of standard input as raw bytes.
-readStdin :: IO (Either SystemError.SystemError BS.ByteString)
-readStdin = withStdioError BS.hGetContents SIO.stdin
-
--- | Write raw bytes to standard error.
-writeStderr :: BS.ByteString -> IO (Either SystemError.SystemError ())
-writeStderr = withStdioError' BS.hPut SIO.stderr
-
--- | Write raw bytes to standard output.
-writeStdout :: BS.ByteString -> IO (Either SystemError.SystemError ())
-writeStdout = withStdioError' BS.hPut SIO.stdout
-
 -- Helpers (not primitives)
-
-withStdioError :: (SIO.Handle -> IO a) -> SIO.Handle -> IO (Either SystemError.SystemError a)
-withStdioError action handle =
-  E.catch (Right <$> action handle)
-    (\e -> pure $ Left $ SystemError.SystemErrorOther (IOE.ioeGetErrorString (e :: IOError)))
-
-withStdioError' :: (SIO.Handle -> a -> IO ()) -> SIO.Handle -> a -> IO (Either SystemError.SystemError ())
-withStdioError' action handle x = withStdioError (`action` x) handle
 
 -- | Convert the environment map to the association list System.Process expects.
 toEnvList :: M.Map System.EnvironmentVariable String -> [(String, String)]
