@@ -234,18 +234,32 @@ jobs:
     needs: haskell
     runs-on: ubuntu-latest
     # Five small stack builds/execs, not a full sync — generous but bounded.
-    timeout-minutes: 60
+    # Bumped 60->120: post-#376 this job cold-seeds dist/haskell first (which
+    # builds the json-driver + regenerates the kernel tree from dist/json), so
+    # it is no longer just "five small stack execs".
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+      # ghc-version pinned for the cold-seed's json-driver build (system-ghc,
+      # resolver lts-24.7 => ghc-9.10.2); see the cold-clone-haskell job.
       - uses: haskell-actions/setup@v2
         with:
+          ghc-version: '9.10.2'
           enable-stack: true
           stack-version: latest
+      - uses: astral-sh/setup-uv@v5
       - uses: actions/cache@v4
         with:
           path: ~/.stack
           key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
+      # #376: dist/haskell/ is untracked (gitignored), so a fresh checkout has
+      # no generated kernel tree — bin/test-regressions.sh's stack build fails
+      # with GHC-87110 "Could not find module 'Hydra.Typing'" etc. Cold-seed it
+      # from the committed dist/json/ first (same path bin/sync.sh's cold-start
+      # detection uses), exactly like the cold-clone-haskell job.
+      - name: Cold-seed dist/haskell from committed dist/json (published host)
+        run: heads/haskell/json-driver/bin/cold-seed-dist-haskell.sh
       # Post-#418 the overlay/haskell/hydra-kernel runtime files are untracked,
       # so a fresh checkout alone can't build the Haskell project (GHC fails
       # with "Could not find module 'Hydra.Overlay.Haskell.Lib.*'"). git
