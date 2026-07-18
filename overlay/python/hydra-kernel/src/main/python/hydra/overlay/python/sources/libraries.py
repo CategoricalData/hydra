@@ -190,6 +190,9 @@ def register_system_primitives() -> dict[Name, Primitive]:
     primitives[def_system.get_environment_variable.name] = unsupported_effect_primitive(def_system.get_environment_variable)
     primitives[def_system.get_time.name] = unsupported_effect_primitive(def_system.get_time)
     primitives[def_system.get_working_directory.name] = unsupported_effect_primitive(def_system.get_working_directory)
+    primitives[def_system.read_stdin.name] = unsupported_effect_primitive(def_system.read_stdin)
+    primitives[def_system.write_stderr.name] = unsupported_effect_primitive(def_system.write_stderr)
+    primitives[def_system.write_stdout.name] = unsupported_effect_primitive(def_system.write_stdout)
     return primitives
 
 

@@ -1364,6 +1364,15 @@ object Libraries:
       // getWorkingDirectory: effect<either<SystemError, FilePath>>
       hydra.lib.system.getWorkingDirectory.name -> mkPrimEffect(hydra.lib.system.getWorkingDirectory.name,
         tMono(tEffect(tEither(tSystemError, tFilePath)))),
+      // readStdin: effect<either<SystemError, binary>>
+      hydra.lib.system.readStdin.name -> mkPrimEffect(hydra.lib.system.readStdin.name,
+        tMono(tEffect(tEither(tSystemError, tBinary)))),
+      // writeStderr: binary -> effect<either<SystemError, unit>>
+      hydra.lib.system.writeStderr.name -> mkPrimEffect(hydra.lib.system.writeStderr.name,
+        tMono(tFun(tBinary, tEffect(tEither(tSystemError, tUnit))))),
+      // writeStdout: binary -> effect<either<SystemError, unit>>
+      hydra.lib.system.writeStdout.name -> mkPrimEffect(hydra.lib.system.writeStdout.name,
+        tMono(tFun(tBinary, tEffect(tEither(tSystemError, tUnit))))),
     )
 
 

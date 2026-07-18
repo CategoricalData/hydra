@@ -428,7 +428,10 @@ hydraLibSystem = standardLibrary [
     unsupportedEffectPrimitive DefSystem.getEnvironment,
     unsupportedEffectPrimitive DefSystem.getEnvironmentVariable,
     unsupportedEffectPrimitive DefSystem.getTime,
-    unsupportedEffectPrimitive DefSystem.getWorkingDirectory]
+    unsupportedEffectPrimitive DefSystem.getWorkingDirectory,
+    unsupportedEffectPrimitive DefSystem.readStdin,
+    unsupportedEffectPrimitive DefSystem.writeStderr,
+    unsupportedEffectPrimitive DefSystem.writeStdout]
 
 hydraLibHashing :: Library
 hydraLibHashing = standardLibrary [
