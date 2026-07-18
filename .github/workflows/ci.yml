@@ -124,15 +124,24 @@ jobs:
       - name: Force-regen dist/haskell/hydra-{java,python} twice and diff
         run: |
           set -e
+          # Compare only the RENDERED SOURCE across two regenerations. The
+          # build/ subtree holds cache artifacts (build/main/digest.json is a
+          # content digest whose serialization is not byte-stable across runs and
+          # is gitignored for exactly that reason), so excluding build/ here is
+          # correct — it is not generated output. Pre-#376 this step used
+          # `git diff`, which never saw build/ (gitignored even in the then-tracked
+          # tree); the #376 switch to `diff -rq` (needed once dist/haskell/ became
+          # untracked) must exclude build/ to preserve that behavior, else the
+          # non-stable digest.json produces a spurious non-determinism failure.
           for pkg in hydra-java hydra-python; do
             rm -f "dist/haskell/$pkg/build/main/digest.json"
             heads/haskell/bin/assemble-distribution.sh "$pkg"
             cp -r "dist/haskell/$pkg" "/tmp/dist-haskell-$pkg-pass1"
             rm -f "dist/haskell/$pkg/build/main/digest.json"
             heads/haskell/bin/assemble-distribution.sh "$pkg"
-            if ! diff -rq "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg"; then
-              echo "::error::dist/haskell/$pkg/ is non-deterministic: two regenerations from the same committed dist/json/$pkg/ produced different output."
-              diff -rq "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg" | head -100
+            if ! diff -rq --exclude=build "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg"; then
+              echo "::error::dist/haskell/$pkg/ is non-deterministic: two regenerations from the same committed dist/json/$pkg/ produced different rendered source."
+              diff -rq --exclude=build "/tmp/dist-haskell-$pkg-pass1" "dist/haskell/$pkg" | head -100
               exit 1
             fi
           done
@@ -164,10 +173,15 @@ jobs:
           rm -rf /tmp/dist-haskell-pass1
           cp -r dist/haskell /tmp/dist-haskell-pass1
           bin/sync.sh --hosts all --targets all --no-tests
-          if ! diff -rq /tmp/dist-haskell-pass1 dist/haskell; then
-            echo "::error::dist/haskell/ is non-deterministic: two regenerations from the same committed dist/json/ produced different output."
+          # Exclude build/ cache artifacts (per-package build/main/digest.json is a
+          # non-byte-stable content digest, gitignored for that reason) — same
+          # rationale as the hydra-{java,python} determinism gate above. Comparing
+          # them produces a spurious non-determinism failure on rendered-identical
+          # output.
+          if ! diff -rq --exclude=build /tmp/dist-haskell-pass1 dist/haskell; then
+            echo "::error::dist/haskell/ is non-deterministic: two regenerations from the same committed dist/json/ produced different rendered source."
             echo "::error::This can hide real drift now that dist/haskell/ is untracked (#376) — fix the generator."
-            diff -rq /tmp/dist-haskell-pass1 dist/haskell | head -200
+            diff -rq --exclude=build /tmp/dist-haskell-pass1 dist/haskell | head -200
             exit 1
           fi
       - name: Stack tests
