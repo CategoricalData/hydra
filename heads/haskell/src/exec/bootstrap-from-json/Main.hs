@@ -702,6 +702,15 @@ main = do
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
   let libSubs = ["chars","eithers","equality","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
+  -- This list (and every libSubs* variant below) is an ALLOW-list, not a hydra.lib.* prefix
+  -- match, and that is intentional: each entry names a sub-namespace that actually has a
+  -- hydra.overlay.<lang>.lib.<sub> implementation to redirect to. A kernel-emitted, overlay-less
+  -- hydra.lib.* module (e.g. hydra.lib.defaults, a generated Map constant with no host-native
+  -- counterpart) has no such target and is correctly left out. Do NOT "simplify" redirectForSubs
+  -- to match any hydra.lib.<x> generically -- that reintroduces the unconditional-rewrite bug
+  -- fixed by name in the Haskell (#549) and TypeScript (#565) coders; #569 confirmed Scala/Lisp
+  -- were never exposed to it precisely because this redirect stays allow-list-based. See #568
+  -- for the longer-term structural fix (route by overlay-module existence instead of by name).
   -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
   -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
   -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
