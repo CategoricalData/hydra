@@ -17,16 +17,21 @@
                 getcwd chdir access? X_OK getenv environ
                 gettimeofday mkstemp! port-filename status:exit-val OPEN_READ
                 with-error-to-file delete-file file-exists? string-index
-                primitive-exit open-file resolve-module module-variable eval)
+                primitive-exit open-file resolve-module module-variable eval
+                current-input-port current-output-port current-error-port
+                force-output)
           (only (ice-9 popen) open-pipe* close-pipe)
-          (only (ice-9 binary-ports) get-bytevector-all)
-          (only (rnrs bytevectors) bytevector-length bytevector-u8-ref make-bytevector))
+          (only (ice-9 binary-ports) get-bytevector-all put-bytevector)
+          (only (rnrs bytevectors) bytevector-length bytevector-u8-ref make-bytevector bytevector-u8-set!))
   (export hydra_lib_system_execute
           hydra_lib_system_exit
           hydra_lib_system_get_environment
           hydra_lib_system_get_environment_variable
           hydra_lib_system_get_time
-          hydra_lib_system_get_working_directory)
+          hydra_lib_system_get_working_directory
+          hydra_lib_system_read_stdin
+          hydra_lib_system_write_stderr
+          hydra_lib_system_write_stdout)
   (begin
 
     ;; Scheme (guile) implementations of hydra.lib.system primitives (#498).
@@ -78,6 +83,12 @@
         (do ((i 0 (+ i 1)))
             ((= i (bytevector-length bv)) v)
           (vector-set! v i (bytevector-u8-ref bv i)))))
+
+    (define (binary->bytevector v)
+      (let ((bv (make-bytevector (vector-length v))))
+        (do ((i 0 (+ i 1)))
+            ((= i (vector-length v)) bv)
+          (bytevector-u8-set! bv i (vector-ref v i)))))
 
     ;; Resolve the program to an executable path, or #f if not found / not executable.
     ;; A program containing a slash is checked directly; otherwise PATH is searched.
@@ -168,4 +179,23 @@
 
     ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
     (define hydra_lib_system_get_working_directory
-      (list 'right (getcwd)))))
+      (list 'right (getcwd)))
+
+    ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
+    (define hydra_lib_system_read_stdin
+      (let ((bv (get-bytevector-all (current-input-port))))
+        (list 'right (if (eof-object? bv) #() (bytevector->binary bv)))))
+
+    ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
+    (define hydra_lib_system_write_stderr
+      (lambda (bs)
+        (put-bytevector (current-error-port) (binary->bytevector bs))
+        (force-output (current-error-port))
+        (list 'right '())))
+
+    ;; writeStdout :: binary -> effect<Either<SystemError, unit>>
+    (define hydra_lib_system_write_stdout
+      (lambda (bs)
+        (put-bytevector (current-output-port) (binary->bytevector bs))
+        (force-output (current-output-port))
+        (list 'right '())))))

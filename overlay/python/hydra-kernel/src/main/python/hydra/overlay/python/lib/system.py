@@ -12,6 +12,7 @@ Hydra.Haskell.Lib.System. For #498.
 from __future__ import annotations
 import os
 import subprocess
+import sys
 import time
 
 from hydra.overlay.python.dsl.python import Either, Left, Right, Given, None_
@@ -94,5 +95,33 @@ def get_working_directory() -> Either["system_error.SystemError", "hydra.file.Fi
     """Get the current working directory as a FilePath."""
     try:
         return Right(FilePath(os.getcwd()))
+    except OSError as e:
+        return Left(system_error.SystemErrorOther(e.strerror or str(e)))
+
+
+def read_stdin() -> Either["system_error.SystemError", bytes]:
+    """Read standard input until end-of-file, returning the complete contents as raw bytes."""
+    try:
+        return Right(sys.stdin.buffer.read())
+    except OSError as e:
+        return Left(system_error.SystemErrorOther(e.strerror or str(e)))
+
+
+def write_stderr(data: bytes) -> Either["system_error.SystemError", None]:
+    """Write bytes to standard error."""
+    try:
+        sys.stderr.buffer.write(data)
+        sys.stderr.buffer.flush()
+        return Right(None)
+    except OSError as e:
+        return Left(system_error.SystemErrorOther(e.strerror or str(e)))
+
+
+def write_stdout(data: bytes) -> Either["system_error.SystemError", None]:
+    """Write bytes to standard output."""
+    try:
+        sys.stdout.buffer.write(data)
+        sys.stdout.buffer.flush()
+        return Right(None)
     except OSError as e:
         return Left(system_error.SystemErrorOther(e.strerror or str(e)))
