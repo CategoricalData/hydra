@@ -1,15 +1,128 @@
-# Release audit: Apache source-release readiness
+# Apache Incubator readiness assessment
 
-This document audits Hydra's current release process (as captured in
-[release-workflow.md](release-workflow.md)) against the source-release expectations of the
-Apache Software Foundation, and records the gaps that must close before Hydra could cut an
-Apache-style release.
+This document assesses Hydra against the
+[Apache Project Maturity Model](https://community.apache.org/apache-way/apache-project-maturity-model.html),
+the checklist the ASF uses to gauge whether a project operates "the Apache Way." It is the artifact to
+show a prospective Incubator champion or the Incubator PMC: every maturity-model checkpoint, an honest
+**ready / partial / gap** status, and a **link to the evidence on `main`** that backs the claim.
 
-It is scoped to **release trust and supply-chain hygiene** (Track 7 of
-[#441](https://github.com/CategoricalData/hydra/issues/441)). It is not the full Apache maturity
-gap analysis (Track 1) — only the release-and-artifact dimension of it.
+It is the deliverable for Track 1 of [#441](https://github.com/CategoricalData/hydra/issues/441). The
+release-and-artifact dimension (Track 7) is covered in depth in the second half — it is the most
+mature dimension and doubles as the worked example of how evidence is cited here.
 
-## Why this matters now
+Evidence links point at `main` (`github.com/CategoricalData/hydra/blob/main/…`) so a reviewer can
+verify each claim against the live source, not a branch snapshot.
+
+Honest framing: Hydra is **strong on the technical dimensions** (code, licensing, releases, quality,
+independence) and **early on the foundation/community dimensions** (governance, consensus, a committer
+ladder, a PMC). The latter are exactly what the Incubator *exists to build*, so they are expected gaps
+for a pre-podling project, not disqualifiers — but they are recorded plainly, not glossed.
+
+## Maturity-model scorecard
+
+Status key: ✅ ready · ⚠️ partial · ❌ gap (expected for a pre-podling project) · ⏭ deferred (applies
+only once incubating). Links resolve on `main`.
+
+### Code (CD)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| CD10 | Produces OSS for free public distribution | ✅ | [LICENSE](https://github.com/CategoricalData/hydra/blob/main/LICENSE) (Apache-2.0); public on GitHub |
+| CD20 | Code is easily discoverable and accessible | ✅ | [README](https://github.com/CategoricalData/hydra/blob/main/README.md); published to Hackage/Maven/PyPI/npm/conda-forge |
+| CD30 | Reproducible build with standard tools | ✅ | [contributor-setup.md](https://github.com/CategoricalData/hydra/blob/main/docs/contributor-setup.md), [build-system.md](https://github.com/CategoricalData/hydra/blob/main/docs/build-system.md) |
+| CD40 | Full history; any release recreatable from SCM | ✅ | git history + release tags through 0.17.x; [CHANGELOG.md](https://github.com/CategoricalData/hydra/blob/main/CHANGELOG.md) |
+| CD50 | Provenance via strong committer authentication | ⚠️ | GitHub authenticated commits; no DCO sign-off / iCLA yet (an Incubator-onboarding step) |
+
+### Licenses and copyright (LC)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| LC10 | Apache-2.0 covers the released code | ✅ | [LICENSE](https://github.com/CategoricalData/hydra/blob/main/LICENSE); per-host build files declare Apache-2.0 |
+| LC20 | Mandatory deps no more restrictive than Apache | ✅ | [Dependency license attestation](#dependency-license-attestation) — all shipped deps Category A |
+| LC30 | Those dependencies are open source | ✅ | same attestation (all BSD/MIT/Apache-class) |
+| LC40 | Committers bound by an iCLA | ❌ | no iCLA yet — established at podling onboarding (ASF-governed step) |
+| LC50 | Copyright ownership documented | ✅ | [NOTICE](https://github.com/CategoricalData/hydra/blob/main/NOTICE) + Apache-2.0 §4(d) |
+
+### Releases (RE)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| RE10 | Releases are source archives in open formats | ✅ | canonical `git archive` source tarball — [prepare-release.sh](https://github.com/CategoricalData/hydra/blob/main/bin/prepare-release.sh); see [Releases dimension](#releases-dimension--detailed-evidence) |
+| RE20 | PMC approves each release | ⏭ | no PMC yet; a `[VOTE]` process is part of podling onboarding |
+| RE30 | Releases signed and/or distributed with digests | ✅ | `.sha512` + detached `.asc`; [KEYS](https://github.com/CategoricalData/hydra/blob/main/KEYS) (key registered); [release-workflow.md "Verifying a release"](https://github.com/CategoricalData/hydra/blob/main/docs/release-workflow.md) |
+| RE40 | Convenience binaries allowed but not "the release" | ✅ | documented in [release-workflow.md](https://github.com/CategoricalData/hydra/blob/main/docs/release-workflow.md) |
+| RE50 | Documented, repeatable release process | ✅ | [release-workflow.md](https://github.com/CategoricalData/hydra/blob/main/docs/release-workflow.md); CI gate [release-verify.yml](https://github.com/CategoricalData/hydra/blob/main/.github/workflows/release-verify.yml) |
+
+### Quality (QU)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| QU10 | Open/honest about code quality and maturity | ✅ | [README](https://github.com/CategoricalData/hydra/blob/main/README.md) implementation-status table; [Language support](https://github.com/CategoricalData/hydra/wiki/Language-support) wiki page (production / conformance / head-bud tiers) |
+| QU20 | High priority on secure software | ✅ | [SECURITY.md](https://github.com/CategoricalData/hydra/blob/main/SECURITY.md); [Security wiki](https://github.com/CategoricalData/hydra/wiki/Security) |
+| QU30 | Documented, private security-report channel | ✅ | [SECURITY.md](https://github.com/CategoricalData/hydra/blob/main/SECURITY.md) ("Reporting a vulnerability") |
+| QU40 | Backwards-compatibility prioritized + documented | ⚠️ | [CHANGELOG.md](https://github.com/CategoricalData/hydra/blob/main/CHANGELOG.md) + forward-compat contract (#369); no standalone versioning/deprecation policy doc yet |
+| QU50 | Timely response to bug reports | ⚠️ | active issue tracker; no stated SLA or issue templates |
+
+### Community (CO)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| CO10 | Well-known homepage covering the maturity model | ⚠️ | [README](https://github.com/CategoricalData/hydra/blob/main/README.md) + [wiki](https://github.com/CategoricalData/hydra/wiki); no dedicated project domain |
+| CO20 | Welcomes good-faith contributions | ✅ | [CONTRIBUTING.md](https://github.com/CategoricalData/hydra/blob/main/CONTRIBUTING.md) + [Contributing wiki](https://github.com/CategoricalData/hydra/wiki/Contributing) |
+| CO30 | Values all contribution types | ✅ | [CONTRIBUTING.md](https://github.com/CategoricalData/hydra/blob/main/CONTRIBUTING.md) / wiki |
+| CO40 | Strives to be meritocratic | ✅ | meritocratic intent + committer ladder in [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md) |
+| CO50 | Documents how contributors earn more rights | ✅ | committer ladder in [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md) ("Becoming a committer / maintainer") |
+| CO60 | Consensus-based; no benevolent dictator | ❌ | honestly lead-maintainer-driven today ([GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md)); the move to PPMC consensus is an incubation goal (Track 9) |
+| CO70 | Timely answers to user questions | ⚠️ | [Discord](https://bit.ly/hydra-on-discord) + GitHub issues; no stated SLA |
+| — | Code of Conduct (not a numbered checkpoint; expected) | ✅ | [CODE_OF_CONDUCT.md](https://github.com/CategoricalData/hydra/blob/main/CODE_OF_CONDUCT.md) (Contributor Covenant 2.1; ASF CoC at incubation) |
+
+### Consensus building (CS)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| CS10 | Public list of contributors with decision power (PMC) | ⚠️ | roles defined in [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md); a formal PMC roster awaits incubation (Track 9) |
+| CS20 | Decisions by documented consensus on main channel | ⚠️ | decision process documented in [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md); lead-maintainer-arbitrated today, PPMC consensus the target |
+| CS30 | Documented voting rules | ❌ | ASF-style voting rules adopted at incubation (mapped in [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md) "Path to Apache governance") |
+| CS40 | Vetoes only on code commits, with justification | ❌ | applies once PPMC voting is in force (Track 9) |
+| CS50 | Important discussions async + written on main channel | ⚠️ | GitHub issues/PRs are written + async ([GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md)); a canonical dev@ list awaits incubation |
+
+### Independence (IN)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| IN10 | Independent of corporate/organizational influence | ✅ | [GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md) "Independence"; no single-company control |
+| IN20 | Contributors act as themselves | ✅ | individual contributors ([GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md)); no corporate-representative structure |
+
+### Trademark and branding (TB)
+
+| ID | Checkpoint | Status | Evidence |
+|----|-----------|--------|----------|
+| TB10 | "Apache Foo™" name used consistently | ⏭ | applies only post-acceptance; pre-podling we deliberately do **not** use "Apache Hydra" (see [Deferred](#deferred-until-podling-acceptance)) |
+| TB20 | Homepage at `projectname.apache.org` | ⏭ | applies post-acceptance |
+| TB30 | ASF holds trademark rights | ⏭ | transferred at acceptance |
+| TB40 | Project monitors brand misuse | ⏭ | post-acceptance |
+
+### How to read this scorecard
+
+The technical dimensions a project must bring *with* it — open code, permissive licensing, a real
+reproducible build, signed reproducible releases, a security process, independence — are ✅. The
+project also documents its governance, committer ladder, and code of conduct
+([GOVERNANCE.md](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md),
+[CODE_OF_CONDUCT.md](https://github.com/CategoricalData/hydra/blob/main/CODE_OF_CONDUCT.md)).
+
+The remaining ❌ items are the ones that **structurally require the Foundation to exist**: a formal PMC
+roster, ASF voting rules, code-commit vetoes, an iCLA, the PMC release vote (CS30/CS40, LC40, RE20, and
+CO60 — the move off lead-maintainer arbitration to collective consensus). These cannot be honestly
+satisfied before acceptance; the
+[GOVERNANCE.md "Path to Apache governance"](https://github.com/CategoricalData/hydra/blob/main/GOVERNANCE.md)
+section records exactly how each maps in. Track 9 of
+[#441](https://github.com/CategoricalData/hydra/issues/441) tracks the governance work; the
+[Deferred](#deferred-until-podling-acceptance) section lists items that would be premature to adopt
+before acceptance.
+
+## Releases dimension — why it matters and what Apache requires
+
+Apache's release policy is one of the foundation's hardest gates: a project cannot make an
 
 Apache's release policy is one of the foundation's hardest gates: a project cannot make an
 official release until it can produce a **signed, checksummed source artifact** that a third party
@@ -45,9 +158,11 @@ Convenience binaries (Hackage sdists, Maven jars, PyPI wheels, conda packages) a
 *secondary* under Apache policy: they may be published, but the signed source archive is the
 release of record.
 
-## Current state — evidence
+## Releases dimension — detailed evidence
 
-Audited at the post-0.17 state of `main`. Evidence is cited by file path.
+The Releases (RE) and Licenses (LC) dimensions are the most mature and the most fully evidenced, so
+they are worked through in detail here as the depth behind the scorecard rows above. Audited at the
+post-0.17 state of `main`; evidence is cited by file path.
 
 ### Licensing
 
@@ -57,7 +172,7 @@ Audited at the post-0.17 state of `main`. Evidence is cited by file path.
 | Per-package `LICENSE` copies | ✅ Present | `packages/hydra-{kernel,haskell,java,python}/LICENSE`, `heads/haskell/LICENSE` — all Apache 2.0 |
 | Build-metadata license declarations | ✅ Present | Haskell `license: Apache-2.0` (`heads/haskell/package.yaml`); Python `license = { text = "Apache-2.0" }` + OSI classifier (`heads/python/pyproject.toml`); Java POM Apache-2.0, generated by `bin/lib/generate-java-package-build.py`; Scala `licenses := Seq("Apache-2.0" -> …)` (`packages/hydra-scala/build.sbt`) |
 | Root `NOTICE` | ✅ Present | `NOTICE` at the repo root (Apache-2.0 §4(d) project notice; see P0 #1) |
-| Source-file license headers | ❌ Absent | sampled Haskell / Java / Python / overlay sources carry only doc comments, no SPDX/Apache header |
+| Source-file license headers | ⏭ Deferred | ASF header form presupposes ASF ownership; defer to acceptance (see [P2](#p2--recommended-not-strictly-required)) |
 
 ### Artifact integrity
 
@@ -66,7 +181,7 @@ Audited at the post-0.17 state of `main`. Evidence is cited by file path.
 | Signed source archive (`.asc`) | ⚠️ Registry-specific | Maven Central path **does** GPG-sign via the Gradle `signing` plugin (`heads/java/build.gradle:22`, generated `signing { sign … }` in `generate-java-package-build.py:169`). Hackage and PyPI paths produce **no** signatures: no `gpg`/`sign`/`.asc` in `bin/prepare-release.sh`, `heads/haskell/bin/publish-hackage.sh`, `heads/python/bin/publish-pypi.sh` |
 | Checksums (`.sha256`/`.sha512`) | ✅ Present | `bin/prepare-release.sh` Step 12 emits a `.sha512` alongside the canonical source archive (see P0 #2) |
 | Single canonical signed source archive | ✅ Present | `bin/prepare-release.sh` Step 12 builds `hydra-<version>-src.tar.gz` via `git archive` with a detached `.asc` signature; this is the release of record (see P0 #2) |
-| `KEYS` file (committer signing keys) | ✅ Present | `KEYS` at the repo root (still open: register an actual signing key before the first signed release; see P0 #3) |
+| `KEYS` file (release-manager signing keys) | ✅ Present, populated | [`KEYS`](https://github.com/CategoricalData/hydra/blob/main/KEYS) carries the release manager's rsa4096 signing key (`FC93F19114D72013`) plus the import/verify/append procedure |
 
 ### Dependency surface (license compatibility)
 
@@ -120,25 +235,26 @@ Ordered by how blocking each is for an Apache-style release. Each is independent
    present with correct content. (Before this, Java/Python carried only metadata license declarations,
    not the files.)
 2. **Produce a signed, checksummed canonical source archive.** ✅ **Done** — `bin/prepare-release.sh`
-   Step 11 builds `hydra-<version>-src.tar.gz` via `git archive` from `HEAD`, emits a `.sha512`
+   Step 12 builds `hydra-<version>-src.tar.gz` via `git archive` from `HEAD`, emits a `.sha512`
    checksum and a detached `.asc` GPG signature, and asserts `LICENSE`/`NOTICE` are present. This is
    the "release of record"; the Hackage/Maven/PyPI artifacts are convenience binaries downstream of
    it. Signing degrades to a warning when no key is configured (set `HYDRA_RELEASE_SIGNING_KEY`).
 3. **Publish a `KEYS` file** listing the release managers' public signing keys. ✅ **Done** — repo-root
-   `KEYS` file added with the standard import/verify/append procedure. Still open: a release manager
-   must **register an actual signing key** in it before the first signed release (none exists yet).
+   [`KEYS`](https://github.com/CategoricalData/hydra/blob/main/KEYS) carries the release manager's
+   rsa4096 signing key (`FC93F19114D72013`) plus the import/verify/append procedure. The first signed
+   release can use it (`HYDRA_RELEASE_SIGNING_KEY=FC93F19114D72013`).
 
 #### Canonical source archive scope (decided 2026-06-11)
 
-`bin/prepare-release.sh` Step 11 builds the archive with `git archive HEAD`, i.e. it ships the **full
+`bin/prepare-release.sh` Step 12 builds the archive with `git archive HEAD`, i.e. it ships the **full
 tracked source tree** (equivalent to a `git clone` minus `.git`). No `.gitattributes` `export-ignore`
-rules are applied, so the archive is a faithful mirror of the repository at the release commit.
+rules are applied, so the archive is a faithful mirror of the tracked repository at the release commit.
 
-This is a deliberate choice, and it rests on an important fact about Hydra's source model: **`dist/json`
-is canonical source, not generated output** — it is the language-neutral representation of the kernel
-(the kernel *as data*) from which every host is generated. The upstream Haskell/Java/Python DSLs are
-effectively the *generator* that produces `dist/json`; a consumer building from the archive builds
-*from* `dist/json`, never from an empty one. So `dist/json` must ship, and does.
+This rests on an important fact about Hydra's source model: **`dist/json` is canonical source, not
+generated output** — it is the language-neutral representation of the kernel (the kernel *as data*)
+from which every host is generated. The upstream Haskell/Java/Python DSLs are effectively the
+*generator* that produces `dist/json`; a consumer building from the archive builds *from* `dist/json`,
+never from an empty one. So `dist/json` must ship, and does.
 
 `dist/json` is the only tracked tree under `dist/`. Every per-language output tree is gitignored and
 regenerated from `dist/json` on each sync — on a cold clone, `dist/haskell` is seeded by the

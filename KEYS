@@ -28,6 +28,69 @@ bin/prepare-release.sh passes to gpg; see docs/release-workflow.md.
 
 -------------------------------------------------------------------------------
 
-No release-signing keys have been registered yet. The first release manager to
-sign a Hydra source release adds their public key below this line, following the
-procedure above.
+Registered release-signing keys follow.
+
+-------------------------------------------------------------------------------
+
+pub   rsa4096 2026-06-20 [SC] [expires: 2027-06-20]
+      AAB8 3F3B 1F4E 6775 4A50  D506 FC93 F191 14D7 2013
+uid           [ultimate] Joshua Shinavier (Hydra release signing) <josh@fortytwo.net>
+sig 3    N   FC93F19114D72013 2026-06-20  [self-signature]
+sub   rsa4096 2026-06-20 [E] [expires: 2027-06-20]
+      FD8C 29C7 F1D5 44AB D210  D47C E1CB 642B F000 FF0C
+sig      N   FC93F19114D72013 2026-06-20  [self-signature]
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Comment: GPGTools - https://gpgtools.org
+
+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
+=+QA3
+-----END PGP PUBLIC KEY BLOCK-----

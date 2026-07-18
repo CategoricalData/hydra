@@ -109,6 +109,11 @@ with the primitive functions and bootstrapping infrastructure required to make H
 a complete programming language on that host. Each head is an independent point of
 entry to Hydra: you can pick the head you're most comfortable with and ignore the others.
 
+For how well-supported each language is — a support-tier model
+(production-supported / conformance target / experimental head bud) graded on test-suite pass,
+self-hosting, runtime completeness, authoring, and published artifacts — see
+[Language support](https://github.com/CategoricalData/hydra/wiki/Language-support) on the wiki.
+
 | Head | Status | Notes |
 |---|---|---|
 | [Haskell](packages/hydra-haskell/README.md) | Complete | Hydra's original bootstrapping language and reference implementation. ([Haskell](https://www.haskell.org/)) |

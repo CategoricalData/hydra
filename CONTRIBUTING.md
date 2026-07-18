@@ -13,6 +13,8 @@ Quick links:
 - [Build system](docs/build-system.md) — sync phases, generated artifacts, and caches.
 - [Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) — required conventions.
 - [Troubleshooting](docs/troubleshooting.md) — common build, sync, and test failures.
+- [Governance](GOVERNANCE.md) — how decisions are made and how contributors earn more responsibility.
+- [Code of Conduct](CODE_OF_CONDUCT.md) — expected standards of behavior in all project spaces.
 
 Core expectations:
 
