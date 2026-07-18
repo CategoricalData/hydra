@@ -19,10 +19,16 @@
 # Usage:
 #   publish-hackage.sh [--out <dir>] [--upload] [--publish]
 #
-#   (default)   assemble all sdists into <out> (build/hackage/) in order; no upload.
+#   (default)   assemble all sdists into <out> (dist/haskell/) in order; no upload.
 #   --upload    after assembling, run `cabal upload` (candidate) per package in order.
 #   --publish   run `cabal upload --publish` (FINAL, irreversible) per package in order.
 #               Implies upload. Prompts for confirmation unless HYDRA_YES=1.
+#   --list      print the curated publish set (one per line, leaves-first) and exit.
+#
+# Authentication (--upload/--publish): set HACKAGE_TOKEN to a Hackage API token and
+# it is passed to `cabal upload --token` for non-interactive, prompt-free upload (the
+# token is never echoed). If unset, cabal uses its own config (~/.config/cabal/config)
+# or prompts per package.
 #
 # Output: <out>/<pkg>-<version>.tar.gz for each package in the publish set.
 
@@ -32,7 +38,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
-OUT_DIR="$HYDRA_ROOT/build/hackage"
+OUT_DIR="$HYDRA_ROOT/dist/haskell"
 DO_UPLOAD=false
 DO_PUBLISH=false
 DO_LIST=false
@@ -214,13 +220,46 @@ fi
 UPLOAD_FLAGS=()
 [ "$DO_PUBLISH" = true ] && UPLOAD_FLAGS+=(--publish)
 
+# Authentication. If HACKAGE_TOKEN is set, pass `cabal upload --token` so uploads
+# run non-interactively (no per-package username/password prompt). The token is
+# kept OUT of the echoed command line below so it never lands in logs/terminal
+# scrollback. If unset, `cabal upload` falls back to its own config/interactive
+# auth (~/.config/cabal/config or a prompt).
+AUTH_FLAGS=()
+if [ -n "${HACKAGE_TOKEN:-}" ]; then
+    AUTH_FLAGS=(--token="$HACKAGE_TOKEN")
+    echo "  Auth: using HACKAGE_TOKEN (passed to cabal upload --token; not echoed)"
+elif [ "${HACKAGE_INTERACTIVE:-}" = "1" ]; then
+    echo "  Auth: HACKAGE_INTERACTIVE=1 — deferring to cabal's own config/prompt"
+else
+    # Fail fast rather than silently fall through to cabal's interactive
+    # username/password prompt (which mid-run looks like a hang). The most common
+    # cause is a token set WITHOUT `export`: `echo $HACKAGE_TOKEN` then shows it,
+    # but the child cabal process — like this script — never sees an un-exported
+    # shell variable. Require it to be a real, exported env var (or an explicit
+    # HACKAGE_INTERACTIVE=1 opt-in to use cabal's own configured/prompted auth).
+    echo "ERROR: HACKAGE_TOKEN is not set (or not exported) for this upload." >&2
+    echo "       cabal would otherwise prompt interactively per package, which mid-run" >&2
+    echo "       looks like a hang. Set and EXPORT a Hackage API token, then re-run:" >&2
+    echo "         export HACKAGE_TOKEN='<your-token>'" >&2
+    echo "       Verify it is exported (not just a shell variable):" >&2
+    echo "         bash -c 'echo \${HACKAGE_TOKEN:+EXPORTED}'   # must print EXPORTED" >&2
+    echo "       (token: https://hackage.haskell.org/users/account-management)" >&2
+    echo "       Or, to use cabal's own configured/interactive auth on purpose," >&2
+    echo "       re-run with HACKAGE_INTERACTIVE=1 set." >&2
+    exit 1
+fi
+echo ""
+
 for pkg in "${TO_PUBLISH[@]}"; do
     tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
+    # Echo WITHOUT the auth flags so the token is never printed.
     echo "=== cabal upload ${UPLOAD_FLAGS[*]:-} $tarball ==="
-    # Expand to nothing (not an empty-string arg) when UPLOAD_FLAGS is empty, so
+    # Expand each array to nothing (not an empty-string arg) when empty, so
     # candidate uploads work under `set -u` (an empty array's [@] is otherwise an
     # unbound-variable error).
-    cabal upload ${UPLOAD_FLAGS[@]+"${UPLOAD_FLAGS[@]}"} "$tarball"
+    cabal upload ${UPLOAD_FLAGS[@]+"${UPLOAD_FLAGS[@]}"} \
+                 ${AUTH_FLAGS[@]+"${AUTH_FLAGS[@]}"} "$tarball"
     echo ""
 done
 
