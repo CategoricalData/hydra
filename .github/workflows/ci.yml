@@ -73,8 +73,15 @@ jobs:
       # bootstrap. Needs only python3 + git, both preinstalled on the runner.
       - name: Check manifest-declared module JSON is tracked in git (#541)
         run: python3 bin/check-manifest-json-tracked.py
+      # ghc-version pinned: this job's bin/sync.sh cold-start path builds the
+      # json-driver (heads/haskell/json-driver/, system-ghc/resolver lts-24.7 =>
+      # ghc-9.10.2) whenever dist/haskell/ is absent — e.g. after a version bump
+      # invalidates the ~/.stack cache. Without the pin, haskell-actions/setup
+      # provisions a different GHC and the cold-seed fails with S-6362. Same fix
+      # as the cold-clone-haskell and Regression-harnesses jobs.
       - uses: haskell-actions/setup@v2
         with:
+          ghc-version: '9.10.2'
           enable-stack: true
           stack-version: latest
       # uv is required by bin/generate-hydra-python-from-python.sh (Phase 5
