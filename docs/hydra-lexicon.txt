@@ -266,9 +266,6 @@ Primitives:
   hydra.lib.system.getEnvironmentVariable : ((hydra.system.EnvironmentVariable → effect<optional<string>>))
   hydra.lib.system.getTime : (effect<hydra.time.Timespec>)
   hydra.lib.system.getWorkingDirectory : (effect<either<hydra.error.system.SystemError, hydra.file.FilePath>>)
-  hydra.lib.system.readStdin : (effect<either<hydra.error.system.SystemError, binary>>)
-  hydra.lib.system.writeStderr : ((binary → effect<either<hydra.error.system.SystemError, unit>>))
-  hydra.lib.system.writeStdout : ((binary → effect<either<hydra.error.system.SystemError, unit>>))
   hydra.lib.text.decodeUtf8 : ((binary → either<string, string>))
   hydra.lib.text.encodeUtf8 : ((string → binary))
 
