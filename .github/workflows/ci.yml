@@ -153,37 +153,18 @@ jobs:
             git diff --stat dist/json/
             exit 1
           fi
-      # #376: dist/haskell/ is untracked (gitignored), so there is no committed
-      # form to diff the just-regenerated tree against. The determinism check
-      # above covers the two native-coder packages most prone to the #469
-      # digest-staleness bug; this step widens the same idempotency principle
-      # to the FULL dist/haskell/ tree (every package bin/sync.sh just
-      # produced): regenerate from the SAME committed dist/json/ a second time
-      # and diff the two outputs. A real drift bug (nondeterministic codegen, a
-      # digest-cache bug that skips a module that should have regenerated)
-      # shows up as a diff here even though there's nothing tracked to compare
-      # against. This does NOT verify dist/haskell/ matches dist/json/'s
-      # *intent* the way the old committed-tree diff did — that guarantee now
-      # comes from the cold-clone-haskell job below, which seeds from
-      # dist/json/ via the independent published-host driver and asserts it
-      # succeeds, plus stack test / verify-distribution.sh actually compiling
-      # and running the result.
-      - name: Regenerate dist/haskell a second time and diff against the first pass (determinism)
-        run: |
-          rm -rf /tmp/dist-haskell-pass1
-          cp -r dist/haskell /tmp/dist-haskell-pass1
-          bin/sync.sh --hosts all --targets all --no-tests
-          # Exclude build/ cache artifacts (per-package build/main/digest.json is a
-          # non-byte-stable content digest, gitignored for that reason) — same
-          # rationale as the hydra-{java,python} determinism gate above. Comparing
-          # them produces a spurious non-determinism failure on rendered-identical
-          # output.
-          if ! diff -rq --exclude=build /tmp/dist-haskell-pass1 dist/haskell; then
-            echo "::error::dist/haskell/ is non-deterministic: two regenerations from the same committed dist/json/ produced different rendered source."
-            echo "::error::This can hide real drift now that dist/haskell/ is untracked (#376) — fix the generator."
-            diff -rq --exclude=build /tmp/dist-haskell-pass1 dist/haskell | head -200
-            exit 1
-          fi
+      # NOTE (#376): a full-tree "regenerate dist/haskell a second time and diff"
+      # determinism gate previously lived here. It was REMOVED because it ran a
+      # second full `bin/sync.sh --hosts all --targets all` (~2.5h under the #592
+      # cold JSON-generation cost) purely to diff for non-determinism — doubling
+      # this job's runtime past its timeout — while providing no real coverage:
+      # the second sync's caches short-circuit so it re-renders ~nothing, making
+      # the diff tautologically clean (verified). Determinism/idempotency of the
+      # rendered output is already guarded by (a) the per-package Force-regen gate
+      # for hydra-{java,python} above, (b) the cold-clone-haskell job below (an
+      # independent from-dist/json seed that must build + stack test), and (c) the
+      # committed-dist/json diff. If a broader per-package determinism sweep is
+      # wanted later, do it WITHOUT a second all-target sync (see #592 follow-up).
       - name: Stack tests
         run: stack test
         working-directory: heads/haskell
