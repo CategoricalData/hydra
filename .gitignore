@@ -84,7 +84,9 @@ docs/work/
 # per-file overlay exceptions under dist/haskell/ (hydra umbrella,
 # hydra-kernel hand-written runtime, hydra-pg/hydra-typescript DSL helpers)
 # are subsumed by this blanket ignore; their canonical copies remain tracked
-# under overlay/haskell/.
+# under overlay/haskell/. (Hackage channel staging artifacts — the sdists and
+# Haddock docs that prepare-release.sh / publish-hackage.sh assemble into
+# dist/haskell/ — are likewise covered by this blanket ignore. #589.)
 dist/haskell/
 
 dist/clojure/

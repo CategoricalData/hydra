@@ -76,9 +76,20 @@ cd "$HYDRA_ROOT"
 LOG_DIR="$HYDRA_ROOT/verify-logs"
 mkdir -p "$LOG_DIR"
 
-# Final upload-ready artifacts (gitignored).
+# release-artifacts/ holds ONLY the language-neutral release of record — the
+# polyglot signed source archive (`hydra-<version>-src.tar.gz` + .sha512 + .asc).
+# Per-registry channel artifacts do NOT go here: each channel stages its own
+# packages under its own dist/<lang>/ tree (Hackage sdists+docs in dist/haskell/,
+# Maven jars under dist/{java,scala}/, wheels under wheels/, etc.). This keeps the
+# directory honestly polyglot rather than Haskell-centric.
 ARTIFACT_DIR="$HYDRA_ROOT/release-artifacts"
 mkdir -p "$ARTIFACT_DIR"
+
+# Hackage channel staging: the sdists and Haddock docs assembled/validated in
+# Steps 10-11 live under dist/haskell/ (the Haskell channel's own dist tree, same
+# as Maven publishes from dist/java, dist/scala), NOT in release-artifacts/.
+HACKAGE_OUT="$HYDRA_ROOT/dist/haskell"
+mkdir -p "$HACKAGE_OUT"
 
 TOTAL_STEPS=13
 
@@ -424,7 +435,7 @@ if [ "$SDIST_OK" = true ]; then
         if ( cd "$PROJECT_DIR" && cabal v2-build --dry-run all -w ghc-9.10.2 ) >>"$SDIST_LOG" 2>&1; then
             echo "  OK: all ${#HACKAGE_PKGS[@]} per-package sdists resolve cleanly on case-sensitive filesystem"
             for pkg in "${HACKAGE_PKGS[@]}"; do
-                cp "$SDIST_WORK/$pkg-${EXPECTED}.tar.gz" "$ARTIFACT_DIR/$pkg-${EXPECTED}.tar.gz"
+                cp "$SDIST_WORK/$pkg-${EXPECTED}.tar.gz" "$HACKAGE_OUT/$pkg-${EXPECTED}.tar.gz"
             done
         else
             echo "  FAIL: cabal v2-build --dry-run reported errors against the assembled"
@@ -455,7 +466,7 @@ if [ "$SDIST_OK" = true ]; then
             DOC_TARBALL="$(find "$SDIST_WORK/project/dist-newstyle" \
                 -name "$pkg-${EXPECTED}-docs.tar.gz" | head -n 1)"
             if [ -n "$DOC_TARBALL" ] && [ -f "$DOC_TARBALL" ]; then
-                cp "$DOC_TARBALL" "$ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
+                cp "$DOC_TARBALL" "$HACKAGE_OUT/$pkg-${EXPECTED}-docs.tar.gz"
                 echo "  OK: $pkg Haddock docs built"
                 DOC_BUILT=$((DOC_BUILT + 1))
             else
@@ -602,14 +613,16 @@ echo "  Warnings: $WARNINGS"
 echo ""
 
 if [ $ERRORS -eq 0 ]; then
-    echo "All checks passed! Release artifacts are ready in:"
-    echo "  $ARTIFACT_DIR"
+    echo "All checks passed!"
     echo ""
-    echo "  - hydra-${EXPECTED}-src.tar.gz         (canonical source archive — release of record)"
+    echo "Release of record (polyglot, language-neutral) in $ARTIFACT_DIR:"
+    echo "  - hydra-${EXPECTED}-src.tar.gz         (canonical source archive — the GitHub-release deliverable)"
     echo "  - hydra-${EXPECTED}-src.tar.gz.sha512  (SHA-512 checksum)"
     if [ -f "$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz.asc" ]; then
         echo "  - hydra-${EXPECTED}-src.tar.gz.asc     (detached GPG signature)"
     fi
+    echo ""
+    echo "Hackage channel inputs (NOT release attachments — plumbing for cabal upload) in $HACKAGE_OUT:"
     for pkg in "${HACKAGE_PKGS[@]}"; do
         echo "  - $pkg-${EXPECTED}.tar.gz       (Hackage sdist)"
         if [ "$DOC_OK" = true ]; then
@@ -632,11 +645,11 @@ if [ $ERRORS -eq 0 ]; then
     echo "       heads/haskell/bin/publish-hackage.sh --publish"
     echo "     or manually, in this order:"
     for pkg in "${HACKAGE_PKGS[@]}"; do
-        echo "       cabal upload --publish $ARTIFACT_DIR/$pkg-${EXPECTED}.tar.gz"
+        echo "       cabal upload --publish $HACKAGE_OUT/$pkg-${EXPECTED}.tar.gz"
     done
     if [ "$DOC_OK" = true ]; then
         for pkg in "${HACKAGE_PKGS[@]}"; do
-            echo "       cabal upload --documentation --publish $ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
+            echo "       cabal upload --documentation --publish $HACKAGE_OUT/$pkg-${EXPECTED}-docs.tar.gz"
         done
     fi
     echo "       (then Maven Central, npm, and conda-forge per docs/release-workflow.md)"

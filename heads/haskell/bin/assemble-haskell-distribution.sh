@@ -38,7 +38,7 @@
 # hydra, or a generated coder (hydra-haskell hydra-coq hydra-typescript hydra-jvm
 # hydra-java hydra-python hydra-scala hydra-lisp hydra-go hydra-wasm hydra-rdf
 # hydra-pg hydra-ext hydra-bench).
-# --out      : where to place the produced tarball (default: build/hackage/)
+# --out      : where to place the produced tarball (default: dist/haskell/)
 # --no-sdist : stage + generate build files only; skip `stack sdist` (for inspection)
 #
 # Output: <out>/<pkg>-<version>.tar.gz
@@ -50,7 +50,7 @@ HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
 PKG=""
-OUT_DIR="$HYDRA_ROOT/build/hackage"
+OUT_DIR="$HYDRA_ROOT/dist/haskell"
 DO_SDIST=true
 
 while [ $# -gt 0 ]; do
