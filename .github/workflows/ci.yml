@@ -355,6 +355,18 @@ jobs:
       # present but actually consumable by the full head build + test suite.
       - name: Full sync + stack test from the seeded tree
         run: bin/sync.sh --hosts haskell --targets haskell
+      # Regression check: a full sync must never leave dist/haskell/ tracked
+      # or trackable again. Checked AFTER the full sync above (not just after
+      # the cold-seed step) because the failure mode this guards against is
+      # something in the sync path disturbing .gitignore's working-tree
+      # content after seeding, which a check immediately post-seed would miss.
+      - name: Confirm dist/haskell/ is still gitignored after a full sync
+        run: |
+          if ! git check-ignore -q dist/haskell/hydra-kernel/src/main/haskell/Hydra/Adapt.hs; then
+            echo "::error::dist/haskell/ is no longer gitignored after a full sync — #376 regression."
+            exit 1
+          fi
+          echo "confirmed: dist/haskell/ still gitignored post-sync"
       - name: Verify Haskell distribution self-containment
         run: heads/haskell/bin/verify-distribution.sh
 
