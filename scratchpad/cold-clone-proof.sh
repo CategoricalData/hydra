@@ -109,4 +109,17 @@ else
 fi
 
 echo ""
+echo "[6/6] Verifying dist/haskell/ is still gitignored in the source worktree..."
+# Regression check for the #376-landing incident: a stray in-progress `git
+# revert` of the untrack commit left a worktree's .gitignore reverted to the
+# old per-file-exception form while HEAD stayed correct — invisible to any
+# check that only inspects the cold dir (a bare tar extraction, not a git
+# repo). Guard the actual source worktree's working-tree .gitignore instead.
+if ! ( cd "$REPO_ROOT" && git check-ignore -q dist/haskell/hydra-kernel/src/main/haskell/Hydra/Adapt.hs ); then
+    echo "FAIL: $REPO_ROOT/dist/haskell/ is not gitignored (working-tree .gitignore reverted?)" >&2
+    exit 1
+fi
+echo "  OK: dist/haskell/ is gitignored in $REPO_ROOT"
+
+echo ""
 echo "=== cold-clone proof PASSED ==="
