@@ -308,17 +308,25 @@ host's native implementation.
 
 ### Impure primitives
 
-**"Impure" and "effectful" are related but not the same thing.** *Impurity* is a flag
-on the primitive's metadata — `primitiveDefinitionIsPure = False` — declared with
-`impurePrimitiveInModule`. *Effectfulness* is a property of the primitive's type: its
-result is `effect<t>`. Every effectful primitive is impure (an `effect<t>` result is not
-a pure value), so the two coincide in today's standard library — `hydra.lib.effects`,
-`hydra.lib.files`, and `hydra.lib.system` are all both. But the flag is the broader
-concept: it marks a primitive as not-referentially-transparent regardless of whether that
-impurity is surfaced through the `effect<t>` type. Set the flag with `impurePrimitiveInModule`;
-make a primitive effectful by giving it an `effect<t>` result type (see
-[Prefer core type constructors](#prefer-core-type-constructors-in-signatures) and the
-[Effects wiki](https://github.com/CategoricalData/hydra/wiki/Effects)).
+**"Impure" and "effectful" are orthogonal, not synonyms.** *Impurity* is a flag on the
+primitive's metadata — `primitiveDefinitionIsPure = False`, set by `impurePrimitiveInModule`
+— meaning the primitive is not referentially transparent (it performs a host interaction).
+*Effectfulness* is a property of the primitive's *type*: its result is `effect<t>`.
+
+A primitive can be effectful (has `effect<t>` in its signature) yet **pure**: the
+`hydra.lib.effects` combinators `pure : a -> effect<a>`, `map`, and `bind` all mention
+`effect<t>`, but they only *construct and transform* effect values — `pure` wraps a value,
+`map`/`bind` compose descriptions of effects — without performing any interaction themselves.
+They are referentially transparent. The primitives that actually *perform* the interaction —
+`readFile`, `writeStdout`, `execute` — are both effectful (by type) and impure (by flag).
+
+So set the impurity flag (`impurePrimitiveInModule`) only for primitives that genuinely
+perform a host interaction; give a primitive an `effect<t>` result type to make it effectful
+(see [Prefer core type constructors](#prefer-core-type-constructors-in-signatures) and the
+[Effects wiki](https://github.com/CategoricalData/hydra/wiki/Effects)). (Note: today the
+`hydra.lib.effects` module as a whole is *declared* with `impurePrimitiveInModule` for
+uniformity, even though `pure`/`map`/`bind` are semantically pure; the type is the reliable
+signal of effectfulness.)
 
 ```haskell
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -660,10 +668,14 @@ Then add the test group to `allTests` in the same file.
 
 #### Effectful primitives use `effectfulCase`, not `primCase`
 
-A primitive whose result is `effect<t>` cannot be string-compared, because the pure
-evaluator cannot reduce an effect. Instead of `primCase`, use `effectfulCase`: its
-`actual` is an `effect<...>` term that each host's test runner **executes** (performing
-the real I/O), comparing the produced value to the expected. Such cases are only ever
+An *impure*, interaction-performing primitive (e.g. `readFile`, `writeStdout`, `execute`)
+cannot be tested by string comparison, because the pure evaluator cannot perform the
+interaction its result stands for — only the host can. (This is about impurity, not the
+`effect<t>` type per se: the pure `hydra.lib.effects` combinators `pure`/`map`/`bind` also
+return `effect<t>` but reduce normally and are tested with ordinary `primCase`.) For an
+interaction-performing primitive, use `effectfulCase` instead of `primCase`: its `actual`
+is an `effect<...>` term that each host's test runner **executes** (performing the real
+I/O), comparing the produced value to the expected. Such cases are only ever
 compiled to native target code and run — never routed through the interpreter — and run
 across every host that implements the effect library. See the
 [Effects wiki § Testing effectful operations](https://github.com/CategoricalData/hydra/wiki/Effects#testing-effectful-operations).
