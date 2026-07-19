@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Upload the Hydra Scala per-package Maven Central distributions in dependency
-# order: leaves first.
+# Upload the Hydra Scala Maven Central distributions as ONE aggregated Central
+# Portal deployment (#591).
 #
 # Scala analog of heads/java/bin/publish-maven.sh. The published artifacts
 # live under group net.fortytwo.hydra.scala (the per-JVM-language group from
@@ -16,35 +16,55 @@
 # hydra-ext is excluded (coder limitation; not in the standard sync matrix).
 #
 # Each dist/scala/<pkg>/ is a standalone sbt build whose generated build.sbt
-# carries `sbt-sonatype` + `sbt-pgp` publishing. Credentials are read from
-# ~/.sbt/1.0/sonatype.sbt or the environment:
+# carries `sbt-sonatype` + `sbt-pgp` publishing, AND points
+# `sonatypeBundleDirectory` at ONE SHARED path across every package
+# (bin/lib/generate-scala-package-build.py; default
+# dist/scala/.central-portal-bundle). This is sbt-sonatype's documented
+# mechanism for staging a multi-module bundle: per-package `publishSigned`
+# only WRITES into that shared directory (fast, no network validation); a
+# single trailing `sonatypeBundleRelease` then uploads the combined bundle as
+# ONE Central Portal deployment — one ~8 min validation cycle total, not one
+# per package (#591). Credentials are read from ~/.sbt/1.0/sonatype.sbt or the
+# environment:
 #   SONATYPE_USERNAME / SONATYPE_PASSWORD
 #   PGP_PASSPHRASE (or interactive prompt)
 #
 # Two safety properties (mirroring the Java script):
 #   1. DEPENDENCY CLOSURE: every Hydra package any published package depends on
 #      must itself be in the publish set.
-#   2. LEAVES-FIRST ORDER: a dependency is always published before its dependents.
+#   2. LEAVES-FIRST ORDER: a dependency is always published-local before its
+#      dependents, so downstream builds resolve fresh siblings. (The final
+#      aggregated release itself has no "order" — it is one release.)
 #
-# Sonatype Central Portal note: `sbt publishSigned` + `sonatypeBundleRelease`
-# (sbt-sonatype 3.12.2) uploads a bundle to the Central Portal and blocks polling
-# for validation. This is the ONLY task in 3.12.2 that targets the Central Portal
-# API — sonatypeBundleUpload talks to the decommissioned legacy OSSRH Nexus
-# (/service/local) and 404s, so do NOT use it. The validation poll is slow (a
-# minute or two per package) but completes; on a rare client timeout mid-poll the
-# coordinate is left locked (drop the stuck deployment in the Portal UI, re-run
-# with --skip for the already-live packages).
+# Sonatype Central Portal note: sbt-sonatype defaults to publishingType =
+# AUTOMATIC, so the single aggregated `sonatypeBundleRelease` auto-publishes
+# with no manual Central Portal UI step — this is the entire point of
+# aggregating (#591). `sonatypeBundleRelease` (sbt-sonatype 3.12.2) is the
+# ONLY task that targets the Central Portal API — `sonatypeBundleUpload`
+# talks to the decommissioned legacy OSSRH Nexus (/service/local) and 404s,
+# so do NOT use it. The single trailing release call uploads the combined
+# bundle and blocks polling for validation (a few minutes total, not per
+# package); on a rare client timeout mid-poll the deployment is left locked
+# (drop the stuck deployment in the Portal UI and re-run).
 #
 # Usage:
 #   publish-sbt.sh [--upload] [--package <pkg>] [--skip <pkg[,pkg...]>]
 #
 #   (default)       dry run: check deps + build jars locally; NO upload.
-#   --upload        run `sbt publishSigned` per package (uploads pending
-#                   deployments to the Central Portal).
-#   --package <pkg> restrict to a single package (must be in the set).
-#   --skip <list>   comma-separated packages to skip (e.g. to resume a batch
-#                   after some coordinates already published — Maven Central
-#                   versions are immutable, so re-uploading one fails).
+#   --upload        run `sbt publishSigned` per package (staging only, fast),
+#                   then ONE `sbt sonatypeBundleRelease` against the shared
+#                   bundle directory (uploads + auto-publishes every package
+#                   as a single Central Portal deployment).
+#   --package <pkg> restrict the BUILD/STAGE step to a single package (must be
+#                   in the set). The final release always covers the full
+#                   PUBLISH_SET — a single-package Central Portal deployment
+#                   defeats the purpose of aggregating; use this only to
+#                   iterate on one package's build before a real publish run.
+#   --skip <list>   comma-separated packages to skip STAGING for (e.g. to
+#                   resume a batch after some coordinates already published —
+#                   Maven Central versions are immutable, so re-staging one
+#                   fails). Has no effect on the trailing release step, which
+#                   always releases whatever is in the shared bundle directory.
 #
 # Requirements:
 #   - sbt on PATH.
@@ -74,7 +94,19 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+if [ "$DO_UPLOAD" = true ] && [ -n "$ONLY_PKG" ]; then
+    echo "ERROR: --upload with --package is not supported — a single-package Central" >&2
+    echo "       Portal deployment defeats the purpose of aggregating (#591). Drop" >&2
+    echo "       --package, or use --package alone (no --upload) to iterate on a build." >&2
+    exit 1
+fi
+
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
+
+# Shared sonatypeBundleDirectory (#591). Must match the default in
+# bin/lib/generate-scala-package-build.py (--bundle-dir override), since every
+# per-package build.sbt was generated pointing at this same path.
+BUNDLE_DIR="$HYDRA_ROOT/dist/scala/.central-portal-bundle"
 
 # Publish set in LEAVES-FIRST topological order. Mirrors the Java publish set
 # (hydra-pg included): the Scala pg coder's type-argument specialization on the
@@ -166,41 +198,47 @@ echo ""
 if [ "$DO_UPLOAD" = true ]; then
     # publishLocal covers the FULL set (even --skip'd packages) so downstream
     # siblings can always resolve their deps from the local ivy cache; --skip
-    # only affects the Central upload below.
+    # only affects staging below. (--package is rejected together with
+    # --upload above, so ONLY_PKG is always empty here — the full set runs.)
     echo "=== Publishing to local ivy cache first (leaves first, for dep resolution) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
-        [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
         echo "--- publishLocal $pkg @ $VERSION ---"
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishLocal )
     done
     echo ""
 
-    # Upload + release each package via sonatypeBundleRelease. NOTE: in
-    # sbt-sonatype 3.12.2, sonatypeBundleRelease is the ONLY task that targets the
-    # Central Portal API; sonatypeBundleUpload talks to the DECOMMISSIONED legacy
-    # OSSRH Nexus (/service/local) and 404s. So we must use Release here. It
-    # uploads then blocks polling the Portal for validation — that poll is slow
-    # (a minute or two per package) but it DOES complete and publish (this is how
-    # hydra-kernel/build/haskell went live). The one hazard is a CLIENT TIMEOUT
-    # mid-poll, which leaves the coordinate locked; if that happens, drop the stuck
-    # deployment in the Portal UI and re-run with --skip for the already-live ones.
-    echo "=== Uploading + releasing to Sonatype Central Portal (leaves first) ==="
+    # Clear any bundle left by a prior (possibly failed) run. sbt-sonatype
+    # refuses to overwrite non-SNAPSHOT artifacts in the staging dir, which
+    # surfaces as "Attempting to overwrite" warnings and a BUNDLE_ZIP_ERROR; a
+    # clean SHARED dir avoids both, and must be wiped ONCE up front here
+    # (not per-package) since every package stages into the same directory.
+    rm -rf "$BUNDLE_DIR"
+    mkdir -p "$BUNDLE_DIR"
+
+    echo "=== Staging every package into the shared bundle directory (leaves first) ==="
+    echo "  $BUNDLE_DIR"
     for pkg in "${PUBLISH_SET[@]}"; do
-        [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
         [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
-        # Clear any staging bundle left by a prior (possibly failed) run.
-        # sbt-sonatype refuses to overwrite non-SNAPSHOT artifacts in
-        # target/sonatype-staging/, which surfaces as "Attempting to overwrite"
-        # warnings and a BUNDLE_ZIP_ERROR; a clean dir avoids both.
-        rm -rf "$HYDRA_ROOT/dist/scala/$pkg/target/sonatype-staging" \
-               "$HYDRA_ROOT/dist/scala/$pkg"/target/*-bundle 2>/dev/null || true
-        echo "=== sbt publishSigned + sonatypeBundleRelease  ($pkg @ $VERSION) ==="
-        ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishSigned sonatypeBundleRelease )
+        echo "--- sbt publishSigned  ($pkg @ $VERSION) — staging only, no upload ---"
+        ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishSigned )
         echo ""
     done
 
-    echo "=== Released ${#PUBLISH_SET[@]} package(s) at $VERSION to the Central Portal. ==="
-    echo "Verify at https://central.sonatype.com/publishing/deployments and on Maven Central."
+    # sonatypeBundleRelease is the ONLY sbt-sonatype 3.12.2 task that targets
+    # the Central Portal API (sonatypeBundleUpload 404s against the
+    # decommissioned legacy OSSRH Nexus — do not use it). Called ONCE here,
+    # against the shared bundle directory, instead of once per package: it
+    # uploads the combined bundle and blocks polling for validation (a few
+    # minutes total, not per package); on a rare client timeout mid-poll the
+    # deployment is left locked (drop the stuck deployment in the Portal UI
+    # and re-run).
+    echo "=== sbt sonatypeBundleRelease  (aggregated: ${#PUBLISH_SET[@]} packages @ $VERSION) ==="
+    ( cd "$HYDRA_ROOT/dist/scala/${PUBLISH_SET[0]}" && sbt sonatypeBundleRelease )
+    echo ""
+    echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as ONE aggregated deployment. ==="
+    echo "sbt-sonatype's default publishingType = AUTOMATIC: validates once (~8 min) then"
+    echo "auto-publishes — no manual Central Portal UI step required. Packages in the deployment:"
+    printf '  %s\n' "${PUBLISH_SET[@]}"
 else
     # Dry run: publishLocal leaves-first (so each package can resolve its
     # Hydra siblings from the local ivy cache), then verify package builds.
