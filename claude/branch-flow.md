@@ -201,6 +201,25 @@ A wall-clock timer (a cron/wakeup that re-arms itself) is the mechanism that kee
 this tick alive — do not gate the sweep on a single event (like one CI run), or the
 loop dies when that event resolves and staging goes silent.
 
+**Drain the decisions channel first, and close every loop downward.** A blocking
+"needs-a-decision" condition reaches staging through the
+[`decisions/` channel](agent-hierarchy.md#design-decisions-a-distinct-channel-decisions)
+(`claude-hydra-messages/decisions/pending/`), not through pane text — reading a tmux
+pane to *infer* whether an agent is blocked is lossy and unreliable (a stale queued
+line looks identical to a live block). So **every sweep, scan `decisions/pending/`
+first**: answer what is within staging's authority, and surface any genuinely
+user-level `blocking: yes` decision to the user immediately — proactively for
+`BLOCKS-RELEASE` severity, not batched to the next tick.
+
+The reciprocal half is a **hard rule**: when staging resolves anything an agent handed
+up — lands its branch, obtains a user decision, clears a blocker — staging **must
+signal the outcome back down to the originating agent** before treating it as done, and
+only then move the decision file to `answered/`. "Resolved but never relayed" is a
+silent stall: the agent keeps holding for an approval that already happened. (This is
+exactly how a #526 land decision left its coordinator idle after the land had shipped —
+the up-signal was noticed but the down-signal was never sent.) A blocker is not closed
+until the requester has been told.
+
 ### Handling pulled WIP commits
 
 When step 1a finds `WIP:` commits inside a merge from `integration` or another
