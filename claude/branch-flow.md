@@ -150,6 +150,16 @@ Each iteration:
 - When a CI issue surfaces mid-cycle, decide case-by-case whether to **interrupt**
   the running `/sync`, `/test`, or `/bootstrap` to fix it now, or let the current cycle
   finish and fix it in the next one. **If in doubt, ask the user.**
+- **Doc-only changes ride the next cycle; do not push them solo.** A change that
+  touches only documentation (`README`, `docs/`, `claude/`, `*.md`, comments) cannot
+  affect the build, so it does **not** need its own `/sync` → `/test` → `/bootstrap`
+  cycle. But a solo push to `origin/main` still triggers a full (~hours-long) CI run for
+  nothing. So the right handling is neither "run the cycle" nor "push directly": **pull
+  the doc change into staging's worktree, commit it, and let it ride onto `origin/main`
+  with the next staging cycle's batch** — it lands alongside substantive work that CI was
+  going to validate anyway. The only exception is a genuine need to update *public-facing*
+  documentation ASAP (e.g. a correction to a released-package list or a broken user-facing
+  link); those may be pushed on their own. When in doubt, batch rather than push solo.
 - This is the staging tier's own loop; promotion *into* staging still follows
   the cadence and conflict rules above (resolve conflicts in the source worktree).
 
