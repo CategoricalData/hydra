@@ -121,15 +121,18 @@ The same kernel code SHOULD serve JSON and textual printing and parsing of strin
   An unsuffixed numeric literal is always a decimal;
   integer and float literals always carry a `:width` suffix.
   The canonical digit string is defined by the `printDecimal` primitive, which is
-  value-canonical (decimal equality is value-based: `1.10` and `1.1` print identically),
-  uses minimal digits, and prints zero as `0`.
-  With `a` the adjusted exponent (decimal position of the leading significant digit):
-  positional form when `−7 ≤ a < 21` (no leading zeros, no trailing fractional zeros,
-  no decimal point for integral values);
-  exponent form otherwise (one digit before the point, minimal fraction with the point
-  omitted when single-digit, lowercase `e`, always-signed exponent: `1e+30`, `6.02e-23`).
-  These are the ECMAScript `Number::toString` (§6.1.6.1.20) / RFC 8785 (JCS) thresholds
-  and spellings, without the shortest-round-trip machinery (decimal values are exact).
+  **representation-faithful**: decimal values are scale-distinct (an integer coefficient
+  plus a scale, so `1.10` and `1.1` are distinct values), coefficient digits are
+  preserved exactly — trailing zeros included — and zero prints per its scale
+  (`0`, `0.0`, `0.00`).
+  Layout follows the ECMAScript `Number::toString` (§6.1.6.1.20) / RFC 8785 (JCS)
+  thresholds and spellings:
+  with `a` the adjusted exponent (decimal position of the leading significant digit),
+  positional form when `−7 ≤ a < 21`,
+  and exponent form otherwise (one digit before the point, lowercase `e`, always-signed
+  exponent, coefficient digits preserved: `1.10e+30`, `6.02e-23`).
+  `parseDecimal` is scale-preserving (`"1.10"` and `"1.1"` parse to distinct values) and
+  accepts the full number grammar above.
   The JSON wire format's decimal encoding is this same form:
   the JSON printer and parser call `printDecimal`/`parseDecimal` directly.
   Exponent parts bind to the numeric token by maximal munch:
