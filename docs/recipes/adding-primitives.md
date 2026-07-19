@@ -308,18 +308,26 @@ host's native implementation.
 
 ### Impure primitives
 
-Primitives whose result type is `effect<t>` — i.e. those in `hydra.lib.effects`,
-`hydra.lib.files`, and `hydra.lib.system` — are declared with `impurePrimitiveInModule`
-instead of `primitiveInModule`:
+**"Impure" and "effectful" are related but not the same thing.** *Impurity* is a flag
+on the primitive's metadata — `primitiveDefinitionIsPure = False` — declared with
+`impurePrimitiveInModule`. *Effectfulness* is a property of the primitive's type: its
+result is `effect<t>`. Every effectful primitive is impure (an `effect<t>` result is not
+a pure value), so the two coincide in today's standard library — `hydra.lib.effects`,
+`hydra.lib.files`, and `hydra.lib.system` are all both. But the flag is the broader
+concept: it marks a primitive as not-referentially-transparent regardless of whether that
+impurity is surfaced through the `effect<t>` type. Set the flag with `impurePrimitiveInModule`;
+make a primitive effectful by giving it an `effect<t>` result type (see
+[Prefer core type constructors](#prefer-core-type-constructors-in-signatures) and the
+[Effects wiki](https://github.com/CategoricalData/hydra/wiki/Effects)).
 
 ```haskell
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = impurePrimitiveInModule module_
 ```
 
-The only difference is that `impurePrimitiveInModule` sets `primitiveDefinitionIsPure = False`
-on the resulting `PrimitiveDefinition`. Default implementations (`primitiveWithDefaultInModule`)
-are not meaningful for impure primitives and are not used in practice. The `comments` field
+`impurePrimitiveInModule` sets `primitiveDefinitionIsPure = False` on the resulting
+`PrimitiveDefinition`. Default implementations (`primitiveWithDefaultInModule`) are not
+meaningful for impure primitives and are not used in practice. The `comments` field
 convention follows the same rules as for pure primitives, but cites POSIX or platform docs
 (e.g. the Open Group Base Specifications) as the authoritative source rather than Haskell `Data.*`.
 
@@ -649,6 +657,36 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 ```
 
 Then add the test group to `allTests` in the same file.
+
+#### Effectful primitives use `effectfulCase`, not `primCase`
+
+A primitive whose result is `effect<t>` cannot be string-compared, because the pure
+evaluator cannot reduce an effect. Instead of `primCase`, use `effectfulCase`: its
+`actual` is an `effect<...>` term that each host's test runner **executes** (performing
+the real I/O), comparing the produced value to the expected. Such cases are only ever
+compiled to native target code and run — never routed through the interpreter — and run
+across every host that implements the effect library. See the
+[Effects wiki § Testing effectful operations](https://github.com/CategoricalData/hydra/wiki/Effects#testing-effectful-operations).
+
+Two constraints are specific to effectful primitives and easy to miss:
+
+- **Some effectful primitives are inherently untestable in the common suite** — because
+  the runner *is* the process the primitive would manipulate. `exit` would terminate the
+  runner; `readStdin` has no deterministic content to assert (the runner does not control
+  its own standard input across hosts). Ship these with their native overlays but **no**
+  common-suite test case, and document the omission at the test site (a comment on the
+  deferral/omission rationale) so it reads as deliberate, not forgotten.
+
+- **A new primitive's tests can transiently break the cold-clone CI build.** The
+  `hydra-json-driver` cold-clone job (see [build-system.md](../build-system.md)) compiles
+  the *local* test sources against the *published* kernel on Hackage, which does not yet
+  contain your brand-new primitive — so referencing `DefSystem.myNewPrim` in a test breaks
+  that build until the kernel republishes at the next version. This is the published-host
+  cold-seed seam. If you hit it, **gate the new test cases** (comment them out with a
+  "re-add once hostVersion advances to X.Y.Z" note and a tracking issue) until the primitive
+  is published; the primitive itself still ships on every host. This bit
+  [#526](https://github.com/CategoricalData/hydra/issues/526); the structural fix so it never
+  recurs is [#601](https://github.com/CategoricalData/hydra/issues/601).
 
 ### 6. Regenerate and run tests
 
