@@ -138,7 +138,8 @@ The same kernel code SHOULD serve JSON and textual printing and parsing of strin
   Exponent parts bind to the numeric token by maximal munch:
   `1.2e9` is one decimal literal, while `1.2 e9` is the application of `1.2` to the name `e9`.
 - **Binary**: a base64 string with the `binary` suffix — `"aGVsbG8=":binary`.
-  Standard base64 alphabet with padding, matching `binaryToString` and the JSON wire format.
+  Standard base64 alphabet with padding, exactly as specified by the
+  [JSON wire format](../json-format.md)'s binary encoding.
 - The character `-` occurs only inside numeric literals (there are no infix operators),
   so a form such as `f -1:int32` lexes unambiguously.
 
