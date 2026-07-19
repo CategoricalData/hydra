@@ -57,6 +57,9 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Parse.Regex      as ParseRegex
+import qualified Hydra.Sources.Kernel.Terms.Print.Emacs.Regex as PrintEmacsRegex
+import qualified Hydra.Sources.Kernel.Terms.Print.Pcre.Regex  as PrintPcreRegex
+import qualified Hydra.Sources.Kernel.Terms.Print.Posix.Regex as PrintPosixRegex
 import qualified Hydra.Sources.Kernel.Terms.Print.Regex      as PrintRegex
 import qualified Hydra.Sources.Kernel.Terms.Read.Docs        as ReadDocs
 import qualified Hydra.Sources.Kernel.Terms.Show.Docs        as ShowDocs
@@ -137,6 +140,9 @@ kernelPrimaryTermsModules = [
   Serialization.module_,
   Strip.module_,
   ParseRegex.module_,
+  PrintEmacsRegex.module_,
+  PrintPcreRegex.module_,
+  PrintPosixRegex.module_,
   PrintRegex.module_,
   ReadDocs.module_,
   ShowDocs.module_,
