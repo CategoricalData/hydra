@@ -8,12 +8,12 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, map)
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
-                               length, map, null, pure, replicate, reverse, span, take,
-                               zip, zipWith)
+                               head, init, last, length, map, null, pure, replicate, reverse,
+                               span, tail, take, takeWhile, zip, zipWith)
 
 
 ns :: ModuleName
@@ -26,11 +26,12 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.lists module.")}
   where
-    definitions = [apply, bind, concat, concat2, cons, drop, dropWhile, elem, filter, find,
-                   foldl, foldr, group, intercalate, intersperse, length, map, maybeAt,
-                   maybeHead, maybeInit, maybeLast, maybeTail, nub, null, partition, pure,
-                   replicate, reverse, singleton, sort, sortOn, span, take, transpose,
-                   uncons, zip, zipWith]
+    definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile, elem,
+                   filter, find, foldList, foldl, foldr, group, head, init, intercalate, intersperse,
+                   join, last, length, map, mapList, mapOptional, mapSet, maybeAt, maybeHead, maybeInit,
+                   maybeLast, maybeTail, member, nub, null, partition, pure, replicate, reverse,
+                   singleton, sort, sortBy, sortOn, span, tail, take, takeWhile, transpose, uncons, zip,
+                   zipWith]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -56,6 +57,14 @@ apply = define "apply" "Apply a list of functions to a list of values (applicati
    "Equivalent to the applicative list instance.",
    "Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b]."]
 
+at :: PrimitiveDefinition
+at = define "at" "Return the element at the given index, or Nothing if out of bounds."
+  (sig $ TypeScheme [Name "x"]
+    (Types.int32 Types.~> l tx Types.~> Types.optional tx) Nothing)
+  ["at(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
+   "New name for maybeAt (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."]
+
 bind :: PrimitiveDefinition
 bind = defineWithDefault "bind" "Apply a function that returns lists to each element and flatten the results."
   (sig $ TypeScheme [Name "x", Name "y"]
@@ -68,6 +77,14 @@ bind = defineWithDefault "bind" "Apply a function that returns lists to each ele
       ("x" ~> "acc" ~> Lists.concat2 (var "f" @@ var "x") (var "acc"))
       (list ([] :: [TypedTerm b]))
       (var "xs"))
+
+compose :: PrimitiveDefinition
+compose = define "compose" "Compose two functions that return lists (Kleisli composition in the list monad)."
+  (sig $ TypeScheme [Name "x", Name "y", Name "z"]
+    ((tx Types.~> l ty) Types.~> (ty Types.~> l tz) Types.~> tx Types.~> l tz) Nothing)
+  ["compose(f, g, x) is bind(f(x), g); this defining equation is the specification. The results of\
+  \ applying g to each element of f(x) are concatenated in order.",
+   "Total. Corresponds to Kleisli composition (>=>) in the list monad."]
 
 concat :: PrimitiveDefinition
 concat = define "concat" "Concatenate a list of lists."
@@ -86,6 +103,14 @@ cons = define "cons" "Prepend a value to a list."
   (sig $ TypeScheme [Name "x"] (tx Types.~> l tx Types.~> l tx) Nothing)
   ["cons(x, xs) returns a list whose head is x and whose tail is xs.",
    "Total. Corresponds to Haskell's (:) :: a -> [a] -> [a]."]
+
+distinct :: PrimitiveDefinition
+distinct = define "distinct" "Remove duplicate elements from a list."
+  (sig $ Types.polyConstrained [("x", [Name "equality"])] (l tx Types.~> l tx))
+  ["distinct(xs) returns the list of distinct elements of xs, in the order of their first occurrence.",
+   "New name for nub (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Requires an 'equality' constraint on the element type.",
+   "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."]
 
 drop :: PrimitiveDefinition
 drop = define "drop" "Drop the first n elements from a list."
@@ -141,6 +166,17 @@ find = defineWithDefault "find" "Find the first element matching a predicate."
       (nothing :: TypedTerm (Maybe a))
       (var "xs"))
 
+foldList :: PrimitiveDefinition
+foldList = define "foldList" "Left-fold a list in the list monad (a nondeterministic fold)."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> ty Types.~> l tx) Types.~> tx Types.~> l ty Types.~> l tx) Nothing)
+  ["foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the\
+  \ step function at each element: after each element the set of accumulators is replaced by all\
+  \ results of applying f to each current accumulator and that element.",
+   "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), pure(acc0), xs); this\
+  \ defining equation is the specification. For the empty list the result is pure(acc0).",
+   "Total on finite inputs. The list-monad instance of the monadic left fold."]
+
 foldl :: PrimitiveDefinition
 foldl = define "foldl" "Left-fold a list with an accumulator."
   (sig $ TypeScheme [Name "y", Name "x"]
@@ -168,6 +204,20 @@ group = define "group" "Group consecutive equal elements."
    "Equality is determined by the element type's 'equality' constraint.",
    "Total. Corresponds to Haskell's Data.List.group :: Eq a => [a] -> [[a]]."]
 
+head :: PrimitiveDefinition
+head = define "head" "Return the first element, or Nothing if the list is empty."
+  (sig $ TypeScheme [Name "x"] (l tx Types.~> Types.optional tx) Nothing)
+  ["head(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
+   "New name for maybeHead (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Wraps Haskell's partial head in maybe."]
+
+init :: PrimitiveDefinition
+init = define "init" "Return all elements except the last, or Nothing if the list is empty."
+  (sig $ TypeScheme [Name "x"] (l tx Types.~> Types.optional (l tx)) Nothing)
+  ["init(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
+   "New name for maybeInit (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Wraps Haskell's partial init in maybe."]
+
 intercalate :: PrimitiveDefinition
 intercalate = define "intercalate" "Intercalate a list of lists with a separator list between each."
   (sig $ TypeScheme [Name "x"]
@@ -184,6 +234,22 @@ intersperse = define "intersperse" "Intersperse a value between consecutive elem
   \ lists of length 0 or 1 the input is returned unchanged.",
    "Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a]."]
 
+join :: PrimitiveDefinition
+join = define "join" "Intercalate a list of lists with a separator list between each."
+  (sig $ TypeScheme [Name "x"]
+    (l tx Types.~> l (l tx) Types.~> l tx) Nothing)
+  ["join(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists.\
+  \ Equivalent to concat(intersperse(sep, xss)).",
+   "New name for intercalate (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."]
+
+last :: PrimitiveDefinition
+last = define "last" "Return the last element, or Nothing if the list is empty."
+  (sig $ TypeScheme [Name "x"] (l tx Types.~> Types.optional tx) Nothing)
+  ["last(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
+   "New name for maybeLast (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Wraps Haskell's partial last in maybe."]
+
 length :: PrimitiveDefinition
 length = define "length" "Return the length of a list."
   (sig $ TypeScheme [Name "x"] (l tx Types.~> Types.int32) Nothing)
@@ -197,6 +263,39 @@ map = define "map" "Map a function over a list."
     ((tx Types.~> ty) Types.~> l tx Types.~> l ty) Nothing)
   ["map(f, xs) returns the list of f(x) for each x in xs, in original order.",
    "Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists."]
+
+mapList :: PrimitiveDefinition
+mapList = define "mapList" "Traverse a list in the list monad."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> l ty) Types.~> l tx Types.~> l (l ty)) Nothing)
+  ["mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in\
+  \ xs: each result list has the same length as xs, with its element at each position drawn from the\
+  \ corresponding f(x).",
+   "Results appear in the lexicographic order of the choices, with the choice for the first element\
+  \ varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is\
+  \ empty for any element, the result is the empty list; mapList(f, []) is pure([]).",
+   "Total on finite inputs. The list-monad instance of the traversal family."]
+
+mapOptional :: PrimitiveDefinition
+mapOptional = define "mapOptional" "Traverse an optional value in the list monad."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> l ty) Types.~> Types.optional tx Types.~> l (Types.optional ty)) Nothing)
+  ["mapOptional(f, m) returns the single-element list containing none when m is none; for given(x) it\
+  \ returns given(y) for each element y of f(x), in order.",
+   "Total on finite inputs. The list-monad instance of the traversal family, applied to the optional\
+  \ container."]
+
+mapSet :: PrimitiveDefinition
+mapSet = define "mapSet" "Traverse a set in the list monad."
+  (sig $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
+    ((tx Types.~> l ty) Types.~> Types.set tx Types.~> l (Types.set ty)))
+  ["mapSet(f, s) returns all sets obtainable by choosing one element from f(x) for each element x of s.\
+  \ Elements of s are traversed in ascending order, and results appear in the lexicographic order of\
+  \ the choices, with the choice for the least element varying slowest.",
+   "A result set may have fewer elements than s when distinct choices coincide. If f(x) is empty for\
+  \ any element, the result is the empty list; for the empty set the result is the single-element list\
+  \ containing the empty set.",
+   "Requires 'ordering' constraints on both element types (the set type contract)."]
 
 maybeAt :: PrimitiveDefinition
 maybeAt = define "maybeAt" "Return the element at the given index, or Nothing if out of bounds."
@@ -230,6 +329,15 @@ maybeTail = define "maybeTail" "Return all elements except the first, or Nothing
   ["maybeTail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is\
   \ empty.",
    "Total. Wraps Haskell's partial tail in maybe."]
+
+member :: PrimitiveDefinition
+member = define "member" "Test whether an element is in a list."
+  (sig $ Types.polyConstrained [("x", [Name "equality"])]
+    (tx Types.~> l tx Types.~> Types.boolean))
+  ["member(x, xs) returns true iff some element of xs is equal to x.",
+   "New name for elem (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Requires an 'equality' constraint on the element type.",
+   "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."]
 
 nub :: PrimitiveDefinition
 nub = define "nub" "Remove duplicate elements from a list."
@@ -292,6 +400,16 @@ sort = define "sort" "Sort a list."
    "Requires an 'ordering' constraint on the element type.",
    "Total. Corresponds to Haskell's Data.List.sort :: Ord a => [a] -> [a]."]
 
+sortBy :: PrimitiveDefinition
+sortBy = define "sortBy" "Sort a list using a key-extraction function."
+  (sig $ Types.polyConstrained [("x", []), ("y", [Name "ordering"])]
+    ((tx Types.~> ty) Types.~> l tx Types.~> l tx))
+  ["sortBy(f, xs) returns xs sorted in ascending order by f(x) for each element x. Sort is stable:\
+  \ elements with equal keys preserve their original relative order.",
+   "New name for sortOn (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Requires an 'ordering' constraint on the key type.",
+   "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."]
+
 sortOn :: PrimitiveDefinition
 sortOn = define "sortOn" "Sort a list using a key-extraction function."
   (sig $ Types.polyConstrained [("x", []), ("y", [Name "ordering"])]
@@ -318,12 +436,31 @@ span = defineWithDefault "span" "Split a list at the first element where the pre
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))
       (var "xs"))
 
+tail :: PrimitiveDefinition
+tail = define "tail" "Return all elements except the first, or Nothing if the list is empty."
+  (sig $ TypeScheme [Name "x"] (l tx Types.~> Types.optional (l tx)) Nothing)
+  ["tail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
+   "New name for maybeTail (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Wraps Haskell's partial tail in maybe."]
+
 take :: PrimitiveDefinition
 take = define "take" "Take the first n elements of a list."
   (sig $ TypeScheme [Name "x"] (Types.int32 Types.~> l tx Types.~> l tx) Nothing)
   ["take(n, xs) returns the prefix of xs of length min(n, length(xs)); if n is non-positive the result\
   \ is the empty list.",
    "Total. Corresponds to Haskell's take :: Int -> [a] -> [a]."]
+
+takeWhile :: PrimitiveDefinition
+takeWhile = defineWithDefault "takeWhile" "Take elements from the beginning of a list while a predicate holds."
+  (sig $ TypeScheme [Name "x"]
+    ((tx Types.~> Types.boolean) Types.~> l tx Types.~> l tx) Nothing)
+  ["takeWhile(p, xs) returns the longest prefix of xs whose elements all satisfy p. If p fails for the\
+  \ first element the result is the empty list; if p holds for every element the result is xs\
+  \ unchanged.",
+   "dropWhile returns the complementary suffix, and span(p, xs) returns the pair of takeWhile(p, xs)\
+  \ and dropWhile(p, xs).",
+   "Total. Corresponds to Haskell's takeWhile :: (a -> Bool) -> [a] -> [a]."]
+  ("p" ~> "xs" ~> Pairs.first (Lists.span (var "p") (var "xs")))
 
 transpose :: PrimitiveDefinition
 transpose = define "transpose" "Transpose a list of lists."

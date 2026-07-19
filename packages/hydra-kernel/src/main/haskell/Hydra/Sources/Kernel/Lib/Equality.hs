@@ -23,7 +23,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.equality module.")}
   where
-    definitions = [compare, equal, gt, gte, identity, lt, lte, max, min]
+    definitions = [compare, equal, gt, gte, identity, lt, lte, max, min, notEqual]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -113,3 +113,13 @@ min = defineWithDefault "min" "Return the minimum of two values."
    "Requires an 'ordering' constraint on the argument type.",
    "Total. Corresponds to Haskell's min :: Ord a => a -> a -> a."]
   ("x" ~> "y" ~> Logic.ifElse (Equality.lte (var "x") (var "y")) (var "x" :: TypedTerm a) (var "y"))
+
+notEqual :: PrimitiveDefinition
+notEqual = defineWithDefault "notEqual" "Check whether two values are unequal."
+  (sig $ Types.polyConstrained [("x", [Name "equality"])]
+    (tx Types.~> tx Types.~> Types.boolean))
+  ["notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the\
+   \ default implementation.",
+   "Requires an 'equality' type-class constraint on the argument type.",
+   "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."]
+  ("x" ~> "y" ~> Logic.not (Equality.equal (var "x") (var "y")))

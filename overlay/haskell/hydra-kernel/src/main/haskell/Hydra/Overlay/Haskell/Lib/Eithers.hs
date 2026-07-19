@@ -2,11 +2,16 @@
 
 module Hydra.Overlay.Haskell.Lib.Eithers where
 
+import Prelude hiding (either, map, pure)
 import qualified Control.Monad as CM
 import qualified Data.Bifunctor as BF
 import qualified Data.Either as E
 import qualified Data.Set as S
 
+
+-- | Applicative apply for Either: combine a function under Either and an argument under Either.
+apply :: Either a (b -> c) -> Either a b -> Either a c
+apply ef ex = bind ef (\f -> map f ex)
 
 -- | Map over both sides of an Either value.
 bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
@@ -16,9 +21,17 @@ bimap = BF.bimap
 bind :: Either a b -> (b -> Either a c) -> Either a c
 bind = (>>=)
 
+-- | Kleisli composition for Either.
+compose :: (a -> Either e b) -> (b -> Either e c) -> a -> Either e c
+compose f g x = bind (f x) g
+
 -- | Eliminate an Either value by applying one of two functions.
 either :: (a -> c) -> (b -> c) -> Either a b -> c
 either = E.either
+
+-- | Left-fold over a list with an Either-returning function, short-circuiting on Left. (Alias of foldl.)
+foldList :: (a -> b -> Either c a) -> a -> [b] -> Either c a
+foldList = CM.foldM
 
 -- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
 foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
@@ -60,9 +73,17 @@ mapOptional = CM.mapM
 mapSet :: Ord b => (a -> Either c b) -> S.Set a -> Either c (S.Set b)
 mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
 
+-- | Partition a list of Eithers into lefts and rights. (Alias of partitionEithers.)
+partition :: [Either a b] -> ([a], [b])
+partition = E.partitionEithers
+
 -- | Partition a list of Eithers into lefts and rights.
 partitionEithers :: [Either a b] -> ([a], [b])
 partitionEithers = E.partitionEithers
+
+-- | Wrap a value as a Right.
+pure :: b -> Either a b
+pure = Right
 
 -- | Extract all Right values from a list of Eithers.
 rights :: [Either a b] -> [b]

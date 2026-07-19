@@ -30,9 +30,9 @@ module_ = Module {
     -- (unlike old 'Meta.Lib.*') exposes the primitive's Ord constraint, so these polymorphic defs need a
     -- concrete type here to satisfy GHC. 'Int' is arbitrary and carries no meaning — the emitted primitive
     -- is type-agnostic and fully polymorphic. See #467.
-    definitions = [alter, bimap, delete, elems, empty, filter, filterWithKey, findWithDefault,
-                   fromList, insert, keys, lookup, map, mapKeys, member, null, singleton, size,
-                   toList, union]
+    definitions = [alter, bimap, delete, difference, elems, empty, filter, filterWithKey,
+                   findWithDefault, fromList, insert, intersection, keys, lookup, map, mapKeys,
+                   member, null, singleton, size, toList, union, unions]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -98,6 +98,15 @@ delete = define "delete" "Remove a key from a map."
   \ unchanged.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."]
+
+difference :: PrimitiveDefinition
+difference = define "difference" "Compute the difference of two maps by key."
+  (ordKey [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
+  ["difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear\
+  \ in m2. Only the key set of m2 matters; its values are ignored.",
+   "The key-set analogue is hydra.lib.sets.difference.",
+   "Requires an 'ordering' constraint on the key type.",
+   "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."]
 
 elems :: PrimitiveDefinition
 elems = define "elems" "Return the values of a map (in key order)."
@@ -169,6 +178,16 @@ insert = define "insert" "Insert a key-value pair into a map."
   \ value is overwritten.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."]
+
+intersection :: PrimitiveDefinition
+intersection = define "intersection" "Compute the intersection of two maps by key."
+  (ordKey [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
+  ["intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear\
+  \ in m2. On each common key the value is taken from m1; only the key set of m2 matters, and its\
+  \ values are ignored.",
+   "The key-set analogue is hydra.lib.sets.intersection.",
+   "Requires an 'ordering' constraint on the key type.",
+   "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."]
 
 keys :: PrimitiveDefinition
 keys = define "keys" "Return the keys of a map (in key order)."
@@ -257,3 +276,13 @@ union = define "union" "Compute the union of two maps; the first map's bindings 
   \ are not in m1. On key collision, the binding from m1 is preferred.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."]
+
+unions :: PrimitiveDefinition
+unions = define "unions" "Compute the left-biased union of a list of maps."
+  (ordKey [("v", [])] (Types.list (mp tk tv) Types.~> mp tk tv))
+  ["unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more\
+  \ than one map, the binding from the earliest such map in the list wins.",
+   "unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([])\
+  \ is empty, and the bias matches union and hydra.lib.sets.unions.",
+   "Requires an 'ordering' constraint on the key type.",
+   "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."]

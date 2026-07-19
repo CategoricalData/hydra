@@ -2,21 +2,34 @@
 
 module Hydra.Overlay.Haskell.Lib.Lists where
 
+import Prelude hiding (compose, head, init, last, map, pure, tail, takeWhile)
 import Hydra.Util
 import Hydra.Core
 import Hydra.Graph
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 
+import qualified Control.Monad as CM
 import qualified Data.List as L
+import qualified Data.Set as S
 
 
 -- | Apply a list of functions to a list of values (applicative style).
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
+-- | Return the element at the given index, or Nothing if out of bounds. (Alias of maybeAt.)
+at :: Int -> [a] -> Maybe a
+at i l
+  | i < 0 || i >= L.length l = Nothing
+  | otherwise = Just (l !! i)
+
 -- | Apply a function that returns lists to each element and flatten results.
 bind :: [a] -> (a -> [b]) -> [b]
 bind = (>>=)
+
+-- | Compose two list-returning functions (Kleisli composition in the list monad).
+compose :: (a -> [b]) -> (b -> [c]) -> a -> [c]
+compose f g x = f x >>= g
 
 -- | Concatenate a list of lists.
 concat :: [[a]] -> [a]
@@ -29,6 +42,10 @@ concat2 l1 l2 = l1 ++ l2
 -- | Prepend a value to a list.
 cons :: a -> [a] -> [a]
 cons = (:)
+
+-- | Remove duplicate elements from a list. (Alias of nub.)
+distinct :: Eq a => [a] -> [a]
+distinct = L.nub
 
 -- | Drop the first n elements from a list.
 drop :: Int -> [a] -> [a]
@@ -50,6 +67,10 @@ filter = L.filter
 find :: (a -> Bool) -> [a] -> Maybe a
 find = L.find
 
+-- | Left-fold a list in the list monad (a nondeterministic fold).
+foldList :: (a -> b -> [a]) -> a -> [b] -> [a]
+foldList = CM.foldM
+
 -- | Fold a list from the left.
 -- Strict left fold. Lazy foldl can pile up thunks for accumulator types
 -- that are field-update records (e.g. PythonModuleMetadata in
@@ -67,9 +88,23 @@ foldr = L.foldr
 group :: Eq a => [a] -> [[a]]
 group = L.group
 
+-- | Return the first element, or Nothing if the list is empty. (Alias of maybeHead.)
+head :: [a] -> Maybe a
+head [] = Nothing
+head (x:_) = Just x
+
+-- | Return all elements except the last, or Nothing if the list is empty. (Alias of maybeInit.)
+init :: [a] -> Maybe [a]
+init [] = Nothing
+init xs = Just (L.init xs)
+
 -- | Intercalate a list of lists with a separator list between each.
 intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
+
+-- | Intercalate a list of lists with a separator list between each. (Alias of intercalate.)
+join :: [a] -> [[a]] -> [a]
+join = L.intercalate
 
 -- | Intersperse a value between elements of a list.
 intersperse :: a -> [a] -> [a]
@@ -82,6 +117,27 @@ length = L.length
 -- | Map a function over a list.
 map :: (a -> b) -> [a] -> [b]
 map = fmap
+
+-- | Traverse a list in the list monad.
+mapList :: (a -> [b]) -> [a] -> [[b]]
+mapList = CM.mapM
+
+-- | Traverse an optional value in the list monad.
+mapOptional :: (a -> [b]) -> Maybe a -> [Maybe b]
+mapOptional = traverse
+
+-- | Traverse a set in the list monad.
+mapSet :: Ord b => (a -> [b]) -> S.Set a -> [S.Set b]
+mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
+
+-- | Return the last element, or Nothing if the list is empty. (Alias of maybeLast.)
+last :: [a] -> Maybe a
+last [] = Nothing
+last xs = Just (L.last xs)
+
+-- | Test whether an element is in a list. (Alias of elem.)
+member :: Eq a => a -> [a] -> Bool
+member = L.elem
 
 -- | Get the element at a specified index in a list, returning Nothing if out of bounds.
 maybeAt :: Int -> [a] -> Maybe a
@@ -141,6 +197,10 @@ singleton e = [e]
 sort :: Ord a => [a] -> [a]
 sort = L.sort
 
+-- | Sort a list based on a key function. (Alias of sortOn.)
+sortBy :: Ord b => (a -> b) -> [a] -> [a]
+sortBy = L.sortOn
+
 -- | Sort a list based on a key function.
 sortOn :: Ord b => (a -> b) -> [a] -> [a]
 sortOn = L.sortOn
@@ -149,9 +209,18 @@ sortOn = L.sortOn
 span :: (a -> Bool) -> [a] -> ([a], [a])
 span = L.span
 
+-- | Return all elements except the first, or Nothing if the list is empty. (Alias of maybeTail.)
+tail :: [a] -> Maybe [a]
+tail [] = Nothing
+tail (_:xs) = Just xs
+
 -- | Take the first n elements from a list.
 take :: Int -> [a] -> [a]
 take = L.take
+
+-- | Take elements from the beginning of a list while a predicate holds.
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile = L.takeWhile
 
 -- | Transpose a list of lists.
 transpose :: [[a]] -> [[a]]

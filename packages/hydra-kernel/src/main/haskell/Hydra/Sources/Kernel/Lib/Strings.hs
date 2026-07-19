@@ -7,7 +7,7 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), length, lines, null, unlines)
+import           Prelude hiding ((++), concat, length, lines, null, unlines)
 
 
 ns :: ModuleName
@@ -20,8 +20,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.strings module.")}
   where
-    definitions = [cat, cat2, fromList, intercalate, length, lines, maybeCharAt, null, splitOn,
-                   toList, toLower, toUpper, unlines]
+    definitions = [cat, cat2, charAt, concat, concat2, fromList, intercalate, join, length, lines,
+                   maybeCharAt, null, splitOn, toList, toLower, toUpper, unlines]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -45,6 +45,28 @@ cat2 = define "cat2" "Concatenate two strings."
   ["cat2(s, t) returns the concatenation of s and t.",
    "Total. Corresponds to Haskell's (++) :: String -> String -> String."]
 
+charAt :: PrimitiveDefinition
+charAt = define "charAt" "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds."
+  (fn2 Types.int32 Types.string (Types.optional Types.int32))
+  ["charAt(i, s) returns Just(c) where c is the Unicode code point at position i in s, or Nothing if i\
+  \ is negative or i >= length(s).",
+   "New name for maybeCharAt (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total."]
+
+concat :: PrimitiveDefinition
+concat = define "concat" "Concatenate a list of strings into a single string."
+  (fn (Types.list Types.string) Types.string)
+  ["concat(xs) returns the string formed by concatenating every string in xs in order.",
+   "New name for cat (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Corresponds to Haskell's concat :: [String] -> String."]
+
+concat2 :: PrimitiveDefinition
+concat2 = define "concat2" "Concatenate two strings."
+  (fn2 Types.string Types.string Types.string)
+  ["concat2(s, t) returns the concatenation of s and t.",
+   "New name for cat2 (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Corresponds to Haskell's (++) :: String -> String -> String."]
+
 fromList :: PrimitiveDefinition
 fromList = define "fromList" "Convert a list of Unicode code points to a string."
   (fn (Types.list Types.int32) Types.string)
@@ -59,6 +81,15 @@ intercalate = define "intercalate" "Join a list of strings with a separator betw
   ["intercalate(sep, xs) returns the strings in xs concatenated with sep inserted between each pair\
   \ of adjacent strings; for the empty list the result is the empty string, and for a singleton\
   \ list the result is the single string.",
+   "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."]
+
+join :: PrimitiveDefinition
+join = define "join" "Join a list of strings with a separator between each element."
+  (fn2 Types.string (Types.list Types.string) Types.string)
+  ["join(sep, xs) returns the strings in xs concatenated with sep inserted between each pair of\
+  \ adjacent strings; for the empty list the result is the empty string, and for a singleton list the\
+  \ result is the single string.",
+   "New name for intercalate (retained as a deprecated alias until the #417 breaking wave removes it).",
    "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."]
 
 length :: PrimitiveDefinition

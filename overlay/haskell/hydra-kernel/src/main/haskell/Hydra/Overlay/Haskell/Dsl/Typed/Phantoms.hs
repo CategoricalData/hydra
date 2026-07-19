@@ -458,6 +458,29 @@ markLazyParams idxs ts = ts {
     zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
       [0..] (termSignatureParameters ts)}
 
+-- | Convert a TypeScheme to a TermSignature, replacing the synthesized @arg0, arg1, ...@ parameter
+-- names and empty descriptions with an authored @(name, description)@ pair per value parameter.
+-- Arity-checked: fails immediately if the number of pairs does not match the number of value
+-- parameters peeled from the type (this catches signature/name drift at DSL-load time).
+-- Example: sigWithParams [("x", "the value to compare"), ("y", "the value to compare against")] $
+--            TypeScheme [Name "x"] (tx ~> tx ~> boolean) Nothing
+sigWithParams :: [(String, String)] -> TypeScheme -> TermSignature
+sigWithParams pairs ts =
+    let s = sig ts
+        params = termSignatureParameters s
+        n = L.length params
+        m = L.length pairs
+    in if m /= n
+      then error (L.concat ["sigWithParams: ", show m, " (name, description) pair(s) provided for a ",
+                  show n, "-parameter signature"])
+      else s {
+        termSignatureParameters =
+          zipWith
+            (\p (nm, desc) -> p {
+              parameterName = Name nm,
+              parameterDescription = if L.null desc then Nothing else Just desc})
+            params pairs}
+
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
 -- long-form comments. Each comments element is one logical observation, kept distinct rather than concatenated.
 primitiveMetadata :: String -> [String] -> Maybe EntityMetadata

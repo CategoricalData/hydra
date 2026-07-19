@@ -17,6 +17,10 @@ bimap f g = M.fromList . fmap (\(k, v) -> (f k, g v)) . M.toList
 delete :: Ord k => k -> M.Map k v -> M.Map k v
 delete = M.delete
 
+-- | Compute the difference of two maps by key.
+difference :: Ord k => M.Map k v -> M.Map k v -> M.Map k v
+difference = M.difference
+
 -- | Get the values of a map.
 elems :: M.Map k v -> [v]
 elems = M.elems
@@ -44,6 +48,10 @@ fromList = M.fromList
 -- | Insert a key-value pair into a map.
 insert :: Ord k => k -> v -> M.Map k v -> M.Map k v
 insert = M.insert
+
+-- | Compute the intersection of two maps by key (values from the first map).
+intersection :: Ord k => M.Map k v -> M.Map k v -> M.Map k v
+intersection = M.intersection
 
 -- | Get the keys of a map.
 keys :: M.Map k v -> [k]
@@ -84,3 +92,7 @@ toList = M.toList
 -- | Union two maps, with the first taking precedence.
 union :: Ord k => M.Map k v -> M.Map k v -> M.Map k v
 union = M.union
+
+-- | Compute the left-biased union of a list of maps.
+unions :: Ord k => [M.Map k v] -> M.Map k v
+unions = M.unions

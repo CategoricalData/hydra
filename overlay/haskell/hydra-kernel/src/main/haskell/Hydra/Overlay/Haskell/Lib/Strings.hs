@@ -2,6 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Strings where
 
+import Prelude hiding (concat, length, null)
 import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.List.Split as LS
@@ -15,6 +16,20 @@ cat = L.concat
 cat2 :: String -> String -> String
 cat2 s1 s2 = s1 ++ s2
 
+-- | Get the Unicode code point of the character at a specific index. (Alias of maybeCharAt.)
+charAt :: Int -> String -> Maybe Int
+charAt i s
+  | i < 0 || i >= L.length s = Nothing
+  | otherwise = Just (C.ord (s !! i))
+
+-- | Concatenate a list of strings into a single string. (Alias of cat.)
+concat :: [String] -> String
+concat = L.concat
+
+-- | Concatenate two strings. (Alias of cat2.)
+concat2 :: String -> String -> String
+concat2 s1 s2 = s1 ++ s2
+
 -- | Convert a list of Unicode code points to a string.
 fromList :: [Int] -> String
 fromList = fmap C.chr
@@ -22,6 +37,10 @@ fromList = fmap C.chr
 -- | Join a list of strings with a separator between each element.
 intercalate :: String -> [String] -> String
 intercalate = L.intercalate
+
+-- | Join a list of strings with a separator between each element. (Alias of intercalate.)
+join :: String -> [String] -> String
+join = L.intercalate
 
 -- | Return the length of a string.
 length :: String -> Int

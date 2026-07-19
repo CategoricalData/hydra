@@ -6,9 +6,17 @@ module Hydra.Overlay.Haskell.Lib.Chars where
 import qualified Data.Char as C
 
 
+-- | Check whether a character is alphabetic.
+isAlpha :: Int -> Bool
+isAlpha = C.isAlpha . C.chr
+
 -- | Check whether a character is alphanumeric.
 isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
+
+-- | Check whether a character is an ASCII decimal digit.
+isDigit :: Int -> Bool
+isDigit = C.isDigit . C.chr
 
 -- | Check whether a character is lowercase.
 isLower :: Int -> Bool

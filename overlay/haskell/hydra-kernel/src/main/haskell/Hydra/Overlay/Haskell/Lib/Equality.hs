@@ -45,3 +45,7 @@ max = Prelude.max
 -- | Return the minimum of two values.
 min :: Ord a => a -> a -> a
 min = Prelude.min
+
+-- | Check if two values are unequal.
+notEqual :: Eq a => a -> a -> Bool
+notEqual = (/=)

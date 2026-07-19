@@ -2,6 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Sets where
 
+import Prelude hiding (filter)
 import qualified Data.Set as S
 
 
@@ -16,6 +17,10 @@ difference = S.difference
 -- | Create an empty set.
 empty :: S.Set x
 empty = S.empty
+
+-- | Filter a set by a predicate.
+filter :: Ord x => (x -> Bool) -> S.Set x -> S.Set x
+filter = S.filter
 
 -- | Create a set from a list.
 fromList :: Ord x => [x] -> S.Set x

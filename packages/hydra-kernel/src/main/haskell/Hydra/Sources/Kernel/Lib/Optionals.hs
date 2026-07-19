@@ -7,10 +7,12 @@ import Hydra.Kernel
 import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, cases, compose, map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), map, pure)
+import qualified Data.Set                    as S
 
 
 ns :: ModuleName
@@ -23,7 +25,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.optionals module.")}
   where
-    definitions = [apply, bind, cases, cat, compose, fromOptional, isGiven, isNone, map, mapOptional, pure, toList]
+    definitions = [apply, bind, cases, cat, compose, foldList, fromOptional, givens, isGiven, isNone,
+                   map, mapList, mapOptional, mapSet, pure, toList, withDefault]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -97,6 +100,23 @@ compose = defineWithDefault "compose" "Kleisli composition for optionals."
    \ Maybe c) -> a -> Maybe c."]
   ("f" ~> "g" ~> "x" ~> Optionals.bind (var "f" @@ var "x") (var "g"))
 
+foldList :: PrimitiveDefinition
+foldList = defineWithDefault "foldList" "Left-fold over a list with an optional-returning function, short-circuiting on none."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> ty Types.~> Types.optional tx) Types.~> tx Types.~> Types.list ty Types.~> Types.optional tx)
+    Nothing)
+  ["foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given,\
+  \ and returns none as soon as any step yields none. If every element is processed, the result is\
+  \ given of the final accumulator.",
+   "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), pure(acc), xs); this defining\
+  \ equation is the specification, and the default implementation.",
+   "Total. Corresponds to a short-circuiting foldM specialised to Maybe."]
+  ("f" ~> "acc" ~> "xs" ~>
+    Lists.foldl
+      ("m" ~> "y" ~> Optionals.bind (var "m") ("x" ~> var "f" @@ var "x" @@ var "y"))
+      (Optionals.pure (var "acc"))
+      (var "xs"))
+
 -- The default value (position 0) is lazy: it is only evaluated when the optional is empty.
 fromOptional :: PrimitiveDefinition
 fromOptional = defineWithDefault "fromOptional" "Return the value contained in an optional, falling back to a default if absent."
@@ -106,6 +126,22 @@ fromOptional = defineWithDefault "fromOptional" "Return the value contained in a
   ["fromOptional(def, m) returns x when m is given(x), and def when m is none.",
    "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."]
   ("def" ~> "m" ~> Optionals.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x"))
+
+givens :: PrimitiveDefinition
+givens = defineWithDefault "givens" "Concatenate optionals, keeping only the present values."
+  (sig $ TypeScheme [Name "x"]
+    (Types.list (Types.optional tx) Types.~> Types.list tx)
+    Nothing)
+  ["givens(xs) returns the list of contained values from given elements of xs, in original order; none\
+  \ elements are discarded.",
+   "New name for cat (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."]
+  ("xs" ~> Lists.foldr
+    ("m" ~> "acc" ~> Optionals.cases (var "m")
+      (var "acc" :: TypedTerm [a])
+      ("v" ~> Lists.cons (var "v") (var "acc")))
+    (list ([] :: [TypedTerm a]))
+    (var "xs"))
 
 isGiven :: PrimitiveDefinition
 isGiven = defineWithDefault "isGiven" "Test whether an optional is present (given)."
@@ -131,6 +167,23 @@ map = defineWithDefault "map" "Map a function over an optional."
    "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."]
   ("f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x")))
 
+mapList :: PrimitiveDefinition
+mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> Types.optional ty) Types.~> Types.list tx Types.~> Types.optional (Types.list ty))
+    Nothing)
+  ["mapList(f, xs) applies f to each element of xs. If every application yields given, the result is\
+  \ given of the list of contained values, in their original order. The result is none as soon as any\
+  \ application yields none.",
+   "Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b]."]
+  ("f" ~> "xs" ~>
+    Lists.foldr
+      ("x" ~> "acc" ~>
+        Optionals.bind (var "f" @@ var "x") $
+          "y" ~> Optionals.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
+      (Optionals.pure (list ([] :: [TypedTerm b])))
+      (var "xs"))
+
 mapOptional :: PrimitiveDefinition
 mapOptional = defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
   (sig $ TypeScheme [Name "x", Name "y"]
@@ -140,6 +193,25 @@ mapOptional = defineWithDefault "mapOptional" "Map a partial function over a lis
   \ results in original order; none results are discarded.",
    "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."]
   ("f" ~> "xs" ~> Optionals.cat (Lists.map (var "f") (var "xs")))
+
+mapSet :: PrimitiveDefinition
+mapSet = defineWithDefault "mapSet" "Traverse a set in the optional monad."
+  (sig $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
+    ((tx Types.~> Types.optional ty) Types.~> Types.set tx Types.~> Types.optional (Types.set ty)))
+  ["mapSet(f, s) applies f to each element of s. If every application yields given, the result is given\
+  \ of the set of contained values, deduplicated by the result type's ordering. The result is none as\
+  \ soon as any application yields none.",
+   "Requires 'ordering' constraints on both element types (the set type contract).",
+   "Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad."]
+  (("f" ~> "s" ~>
+    Optionals.map
+      ("ys" ~> (Sets.fromList (var "ys") :: TypedTerm (S.Set Int)))
+      (Lists.foldr
+        ("x" ~> "acc" ~>
+          Optionals.bind (var "f" @@ var "x") $
+            "y" ~> Optionals.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
+        (Optionals.pure (list ([] :: [TypedTerm Int])))
+        (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Maybe Int) -> S.Set Int -> Maybe (S.Set Int)))
 
 pure :: PrimitiveDefinition
 pure = defineWithDefault "pure" "Wrap a value in given."
@@ -156,3 +228,13 @@ toList = defineWithDefault "toList" "Convert an optional to a list: given x maps
   ("m" ~> Optionals.cases (var "m")
     (list ([] :: [TypedTerm a]))
     ("x" ~> list [var "x"]))
+
+withDefault :: PrimitiveDefinition
+withDefault = defineWithDefault "withDefault" "Return the value contained in an optional, falling back to a default if absent."
+  (lazySig [0] $ TypeScheme [Name "x"]
+    (tx Types.~> Types.optional tx Types.~> tx)
+    Nothing)
+  ["withDefault(def, m) returns x when m is given(x), and def when m is none.",
+   "New name for fromOptional (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."]
+  ("def" ~> "m" ~> Optionals.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x"))

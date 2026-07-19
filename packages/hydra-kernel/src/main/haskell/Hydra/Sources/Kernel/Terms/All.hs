@@ -32,6 +32,7 @@ import qualified Hydra.Sources.Kernel.Lib.Effects           as LibEffects
 import qualified Hydra.Sources.Kernel.Lib.Eithers           as LibEithers
 import qualified Hydra.Sources.Kernel.Lib.Equality          as LibEquality
 import qualified Hydra.Sources.Kernel.Lib.Files             as LibFiles
+import qualified Hydra.Sources.Kernel.Lib.Functions         as LibFunctions
 import qualified Hydra.Sources.Kernel.Lib.Hashing           as LibHashing
 import qualified Hydra.Sources.Kernel.Lib.Lists              as LibLists
 import qualified Hydra.Sources.Kernel.Lib.Literals          as LibLiterals
@@ -113,6 +114,7 @@ kernelPrimaryTermsModules = [
   LibEithers.module_,
   LibEquality.module_,
   LibFiles.module_,
+  LibFunctions.module_,
   LibHashing.module_,
   LibLists.module_,
   LibLiterals.module_,
@@ -172,6 +174,7 @@ kernelLibModules = [
   LibDefaults.module_,
   LibEithers.module_,
   LibEquality.module_,
+  LibFunctions.module_,
   LibLists.module_,
   LibLiterals.module_,
   LibLogic.module_,

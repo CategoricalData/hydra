@@ -3,6 +3,7 @@
 module Hydra.Overlay.Haskell.Lib.Effects where
 
 import qualified Control.Monad as CM
+import qualified Data.Set as S
 import Prelude hiding (foldl, map, pure)
 import qualified Prelude as P
 
@@ -19,6 +20,10 @@ bind = (P.>>=)
 compose :: (a -> IO b) -> (b -> IO c) -> a -> IO c
 compose f g = \x -> f x P.>>= g
 
+-- | Left-fold over a list with an effect-returning function. (Alias of foldl.)
+foldList :: (a -> b -> IO a) -> a -> [b] -> IO a
+foldList = CM.foldM
+
 -- | Left-fold over a list with an effect-returning function.
 foldl :: (a -> b -> IO a) -> a -> [b] -> IO a
 foldl = CM.foldM
@@ -34,6 +39,10 @@ mapList = CM.mapM
 -- | Map an effect-returning function over an optional.
 mapOptional :: (a -> IO b) -> Maybe a -> IO (Maybe b)
 mapOptional = CM.mapM
+
+-- | Map an effect-returning function over a set.
+mapSet :: Ord b => (a -> IO b) -> S.Set a -> IO (S.Set b)
+mapSet f s = P.fmap S.fromList (CM.mapM f (S.toList s))
 
 -- | Lift a pure value into an effect.
 pure :: a -> IO a

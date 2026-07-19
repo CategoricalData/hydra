@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), map, null)
+import           Prelude hiding ((++), filter, map, null)
 import qualified Data.Set                    as S
 
 
@@ -30,8 +30,8 @@ module_ = Module {
     -- exposes the primitive's `Ord` element constraint, so these polymorphic defs need a concrete `Ord`
     -- type here to satisfy GHC. `Int` is arbitrary and carries no meaning — the emitted primitive is
     -- type-agnostic and fully polymorphic; only the Haskell typechecker sees the `Int`. See #467.
-    definitions = [delete, difference, empty, fromList, insert, intersection, map, member, null,
-                   singleton, size, toList, union, unions]
+    definitions = [delete, difference, empty, filter, fromList, insert, intersection, map, member,
+                   null, singleton, size, toList, union, unions]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -76,6 +76,15 @@ empty = define "empty" "The empty set."
   ["empty is the set with no elements.",
    "Requires an 'ordering' constraint on the element type.",
    "Total. Corresponds to Haskell's Data.Set.empty :: Set a."]
+
+filter :: PrimitiveDefinition
+filter = defineWithDefault "filter" "Filter a set by a predicate."
+  (setOp ((sx Types.~> Types.boolean) Types.~> ssx Types.~> ssx))
+  ["filter(p, s) returns the subset of s containing exactly the elements x for which p(x) is true.",
+   "Requires an 'ordering' constraint on the element type.",
+   "Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a."]
+  (("p" ~> "s" ~> (Sets.fromList (Lists.filter (var "p") (Sets.toList (var "s" :: TypedTerm (S.Set Int)))) :: TypedTerm (S.Set Int)))
+    :: TypedTerm ((Int -> Bool) -> S.Set Int -> S.Set Int))
 
 fromList :: PrimitiveDefinition
 fromList = define "fromList" "Construct a set from a list of elements (duplicates removed)."

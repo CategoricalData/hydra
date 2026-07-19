@@ -31,7 +31,7 @@ module_ = Module {
               []
               Nothing)}
   where
-    definitions = [isAlphaNum, isLower, isSpace, isUpper, toLower, toUpper]
+    definitions = [isAlpha, isAlphaNum, isDigit, isLower, isSpace, isUpper, toLower, toUpper]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -44,6 +44,16 @@ intToBool = sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
 intToInt :: TermSignature
 intToInt = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
 
+isAlpha :: PrimitiveDefinition
+isAlpha = define "isAlpha" "Check whether a character is alphabetic." intToBool
+  ["True if the argument is a Unicode letter — any of the general categories L* (Lu, Ll, Lt, Lm, Lo) —\
+   \ and false otherwise.",
+   "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range\
+   \ [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+   "Alphabetic is broader than cased: letters in scripts without a case distinction are included.\
+   \ isAlphaNum is true whenever isAlpha is true.",
+   "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."]
+
 isAlphaNum :: PrimitiveDefinition
 isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric." intToBool
   ["True if the argument is a Unicode letter or digit, false otherwise.",
@@ -51,6 +61,14 @@ isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric." in
    \ [0, 0x10FFFF] yield an implementation-defined result (typically false).",
    "The classification is based on Unicode general categories (any of L*, Nd, Nl, No).",
    "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."]
+
+isDigit :: PrimitiveDefinition
+isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit." intToBool
+  ["True if the argument is one of the ten code points '0' through '9' (U+0030 to U+0039), and false\
+   \ otherwise.",
+   "Unlike the other predicates in this module, this one is deliberately ASCII-only: decimal digits\
+   \ outside the ASCII range (general category Nd) are rejected here, though isAlphaNum accepts them.",
+   "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."]
 
 isLower :: PrimitiveDefinition
 isLower = define "isLower" "Check whether a character is lowercase." intToBool

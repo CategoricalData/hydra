@@ -10,10 +10,10 @@ import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), either, foldl, map)
+import           Prelude hiding ((++), either, foldl, map, pure)
 import qualified Data.Set                    as S
 
 
@@ -31,8 +31,9 @@ module_ = Module {
     -- generated `Hydra.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`) exposes the primitive's `Ord`
     -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
     -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
-    definitions = [bimap, bind, either, foldl, fromLeft, fromRight, isLeft, isRight, lefts,
-                   map, mapList, mapOptional, mapSet, partitionEithers, rights]
+    definitions = [apply, bimap, bind, compose, either, foldList, foldl, fromLeft, fromRight, isLeft,
+                   isRight, lefts, map, mapList, mapOptional, mapSet, partition, partitionEithers, pure,
+                   rights]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -49,6 +50,20 @@ tw = Types.var "w"
 
 ee :: Type -> Type -> Type
 ee = Types.either_
+
+apply :: PrimitiveDefinition
+apply = defineWithDefault "apply" "Applicative apply for either: combine a function under either and an argument under either."
+  (sig $ TypeScheme [Name "x", Name "y", Name "z"]
+    (ee tx (ty Types.~> tz) Types.~> ee tx ty Types.~> ee tx tz) Nothing)
+  ["apply(ef, ex) returns right(f(x)) when ef is right(f) and ex is right(x).",
+   "If either argument is a left, the result is that left; when both arguments are left, the first\
+  \ (function-side) left is returned — first error wins, and ex is not consulted once ef is known to\
+  \ be a left.",
+   "apply(ef, ex) is bind(ef, \\f -> map(f, ex)); this defining equation is the specification, and the\
+  \ default implementation.",
+   "Total. Corresponds to Haskell's (<*>) :: Either a (b -> c) -> Either a b -> Either a c."]
+  ("ef" ~> "ex" ~>
+    Eithers.bind (var "ef") ("f" ~> Eithers.map (var "f") (var "ex")))
 
 bimap :: PrimitiveDefinition
 bimap = defineWithDefault "bimap" "Map over both sides of an either value."
@@ -78,6 +93,17 @@ bind = defineWithDefault "bind" "Bind (flatMap) for either: if Right, apply the 
       (var "f")
       (var "e"))
 
+compose :: PrimitiveDefinition
+compose = defineWithDefault "compose" "Kleisli composition for either."
+  (sig $ TypeScheme [Name "x", Name "y", Name "z", Name "w"]
+    ((tx Types.~> ee tw ty) Types.~> (ty Types.~> ee tw tz) Types.~> tx Types.~> ee tw tz) Nothing)
+  ["compose(f, g, x) is bind(f(x), g); this defining equation is the specification, and the default\
+  \ implementation.",
+   "If either f(x) or the second stage produces a left, the result is that left.",
+   "Total. Corresponds to Kleisli composition (>=>) specialised to Either with a fixed Left type."]
+  ("f" ~> "g" ~> "x" ~>
+    Eithers.bind (var "f" @@ var "x") (var "g"))
+
 either :: PrimitiveDefinition
 either = define "either" "Eliminate an either value by applying one of two functions."
   (sig $ TypeScheme [Name "x", Name "y", Name "z"]
@@ -86,6 +112,22 @@ either = define "either" "Eliminate an either value by applying one of two funct
    "The fundamental eliminator for the either type; every other primitive in this namespace can be\
   \ derived from it.",
    "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."]
+
+foldList :: PrimitiveDefinition
+foldList = defineWithDefault "foldList" "Left-fold over a list with an Either-returning function, short-circuiting on Left."
+  (sig $ TypeScheme [Name "x", Name "y", Name "z"]
+    ((tx Types.~> ty Types.~> ee tz tx) Types.~> tx Types.~> Types.list ty Types.~> ee tz tx) Nothing)
+  ["foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each\
+  \ application may fail with Left e: it iterates while f returns Right, propagates Left on the first\
+  \ failure, and returns Right (final accumulator) if all elements were processed.",
+   "New name for foldl (retained as a deprecated alias until the #417 breaking wave removes it).",
+   "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."]
+  ("f" ~> "acc0" ~> "xs" ~>
+    Lists.foldl
+      ("acc" ~> "el" ~>
+        Eithers.bind (var "acc") ("a" ~> var "f" @@ var "a" @@ var "el"))
+      (right (var "acc0"))
+      (var "xs"))
 
 foldl :: PrimitiveDefinition
 foldl = defineWithDefault "foldl" "Left-fold over a list with an Either-returning function, short-circuiting on Left."
@@ -230,6 +272,34 @@ partitionEithers = defineWithDefault "partitionEithers" "Partition a list of eit
           (var "e"))
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm b])))
       (var "xs"))
+
+partition :: PrimitiveDefinition
+partition = defineWithDefault "partition" "Partition a list of either values into lefts and rights."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    (Types.list (ee tx ty) Types.~> Types.pair (Types.list tx) (Types.list ty)) Nothing)
+  ["partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in\
+  \ original order and rights contains every Right value from xs in original order.",
+   "New name for partitionEithers (which is retained as a deprecated alias until the #417 breaking\
+  \ wave removes it).",
+   "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."]
+  ("xs" ~>
+    Lists.foldr
+      ("e" ~> "acc" ~>
+        Eithers.either
+          ("l" ~> pair (Lists.cons (var "l") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
+          ("r" ~> pair (Pairs.first $ var "acc") (Lists.cons (var "r") (Pairs.second $ var "acc")))
+          (var "e"))
+      (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm b])))
+      (var "xs"))
+
+pure :: PrimitiveDefinition
+pure = defineWithDefault "pure" "Wrap a value as a right."
+  (sig $ TypeScheme [Name "x", Name "y"] (ty Types.~> ee tx ty) Nothing)
+  ["pure(x) is right(x); this defining equation is the specification, and the default implementation.",
+   "This is the unit of the either monad; it exists so that code written generically over a monad can\
+  \ reach the unit.",
+   "Total. Corresponds to Haskell's pure / Right for Either."]
+  ("x" ~> right (var "x"))
 
 rights :: PrimitiveDefinition
 rights = defineWithDefault "rights" "Extract all Right values from a list of either values."
