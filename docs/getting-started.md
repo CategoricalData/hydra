@@ -219,7 +219,7 @@ main = case Validate.checkLiteral Core.LiteralTypeString (Core.LiteralString "he
 
 ## TypeScript
 
-Hydra publishes `hydra-kernel`, `hydra-typescript`, `hydra-pg`, and `hydra-rdf` to
+Hydra publishes `hydra-kernel`, `hydra-build`, `hydra-typescript`, `hydra-pg`, and `hydra-rdf` to
 [npm](https://www.npmjs.com/package/hydra-kernel). The packages are ESM (`"type": "module"`)
 with TypeScript type declarations included.
 
@@ -230,7 +230,7 @@ npm install hydra-kernel
 `hydra-kernel`'s root export is the kernel's `hydra/core` module; every other module is
 available as a subpath export (e.g. `hydra-kernel/dist/hydra/validate/core.js`).
 
-`hydra-typescript`, `hydra-pg`, and `hydra-rdf` are namespace packages with no single
+`hydra-build`, `hydra-typescript`, `hydra-pg`, and `hydra-rdf` are namespace packages with no single
 umbrella module, so they have no root (`.`) export — `import "hydra-rdf"` fails by design.
 Import specific submodules by subpath instead, e.g.
 `import { ... } from "hydra-rdf/dist/hydra/rdf/syntax.js"`.
