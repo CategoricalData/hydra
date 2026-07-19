@@ -79,21 +79,14 @@ and heterogeneous distributed systems.
 
 ## Releases
 
-The latest Hydra release is **0.17.0**. Published artifacts:
+Hydra publishes to Hackage (Haskell), Maven Central (Java and Scala), PyPI and conda-forge
+(Python), and npm (TypeScript). All Hydra packages share a single version number.
 
-| Channel | Packages |
-|---|---|
-| Hackage (Haskell) | [`hydra`](https://hackage.haskell.org/package/hydra) (umbrella), [`hydra-kernel`](https://hackage.haskell.org/package/hydra-kernel), [`hydra-haskell`](https://hackage.haskell.org/package/hydra-haskell) |
-| Maven Central (Java, group `net.fortytwo.hydra.java`) | [`hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-rdf) |
-| Maven Central (Scala 3, group `net.fortytwo.hydra.scala`) | [`hydra-kernel_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-kernel_3), [`hydra-scala_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-scala_3), [`hydra-rdf_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-rdf_3), and six more |
-| PyPI (Python) | [`hydra-kernel`](https://pypi.org/project/hydra-kernel/), [`hydra-python`](https://pypi.org/project/hydra-python/), [`hydra-pg`](https://pypi.org/project/hydra-pg/), [`hydra-rdf`](https://pypi.org/project/hydra-rdf/) |
-| conda-forge (Python) | [`hydra-kernel`](https://prefix.dev/channels/conda-forge/packages/hydra-kernel), [`hydra-python`](https://prefix.dev/channels/conda-forge/packages/hydra-python), [`hydra-pg`](https://prefix.dev/channels/conda-forge/packages/hydra-pg), [`hydra-rdf`](https://prefix.dev/channels/conda-forge/packages/hydra-rdf) |
-| npm (TypeScript) | [`hydra-kernel`](https://www.npmjs.com/package/hydra-kernel), [`hydra-typescript`](https://www.npmjs.com/package/hydra-typescript), [`hydra-pg`](https://www.npmjs.com/package/hydra-pg), [`hydra-rdf`](https://www.npmjs.com/package/hydra-rdf) |
-
-All Hydra packages share a single version number;
-see the [CHANGELOG](CHANGELOG.md) for release history and the
-[release policy](https://github.com/CategoricalData/hydra/wiki/Release-policy)
-for how releases are versioned and published.
+The **[Releases wiki page](https://github.com/CategoricalData/hydra/wiki/Releases)** is the
+authoritative, always-current list of published packages and their registry locations for the
+latest release. See the [CHANGELOG](CHANGELOG.md) for release history and the
+[release policy](https://github.com/CategoricalData/hydra/wiki/Release-policy) for how releases
+are versioned and published.
 
 ## Status
 
