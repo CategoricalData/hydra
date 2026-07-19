@@ -140,13 +140,66 @@ Each iteration:
 
 ### Cycle cadence
 
-- The next cycle may begin as soon as the push to `origin/main` succeeds; it
-  does not wait for CI to go green.
+- **The loop is pipelined, never serial. Idle-watching CI is a coordination
+  failure.** The moment a push to `origin/main` succeeds, begin assembling the
+  *next* batch immediately — CI validates batch N while you prepare N+1. Do not
+  block a new cycle on the prior push going green (only a *red* main gates a new
+  push, and even then you can keep preparing). If you ever find yourself with
+  nothing to do but wait for a CI run, you have skipped the landable sweep below
+  — there is almost always a ready branch to pull.
 - When a CI issue surfaces mid-cycle, decide case-by-case whether to **interrupt**
   the running `/sync`, `/test`, or `/bootstrap` to fix it now, or let the current cycle
   finish and fix it in the next one. **If in doubt, ask the user.**
 - This is the staging tier's own loop; promotion *into* staging still follows
   the cadence and conflict rules above (resolve conflicts in the source worktree).
+
+### Proactive coordination — staging drives, it does not wait
+
+**The staging agent is the machine's most important coordinator.** Issue agents
+coordinate their own subtrees (a `release_*` agent manages its issue tree), but
+staging sits *above* all of them: it drives the entire promotion ladder to
+`origin/main`, adjudicates red-main, and owns every top-level, non-issue and
+cross-machine duty ([two homes for all work](agent-hierarchy.md#two-homes-for-all-work)).
+Every subtree's work — no matter which coordinator produced it — ultimately flows
+through staging to land. That makes staging the single hub the whole fleet depends
+on, and it has a sharp consequence: **when staging idles, nothing lands.** A stalled
+issue agent blocks one issue; a stalled staging agent blocks the machine.
+
+Because of that, coordination here is **active**: staging contacts the fleet on a
+cadence rather than waiting to be contacted. Treating "no one pinged me" as "nothing
+to do" is the characteristic — and most damaging — failure of this role. On a regular
+tick (every ~20–30 min, even when quiet), sweep:
+
+1. **Landable sweep — the heart of the loop.** Enumerate *every* worktree with
+   commits ahead of `origin/main` (not just `integration`; the whole fleet). For
+   each, check whether it is a clean, rebased-onto-current-`main`, no-`WIP:`,
+   owner-accepted branch ready to land. **Land clean ones now** (full
+   read-before-push each). If a branch is *almost* ready — stale base needs a
+   re-bump, or `WIP:` needs squashing — **ping its agent** to rebase/de-WIP and
+   hand you the SHA. Do not wait for a handover message; go look. Keep a batch
+   flowing at all times.
+2. **Poll the coordinators and any parentless worktrees.** Actively check on
+   `release_508`, `release_509`, the feature coordinators, and any unmanaged
+   worktree — even if they have been silent. Ask a silent coordinator for its
+   status (coordinate *with* a release coordinator's tree; don't reach into its
+   children). Deliver stuck input (the tmux paste-quirk swallows trailing Enters),
+   answer anyone blocked on a staging decision, and nudge the stalled.
+3. **Surface blockers to the user, promptly.** When a sweep turns up something
+   that only the user can unblock — a user-gated GitHub write an agent is waiting
+   on, a decision holding up the fleet, a design choice — **raise it immediately**,
+   don't let it sit until asked. A blocker the user never hears about is a stall
+   the user cannot fix.
+4. **Verify machine state before slot answers.** Before telling any agent "the
+   build slot is clear," actually `pgrep` for heavy builds (`sync.sh` / `stack
+   build` / `stack test`) across *all* worktrees — a build you are not tracking
+   still consumes the fleet-wide slot (§5, one heavy Haskell build at a time).
+5. **Scan for new sessions.** New agents get spawned without announcing to
+   staging; a periodic `tmux ls` against your known roster catches worktrees you
+   are not yet shepherding.
+
+A wall-clock timer (a cron/wakeup that re-arms itself) is the mechanism that keeps
+this tick alive — do not gate the sweep on a single event (like one CI run), or the
+loop dies when that event resolves and staging goes silent.
 
 ### Handling pulled WIP commits
 
