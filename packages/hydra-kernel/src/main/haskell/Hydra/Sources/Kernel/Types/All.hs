@@ -21,6 +21,7 @@ import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Packaging   as Packaging
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Regex       as Regex
 import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
 import qualified Hydra.Sources.Kernel.Types.System      as System
 import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
@@ -52,6 +53,7 @@ kernelTypesModules = [
   Packaging.module_,
   Parsing.module_,
   Query.module_,
+  Regex.module_,
   Relational.module_,
   System.module_,
   Tabular.module_,
