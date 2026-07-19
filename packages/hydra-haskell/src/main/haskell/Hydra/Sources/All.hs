@@ -9,13 +9,11 @@ module Hydra.Sources.All(
   module Hydra.Sources.All,
   module Hydra.Sources.Kernel.Terms.All,
   module Hydra.Sources.Kernel.Types.All,
-  module Hydra.Sources.Test.All,
 ) where
 
 import Hydra.Kernel
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Sources.Test.All
 
 import qualified Hydra.Sources.Kernel.Manifest as KernelManifest
 import qualified Hydra.Sources.Haskell.Manifest as HaskellManifest

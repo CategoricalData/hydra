@@ -30,6 +30,7 @@ module Hydra.Sources.Ext (
 
 import Hydra.Kernel
 import Hydra.Sources.All
+import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Sources.Bench.Manifest as BenchManifest
 import qualified Hydra.Sources.Build.Manifest as BuildManifest
