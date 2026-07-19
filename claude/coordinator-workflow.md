@@ -92,13 +92,27 @@ Spawning is step 1 of a lifecycle the coordinator owns end to end.
 6. **Finalize the worktree** — the end-of-life step, distinct from
    terminating the process (step 4, which typically already happened). This is
    what waits for the appropriate time: once the staging cycle completes, the
-   change lands on `main`, **CI on the landing tip is green**, **and every child
-   issue is closed**. Three gates, all required:
+   change lands on `main`, **the resolving commit is covered by a green `[CI]`
+   run**, **and every child issue is closed**. Three gates, all required:
    - **Landed + green.** Not merely "pushed" — a push with red CI is not
      finalized. Key the CI check on the workflow *named* `[CI]`, not "the latest
      run": a fast auxiliary workflow (Dependency-Graph, JavaDocs) can show green
      while `[CI]` still runs, and mistaking it for `[CI]` green has caused a
      premature finalize.
+     - **Check green by ancestry, not by the landing-tip run.** On a busy
+       `main`, staging keeps pushing, so the `[CI]` run on the change's *own*
+       landing-tip commit is often superseded and cancelled — it may **never**
+       conclude, and waiting for it stalls the finalize forever. The change is
+       validated the moment **any** green `[CI]` run exists on a commit at or
+       after the resolving commit. Test it:
+       `git merge-base --is-ancestor <resolving-commit> <green-CI-commit>` — YES
+       means the green run's tree contains the change, so it's covered. Find the
+       resolving commit with `git log --oneline origin/main | grep 'Resolves
+       #<n>'` (or `For #<n>`), and the green commits with `gh run list --branch
+       main --workflow CI --json headSha,conclusion` filtered to
+       `conclusion == success`. A change that landed *after* the latest green run
+       is simply not-yet-covered — the next green `main` run covers it (it's an
+       ancestor of `main`); do not read "not-yet-covered" as "failed."
    - **All children closed.** The parent/child link is a blocking dependency
      (see [`agent-hierarchy.md`](agent-hierarchy.md#finalizing-a-parent-waits-for-its-children)):
      a parent issue cannot finalize while any child issue is open. An agent that
