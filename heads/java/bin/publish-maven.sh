@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Upload the Hydra Java per-package Maven Central distributions in dependency
-# order: leaves first.
+# Upload the Hydra Java Maven Central distributions as ONE aggregated Central
+# Portal deployment (#591).
 #
 # Java analog of heads/haskell/bin/publish-hackage.sh. The published artifacts
 # live under group net.fortytwo.hydra.java (#519). The Java publish set is:
@@ -8,31 +8,44 @@
 #   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg
 # (hydra-ext is intentionally excluded; see docs/release-workflow.md.)
 #
-# Each dist/java/<pkg>/ is a self-contained Gradle build whose generated
-# build.gradle carries the nmcp `publishAggregationToCentralPortal` task. There
-# is no single Gradle multi-project here, so we invoke gradle once per package.
+# Each dist/java/<pkg>/ is (still) an independently buildable Gradle build.
+# Publishing, however, goes through a generated ROOT aggregator build at
+# dist/java/{settings,build}.gradle (bin/lib/generate-java-package-build.py
+# --root-aggregator) that includes every PUBLISH_SET package as a subproject
+# and bundles all of their nmcp publications into ONE Central Portal
+# deployment — one ~8 min validation cycle total, not one per package (#591).
+# This restructure was necessary: nmcp's aggregation plugin only resolves
+# project(":path") references within a single settings.gradle project tree;
+# Gradle composite builds (includeBuild) are not supported for this purpose
+# (confirmed against nmcp 1.6.1 source during #591 investigation).
 #
 # Two safety properties (mirroring the Hackage script):
 #   1. DEPENDENCY CLOSURE: every Hydra package any published package depends on
 #      must itself be in the publish set, else publishing strands it on Central.
-#   2. LEAVES-FIRST ORDER: a dependency is always uploaded before its dependents,
-#      so consumers' transitive POM resolution is satisfiable.
+#   2. LEAVES-FIRST ORDER: a dependency is always built+locally-published before
+#      its dependents, so consumers' transitive POM resolution is satisfiable.
+#      (The final aggregated upload itself has no "order" — it is one upload.)
 #
-# Central Portal note: the generated build sets publishingType = USER_MANAGED, so
-# an upload lands as a reviewable *pending deployment* in the Central Portal UI
-# (the analog of a Hackage candidate). Nothing goes live until you click
-# "Publish" per deployment at https://central.sonatype.com/publishing/deployments.
-# There is therefore no separate --publish flag here: --upload IS the candidate
-# step; finalization is the manual UI click.
+# Central Portal note: the root aggregator sets publishingType = AUTOMATIC, so
+# the single aggregated upload auto-publishes with no manual Central Portal UI
+# step — this is the entire point of aggregating (#591). There is no --publish
+# flag: --upload performs the complete upload-and-publish in one step.
 #
 # Usage:
 #   publish-maven.sh [--upload] [--package <pkg>]
 #
 #   (default)       dry run: verify JDK + creds + dependency closure + that each
 #                   build.gradle resolves; build artifacts locally; NO upload.
-#   --upload        run `gradle publishAggregationToCentralPortal` per package in
-#                   order (uploads pending deployments to the Central Portal).
-#   --package <pkg> restrict to a single package (must still be in the set).
+#   --upload        build+publishToMavenLocal every package (leaves first), then
+#                   run ONE `gradle publishAggregationToCentralPortal` at the
+#                   root aggregator (uploads + auto-publishes every package as a
+#                   single Central Portal deployment).
+#   --package <pkg> restrict the BUILD step to a single package (must still be
+#                   in the set). The aggregated upload itself always covers the
+#                   full PUBLISH_SET — a single-package Central Portal
+#                   deployment defeats the purpose of aggregating; use this
+#                   only to iterate on one package's build before a real
+#                   publish run.
 #
 # Requirements:
 #   - JDK 17+ to RUN gradle (the nmcp plugin requires it, even though artifacts
@@ -60,6 +73,13 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+if [ "$DO_UPLOAD" = true ] && [ -n "$ONLY_PKG" ]; then
+    echo "ERROR: --upload with --package is not supported — a single-package Central" >&2
+    echo "       Portal deployment defeats the purpose of aggregating (#591). Drop" >&2
+    echo "       --package, or use --package alone (no --upload) to iterate on a build." >&2
+    exit 1
+fi
+
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
 # The 0.16.1 Java publish set, in LEAVES-FIRST topological order.
@@ -78,6 +98,7 @@ PUBLISH_SET=(
 )
 
 GRADLE_TASK="publishAggregationToCentralPortal"
+ROOT_AGGREGATOR_DIR="$HYDRA_ROOT/dist/java"
 
 # --- Guard: JDK 17+ ----------------------------------------------------------
 # The nmcp plugin fails to load under JDK 11. Catch this before any upload.
@@ -165,21 +186,27 @@ echo ""
 for pkg in "${PUBLISH_SET[@]}"; do
     [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
     pkgdir="$HYDRA_ROOT/dist/java/$pkg"
-    if [ "$DO_UPLOAD" = true ]; then
-        echo "=== gradle $GRADLE_TASK  ($pkg @ $VERSION) ==="
-        ( cd "$pkgdir" && gradle "$GRADLE_TASK" )
-    else
-        echo "=== [dry run] gradle build  ($pkg @ $VERSION) — verifying artifacts assemble, no upload ==="
-        ( cd "$pkgdir" && gradle build -x test --refresh-dependencies )
-    fi
+    echo "=== gradle build  ($pkg @ $VERSION) — verifying artifacts assemble ==="
+    ( cd "$pkgdir" && gradle build -x test --refresh-dependencies )
     echo ""
 done
 
 if [ "$DO_UPLOAD" = true ]; then
-    echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as pending deployments. ==="
-    echo "Finalize at https://central.sonatype.com/publishing/deployments —"
-    echo "verify each passed validation, then click Publish (leaves first)."
-    echo "Expected deployment order:"
+    # --- Generate the root aggregator build (#591) ---------------------------
+    # Regenerated fresh on every --upload run so it always reflects the current
+    # PUBLISH_SET and version, mirroring the per-package build.gradle freshness
+    # check above.
+    echo "=== Generating root aggregator build (dist/java/{settings,build}.gradle) ==="
+    HYDRA_ROOT_DIR="$HYDRA_ROOT" "$HYDRA_ROOT/bin/lib/generate-java-package-build.py" \
+        --root-aggregator "${PUBLISH_SET[@]}" --out-dir "$ROOT_AGGREGATOR_DIR"
+    echo ""
+
+    echo "=== gradle $GRADLE_TASK  (aggregated: ${#PUBLISH_SET[@]} packages @ $VERSION) ==="
+    ( cd "$ROOT_AGGREGATOR_DIR" && gradle "$GRADLE_TASK" )
+    echo ""
+    echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as ONE aggregated deployment. ==="
+    echo "publishingType = AUTOMATIC: validates once (~8 min) then auto-publishes — no manual"
+    echo "Central Portal UI step required. Packages in the deployment:"
     printf '  %s\n' "${PUBLISH_SET[@]}"
 else
     echo "=== Dry run complete (no upload). Re-run with --upload to push to the Central Portal. ==="

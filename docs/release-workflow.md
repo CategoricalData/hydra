@@ -544,22 +544,25 @@ The following are Java-specific release steps:
     ```
   * **Use the orchestrator** `heads/java/bin/publish-maven.sh` (analogous to
     `publish-hackage.sh`). It checks the JDK + credentials + dependency closure, refreshes
-    each package into `~/.m2` leaves-first, then runs `publishAggregationToCentralPortal` per
-    package. Default is a build-only dry run; `--upload` does the real Central upload:
+    each package into `~/.m2` leaves-first, then regenerates a **root aggregator** Gradle build
+    (`bin/lib/generate-java-package-build.py --root-aggregator`, #591) that includes every
+    published package as a subproject and runs `publishAggregationToCentralPortal` **once**
+    at the root. Default is a build-only dry run; `--upload` does the real Central upload:
     ```bash
     export JAVA_HOME=$(/usr/libexec/java_home -v 19)   # JDK 17+ required (nmcp plugin)
     heads/java/bin/publish-maven.sh                    # dry run: build all published artifacts, no upload
-    heads/java/bin/publish-maven.sh --upload           # upload pending deployments
+    heads/java/bin/publish-maven.sh --upload           # upload + auto-publish, as ONE deployment
     ```
-    Or manually, in dependency order, from each `dist/java/<pkg>/`:
+    Or manually, from the generated root aggregator at `dist/java/`:
     ```bash
-    cd dist/java/hydra-kernel && gradle publishAggregationToCentralPortal   # then rdf, pg, java
+    cd dist/java && gradle publishAggregationToCentralPortal   # all packages, one deployment
     ```
     The task chain is: build the jar + Javadoc + sources jars, generate a signed POM,
-    package everything into a Central Portal-shaped zip, and upload it via the publisher API.
-    The generated `build.gradle` sets `publishingType = "USER_MANAGED"`,
-    so each upload lands in the Central Portal UI as a separate pending deployment for review
-    (the analog of a Hackage candidate — nothing is live until you click Publish).
+    package every included package into ONE Central Portal-shaped zip, and upload it via the
+    publisher API. The root aggregator sets `publishingType = "AUTOMATIC"` (#591), so the single
+    upload auto-publishes — one ~8 minute validation cycle covering all packages, with no manual
+    Central Portal UI step (this replaced an earlier per-package flow that produced eleven
+    separate `USER_MANAGED` deployments requiring eleven manual "Publish" clicks).
   * **Stale `~/.m2` trap (important).** Across a pre-release cycle the version string
     (e.g. `0.16.0`) does not change, so a previously-built same-version jar can linger in
     `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra.java:hydra-kernel:0.16.0'`
@@ -578,8 +581,10 @@ The following are Java-specific release steps:
     `heads/java/bin/javadoc-nonfatal.init.gradle` for that run only (the generated build.gradle stays
     strict, so a plain `gradle build` keeps failing on #449 until it is fixed). Remove the flag and
     the init script once #449 lands.
-  * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
-    Find the eleven deployments, verify they have passed validation, then click "Publish" on each.
+  * `publishingType = AUTOMATIC` auto-publishes once validation passes, so no manual Central
+    Portal UI step is required (#591). You can still check
+    [Deployments](https://central.sonatype.com/publishing/deployments) to confirm the single
+    aggregated deployment validated and published successfully.
 
 It will take a short time (a couple of minutes) for validation,
 and a longer time (as little as 15 minutes, or as much as nearly an hour) for promotion,
@@ -649,14 +654,17 @@ The following are Scala-specific release steps:
   Default is a dry run (builds jars locally, no upload); `--upload` does the real Central upload:
   ```bash
   heads/scala/bin/publish-sbt.sh             # dry run: build all jars, no upload
-  heads/scala/bin/publish-sbt.sh --upload    # upload pending deployments
+  heads/scala/bin/publish-sbt.sh --upload    # upload + auto-publish, as ONE deployment
   ```
   The orchestrator checks dependency closure, publishes each package to the local ivy cache
   leaves-first (so downstream builds resolve fresh siblings), then runs `sbt publishSigned`
-  per package in topological order.
-* Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
-  Find the ten deployments, verify they have passed validation, then click "Publish" on each
-  (leaves first).
+  per package — each package **stages** into a shared `sonatypeBundleDirectory`
+  (`bin/lib/generate-scala-package-build.py`, #591) rather than uploading individually. A single
+  trailing `sbt sonatypeBundleRelease` then uploads every package's staged artifacts as ONE
+  Central Portal deployment. sbt-sonatype's default `publishingType = AUTOMATIC` means this one
+  upload auto-publishes — one ~8 minute validation cycle covering all packages, with no manual
+  Central Portal UI step (this replaced an earlier per-package flow where each of the ten/eleven
+  `sonatypeBundleRelease` calls blocked through its own ~8 minute cycle, serially).
 * **Self-containment gate (#537):** `heads/scala/bin/verify-distribution.sh` publishes the publish
   set to a temp Ivy repo (`sbt --ivy <tmp>`) and builds a throwaway sbt consumer against the
   published `_3` coordinates, proving each jar carries the classes its API needs in isolation from
