@@ -77,6 +77,23 @@ where the same queries/programs need to produce identical results against the sa
 database clients which expose the same API and validation logic in different languages,
 and heterogeneous distributed systems.
 
+## Specification
+
+Hydra has an independent, implementation-agnostic specification: the normative,
+implementer-facing reference for the language — the data model, textual syntax, type
+system, validation, the standard primitive library, and the interchange formats. It
+states what a conforming implementation MUST do, and is the reference against which all
+of the heads above are measured (no single implementation is "the reference"). It is
+distinct from the explanatory [wiki](https://github.com/CategoricalData/hydra/wiki) and
+the implementation-facing [`docs/`](docs/) tree.
+
+The specification is a work in progress (currently **Draft**):
+
+- [Specification index](docs/specification/index.md) — scope, conformance, versioning,
+  and table of contents
+- [Textual syntax](docs/specification/syntax.md) — the syntax of terms, types, and their
+  dependencies
+
 ## Releases
 
 Hydra publishes to Hackage (Haskell), Maven Central (Java and Scala), PyPI and conda-forge
@@ -107,22 +124,22 @@ For how well-supported each language is — a support-tier model
 self-hosting, runtime completeness, authoring, and published artifacts — see
 [Language support](https://github.com/CategoricalData/hydra/wiki/Language-support) on the wiki.
 
-| Head | Status | Notes |
+| Head | Status | Description |
 |---|---|---|
-| [Haskell](packages/hydra-haskell/README.md) | Complete | Hydra's original bootstrapping language and reference implementation. ([Haskell](https://www.haskell.org/)) |
-| [Java](packages/hydra-java/README.md) | Complete | ([Java](https://www.java.com/)) |
-| [Python](packages/hydra-python/README.md) | Complete | ([Python](https://www.python.org/)) |
-| [Scala](packages/hydra-scala/README.md) | Complete | ([Scala](https://www.scala-lang.org/)) |
-| [Clojure](packages/hydra-lisp/hydra-clojure/README.md) | Complete | A Lisp dialect on the JVM. ([Clojure](https://clojure.org/)) |
-| [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | ([Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language))) |
-| [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | ([Common Lisp](https://common-lisp.net/)) |
-| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the hydra-kernel test suite; still maturing as a self-hosting host. ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
-| [TypeScript](packages/hydra-typescript/README.md) | Complete | Self-hosts and passes the hydra-kernel test suite; published to npm. ([TypeScript](https://www.typescriptlang.org/)) |
-| [Go](packages/hydra-go/README.md) | In progress | A "head bud": kernel code generation works, but the hand-written Go runtime is still stubbed out, and Go does not yet host the test suite. ([Go](https://go.dev/)) |
-| [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Coder lives in `hydra-ext`; the Rust head has not yet been split into its own package. ([Rust](https://www.rust-lang.org/)) |
-| [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target; there is no Coq-side runtime. ([Coq](https://coq.inria.fr/)) |
-| [WebAssembly](packages/hydra-wasm/README.md) | In progress | ([WebAssembly](https://webassembly.org/)) |
-| [C++](packages/hydra-ext/src/main/haskell/Hydra/Sources/Cpp) | In progress | Coder lives in `hydra-ext`; the C++ head has not yet been split into its own package. ([C++](https://isocpp.org/)) |
+| [Haskell](packages/hydra-haskell/README.md) | Complete | Complete implementation and a build host: the kernel DSLs are authored in Haskell and Hydra code-generates itself from them, so Haskell both self-hosts and drives the build. Published to Hackage. |
+| [Java](packages/hydra-java/README.md) | Complete | Complete implementation and a build host: self-hosts and its native coder generates Hydra into the JVM. Published to Maven Central. |
+| [Scala](packages/hydra-scala/README.md) | Complete | Complete implementation and a build host: self-hosts on the JVM and its native coder participates in the build. Published to Maven Central. |
+| [Python](packages/hydra-python/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Published to PyPI and conda-forge. |
+| [TypeScript](packages/hydra-typescript/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Published to npm. |
+| [Clojure](packages/hydra-lisp/hydra-clojure/README.md) | Complete | Complete implementation: self-hosts on the JVM and passes the hydra-kernel test suite. Shares the Lisp-family coder. |
+| [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Shares the Lisp-family coder. |
+| [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Shares the Lisp-family coder. |
+| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the hydra-kernel test suite as a target; still maturing as a self-hosting host. Shares the Lisp-family coder. |
+| [Go](packages/hydra-go/README.md) | In progress | A "head bud": kernel code generation works, but the hand-written Go runtime is still stubbed out and Go does not yet host the test suite. |
+| [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Generation target; the coder lives in `hydra-ext` and has not yet been split into its own head package. |
+| [C++](packages/hydra-ext/src/main/haskell/Hydra/Sources/Cpp) | In progress | Generation target; the coder lives in `hydra-ext` and has not yet been split into its own head package. |
+| [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target: Hydra emits Coq, but there is no Coq-side runtime. |
+| [WebAssembly](packages/hydra-wasm/README.md) | In progress | Generation-only target: an experimental WebAssembly coder with no host-side runtime yet. |
 
 ### Packages
 
