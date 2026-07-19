@@ -302,7 +302,11 @@ and confirmed by the cross-host formatting tests.
 - The canonical printer backtick-escapes a name if and only if
   one of the three interference cases of §2.4 holds.
 - Sets and maps print their elements and entries in **canonical order**:
-  ascending by the canonical total order on terms (the `ordering` class's order).
+  ascending by the canonical total order on terms — the `ordering` class's order,
+  specified in [ordering-and-equality.md](ordering-and-equality.md)
+  (one structural rule over records/unions/wrappers, per-type rules for literals and
+  built-in constructors; note the decimal tiebreak: numerically equal decimals order
+  by scale, smaller first, `1.1 < 1.10`).
 - Record and union fields print in declaration order (field order is meaningful).
 
 ## 5. Sibling notations (non-normative)
