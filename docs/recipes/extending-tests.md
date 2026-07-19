@@ -1,10 +1,10 @@
-# Extending the common test suite
+# Extending the hydra-kernel test suite
 
-This recipe explains how to extend Hydra's common test suite with new test cases.
+This recipe explains how to extend Hydra's hydra-kernel test suite with new test cases.
 
 ## Background
 
-Hydra's [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing#common-test-suite) is designed to run identically in all language
+Hydra's [hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing#hydra-kernel-test-suite) is designed to run identically in all language
 implementations (Haskell, Java, Python, Scala, and Lisp).
 Tests are written in Hydra's term-encoded DSL in [packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/][sources-test]
 and code-generated into each target language.
@@ -24,7 +24,7 @@ For more context on Hydra's testing strategy, see [Testing in Hydra](https://git
 
 ## Adding new tests (normal workflow)
 
-This is the standard way to add tests to the common test suite.
+This is the standard way to add tests to the hydra-kernel test suite.
 
 ### 1. Choose the appropriate test module
 
@@ -183,7 +183,7 @@ Common issues when tests fail:
 ## Migrating existing Haskell-specific tests
 
 This section covers the special case of migrating tests from Haskell-specific spec files (like `CheckingSpec.hs`) to
-the common test suite.
+the hydra-kernel test suite.
 This is **not the normal workflow** for adding tests - most tests should be written directly in
 [Sources/Test/](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test)
 as described above.
@@ -308,14 +308,14 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 ## See also
 
 - [Testing in Hydra](https://github.com/CategoricalData/hydra/wiki/Testing) - Complete testing documentation
-- [Common test suite](https://github.com/CategoricalData/hydra/wiki/Testing#common-test-suite) - Test suite structure and categories
+- [Hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing#hydra-kernel-test-suite) - Test suite structure and categories
 - [Adding new tests](https://github.com/CategoricalData/hydra/wiki/Testing#adding-new-tests) - Official guide for test creation
 
 ## Key files
 
 - [Typed/Terms.hs][tterms] - Term-encoded term constructors
 - [Typed/Types.hs][ttypes] - Term-encoded type constructors
-- [Sources/Test/][sources-test] - All common test suite modules
+- [Sources/Test/][sources-test] - All hydra-kernel test suite modules
   - [Checking/][test-checking] - Type checking tests
   - [Inference/][test-inference] - Type inference tests
   - [Lib/][test-lib] - Library primitive tests

@@ -44,7 +44,7 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** -
   The `packages/`, `heads/`, `dist/` layout
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** -
-  Common test suite documentation
+  Hydra-kernel test suite documentation
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
   Step-by-step guides
 - **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/syncing-python.md)** -
@@ -52,15 +52,15 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 
 ## Testing
 
-Hydra-Python has two types of tests: the **common test suite** (shared across all Hydra implementations)
+Hydra-Python has two types of tests: the **hydra-kernel test suite** (shared across all Hydra implementations)
 and **Python-specific tests**.
 See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing)
 for comprehensive documentation.
 
-### Common test suite
+### Hydra-kernel test suite
 
-The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
-**Passing all common test suite cases is the criterion for a true Hydra implementation.**
+The hydra-kernel test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
+**Passing all hydra-kernel test suite cases is the criterion for a true Hydra implementation.**
 
 To run all tests (from `heads/python/`):
 
@@ -68,7 +68,7 @@ To run all tests (from `heads/python/`):
 cd heads/python && pytest
 ```
 
-To run only the common test suite:
+To run only the hydra-kernel test suite:
 
 ```bash
 cd heads/python && pytest src/test/python/test_suite_runner.py
@@ -86,7 +86,7 @@ The test suite is generated from Hydra DSL sources and includes:
 ### Python-specific tests
 
 Python-specific tests validate implementation details and Python-specific functionality.
-These are located in `heads/python/src/test/python/` alongside the common test suite runner.
+These are located in `heads/python/src/test/python/` alongside the hydra-kernel test suite runner.
 
 To run a specific test file:
 

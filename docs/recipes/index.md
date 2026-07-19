@@ -18,7 +18,7 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 
 ### Testing
 
-- **[Extending the common test suite](extending-tests.md)** - How to add new test cases to Hydra's cross-language test suite.
+- **[Extending the hydra-kernel test suite](extending-tests.md)** - How to add new test cases to Hydra's cross-language test suite.
 
 ### Implementations
 

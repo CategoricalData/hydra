@@ -60,7 +60,7 @@ source language.
 Nine implementations have this property today — Haskell (Hydra's original bootstrapping
 language), Java, Python, Scala, TypeScript, and four dialects of Lisp (Clojure, Scheme,
 Common Lisp, and Emacs Lisp) —
-and all of them pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing)
+and all of them pass the [hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing)
 under every bootstrapping path. TypeScript, Emacs Lisp, and (like Scala and Lisp) the JVM
 Lisp dialects self-host in the two load-bearing pillars — running as a codegen target and as a
 codegen host — but do not yet author Hydra DSL sources in their own language; only Haskell,
@@ -68,7 +68,7 @@ Java, Python, and Scala do all three today.
 Additional ports are in active development; see the [Implementations](#implementations) table below
 for the full set.
 
-The common test suite is what makes translingual programming load-bearing rather than
+The hydra-kernel test suite is what makes translingual programming load-bearing rather than
 aspirational: it ensures every program behaves the same when translated into each supported language,
 which is essential in heterogeneous environments where the same logic must be manifested identically
 across more than one programming language.
@@ -123,8 +123,8 @@ self-hosting, runtime completeness, authoring, and published artifacts — see
 | [Clojure](packages/hydra-lisp/hydra-clojure/README.md) | Complete | A Lisp dialect on the JVM. ([Clojure](https://clojure.org/)) |
 | [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | ([Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language))) |
 | [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | ([Common Lisp](https://common-lisp.net/)) |
-| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the common test suite; still maturing as a self-hosting host. ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
-| [TypeScript](packages/hydra-typescript/README.md) | Complete | Self-hosts and passes the common test suite; published to npm. ([TypeScript](https://www.typescriptlang.org/)) |
+| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the hydra-kernel test suite; still maturing as a self-hosting host. ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
+| [TypeScript](packages/hydra-typescript/README.md) | Complete | Self-hosts and passes the hydra-kernel test suite; published to npm. ([TypeScript](https://www.typescriptlang.org/)) |
 | [Go](packages/hydra-go/README.md) | In progress | A "head bud": kernel code generation works, but the hand-written Go runtime is still stubbed out, and Go does not yet host the test suite. ([Go](https://go.dev/)) |
 | [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Coder lives in `hydra-ext`; the Rust head has not yet been split into its own package. ([Rust](https://www.rust-lang.org/)) |
 | [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target; there is no Coq-side runtime. ([Coq](https://coq.inria.fr/)) |

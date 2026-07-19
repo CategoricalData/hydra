@@ -11,7 +11,7 @@ Hydra-Lisp has four dialects (Clojure, Scheme, Common Lisp, and Emacs Lisp) shar
 but with distinct bootstrapping heads.
 All six implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs),
 support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib),
-and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+and pass the [hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 The six implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
 (see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/demos/bootstrapping)).
@@ -562,7 +562,7 @@ These are language-specific representations of Hydra's core algebraic types:
 
 ## Step 9: Create test runners
 
-Hydra includes a common test suite which is intended to be evaluated in the same way across
+Hydra includes a hydra-kernel test suite which is intended to be evaluated in the same way across
 implementations, ensuring parity. The sources for the test suite can be found in the Haskell DSL at
 [Hydra/Sources/Test](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test).
 
@@ -570,7 +570,7 @@ See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testin
 
 ### Universal test cases
 
-The common test suite uses **universal test cases** -- each test case is defined once and produces
+The hydra-kernel test suite uses **universal test cases** -- each test case is defined once and produces
 both a kernel-style test (where `reduceTerm` evaluates the test expression) and a generation-style
 test (where the target runtime evaluates natively generated code). Both styles are generated to
 `dist/<lang>/hydra-kernel/src/test/<lang>/` from a single source definition.
@@ -599,7 +599,7 @@ counted as failures, matching Python's `is_disabled(tcase)` behavior. The relate
 `disabledForMinimalInference` tag is *not* a universal skip — it only applies to heads using the
 minimal inference variant.
 
-**Passing all test cases in the common test suite (both kernel and generation evaluation) is the
+**Passing all test cases in the hydra-kernel test suite (both kernel and generation evaluation) is the
 criterion for a complete Hydra implementation.**
 
 ### Examples of test runners

@@ -2,7 +2,7 @@
 
 This directory contains a **complete Java implementation** of Hydra.
 Hydra-Java passes all tests in the
-[common test suite](https://github.com/CategoricalData/hydra/wiki/Testing),
+[hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing),
 ensuring identical behavior with Hydra-Haskell and Hydra-Python.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
@@ -80,20 +80,20 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** -
   The `packages/`, `heads/`, `dist/` layout
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** -
-  Common test suite documentation
+  Hydra-kernel test suite documentation
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
   Step-by-step guides
 
 ## Testing
 
-Hydra-Java has two types of tests: the **common test suite** (shared across all Hydra implementations)
+Hydra-Java has two types of tests: the **hydra-kernel test suite** (shared across all Hydra implementations)
 and **Java-specific tests**.
 See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
 
-### Common Test Suite
+### hydra-kernel test suite
 
-The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
-**Passing all common test suite cases is the criterion for a true Hydra implementation.**
+The hydra-kernel test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
+**Passing all hydra-kernel test suite cases is the criterion for a true Hydra implementation.**
 
 To run all tests:
 
@@ -114,7 +114,7 @@ The test suite is generated from Hydra DSL sources and includes:
 ### Java-Specific Tests
 
 Java-specific tests validate implementation details and Java-specific functionality.
-These are located in `src/test/java/` alongside the common test suite runner.
+These are located in `src/test/java/` alongside the hydra-kernel test suite runner.
 
 To run a specific test class:
 
@@ -156,7 +156,7 @@ Hydra's Java code is split across three locations
   - `hydra/inference/`, `hydra/checking/`
 
 - **Generated Java test suite** (`dist/java/hydra-kernel/src/test/java/`) —
-  the common test suite compiled into Java.
+  the hydra-kernel test suite compiled into Java.
 
 ## Generate Java code
 

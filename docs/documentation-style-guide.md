@@ -220,7 +220,7 @@ wiki/                                # Separate Git repo (user-facing design doc
 ├── Coding-style.md                  # Conventions for kernel + DSL sources
 ├── Property-graphs.md               # PG data model + mappings
 ├── RDF.md                           # RDF / SHACL / OWL design
-├── Testing.md                       # Common test suite design
+├── Testing.md                       # Hydra-kernel test suite design
 ├── Benchmarking.md                  # Inference benchmark design
 ├── Release-policy.md                # Release policy (versioning + publish targets)
 └── ...

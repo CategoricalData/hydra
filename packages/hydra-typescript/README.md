@@ -4,7 +4,7 @@ A TypeScript implementation of the [Hydra](https://github.com/CategoricalData/hy
 system and kernel.
 
 **Status:** TypeScript is a full Hydra implementation.
-As a **target**, the kernel passes the full common test suite
+As a **target**, the kernel passes the full hydra-kernel test suite
 (2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing).
 As a **host**, TypeScript drives code generation for all other supported targets
 (Haskell, Python, Scala, Clojure, Scheme, Common Lisp, Emacs Lisp, and Java)
@@ -51,7 +51,7 @@ This runs three phases:
 3. Copy the hand-written TS runtime (`heads/typescript/src/main/typescript/`)
    alongside the generated kernel so `./lib/...` imports resolve.
 
-To run the common test suite (vitest):
+To run the hydra-kernel test suite (vitest):
 
 ```bash
 cd heads/typescript

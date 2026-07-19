@@ -4,7 +4,7 @@ Hydra ships two complementary benchmark suites under `bin/`:
 
 | Bench               | Script                          | Measures                                              |
 |---------------------|---------------------------------|-------------------------------------------------------|
-| Kernel test suite   | `bin/run-benchmark-tests.sh`    | Wall-clock of the common test suite, per host         |
+| Kernel test suite   | `bin/run-benchmark-tests.sh`    | Wall-clock of the hydra-kernel test suite, per host         |
 | Cross-host inference | `bin/run-inference-bench.sh`   | Inference scaling on synthetic workloads, per host    |
 
 The two scripts share a CLI shape (`--hosts`, `--tag`, `dashboard`
@@ -28,7 +28,7 @@ empty/stub results that the dashboard then chokes on:
 
 ## Kernel-tests benchmark
 
-Runs the full common test suite under each requested host's test runner,
+Runs the full hydra-kernel test suite under each requested host's test runner,
 extracts per-group timing, and prints a side-by-side dashboard.
 
 ```bash

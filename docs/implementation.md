@@ -984,7 +984,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 **See also:**
 - [Property Graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) -
   Mapping Hydra schemas to property graphs with annotations
-- [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - How the common test suite validates coder parity
+- [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - How the hydra-kernel test suite validates coder parity
 
 ### Coder locations
 
@@ -1341,7 +1341,7 @@ The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
 
 - **Other modules** (`otherModules`) — Currently the YAML model and coder utilities.
 
-- **Test modules** (`testModules`) — The common test suite, compiled into each target
+- **Test modules** (`testModules`) — The hydra-kernel test suite, compiled into each target
   language as part of the sync process. Defined separately from `mainModules`.
 
 **Encoder/decoder source modules** are a special category of term modules that are
@@ -1591,7 +1591,7 @@ packages/hydra-kernel/src/main/haskell/Hydra/
     ├── Kernel/Types/       # Type modules (data shapes)
     ├── Kernel/Terms/       # Term modules (kernel functions)
     ├── Kernel/Lib/         # Primitive registry: PrimitiveDefinition per hydra.lib.<sub> module name
-    └── Test/               # Common test suite
+    └── Test/               # Hydra-kernel test suite
 
 packages/hydra-<lang>/src/main/haskell/Hydra/
 └── Sources/<Lang>/         # Per-language coder DSL sources (manual)

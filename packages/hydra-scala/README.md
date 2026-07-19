@@ -34,7 +34,7 @@ sbt console
 ## Testing
 
 ```bash
-# Common test suite against the assembled dist/scala distribution:
+# Hydra-kernel test suite against the assembled dist/scala distribution:
 heads/scala/bin/test-distribution.sh
 
 # Or, from packages/hydra-scala (tests resolve via build.sbt's unmanaged dirs):

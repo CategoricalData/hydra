@@ -9,7 +9,7 @@ modules via `bin/sync-go.sh`, but:
 
 - the coder has emission bugs and the generated output is not yet idiomatic;
 - the hand-written runtime under `heads/go/` is mostly placeholder;
-- Go does **not** currently host or pass the common test suite;
+- Go does **not** currently host or pass the hydra-kernel test suite;
 - Go does **not** yet participate in `bin/run-bootstrapping-demo.sh`.
 
 Track the work on [#289](https://github.com/CategoricalData/hydra/issues/289).
@@ -56,7 +56,7 @@ checked in (kernel and downstream packages alike) — regenerate as needed.
 
 `heads/go/bin/test-distribution.sh` runs `go build ./...` over the generated
 distribution as a compile smoke check. There are no `_test.go` files yet, so no
-assertions run — Go does not yet host the common test suite (see the status
+assertions run — Go does not yet host the hydra-kernel test suite (see the status
 note above).
 
 ## See also

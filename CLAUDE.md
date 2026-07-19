@@ -14,7 +14,7 @@ Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-gene
 into nine host languages spanning six implementation families:
 Haskell, Java, Python, Scala, TypeScript, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme —
 sharing one coder).
-All nine pass the common test suite as targets; Haskell, Java, Python, Scala, TypeScript, and the
+All nine pass the hydra-kernel test suite as targets; Haskell, Java, Python, Scala, TypeScript, and the
 JVM/native Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README
 implementation status).
 

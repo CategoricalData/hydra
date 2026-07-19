@@ -1,6 +1,6 @@
 # Hydra Test Suite Architecture
 
-This document explains the architecture of Hydra's common test suite,
+This document explains the architecture of Hydra's hydra-kernel test suite,
 including the test kernel pattern and how test modules are structured for code generation.
 
 ## Overview
@@ -540,9 +540,9 @@ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName")
 project (Core.name "Person") (Core.name "firstName")
 ```
 
-### 2. Keep the Common Test Suite Language-Agnostic
+### 2. Keep the hydra-kernel test suite language-agnostic
 
-The common test suite (`hydra.test.*`) must not depend on any `hydra.<domain>.*` module.
+The hydra-kernel test suite (`hydra.test.*`) must not depend on any `hydra.<domain>.*` module.
 Every test runner — Haskell, Java, Python, and future implementations — must be able
 to run the common tests without shipping language-specific extension modules. If a
 test needs data values that happen to exist in an extension module (e.g., operator

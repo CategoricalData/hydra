@@ -5,7 +5,7 @@ regenerate each other from a language-independent JSON representation.
 Each of Hydra's five bootstrapping hosts (Haskell, Java, Python, Scala, and TypeScript)
 can load Hydra modules from JSON and generate code for any target language, producing a
 matrix of generation paths — all of which produce functionally equivalent output that
-passes the common test suite. The Lisp dialects (Clojure, Common Lisp, Emacs Lisp, and
+passes the hydra-kernel test suite. The Lisp dialects (Clojure, Common Lisp, Emacs Lisp, and
 Scheme) are supported as targets only.
 
 This is a core part of Hydra's build and verification system, not just a demo.

@@ -13,7 +13,7 @@ For how this process measures up against Apache Software Foundation source-relea
 (signing, checksums, `NOTICE`, dependency-license attestation) and the gaps that remain, see
 [release-audit.md](release-audit.md).
 
-As of May 2026, eight complete Hydra hosts pass the common test suite: Hydra-Haskell, Hydra-Java,
+As of May 2026, eight complete Hydra hosts pass the hydra-kernel test suite: Hydra-Haskell, Hydra-Java,
 Hydra-Python, Hydra-Scala, Hydra-Clojure, Hydra-Common Lisp, Hydra-Scheme, and Hydra-Emacs Lisp.
 The four Lisp dialects share a single coder and serializer. Hydra-TypeScript graduated to a full
 head under [#126](https://github.com/CategoricalData/hydra/issues/126); Hydra-Go remains a head bud
@@ -458,7 +458,7 @@ The following are Haskell-specific release steps:
 
 ## Java releases
 
-Hydra-Java is a **complete Hydra implementation** that passes all tests in the common test suite.
+Hydra-Java is a **complete Hydra implementation** that passes all tests in the hydra-kernel test suite.
 It requires Java 11 or later.
 
 We have Java code in `packages/hydra-java` (DSL coder sources) and `heads/java/`
@@ -597,7 +597,7 @@ dependencies {
 
 ## Scala releases
 
-Hydra-Scala is a **complete Hydra implementation** that passes all tests in the common test suite.
+Hydra-Scala is a **complete Hydra implementation** that passes all tests in the hydra-kernel test suite.
 It requires Scala 3.3 or later and sbt 1.10+.
 
 Starting with 0.17, the Scala release ships **per-package Maven artifacts** under group `net.fortytwo.hydra.scala` (#519),
@@ -674,7 +674,7 @@ libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.0"
 
 ## Python releases
 
-Hydra-Python is a **complete Hydra implementation** that passes all tests in the common test suite.
+Hydra-Python is a **complete Hydra implementation** that passes all tests in the hydra-kernel test suite.
 It requires Python 3.12 or later
 and uses [uv](https://github.com/astral-sh/uv) for dependency management.
 
@@ -871,7 +871,7 @@ The following are Python-specific release steps:
 
 ## TypeScript releases
 
-Hydra-TypeScript is a **complete Hydra implementation** that passes all tests in the common test suite.
+Hydra-TypeScript is a **complete Hydra implementation** that passes all tests in the hydra-kernel test suite.
 It requires Node.js 20 or later.
 
 Starting with 0.17, the TypeScript release ships **per-package npm tarballs**.

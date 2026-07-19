@@ -9,7 +9,7 @@ across all implementations.
 - Understanding of the target language implementations (Haskell, Java, Python, Scala, Lisp)
 - Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
 
-**Important:** Every new primitive must include test cases in the common test suite.
+**Important:** Every new primitive must include test cases in the hydra-kernel test suite.
 Tests ensure consistent behavior across all language implementations and catch regressions.
 Adding a primitive without tests is incomplete work.
 
@@ -700,7 +700,7 @@ When adding a new primitive function:
 - [ ] **Python**
   - [ ] Function in `hydra.overlay.python.lib.<library>`
   - [ ] Registration in `hydra.sources.libraries` (name via `def_<library>.<fn>.name`)
-- [ ] **Common test suite** (required)
+- [ ] **Hydra-kernel test suite** (required)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
 - [ ] **Tests pass** in all three languages
@@ -871,6 +871,6 @@ which have default implementations in terms of `cases`. See:
 
 ## Further reading
 
-- [Testing documentation](https://github.com/CategoricalData/hydra/wiki/Testing) — common test suite
+- [Testing documentation](https://github.com/CategoricalData/hydra/wiki/Testing) — hydra-kernel test suite
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) — Hydra's type system and data structures
 - [Creating a new Hydra implementation](new-implementation.md) — adding an entirely new language target

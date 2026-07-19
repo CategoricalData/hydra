@@ -301,7 +301,7 @@ Module lists are Haskell values from `Hydra.Sources.All`:
 |----------|----------|
 | `kernelModules` | Core kernel types and terms |
 | `mainModules` | Kernel + standard libraries (encoders, decoders, DSLs) |
-| `testModules` | Common test suite modules |
+| `testModules` | Hydra-kernel test suite modules |
 | `hydraExtModules` | All ext modules (coders, domain models) |
 
 ### Adding DSL wrapper generation for a new package
@@ -381,7 +381,7 @@ Coq output is generated via dedicated executables rather than GHCi.
 ```bash
 cd heads/haskell
 stack exec generate-coq         # kernel .v files + lib stubs + _CoqProject
-stack exec generate-coq-tests   # common test suite .v files
+stack exec generate-coq-tests   # hydra-kernel test suite .v files
 ```
 
 `generate-coq` writes to `dist/coq/hydra-kernel/src/main/coq/` and

@@ -70,7 +70,7 @@ and implementation details, see:
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** —
   The `packages/`, `heads/`, `dist/` layout
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** —
-  Common test suite and language-specific testing
+  Hydra-kernel test suite and language-specific testing
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** —
   Step-by-step guides for extending Hydra
 
@@ -143,7 +143,7 @@ Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 ```
 
 See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing)
-for details on Hydra's common test suite, which ensures parity across all Hydra language variants.
+for details on Hydra's hydra-kernel test suite, which ensures parity across all Hydra language variants.
 
 ## Code generation
 

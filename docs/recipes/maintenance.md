@@ -878,7 +878,7 @@ All implementations should have the same number of passing tests
 
 3. **Investigate any divergence.**
    Common causes:
-   - A new test case was added to the common test suite but a runner wasn't updated.
+   - A new test case was added to the hydra-kernel test suite but a runner wasn't updated.
    - A primitive was added/changed in some implementations but not others.
    - A language-specific limitation prevents a test from running
      (should be documented as a skip, not silently absent).
