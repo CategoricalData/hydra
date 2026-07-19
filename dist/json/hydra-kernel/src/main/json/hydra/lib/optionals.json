@@ -214,6 +214,65 @@
                         "argument": {"variable": "g"}}}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.optionals.foldList",
+        "metadata": {
+          "description": "Left-fold over a list with an optional-returning function, short-circuiting on none.",
+          "comments": [
+            "foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given, and returns none as soon as any step yields none. If every element is processed, the result is given of the final accumulator.",
+            "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), pure(acc), xs); this defining equation is the specification, and the default implementation.",
+            "Total. Corresponds to a short-circuiting foldM specialised to Maybe."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"optional": {"variable": "x"}}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "acc",
+                "body": {
+                  "lambda": {
+                    "parameter": "xs",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "m",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "y",
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.bind"}, "argument": {"variable": "m"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "x",
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}},
+                                                    "argument": {"variable": "y"}}}}}}}}}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"variable": "acc"}}}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.optionals.fromOptional",
         "metadata": {
           "description": "Return the value contained in an optional, falling back to a default if absent.",
@@ -242,6 +301,53 @@
                         "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
                         "argument": {"variable": "def"}}},
                     "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.givens",
+        "metadata": {
+          "description": "Concatenate optionals, keeping only the present values.",
+          "comments": [
+            "givens(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
+            "New name for cat (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"optional": {"variable": "x"}}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "xs",
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.lists.foldr"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "m",
+                            "body": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                                        "argument": {"variable": "acc"}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "v",
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "v"}}},
+                                            "argument": {"variable": "acc"}}}}}}}}}}}}},
+                    "argument": {"list": []}}},
+                "argument": {"variable": "xs"}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.isGiven",
@@ -328,6 +434,69 @@
                         "body": {"optional": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.optionals.mapList",
+        "metadata": {
+          "description": "Traverse a list in the optional monad.",
+          "comments": [
+            "mapList(f, xs) applies f to each element of xs. If every application yields given, the result is given of the list of contained values, in their original order. The result is none as soon as any application yields none.",
+            "Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"list": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.lib.optionals.bind"},
+                                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "y",
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.lib.optionals.map"},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "ys",
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "y"}}},
+                                                            "argument": {"variable": "ys"}}}}}}},
+                                                "argument": {"variable": "acc"}}}}}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"list": []}}}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.optionals.mapOptional",
         "metadata": {
           "description": "Map a partial function over a list, keeping only the present results.",
@@ -359,6 +528,79 @@
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
                         "argument": {"variable": "xs"}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.mapSet",
+        "metadata": {
+          "description": "Traverse a set in the optional monad.",
+          "comments": [
+            "mapSet(f, s) applies f to each element of s. If every application yields given, the result is given of the set of contained values, deduplicated by the result type's ordering. The result is none as soon as any application yields none.",
+            "Requires 'ordering' constraints on both element types (the set type contract).",
+            "Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"set": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.optionals.map"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "ys",
+                            "body": {"application": {"function": {"variable": "hydra.lib.sets.fromList"}, "argument": {"variable": "ys"}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldr"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "x",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"variable": "hydra.lib.optionals.bind"},
+                                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "y",
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.lib.optionals.map"},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "ys",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "y"}}},
+                                                                "argument": {"variable": "ys"}}}}}}},
+                                                    "argument": {"variable": "acc"}}}}}}}}}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"list": []}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.pure",
@@ -399,4 +641,35 @@
                   "application": {
                     "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
                     "argument": {"list": []}}},
-                "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}}}}]}
+                "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.withDefault",
+        "metadata": {
+          "description": "Return the value contained in an optional, falling back to a default if absent.",
+          "comments": [
+            "withDefault(def, m) returns x when m is given(x), and def when m is none.",
+            "New name for fromOptional (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": true},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "def",
+            "body": {
+              "lambda": {
+                "parameter": "m",
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"variable": "def"}}},
+                    "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}}}}]}

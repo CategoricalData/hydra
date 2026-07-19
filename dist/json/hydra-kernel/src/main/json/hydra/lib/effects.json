@@ -95,6 +95,30 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.effects.foldList",
+        "metadata": {
+          "description": "Left-fold over a list with an effect-returning function.",
+          "comments": [
+            "foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right.",
+            "New name for foldl (retained as a deprecated alias until the #417 breaking wave removes it)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "x"}}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "x"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.effects.foldl",
         "metadata": {
           "description": "Left-fold over a list with an effect-returning function.",
@@ -168,6 +192,26 @@
               "isLazy": false},
             {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"effect": {"optional": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.mapSet",
+        "metadata": {
+          "description": "Map an effect-returning function over a set.",
+          "comments": [
+            "mapSet(f, s) describes an effectful computation which applies f to each element of s, sequencing the effects in ascending element order (the order is normative, since the effects are observable), and collects the results as a set, deduplicated by the result type's ordering.",
+            "Requires 'ordering' constraints on both element types (the set type contract)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"set": {"variable": "y"}}}}},
         "isPure": false,
         "isTotal": true}},
     {

@@ -167,6 +167,25 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.maps.difference",
+        "metadata": {
+          "description": "Compute the difference of two maps by key.",
+          "comments": [
+            "difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear in m2. Only the key set of m2 matters; its values are ignored.",
+            "The key-set analogue is hydra.lib.sets.difference.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.maps.elems",
         "metadata": {
           "description": "Return the values of a map (in key order).",
@@ -357,6 +376,25 @@
             {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "v"}, "isLazy": false},
             {"name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.maps.intersection",
+        "metadata": {
+          "description": "Compute the intersection of two maps by key.",
+          "comments": [
+            "intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear in m2. On each common key the value is taken from m1; only the key set of m2 matters, and its values are ignored.",
+            "The key-set analogue is hydra.lib.sets.intersection.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -585,6 +623,23 @@
           "parameters": [
             {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
             {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.maps.unions",
+        "metadata": {
+          "description": "Compute the left-biased union of a list of maps.",
+          "comments": [
+            "unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more than one map, the binding from the earliest such map in the list wins.",
+            "unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([]) is empty, and the bias matches union and hydra.lib.sets.unions.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}, "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}}]}

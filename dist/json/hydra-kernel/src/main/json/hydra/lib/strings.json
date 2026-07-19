@@ -66,6 +66,58 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.strings.charAt",
+        "metadata": {
+          "description": "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.",
+          "comments": [
+            "charAt(i, s) returns Just(c) where c is the Unicode code point at position i in s, or Nothing if i is negative or i >= length(s).",
+            "New name for maybeCharAt (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.strings.concat",
+        "metadata": {
+          "description": "Concatenate a list of strings into a single string.",
+          "comments": [
+            "concat(xs) returns the string formed by concatenating every string in xs in order.",
+            "New name for cat (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's concat :: [String] -> String."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.strings.concat2",
+        "metadata": {
+          "description": "Concatenate two strings.",
+          "comments": [
+            "concat2(s, t) returns the concatenation of s and t.",
+            "New name for cat2 (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's (++) :: String -> String -> String."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.strings.fromList",
         "metadata": {
           "description": "Convert a list of Unicode code points to a string.",
@@ -87,6 +139,24 @@
           "description": "Join a list of strings with a separator between each element.",
           "comments": [
             "intercalate(sep, xs) returns the strings in xs concatenated with sep inserted between each pair of adjacent strings; for the empty list the result is the empty string, and for a singleton list the result is the single string.",
+            "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.strings.join",
+        "metadata": {
+          "description": "Join a list of strings with a separator between each element.",
+          "comments": [
+            "join(sep, xs) returns the strings in xs concatenated with sep inserted between each pair of adjacent strings; for the empty list the result is the empty string, and for a singleton list the result is the single string.",
+            "New name for intercalate (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."],
           "seeAlso": []},
         "signature": {

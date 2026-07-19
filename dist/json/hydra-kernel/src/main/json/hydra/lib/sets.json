@@ -123,6 +123,40 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.sets.filter",
+        "metadata": {
+          "description": "Filter a set by a predicate.",
+          "comments": [
+            "filter(p, s) returns the subset of s containing exactly the elements x for which p(x) is true.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"set": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "p",
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.sets.fromList"},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.lists.filter"}, "argument": {"variable": "p"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.sets.fromList",
         "metadata": {
           "description": "Construct a set from a list of elements (duplicates removed).",

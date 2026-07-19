@@ -229,4 +229,35 @@
                                 "function": {"application": {"function": {"variable": "hydra.lib.equality.lte"}, "argument": {"variable": "x"}}},
                                 "argument": {"variable": "y"}}}}},
                         "argument": {"variable": "x"}}},
-                    "argument": {"variable": "y"}}}}}}}}}]}
+                    "argument": {"variable": "y"}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.equality.notEqual",
+        "metadata": {
+          "description": "Check whether two values are unequal.",
+          "comments": [
+            "notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the default implementation.",
+            "Requires an 'equality' type-class constraint on the argument type.",
+            "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "x",
+            "body": {
+              "lambda": {
+                "parameter": "y",
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.logic.not"},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.equality.equal"}, "argument": {"variable": "x"}}},
+                        "argument": {"variable": "y"}}}}}}}}}}}]}

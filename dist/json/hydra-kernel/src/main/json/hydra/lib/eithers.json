@@ -34,6 +34,45 @@
   "definitions": [
     {
       "primitive": {
+        "name": "hydra.lib.eithers.apply",
+        "metadata": {
+          "description": "Applicative apply for either: combine a function under either and an argument under either.",
+          "comments": [
+            "apply(ef, ex) returns right(f(x)) when ef is right(f) and ex is right(x).",
+            "If either argument is a left, the result is that left; when both arguments are left, the first (function-side) left is returned — first error wins, and ex is not consulted once ef is known to be a left.",
+            "apply(ef, ex) is bind(ef, \\f -> map(f, ex)); this defining equation is the specification, and the default implementation.",
+            "Total. Corresponds to Haskell's (<*>) :: Either a (b -> c) -> Either a b -> Either a c."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "either": {"left": {"variable": "x"}, "right": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "z"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "ef",
+            "body": {
+              "lambda": {
+                "parameter": "ex",
+                "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.lib.eithers.bind"}, "argument": {"variable": "ef"}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "f",
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.eithers.map"}, "argument": {"variable": "f"}}},
+                            "argument": {"variable": "ex"}}}}}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.eithers.bimap",
         "metadata": {
           "description": "Map over both sides of an either value.",
@@ -119,6 +158,53 @@
                     "argument": {"variable": "e"}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.eithers.compose",
+        "metadata": {
+          "description": "Kleisli composition for either.",
+          "comments": [
+            "compose(f, g, x) is bind(f(x), g); this defining equation is the specification, and the default implementation.",
+            "If either f(x) or the second stage produces a left, the result is that left.",
+            "Total. Corresponds to Kleisli composition (>=>) specialised to Either with a fixed Left type."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [
+            {"name": "x", "constraints": []},
+            {"name": "y", "constraints": []},
+            {"name": "z", "constraints": []},
+            {"name": "w", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {"domain": {"variable": "x"}, "codomain": {"either": {"left": {"variable": "w"}, "right": {"variable": "y"}}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "w"}, "right": {"variable": "z"}}}}},
+              "isLazy": false},
+            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "w"}, "right": {"variable": "z"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "body": {
+                  "lambda": {
+                    "parameter": "x",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.eithers.bind"},
+                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                        "argument": {"variable": "g"}}}}}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.eithers.either",
         "metadata": {
           "description": "Eliminate an either value by applying one of two functions.",
@@ -136,6 +222,66 @@
           "result": {"type": {"variable": "z"}}},
         "isPure": true,
         "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.eithers.foldList",
+        "metadata": {
+          "description": "Left-fold over a list with an Either-returning function, short-circuiting on Left.",
+          "comments": [
+            "foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: it iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed.",
+            "New name for foldl (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {
+                    "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "acc0",
+                "body": {
+                  "lambda": {
+                    "parameter": "xs",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.lists.foldl"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "el",
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.eithers.bind"}, "argument": {"variable": "acc"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "a",
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "a"}}},
+                                                    "argument": {"variable": "el"}}}}}}}}}}}}},
+                            "argument": {"either": {"right": {"variable": "acc0"}}}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.foldl",
@@ -587,6 +733,69 @@
                         "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.eithers.partition",
+        "metadata": {
+          "description": "Partition a list of either values into lefts and rights.",
+          "comments": [
+            "partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
+            "New name for partitionEithers (which is retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}, "isLazy": false}],
+          "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "y"}}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "xs",
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.lists.foldr"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "e",
+                            "body": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.lib.eithers.either"},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "l",
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "l"}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
+                                                    "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "r",
+                                            "body": {
+                                              "pair": {
+                                                "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}},
+                                                "second": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "r"}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}},
+                                    "argument": {"variable": "e"}}}}}}}}},
+                    "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
+                "argument": {"variable": "xs"}}}}}}},
+    {
+      "primitive": {
         "name": "hydra.lib.eithers.partitionEithers",
         "metadata": {
           "description": "Partition a list of either values into lefts and rights.",
@@ -647,6 +856,23 @@
                                     "argument": {"variable": "e"}}}}}}}}},
                     "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
                 "argument": {"variable": "xs"}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.eithers.pure",
+        "metadata": {
+          "description": "Wrap a value as a right.",
+          "comments": [
+            "pure(x) is right(x); this defining equation is the specification, and the default implementation.",
+            "This is the unit of the either monad; it exists so that code written generically over a monad can reach the unit.",
+            "Total. Corresponds to Haskell's pure / Right for Either."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "y"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"either": {"right": {"variable": "x"}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.rights",

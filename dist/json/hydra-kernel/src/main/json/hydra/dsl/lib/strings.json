@@ -172,6 +172,178 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.cat2"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.lib.strings.charAt",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"optional": {"literal": {"integer": "int32"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Term",
+                                                        "field": {
+                                                          "name": "variable",
+                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.charAt"}}}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.charAt"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lib.strings.concat",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"literal": "string"}}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"literal": "string"}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.concat"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lib.strings.concat2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Term",
+                                                        "field": {
+                                                          "name": "variable",
+                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.concat2"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.lib.strings.fromList",
         "signature": {
           "typeParameters": [],
@@ -279,6 +451,70 @@
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.intercalate"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lib.strings.join",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"literal": "string"}}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"literal": "string"}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "application",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Application",
+                                  "fields": [
+                                    {
+                                      "name": "function",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.core.Term",
+                                          "field": {
+                                            "name": "application",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.core.Application",
+                                                "fields": [
+                                                  {
+                                                    "name": "function",
+                                                    "term": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Term",
+                                                        "field": {
+                                                          "name": "variable",
+                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.join"}}}}}}}},
+                                                  {
+                                                    "name": "argument",
+                                                    "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
+                                    {
+                                      "name": "argument",
+                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.strings.join"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.lib.strings.length",

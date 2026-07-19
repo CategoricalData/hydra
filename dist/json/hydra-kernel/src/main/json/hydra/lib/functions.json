@@ -1,0 +1,138 @@
+{
+  "name": "hydra.lib.functions",
+  "metadata": {"description": "Primitives in the hydra.lib.functions module.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.functions.compose",
+        "metadata": {
+          "description": "Compose two functions.",
+          "comments": [
+            "compose(g, f, x) = g(f(x)); this defining equation is the specification.",
+            "The outer function comes first: f is applied to x, and g is applied to the result.",
+            "This is ordinary function composition, distinct from the Kleisli compose primitives of the monad modules.",
+            "Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "t2"}, "codomain": {"variable": "t3"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "t2"}}}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "t1"}, "isLazy": false}],
+          "result": {"type": {"variable": "t3"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "g",
+            "body": {
+              "lambda": {
+                "parameter": "f",
+                "body": {
+                  "lambda": {
+                    "parameter": "x",
+                    "body": {
+                      "application": {
+                        "function": {"variable": "g"},
+                        "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.functions.const",
+        "metadata": {
+          "description": "Return the first argument, ignoring the second.",
+          "comments": [
+            "const(x, y) = x; this defining equation is the specification.",
+            "Partially applied, const(x) is the constant function which returns x on every input.",
+            "Total. Corresponds to Haskell's const :: a -> b -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "t1"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "t2"}, "isLazy": false}],
+          "result": {"type": {"variable": "t1"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"lambda": {"parameter": "y", "body": {"variable": "x"}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.functions.flip",
+        "metadata": {
+          "description": "Swap the argument order of a binary function.",
+          "comments": [
+            "flip(f, x, y) = f(y, x); this defining equation is the specification.",
+            "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {"domain": {"variable": "t1"}, "codomain": {"function": {"domain": {"variable": "t2"}, "codomain": {"variable": "t3"}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "t2"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "t1"}, "isLazy": false}],
+          "result": {"type": {"variable": "t3"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "body": {
+                  "lambda": {
+                    "parameter": "y",
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "y"}}},
+                        "argument": {"variable": "x"}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.functions.identity",
+        "metadata": {
+          "description": "Return the argument unchanged.",
+          "comments": [
+            "identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
+            "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
+            "Total. Corresponds to Haskell's id :: a -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "t1", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t1"}, "isLazy": false}],
+          "result": {"type": {"variable": "t1"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}]}

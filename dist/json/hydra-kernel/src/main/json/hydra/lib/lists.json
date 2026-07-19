@@ -55,6 +55,24 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.at",
+        "metadata": {
+          "description": "Return the element at the given index, or Nothing if out of bounds.",
+          "comments": [
+            "at(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
+            "New name for maybeAt (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.bind",
         "metadata": {
           "description": "Apply a function that returns lists to each element and flatten the results.",
@@ -103,6 +121,30 @@
                     "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.compose",
+        "metadata": {
+          "description": "Compose two functions that return lists (Kleisli composition in the list monad).",
+          "comments": [
+            "compose(f, g, x) is bind(f(x), g); this defining equation is the specification. The results of applying g to each element of f(x) are concatenated in order.",
+            "Total. Corresponds to Kleisli composition (>=>) in the list monad."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"list": {"variable": "z"}}}},
+              "isLazy": false},
+            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "z"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.concat",
         "metadata": {
           "description": "Concatenate a list of lists.",
@@ -145,6 +187,23 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.distinct",
+        "metadata": {
+          "description": "Remove duplicate elements from a list.",
+          "comments": [
+            "distinct(xs) returns the list of distinct elements of xs, in the order of their first occurrence.",
+            "New name for nub (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Requires an 'equality' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -323,6 +382,31 @@
                     "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.foldList",
+        "metadata": {
+          "description": "Left-fold a list in the list monad (a nondeterministic fold).",
+          "comments": [
+            "foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the step function at each element: after each element the set of accumulators is replaced by all results of applying f to each current accumulator and that element.",
+            "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), pure(acc0), xs); this defining equation is the specification. For the empty list the result is pure(acc0).",
+            "Total on finite inputs. The list-monad instance of the monadic left fold."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"list": {"variable": "x"}}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.foldl",
         "metadata": {
           "description": "Left-fold a list with an accumulator.",
@@ -384,6 +468,38 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.head",
+        "metadata": {
+          "description": "Return the first element, or Nothing if the list is empty.",
+          "comments": [
+            "head(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
+            "New name for maybeHead (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Wraps Haskell's partial head in maybe."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.init",
+        "metadata": {
+          "description": "Return all elements except the last, or Nothing if the list is empty.",
+          "comments": [
+            "init(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
+            "New name for maybeInit (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Wraps Haskell's partial init in maybe."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.intercalate",
         "metadata": {
           "description": "Intercalate a list of lists with a separator list between each.",
@@ -418,6 +534,40 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.join",
+        "metadata": {
+          "description": "Intercalate a list of lists with a separator list between each.",
+          "comments": [
+            "join(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists. Equivalent to concat(intersperse(sep, xss)).",
+            "New name for intercalate (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"list": {"variable": "x"}}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.last",
+        "metadata": {
+          "description": "Return the last element, or Nothing if the list is empty.",
+          "comments": [
+            "last(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
+            "New name for maybeLast (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Wraps Haskell's partial last in maybe."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.length",
         "metadata": {
           "description": "Return the length of a list.",
@@ -447,6 +597,68 @@
             {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.mapList",
+        "metadata": {
+          "description": "Traverse a list in the list monad.",
+          "comments": [
+            "mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in xs: each result list has the same length as xs, with its element at each position drawn from the corresponding f(x).",
+            "Results appear in the lexicographic order of the choices, with the choice for the first element varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is empty for any element, the result is the empty list; mapList(f, []) is pure([]).",
+            "Total on finite inputs. The list-monad instance of the traversal family."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"list": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.mapOptional",
+        "metadata": {
+          "description": "Traverse an optional value in the list monad.",
+          "comments": [
+            "mapOptional(f, m) returns the single-element list containing none when m is none; for given(x) it returns given(y) for each element y of f(x), in order.",
+            "Total on finite inputs. The list-monad instance of the traversal family, applied to the optional container."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"optional": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.mapSet",
+        "metadata": {
+          "description": "Traverse a set in the list monad.",
+          "comments": [
+            "mapSet(f, s) returns all sets obtainable by choosing one element from f(x) for each element x of s. Elements of s are traversed in ascending order, and results appear in the lexicographic order of the choices, with the choice for the least element varying slowest.",
+            "A result set may have fewer elements than s when distinct choices coincide. If f(x) is empty for any element, the result is the empty list; for the empty set the result is the single-element list containing the empty set.",
+            "Requires 'ordering' constraints on both element types (the set type contract)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"set": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -524,6 +736,25 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.member",
+        "metadata": {
+          "description": "Test whether an element is in a list.",
+          "comments": [
+            "member(x, xs) returns true iff some element of xs is equal to x.",
+            "New name for elem (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Requires an 'equality' constraint on the element type.",
+            "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -693,6 +924,25 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.sortBy",
+        "metadata": {
+          "description": "Sort a list using a key-extraction function.",
+          "comments": [
+            "sortBy(f, xs) returns xs sorted in ascending order by f(x) for each element x. Sort is stable: elements with equal keys preserve their original relative order.",
+            "New name for sortOn (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.sortOn",
         "metadata": {
           "description": "Sort a list using a key-extraction function.",
@@ -789,6 +1039,22 @@
                     "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.tail",
+        "metadata": {
+          "description": "Return all elements except the first, or Nothing if the list is empty.",
+          "comments": [
+            "tail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
+            "New name for maybeTail (retained as a deprecated alias until the #417 breaking wave removes it).",
+            "Total. Wraps Haskell's partial tail in maybe."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.take",
         "metadata": {
           "description": "Take the first n elements of a list.",
@@ -804,6 +1070,40 @@
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.lists.takeWhile",
+        "metadata": {
+          "description": "Take elements from the beginning of a list while a predicate holds.",
+          "comments": [
+            "takeWhile(p, xs) returns the longest prefix of xs whose elements all satisfy p. If p fails for the first element the result is the empty list; if p holds for every element the result is xs unchanged.",
+            "dropWhile returns the complementary suffix, and span(p, xs) returns the pair of takeWhile(p, xs) and dropWhile(p, xs).",
+            "Total. Corresponds to Haskell's takeWhile :: (a -> Bool) -> [a] -> [a]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "p",
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.pairs.first"},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.lists.span"}, "argument": {"variable": "p"}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.transpose",
