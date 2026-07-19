@@ -31,6 +31,7 @@
     {"module": "hydra.packaging"},
     {"module": "hydra.parsing"},
     {"module": "hydra.query"},
+    {"module": "hydra.regex"},
     {"module": "hydra.relational"},
     {"module": "hydra.system"},
     {"module": "hydra.tabular"},

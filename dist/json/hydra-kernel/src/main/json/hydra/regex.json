@@ -1,0 +1,374 @@
+{
+  "name": "hydra.regex",
+  "metadata": {
+    "description": "A model for Hydra's translingual regular-expression syntax: the abstract syntax tree (AST) into which hydra.parse.regex parses a pattern and from which hydra.print.regex (and the per-dialect hydra.print.<dialect>.regex renderers) emit target syntax. Covers the minimal core defined in docs/specification/regex.md (literals, character classes, ., quantifiers, alternation, anchors, grouping). See issue #567.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.regex.Alternation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "hydra.regex.RegexSequence"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A non-empty list of alternative sequences, joined by the | operator. Matches if any alternative matches."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.Atom",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "literal",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A literal character, matched exactly. The character is a Unicode scalar value in the range [U+0000, U+10FFFF] (surrogates excluded), held as an int32 code point (the range fits in signed 32-bit, and int32 matches Hydra's string/parser code-point representation). In concrete syntax, a metacharacter is written escaped (e.g. \\.); escaping is purely a concrete-syntax concern, so the AST holds the bare code point."}}}]}}}},
+                  {
+                    "name": "any",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The . metacharacter; matches any single character, INCLUDING newline (unlike most host engines, whose native . excludes newline). To exclude newline, write [^\\n] explicitly."}}}]}}}},
+                  {
+                    "name": "anchorStart",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The ^ anchor; matches the empty string at the start of input."}}}]}}}},
+                  {
+                    "name": "anchorEnd",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The $ anchor; matches the empty string at the end of input."}}}]}}}},
+                  {
+                    "name": "group",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.Alternation"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A parenthesized sub-expression, ( ... ); groups an alternation for quantification."}}}]}}}},
+                  {
+                    "name": "class",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.CharacterClass"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A character class, [ ... ]; matches any single character in (or, if negated, not in) the set."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single, unquantified regex element: the smallest unit to which a quantifier may apply."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.CharacterClass",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "negated",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "True for a negated class ([^ ... ]), which matches any character NOT listed."}}}]}}}},
+                  {
+                    "name": "items",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.regex.ClassItem"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The class members: individual characters and/or character ranges. Must be non-empty; the empty class [] and negated-empty class [^] are excluded from the core (they are not in the POSIX/PCRE/ECMA intersection). hydra.parse.regex rejects an empty class."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A bracketed character class, [ ... ] or [^ ... ]."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.CharacterRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "from",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The first character of the range (inclusive), as an int32 Unicode scalar value."}}}]}}}},
+                  {
+                    "name": "to",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The last character of the range (inclusive), as an int32 Unicode scalar value."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An inclusive range of characters within a character class, e.g. a-z."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.ClassItem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "character",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A single character (int32 Unicode scalar value) in the class."}}}]}}}},
+                  {
+                    "name": "range",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.CharacterRange"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inclusive range of characters, e.g. a-z."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A member of a character class: either a single character or an inclusive character range."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.Quantified",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "atom",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.Atom"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The atom being quantified."}}}]}}}},
+                  {
+                    "name": "quantifier",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.Quantifier"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The quantifier; use 'one' for an unquantified atom."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An atom together with an optional quantifier applied to it."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.Quantifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "one",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "No quantifier; matches exactly one occurrence."}}}]}}}},
+                  {
+                    "name": "zeroOrOne",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The ? quantifier; matches zero or one occurrence."}}}]}}}},
+                  {
+                    "name": "zeroOrMore",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The * quantifier; matches zero or more occurrences."}}}]}}}},
+                  {
+                    "name": "oneOrMore",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The + quantifier; matches one or more occurrences."}}}]}}}},
+                  {
+                    "name": "exactly",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n} quantifier; matches exactly n occurrences."}}}]}}}},
+                  {
+                    "name": "atLeast",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n,} quantifier; matches at least n occurrences."}}}]}}}},
+                  {
+                    "name": "range",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.regex.QuantifierRange"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The {n,m} quantifier; matches between n and m (inclusive) occurrences."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A regular-expression quantifier. Mirrors hydra.query.RegexQuantifier, which models the same set of quantifiers for graph-path queries; a future refactor may hoist a shared type (see #567 findings)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.QuantifierRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "min",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum number of occurrences (inclusive)."}}}]}}}},
+                  {
+                    "name": "max",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum number of occurrences (inclusive)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.Regex",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"variable": "hydra.regex.Alternation"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A complete Hydra regular expression: the root of the AST. A regex is an alternation of sequences."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.regex.RegexSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "hydra.regex.Quantified"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A (possibly empty) sequence of quantified atoms, matched in order. An empty sequence matches the empty string. (Named RegexSequence rather than Sequence to avoid the generated coder binding colliding with the host's built-in sequence.)"}}}]}}}}}}]}

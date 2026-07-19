@@ -1,0 +1,1098 @@
+{
+  "name": "hydra.parse.regex",
+  "metadata": {
+    "description": "Parser for Hydra's translingual regular-expression syntax (docs/specification/regex.md): text -> hydra.regex AST. Built on the hydra.parsers combinators. Rejects ill-formed patterns (empty alternation branches, empty classes, out-of-range code points) via the ParseResult failure channel, so 'well-formed' is portable across hosts. See issue #567.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.parsers"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.parse.regex.alternation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.parsing.Parser"},
+                "argument": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {
+                          "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                        "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.sepBy1"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
+                                "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "hydra.parse.regex.regexSequence"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 124}}}}}}}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "branches",
+                    "domain": {"list": {"list": {"variable": "hydra.regex.Quantified"}}},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "hasEmpty",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
+                                            "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "acc",
+                                            "domain": {"literal": "boolean"},
+                                            "body": {
+                                              "lambda": {
+                                                "parameter": "b",
+                                                "domain": {"list": {"variable": "hydra.regex.Quantified"}},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "acc"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.regex.Quantified"}}},
+                                                        "argument": {"variable": "b"}}}}}}}}}}},
+                                    "argument": {"literal": {"boolean": false}}}},
+                                "argument": {"variable": "branches"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                          {
+                            "name": "multi",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
+                                        "argument": {"variable": "branches"}}}}},
+                                "argument": {"literal": {"integer": {"int32": 1}}}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                        "type": {
+                                          "application": {
+                                            "function": {"variable": "hydra.parsing.Parser"},
+                                            "argument": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "hasEmpty"}}},
+                                        "argument": {"variable": "multi"}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.parsers.fail"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                    "argument": {"literal": {"string": "empty alternation branch"}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                "argument": {"variable": "branches"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Parse an alternation of sequences separated by |. When there is more than one branch, each branch must be non-empty; empty branches (a|, |b, a||b, and the nested (a|)) are rejected at every level. A single empty branch is the legal empty case (empty whole pattern / empty group)."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.atom",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Atom"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"variable": "hydra.regex.Atom"}}},
+                "argument": {
+                  "list": [
+                    {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                "type": {"variable": "hydra.regex.Atom"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "g",
+                                "domain": {"list": {"list": {"variable": "hydra.regex.Quantified"}}},
+                                "body": {"inject": {"typeName": "hydra.regex.Atom", "field": {"name": "group", "term": {"variable": "g"}}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.parsers.between"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 40}}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 41}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.lazy"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                "argument": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "hydra.parse.regex.alternation"}}}}}}}}},
+                    {"variable": "hydra.parse.regex.characterClass"},
+                    {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"variable": "hydra.regex.Atom"}}},
+                            "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 46}}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "_",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Atom"}}},
+                                "argument": {"inject": {"typeName": "hydra.regex.Atom", "field": {"name": "any", "term": "unit"}}}}}}}}},
+                    {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"variable": "hydra.regex.Atom"}}},
+                            "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 94}}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "_",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Atom"}}},
+                                "argument": {"inject": {"typeName": "hydra.regex.Atom", "field": {"name": "anchorStart", "term": "unit"}}}}}}}}},
+                    {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                "type": {"variable": "hydra.regex.Atom"}}},
+                            "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 36}}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "_",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Atom"}}},
+                                "argument": {"inject": {"typeName": "hydra.regex.Atom", "field": {"name": "anchorEnd", "term": "unit"}}}}}}}}},
+                    {"variable": "hydra.parse.regex.literalAtom"}]}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a single atom: a group ( ... ), a class [ ... ], ., an anchor ^ or $, or a literal."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.characterClass",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Atom"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"variable": "hydra.regex.Atom"}}},
+                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 91}}}}}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "_",
+                    "domain": {"literal": {"integer": "int32"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                                "type": {"variable": "hydra.regex.Atom"}}},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 94}}}}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "neg",
+                            "domain": {"optional": {"literal": {"integer": "int32"}}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"list": {"variable": "hydra.regex.ClassItem"}}}},
+                                        "type": {"variable": "hydra.regex.Atom"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.some"}, "type": {"variable": "hydra.regex.ClassItem"}}},
+                                        "argument": {"variable": "hydra.parse.regex.classItem"}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "items",
+                                    "domain": {"list": {"variable": "hydra.regex.ClassItem"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "type": {"variable": "hydra.regex.Atom"}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 93}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "_",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Atom"}}},
+                                                "argument": {
+                                                  "inject": {
+                                                    "typeName": "hydra.regex.Atom",
+                                                    "field": {
+                                                      "name": "class",
+                                                      "term": {
+                                                        "record": {
+                                                          "typeName": "hydra.regex.CharacterClass",
+                                                          "fields": [
+                                                            {
+                                                              "name": "negated",
+                                                              "term": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                              "type": {"literal": "boolean"}}},
+                                                                          "argument": {"variable": "neg"}}},
+                                                                      "argument": {"literal": {"boolean": false}}}},
+                                                                  "argument": {"lambda": {"parameter": "_", "domain": {"literal": {"integer": "int32"}}, "body": {"literal": {"boolean": true}}}}}}},
+                                                            {"name": "items", "term": {"variable": "items"}}]}}}}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a character class [ ... ] or [^ ... ]; the class must be non-empty."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.classItem",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.ClassItem"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "classChar",
+                    "term": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "hydra.parse.regex.escapedChar"}}},
+                        "argument": {
+                          "application": {
+                            "function": {"variable": "hydra.parsers.satisfy"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "c",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.logic.and"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"variable": "hydra.lib.logic.not"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {"variable": "c"}}},
+                                                "argument": {"literal": {"integer": {"int32": 93}}}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.logic.not"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "c"}}},
+                                            "argument": {"literal": {"integer": {"int32": 92}}}}}}}}}}}}}}},
+                    "typeScheme": {
+                      "variables": [],
+                      "body": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}}],
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                            "type": {"variable": "hydra.regex.ClassItem"}}},
+                        "argument": {"variable": "classChar"}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "from",
+                        "domain": {"literal": {"integer": "int32"}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"variable": "hydra.regex.ClassItem"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "type": {"variable": "hydra.regex.ClassItem"}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 45}}}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "_",
+                                        "domain": {"literal": {"integer": "int32"}},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "type": {"variable": "hydra.regex.ClassItem"}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "to",
+                                                    "domain": {"literal": {"integer": "int32"}},
+                                                    "body": {
+                                                      "inject": {
+                                                        "typeName": "hydra.regex.ClassItem",
+                                                        "field": {
+                                                          "name": "range",
+                                                          "term": {
+                                                            "record": {
+                                                              "typeName": "hydra.regex.CharacterRange",
+                                                              "fields": [{"name": "from", "term": {"variable": "from"}}, {"name": "to", "term": {"variable": "to"}}]}}}}}}}}},
+                                            "argument": {"variable": "classChar"}}}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.ClassItem"}}},
+                                "argument": {"inject": {"typeName": "hydra.regex.ClassItem", "field": {"name": "character", "term": {"variable": "from"}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Parse one member of a character class: a range like a-z, or a single character (escapes allowed)."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.escapedChar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 92}}}}}}},
+                "argument": {
+                  "lambda": {"parameter": "_", "domain": {"literal": {"integer": "int32"}}, "body": {"variable": "hydra.parsers.anyChar"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Parse a backslash followed by any character; yields that character's codepoint (the escape is consumed)."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.isMetachar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
+                                "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "domain": {"literal": "boolean"},
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "m",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "acc"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "c"}}},
+                                            "argument": {"variable": "m"}}}}}}}}}}},
+                        "argument": {"literal": {"boolean": false}}}},
+                    "argument": {
+                      "list": [
+                        {"literal": {"integer": {"int32": 46}}},
+                        {"literal": {"integer": {"int32": 94}}},
+                        {"literal": {"integer": {"int32": 36}}},
+                        {"literal": {"integer": {"int32": 42}}},
+                        {"literal": {"integer": {"int32": 43}}},
+                        {"literal": {"integer": {"int32": 63}}},
+                        {"literal": {"integer": {"int32": 40}}},
+                        {"literal": {"integer": {"int32": 41}}},
+                        {"literal": {"integer": {"int32": 91}}},
+                        {"literal": {"integer": {"int32": 93}}},
+                        {"literal": {"integer": {"int32": 123}}},
+                        {"literal": {"integer": {"int32": 125}}},
+                        {"literal": {"integer": {"int32": 124}}},
+                        {"literal": {"integer": {"int32": 92}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "True if the codepoint is a top-level regex metacharacter that must be escaped to match literally."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.literalAtom",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Atom"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"literal": {"integer": "int32"}}}},
+                        "type": {"variable": "hydra.regex.Atom"}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "c",
+                        "domain": {"literal": {"integer": "int32"}},
+                        "body": {"inject": {"typeName": "hydra.regex.Atom", "field": {"name": "literal", "term": {"variable": "c"}}}}}}}},
+                "argument": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"literal": {"integer": "int32"}}}},
+                        "argument": {"variable": "hydra.parse.regex.escapedChar"}}},
+                    "argument": {
+                      "application": {
+                        "function": {"variable": "hydra.parsers.satisfy"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "c",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.logic.not"},
+                                "argument": {"application": {"function": {"variable": "hydra.parse.regex.isMetachar"}, "argument": {"variable": "c"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Parse a literal character (an escaped metacharacter, or any ordinary non-metacharacter) into an Atom."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.parseRegex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "input",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {
+                          "cases": {
+                            "typeName": "hydra.parsing.ParseResult",
+                            "cases": [
+                              {
+                                "name": "success",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "s",
+                                    "domain": {
+                                      "application": {
+                                        "function": {"variable": "hydra.parsing.ParseSuccess"},
+                                        "argument": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {"optional": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"project": {"typeName": "hydra.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                                "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                                            "argument": {"variable": "s"}}}}},
+                                                    "argument": {"literal": {"string": ""}}}}}},
+                                            "argument": {
+                                              "optional": {
+                                                "application": {
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"project": {"typeName": "hydra.parsing.ParseSuccess", "fieldName": "value"}},
+                                                      "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                                  "argument": {"variable": "s"}}}}}},
+                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}}}}}},
+                              {
+                                "name": "failure",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "e",
+                                    "domain": {"variable": "hydra.parsing.ParseError"},
+                                    "body": {"typeApplication": {"body": {"optional": null}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}}}}]}},
+                        "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.parsers.runParser"}, "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                            "argument": {"variable": "hydra.parse.regex.regex"}}},
+                        "argument": {"variable": "input"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Parse a full regex pattern string into a hydra.regex AST. Returns nothing if the pattern is ill-formed or does not consume all input; a well-formed pattern is exactly one that parses here, so 'well-formed' is portable across all hosts."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.quantified",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantified"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"variable": "hydra.regex.Atom"}}},
+                        "type": {"variable": "hydra.regex.Quantified"}}},
+                    "argument": {"variable": "hydra.parse.regex.atom"}}},
+                "argument": {
+                  "lambda": {
+                    "parameter": "a",
+                    "domain": {"variable": "hydra.regex.Atom"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                "type": {"variable": "hydra.regex.Quantified"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "q",
+                                "domain": {"variable": "hydra.regex.Quantifier"},
+                                "body": {
+                                  "record": {
+                                    "typeName": "hydra.regex.Quantified",
+                                    "fields": [{"name": "atom", "term": {"variable": "a"}}, {"name": "quantifier", "term": {"variable": "q"}}]}}}}}},
+                        "argument": {"variable": "hydra.parse.regex.quantifier"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse an atom followed by an optional quantifier."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.quantifier",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantifier"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.alt"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                    "argument": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.choice"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 42}}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                        "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "zeroOrMore", "term": "unit"}}}}}}}}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 43}}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                        "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "oneOrMore", "term": "unit"}}}}}}}}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 63}}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                        "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "zeroOrOne", "term": "unit"}}}}}}}}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 123}}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "_",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "type": {"variable": "hydra.regex.Quantifier"}}},
+                                            "argument": {"variable": "hydra.parse.regex.unsignedInt"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "n",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 44}}}}}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "comma",
+                                                    "domain": {"optional": {"literal": {"integer": "int32"}}},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantifier"}}}}},
+                                                                "argument": {"variable": "comma"}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 125}}}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "_",
+                                                                    "domain": {"literal": {"integer": "int32"}},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                        "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "exactly", "term": {"variable": "n"}}}}}}}}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": {"literal": {"integer": "int32"}},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"optional": {"literal": {"integer": "int32"}}}}},
+                                                                        "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.optional"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "argument": {"variable": "hydra.parse.regex.unsignedInt"}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "mm",
+                                                                    "domain": {"optional": {"literal": {"integer": "int32"}}},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.parsers.bind"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                            "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 125}}}}}}},
+                                                                        "argument": {
+                                                                          "lambda": {
+                                                                            "parameter": "_",
+                                                                            "domain": {"literal": {"integer": "int32"}},
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantifier"}}}}},
+                                                                                        "argument": {"variable": "mm"}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                                        "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "atLeast", "term": {"variable": "n"}}}}}}}},
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "m",
+                                                                                    "domain": {"literal": {"integer": "int32"}},
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                                                                                        "argument": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.regex.Quantifier",
+                                                                                            "field": {
+                                                                                              "name": "range",
+                                                                                              "term": {
+                                                                                                "record": {
+                                                                                                  "typeName": "hydra.regex.QuantifierRange",
+                                                                                                  "fields": [{"name": "min", "term": {"variable": "n"}}, {"name": "max", "term": {"variable": "m"}}]}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}]}}}}},
+                "argument": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.regex.Quantifier"}}},
+                    "argument": {"inject": {"typeName": "hydra.regex.Quantifier", "field": {"name": "one", "term": "unit"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse an optional quantifier following an atom; yields 'one' when no quantifier is present."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.regex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.parsing.Parser"},
+                "argument": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {"variable": "hydra.parse.regex.alternation"},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a complete regex (an alternation). The empty pattern parses to a single empty sequence."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.regexSequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"list": {"variable": "hydra.regex.Quantified"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {"typeApplication": {"body": {"variable": "hydra.parsers.many"}, "type": {"variable": "hydra.regex.Quantified"}}},
+                "argument": {"variable": "hydra.parse.regex.quantified"}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Parse a sequence of quantified atoms (a single alternation branch). May be empty only as the whole pattern; as an alternation branch it is constrained to be non-empty by the alternation parser's use of sepBy1 plus a non-empty check."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.parse.regex.unsignedInt",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {
+                        "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
+                        "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "digits",
+                        "domain": {"list": {"literal": {"integer": "int32"}}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "domain": {"literal": {"integer": "int32"}},
+                                        "body": {
+                                          "lambda": {
+                                            "parameter": "d",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.lib.math.add"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "acc"}}},
+                                                        "argument": {"literal": {"integer": {"int32": 10}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "d"}}},
+                                                    "argument": {"literal": {"integer": {"int32": 48}}}}}}}}}}}}},
+                                "argument": {"literal": {"integer": {"int32": 0}}}}},
+                            "argument": {"variable": "digits"}}}}}}},
+                "argument": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.parsers.some"}, "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {
+                      "application": {
+                        "function": {"variable": "hydra.parsers.satisfy"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "c",
+                            "domain": {"literal": {"integer": "int32"}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.logic.and"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "c"}}},
+                                        "argument": {"literal": {"integer": {"int32": 48}}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {"variable": "c"}}},
+                                    "argument": {"literal": {"integer": {"int32": 57}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Parse a non-negative decimal integer (one or more digits)."}}}]}}}}}]}
