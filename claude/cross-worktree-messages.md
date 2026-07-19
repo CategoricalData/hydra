@@ -153,6 +153,34 @@ Message body: include your branch name, the date, the ask or update, and any
 commit SHAs / verification results the recipient needs. Never edit or delete
 existing files in the recipient's inbox — only create new ones.
 
+## Waking the recipient: tmux pings
+
+An inbox message is only *surfaced* when the recipient's inbox hook runs — on its next
+prompt. An idle sibling won't see your message until someone prompts it. When timely
+pickup matters and the recipient has a live tmux session (named after its worktree),
+follow the delivery with a ping typed into that session. Rules:
+
+1. **Deliver the message file first** (copy → verify → archive, above). The ping is a
+   doorbell, not the payload — never put substantive content only in the ping.
+2. **Start the ping with `From <sender-branch>: `.** Injected keystrokes are
+   indistinguishable from the supervising human typing; an unprefixed ping
+   misattributes the request.
+3. **No deictic references** ("my inbox", "your coordinator") — with attribution
+   uncertain, they dangle. Spell out paths:
+   "reply to `../<sender-worktree>/claude-hydra-messages/inbox/`".
+4. **Send text and Enter as separate `send-keys` invocations, but in ONE shell
+   command** (chained with `&&` and a sub-second sleep). Two separate keystroke events
+   defeat paste detection (which swallows a trailing Enter sent with the text); the
+   sub-second gap matters because a slow follow-up leaves the recipient's input box
+   holding a line the human can't edit. Then `capture-pane` to confirm the prompt was
+   submitted or queued — an unsubmitted ping sits invisibly in the input box.
+
+```
+tmux send-keys -t <recipient-worktree> "From <sender-branch>: new message in your inbox (<filename>). Reply to ../<sender-worktree>/claude-hydra-messages/inbox/." \
+  && sleep 0.3 && tmux send-keys -t <recipient-worktree> Enter \
+  && sleep 2 && tmux capture-pane -t <recipient-worktree> -p | tail -5
+```
+
 ## Receiving
 
 Receiving is **hook-assisted**: the [inbox hook](../bin/claude-hooks/inbox-hook.sh)
