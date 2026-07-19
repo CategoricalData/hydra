@@ -114,9 +114,18 @@ The same kernel code SHOULD serve JSON and textual printing and parsing of strin
   to the exact IEEE 754 bit pattern; the printer never tidies its input.
   The non-finite sentinels are bare suffixed tokens: `NaN:float64`, `Infinity:float32`,
   `-Infinity:float64`; negative zero is written directly as `-0.0`.
-- **Decimals** (arbitrary precision): bare digits with no suffix — `3.14`.
+- **Decimals** (arbitrary precision): a bare numeric literal with no suffix — `3.14`.
+  The lexical form is exactly JSON's number grammar:
+  an optional sign, integer digits, an optional fraction part, and an optional exponent part
+  (`123`, `3.14`, `-0.5`, `1.2e9`, `6.02e-23`).
   An unsuffixed numeric literal is always a decimal;
   integer and float literals always carry a `:width` suffix.
+  The canonical digit string is defined by the `printDecimal` primitive
+  (positional form up to a pinned magnitude threshold, exponent form beyond it;
+  specified with the wire format's decimal entry so the primitive, the JSON encoding,
+  and this syntax agree by construction).
+  Exponent parts bind to the numeric token by maximal munch:
+  `1.2e9` is one decimal literal, while `1.2 e9` is the application of `1.2` to the name `e9`.
 - **Binary**: a base64 string with the `binary` suffix — `"aGVsbG8=":binary`.
   Standard base64 alphabet with padding, matching `binaryToString` and the JSON wire format.
 - The character `-` occurs only inside numeric literals (there are no infix operators),
