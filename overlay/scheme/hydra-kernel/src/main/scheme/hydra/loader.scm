@@ -993,7 +993,14 @@
    which the flat-loaded registry's hydra_packaging_primitive_definition-name accessor does not accept
    ('Wrong type argument'). Flat-loading here reuses the kernel's already-loaded record constructors, so
    there is no duplicate record type; the def: prefix keeps the DATA from colliding with the impl
-   PROCEDUREs (which are relocated to distinct names post-#501)."
+   PROCEDUREs (which are relocated to distinct names post-#501).
+
+   #599: body forms are evaluated via hydra-eval-with-retry, not a single-pass eval. A
+   PrimitiveDefinition's reified body can reference names not yet bound at the point this particular
+   form is first tried (forward references within/across def-modules, or ordering relative to the
+   flat-loaded kernel); a single-pass eval throws immediately and uncaught, aborting the whole
+   for-each in bootstrap.scm ('Unbound variable: def:...'). hydra-eval-with-retry retries unresolved
+   forms up to 10 passes, matching how hydra-load-native-lib's define-library body is loaded."
   (call-with-input-file path
     (lambda (port)
       (let loop ()
@@ -1012,10 +1019,9 @@
                   (cond
                     ((null? rest) #t)
                     ((and (pair? (car rest)) (eq? (caar rest) 'begin))
-                     (for-each
-                       (lambda (body-form)
-                         (eval (rewrite-form body-form renames '()) (interaction-environment)))
-                       (cdar rest)))
+                     (hydra-eval-with-retry
+                       (map (lambda (body-form) (rewrite-form body-form renames '()))
+                            (cdar rest))))
                     (else (find-begin (cdr rest)))))))
             (loop)))))))
 
