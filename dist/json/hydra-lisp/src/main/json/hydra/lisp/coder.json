@@ -12,7 +12,7 @@
     {"module": "hydra.predicates"},
     {"module": "hydra.sorting"},
     {"module": "hydra.lexical"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.lisp.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -4437,7 +4437,7 @@
                                                                             "application": {
                                                                               "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "lname"}}},
                                                                               "argument": {"literal": {"string": " = "}}}}}},
-                                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "origTyp"}}}}}}]}}}},
+                                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "origTyp"}}}}}}]}}}},
                                                       {
                                                         "name": "form",
                                                         "term": {
