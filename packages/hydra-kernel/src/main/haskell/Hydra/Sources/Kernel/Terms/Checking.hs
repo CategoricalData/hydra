@@ -2,10 +2,7 @@
 
 {-
 TODO:
-* Double-check the use of checkTypeVariables for consistency across rules
 * In nominal rules (record/union/wrap intro and elim), double-check that we are checking provided data against the schema
-* Use the inference debug flag to enable / disable code which is purely for checking and not for reconstruction.
-* When the debug flag is set, call checkType from hydra.inference rules
 -}
 
 module Hydra.Sources.Kernel.Terms.Checking where
@@ -14,8 +11,7 @@ module Hydra.Sources.Kernel.Terms.Checking where
 import Hydra.Kernel hiding (
   allEqual, applyTypeArgumentsToType,
   checkForUnboundTypeVariables, checkForUnboundTypeVariablesE,
-  checkNominalApplication, checkNominalApplicationE,
-  checkSameType, checkType, checkTypeSubst, checkTypeVariables, containsInScopeTypeVars, normalizeTypeFreeVars, toFContext,
+  checkSameType, checkTypeSubst, containsInScopeTypeVars, normalizeTypeFreeVars, toFContext,
   typeListsEffectivelyEqual, typeOf, typeOfE, typeOfTerm, typesAllEffectivelyEqual, typesEffectivelyEqual,
   typeOfAnnotatedTerm, typeOfAnnotatedTermE,
   typeOfApplication, typeOfApplicationE,
@@ -125,11 +121,8 @@ module_ = Module {
       toDefinition allEqual,
       toDefinition applyTypeArgumentsToType,
       toDefinition checkForUnboundTypeVariables,
-      toDefinition checkNominalApplication,
       toDefinition checkSameType,
-      toDefinition checkType,
       toDefinition checkTypeSubst,
-      toDefinition checkTypeVariables,
       toDefinition containsInScopeTypeVars,
       toDefinition normalizeTypeFreeVars,
       toDefinition toFContext,
@@ -279,21 +272,6 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
           ("_" ~> var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
   var "checkRecursive" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ list [string "top level"] @@ nothing @@ var "term0"
 
-checkNominalApplication :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [Type] -> Prelude.Either Error ((), InferenceContext))
-checkNominalApplication = define "checkNominalApplication" $
-  doc "Check that a nominal type is applied to the correct number of type arguments (Either version)" $
-  "cx" ~> "tx" ~> "tname" ~> "typeArgs" ~>
-  "result" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
-  "schemaType" <~ Pairs.first (var "result") $
-  "cx2" <~ Pairs.second (var "result") $
-  "vars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "varslen" <~ Lists.length (var "vars") $
-  "argslen" <~ Lists.length (var "typeArgs") $
-  Logic.ifElse (Equality.equal (var "varslen") (var "argslen"))
-    (right $ pair unit (var "cx2"))
-    (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeVariable (var "tname")) (var "varslen") (var "argslen") (var "typeArgs")))
-
--- Currently unused, but preserved for future inference debugging.
 checkSameType :: TypedTermDefinition (InferenceContext -> Graph -> String -> [Type] -> Prelude.Either Error Type)
 checkSameType = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
@@ -302,19 +280,6 @@ checkSameType = define "checkSameType" $
   Logic.ifElse (typesAllEffectivelyEqual @@ var "tx" @@ var "types")
     (Optionals.cases (Lists.maybeHead $ var "types") (var "unequalErr") ("t" ~> right $ var "t"))
     (var "unequalErr")
-
--- Currently unused, but preserved for future inference debugging.
-checkType :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Type -> Prelude.Either Error ())
-checkType = define "checkType" $
-  doc "Check that a term has the expected type" $
-  "cx" ~> "tx" ~> "term" ~> "typ" ~>
-  "vars" <~ Graph.graphTypeVariables (var "tx") $
-  Logic.ifElse (asTerm Constants.debugInference)
-    ("t0" <<~ (Eithers.map ("_p" ~> Pairs.first (var "_p")) (typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term")) $
-      Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
-        (right unit)
-        (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeMismatch $ ErrorsChecking.typeMismatchError (var "typ") (var "t0"))))
-    (right unit)
 
 checkTypeSubst :: TypedTermDefinition (InferenceContext -> Graph -> TypeSubst -> Prelude.Either Error TypeSubst)
 checkTypeSubst = define "checkTypeSubst" $
@@ -340,15 +305,6 @@ checkTypeSubst = define "checkTypeSubst" $
   Logic.ifElse (Sets.null (var "badVars" :: TypedTerm (S.Set Name)))
     (right $ var "subst")
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorIncorrectUnification $ ErrorsChecking.incorrectUnificationError (var "subst")))
-
--- Currently unused, but preserved for future inference debugging.
-checkTypeVariables :: TypedTermDefinition (Graph -> Type -> ())
-checkTypeVariables = define "checkTypeVariables" $
-  doc "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code." $
-  "_tx" ~> "_typ" ~>
-  -- Disabled: phantom type variables from polymorphic instantiation cause false positives.
-  -- The inference pass has already validated type variables via checkForUnboundTypeVariables.
-  unit
 
 -- Note: with Graph, this converts TypeSchemes back to System F types
 -- | Check if a type contains any type variable that's in scope (from graphTypeVariables)

@@ -15,7 +15,7 @@ import Hydra.Kernel hiding (
   inferTypeOfLambda, inferTypeOfLet, inferTypeOfLetNormalized,
   inferTypeOfList, inferTypeOfLiteral,
   inferTypeOfMap, inferTypeOfOptional,
-  inferTypeOfPair, inferTypeOfPrimitive,
+  inferTypeOfPair,
   inferTypeOfProjection, inferTypeOfRecord,
   inferTypeOfSet, inferTypeOfTerm,
   inferTypeOfTypeLambda, inferTypeOfTypeApplication,
@@ -135,7 +135,6 @@ module_ = Module {
       toDefinition inferTypeOfMap,
       toDefinition inferTypeOfOptional,
       toDefinition inferTypeOfPair,
-      toDefinition inferTypeOfPrimitive,
       toDefinition inferTypeOfProjection,
       toDefinition inferTypeOfRecord,
       toDefinition inferTypeOfSet,
@@ -1003,24 +1002,6 @@ inferTypeOfPair = define "inferTypeOfPair" $
     @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
     @@ var "isubst"
     @@ var "pairElemConstraints")
-
-inferTypeOfPrimitive :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
-inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
-  doc "Infer the type of a primitive function (Either version)" $
-  "fcx" ~> "cx" ~> "name" ~>
-  Optionals.cases (Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")) (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name"))) ("scheme" ~>
-      "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
-      "ts" <~ Pairs.first (var "tsResult") $
-      "fcx2" <~ Pairs.second (var "tsResult") $
-      "constraints" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "ts") $
-      right (yieldCheckedWithConstraints
-        @@ var "fcx2"
-        @@ (buildTypeApplicationTerm
-          @@ Core.typeSchemeVariables (var "ts")
-          @@ Core.termVariable (var "name"))
-        @@ Core.typeSchemeBody (var "ts")
-        @@ Substitution.idTypeSubst
-        @@ var "constraints"))
 
 inferTypeOfProjection :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $

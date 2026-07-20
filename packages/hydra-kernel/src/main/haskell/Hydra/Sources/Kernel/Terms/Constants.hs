@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Constants where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  debugInference, ignoredVariable, keyClasses, keyDebugId, keyDeprecated, keyDescription,
+  ignoredVariable, keyClasses, keyDebugId, keyDeprecated, keyDescription,
   keyExclude, keyFirstClassType, keyFreshTypeVariableCount, keyMaxLength, keyMinLength,
   keyPreserveFieldName, keyType, maxInt32, maxTraceDepth,
   regexCamelCase, regexNamespace, regexPackageName, regexPascalCase,
@@ -67,7 +67,6 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for tier-0 constants."))}
   where
    definitions = [
-     toDefinition debugInference,
      toDefinition ignoredVariable,
      toDefinition keyClasses,
      toDefinition keyDebugId,
@@ -90,11 +89,6 @@ module_ = Module {
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
-
-debugInference :: TypedTermDefinition Bool
-debugInference = define "debugInference" $
-  doc "Disable type checking by default, for better performance" $
-  true
 
 defineAnnotationKey :: String -> Maybe String -> TypedTermDefinition Name
 defineAnnotationKey name mdesc = define ("key" <> capitalize name) $ case mdesc of

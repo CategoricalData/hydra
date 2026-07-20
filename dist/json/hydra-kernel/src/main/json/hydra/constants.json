@@ -34,18 +34,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.constants.debugInference",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "boolean"}}},
-        "body": {
-          "annotated": {
-            "body": {"literal": {"boolean": true}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Disable type checking by default, for better performance"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.constants.ignoredVariable",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
         "body": {
