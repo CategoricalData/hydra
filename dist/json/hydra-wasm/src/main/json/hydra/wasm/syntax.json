@@ -8,7 +8,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.wasm.syntax.Module",
+        "name": "hydra.wasm.syntax.BlockInstruction",
         "body": {
           "variables": [],
           "body": {
@@ -16,27 +16,31 @@
               "body": {
                 "record": [
                   {
-                    "name": "name",
+                    "name": "label",
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module name"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional block label"}}}]}}}},
                   {
-                    "name": "fields",
+                    "name": "blockType",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The module's fields (types, functions, memories, tables, globals, imports, exports, etc.)"}}}]}}}}]},
+                        "body": {"variable": "hydra.wasm.syntax.BlockType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The block's result type"}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The instructions in the block"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly module, the top-level container"}}}]}}}}}},
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A block or loop instruction with a label and body"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.ModuleField",
+        "name": "hydra.wasm.syntax.BlockType",
         "body": {
           "variables": [],
           "body": {
@@ -44,69 +48,51 @@
               "body": {
                 "union": [
                   {
-                    "name": "type",
+                    "name": "empty",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.TypeDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]}}}},
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No result"}}}]}}}},
                   {
-                    "name": "func",
+                    "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.Func"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function definition"}}}]}}}},
+                        "body": {"variable": "hydra.wasm.syntax.ValType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Single result value type"}}}]}}}},
                   {
-                    "name": "memory",
+                    "name": "typeUse",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.MemoryDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory definition"}}}]}}}},
+                        "body": {"variable": "hydra.wasm.syntax.TypeUse"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Full function type signature"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a block, loop, or if instruction"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.BrTableArgs",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
                   {
-                    "name": "table",
+                    "name": "labels",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.TableDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table definition"}}}]}}}},
+                        "body": {"list": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Branch target labels"}}}]}}}},
                   {
-                    "name": "global",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.GlobalDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable definition"}}}]}}}},
-                  {
-                    "name": "import",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An import declaration"}}}]}}}},
-                  {
-                    "name": "export",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ExportDef"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An export declaration"}}}]}}}},
-                  {
-                    "name": "data",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.DataSegment"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data segment"}}}]}}}},
-                  {
-                    "name": "elem",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ElemSegment"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An element segment"}}}]}}}},
-                  {
-                    "name": "start",
+                    "name": "default",
                     "type": {
                       "annotated": {
                         "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A start function index"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field within a WebAssembly module"}}}]}}}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Default branch target"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arguments for a branch table instruction"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.ValType",
+        "name": "hydra.wasm.syntax.ConstValue",
         "body": {
           "variables": [],
           "body": {
@@ -117,64 +103,30 @@
                     "name": "i32",
                     "type": {
                       "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit integer"}}}]}}}},
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit integer constant"}}}]}}}},
                   {
                     "name": "i64",
                     "type": {
                       "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit integer"}}}]}}}},
+                        "body": {"literal": {"integer": "int64"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit integer constant"}}}]}}}},
                   {
                     "name": "f32",
                     "type": {
                       "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit float"}}}]}}}},
+                        "body": {"literal": {"float": "float32"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit float constant"}}}]}}}},
                   {
                     "name": "f64",
                     "type": {
                       "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit float"}}}]}}}},
-                  {
-                    "name": "funcref",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function reference"}}}]}}}},
-                  {
-                    "name": "externref",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "External reference"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly value type"}}}]}}}}}},
+                        "body": {"literal": {"float": "float64"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit float constant"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant value instruction"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.FuncType",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "params",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameter types"}}}]}}}},
-                  {
-                    "name": "results",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Result types"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function type signature"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.FuncTypeRef",
+        "name": "hydra.wasm.syntax.DataMode",
         "body": {
           "variables": [],
           "body": {
@@ -182,61 +134,29 @@
               "body": {
                 "union": [
                   {
-                    "name": "index",
+                    "name": "active",
                     "type": {
                       "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference by type index"}}}]}}}},
-                  {
-                    "name": "inline",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.FuncType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Inline function type"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a function type, either by index or inline"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.TypeUse",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "index",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type index reference"}}}]}}}},
-                  {
-                    "name": "params",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Param"}},
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Explicit parameter declarations (may augment or override type index)"}}}]}}}},
+                              "value": {"literal": {"string": "Active segment: loaded at the given offset expression"}}}]}}}},
                   {
-                    "name": "results",
+                    "name": "passive",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Explicit result types"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type use clause, referencing a type definition"}}}]}}}}}},
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Passive segment: must be explicitly loaded via memory.init"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The mode of a data segment"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.TypeDef",
+        "name": "hydra.wasm.syntax.DataSegment",
         "body": {
           "variables": [],
           "body": {
@@ -248,15 +168,189 @@
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type name"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional data segment name"}}}]}}}},
+                  {
+                    "name": "mode",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.DataMode"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether this is an active or passive data segment"}}}]}}}},
+                  {
+                    "name": "bytes",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data bytes (as a string of escaped bytes)"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data segment for initializing memory"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ElemActive",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "table",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Table index"}}}]}}}},
+                  {
+                    "name": "offset",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Offset expression"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Active element segment parameters"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ElemMode",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "active",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ElemActive"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Active segment: loaded at the given table index and offset"}}}]}}}},
+                  {
+                    "name": "passive",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Passive segment: must be explicitly loaded via table.init"}}}]}}}},
+                  {
+                    "name": "declarative",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Declarative segment: declares function references for ref.func"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The mode of an element segment"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ElemSegment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional element segment name"}}}]}}}},
+                  {
+                    "name": "mode",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ElemMode"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether this is an active or passive element segment"}}}]}}}},
                   {
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.FuncType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The function type"}}}]}}}}]},
+                        "body": {"variable": "hydra.wasm.syntax.RefType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The reference type of elements"}}}]}}}},
+                  {
+                    "name": "init",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Initialization expressions (one per element)"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A named type definition in the type section"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An element segment for initializing tables"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ExportDef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The exported name"}}}]}}}},
+                  {
+                    "name": "desc",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ExportDesc"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "What is being exported"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An export declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ExportDesc",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "func",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a function by name or index"}}}]}}}},
+                  {
+                    "name": "memory",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a memory by name or index"}}}]}}}},
+                  {
+                    "name": "table",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a table by name or index"}}}]}}}},
+                  {
+                    "name": "global",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a global by name or index"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An export descriptor identifying what is being exported"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.Func",
@@ -319,7 +413,55 @@
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "A local variable declaration within a function"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.Param",
+        "name": "hydra.wasm.syntax.FuncType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "params",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameter types"}}}]}}}},
+                  {
+                    "name": "results",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Result types"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function type signature"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.FuncTypeRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "index",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference by type index"}}}]}}}},
+                  {
+                    "name": "inline",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.FuncType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Inline function type"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to a function type, either by index or inline"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.GlobalDef",
         "body": {
           "variables": [],
           "body": {
@@ -331,17 +473,25 @@
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional parameter name"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional global name"}}}]}}}},
                   {
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ValType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The parameter's value type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function parameter declaration"}}}]}}}}}},
+                        "body": {"variable": "hydra.wasm.syntax.GlobalType"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The global's type (value type and mutability)"}}}]}}}},
+                  {
+                    "name": "init",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Initialization expression"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable definition"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.BrTableArgs",
+        "name": "hydra.wasm.syntax.GlobalType",
         "body": {
           "variables": [],
           "body": {
@@ -349,19 +499,222 @@
               "body": {
                 "record": [
                   {
-                    "name": "labels",
+                    "name": "valType",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Branch target labels"}}}]}}}},
+                        "body": {"variable": "hydra.wasm.syntax.ValType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value type"}}}]}}}},
                   {
-                    "name": "default",
+                    "name": "mutable",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the global is mutable"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.IfInstruction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional label for the if block"}}}]}}}},
+                  {
+                    "name": "blockType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.BlockType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result type of the if"}}}]}}}},
+                  {
+                    "name": "then",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'then' branch instructions"}}}]}}}},
+                  {
+                    "name": "else",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The 'else' branch instructions (may be empty)"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if-then-else instruction"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportDef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "module",
                     "type": {
                       "annotated": {
                         "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Default branch target"}}}]}}}}]},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name to import from"}}}]}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the imported entity"}}}]}}}},
+                  {
+                    "name": "desc",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportDesc"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The import descriptor (what kind of entity is imported)"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An import declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportDesc",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "func",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportFunc"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a function with the given type"}}}]}}}},
+                  {
+                    "name": "memory",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportMemory"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a memory with the given limits"}}}]}}}},
+                  {
+                    "name": "table",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportTable"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a table"}}}]}}}},
+                  {
+                    "name": "global",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportGlobal"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a global variable"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arguments for a branch table instruction"}}}]}}}}}},
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An import descriptor specifying the kind of imported entity"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportFunc",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name for the imported function"}}}]}}}},
+                  {
+                    "name": "typeUse",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.TypeUse"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The function's type"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function import descriptor"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportGlobal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.GlobalType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Global type"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global import descriptor"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportMemory",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
+                  {
+                    "name": "limits",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.Limits"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory limits"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory import descriptor"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ImportTable",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
+                  {
+                    "name": "refType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.RefType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference type"}}}]}}}},
+                  {
+                    "name": "limits",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.Limits"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Table limits"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table import descriptor"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.Instruction",
@@ -582,7 +935,7 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly instruction"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.BlockInstruction",
+        "name": "hydra.wasm.syntax.Limits",
         "body": {
           "variables": [],
           "body": {
@@ -590,57 +943,18 @@
               "body": {
                 "record": [
                   {
-                    "name": "label",
+                    "name": "min",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional block label"}}}]}}}},
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Minimum size"}}}]}}}},
                   {
-                    "name": "blockType",
+                    "name": "max",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.BlockType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The block's result type"}}}]}}}},
-                  {
-                    "name": "body",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The instructions in the block"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A block or loop instruction with a label and body"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.BlockType",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {
-                    "name": "empty",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No result"}}}]}}}},
-                  {
-                    "name": "value",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ValType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Single result value type"}}}]}}}},
-                  {
-                    "name": "typeUse",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.TypeUse"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Full function type signature"}}}]}}}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a block, loop, or if instruction"}}}]}}}}}},
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional maximum size"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Size limits for memories and tables"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.MemArg",
@@ -663,6 +977,29 @@
                         "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Alignment hint (power of 2)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory access arguments"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.MemoryDef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional memory name"}}}]}}}},
+                  {
+                    "name": "limits",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.Limits"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory size limits (in pages of 64KB)"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory definition"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.MemoryInstruction",
@@ -688,7 +1025,7 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory load or store instruction"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.IfInstruction",
+        "name": "hydra.wasm.syntax.Module",
         "body": {
           "variables": [],
           "body": {
@@ -696,32 +1033,94 @@
               "body": {
                 "record": [
                   {
-                    "name": "label",
+                    "name": "name",
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional label for the if block"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module name"}}}]}}}},
                   {
-                    "name": "blockType",
+                    "name": "fields",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.BlockType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result type of the if"}}}]}}}},
-                  {
-                    "name": "then",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'then' branch instructions"}}}]}}}},
-                  {
-                    "name": "else",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                        "body": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}},
                         "annotation": {
                           "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The 'else' branch instructions (may be empty)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if-then-else instruction"}}}]}}}}}},
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The module's fields (types, functions, memories, tables, globals, imports, exports, etc.)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly module, the top-level container"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ModuleField",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.TypeDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]}}}},
+                  {
+                    "name": "func",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.Func"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function definition"}}}]}}}},
+                  {
+                    "name": "memory",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.MemoryDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory definition"}}}]}}}},
+                  {
+                    "name": "table",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.TableDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table definition"}}}]}}}},
+                  {
+                    "name": "global",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.GlobalDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable definition"}}}]}}}},
+                  {
+                    "name": "import",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ImportDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An import declaration"}}}]}}}},
+                  {
+                    "name": "export",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ExportDef"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An export declaration"}}}]}}}},
+                  {
+                    "name": "data",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.DataSegment"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data segment"}}}]}}}},
+                  {
+                    "name": "elem",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.wasm.syntax.ElemSegment"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An element segment"}}}]}}}},
+                  {
+                    "name": "start",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A start function index"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field within a WebAssembly module"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.NumericOp",
@@ -754,7 +1153,7 @@
                     "value": {"literal": {"string": "A typed numeric operation (used for unop, binop, testop, relop)"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.MemoryDef",
+        "name": "hydra.wasm.syntax.Param",
         "body": {
           "variables": [],
           "body": {
@@ -766,53 +1165,17 @@
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional memory name"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional parameter name"}}}]}}}},
                   {
-                    "name": "limits",
+                    "name": "type",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.Limits"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory size limits (in pages of 64KB)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory definition"}}}]}}}}}},
+                        "body": {"variable": "hydra.wasm.syntax.ValType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The parameter's value type"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function parameter declaration"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.DataSegment",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional data segment name"}}}]}}}},
-                  {
-                    "name": "mode",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.DataMode"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether this is an active or passive data segment"}}}]}}}},
-                  {
-                    "name": "bytes",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The data bytes (as a string of escaped bytes)"}}}]}}}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data segment for initializing memory"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.DataMode",
+        "name": "hydra.wasm.syntax.RefType",
         "body": {
           "variables": [],
           "body": {
@@ -820,100 +1183,22 @@
               "body": {
                 "union": [
                   {
-                    "name": "active",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Active segment: loaded at the given offset expression"}}}]}}}},
-                  {
-                    "name": "passive",
+                    "name": "funcref",
                     "type": {
                       "annotated": {
                         "body": "unit",
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Passive segment: must be explicitly loaded via memory.init"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The mode of a data segment"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.Limits",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function reference"}}}]}}}},
                   {
-                    "name": "min",
+                    "name": "externref",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": "int32"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Minimum size"}}}]}}}},
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "External reference"}}}]}}}}]},
+              "annotation": {
+                "map": [
                   {
-                    "name": "max",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": {"integer": "int32"}}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional maximum size"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Size limits for memories and tables"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.GlobalDef",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional global name"}}}]}}}},
-                  {
-                    "name": "type",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.GlobalType"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The global's type (value type and mutability)"}}}]}}}},
-                  {
-                    "name": "init",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Initialization expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable definition"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.GlobalType",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "valType",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ValType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value type"}}}]}}}},
-                  {
-                    "name": "mutable",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the global is mutable"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable type"}}}]}}}}}},
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference type for tables and reference instructions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.wasm.syntax.TableDef",
@@ -945,29 +1230,7 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table definition"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.ElemActive",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "table",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Table index"}}}]}}}},
-                  {
-                    "name": "offset",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Offset expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Active element segment parameters"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ElemSegment",
+        "name": "hydra.wasm.syntax.TypeDef",
         "body": {
           "variables": [],
           "body": {
@@ -979,35 +1242,54 @@
                     "type": {
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional element segment name"}}}]}}}},
-                  {
-                    "name": "mode",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ElemMode"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether this is an active or passive element segment"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type name"}}}]}}}},
                   {
                     "name": "type",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.RefType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The reference type of elements"}}}]}}}},
-                  {
-                    "name": "init",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Initialization expressions (one per element)"}}}]}}}}]},
+                        "body": {"variable": "hydra.wasm.syntax.FuncType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The function type"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An element segment for initializing tables"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A named type definition in the type section"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.wasm.syntax.ElemMode",
+        "name": "hydra.wasm.syntax.TypeUse",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "index",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type index reference"}}}]}}}},
+                  {
+                    "name": "params",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.Param"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Explicit parameter declarations (may augment or override type index)"}}}]}}}},
+                  {
+                    "name": "results",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.wasm.syntax.ValType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Explicit result types"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A type use clause, referencing a type definition"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.wasm.syntax.ValType",
         "body": {
           "variables": [],
           "body": {
@@ -1015,45 +1297,29 @@
               "body": {
                 "union": [
                   {
-                    "name": "active",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ElemActive"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Active segment: loaded at the given table index and offset"}}}]}}}},
-                  {
-                    "name": "passive",
+                    "name": "i32",
                     "type": {
                       "annotated": {
                         "body": "unit",
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Passive segment: must be explicitly loaded via table.init"}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit integer"}}}]}}}},
                   {
-                    "name": "declarative",
+                    "name": "i64",
                     "type": {
                       "annotated": {
                         "body": "unit",
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Declarative segment: declares function references for ref.func"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The mode of an element segment"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.RefType",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit integer"}}}]}}}},
+                  {
+                    "name": "f32",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit float"}}}]}}}},
+                  {
+                    "name": "f64",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit float"}}}]}}}},
                   {
                     "name": "funcref",
                     "type": {
@@ -1066,270 +1332,4 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "External reference"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference type for tables and reference instructions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportDef",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "module",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name to import from"}}}]}}}},
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the imported entity"}}}]}}}},
-                  {
-                    "name": "desc",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportDesc"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "The import descriptor (what kind of entity is imported)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An import declaration"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportDesc",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {
-                    "name": "func",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportFunc"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a function with the given type"}}}]}}}},
-                  {
-                    "name": "memory",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportMemory"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a memory with the given limits"}}}]}}}},
-                  {
-                    "name": "table",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportTable"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a table"}}}]}}}},
-                  {
-                    "name": "global",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ImportGlobal"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import a global variable"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An import descriptor specifying the kind of imported entity"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportFunc",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name for the imported function"}}}]}}}},
-                  {
-                    "name": "typeUse",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.TypeUse"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The function's type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function import descriptor"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportGlobal",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
-                  {
-                    "name": "type",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.GlobalType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Global type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global import descriptor"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportMemory",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
-                  {
-                    "name": "limits",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.Limits"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory limits"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A memory import descriptor"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ImportTable",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"optional": {"literal": "string"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
-                  {
-                    "name": "refType",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.RefType"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference type"}}}]}}}},
-                  {
-                    "name": "limits",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.Limits"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Table limits"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table import descriptor"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ExportDef",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "name",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The exported name"}}}]}}}},
-                  {
-                    "name": "desc",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.wasm.syntax.ExportDesc"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "What is being exported"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An export declaration"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ExportDesc",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {
-                    "name": "func",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a function by name or index"}}}]}}}},
-                  {
-                    "name": "memory",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a memory by name or index"}}}]}}}},
-                  {
-                    "name": "table",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a table by name or index"}}}]}}}},
-                  {
-                    "name": "global",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "string"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a global by name or index"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An export descriptor identifying what is being exported"}}}]}}}}}},
-    {
-      "type": {
-        "name": "hydra.wasm.syntax.ConstValue",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {
-                    "name": "i32",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": {"integer": "int32"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit integer constant"}}}]}}}},
-                  {
-                    "name": "i64",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": {"integer": "int64"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit integer constant"}}}]}}}},
-                  {
-                    "name": "f32",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": {"float": "float32"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit float constant"}}}]}}}},
-                  {
-                    "name": "f64",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": {"float": "float64"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit float constant"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant value instruction"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly value type"}}}]}}}}}}]}
