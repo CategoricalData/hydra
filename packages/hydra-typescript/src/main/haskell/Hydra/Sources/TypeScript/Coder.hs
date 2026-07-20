@@ -78,35 +78,33 @@ module_ = Module {
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where
+    -- Alphabetical order by local name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness).
     definitions = [
+      toDefinition analyzeTypeScriptFunction,
       toDefinition collectForallParams,
       toDefinition collectImports,
-      toDefinition collectTermImports,
       toDefinition collectInnerTypeImports,
-      toDefinition encodeLiteral,
-      toDefinition filterNonLocalNames,
-      toDefinition encodeLiteralType,
+      toDefinition collectTermImports,
+      toDefinition eagerFreeVariablesInTerm,
       toDefinition encodeBindingAsStatement,
-      toDefinition letBindingIsThunkCandidate,
-      toDefinition forceLazyRefs,
-      toDefinition thunkLazyLet,
-      toDefinition thunkLazyBindings,
+      toDefinition encodeLazyCall,
+      toDefinition encodeLiteral,
+      toDefinition encodeLiteralType,
       toDefinition encodeParam,
-      toDefinition tsEnvGetGraph,
-      toDefinition tsEnvSetGraph,
-      toDefinition analyzeTypeScriptFunction,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
-      toDefinition encodeLazyCall,
-      toDefinition lazyFlagsForPrimitive,
-      toDefinition encodeTypeOrAny,
-      toDefinition functionDeclarationFromTerm,
-      toDefinition sanitizeParamName,
-      toDefinition flattenApplication,
-      toDefinition termHeadVariable,
       toDefinition encodeType,
       toDefinition encodeTypeDefinition,
+      toDefinition encodeTypeOrAny,
+      toDefinition filterNonLocalNames,
+      toDefinition flattenApplication,
+      toDefinition forceLazyRefs,
+      toDefinition functionDeclarationFromTerm,
       toDefinition importsToText,
+      toDefinition lazyFlagsForPrimitive,
+      toDefinition letBindingIsThunkCandidate,
+      toDefinition mkDocComment,
       toDefinition moduleToTypeScript,
       toDefinition printInterfaceDeclaration,
       toDefinition printLiteral,
@@ -116,36 +114,40 @@ module_ = Module {
       toDefinition printTypeExpression,
       toDefinition printTypeParameter,
       toDefinition printTypeParameterList,
-      toDefinition eagerFreeVariablesInTerm,
+      toDefinition sanitizeParamName,
       toDefinition sortBindingsTopologically,
       toDefinition sortTermDefsTopologically,
       toDefinition stripForalls,
+      toDefinition termHeadVariable,
+      toDefinition thunkLazyBindings,
+      toDefinition thunkLazyLet,
       toDefinition tsArray,
       toDefinition tsArrow,
       toDefinition tsArrowTyped,
+      toDefinition tsAsAny,
       toDefinition tsCall,
       toDefinition tsCond,
+      toDefinition tsDocEntityRef,
+      toDefinition tsEnvGetGraph,
+      toDefinition tsEnvSetGraph,
       toDefinition tsEscapeString,
       toDefinition tsExprIdent,
       toDefinition tsExprStr,
       toDefinition tsIdent,
       toDefinition tsMember,
-      toDefinition tsTypedIdent,
       toDefinition tsNamedType,
       toDefinition tsNew,
       toDefinition tsObject,
-      toDefinition tsAsAny,
       toDefinition tsParam,
       toDefinition tsParamApp1,
       toDefinition tsParamApp2,
       toDefinition tsParen,
       toDefinition tsPropSig,
       toDefinition tsPropSigWithDoc,
-      toDefinition tsDocEntityRef,
-      toDefinition mkDocComment,
       toDefinition tsReadonlyMap,
       toDefinition tsReadonlySet,
       toDefinition tsTuple,
+      toDefinition tsTypedIdent,
       toDefinition tsUndefined]
 
 -- =============================================================================
@@ -156,6 +158,7 @@ module_ = Module {
 -- `env = Graph`. Mirrors `analyzeJavaFunction` / `analyzePythonFunction`.
 analyzeTypeScriptFunction :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error (FunctionStructure Graph))
 analyzeTypeScriptFunction = def "analyzeTypeScriptFunction" $
+  doc "Analyze a term as a TypeScript function, using the Graph as the analysis environment" $
   "cx" ~> "g" ~> "term" ~>
     Analysis.analyzeFunctionTerm @@ var "cx"
       @@ tsEnvGetGraph
@@ -249,6 +252,7 @@ def = definitionInModule module_
 -- (which hoists). Otherwise emit a `const name = <expr>;` variable declaration.
 encodeBindingAsStatement :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Binding -> TS.Statement)
 encodeBindingAsStatement = def "encodeBindingAsStatement" $
+  doc "Encode a let-binding as a TS statement inside an enclosing function body, hoisting lambda-valued bindings as nested function declarations" $
   "cx" ~> "g" ~> "currentNs" ~> "b" ~>
     "bname" <~ Core.bindingName (var "b") $
     "lname" <~ (Formatting.sanitizeWithUnderscores
@@ -290,6 +294,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
 -- helper invoked only on failure. See issue #564.
 letBindingIsThunkCandidate :: TypedTermDefinition (Binding -> Bool)
 letBindingIsThunkCandidate = def "letBindingIsThunkCandidate" $
+  doc "True when a let-binding's value should be thunked to preserve Haskell's lazy evaluation semantics" $
   "b" ~>
     -- Strip type lambdas / type applications as well as annotations: a
     -- polymorphic binding (e.g. adaptTerm's `rewrite`, which is forall-typed)
@@ -323,6 +328,7 @@ letBindingIsThunkCandidate = def "letBindingIsThunkCandidate" $
 -- bind to the shadowing definition, not the thunk) are left untouched.
 forceLazyRefs :: TypedTermDefinition (S.Set Name -> Term -> Term)
 forceLazyRefs = def "forceLazyRefs" $
+  doc "Rewrite free occurrences of the given target names from x to x(undefined), forcing a thunked binding created by thunkLazyLet" $
   "targets0" ~> "term0" ~>
     Rewriting.rewriteTermWithContext
       @@ ("recurse0" ~> "targets" ~> "term" ~>
@@ -366,6 +372,7 @@ forceLazyRefs = def "forceLazyRefs" $
 -- as well as to inline `Term_let`s.
 thunkLazyLet :: TypedTermDefinition (Let -> Let)
 thunkLazyLet = def "thunkLazyLet" $
+  doc "Thunk every let-binding for which letBindingIsThunkCandidate holds, and rewrite forced references to it accordingly" $
   "lt" ~>
     "result" <~ (thunkLazyBindings
       @@ (Core.letBindings (var "lt")) @@ (Core.letBody (var "lt"))) $
@@ -377,6 +384,7 @@ thunkLazyLet = def "thunkLazyLet" $
 -- binding is a thunk candidate.
 thunkLazyBindings :: TypedTermDefinition ([Binding] -> Term -> ([Binding], Term))
 thunkLazyBindings = def "thunkLazyBindings" $
+  doc "The bindings-and-body core of thunkLazyLet, shared by the Term_let encoder and the lifted-binding path in functionDeclarationFromTerm" $
   "bindings" ~> "body" ~>
     "candidates" <~ (Lists.filter
       (lambda "b" $ letBindingIsThunkCandidate @@ var "b") (var "bindings")) $
@@ -403,6 +411,7 @@ thunkLazyBindings = def "thunkLazyBindings" $
 -- Returns a single call expression with all args supplied at once.
 encodeLazyCall :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Term -> [Term] -> [Bool] -> TS.Expression)
 encodeLazyCall = def "encodeLazyCall" $
+  doc "Emit a fully-applied primitive call with selected arguments wrapped in thunks, per a parallel list of laziness flags" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "headTerm" $ lambda "args" $ lambda "lazyFlags" $
     "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
     "paired" <~ Lists.zip (var "args") (var "lazyFlags") $
@@ -423,6 +432,7 @@ encodeLazyCall = def "encodeLazyCall" $
 -- lazy. See issue #391.
 lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
 lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
+  doc "Look up a primitive by name and return its per-parameter laziness flags in parameter order" $
   lambda "g" $ lambda "name" $
     Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
       (list ([] :: [TypedTerm Bool]))
@@ -445,6 +455,7 @@ lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
 --     decoder (extractCore.binary) accepts either Uint8Array or base64.
 encodeLiteral :: TypedTermDefinition (Literal -> TS.Expression)
 encodeLiteral = def "encodeLiteral" $
+  doc "Render a Hydra literal as a TypeScript expression" $
   "litExpr" <~ (lambda "lit" $
     inject TS._Expression TS._Expression_literal (var "lit")) $
   "numLit" <~ (lambda "i" $
@@ -503,6 +514,7 @@ encodeLiteral = def "encodeLiteral" $
 -- | Map a Hydra LiteralType to a TypeScript TypeExpression.
 encodeLiteralType :: TypedTermDefinition (LiteralType -> TS.TypeExpression)
 encodeLiteralType = def "encodeLiteralType" $
+  doc "Map a Hydra literal type to a TypeScript type expression" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       tsParamApp1 @@ string "ReadonlyArray" @@ (tsNamedType @@ string "number"),
@@ -537,6 +549,7 @@ encodeLiteralType = def "encodeLiteralType" $
 -- pass's `_`-typed-variable sentinel; otherwise emits an untyped identifier.
 encodeParam :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Name -> Type -> TS.Pattern)
 encodeParam = def "encodeParam" $
+  doc "Build a TS function parameter as a pattern, typed unless the domain is the analyze pass's untyped-variable sentinel" $
   "cx" ~> "g" ~> "currentNs" ~> "pname" ~> "dom" ~>
     "nstr" <~ (sanitizeParamName @@ var "pname") $
     cases _Type (Strip.deannotateType @@ var "dom")
@@ -565,6 +578,7 @@ encodeParam = def "encodeParam" $
 -- newlines, and indentation without manual string assembly.
 encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Term -> TS.Expression)
 encodeTerm = def "encodeTerm" $
+  doc "Render a Hydra term as a TypeScript expression" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
     (Just $ tsExprIdent @@ string "null")
     [_Term_annotated>>: lambda "at" $
@@ -975,6 +989,7 @@ encodeTerm = def "encodeTerm" $
 -- the term's description annotation, if any) alongside the ModuleItem.
 encodeTermDefinition :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> TermDefinition -> (Maybe String, TS.ModuleItem))
 encodeTermDefinition = def "encodeTermDefinition" $
+  doc "Render a Hydra term definition as a TypeScript module item" $
   lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "td" $
     "name" <~ Packaging.termDefinitionName (var "td") $
     "lname" <~ (Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords
@@ -1031,6 +1046,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- union alias.
 encodeType :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Type -> Either Error TS.TypeExpression)
 encodeType = def "encodeType" $
+  doc "Map a Hydra type to a TypeScript type expression" $
   "cx" ~> "g" ~> "currentNs" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "typ") Nothing [
@@ -1201,6 +1217,7 @@ encodeType = def "encodeType" $
 -- `moduleToTypeScript` prepends the doc above the rendered item.
 encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
 encodeTypeDefinition = def "encodeTypeDefinition" $
+  doc "Encode a Hydra type definition as an interface declaration, a discriminated-union type alias, or a plain type alias" $
   "cx" ~> "g" ~> "currentNs" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "typScheme" <~ Packaging.typeDefinitionBody (var "tdef") $
@@ -1316,6 +1333,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- fails (e.g. anonymous record), fall back to `any`.
 encodeTypeOrAny :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Type -> TS.TypeExpression)
 encodeTypeOrAny = def "encodeTypeOrAny" $
+  doc "Try to encode a Hydra type as a TS type expression, falling back to any if encodeType fails" $
   "cx" ~> "g" ~> "currentNs" ~> "typ" ~>
     Eithers.either
       (lambda "_e" $ inject TS._TypeExpression TS._TypeExpression_any unit)
@@ -1327,6 +1345,7 @@ encodeTypeOrAny = def "encodeTypeOrAny" $
 -- and Names in the current namespace are dropped.
 filterNonLocalNames :: TypedTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
 filterNonLocalNames = def "filterNonLocalNames" $
+  doc "Keep only names whose module differs from the current module's" $
   lambda "currentNs" $ lambda "names" $
     ((Sets.fromList $ Optionals.cat $ Lists.map
       (lambda "n" $
@@ -1345,6 +1364,7 @@ filterNonLocalNames = def "filterNonLocalNames" $
 -- application order). For `App (App (App f a) b) c)` returns `(f, [a,b,c])`.
 flattenApplication :: TypedTermDefinition (Term -> (Term, [Term]))
 flattenApplication = def "flattenApplication" $
+  doc "Walk an application spine, returning the innermost head term and its arguments in application order" $
   lambda "t" $
     "dt" <~ (Strip.deannotateTerm @@ var "t") $
     cases _Term (var "dt")
@@ -1364,6 +1384,7 @@ flattenApplication = def "flattenApplication" $
 -- (for codomain inference); pass `Nothing` if not available.
 functionDeclarationFromTerm :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
 functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
+  doc "Build a TS function declaration from a Hydra term by peeling lambdas and let bindings into explicit parameters, statements, and a body" $
   "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
     "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
     "fs" <~ Eithers.either
@@ -1426,6 +1447,7 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
 --   "value" → emits `import { ... }` with names verbatim (for term-level refs).
 importsToText :: TypedTermDefinition (String -> ModuleName -> S.Set Name -> String)
 importsToText = def "importsToText" $
+  doc "Render a set of qualified names as TypeScript import statements grouped by source module" $
   lambda "kind" $ lambda "currentNs" $ lambda "names" $
     -- Pair each Name with its optional ModuleName; drop ones with no namespace
     -- or whose namespace matches the current module.
@@ -1625,6 +1647,7 @@ tsDocEntityRef = def "tsDocEntityRef" $
 -- duplicative with TS's own type annotations).
 mkDocComment :: TypedTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
 mkDocComment = def "mkDocComment" $
+  doc "Build a documentation comment from an optional description string, or nothing if the description is missing or empty" $
   lambda "mdesc" $ Optionals.cases (var "mdesc")
     nothing
     (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
@@ -1640,6 +1663,7 @@ mkDocComment = def "mkDocComment" $
 -- term-level cross-module refs may be missing imports.
 moduleToTypeScript :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToTypeScript = def "moduleToTypeScript" $
+  doc "Convert a Hydra module to a map from .ts file path to TypeScript source" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "currentNs" <~ Packaging.moduleName (var "mod") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
@@ -1744,6 +1768,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
 --     }
 printInterfaceDeclaration :: TypedTermDefinition (TS.InterfaceDeclaration -> String)
 printInterfaceDeclaration = def "printInterfaceDeclaration" $
+  doc "Render an interface declaration" $
   lambda "decl" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_name @@ var "decl")) $
     "params" <~ (printTypeParameterList @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_typeParameters @@ var "decl")) $
@@ -1777,6 +1802,7 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
 -- appear in generated declarations are handled in detail.
 printLiteral :: TypedTermDefinition (TS.Literal -> String)
 printLiteral = def "printLiteral" $
+  doc "Render a TypeScript literal as source text" $
   lambda "lit" $ cases TS._Literal (var "lit") (Just $ string "null") [
     TS._Literal_string>>: lambda "sl" $
       tsEscapeString @@ (project TS._StringLiteral TS._StringLiteral_value @@ var "sl"),
@@ -1794,6 +1820,7 @@ printLiteral = def "printLiteral" $
 -- other coders use, giving proper indentation and newlines for terms.
 printModuleItem :: TypedTermDefinition (TS.ModuleItem -> String)
 printModuleItem = def "printModuleItem" $
+  doc "Render a top-level module item" $
   lambda "mi" $ cases TS._ModuleItem (var "mi") (Just $ string "") [
     TS._ModuleItem_interface>>: asTerm printInterfaceDeclaration,
     TS._ModuleItem_typeAlias>>: asTerm printTypeAliasDeclaration,
@@ -1817,6 +1844,7 @@ printModuleItem = def "printModuleItem" $
 --   readonly fieldName: T;
 printPropertySignature :: TypedTermDefinition (TS.PropertySignature -> String)
 printPropertySignature = def "printPropertySignature" $
+  doc "Render a property signature, with an optional JSDoc comment prepended" $
   lambda "ps" $
     "mcomments" <~ (project TS._PropertySignature TS._PropertySignature_comments @@ var "ps") $
     "line" <~ Strings.cat (list [
@@ -1841,6 +1869,7 @@ printPropertySignature = def "printPropertySignature" $
 --     export type Foo<T> = …;
 printTypeAliasDeclaration :: TypedTermDefinition (TS.TypeAliasDeclaration -> String)
 printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
+  doc "Render a type alias declaration" $
   lambda "decl" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_name @@ var "decl")) $
     "params" <~ (printTypeParameterList @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_typeParameters @@ var "decl")) $
@@ -1856,6 +1885,7 @@ printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
 -- | Render a TypeScript TypeExpression as source text.
 printTypeExpression :: TypedTermDefinition (TS.TypeExpression -> String)
 printTypeExpression = def "printTypeExpression" $
+  doc "Render a TypeScript type expression as source text" $
   lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
     TS._TypeExpression_identifier>>: lambda "i" $
       unwrap TS._Identifier @@ var "i",
@@ -1911,6 +1941,7 @@ printTypeExpression = def "printTypeExpression" $
 -- | Render one generic parameter (with optional `extends` constraint).
 printTypeParameter :: TypedTermDefinition (TS.TypeParameter -> String)
 printTypeParameter = def "printTypeParameter" $
+  doc "Render one generic type parameter, with an optional extends constraint" $
   lambda "tp" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._TypeParameter TS._TypeParameter_name @@ var "tp")) $
     "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
@@ -1924,6 +1955,7 @@ printTypeParameter = def "printTypeParameter" $
 -- | Render a `<T, U extends Foo>` block, or empty string when no parameters.
 printTypeParameterList :: TypedTermDefinition ([TS.TypeParameter] -> String)
 printTypeParameterList = def "printTypeParameterList" $
+  doc "Render a generic parameter list, or the empty string when there are no parameters" $
   lambda "tps" $
     Logic.ifElse (Lists.null (var "tps"))
       (string "")
@@ -1936,6 +1968,7 @@ printTypeParameterList = def "printTypeParameterList" $
 -- | Sanitize a Hydra parameter name into a valid (and non-reserved) TS identifier.
 sanitizeParamName :: TypedTermDefinition (Name -> String)
 sanitizeParamName = def "sanitizeParamName" $
+  doc "Sanitize a Hydra parameter name into a valid, non-reserved TS identifier" $
   lambda "n" $ Formatting.sanitizeWithUnderscores
     @@ TypeScriptLanguageSource.typeScriptReservedWords
     @@ (Names.localNameOf @@ var "n")
@@ -1947,6 +1980,7 @@ sanitizeParamName = def "sanitizeParamName" $
 -- whereas JS `const` requires definitions-before-uses.
 sortBindingsTopologically :: TypedTermDefinition ([Binding] -> [Binding])
 sortBindingsTopologically = def "sortBindingsTopologically" $
+  doc "Reorder let-bindings so each appears after the sibling bindings it depends on, avoiding JS temporal-dead-zone errors" $
   lambda "bindings" $
     "byName" <~ (Maps.fromList $ Lists.map
       (lambda "b" $ pair (Core.bindingName (var "b")) (var "b"))
@@ -1979,6 +2013,8 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
 -- parsers deliberately deferred with `lazy(() -> otherParser)`). See #604.
 eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
+  doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested " ++
+    "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.parsers.lazy") $
   lambda "term" $
     "dfltVars" <~ (lambda "_" $ Lists.foldl
       (lambda "s" $ lambda "t" $ Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "t"))
@@ -2014,6 +2050,7 @@ eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
 -- chain a simple (acyclic) dependency and sorts it correctly. See #604.
 sortTermDefsTopologically :: TypedTermDefinition (ModuleName -> [TermDefinition] -> [TermDefinition])
 sortTermDefsTopologically = def "sortTermDefsTopologically" $
+  doc "Reorder term definitions so each appears after the intra-module definitions it depends on" $
   lambda "currentNs" $ lambda "tdefs" $
     -- Build a Map<Name, TermDefinition> keyed by full Hydra name.
     "byName" <~ (Maps.fromList $ Lists.map
@@ -2050,6 +2087,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
 
 stripForalls :: TypedTermDefinition (Type -> Type)
 stripForalls = def "stripForalls" $
+  doc "Strip leading forall quantifiers from a type, returning the innermost body" $
   lambda "t" $
     "dt" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "dt") (Just $ var "dt") [
@@ -2063,6 +2101,7 @@ stripForalls = def "stripForalls" $
 -- erase them here too when looking for the head.
 termHeadVariable :: TypedTermDefinition (Term -> Maybe Name)
 termHeadVariable = def "termHeadVariable" $
+  doc "If a term reduces, through annotations and type applications, to a variable reference, return its name" $
   lambda "t" $
     "dt" <~ (Strip.deannotateTerm @@ var "t") $
     cases _Term (var "dt")
@@ -2076,6 +2115,7 @@ termHeadVariable = def "termHeadVariable" $
 -- don't emit).
 tsArray :: TypedTermDefinition ([TS.Expression] -> TS.Expression)
 tsArray = def "tsArray" $
+  doc "An array expression: [e1, e2, ...]" $
   lambda "elems" $
     inject TS._Expression TS._Expression_array $
       Lists.map (lambda "e" $ inject TS._ArrayElement TS._ArrayElement_expression (var "e"))
@@ -2086,6 +2126,7 @@ tsArray = def "tsArray" $
 -- AST grows a typed-parameter slot.
 tsArrow :: TypedTermDefinition ([String] -> TS.Expression -> TS.Expression)
 tsArrow = def "tsArrow" $
+  doc "An untyped arrow function with an expression body" $
   lambda "params" $ lambda "body" $
     inject TS._Expression TS._Expression_arrow $
       record TS._ArrowFunctionExpression [
@@ -2100,6 +2141,7 @@ tsArrow = def "tsArrow" $
 -- Used by inline `_Term_lambda` emission to satisfy `noImplicitAny`.
 tsArrowTyped :: TypedTermDefinition ([TS.Pattern] -> TS.Expression -> TS.Expression)
 tsArrowTyped = def "tsArrowTyped" $
+  doc "A typed arrow function with typed parameter patterns" $
   lambda "patterns" $ lambda "body" $
     inject TS._Expression TS._Expression_arrow $
       record TS._ArrowFunctionExpression [
@@ -2114,6 +2156,7 @@ tsArrowTyped = def "tsArrowTyped" $
 -- vs `Term`/`Type`/`Optional<T>`). The runtime is unaffected.
 tsAsAny :: TypedTermDefinition (TS.Expression -> TS.Expression)
 tsAsAny = def "tsAsAny" $
+  doc "Wrap an expression in a TypeScript 'as any' cast" $
   lambda "e" $
     inject TS._Expression TS._Expression_asExpression $
       record TS._AsExpression [
@@ -2124,6 +2167,7 @@ tsAsAny = def "tsAsAny" $
 -- an arrow function or other expression that's ambiguous as a call target.
 tsCall :: TypedTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
 tsCall = def "tsCall" $
+  doc "A call expression, parenthesizing the callee when it's an arrow function or other ambiguous call target" $
   lambda "callee" $ lambda "args" $
     inject TS._Expression TS._Expression_call $
       record TS._CallExpression [
@@ -2134,6 +2178,7 @@ tsCall = def "tsCall" $
 -- | `test ? consequent : alternate`.
 tsCond :: TypedTermDefinition (TS.Expression -> TS.Expression -> TS.Expression -> TS.Expression)
 tsCond = def "tsCond" $
+  doc "A conditional (ternary) expression" $
   lambda "test" $ lambda "cons" $ lambda "alt" $
     inject TS._Expression TS._Expression_conditional $
       record TS._ConditionalExpression [
@@ -2147,11 +2192,15 @@ tsCond = def "tsCond" $
 -- coders' "untyped term variable" check when the surrounding HOF (here,
 -- `Analysis.analyzeFunctionTerm`) is polymorphic.
 tsEnvGetGraph :: TypedTermDefinition (Graph -> Graph)
-tsEnvGetGraph = def "tsEnvGetGraph" $ lambda "g" $ var "g"
+tsEnvGetGraph = def "tsEnvGetGraph" $
+  doc "Identity getter for analyzeFunctionTerm when the environment is a Graph" $
+  lambda "g" $ var "g"
 
 -- | `\new old -> new`. setter for `analyzeFunctionTerm` when env == Graph.
 tsEnvSetGraph :: TypedTermDefinition (Graph -> Graph -> Graph)
-tsEnvSetGraph = def "tsEnvSetGraph" $ lambda "newG" $ lambda "_old" $ var "newG"
+tsEnvSetGraph = def "tsEnvSetGraph" $
+  doc "Setter for analyzeFunctionTerm when the environment is a Graph" $
+  lambda "newG" $ lambda "_old" $ var "newG"
 
 -- | Escape a Hydra string for embedding as a double-quoted TypeScript string
 -- literal. Handles backslash, double-quote, newline, carriage return, tab,
@@ -2159,6 +2208,7 @@ tsEnvSetGraph = def "tsEnvSetGraph" $ lambda "newG" $ lambda "_old" $ var "newG"
 -- keeps multibyte Unicode intact).
 tsEscapeString :: TypedTermDefinition (String -> String)
 tsEscapeString = def "tsEscapeString" $
+  doc "Escape a Hydra string for embedding as a double-quoted TypeScript string literal" $
   lambda "s" $
     "escapeChar" <~ ("c" ~>
       Logic.ifElse (Equality.equal (var "c") (int32 34))    (string "\\\"") $
@@ -2177,12 +2227,14 @@ tsEscapeString = def "tsEscapeString" $
 -- | A bare identifier expression like `x`.
 tsExprIdent :: TypedTermDefinition (String -> TS.Expression)
 tsExprIdent = def "tsExprIdent" $
+  doc "A bare identifier expression" $
   lambda "s" $ inject TS._Expression TS._Expression_identifier (tsIdent @@ var "s")
 
 -- | A string-literal expression. Embeds the value verbatim through
 -- `TS.StringLiteral`; serde handles escaping.
 tsExprStr :: TypedTermDefinition (String -> TS.Expression)
 tsExprStr = def "tsExprStr" $
+  doc "A string-literal expression" $
   lambda "s" $
     inject TS._Expression TS._Expression_literal $
       inject TS._Literal TS._Literal_string $
@@ -2193,11 +2245,13 @@ tsExprStr = def "tsExprStr" $
 -- | Wrap a String into a TypeScript Identifier.
 tsIdent :: TypedTermDefinition (String -> TS.Identifier)
 tsIdent = def "tsIdent" $
+  doc "Wrap a string into a TypeScript identifier" $
   lambda "s" $ wrap TS._Identifier (var "s")
 
 -- | `obj.prop` member access.
 tsMember :: TypedTermDefinition (TS.Expression -> String -> TS.Expression)
 tsMember = def "tsMember" $
+  doc "A member-access expression: obj.prop" $
   lambda "obj" $ lambda "prop" $
     inject TS._Expression TS._Expression_member $
       record TS._MemberExpression [
@@ -2209,12 +2263,14 @@ tsMember = def "tsMember" $
 -- | A bare named type reference like `Foo`.
 tsNamedType :: TypedTermDefinition (String -> TS.TypeExpression)
 tsNamedType = def "tsNamedType" $
+  doc "A bare named type reference" $
   lambda "n" $
     inject TS._TypeExpression TS._TypeExpression_identifier (tsIdent @@ var "n")
 
 -- | `new C(arg, ...)`.
 tsNew :: TypedTermDefinition (TS.Expression -> [TS.Expression] -> TS.Expression)
 tsNew = def "tsNew" $
+  doc "A new-expression: new C(args)" $
   lambda "callee" $ lambda "args" $
     inject TS._Expression TS._Expression_new $
       record TS._CallExpression [
@@ -2226,6 +2282,7 @@ tsNew = def "tsNew" $
 -- callers that need string-keyed properties can build a Property directly.
 tsObject :: TypedTermDefinition ([(String, TS.Expression)] -> TS.Expression)
 tsObject = def "tsObject" $
+  doc "An object literal with identifier-style keys" $
   lambda "props" $
     inject TS._Expression TS._Expression_object $
       Lists.map
@@ -2243,6 +2300,7 @@ tsObject = def "tsObject" $
 -- | A generic type parameter with no constraint.
 tsParam :: TypedTermDefinition (String -> TS.TypeParameter)
 tsParam = def "tsParam" $
+  doc "A generic type parameter with no constraint" $
   lambda "n" $
     record TS._TypeParameter [
       TS._TypeParameter_name>>: tsIdent @@ var "n",
@@ -2252,6 +2310,7 @@ tsParam = def "tsParam" $
 -- | A parameterized type `Name<T>`.
 tsParamApp1 :: TypedTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression)
 tsParamApp1 = def "tsParamApp1" $
+  doc "A parameterized type with one type argument" $
   lambda "n" $ lambda "arg" $
     inject TS._TypeExpression TS._TypeExpression_parameterized $
       record TS._ParameterizedTypeExpression [
@@ -2261,6 +2320,7 @@ tsParamApp1 = def "tsParamApp1" $
 -- | A parameterized type `Name<K, V>`.
 tsParamApp2 :: TypedTermDefinition (String -> TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
 tsParamApp2 = def "tsParamApp2" $
+  doc "A parameterized type with two type arguments" $
   lambda "n" $ lambda "a" $ lambda "b" $
     inject TS._TypeExpression TS._TypeExpression_parameterized $
       record TS._ParameterizedTypeExpression [
@@ -2272,12 +2332,14 @@ tsParamApp2 = def "tsParamApp2" $
 -- nested calls; cheaper than re-deriving precedence at every site.
 tsParen :: TypedTermDefinition (TS.Expression -> TS.Expression)
 tsParen = def "tsParen" $
+  doc "Wrap an expression in parentheses when its serialized form needs grouping" $
   lambda "e" $ inject TS._Expression TS._Expression_parenthesized (var "e")
 
 -- | A readonly property signature. The name is sanitized for TS reserved
 -- words (so a Hydra field named `case` becomes `case_`).
 tsPropSig :: TypedTermDefinition (String -> Bool -> TS.TypeExpression -> TS.PropertySignature)
 tsPropSig = def "tsPropSig" $
+  doc "A readonly property signature, with the name sanitized for TS reserved words" $
   lambda "name" $ lambda "optional" $ lambda "typ" $
     tsPropSigWithDoc @@ var "name" @@ var "optional" @@ var "typ" @@ nothing
 
@@ -2286,6 +2348,7 @@ tsPropSig = def "tsPropSig" $
 -- the field has a description annotation in the kernel module.
 tsPropSigWithDoc :: TypedTermDefinition (String -> Bool -> TS.TypeExpression -> Maybe TS.DocumentationComment -> TS.PropertySignature)
 tsPropSigWithDoc = def "tsPropSigWithDoc" $
+  doc "A readonly property signature with an optional JSDoc comment above the property line" $
   lambda "name" $ lambda "optional" $ lambda "typ" $ lambda "mcomments" $
     "safe" <~ (Formatting.sanitizeWithUnderscores
       @@ TypeScriptLanguageSource.typeScriptReservedWords
@@ -2304,16 +2367,19 @@ tsPropSigWithDoc = def "tsPropSigWithDoc" $
 -- | A `ReadonlyMap<K, V>`.
 tsReadonlyMap :: TypedTermDefinition (TS.TypeExpression -> TS.TypeExpression -> TS.TypeExpression)
 tsReadonlyMap = def "tsReadonlyMap" $
+  doc "A ReadonlyMap type with the given key and value types" $
   lambda "k" $ lambda "v" $ tsParamApp2 @@ string "ReadonlyMap" @@ var "k" @@ var "v"
 
 -- | A `ReadonlySet<T>`.
 tsReadonlySet :: TypedTermDefinition (TS.TypeExpression -> TS.TypeExpression)
 tsReadonlySet = def "tsReadonlySet" $
+  doc "A ReadonlySet type with the given element type" $
   lambda "t" $ tsParamApp1 @@ string "ReadonlySet" @@ var "t"
 
 -- | A tuple type `[A, B, ...]`.
 tsTuple :: TypedTermDefinition ([TS.TypeExpression] -> TS.TypeExpression)
 tsTuple = def "tsTuple" $
+  doc "A tuple type" $
   lambda "ts" $
     inject TS._TypeExpression TS._TypeExpression_tuple (var "ts")
 
@@ -2321,6 +2387,7 @@ tsTuple = def "tsTuple" $
 -- parameters where the parameter's domain type is known.
 tsTypedIdent :: TypedTermDefinition (String -> TS.TypeExpression -> TS.Pattern)
 tsTypedIdent = def "tsTypedIdent" $
+  doc "A typed-identifier pattern for a function parameter with a known domain type" $
   lambda "name" $ lambda "typ" $
     inject TS._Pattern TS._Pattern_typed $
       record TS._TypedPattern [
@@ -2330,4 +2397,6 @@ tsTypedIdent = def "tsTypedIdent" $
 
 -- | The `undefined` value as an Expression.
 tsUndefined :: TypedTermDefinition TS.Expression
-tsUndefined = def "tsUndefined" $ tsExprIdent @@ string "undefined"
+tsUndefined = def "tsUndefined" $
+  doc "The undefined value as an expression" $
+  tsExprIdent @@ string "undefined"

@@ -101,96 +101,81 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting TypeScript AST to abstract expressions")}
   where
+    -- Alphabetical order by local name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness).
     definitions = [
-      -- Core conversions
-      toDefinition identifierToExpr,
-      toDefinition literalToExpr,
-      toDefinition stringLiteralToExpr,
-      toDefinition escapeString,
-      toDefinition templateLiteralToExpr,
-      toDefinition numericLiteralToExpr,
-
-      -- Expression conversions
-      toDefinition expressionToExpr,
-      toDefinition arrayExpressionToExpr,
-      toDefinition arrayElementToExpr,
-      toDefinition objectExpressionToExpr,
-      toDefinition propertyToExpr,
-      toDefinition functionExpressionToExpr,
-      toDefinition arrowFunctionExpressionToExpr,
-      toDefinition callExpressionToExpr,
-      toDefinition memberExpressionToExpr,
-      toDefinition conditionalExpressionToExpr,
-      toDefinition binaryExpressionToExpr,
-      toDefinition unaryExpressionToExpr,
-      toDefinition assignmentExpressionToExpr,
-
-      -- Pattern conversions
-      toDefinition patternToExpr,
-      toDefinition objectPatternToExpr,
-      toDefinition objectPatternPropertyToExpr,
-      toDefinition arrayPatternToExpr,
-      toDefinition assignmentPatternToExpr,
-      toDefinition typedPatternToExpr,
-      toDefinition patternToString,
-      toDefinition tsTypeExpressionToString,
-      toDefinition isKernelTypeVarName,
       toDefinition allDigits,
-
-      -- Statement conversions
-      toDefinition statementToExpr,
+      toDefinition arrayElementToExpr,
+      toDefinition arrayExpressionToExpr,
+      toDefinition arrayPatternToExpr,
+      toDefinition arrowFunctionExpressionToExpr,
+      toDefinition assignmentExpressionToExpr,
+      toDefinition assignmentOperatorToString,
+      toDefinition assignmentPatternToExpr,
+      toDefinition binaryExpressionToExpr,
+      toDefinition binaryOperatorToExpr,
       toDefinition blockStatementToExpr,
+      toDefinition breakStatementToExpr,
+      toDefinition callExpressionToExpr,
+      toDefinition catchClauseToExpr,
+      toDefinition classDeclarationToExpr,
+      toDefinition classDeclarationWithCommentsToExpr,
+      toDefinition conditionalExpressionToExpr,
+      toDefinition continueStatementToExpr,
+      toDefinition doWhileStatementToExpr,
+      toDefinition documentationCommentToExpr,
+      toDefinition documentationTagToLine,
+      toDefinition escapeString,
+      toDefinition exportAllToExpr,
+      toDefinition exportDeclarationToExpr,
+      toDefinition exportSpecifierToExpr,
+      toDefinition expressionToExpr,
+      toDefinition forInStatementToExpr,
+      toDefinition forOfStatementToExpr,
+      toDefinition forStatementToExpr,
+      toDefinition formatImportSpecifiers,
+      toDefinition functionDeclarationToExpr,
+      toDefinition functionDeclarationWithCommentsToExpr,
+      toDefinition functionExpressionToExpr,
+      toDefinition identifierToExpr,
+      toDefinition ifStatementToExpr,
+      toDefinition importDeclarationToExpr,
+      toDefinition importSpecifierToExpr,
+      toDefinition isKernelTypeVarName,
+      toDefinition labeledStatementToExpr,
+      toDefinition literalToExpr,
+      toDefinition memberExpressionToExpr,
+      toDefinition methodDefinitionToExpr,
+      toDefinition moduleItemToExpr,
+      toDefinition moduleItemWithCommentsToExpr,
+      toDefinition namedExportToExpr,
+      toDefinition numericLiteralToExpr,
+      toDefinition objectExpressionToExpr,
+      toDefinition objectPatternPropertyToExpr,
+      toDefinition objectPatternToExpr,
+      toDefinition patternToExpr,
+      toDefinition patternToString,
+      toDefinition programToExpr,
+      toDefinition propertyToExpr,
+      toDefinition returnStatementToExpr,
+      toDefinition statementToExpr,
+      toDefinition stringLiteralToExpr,
+      toDefinition switchCaseToExpr,
+      toDefinition switchStatementToExpr,
+      toDefinition templateLiteralToExpr,
+      toDefinition throwStatementToExpr,
+      toDefinition toLineComment,
+      toDefinition toTypeScriptComments,
+      toDefinition tryStatementToExpr,
+      toDefinition tsTypeExpressionToString,
+      toDefinition typeExpressionToString,
+      toDefinition typedPatternToExpr,
+      toDefinition unaryExpressionToExpr,
+      toDefinition unaryOperatorToString,
       toDefinition variableDeclarationToExpr,
       toDefinition variableDeclaratorToExpr,
       toDefinition variableKindToExpr,
-      toDefinition ifStatementToExpr,
-      toDefinition switchStatementToExpr,
-      toDefinition switchCaseToExpr,
-      toDefinition returnStatementToExpr,
-      toDefinition throwStatementToExpr,
-      toDefinition tryStatementToExpr,
-      toDefinition catchClauseToExpr,
-      toDefinition breakStatementToExpr,
-      toDefinition continueStatementToExpr,
-      toDefinition whileStatementToExpr,
-      toDefinition doWhileStatementToExpr,
-      toDefinition forStatementToExpr,
-      toDefinition forInStatementToExpr,
-      toDefinition forOfStatementToExpr,
-      toDefinition labeledStatementToExpr,
-
-      -- Declaration conversions
-      toDefinition functionDeclarationToExpr,
-      toDefinition classDeclarationToExpr,
-      toDefinition methodDefinitionToExpr,
-
-      -- Module conversions
-      toDefinition programToExpr,
-      toDefinition moduleItemToExpr,
-      toDefinition importDeclarationToExpr,
-      toDefinition importSpecifierToExpr,
-      toDefinition formatImportSpecifiers,
-      toDefinition exportDeclarationToExpr,
-      toDefinition namedExportToExpr,
-      toDefinition exportSpecifierToExpr,
-      toDefinition exportAllToExpr,
-
-      -- Operators
-      toDefinition binaryOperatorToExpr,
-      toDefinition unaryOperatorToString,
-      toDefinition assignmentOperatorToString,
-
-      -- Comments
-      toDefinition documentationCommentToExpr,
-      toDefinition toTypeScriptComments,
-      toDefinition documentationTagToLine,
-      toDefinition typeExpressionToString,
-      toDefinition toLineComment,
-
-      -- With comments variants
-      toDefinition moduleItemWithCommentsToExpr,
-      toDefinition functionDeclarationWithCommentsToExpr,
-      toDefinition classDeclarationWithCommentsToExpr]
+      toDefinition whileStatementToExpr]
 
 
 -- ============================================================================
@@ -200,6 +185,7 @@ module_ = Module {
 -- | True iff every codepoint is an ASCII digit '0'..'9' (and the list is non-empty).
 allDigits :: TypedTermDefinition ([Int] -> Bool)
 allDigits = define "allDigits" $
+  doc "True iff every codepoint is an ASCII digit 0-9, and the list is non-empty" $
   lambda "cps" $
     Logic.and
       (Equality.gt (Lists.length (var "cps")) (int32 0))
@@ -824,6 +810,7 @@ importSpecifierToExpr = define "importSpecifierToExpr" $
 -- builtin (the kernel String DSL doesn't expose one).
 isKernelTypeVarName :: TypedTermDefinition (String -> Bool)
 isKernelTypeVarName = define "isKernelTypeVarName" $
+  doc "Detect a kernel-synthesized type-variable name like T0 or T12, which is unbound in inline type annotations" $
   lambda "s" $ lets [
     "cps">: Strings.toList (var "s"),
     "len">: Lists.length (var "cps"),

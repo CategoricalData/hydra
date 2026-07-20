@@ -97,64 +97,46 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "AST operators for TypeScript with precedence and associativity")}
   where
+    -- Alphabetical order by local name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness,
+    -- so the semantic grouping formerly used here cannot be preserved in this list;
+    -- the section comments remain in place below, next to the definitions
+    -- themselves, as documentation).
     definitions = [
-      -- Function application
-      toDefinition appOp,
-
-      -- Member access
-      toDefinition memberOp,
-      toDefinition optionalChainOp,
-
-      -- Arithmetic operators
-      toDefinition exponentiateOp,
-      toDefinition multiplyOp,
-      toDefinition divideOp,
-      toDefinition moduloOp,
       toDefinition addOp,
-      toDefinition subtractOp,
-
-      -- Comparison operators
-      toDefinition lessThanOp,
-      toDefinition lessThanOrEqualOp,
+      toDefinition appOp,
+      toDefinition arrowOp,
+      toDefinition assignOp,
+      toDefinition bitwiseAndOp,
+      toDefinition bitwiseOrOp,
+      toDefinition bitwiseXorOp,
+      toDefinition colonOp,
+      toDefinition commaOp,
+      toDefinition defineOp,
+      toDefinition divideOp,
+      toDefinition equalOp,
+      toDefinition exponentiateOp,
       toDefinition greaterThanOp,
       toDefinition greaterThanOrEqualOp,
       toDefinition inOp,
       toDefinition instanceOfOp,
-      toDefinition equalOp,
-      toDefinition notEqualOp,
-      toDefinition strictEqualOp,
-      toDefinition strictNotEqualOp,
-
-      -- Bitwise operators
-      toDefinition bitwiseAndOp,
-      toDefinition bitwiseXorOp,
-      toDefinition bitwiseOrOp,
       toDefinition leftShiftOp,
-      toDefinition rightShiftOp,
-      toDefinition unsignedRightShiftOp,
-
-      -- Logical operators
+      toDefinition lessThanOp,
+      toDefinition lessThanOrEqualOp,
       toDefinition logicalAndOp,
       toDefinition logicalOrOp,
+      toDefinition memberOp,
+      toDefinition moduloOp,
+      toDefinition multiplyOp,
+      toDefinition notEqualOp,
       toDefinition nullishCoalescingOp,
-
-      -- Assignment operators
-      toDefinition assignOp,
-
-      -- Arrow function
-      toDefinition arrowOp,
-
-      -- Ternary
+      toDefinition optionalChainOp,
+      toDefinition rightShiftOp,
+      toDefinition strictEqualOp,
+      toDefinition strictNotEqualOp,
+      toDefinition subtractOp,
       toDefinition ternaryOp,
-
-      -- Comma
-      toDefinition commaOp,
-
-      -- Definition (for const x = ...)
-      toDefinition defineOp,
-
-      -- Type annotation (TypeScript)
-      toDefinition colonOp]
+      toDefinition unsignedRightShiftOp]
 
 -- Note: JavaScript precedence levels (MDN); TypeScript inherits these:
 -- 1 = comma, 2 = assignment, 3 = conditional, 4 = nullish coalescing,
