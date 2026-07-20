@@ -96,21 +96,21 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting RDF graphs to N-Triples format expressions")}
   where
     definitions = [
+      toDefinition blankNodeToExpr,
       toDefinition escapeIriChar,
       toDefinition escapeIriStr,
       toDefinition escapeLiteralChar,
       toDefinition escapeLiteralString,
-      toDefinition hexDigit,
-      toDefinition rdfGraphToNtriples,
-      toDefinition uchar4,
-      toDefinition blankNodeToExpr,
       toDefinition graphToExpr,
+      toDefinition hexDigit,
       toDefinition iriToExpr,
       toDefinition languageTagToExpr,
       toDefinition literalToExpr,
       toDefinition nodeToExpr,
+      toDefinition rdfGraphToNtriples,
       toDefinition resourceToExpr,
-      toDefinition tripleToExpr]
+      toDefinition tripleToExpr,
+      toDefinition uchar4]
 
 
 blankNodeToExpr :: TypedTermDefinition (Rdf.BlankNode -> Expr)

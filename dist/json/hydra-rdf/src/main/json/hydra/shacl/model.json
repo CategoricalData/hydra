@@ -18,7 +18,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent"}}}]}}}}}},
+                    "value": {
+                      "literal": {"string": "A SHACL closed-shape constraint, restricting a node's properties to those explicitly listed or ignored"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shacl.model.CommonConstraint",
@@ -373,43 +374,46 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "blankNode",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node"}}}]}}}},
-              {
-                "name": "iri",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI"}}}]}}}},
-              {
-                "name": "literal",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal"}}}]}}}},
-              {
-                "name": "blankNodeOrIri",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or an IRI"}}}]}}}},
-              {
-                "name": "blankNodeOrLiteral",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or a literal"}}}]}}}},
-              {
-                "name": "iriOrLiteral",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI or a literal"}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "blankNode",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node"}}}]}}}},
+                  {
+                    "name": "iri",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI"}}}]}}}},
+                  {
+                    "name": "literal",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal"}}}]}}}},
+                  {
+                    "name": "blankNodeOrIri",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or an IRI"}}}]}}}},
+                  {
+                    "name": "blankNodeOrLiteral",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or a literal"}}}]}}}},
+                  {
+                    "name": "iriOrLiteral",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI or a literal"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SHACL node kind of an RDF term"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shacl.model.NodeShape",
@@ -592,7 +596,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}]}}}}}},
+                    "value": {
+                      "literal": {"string": "A SHACL qualified value shape constraint, requiring a count of values conforming to a given shape"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shacl.model.Reference",
@@ -631,33 +636,37 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "info",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "A non-critical constraint violation indicating an informative message"}}}]}}}},
-              {
-                "name": "warning",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "A non-critical constraint violation indicating a warning"}}}]}}}},
-              {
-                "name": "violation",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constraint violation"}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "info",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A non-critical constraint violation indicating an informative message"}}}]}}}},
+                  {
+                    "name": "warning",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A non-critical constraint violation indicating a warning"}}}]}}}},
+                  {
+                    "name": "violation",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constraint violation"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The severity of a SHACL constraint violation"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shacl.model.Shape",

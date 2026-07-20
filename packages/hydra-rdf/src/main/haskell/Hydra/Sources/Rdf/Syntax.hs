@@ -28,7 +28,6 @@ module_ = Module {
   where
     definitions = [
       blankNode,
-      rdfsClass,
       dataset,
       description,
       graph_,
@@ -40,14 +39,19 @@ module_ = Module {
       node_,
       property_,
       quad,
+      rdfsClass,
       resource_,
       triple]
 
 blankNode :: TypeDefinition
-blankNode = define "BlankNode" $ T.wrap T.string
+blankNode = define "BlankNode" $
+  doc "An RDF blank node identifier" $
+  T.wrap T.string
 
 dataset :: TypeDefinition
-dataset = define "Dataset" $ T.wrap $ T.set $ rdf "Quad"
+dataset = define "Dataset" $
+  doc "A set of RDF quads" $
+  T.wrap $ T.set $ rdf "Quad"
 
 description :: TypeDefinition
 description = define "Description" $
@@ -57,7 +61,9 @@ description = define "Description" $
     "graph">: rdf "Graph"]
 
 graph_ :: TypeDefinition
-graph_ = define "Graph" $ T.wrap $ T.set $ rdf "Triple"
+graph_ = define "Graph" $
+  doc "A set of RDF triples" $
+  T.wrap $ T.set $ rdf "Triple"
 
 iri :: TypeDefinition
 iri = define "Iri" $
@@ -98,6 +104,7 @@ literal_ = define "Literal" $
 
 node_ :: TypeDefinition
 node_ = define "Node" $
+  doc "An RDF node: an IRI, a blank node, or a literal" $
   T.union [
     "iri">: rdf "Iri",
     "bnode">: rdf "BlankNode",
@@ -134,6 +141,7 @@ rdfsClass = define "RdfsClass" $
 
 resource_ :: TypeDefinition
 resource_ = define "Resource" $
+  doc "An RDF resource: an IRI or a blank node" $
   T.union [
     "iri">: rdf "Iri",
     "bnode">: rdf "BlankNode"]

@@ -8,1081 +8,2113 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.shex.syntax.ShexDoc",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "listOfDirective", "type": {"list": {"variable": "hydra.shex.syntax.Directive"}}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.ShexDocSequenceOption"}}},
-              {"name": "PrefixDecl", "type": {"variable": "hydra.shex.syntax.PrefixDecl"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShexDocSequenceOption",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.ShexDocSequenceOptionAlts"}},
-              {"name": "listOfStatement", "type": {"list": {"variable": "hydra.shex.syntax.Statement"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShexDocSequenceOptionAlts",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "NotStartAction", "type": {"variable": "hydra.shex.syntax.NotStartAction"}},
-              {"name": "StartActions", "type": {"variable": "hydra.shex.syntax.StartActions"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Directive",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "BaseDecl", "type": {"variable": "hydra.shex.syntax.BaseDecl"}},
-              {"name": "PrefixDecl", "type": {"variable": "hydra.shex.syntax.PrefixDecl"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.BaseDecl",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.IriRef"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PrefixDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
-              {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NotStartAction",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "start", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
-              {"name": "declaration", "type": {"variable": "hydra.shex.syntax.NotStartActionShapeExprDecl"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NotStartActionShapeExprDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ShapeExprLabel", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}},
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.NotStartActionShapeExprDeclAlts"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NotStartActionShapeExprDeclAlts",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "ShapeExpression", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
-              {"name": "EXTERNAL", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StartActions",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Statement",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Directive", "type": {"variable": "hydra.shex.syntax.Directive"}},
-              {"name": "NotStartAction", "type": {"variable": "hydra.shex.syntax.NotStartAction"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.ShapeOr"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.InlineShapeOr"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeOr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ShapeAnd", "type": {"variable": "hydra.shex.syntax.ShapeAnd"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.ShapeAnd"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeOr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ShapeAnd", "type": {"variable": "hydra.shex.syntax.ShapeAnd"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeAnd"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeAnd",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ShapeNot", "type": {"variable": "hydra.shex.syntax.ShapeNot"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.ShapeNot"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeAnd",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "InlineShapeNot", "type": {"variable": "hydra.shex.syntax.InlineShapeNot"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeNot"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeNot",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NOT", "type": {"optional": "unit"}},
-              {"name": "ShapeAtom", "type": {"variable": "hydra.shex.syntax.ShapeAtom"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeNot",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NOT", "type": {"optional": "unit"}},
-              {"name": "InlineShapeAtom", "type": {"variable": "hydra.shex.syntax.InlineShapeAtom"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeAtom",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.ShapeAtomSequence"}},
-              {"name": "ShapeOrRef", "type": {"variable": "hydra.shex.syntax.ShapeOrRef"}},
-              {"name": "sequence2", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
-              {"name": "Period", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeAtomSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NodeConstraint", "type": {"variable": "hydra.shex.syntax.NodeConstraint"}},
-              {"name": "ShapeOrRef", "type": {"optional": {"variable": "hydra.shex.syntax.ShapeOrRef"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeAtom",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.InlineShapeAtomSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.shex.syntax.InlineShapeAtomSequence2"}},
-              {"name": "sequence3", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
-              {"name": "Period", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeAtomSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NodeConstraint", "type": {"variable": "hydra.shex.syntax.NodeConstraint"}},
-              {"name": "InlineShapeOrRef", "type": {"optional": {"variable": "hydra.shex.syntax.InlineShapeOrRef"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeAtomSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "InlineShapeOrRef", "type": {"variable": "hydra.shex.syntax.InlineShapeOrRef"}},
-              {"name": "NodeConstraint", "type": {"optional": {"variable": "hydra.shex.syntax.NodeConstraint"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeOrRef",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "ShapeDefinition", "type": {"variable": "hydra.shex.syntax.ShapeDefinition"}},
-              {"name": "AtpNameLn", "type": {"variable": "hydra.shex.syntax.AtpNameLn"}},
-              {"name": "AtpNameNs", "type": {"variable": "hydra.shex.syntax.AtpNameNs"}},
-              {"name": "sequence", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeOrRef",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "InlineShapeDefinition", "type": {"variable": "hydra.shex.syntax.InlineShapeDefinition"}},
-              {"name": "AtpNameLn", "type": {"variable": "hydra.shex.syntax.AtpNameLn"}},
-              {"name": "AtpNameNs", "type": {"variable": "hydra.shex.syntax.AtpNameNs"}},
-              {"name": "sequence", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NodeConstraint",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "sequence", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}},
-              {"name": "seq2", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence2"}},
-              {"name": "seq3", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence3"}},
-              {"name": "seq4", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence4"}},
-              {"name": "seq5", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence5"}},
-              {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NodeConstraintSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NonLiteralKind", "type": {"variable": "hydra.shex.syntax.NonLiteralKind"}},
-              {"name": "listOfStringFacet", "type": {"list": {"variable": "hydra.shex.syntax.StringFacet"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NodeConstraintSequence3",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Datatype", "type": {"variable": "hydra.shex.syntax.Datatype"}},
-              {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NodeConstraintSequence4",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ValueSet", "type": {"variable": "hydra.shex.syntax.ValueSet"}},
-              {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NodeConstraintSequence5",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ValueSet", "type": {"variable": "hydra.shex.syntax.ValueSet"}},
-              {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NonLiteralKind",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "IRI", "type": "unit"}, {"name": "BNODE", "type": "unit"}, {"name": "NONLITERAL", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.XsFacet",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "StringFacet", "type": {"variable": "hydra.shex.syntax.StringFacet"}},
-              {"name": "NumericFacet", "type": {"variable": "hydra.shex.syntax.NumericFacet"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringFacet",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringFacetSequence"}},
-              {"name": "Regexp", "type": {"variable": "hydra.shex.syntax.Regexp"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringFacetSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "StringLength", "type": {"variable": "hydra.shex.syntax.StringLength"}},
-              {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLength",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [{"name": "LENGTH", "type": "unit"}, {"name": "MINLENGTH", "type": "unit"}, {"name": "MAXLENGTH", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericFacet",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.NumericFacetSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.shex.syntax.NumericFacetSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericFacetSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NumericRange", "type": {"variable": "hydra.shex.syntax.NumericRange"}},
-              {"name": "NumericLiteral", "type": {"variable": "hydra.shex.syntax.NumericLiteral"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericFacetSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "NumericLength", "type": {"variable": "hydra.shex.syntax.NumericLength"}},
-              {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericRange",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "MININCLUSIVE", "type": "unit"},
-              {"name": "MINEXCLUSIVE", "type": "unit"},
-              {"name": "MAXINCLUSIVE", "type": "unit"},
-              {"name": "MAXEXCLUSIVE", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericLength",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "TOTALDIGITS", "type": "unit"}, {"name": "FRACTIONDIGITS", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.ShapeDefinitionListOfAltsElmt"}}},
-              {"name": "TripleExpression", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExpression"}}},
-              {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
-              {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeDefinitionListOfAltsElmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "IncludeSet", "type": {"variable": "hydra.shex.syntax.IncludeSet"}},
-              {"name": "ExtraPropertySet", "type": {"variable": "hydra.shex.syntax.ExtraPropertySet"}},
-              {"name": "CLOSED", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeDefinitionListOfAltsElmt"}}},
-              {"name": "TripleExpression", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExpression"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InlineShapeDefinitionListOfAltsElmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "IncludeSet", "type": {"variable": "hydra.shex.syntax.IncludeSet"}},
-              {"name": "ExtraPropertySet", "type": {"variable": "hydra.shex.syntax.ExtraPropertySet"}},
-              {"name": "CLOSED", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ExtraPropertySet",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.Predicate"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.TripleExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.OneOfTripleExpr"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.OneOfTripleExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "GroupTripleExpr", "type": {"variable": "hydra.shex.syntax.GroupTripleExpr"}},
-              {"name": "MultiElementOneOf", "type": {"variable": "hydra.shex.syntax.MultiElementOneOf"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.MultiElementOneOf",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "GroupTripleExpr", "type": {"variable": "hydra.shex.syntax.GroupTripleExpr"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.GroupTripleExpr"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.InnerTripleExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "MultiElementGroup", "type": {"variable": "hydra.shex.syntax.MultiElementGroup"}},
-              {"name": "MultiElementOneOf", "type": {"variable": "hydra.shex.syntax.MultiElementOneOf"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.GroupTripleExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "SingleElementGroup", "type": {"variable": "hydra.shex.syntax.SingleElementGroup"}},
-              {"name": "MultiElementGroup", "type": {"variable": "hydra.shex.syntax.MultiElementGroup"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.SingleElementGroup",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "UnaryTripleExpr", "type": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}},
-              {"name": "Semi", "type": {"optional": "unit"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.MultiElementGroup",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "UnaryTripleExpr", "type": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}},
-              {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}}},
-              {"name": "Semi", "type": {"optional": "unit"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.UnaryTripleExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.UnaryTripleExprSequence"}},
-              {"name": "Include", "type": {"variable": "hydra.shex.syntax.Include"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.UnaryTripleExprSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExprLabel"}}},
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.UnaryTripleExprSequenceAlts"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.UnaryTripleExprSequenceAlts",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "TripleConstraint", "type": {"variable": "hydra.shex.syntax.TripleConstraint"}},
-              {"name": "BracketedTripleExpr", "type": {"variable": "hydra.shex.syntax.BracketedTripleExpr"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.BracketedTripleExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "InnerTripleExpr", "type": {"variable": "hydra.shex.syntax.InnerTripleExpr"}},
-              {"name": "Cardinality", "type": {"optional": {"variable": "hydra.shex.syntax.Cardinality"}}},
-              {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
-              {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.TripleConstraint",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "SenseFlags", "type": {"optional": {"variable": "hydra.shex.syntax.SenseFlags"}}},
-              {"name": "Predicate", "type": {"variable": "hydra.shex.syntax.Predicate"}},
-              {"name": "InlineShapeExpression", "type": {"variable": "hydra.shex.syntax.InlineShapeExpression"}},
-              {"name": "Cardinality", "type": {"optional": {"variable": "hydra.shex.syntax.Cardinality"}}},
-              {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
-              {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Cardinality",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Ast", "type": "unit"},
-              {"name": "Plus", "type": "unit"},
-              {"name": "Quest", "type": "unit"},
-              {"name": "RepeatRange", "type": {"variable": "hydra.shex.syntax.RepeatRange"}}]}}}},
-    {"type": {"name": "hydra.shex.syntax.SenseFlags", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ValueSet",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ValueSetValue"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ValueSetValue",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "IriRange", "type": {"variable": "hydra.shex.syntax.IriRange"}},
-              {"name": "Literal", "type": {"variable": "hydra.shex.syntax.Literal"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.IriRange",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.IriRangeSequence"}},
-              {"name": "sequence2", "type": {"list": {"variable": "hydra.shex.syntax.Exclusion"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.IriRangeSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "Sequence", "type": {"optional": {"list": {"variable": "hydra.shex.syntax.Exclusion"}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Exclusion",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Include",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.TripleExprLabel"}}}}},
-    {
-      "type": {
         "name": "hydra.shex.syntax.Annotation",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Predicate", "type": {"variable": "hydra.shex.syntax.Predicate"}},
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.AnnotationAlts"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Predicate", "type": {"variable": "hydra.shex.syntax.Predicate"}},
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.AnnotationAlts"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Annotation ::= '//' Predicate (Iri | Literal)"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.AnnotationAlts",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "Literal", "type": {"variable": "hydra.shex.syntax.Literal"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.SemanticActions",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.CodeDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.CodeDeclAlts"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.CodeDeclAlts",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "Code", "type": {"variable": "hydra.shex.syntax.Code"}}, {"name": "Percnt", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Literal",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "RdfLiteral", "type": {"variable": "hydra.shex.syntax.RdfLiteral"}},
-              {"name": "NumericLiteral", "type": {"variable": "hydra.shex.syntax.NumericLiteral"}},
-              {"name": "BooleanLiteral", "type": {"variable": "hydra.shex.syntax.BooleanLiteral"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Predicate",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "RdfType", "type": {"variable": "hydra.shex.syntax.RdfType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Datatype",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.ShapeExprLabel",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "BlankNode", "type": {"variable": "hydra.shex.syntax.BlankNode"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.TripleExprLabel",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
-              {"name": "BlankNode", "type": {"variable": "hydra.shex.syntax.BlankNode"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.NumericLiteral",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
-              {"name": "Decimal", "type": {"variable": "hydra.shex.syntax.Decimal"}},
-              {"name": "Double", "type": {"variable": "hydra.shex.syntax.Double"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.RdfLiteral",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "String", "type": {"variable": "hydra.shex.syntax.String"}},
-              {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.RdfLiteralAltsOption"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.RdfLiteralAltsOption",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "LangTag", "type": {"variable": "hydra.shex.syntax.LangTag"}},
-              {"name": "sequence", "type": {"variable": "hydra.shex.syntax.Datatype"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.BooleanLiteral",
-        "body": {"variables": [], "body": {"union": [{"name": "True", "type": "unit"}, {"name": "False", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.String",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "StringLiteral1", "type": {"variable": "hydra.shex.syntax.StringLiteral1"}},
-              {"name": "StringLiteralLong1", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1"}},
-              {"name": "StringLiteral2", "type": {"variable": "hydra.shex.syntax.StringLiteral2"}},
-              {"name": "StringLiteralLong2", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Iri",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}},
-              {"name": "PrefixedName", "type": {"variable": "hydra.shex.syntax.PrefixedName"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PrefixedName",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "PnameLn", "type": {"variable": "hydra.shex.syntax.PnameLn"}},
-              {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.BlankNode",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.shex.syntax.BlankNodeLabel"}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.IncludeSet",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Code",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeElmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.CodeElmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "regex", "type": {"literal": "string"}},
-              {"name": "sequence", "type": {"literal": "string"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.RepeatRange",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
-              {
-                "name": "Sequence",
-                "type": {"optional": {"optional": {"optional": {"variable": "hydra.shex.syntax.RepeatRangeSequenceOptionOptionOption"}}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.RepeatRangeSequenceOptionOptionOption",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}, {"name": "Ast", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.shex.syntax.RdfType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.IriRef",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.IriRefElmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.IriRefElmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [{"name": "regex", "type": {"literal": "string"}}, {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PnameNs",
-        "body": {"variables": [], "body": {"wrap": {"optional": {"variable": "hydra.shex.syntax.PnPrefix"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PnameLn",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
-              {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.AtpNameNs",
-        "body": {"variables": [], "body": {"wrap": {"optional": {"variable": "hydra.shex.syntax.PnPrefix"}}}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "Literal", "type": {"variable": "hydra.shex.syntax.Literal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx Annotation production"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.AtpNameLn",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
-              {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
+                  {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: AtpNameLn ::= '@' PnameNs PnLocal"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.Regexp",
+        "name": "hydra.shex.syntax.AtpNameNs",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.RegexpListOfAltsElmt"}}},
-              {"name": "listOfRegex", "type": {"list": {"literal": "string"}}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"optional": {"variable": "hydra.shex.syntax.PnPrefix"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: AtpNameNs ::= '@' PnPrefix? ':'"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.RegexpListOfAltsElmt",
+        "name": "hydra.shex.syntax.BaseDecl",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "regex", "type": {"literal": "string"}},
-              {"name": "sequence", "type": {"literal": "string"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.IriRef"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: BaseDecl ::= 'BASE' IriRef"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.BlankNode",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.BlankNodeLabel"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: BlankNode ::= BlankNodeLabel"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabel",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.BlankNodeLabelAlts"}},
-              {
-                "name": "ListOfAlts",
-                "type": {"optional": {"list": {"variable": "hydra.shex.syntax.BlankNodeLabelListOfAltsOptionElmt"}}}},
-              {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.BlankNodeLabelAlts"}},
+                  {
+                    "name": "ListOfAlts",
+                    "type": {"optional": {"list": {"variable": "hydra.shex.syntax.BlankNodeLabelListOfAltsOptionElmt"}}}},
+                  {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx BlankNodeLabel production"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabelAlts",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
-              {"name": "regex", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
+                  {"name": "regex", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx BlankNodeLabel production"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.BlankNodeLabelListOfAltsOptionElmt",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}, {"name": "Period", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.shex.syntax.LangTag", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.shex.syntax.Integer", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.shex.syntax.Decimal", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.shex.syntax.Double", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}, {"name": "Period", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing one alternative of an optional list element within the ShEx BlankNodeLabel production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteral1",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral1Elmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLiteral1Elmt",
+        "name": "hydra.shex.syntax.BooleanLiteral",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "regex", "type": {"literal": "string"}},
-              {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
+            "annotated": {
+              "body": {"union": [{"name": "True", "type": "unit"}, {"name": "False", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: BooleanLiteral ::= 'true' | 'false'"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteral2",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral2Elmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLiteral2Elmt",
+        "name": "hydra.shex.syntax.BracketedTripleExpr",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "regex", "type": {"literal": "string"}},
-              {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "InnerTripleExpr", "type": {"variable": "hydra.shex.syntax.InnerTripleExpr"}},
+                  {"name": "Cardinality", "type": {"optional": {"variable": "hydra.shex.syntax.Cardinality"}}},
+                  {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
+                  {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx BracketedTripleExpr production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong1",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong1Elmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong1Elmt",
+        "name": "hydra.shex.syntax.Cardinality",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequence"}},
-              {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Ast", "type": "unit"},
+                  {"name": "Plus", "type": "unit"},
+                  {"name": "Quest", "type": "unit"},
+                  {"name": "RepeatRange", "type": {"variable": "hydra.shex.syntax.RepeatRange"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Cardinality ::= '*' | '+' | '?' | RepeatRange"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequence",
+        "name": "hydra.shex.syntax.Code",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOption"}}},
-              {"name": "regex", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeElmt"}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Code production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOption",
+        "name": "hydra.shex.syntax.CodeDecl",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Apos", "type": "unit"},
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOptionSequence"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.CodeDeclAlts"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: CodeDecl ::= '%' Iri (Code | '%')"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOptionSequence",
-        "body": {"variables": [], "body": "unit"}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong2",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong2Elmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong2Elmt",
+        "name": "hydra.shex.syntax.CodeDeclAlts",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequence"}},
-              {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
-              {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]}}}},
+            "annotated": {
+              "body": {"union": [{"name": "Code", "type": {"variable": "hydra.shex.syntax.Code"}}, {"name": "Percnt", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx CodeDecl production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequence",
+        "name": "hydra.shex.syntax.CodeElmt",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOption"}}},
-              {"name": "regex", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "regex", "type": {"literal": "string"}},
+                  {"name": "sequence", "type": {"literal": "string"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx Code production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOption",
+        "name": "hydra.shex.syntax.Datatype",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Quot", "type": "unit"},
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOptionSequence"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ShEx grammar production: Datatype ::= Iri"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOptionSequence",
-        "body": {"variables": [], "body": "unit"}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.Uchar",
+        "name": "hydra.shex.syntax.Decimal",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.shex.syntax.UcharSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.shex.syntax.UcharSequence2"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Decimal production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.UcharSequence",
+        "name": "hydra.shex.syntax.Directive",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex3", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex4", "type": {"variable": "hydra.shex.syntax.Hex"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "BaseDecl", "type": {"variable": "hydra.shex.syntax.BaseDecl"}},
+                  {"name": "PrefixDecl", "type": {"variable": "hydra.shex.syntax.PrefixDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Directive ::= BaseDecl | PrefixDecl"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.UcharSequence2",
+        "name": "hydra.shex.syntax.Double",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex3", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex4", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex5", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex6", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex7", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex8", "type": {"variable": "hydra.shex.syntax.Hex"}}]}}}},
-    {"type": {"name": "hydra.shex.syntax.Echar", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Double production"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnCharsBase",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "regex", "type": {"literal": "string"}}, {"name": "regex2", "type": {"literal": "string"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PnCharsU",
+        "name": "hydra.shex.syntax.Echar",
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "PnCharsBase", "type": {"variable": "hydra.shex.syntax.PnCharsBase"}}, {"name": "Lowbar", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Echar ::= '\\' [tbnrf\\'']"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnChars",
+        "name": "hydra.shex.syntax.Exclusion",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
-              {"name": "Minus", "type": "unit"},
-              {"name": "regex", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.Iri"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Exclusion ::= '-' Iri '~'?"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnPrefix",
+        "name": "hydra.shex.syntax.ExtraPropertySet",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "PnCharsBase", "type": {"variable": "hydra.shex.syntax.PnCharsBase"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.PnPrefixSequenceOption"}}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.Predicate"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ExtraPropertySet ::= 'EXTRA' Predicate+"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnPrefixSequenceOption",
+        "name": "hydra.shex.syntax.GroupTripleExpr",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnPrefixSequenceOptionAlts"}},
-              {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "SingleElementGroup", "type": {"variable": "hydra.shex.syntax.SingleElementGroup"}},
+                  {"name": "MultiElementGroup", "type": {"variable": "hydra.shex.syntax.MultiElementGroup"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: GroupTripleExpr ::= SingleElementGroup | MultiElementGroup"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnPrefixSequenceOptionAlts",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}, {"name": "Period", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PnLocal",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnLocalAlts"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.PnLocalSequenceOption"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.shex.syntax.PnLocalAlts",
+        "name": "hydra.shex.syntax.Hex",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
-              {"name": "Colon", "type": "unit"},
-              {"name": "regex", "type": {"literal": "string"}},
-              {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Hex ::= [0-9] | [A-F] | [a-f]"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnLocalSequenceOption",
+        "name": "hydra.shex.syntax.Include",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.PnLocalSequenceOptionListOfAltsElmt"}}},
-              {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnLocalSequenceOptionAlts"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.TripleExprLabel"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Include ::= '&' TripleExprLabel"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnLocalSequenceOptionListOfAltsElmt",
+        "name": "hydra.shex.syntax.IncludeSet",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
-              {"name": "Period", "type": "unit"},
-              {"name": "Colon", "type": "unit"},
-              {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: IncludeSet ::= '&' ShapeExprLabel+"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.PnLocalSequenceOptionAlts",
+        "name": "hydra.shex.syntax.InlineShapeAnd",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
-              {"name": "Colon", "type": "unit"},
-              {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "InlineShapeNot", "type": {"variable": "hydra.shex.syntax.InlineShapeNot"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeNot"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: InlineShapeAnd ::= InlineShapeNot ('AND' InlineShapeNot)*"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.shex.syntax.Plx",
+        "name": "hydra.shex.syntax.InlineShapeAtom",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Percent", "type": {"variable": "hydra.shex.syntax.Percent"}},
-              {"name": "PnLocalEsc", "type": {"variable": "hydra.shex.syntax.PnLocalEsc"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.InlineShapeAtomSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.shex.syntax.InlineShapeAtomSequence2"}},
+                  {"name": "sequence3", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
+                  {"name": "Period", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx InlineShapeAtom production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeAtomSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NodeConstraint", "type": {"variable": "hydra.shex.syntax.NodeConstraint"}},
+                  {"name": "InlineShapeOrRef", "type": {"optional": {"variable": "hydra.shex.syntax.InlineShapeOrRef"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx InlineShapeAtom production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeAtomSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "InlineShapeOrRef", "type": {"variable": "hydra.shex.syntax.InlineShapeOrRef"}},
+                  {"name": "NodeConstraint", "type": {"optional": {"variable": "hydra.shex.syntax.NodeConstraint"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a secondary sequence within the ShEx InlineShapeAtom production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeDefinitionListOfAltsElmt"}}},
+                  {"name": "TripleExpression", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExpression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx InlineShapeDefinition production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeDefinitionListOfAltsElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "IncludeSet", "type": {"variable": "hydra.shex.syntax.IncludeSet"}},
+                  {"name": "ExtraPropertySet", "type": {"variable": "hydra.shex.syntax.ExtraPropertySet"}},
+                  {"name": "CLOSED", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing one element of the ShEx InlineShapeDefinitionListOfAlts production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.InlineShapeOr"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: InlineShapeExpression ::= InlineShapeOr"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeNot",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NOT", "type": {"optional": "unit"}},
+                  {"name": "InlineShapeAtom", "type": {"variable": "hydra.shex.syntax.InlineShapeAtom"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: InlineShapeNot ::= 'NOT'? InlineShapeAtom"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeOr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ShapeAnd", "type": {"variable": "hydra.shex.syntax.ShapeAnd"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.InlineShapeAnd"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: InlineShapeOr ::= InlineShapeAnd ('OR' InlineShapeAnd)*"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InlineShapeOrRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "InlineShapeDefinition", "type": {"variable": "hydra.shex.syntax.InlineShapeDefinition"}},
+                  {"name": "AtpNameLn", "type": {"variable": "hydra.shex.syntax.AtpNameLn"}},
+                  {"name": "AtpNameNs", "type": {"variable": "hydra.shex.syntax.AtpNameNs"}},
+                  {"name": "sequence", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx InlineShapeOrRef production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.InnerTripleExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "MultiElementGroup", "type": {"variable": "hydra.shex.syntax.MultiElementGroup"}},
+                  {"name": "MultiElementOneOf", "type": {"variable": "hydra.shex.syntax.MultiElementOneOf"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: InnerTripleExpr ::= MultiElementGroup | MultiElementOneOf"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Integer",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Integer production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Iri",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}},
+                  {"name": "PrefixedName", "type": {"variable": "hydra.shex.syntax.PrefixedName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Iri ::= IriRef | PrefixedName"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.IriRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.IriRangeSequence"}},
+                  {"name": "sequence2", "type": {"list": {"variable": "hydra.shex.syntax.Exclusion"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx IriRange production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.IriRangeSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "Sequence", "type": {"optional": {"list": {"variable": "hydra.shex.syntax.Exclusion"}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx IriRange production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.IriRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.IriRefElmt"}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx IriRef production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.IriRefElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "regex", "type": {"literal": "string"}}, {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx IriRef production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.LangTag",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx LangTag production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Literal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "RdfLiteral", "type": {"variable": "hydra.shex.syntax.RdfLiteral"}},
+                  {"name": "NumericLiteral", "type": {"variable": "hydra.shex.syntax.NumericLiteral"}},
+                  {"name": "BooleanLiteral", "type": {"variable": "hydra.shex.syntax.BooleanLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Literal ::= RdfLiteral | NumericLiteral | BooleanLiteral"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.MultiElementGroup",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "UnaryTripleExpr", "type": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}}},
+                  {"name": "Semi", "type": {"optional": "unit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: MultiElementGroup ::= UnaryTripleExpr (';' UnaryTripleExpr)+ ';'?"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.MultiElementOneOf",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "GroupTripleExpr", "type": {"variable": "hydra.shex.syntax.GroupTripleExpr"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.GroupTripleExpr"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: MultiElementOneOf ::= GroupTripleExpr ('|' GroupTripleExpr)+"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NodeConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "sequence", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}},
+                  {"name": "seq2", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence2"}},
+                  {"name": "seq3", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence3"}},
+                  {"name": "seq4", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence4"}},
+                  {"name": "seq5", "type": {"variable": "hydra.shex.syntax.NodeConstraintSequence5"}},
+                  {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx NodeConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NodeConstraintSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NonLiteralKind", "type": {"variable": "hydra.shex.syntax.NonLiteralKind"}},
+                  {"name": "listOfStringFacet", "type": {"list": {"variable": "hydra.shex.syntax.StringFacet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a secondary sequence within the ShEx NodeConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NodeConstraintSequence3",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Datatype", "type": {"variable": "hydra.shex.syntax.Datatype"}},
+                  {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a tertiary sequence within the ShEx NodeConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NodeConstraintSequence4",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ValueSet", "type": {"variable": "hydra.shex.syntax.ValueSet"}},
+                  {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a quaternary sequence within the ShEx NodeConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NodeConstraintSequence5",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ValueSet", "type": {"variable": "hydra.shex.syntax.ValueSet"}},
+                  {"name": "listOfXsFacet", "type": {"list": {"variable": "hydra.shex.syntax.XsFacet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a quinary sequence within the ShEx NodeConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NonLiteralKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "IRI", "type": "unit"}, {"name": "BNODE", "type": "unit"}, {"name": "NONLITERAL", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: NonLiteralKind ::= 'IRI' | 'BNODE' | 'NONLITERAL'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NotStartAction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "start", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
+                  {"name": "declaration", "type": {"variable": "hydra.shex.syntax.NotStartActionShapeExprDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: NotStartAction ::= start | shapeExprDecl"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NotStartActionShapeExprDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ShapeExprLabel", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}},
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.NotStartActionShapeExprDeclAlts"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx NotStartActionShapeExprDecl production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NotStartActionShapeExprDeclAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "ShapeExpression", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
+                  {"name": "EXTERNAL", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx NotStartActionShapeExprDecl production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericFacet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.NumericFacetSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.shex.syntax.NumericFacetSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx NumericFacet production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericFacetSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NumericRange", "type": {"variable": "hydra.shex.syntax.NumericRange"}},
+                  {"name": "NumericLiteral", "type": {"variable": "hydra.shex.syntax.NumericLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx NumericFacet production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericFacetSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NumericLength", "type": {"variable": "hydra.shex.syntax.NumericLength"}},
+                  {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a secondary sequence within the ShEx NumericFacet production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericLength",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "TOTALDIGITS", "type": "unit"}, {"name": "FRACTIONDIGITS", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx NumericLength production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
+                  {"name": "Decimal", "type": {"variable": "hydra.shex.syntax.Decimal"}},
+                  {"name": "Double", "type": {"variable": "hydra.shex.syntax.Double"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: NumericLiteral ::= Integer | Decimal | Double"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.NumericRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "MININCLUSIVE", "type": "unit"},
+                  {"name": "MINEXCLUSIVE", "type": "unit"},
+                  {"name": "MAXINCLUSIVE", "type": "unit"},
+                  {"name": "MAXEXCLUSIVE", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx NumericRange production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.OneOfTripleExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "GroupTripleExpr", "type": {"variable": "hydra.shex.syntax.GroupTripleExpr"}},
+                  {"name": "MultiElementOneOf", "type": {"variable": "hydra.shex.syntax.MultiElementOneOf"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: OneOfTripleExpr ::= GroupTripleExpr | MultiElementOneOf"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.shex.syntax.Percent",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
-              {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}}]}}}},
-    {"type": {"name": "hydra.shex.syntax.Hex", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.shex.syntax.PnLocalEsc", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}}]}
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Percent ::= '%' Hex Hex"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Plx",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Percent", "type": {"variable": "hydra.shex.syntax.Percent"}},
+                  {"name": "PnLocalEsc", "type": {"variable": "hydra.shex.syntax.PnLocalEsc"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Plx ::= Percent | PnLocalEsc"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnChars",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
+                  {"name": "Minus", "type": "unit"},
+                  {"name": "regex", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx PnChars production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnCharsBase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "regex", "type": {"literal": "string"}}, {"name": "regex2", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx PnCharsBase production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnCharsU",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "PnCharsBase", "type": {"variable": "hydra.shex.syntax.PnCharsBase"}}, {"name": "Lowbar", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: PnCharsU ::= PnCharsBase | '_'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnLocalAlts"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.PnLocalSequenceOption"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx PnLocal production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocalAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnCharsU", "type": {"variable": "hydra.shex.syntax.PnCharsU"}},
+                  {"name": "Colon", "type": "unit"},
+                  {"name": "regex", "type": {"literal": "string"}},
+                  {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx PnLocal production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocalEsc",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx PnLocalEsc production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocalSequenceOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.PnLocalSequenceOptionListOfAltsElmt"}}},
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnLocalSequenceOptionAlts"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing an optional group within the ShEx PnLocal production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocalSequenceOptionAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
+                  {"name": "Colon", "type": "unit"},
+                  {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing the alternatives of an optional group within the ShEx PnLocal production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnLocalSequenceOptionListOfAltsElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}},
+                  {"name": "Period", "type": "unit"},
+                  {"name": "Colon", "type": "unit"},
+                  {"name": "Plx", "type": {"variable": "hydra.shex.syntax.Plx"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing one alternative of an optional repeated group within the ShEx PnLocal production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnPrefix",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "PnCharsBase", "type": {"variable": "hydra.shex.syntax.PnCharsBase"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.PnPrefixSequenceOption"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx PnPrefix production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnPrefixSequenceOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.PnPrefixSequenceOptionAlts"}},
+                  {"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing an optional group within the ShEx PnPrefix production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnPrefixSequenceOptionAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "PnChars", "type": {"variable": "hydra.shex.syntax.PnChars"}}, {"name": "Period", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing the alternatives of an optional group within the ShEx PnPrefix production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnameLn",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
+                  {"name": "PnLocal", "type": {"variable": "hydra.shex.syntax.PnLocal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: PnameLn ::= PnameNs PnLocal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PnameNs",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"optional": {"variable": "hydra.shex.syntax.PnPrefix"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: PnameNs ::= PnPrefix? ':'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Predicate",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "RdfType", "type": {"variable": "hydra.shex.syntax.RdfType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Predicate ::= Iri | RdfType"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PrefixDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}},
+                  {"name": "IriRef", "type": {"variable": "hydra.shex.syntax.IriRef"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: PrefixDecl ::= 'PREFIX' PnameNs IriRef"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.PrefixedName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "PnameLn", "type": {"variable": "hydra.shex.syntax.PnameLn"}},
+                  {"name": "PnameNs", "type": {"variable": "hydra.shex.syntax.PnameNs"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: PrefixedName ::= PnameLn | PnameNs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RdfLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "String", "type": {"variable": "hydra.shex.syntax.String"}},
+                  {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.RdfLiteralAltsOption"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: RdfLiteral ::= String (LangTag | '^^' Datatype)?"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RdfLiteralAltsOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "LangTag", "type": {"variable": "hydra.shex.syntax.LangTag"}},
+                  {"name": "sequence", "type": {"variable": "hydra.shex.syntax.Datatype"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing an optional alternative within the ShEx RdfLiteral production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RdfType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ShEx grammar production: RdfType ::= 'a'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Regexp",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.RegexpListOfAltsElmt"}}},
+                  {"name": "listOfRegex", "type": {"list": {"literal": "string"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Regexp production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RegexpListOfAltsElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "regex", "type": {"literal": "string"}},
+                  {"name": "sequence", "type": {"literal": "string"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx RegexpListOfAlts production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RepeatRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}},
+                  {
+                    "name": "Sequence",
+                    "type": {"optional": {"optional": {"optional": {"variable": "hydra.shex.syntax.RepeatRangeSequenceOptionOptionOption"}}}}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx RepeatRange production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.RepeatRangeSequenceOptionOptionOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}, {"name": "Ast", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a nested optional group within the ShEx RepeatRange production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.SemanticActions",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: SemanticActions ::= CodeDecl*"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.SenseFlags",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ShEx grammar production: SenseFlags ::= '^'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeAnd",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ShapeNot", "type": {"variable": "hydra.shex.syntax.ShapeNot"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.ShapeNot"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShapeAnd ::= ShapeNot ('AND' ShapeNot)*"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeAtom",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.ShapeAtomSequence"}},
+                  {"name": "ShapeOrRef", "type": {"variable": "hydra.shex.syntax.ShapeOrRef"}},
+                  {"name": "sequence2", "type": {"variable": "hydra.shex.syntax.ShapeExpression"}},
+                  {"name": "Period", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx ShapeAtom production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeAtomSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NodeConstraint", "type": {"variable": "hydra.shex.syntax.NodeConstraint"}},
+                  {"name": "ShapeOrRef", "type": {"optional": {"variable": "hydra.shex.syntax.ShapeOrRef"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx ShapeAtom production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "listOfAlts", "type": {"list": {"variable": "hydra.shex.syntax.ShapeDefinitionListOfAltsElmt"}}},
+                  {"name": "TripleExpression", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExpression"}}},
+                  {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
+                  {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx ShapeDefinition production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeDefinitionListOfAltsElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "IncludeSet", "type": {"variable": "hydra.shex.syntax.IncludeSet"}},
+                  {"name": "ExtraPropertySet", "type": {"variable": "hydra.shex.syntax.ExtraPropertySet"}},
+                  {"name": "CLOSED", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing one element of the ShEx ShapeDefinitionListOfAlts production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeExprLabel",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "BlankNode", "type": {"variable": "hydra.shex.syntax.BlankNode"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShapeExprLabel ::= Iri | BlankNode"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.ShapeOr"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShapeExpression ::= ShapeOr"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeNot",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NOT", "type": {"optional": "unit"}},
+                  {"name": "ShapeAtom", "type": {"variable": "hydra.shex.syntax.ShapeAtom"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShapeNot ::= 'NOT'? ShapeAtom"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeOr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ShapeAnd", "type": {"variable": "hydra.shex.syntax.ShapeAnd"}},
+                  {"name": "listOfSequence", "type": {"list": {"variable": "hydra.shex.syntax.ShapeAnd"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShapeOr ::= ShapeAnd ('OR' ShapeAnd)*"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShapeOrRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "ShapeDefinition", "type": {"variable": "hydra.shex.syntax.ShapeDefinition"}},
+                  {"name": "AtpNameLn", "type": {"variable": "hydra.shex.syntax.AtpNameLn"}},
+                  {"name": "AtpNameNs", "type": {"variable": "hydra.shex.syntax.AtpNameNs"}},
+                  {"name": "sequence", "type": {"variable": "hydra.shex.syntax.ShapeExprLabel"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx ShapeOrRef production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShexDoc",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "listOfDirective", "type": {"list": {"variable": "hydra.shex.syntax.Directive"}}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.ShexDocSequenceOption"}}},
+                  {"name": "PrefixDecl", "type": {"variable": "hydra.shex.syntax.PrefixDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ShexDoc ::= Directive* ((NotStartAction | StartActions) Statement*)?"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShexDocSequenceOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.ShexDocSequenceOptionAlts"}},
+                  {"name": "listOfStatement", "type": {"list": {"variable": "hydra.shex.syntax.Statement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing an optional group within the ShEx ShexDoc production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ShexDocSequenceOptionAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "NotStartAction", "type": {"variable": "hydra.shex.syntax.NotStartAction"}},
+                  {"name": "StartActions", "type": {"variable": "hydra.shex.syntax.StartActions"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing the alternatives of an optional group within the ShEx ShexDoc production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.SingleElementGroup",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "UnaryTripleExpr", "type": {"variable": "hydra.shex.syntax.UnaryTripleExpr"}},
+                  {"name": "Semi", "type": {"optional": "unit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: SingleElementGroup ::= UnaryTripleExpr ';'?"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StartActions",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.CodeDecl"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: StartActions ::= CodeDecl+"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Statement",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Directive", "type": {"variable": "hydra.shex.syntax.Directive"}},
+                  {"name": "NotStartAction", "type": {"variable": "hydra.shex.syntax.NotStartAction"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: Statement ::= Directive | NotStartAction"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.String",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "StringLiteral1", "type": {"variable": "hydra.shex.syntax.StringLiteral1"}},
+                  {"name": "StringLiteralLong1", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1"}},
+                  {"name": "StringLiteral2", "type": {"variable": "hydra.shex.syntax.StringLiteral2"}},
+                  {"name": "StringLiteralLong2", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx String production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringFacet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringFacetSequence"}},
+                  {"name": "Regexp", "type": {"variable": "hydra.shex.syntax.Regexp"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: StringFacet ::= StringLength Integer | Regexp"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringFacetSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "StringLength", "type": {"variable": "hydra.shex.syntax.StringLength"}},
+                  {"name": "Integer", "type": {"variable": "hydra.shex.syntax.Integer"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx StringFacet production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLength",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "LENGTH", "type": "unit"}, {"name": "MINLENGTH", "type": "unit"}, {"name": "MAXLENGTH", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: StringLength ::= 'LENGTH' | 'MINLENGTH' | 'MAXLENGTH'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteral1",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral1Elmt"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx StringLiteral1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteral1Elmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "regex", "type": {"literal": "string"}},
+                  {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx StringLiteral1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteral2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteral2Elmt"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx StringLiteral2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteral2Elmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "regex", "type": {"literal": "string"}},
+                  {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx StringLiteral2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong1",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong1Elmt"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx StringLiteralLong1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong1Elmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequence"}},
+                  {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx StringLiteralLong1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOption"}}},
+                  {"name": "regex", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a sequence within an element of the ShEx StringLiteralLong1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Apos", "type": "unit"},
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOptionSequence"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing an optional alternative of an element of the ShEx StringLiteralLong1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong1ElmtSequenceAltsOptionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": "unit",
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing a sequence within an optional alternative of an element of the ShEx StringLiteralLong1 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.StringLiteralLong2Elmt"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx StringLiteralLong2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong2Elmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequence"}},
+                  {"name": "Echar", "type": {"variable": "hydra.shex.syntax.Echar"}},
+                  {"name": "Uchar", "type": {"variable": "hydra.shex.syntax.Uchar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing one element of the ShEx StringLiteralLong2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Alts", "type": {"optional": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOption"}}},
+                  {"name": "regex", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing a sequence within an element of the ShEx StringLiteralLong2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Quot", "type": "unit"},
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOptionSequence"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing an optional alternative of an element of the ShEx StringLiteralLong2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.StringLiteralLong2ElmtSequenceAltsOptionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": "unit",
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A synthetic Hydra type representing a sequence within an optional alternative of an element of the ShEx StringLiteralLong2 production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.TripleConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "SenseFlags", "type": {"optional": {"variable": "hydra.shex.syntax.SenseFlags"}}},
+                  {"name": "Predicate", "type": {"variable": "hydra.shex.syntax.Predicate"}},
+                  {"name": "InlineShapeExpression", "type": {"variable": "hydra.shex.syntax.InlineShapeExpression"}},
+                  {"name": "Cardinality", "type": {"optional": {"variable": "hydra.shex.syntax.Cardinality"}}},
+                  {"name": "listOfAnnotation", "type": {"list": {"variable": "hydra.shex.syntax.Annotation"}}},
+                  {"name": "SemanticActions", "type": {"variable": "hydra.shex.syntax.SemanticActions"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx TripleConstraint production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.TripleExprLabel",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Iri", "type": {"variable": "hydra.shex.syntax.Iri"}},
+                  {"name": "BlankNode", "type": {"variable": "hydra.shex.syntax.BlankNode"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: TripleExprLabel ::= Iri | BlankNode"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.TripleExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.shex.syntax.OneOfTripleExpr"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: TripleExpression ::= OneOfTripleExpr"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.Uchar",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.UcharSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.shex.syntax.UcharSequence2"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A component of the ShEx Uchar production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.UcharSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex3", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex4", "type": {"variable": "hydra.shex.syntax.Hex"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx Uchar production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.UcharSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Hex", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex2", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex3", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex4", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex5", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex6", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex7", "type": {"variable": "hydra.shex.syntax.Hex"}},
+                  {"name": "Hex8", "type": {"variable": "hydra.shex.syntax.Hex"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a secondary sequence within the ShEx Uchar production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.UnaryTripleExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.shex.syntax.UnaryTripleExprSequence"}},
+                  {"name": "Include", "type": {"variable": "hydra.shex.syntax.Include"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A component of the ShEx UnaryTripleExpr production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.UnaryTripleExprSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.shex.syntax.TripleExprLabel"}}},
+                  {"name": "alts", "type": {"variable": "hydra.shex.syntax.UnaryTripleExprSequenceAlts"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A synthetic Hydra type representing a sequence within the ShEx UnaryTripleExpr production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.UnaryTripleExprSequenceAlts",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "TripleConstraint", "type": {"variable": "hydra.shex.syntax.TripleConstraint"}},
+                  {"name": "BracketedTripleExpr", "type": {"variable": "hydra.shex.syntax.BracketedTripleExpr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A synthetic Hydra type representing the alternatives of the ShEx UnaryTripleExprSequence production"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ValueSet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.shex.syntax.ValueSetValue"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ValueSet ::= '[' ValueSetValue* ']'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.ValueSetValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "IriRange", "type": {"variable": "hydra.shex.syntax.IriRange"}},
+                  {"name": "Literal", "type": {"variable": "hydra.shex.syntax.Literal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: ValueSetValue ::= IriRange | Literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.shex.syntax.XsFacet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "StringFacet", "type": {"variable": "hydra.shex.syntax.StringFacet"}},
+                  {"name": "NumericFacet", "type": {"variable": "hydra.shex.syntax.NumericFacet"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "ShEx grammar production: XsFacet ::= StringFacet | NumericFacet"}}}]}}}}}}]}

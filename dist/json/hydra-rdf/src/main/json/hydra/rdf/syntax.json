@@ -3,20 +3,24 @@
   "metadata": {"description": "An RDF 1.1 syntax model", "comments": [], "seeAlso": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
-    {"type": {"name": "hydra.rdf.syntax.BlankNode", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
-        "name": "hydra.rdf.syntax.RdfsClass",
+        "name": "hydra.rdf.syntax.BlankNode",
         "body": {
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Stand-in for rdfs:Class"}}}]}}}}}},
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An RDF blank node identifier"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Dataset",
-        "body": {"variables": [], "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Quad"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Quad"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of RDF quads"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Description",
@@ -36,7 +40,12 @@
     {
       "type": {
         "name": "hydra.rdf.syntax.Graph",
-        "body": {"variables": [], "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Triple"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"set": {"variable": "hydra.rdf.syntax.Triple"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of RDF triples"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Iri",
@@ -138,10 +147,17 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-              {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}},
-              {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
+                  {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}},
+                  {"name": "literal", "type": {"variable": "hydra.rdf.syntax.Literal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An RDF node: an IRI, a blank node, or a literal"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Property",
@@ -198,13 +214,26 @@
                     "value": {"literal": {"string": "An RDF triple with an optional named graph component"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.rdf.syntax.RdfsClass",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Stand-in for rdfs:Class"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.rdf.syntax.Resource",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
-              {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "iri", "type": {"variable": "hydra.rdf.syntax.Iri"}},
+                  {"name": "bnode", "type": {"variable": "hydra.rdf.syntax.BlankNode"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An RDF resource: an IRI or a blank node"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.Triple",

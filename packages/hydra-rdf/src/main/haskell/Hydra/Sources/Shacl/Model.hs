@@ -47,6 +47,7 @@ module_ = Module {
 
 closed :: TypeDefinition
 closed = define "Closed" $
+  doc "A SHACL closed-shape constraint, restricting a node's properties to those explicitly listed or ignored" $
   see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
   T.record [
     "isClosed">: T.boolean,
@@ -190,7 +191,9 @@ definition = define "Definition" $
     "target">: "a"]
 
 nodeKind :: TypeDefinition
-nodeKind = define "NodeKind" $ T.union [
+nodeKind = define "NodeKind" $
+  doc "The SHACL node kind of an RDF term" $
+  T.union [
   "blankNode">: doc "A blank node" T.unit,
   "iri">: doc "An IRI" T.unit,
   "literal">: doc "A literal" T.unit,
@@ -273,6 +276,7 @@ propertyShapeConstraint = define "PropertyShapeConstraint" $
 
 qualifiedValueShape :: TypeDefinition
 qualifiedValueShape = define "QualifiedValueShape" $
+  doc "A SHACL qualified value shape constraint, requiring a count of values conforming to a given shape" $
   see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
   T.record [
     "qualifiedValueShape">: shacl "Reference" @@ shacl "Shape",
@@ -296,7 +300,9 @@ reference = define "Reference" $
       shacl "Definition" @@ "a"]
 
 severity :: TypeDefinition
-severity = define "Severity" $ T.union [
+severity = define "Severity" $
+  doc "The severity of a SHACL constraint violation" $
+  T.union [
   "info">: doc "A non-critical constraint violation indicating an informative message" T.unit,
   "warning">: doc "A non-critical constraint violation indicating a warning" T.unit,
   "violation">: doc "A constraint violation" T.unit]

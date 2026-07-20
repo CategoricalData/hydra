@@ -6,82 +6,77 @@
     "seeAlso": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
-    {"type": {"name": "hydra.xml.schema.AnySimpleType", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.AnyType", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.AnyURI", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Base64Binary", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Boolean", "body": {"variables": [], "body": {"wrap": {"literal": "boolean"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Byte", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "int8"}}}}}},
-    {"type": {"name": "hydra.xml.schema.Date", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.DateTime", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Decimal", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Double", "body": {"variables": [], "body": {"wrap": {"literal": {"float": "float64"}}}}}},
-    {"type": {"name": "hydra.xml.schema.Duration", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.ENTITIES", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.ENTITY", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Float", "body": {"variables": [], "body": {"wrap": {"literal": {"float": "float32"}}}}}},
-    {"type": {"name": "hydra.xml.schema.GDay", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.GMonth", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.GMonthDay", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.GYear", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.GYearMonth", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.HexBinary", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.ID", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.IDREF", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.IDREFS", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Int", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "int32"}}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Integer", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
-    {"type": {"name": "hydra.xml.schema.Language", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Long", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "int64"}}}}}},
-    {"type": {"name": "hydra.xml.schema.NMTOKEN", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.NOTATION", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Name", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.NegativeInteger",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
+        "name": "hydra.xml.schema.AnySimpleType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The XSD anySimpleType, the base type of all simple (non-list, non-union-composed) XML Schema datatypes"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.NonNegativeInteger",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
+        "name": "hydra.xml.schema.AnyType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD anyType, the root of the XML Schema type hierarchy"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.NonPositiveInteger",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.NormalizedString", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.xml.schema.PositiveInteger",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
-    {"type": {"name": "hydra.xml.schema.QName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.xml.schema.Short", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "int16"}}}}}},
-    {"type": {"name": "hydra.xml.schema.String", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Time", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.xml.schema.Token", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+        "name": "hydra.xml.schema.AnyURI",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD anyURI datatype: a URI reference"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.UnsignedByte",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "uint8"}}}}}},
+        "name": "hydra.xml.schema.Base64Binary",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD base64Binary datatype: arbitrary binary data encoded as base64"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.UnsignedInt",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "uint32"}}}}}},
+        "name": "hydra.xml.schema.Boolean",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "boolean"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD boolean datatype: true or false"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.xml.schema.UnsignedLong",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "uint64"}}}}}},
-    {
-      "type": {
-        "name": "hydra.xml.schema.UnsignedShort",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "uint16"}}}}}},
+        "name": "hydra.xml.schema.Byte",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int8"}}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD byte datatype: an 8-bit signed integer"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.xml.schema.ConstrainingFacet",
@@ -94,55 +89,542 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "See https://www.w3.org/TR/xmlschema-2/#non-fundamental"}}}]}}}}}},
+                    "value": {"literal": {"string": "An XML Schema constraining facet, restricting the value space of a datatype"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.xml.schema.Datatype",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "anySimpleType", "type": "unit"},
-              {"name": "anyType", "type": "unit"},
-              {"name": "anyURI", "type": "unit"},
-              {"name": "base64Binary", "type": "unit"},
-              {"name": "boolean", "type": "unit"},
-              {"name": "byte", "type": "unit"},
-              {"name": "date", "type": "unit"},
-              {"name": "dateTime", "type": "unit"},
-              {"name": "decimal", "type": "unit"},
-              {"name": "double", "type": "unit"},
-              {"name": "duration", "type": "unit"},
-              {"name": "ENTITIES", "type": "unit"},
-              {"name": "ENTITY", "type": "unit"},
-              {"name": "float", "type": "unit"},
-              {"name": "gDay", "type": "unit"},
-              {"name": "gMonth", "type": "unit"},
-              {"name": "gMonthDay", "type": "unit"},
-              {"name": "gYear", "type": "unit"},
-              {"name": "gYearMonth", "type": "unit"},
-              {"name": "hexBinary", "type": "unit"},
-              {"name": "ID", "type": "unit"},
-              {"name": "IDREF", "type": "unit"},
-              {"name": "IDREFS", "type": "unit"},
-              {"name": "int", "type": "unit"},
-              {"name": "integer", "type": "unit"},
-              {"name": "language", "type": "unit"},
-              {"name": "long", "type": "unit"},
-              {"name": "NMTOKEN", "type": "unit"},
-              {"name": "NOTATION", "type": "unit"},
-              {"name": "name", "type": "unit"},
-              {"name": "negativeInteger", "type": "unit"},
-              {"name": "nonNegativeInteger", "type": "unit"},
-              {"name": "nonPositiveInteger", "type": "unit"},
-              {"name": "normalizedString", "type": "unit"},
-              {"name": "positiveInteger", "type": "unit"},
-              {"name": "qName", "type": "unit"},
-              {"name": "short", "type": "unit"},
-              {"name": "string", "type": "unit"},
-              {"name": "time", "type": "unit"},
-              {"name": "token", "type": "unit"},
-              {"name": "unsignedByte", "type": "unit"},
-              {"name": "unsignedInt", "type": "unit"},
-              {"name": "unsignedLong", "type": "unit"},
-              {"name": "unsignedShort", "type": "unit"}]}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "anySimpleType", "type": "unit"},
+                  {"name": "anyType", "type": "unit"},
+                  {"name": "anyURI", "type": "unit"},
+                  {"name": "base64Binary", "type": "unit"},
+                  {"name": "boolean", "type": "unit"},
+                  {"name": "byte", "type": "unit"},
+                  {"name": "date", "type": "unit"},
+                  {"name": "dateTime", "type": "unit"},
+                  {"name": "decimal", "type": "unit"},
+                  {"name": "double", "type": "unit"},
+                  {"name": "duration", "type": "unit"},
+                  {"name": "ENTITIES", "type": "unit"},
+                  {"name": "ENTITY", "type": "unit"},
+                  {"name": "float", "type": "unit"},
+                  {"name": "gDay", "type": "unit"},
+                  {"name": "gMonth", "type": "unit"},
+                  {"name": "gMonthDay", "type": "unit"},
+                  {"name": "gYear", "type": "unit"},
+                  {"name": "gYearMonth", "type": "unit"},
+                  {"name": "hexBinary", "type": "unit"},
+                  {"name": "ID", "type": "unit"},
+                  {"name": "IDREF", "type": "unit"},
+                  {"name": "IDREFS", "type": "unit"},
+                  {"name": "int", "type": "unit"},
+                  {"name": "integer", "type": "unit"},
+                  {"name": "language", "type": "unit"},
+                  {"name": "long", "type": "unit"},
+                  {"name": "NMTOKEN", "type": "unit"},
+                  {"name": "NOTATION", "type": "unit"},
+                  {"name": "name", "type": "unit"},
+                  {"name": "negativeInteger", "type": "unit"},
+                  {"name": "nonNegativeInteger", "type": "unit"},
+                  {"name": "nonPositiveInteger", "type": "unit"},
+                  {"name": "normalizedString", "type": "unit"},
+                  {"name": "positiveInteger", "type": "unit"},
+                  {"name": "qName", "type": "unit"},
+                  {"name": "short", "type": "unit"},
+                  {"name": "string", "type": "unit"},
+                  {"name": "time", "type": "unit"},
+                  {"name": "token", "type": "unit"},
+                  {"name": "unsignedByte", "type": "unit"},
+                  {"name": "unsignedInt", "type": "unit"},
+                  {"name": "unsignedLong", "type": "unit"},
+                  {"name": "unsignedShort", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a built-in XML Schema datatype"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Date",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD date datatype: a calendar date, optionally with a timezone"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.DateTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD dateTime datatype: a date and time, optionally with a timezone"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Decimal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD decimal datatype: an arbitrary-precision signed decimal number"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Double",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"float": "float64"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD double datatype: an IEEE 754 double-precision floating-point number"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Duration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD duration datatype: a duration of time"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.ENTITIES",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD ENTITIES datatype: a whitespace-separated list of unparsed entity names"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.ENTITY",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD ENTITY datatype: the name of an unparsed entity"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Float",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"float": "float32"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD float datatype: an IEEE 754 single-precision floating-point number"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.GDay",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD gDay datatype: a day of the month, recurring"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.GMonth",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD gMonth datatype: a month of the year, recurring"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.GMonthDay",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD gMonthDay datatype: a day of a specific month, recurring yearly"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.GYear",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD gYear datatype: a calendar year"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.GYearMonth",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD gYearMonth datatype: a specific month of a specific year"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.HexBinary",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD hexBinary datatype: arbitrary binary data encoded as hexadecimal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.ID",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD ID datatype: an XML identifier attribute value, unique within a document"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.IDREF",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD IDREF datatype: a reference to an XML ID attribute value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.IDREFS",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD IDREFS datatype: a whitespace-separated list of IDREF values"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Int",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD int datatype: a 32-bit signed integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Integer",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD integer datatype: an arbitrary-precision signed integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Language",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD language datatype: an RFC 3066 language tag"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Long",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int64"}}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD long datatype: a 64-bit signed integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NMTOKEN",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD NMTOKEN datatype: an XML name token"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NOTATION",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD NOTATION datatype: the name of a notation declared in the document's DTD"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Name",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD Name datatype: an XML Name (a token that may not start with a digit)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NegativeInteger",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD negativeInteger datatype: an arbitrary-precision integer less than zero"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NonNegativeInteger",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The XSD nonNegativeInteger datatype: an arbitrary-precision integer greater than or equal to zero"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NonPositiveInteger",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The XSD nonPositiveInteger datatype: an arbitrary-precision integer less than or equal to zero"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.NormalizedString",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The XSD normalizedString datatype: a string with no carriage return, line feed, or tab characters"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.PositiveInteger",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD positiveInteger datatype: an arbitrary-precision integer greater than zero"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.QName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD QName datatype: a namespace-qualified XML name"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Short",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int16"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD short datatype: a 16-bit signed integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.String",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD string datatype: a character string"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Time",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD time datatype: a time of day, optionally with a timezone"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.Token",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The XSD token datatype: a normalized string with no leading, trailing, or consecutive internal whitespace"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedByte",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "uint8"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD unsignedByte datatype: an 8-bit unsigned integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedInt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "uint32"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD unsignedInt datatype: a 32-bit unsigned integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedLong",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "uint64"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD unsignedLong datatype: a 64-bit unsigned integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.xml.schema.UnsignedShort",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "uint16"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The XSD unsignedShort datatype: a 16-bit unsigned integer"}}}]}}}}}}]}
