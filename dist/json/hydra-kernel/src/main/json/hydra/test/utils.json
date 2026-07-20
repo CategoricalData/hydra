@@ -3,7 +3,7 @@
   "metadata": {"description": "Shared utility functions for test code generation codecs", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.inference"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -74,7 +74,7 @@
                                   "lambda": {
                                     "parameter": "e",
                                     "domain": {"variable": "hydra.errors.Error"},
-                                    "body": {"application": {"function": {"variable": "hydra.show.errors.error"}, "argument": {"variable": "e"}}}}}}},
+                                    "body": {"application": {"function": {"variable": "hydra.print.errors.error"}, "argument": {"variable": "e"}}}}}}},
                             "argument": {
                               "lambda": {
                                 "parameter": "x",

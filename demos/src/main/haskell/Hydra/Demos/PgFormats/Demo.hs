@@ -32,7 +32,7 @@ import qualified Hydra.Pg.Model as Pg
 import Hydra.Pg.Graphson.Utils (pgElementsToGraphson, encodeTermValue)
 import Hydra.Pg.Utils (propertyGraphElements)
 import qualified Hydra.Json.Writer as JsonWriter
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import qualified Hydra.Sources.Pg.Model as PgModelSource
 import qualified Hydra.Sources.Pg.Graphson.Syntax as GraphsonSyntaxSource
 import qualified Hydra.Sources.All as SourcesAll
@@ -61,7 +61,7 @@ generatePgFormats outDir = do
   let graphsonPath = outDir </> "modern_graph.graphson.jsonl"
   let elements = propertyGraphElements modernGraph
   jsonValues <- case pgElementsToGraphson encodeTermValue elements of
-    Left ic -> fail $ "GraphSON encode failed: " ++ ShowError.error ic
+    Left ic -> fail $ "GraphSON encode failed: " ++ PrintError.error ic
     Right v -> return v
   writeFile graphsonPath (jsonValuesToString jsonValues)
   log_ $ "  wrote " ++ graphsonPath
@@ -142,7 +142,7 @@ generatePgFormats outDir = do
           cx = Lexical.emptyInferenceContext
       in case AvroEncoder.encodeType cx tmap typeName of
         Left err -> fail $ "Avro encodeType failed for " ++ typeNameStr
-                            ++ ": " ++ ShowError.error err
+                            ++ ": " ++ PrintError.error err
         Right adapter -> do
           let avroSchema = Coders.adapterTarget adapter
           let jsonValue = AvroSchemaJson.encodeSchema avroSchema

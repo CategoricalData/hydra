@@ -91,7 +91,7 @@ encodeSet = define "encodeSet" $
     (Sets.map (var "elemEncoder" :: TypedTerm (Int -> Term)) (var "xs" :: TypedTerm (S.Set Int)))
 
 -- | Look up the string-shower for a type given its TypedName token. The result is a
--- term reference (Term.variable) to the type's hydra.show.<ns>.<local> binding;
+-- term reference (Term.variable) to the type's hydra.print.<ns>.<local> binding;
 -- ordinary term evaluation resolves it to the shower function it names.
 showRef :: TypedTermDefinition (TypedName a -> (a -> String))
 showRef = define "showRef" $

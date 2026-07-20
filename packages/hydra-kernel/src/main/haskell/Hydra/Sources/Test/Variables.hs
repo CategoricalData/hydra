@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Dsl.Lib.Sets as Sets
 import qualified Hydra.Dsl.Lib.Lists as Lists
@@ -42,7 +42,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for variable analysis and manipulation"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -72,9 +72,9 @@ showNameSet s = Strings.cat $ plist [
   where
     plist = Phantoms.list; pstring = Phantoms.string; plambda = Phantoms.lambda; pvar = Phantoms.var
 
--- | Show a term as a string using ShowCore.term
+-- | Show a term as a string using PrintCore.term
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term @@ t
+showTerm t = PrintCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata

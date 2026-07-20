@@ -25,7 +25,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
 import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
 import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as TermShowCore
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Overlay.Haskell.Libraries
 import Hydra.Test.TestGraph hiding (testGraph, testContext)
@@ -34,7 +34,7 @@ import Hydra.Test.TestTerms
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
@@ -146,7 +146,7 @@ expectFailure print desc f = case f of
 expectInferenceFailure :: String -> Term -> H.Expectation
 expectInferenceFailure desc term = case inferTypeOf testContext testGraph term of
     Left _ -> return ()
-    Right ((_, ts), _) -> HL.assertFailure $ "Expected inference failure but got: " ++ ShowCore.typeScheme ts
+    Right ((_, ts), _) -> HL.assertFailure $ "Expected inference failure but got: " ++ PrintCore.typeScheme ts
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.SpecWith ()
 expectInferenceResult desc term expected = do
@@ -154,9 +154,9 @@ expectInferenceResult desc term expected = do
     Left err -> H.runIO (HL.assertFailure (showError err)) >> return ()
     Right ((iterm, its), _cx') -> do
       H.it "inferred type" $
-        H.shouldBe (ShowCore.typeScheme its) (ShowCore.typeScheme expected)
+        H.shouldBe (PrintCore.typeScheme its) (PrintCore.typeScheme expected)
       H.it "inferred term" $
-        H.shouldBe (ShowCore.term $ removeTypesFromTerm iterm) (ShowCore.term $ removeTypesFromTerm term)
+        H.shouldBe (PrintCore.term $ removeTypesFromTerm iterm) (PrintCore.term $ removeTypesFromTerm term)
 
 expectSuccess :: (Eq a, Show a) => String -> Either String a -> a -> H.Expectation
 expectSuccess desc result x = case result of
@@ -173,11 +173,11 @@ expectTypeCheckingResult desc input outputTerm outputType = do
         Left err2 -> H.runIO (HL.assertFailure (showError err2)) >> return ()
         Right (rtype, _cx2) -> do
           H.it "inferred term" $
-            H.shouldBe (ShowCore.term iterm) (ShowCore.term outputTerm)
+            H.shouldBe (PrintCore.term iterm) (PrintCore.term outputTerm)
           H.it "inferred type" $
-            H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ outputType)
+            H.shouldBe (PrintCore.type_ itype) (PrintCore.type_ outputType)
           H.it "reconstructed type" $
-            H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ outputType)
+            H.shouldBe (PrintCore.type_ rtype) (PrintCore.type_ outputType)
 
 makeMap :: [(String, Int)] -> Term
 makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (Terms.string k, Terms.int32 v)) <$> keyvals)

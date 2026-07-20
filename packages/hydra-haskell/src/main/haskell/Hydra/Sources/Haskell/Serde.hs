@@ -61,12 +61,12 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Docs      as ShowDocs
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Docs      as PrintDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants      as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -93,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Names.ns, Serialization.ns, HaskellOperators.ns, ShowDocs.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Names.ns, Serialization.ns, HaskellOperators.ns, PrintDocs.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
@@ -580,7 +580,7 @@ toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "-- |")
       (Strings.cat2 (string "-- | ") (var "s")))
-    (Strings.lines $ ShowDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c")
+    (Strings.lines $ PrintDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c")
 
 toSimpleComments :: TypedTermDefinition (String -> String)
 toSimpleComments = haskellSerdeDefinition "toSimpleComments" $

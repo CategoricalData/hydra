@@ -3,8 +3,8 @@
   "metadata": {"description": "A module for lexical operations over graphs.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.strip"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -1551,7 +1551,7 @@
                                                                           {"name": "expected", "term": {"literal": {"string": "record"}}},
                                                                           {
                                                                             "name": "actual",
-                                                                            "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                            "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "t1"}}},
                                             "cases": [
@@ -1716,7 +1716,7 @@
                                                                                     "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "tname"}}}}}},
                                                                               {
                                                                                 "name": "actual",
-                                                                                "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
+                                                                                "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "cases": [
@@ -1907,7 +1907,7 @@
                                                                                                     "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "tname"}}}}}},
                                                                                               {
                                                                                                 "name": "actual",
-                                                                                                "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                                "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "t0"}}}}}}}}}}]}},
                                             "argument": {"variable": "stripped"}}}}}}}}}}}}}}},

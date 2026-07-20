@@ -1,0 +1,1331 @@
+{
+  "name": "hydra.print.error.core",
+  "metadata": {"description": "String representations of hydra.error.core types", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.variants"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.print.error.core.constantConditionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.ConstantConditionError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.ConstantConditionError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "constant condition: ifElse with literal "}},
+                        {
+                          "application": {
+                            "function": {"variable": "hydra.lib.literals.showBoolean"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.ConstantConditionError", "fieldName": "value"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a constant condition error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.duplicateBindingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateBindingError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "duplicate binding: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.DuplicateBindingError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a duplicate binding error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.duplicateFieldError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateFieldError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "duplicate field: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.DuplicateFieldError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a duplicate field error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.duplicateRecordTypeFieldNamesError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "duplicate field in record type: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate record type field names error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.duplicateUnionTypeFieldNamesError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "duplicate field in union type: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate union type field names error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyCaseStatementError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.EmptyCaseStatementError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "empty case statement for type: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.EmptyCaseStatementError", "fieldName": "typeName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty case statement error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyLetBindingsError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {"parameter": "e", "domain": {"variable": "t0"}, "body": {"literal": {"string": "let expression with no bindings"}}}},
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty let bindings error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyRecordTypeError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "record type with no fields (use TypeUnit instead)"}}}},
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty record type error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyTermAnnotationError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "term annotation with empty annotation map"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty term annotation error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyTypeAnnotationError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "type annotation with empty annotation map"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty type annotation error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyTypeNameInTermError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {"parameter": "e", "domain": {"variable": "t0"}, "body": {"literal": {"string": "term with empty type name"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an empty type name in term error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.emptyUnionTypeError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "union type with no alternatives (use TypeVoid instead)"}}}},
+                "annotation": {
+                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an empty union type error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidForallParameterNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidForallParameterNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "invalid forall parameter name: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.InvalidForallParameterNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid forall parameter name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidLambdaParameterNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "invalid lambda parameter name: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.InvalidLambdaParameterNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid lambda parameter name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidLetBindingNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidLetBindingNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "invalid let binding name: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.InvalidLetBindingNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid let binding name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidTermError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTermError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid term: "}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.error.core.InvalidTermError",
+                            "cases": [
+                              {"name": "constantCondition", "handler": {"variable": "hydra.print.error.core.constantConditionError"}},
+                              {"name": "duplicateBinding", "handler": {"variable": "hydra.print.error.core.duplicateBindingError"}},
+                              {"name": "duplicateField", "handler": {"variable": "hydra.print.error.core.duplicateFieldError"}},
+                              {"name": "emptyCaseStatement", "handler": {"variable": "hydra.print.error.core.emptyCaseStatementError"}},
+                              {
+                                "name": "emptyLetBindings",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyLetBindingsError"},
+                                    "type": {"variable": "hydra.error.core.EmptyLetBindingsError"}}}},
+                              {
+                                "name": "emptyTermAnnotation",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyTermAnnotationError"},
+                                    "type": {"variable": "hydra.error.core.EmptyTermAnnotationError"}}}},
+                              {
+                                "name": "emptyTypeNameInTerm",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyTypeNameInTermError"},
+                                    "type": {"variable": "hydra.error.core.EmptyTypeNameInTermError"}}}},
+                              {
+                                "name": "invalidLambdaParameterName",
+                                "handler": {"variable": "hydra.print.error.core.invalidLambdaParameterNameError"}},
+                              {"name": "invalidLetBindingName", "handler": {"variable": "hydra.print.error.core.invalidLetBindingNameError"}},
+                              {
+                                "name": "invalidTypeLambdaParameterName",
+                                "handler": {"variable": "hydra.print.error.core.invalidTypeLambdaParameterNameError"}},
+                              {
+                                "name": "nestedTermAnnotation",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.nestedTermAnnotationError"},
+                                    "type": {"variable": "hydra.error.core.NestedTermAnnotationError"}}}},
+                              {"name": "redundantWrapUnwrap", "handler": {"variable": "hydra.print.error.core.redundantWrapUnwrapError"}},
+                              {"name": "selfApplication", "handler": {"variable": "hydra.print.error.core.selfApplicationError"}},
+                              {"name": "termVariableShadowing", "handler": {"variable": "hydra.print.error.core.termVariableShadowingError"}},
+                              {
+                                "name": "typeVariableShadowingInTypeLambda",
+                                "handler": {"variable": "hydra.print.error.core.typeVariableShadowingInTypeLambdaError"}},
+                              {"name": "undefinedTermVariable", "handler": {"variable": "hydra.print.error.core.undefinedTermVariableError"}},
+                              {
+                                "name": "undefinedTypeVariableInBindingType",
+                                "handler": {"variable": "hydra.print.error.core.undefinedTypeVariableInBindingTypeError"}},
+                              {
+                                "name": "undefinedTypeVariableInLambdaDomain",
+                                "handler": {"variable": "hydra.print.error.core.undefinedTypeVariableInLambdaDomainError"}},
+                              {
+                                "name": "undefinedTypeVariableInTypeApplication",
+                                "handler": {"variable": "hydra.print.error.core.undefinedTypeVariableInTypeApplicationError"}},
+                              {"name": "unknownPrimitiveName", "handler": {"variable": "hydra.print.error.core.unknownPrimitiveNameError"}},
+                              {
+                                "name": "unnecessaryIdentityApplication",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.unnecessaryIdentityApplicationError"},
+                                    "type": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"}}}},
+                              {"name": "untypedTermVariable", "handler": {"variable": "hydra.print.error.core.untypedTermVariableError"}}]}},
+                        "argument": {"variable": "e"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid term error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidTypeError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid type: "}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.error.core.InvalidTypeError",
+                            "cases": [
+                              {
+                                "name": "duplicateRecordTypeFieldNames",
+                                "handler": {"variable": "hydra.print.error.core.duplicateRecordTypeFieldNamesError"}},
+                              {
+                                "name": "duplicateUnionTypeFieldNames",
+                                "handler": {"variable": "hydra.print.error.core.duplicateUnionTypeFieldNamesError"}},
+                              {
+                                "name": "emptyRecordType",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyRecordTypeError"},
+                                    "type": {"variable": "hydra.error.core.EmptyRecordTypeError"}}}},
+                              {
+                                "name": "emptyTypeAnnotation",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyTypeAnnotationError"},
+                                    "type": {"variable": "hydra.error.core.EmptyTypeAnnotationError"}}}},
+                              {
+                                "name": "emptyUnionType",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.emptyUnionTypeError"},
+                                    "type": {"variable": "hydra.error.core.EmptyUnionTypeError"}}}},
+                              {
+                                "name": "invalidForallParameterName",
+                                "handler": {"variable": "hydra.print.error.core.invalidForallParameterNameError"}},
+                              {
+                                "name": "invalidTypeSchemeVariableName",
+                                "handler": {"variable": "hydra.print.error.core.invalidTypeSchemeVariableNameError"}},
+                              {
+                                "name": "nestedTypeAnnotation",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.nestedTypeAnnotationError"},
+                                    "type": {"variable": "hydra.error.core.NestedTypeAnnotationError"}}}},
+                              {"name": "nonComparableMapKeyType", "handler": {"variable": "hydra.print.error.core.nonComparableMapKeyTypeError"}},
+                              {
+                                "name": "nonComparableSetElementType",
+                                "handler": {"variable": "hydra.print.error.core.nonComparableSetElementTypeError"}},
+                              {"name": "singleVariantUnion", "handler": {"variable": "hydra.print.error.core.singleVariantUnionError"}},
+                              {
+                                "name": "typeVariableShadowingInForall",
+                                "handler": {"variable": "hydra.print.error.core.typeVariableShadowingInForallError"}},
+                              {"name": "undefinedTypeVariable", "handler": {"variable": "hydra.print.error.core.undefinedTypeVariableError"}},
+                              {
+                                "name": "voidInNonBottomPosition",
+                                "handler": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.print.error.core.voidInNonBottomPositionError"},
+                                    "type": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}}}]}},
+                        "argument": {"variable": "e"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid type error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidTypeLambdaParameterNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "invalid type lambda parameter name: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid type lambda parameter name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.invalidTypeSchemeVariableNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "invalid type scheme variable name: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid type scheme variable name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.nestedTermAnnotationError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "nested term annotations should be merged"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a nested term annotation error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.nestedTypeAnnotationError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "nested type annotations should be merged"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a nested type annotation error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.nonComparableMapKeyTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "map key type contains a function type: "}},
+                        {
+                          "application": {
+                            "function": {"variable": "hydra.print.core.type"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.NonComparableMapKeyTypeError", "fieldName": "keyType"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a non-comparable map key type error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.nonComparableSetElementTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.NonComparableSetElementTypeError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "set element type contains a function type: "}},
+                        {
+                          "application": {
+                            "function": {"variable": "hydra.print.core.type"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.NonComparableSetElementTypeError", "fieldName": "elementType"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a non-comparable set element type error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.redundantWrapUnwrapError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.RedundantWrapUnwrapError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "redundant wrap/unwrap for type: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.RedundantWrapUnwrapError", "fieldName": "typeName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a redundant wrap/unwrap error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.selfApplicationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.SelfApplicationError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.SelfApplicationError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "self-application of variable: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.SelfApplicationError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a self-application error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.singleVariantUnionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.SingleVariantUnionError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.SingleVariantUnionError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "union type with single variant: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.SingleVariantUnionError", "fieldName": "fieldName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a single variant union error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.termVariableShadowingError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TermVariableShadowingError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.TermVariableShadowingError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "variable shadowing: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.TermVariableShadowingError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a term variable shadowing error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.typeVariableShadowingInForallError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "type variable shadowing in forall: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.TypeVariableShadowingInForallError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a type variable shadowing in forall error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.typeVariableShadowingInTypeLambdaError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "type variable shadowing in type lambda: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a type variable shadowing in type lambda error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedFieldError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedFieldError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedFieldError"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "fname",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.error.core.UndefinedFieldError", "fieldName": "fieldName"}},
+                            "argument": {"variable": "e"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "tname",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedFieldError", "fieldName": "typeName"}},
+                                "argument": {"variable": "e"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "no such field \""}},
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}},
+                                {"literal": {"string": "\" in type \""}},
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "tname"}}},
+                                {"literal": {"string": "\""}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an undefined field error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedTermVariableError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "undefined term variable: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedTermVariableError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined term variable error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedTypeVariableError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedTypeVariableError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "undefined type variable: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedTypeVariableError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedTypeVariableInBindingTypeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "undefined type variable in binding type: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in binding type error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedTypeVariableInLambdaDomainError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "undefined type variable in lambda domain: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in lambda domain error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.undefinedTypeVariableInTypeApplicationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "undefined type variable in type application: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undefined type variable in type application error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.unexpectedTermVariantError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTermVariantError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UnexpectedTermVariantError"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "expected",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.error.core.UnexpectedTermVariantError", "fieldName": "expectedVariant"}},
+                            "argument": {"variable": "e"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TermVariant"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "actual",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UnexpectedTermVariantError", "fieldName": "actualTerm"}},
+                                "argument": {"variable": "e"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "expected "}},
+                                {"application": {"function": {"variable": "hydra.print.variants.termVariant"}, "argument": {"variable": "expected"}}},
+                                {"literal": {"string": " term but found "}},
+                                {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "actual"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unexpected term variant error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.unexpectedTypeVariantError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UnexpectedTypeVariantError"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "expected",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.error.core.UnexpectedTypeVariantError", "fieldName": "expectedVariant"}},
+                            "argument": {"variable": "e"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "actual",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UnexpectedTypeVariantError", "fieldName": "actualType"}},
+                                "argument": {"variable": "e"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "expected "}},
+                                {"application": {"function": {"variable": "hydra.print.variants.typeVariant"}, "argument": {"variable": "expected"}}},
+                                {"literal": {"string": " type but found "}},
+                                {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "actual"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unexpected type variant error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.unknownPrimitiveNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UnknownPrimitiveNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "unknown primitive: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UnknownPrimitiveNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unknown primitive name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.unnecessaryIdentityApplicationError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "unnecessary application of identity lambda"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show an unnecessary identity application error as a string"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.untypedTermVariableError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UntypedTermVariableError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "untyped term variable: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UntypedTermVariableError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an untyped term variable error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.voidInNonBottomPositionError",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "domain": {"variable": "t0"},
+                    "body": {"literal": {"string": "TypeVoid in a position where no value can be constructed"}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Show a void in non-bottom position error as a string"}}}]}}}}}}}]}

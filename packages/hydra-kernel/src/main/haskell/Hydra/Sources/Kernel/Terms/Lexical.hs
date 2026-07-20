@@ -55,9 +55,9 @@ import qualified Data.Maybe                  as Y
 
 
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 
 
 ns :: ModuleName
@@ -70,7 +70,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns, Scoping.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, PrintCore.ns, PrintError.ns, Scoping.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for lexical operations over graphs."))}
   where
     definitions = [
@@ -218,7 +218,7 @@ fieldsOf = define "fieldsOf" $
     _Type_union>>: "rt" ~> var "rt"]
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 getField :: TypedTermDefinition (M.Map Name Term -> Name -> (Term -> Either Error b) -> Either Error b)
 getField = define "getField" $
@@ -280,7 +280,7 @@ matchRecord = define "matchRecord" $
   "graph" ~> "decode" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
-    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "record") (ShowCore.term @@ var "term")))) [
+    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "record") (PrintCore.term @@ var "term")))) [
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
         ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
@@ -296,7 +296,7 @@ matchUnion = define "matchUnion" $
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name (Term -> Either Error b))) $
   cases _Term (var "stripped")
-    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "stripped")))) [
+    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "stripped")))) [
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
       matchUnion @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
@@ -307,7 +307,7 @@ matchUnion = define "matchUnion" $
         Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
-        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "term")))]
+        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "term")))]
 
 matchUnitField :: TypedTermDefinition (Name -> y -> (Name, x -> Either Error y))
 matchUnitField = define "matchUnitField" $

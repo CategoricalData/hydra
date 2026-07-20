@@ -3,7 +3,7 @@
   "metadata": {"description": "Extraction and validation for hydra.util types", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

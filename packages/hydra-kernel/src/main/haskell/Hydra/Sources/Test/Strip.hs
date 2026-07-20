@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
 
@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for annotation and type stripping operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -122,13 +122,13 @@ deannotateTypeGroup = subgroup "deannotateType" [
 emptyAnnMap :: TypedTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
--- | Show a term as a string using ShowCore.term
+-- | Show a term as a string using PrintCore.term
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term @@ t
+showTerm t = PrintCore.term @@ t
 
--- | Show a type as a string using ShowCore.type_
+-- | Show a type as a string using PrintCore.type_
 showType :: TypedTerm Type -> TypedTerm String
-showType t = ShowCore.type_ @@ t
+showType t = PrintCore.type_ @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata

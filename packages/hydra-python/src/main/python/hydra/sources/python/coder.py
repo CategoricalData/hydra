@@ -92,7 +92,7 @@ DEPENDENCIES = [
         "hydra.scoping",
         "hydra.strip",
         "hydra.variables",
-        "hydra.show.core",
+        "hydra.print.core",
         "hydra.reduction",
         "hydra.sorting",
         "hydra.inference",

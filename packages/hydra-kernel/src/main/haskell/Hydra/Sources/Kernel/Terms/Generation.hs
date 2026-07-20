@@ -76,8 +76,8 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 
 import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
-import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors     as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Core       as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors     as PrintError
 
 -- Dependencies on secondary generated modules (decode/encode)
 
@@ -90,7 +90,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
-     Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
+     Environment.ns, PrintCore.ns, PrintError.ns, Strip.ns,
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
      ModuleName "hydra.decode.core", ModuleName "hydra.decode.packaging", ModuleName "hydra.encode.packaging"] L.++ kernelTypesModuleNames),
@@ -202,7 +202,7 @@ formatPrimitive = define "formatPrimitive" $
   "prim" ~>
   "name" <~ Core.unName (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "prim") $
   "typ" <~ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "prim")) $
-  "typeStr" <~ ShowCore.typeScheme @@ var "typ" $
+  "typeStr" <~ PrintCore.typeScheme @@ var "typ" $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
 -- | Format a type binding for the lexicon: "  name = type"
@@ -214,7 +214,7 @@ formatTermBinding = define "formatTermBinding" $
   "name" <~ Core.unName (Core.bindingName $ var "binding") $
   "typeStr" <~ optCases (Core.bindingTypeScheme $ var "binding")
     (string "?")
-    ("scheme" ~> ShowCore.typeScheme @@ var "scheme") $
+    ("scheme" ~> PrintCore.typeScheme @@ var "scheme") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
 -- | Format a primitive for the lexicon: "  name : typeScheme"
@@ -231,7 +231,7 @@ formatTypeBinding = define "formatTypeBinding" $
   "graph" ~> "binding" ~>
   "typ" <<~ Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
   right $
-    (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
+    (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (PrintCore.type_ @@ var "typ")
 
 -- | Build a schema map (Name -> Type) from a graph's schema types.
 -- Used by the JSON decoder to resolve type variables.

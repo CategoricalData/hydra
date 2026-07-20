@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Sources.Kernel.Terms.Show.Util as ShowUtil
+import qualified Hydra.Sources.Kernel.Terms.Print.Util as PrintUtil
 
 
 ns :: ModuleName
@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core", ShowUtil.ns, ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core", PrintUtil.ns, ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for Ord instance comparisons on complex Hydra types")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -57,7 +57,7 @@ compResult _ = error "Invalid comparison"
 
 -- Test comparing two values
 compareTest :: String -> TypedTerm a -> TypedTerm a -> String -> TypedTerm TestCaseWithMetadata
-compareTest testName x y resultField = evalPair testName (asTerm ShowUtil.comparison)
+compareTest testName x y resultField = evalPair testName (asTerm PrintUtil.comparison)
   (Equality.compare x y)
   (compResult resultField)
 

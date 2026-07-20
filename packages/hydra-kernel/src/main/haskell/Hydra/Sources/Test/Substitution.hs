@@ -17,7 +17,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
@@ -28,7 +28,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for type and term substitution operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -54,7 +54,7 @@ scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 -- | Apply substInType and show the result as a string
 showSubstInType :: [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm String
 showSubstInType pairs inputType =
-  ShowCore.type_ @@ (Substitution.substInType @@
+  PrintCore.type_ @@ (Substitution.substInType @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputType)
 
 -- | Apply substInTypeScheme and render just the scheme's body type, which is
@@ -62,7 +62,7 @@ showSubstInType pairs inputType =
 -- preserved unchanged so we test it separately via showSubstInTypeSchemeVars.
 showSubstInTypeSchemeBody :: [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm String
 showSubstInTypeSchemeBody pairs inputScheme =
-  ShowCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
+  PrintCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
 -- Helper for building substitution pairs
@@ -72,12 +72,12 @@ subst pairs = list [pair (nm n) t | (n, t) <- pairs]
 -- | Universal substInType test case
 substInTypeCase :: String -> [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 substInTypeCase cname pairs input output =
-  universalCase cname (showSubstInType pairs input) (ShowCore.type_ @@ output)
+  universalCase cname (showSubstInType pairs input) (PrintCore.type_ @@ output)
 
 substInTypeSchemeBodyCase :: String -> [(String, TypedTerm Type)] -> TypedTerm TypeScheme -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 substInTypeSchemeBodyCase cname pairs input expectedBody =
   universalCase cname (showSubstInTypeSchemeBody pairs input)
-    (ShowCore.type_ @@ expectedBody)
+    (PrintCore.type_ @@ expectedBody)
 
 -- ============================================================
 -- substInType tests

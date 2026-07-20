@@ -47,7 +47,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
-import qualified Hydra.Sources.Kernel.Terms.Show.Docs      as ShowDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Docs      as PrintDocs
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -74,7 +74,7 @@ module_ = Module {
               [moduleName TypeScriptLanguageSource.module_,
                moduleName TypeScriptSerdeSource.module_,
                Analysis.ns, Annotations.ns, Arity.ns, Environment.ns, Formatting.ns, Lexical.ns,
-               Names.ns, Rewriting.ns, Scoping.ns, Serialization.ns, ShowDocs.ns, Sorting.ns, Strip.ns, Variables.ns]
+               Names.ns, Rewriting.ns, Scoping.ns, Serialization.ns, PrintDocs.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where
@@ -279,7 +279,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
 
 -- | True when a let-binding's value should be thunked to preserve Haskell's
 -- lazy evaluation. A non-lambda binding whose right-hand side calls a
--- `hydra.show.*` function (e.g. `show.core.type_`) is dangerous to build
+-- `hydra.print.*` function (e.g. `print.core.type_`) is dangerous to build
 -- eagerly: TypeScript is strict, so the `const` is evaluated on entry to the
 -- enclosing function even when the binding is only referenced in a fallback
 -- position (an `ifElse` else-branch or a `cases` default). The Haskell source
@@ -1630,7 +1630,7 @@ mkDocComment = def "mkDocComment" $
     (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
       nothing
       (just (record TS._DocumentationComment [
-        TS._DocumentationComment_description>>: ShowDocs.renderDocStringWith @@ (asTerm tsDocEntityRef) @@ var "d",
+        TS._DocumentationComment_description>>: PrintDocs.renderDocStringWith @@ (asTerm tsDocEntityRef) @@ var "d",
         TS._DocumentationComment_tags>>: list ([] :: [TypedTerm TS.DocumentationTag])])))
 
 -- | Convert a Hydra module to a map from `.ts` file path to TypeScript source.

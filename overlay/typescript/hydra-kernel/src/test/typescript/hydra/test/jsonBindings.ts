@@ -371,7 +371,7 @@ export const EVALUATOR_NAMESPACES: readonly string[] = [
   "hydra.lexical",
   "hydra.rewriting",
   "hydra.scoping",
-  "hydra.show.core",
+  "hydra.print.core",
   "hydra.strip",
   "hydra.variables",
 ];

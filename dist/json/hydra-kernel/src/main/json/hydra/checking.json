@@ -15,9 +15,9 @@
     {"module": "hydra.scoping"},
     {"module": "hydra.names"},
     {"module": "hydra.resolution"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
-    {"module": "hydra.show.variants"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
+    {"module": "hydra.print.variants"},
     {"module": "hydra.strip"},
     {"module": "hydra.substitution"},
     {"module": "hydra.variables"},
@@ -264,7 +264,7 @@
                                                                                         "function": {"variable": "hydra.lib.strings.cat"},
                                                                                         "argument": {
                                                                                           "list": [
-                                                                                            {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}},
+                                                                                            {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}},
                                                                                             {"literal": {"string": ". Trying to apply "}},
                                                                                             {
                                                                                               "application": {
@@ -279,7 +279,7 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.formatting.showList"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                                    "argument": {"variable": "hydra.show.core.type"}}},
+                                                                                                    "argument": {"variable": "hydra.print.core.type"}}},
                                                                                                 "argument": {"variable": "typeArgs"}}},
                                                                                             {"literal": {"string": ". Context has vars: {"}},
                                                                                             {
@@ -409,7 +409,7 @@
                                                                                                                 "function": {"variable": "hydra.lib.strings.cat"},
                                                                                                                 "argument": {
                                                                                                                   "list": [
-                                                                                                                    {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}},
+                                                                                                                    {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}},
                                                                                                                     {"literal": {"string": ". Trying to apply "}},
                                                                                                                     {
                                                                                                                       "application": {
@@ -424,7 +424,7 @@
                                                                                                                         "function": {
                                                                                                                           "application": {
                                                                                                                             "function": {"typeApplication": {"body": {"variable": "hydra.formatting.showList"}, "type": {"variable": "hydra.core.Type"}}},
-                                                                                                                            "argument": {"variable": "hydra.show.core.type"}}},
+                                                                                                                            "argument": {"variable": "hydra.print.core.type"}}},
                                                                                                                         "argument": {"variable": "typeArgs"}}}]}}}}]}}}}}}}}}},
                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}}}}}},
@@ -1670,7 +1670,7 @@
                                                                             "argument": {"literal": {"string": " --> "}}}}}},
                                                                     "argument": {
                                                                       "application": {
-                                                                        "function": {"variable": "hydra.show.core.type"},
+                                                                        "function": {"variable": "hydra.print.core.type"},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {

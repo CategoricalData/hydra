@@ -14,7 +14,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as TermShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
 import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Decode.Core as TermDecodeCore

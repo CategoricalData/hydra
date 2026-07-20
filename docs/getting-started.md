@@ -31,7 +31,7 @@ package's jar via the overlay system (see [docs/overlays.md](overlays.md) and th
 
 | ArtifactId | Contains |
 |---|---|
-| `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.show.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
+| `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.print.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
 | `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); the Java fluent builders in `hydra.pg.dsl.*` (from `overlay/java/hydra-pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping; ANTLR-based openCypher/GQL parsers producing `hydra.pg.query.*`; and the TinkerPop/Gremlin bridge. |
 | `hydra-rdf` | RDF 1.1 model, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization; the rdf4j binding (from `overlay/java/hydra-rdf`) for external I/O via Eclipse rdf4j Rio. |
 | `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages. Depend on these if your code needs to generate code in that target. (Coq, WASM, and Go coders are not currently published — Coq and WASM are in progress; Go is a "head bud": kernel generation works, but the Go runtime is incomplete. See the [Implementations](../README.md#implementations) table.) |
@@ -127,7 +127,7 @@ conda install -c conda-forge hydra-kernel hydra-pg
 ```
 
 After install, the packages expose `hydra.core`, `hydra.pg.model`, `hydra.validate.core`, `hydra.validate.pg`,
-`hydra.show.core`, `hydra.error.core`, `hydra.error.pg`, etc.
+`hydra.print.core`, `hydra.error.core`, `hydra.error.pg`, etc.
 
 ### Local install from the repo
 
@@ -285,7 +285,7 @@ A handful of module names you'll touch most often as a library user:
 | Module name | Contents |
 |---|---|
 | `hydra.core` | The kernel types: `Literal`, `LiteralType`, `Term`, `Type`, `Name`, etc. |
-| `hydra.show.core` | Pretty-printers for literals, types, terms. |
+| `hydra.print.core` | Pretty-printers for literals, types, terms. |
 | `hydra.validate.core` | Validators that return typed errors (e.g. `checkLiteral`, `checkTerm`). |
 | `hydra.error.core` | The `InvalidTermError` / `InvalidTypeError` / `InvalidLiteralError` union types. |
 | `hydra.pg.model` | Property-graph schema and value types (`GraphSchema`, `Graph`, `Vertex`, `Edge`). |

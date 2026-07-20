@@ -10,7 +10,7 @@ module Hydra.Demos.ValidatePg.Demo where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Pg
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 import qualified Hydra.Validate.Core as ValidateCore
 import qualified Hydra.Validate.Pg as Validation
 import qualified Hydra.Validation as V
@@ -103,8 +103,8 @@ checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe Err.InvalidValueError
 checkLiteral lt lv = case ValidateCore.checkLiteral lt lv of
   Nothing -> Nothing
   Just _ -> Just $ Err.InvalidValueError {
-    Err.invalidValueErrorExpectedType = ShowCore.literalType lt,
-    Err.invalidValueErrorValue = ShowCore.literal lv }
+    Err.invalidValueErrorExpectedType = PrintCore.literalType lt,
+    Err.invalidValueErrorValue = PrintCore.literal lv }
 
 
 -- ============================================================================

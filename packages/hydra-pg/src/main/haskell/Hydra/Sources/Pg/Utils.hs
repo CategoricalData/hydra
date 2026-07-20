@@ -63,11 +63,11 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -100,7 +100,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns, PrintCore.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for property graph operations")}
   where
     definitions = [
@@ -179,7 +179,7 @@ pgElementToJson = define "pgElementToJson" $
               ("propsJson" ~>
                 Json.valueObject (Optionals.cat $ list [
                   just (pair (string "label") (var "labelJson")),
-                  just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
+                  just (pair (string "id") (Json.valueString $ PrintCore.term @@ var "term")),
                   var "propsJson"]))
               (propsToJson @@ var "schema" @@ (project PG._Vertex PG._Vertex_properties @@ var "vertex"))),
       PG._Element_edge>>: "edge" ~>
@@ -192,9 +192,9 @@ pgElementToJson = define "pgElementToJson" $
                   ("propsJson" ~>
                     Json.valueObject (Optionals.cat $ list [
                       just (pair (string "label") (var "labelJson")),
-                      just (pair (string "id") (Json.valueString $ ShowCore.term @@ var "term")),
-                      just (pair (string "out") (Json.valueString $ ShowCore.term @@ var "termOut")),
-                      just (pair (string "in") (Json.valueString $ ShowCore.term @@ var "termIn")),
+                      just (pair (string "id") (Json.valueString $ PrintCore.term @@ var "term")),
+                      just (pair (string "out") (Json.valueString $ PrintCore.term @@ var "termOut")),
+                      just (pair (string "in") (Json.valueString $ PrintCore.term @@ var "termIn")),
                       var "propsJson"]))
                   (propsToJson @@ var "schema" @@ (project PG._Edge PG._Edge_properties @@ var "edge")))))]
     @@ var "el"
@@ -231,7 +231,7 @@ propsToJson = "schema" ~> "pairs" ~>
           "key">: Pairs.first $ var "pair",
           "v">: Pairs.second $ var "pair"] $
           Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "v")
-            ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ ShowCore.term @@ var "term"))))
+            ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ PrintCore.term @@ var "term"))))
         (Maps.toList $ (var "pairs" :: TypedTerm (M.Map PG.PropertyKey v)))))
 
 -- | Convert a type-annotated term to property graph elements

@@ -1,0 +1,355 @@
+{
+  "name": "hydra.print.docs",
+  "metadata": {"description": "String representations of hydra.docs types", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.parse.docs"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.print.docs.definitionReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.DefinitionReference"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.packaging.DefinitionReference",
+                "cases": [
+                  {
+                    "name": "primitive",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "n",
+                        "domain": {"variable": "hydra.core.Name"},
+                        "body": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "n"}}}}}},
+                  {
+                    "name": "term",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "n",
+                        "domain": {"variable": "hydra.core.Name"},
+                        "body": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "n"}}}}}},
+                  {
+                    "name": "type",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "n",
+                        "domain": {"variable": "hydra.core.Name"},
+                        "body": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "n"}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a DefinitionReference as its fully-qualified name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.docSegment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.docs.DocSegment"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "seg",
+                "domain": {"variable": "hydra.docs.DocSegment"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.print.docs.docSegmentWith"},
+                        "argument": {"variable": "hydra.print.docs.entityReference"}}},
+                    "argument": {"variable": "seg"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single DocSegment back to its source string form"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.docSegmentWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.docs.DocSegment"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "render",
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+                "body": {
+                  "cases": {
+                    "typeName": "hydra.docs.DocSegment",
+                    "cases": [
+                      {
+                        "name": "ref",
+                        "handler": {
+                          "lambda": {
+                            "parameter": "r",
+                            "domain": {"variable": "hydra.packaging.EntityReference"},
+                            "body": {"application": {"function": {"variable": "render"}, "argument": {"variable": "r"}}}}}},
+                      {"name": "text", "handler": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}]}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single DocSegment using a custom {@type hydra.packaging.EntityReference} renderer"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.docSegments",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.docs.DocSegment"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "segs",
+                "domain": {"list": {"variable": "hydra.docs.DocSegment"}},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.docs.DocSegment"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {"variable": "hydra.print.docs.docSegment"}}},
+                        "argument": {"variable": "segs"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a list of DocSegments back to a plain documentation string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.docSegmentsWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.docs.DocSegment"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "render",
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "segs",
+                    "domain": {"list": {"variable": "hydra.docs.DocSegment"}},
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.docs.DocSegment"}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {"application": {"function": {"variable": "hydra.print.docs.docSegmentWith"}, "argument": {"variable": "render"}}}}},
+                            "argument": {"variable": "segs"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a list of DocSegments using a custom {@type hydra.packaging.EntityReference} renderer"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.entityReference",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.packaging.EntityReference",
+                "cases": [
+                  {
+                    "name": "definition",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "d",
+                        "domain": {"variable": "hydra.packaging.DefinitionReference"},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.packaging.DefinitionReference",
+                                        "cases": [
+                                          {
+                                            "name": "primitive",
+                                            "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.Name"}, "body": {"literal": {"string": "primitive"}}}}},
+                                          {
+                                            "name": "term",
+                                            "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.Name"}, "body": {"literal": {"string": "term"}}}}},
+                                          {
+                                            "name": "type",
+                                            "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.Name"}, "body": {"literal": {"string": "type"}}}}}]}},
+                                    "argument": {"variable": "d"}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " "}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.print.docs.definitionReference"}, "argument": {"variable": "d"}}}}}}}}}},
+                  {
+                    "name": "module",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "m",
+                        "domain": {"variable": "hydra.packaging.ModuleName"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "module "}}}},
+                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "m"}}}}}}}},
+                  {
+                    "name": "package",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "p",
+                        "domain": {"variable": "hydra.packaging.PackageName"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "package "}}}},
+                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "p"}}}}}}}},
+                  {
+                    "name": "termExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "term-expr "}}}},
+                            "argument": {"variable": "s"}}}}}},
+                  {
+                    "name": "typeExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "type-expr "}}}},
+                            "argument": {"variable": "s"}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render a {@type hydra.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.renderDocString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.print.docs.renderDocStringWith"},
+                        "argument": {"variable": "hydra.print.docs.entityReference"}}},
+                    "argument": {"variable": "s"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Parse a documentation string and re-render it, converting doc-escape tags through their canonical form"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.docs.renderDocStringWith",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "render",
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "s",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.print.docs.docSegmentsWith"}, "argument": {"variable": "render"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.parse.docs.parseDocString"}, "argument": {"variable": "s"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Parse a documentation string and render it using a custom {@type hydra.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text."}}}]}}}}}]}

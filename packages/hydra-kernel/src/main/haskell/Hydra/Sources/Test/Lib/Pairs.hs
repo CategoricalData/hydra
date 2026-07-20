@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.pairs primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]

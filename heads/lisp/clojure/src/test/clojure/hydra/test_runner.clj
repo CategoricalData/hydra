@@ -455,23 +455,23 @@
 ;; ==========================================================================
 
 (defn- show-term [t]
-  (let [show-fn (or (resolve 'hydra_show_core_term)
-                    (ns-resolve 'hydra.show.core 'hydra_show_core_term))]
+  (let [show-fn (or (resolve 'hydra_print_core_term)
+                    (ns-resolve 'hydra.print.core 'hydra_print_core_term))]
     (when show-fn ((deref show-fn) t))))
 
 (defn- show-type [t]
-  (let [show-fn (or (resolve 'hydra_show_core_type)
-                    (ns-resolve 'hydra.show.core 'hydra_show_core_type))]
+  (let [show-fn (or (resolve 'hydra_print_core_type)
+                    (ns-resolve 'hydra.print.core 'hydra_print_core_type))]
     (when show-fn ((deref show-fn) t))))
 
 (defn- show-type-scheme [ts]
-  (let [show-fn (or (resolve 'hydra_show_core_type_scheme)
-                    (ns-resolve 'hydra.show.core 'hydra_show_core_type_scheme))]
+  (let [show-fn (or (resolve 'hydra_print_core_type_scheme)
+                    (ns-resolve 'hydra.print.core 'hydra_print_core_type_scheme))]
     (when show-fn ((deref show-fn) ts))))
 
 (defn- show-let [l]
-  (let [show-fn (or (resolve 'hydra_show_core_let)
-                    (ns-resolve 'hydra.show.core 'hydra_show_core_let))]
+  (let [show-fn (or (resolve 'hydra_print_core_let)
+                    (ns-resolve 'hydra.print.core 'hydra_print_core_let))]
     (when show-fn ((deref show-fn) l))))
 
 (defn- normalize-show [s]
@@ -840,7 +840,7 @@
           (let [pair-val (second result)
                 inner-pair (first pair-val)
                 result-scheme (second inner-pair)
-                show-ts (resolve-fn 'hydra.show.core 'hydra_show_core_type_scheme)
+                show-ts (resolve-fn 'hydra.print.core 'hydra_print_core_type_scheme)
                 expected-str (when show-ts (show-ts (:output tc)))
                 actual-str (when show-ts (show-ts result-scheme))]
             (run-string-comparison-test path expected-str actual-str))))
@@ -1530,7 +1530,7 @@
   (require 'hydra.hoisting)
   (require 'hydra.unification)
   (require 'hydra.substitution)
-  (require 'hydra.show.core)
+  (require 'hydra.print.core)
   ;; JSON/bootstrap modules
   (require 'hydra.json.bootstrap)
   (require 'hydra.json.parser)

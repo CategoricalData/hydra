@@ -252,7 +252,7 @@ case:
 
 1. **Interpreter-based mapping.** The mapping *reifies* the field term — turning it into a
    `hydra.core.Term` value — and produces a derived term that applies the kernel interpreter
-   (`hydra.reduction.reduceTerm`, with `hydra.show.core.term` rendering the result). That
+   (`hydra.reduction.reduceTerm`, with `hydra.print.core.term` rendering the result). That
    *derived* term is what gets encoded into the target, which therefore runs the expression
    through Hydra's own evaluator. (Today this is set up by the explicit `evalCase`/`primCase`
    helpers, which build the `reduceTerm` application by hand; #420 moves this into the

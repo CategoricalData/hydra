@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic as Logic
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
@@ -35,7 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.optionals primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -55,13 +55,13 @@ showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showMaybeInt :: TypedTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
+showMaybeInt = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.optional_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ PrintCore.optional_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
 
 -- Test groups
 

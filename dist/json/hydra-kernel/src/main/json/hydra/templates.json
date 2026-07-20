@@ -4,7 +4,7 @@
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.decode.core"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

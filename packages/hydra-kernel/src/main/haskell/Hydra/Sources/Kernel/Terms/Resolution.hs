@@ -76,7 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 import qualified Hydra.Sources.Kernel.Terms.Names        as Names
-import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core    as PrintCore
 
 
 ns :: ModuleName
@@ -89,7 +89,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Names.ns, Scoping.ns, PrintCore.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Type dereference, lookup, requirements, and instantiation"))}
   where
     definitions = [
@@ -154,7 +154,7 @@ fieldTypes = define "fieldTypes" $
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields")) :: TypedTerm (M.Map Name Type))) $
   match _Type (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
-    Error.unexpectedShapeError (string "record or union type") (ShowCore.type_ @@ var "t")))) [
+    Error.unexpectedShapeError (string "record or union type") (PrintCore.type_ @@ var "t")))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
@@ -269,7 +269,7 @@ requireRowType = define "requireRowType" $
     "t" ~>
     Optionals.cases (var "getter" @@ (var "rawType" @@ var "t")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
         (Strings.cat2 (var "label") (string " type"))
-        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t"))))) (reify right))
+        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (PrintCore.type_ @@ var "t"))))) (reify right))
 
 requireSchemaType :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, InferenceContext))
 requireSchemaType = define "requireSchemaType" $

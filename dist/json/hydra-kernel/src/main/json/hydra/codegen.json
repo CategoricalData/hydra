@@ -14,8 +14,8 @@
     {"module": "hydra.names"},
     {"module": "hydra.scoping"},
     {"module": "hydra.environment"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.strip"},
     {"module": "hydra.decoding"},
     {"module": "hydra.encoding"},
@@ -598,7 +598,7 @@
                             "bindings": [
                               {
                                 "name": "typeStr",
-                                "term": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "typ"}}},
+                                "term": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "typ"}}},
                                 "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                             "body": {
                               "application": {
@@ -665,7 +665,7 @@
                                   "lambda": {
                                     "parameter": "scheme",
                                     "domain": {"variable": "hydra.core.TypeScheme"},
-                                    "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "scheme"}}}}}}},
+                                    "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "scheme"}}}}}}},
                             "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                         "body": {
                           "application": {
@@ -772,7 +772,7 @@
                                                                 "argument": {
                                                                   "application": {"function": {"project": {"typeName": "hydra.core.Binding", "fieldName": "name"}}, "argument": {"variable": "binding"}}}}}}}}},
                                                     "argument": {"literal": {"string": " = "}}}}}},
-                                            "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"literal": "string"}}}}}}}}}}},
             "annotation": {

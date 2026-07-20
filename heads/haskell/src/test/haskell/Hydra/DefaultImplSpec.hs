@@ -13,7 +13,7 @@ module Hydra.DefaultImplSpec where
 
 import Hydra.Kernel
 import Hydra.Reduction (reduceTerm)
-import Hydra.Show.Core (term)
+import Hydra.Print.Core (term)
 import Hydra.Test.DefaultImplGraph (defaultImplGraph, defaultImplPrimCount)
 import Hydra.Test.TestGraph (testGraph, testTypes, testTerms)
 

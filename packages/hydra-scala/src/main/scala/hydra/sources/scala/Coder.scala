@@ -25,7 +25,7 @@ object Coder:
     Seq(
       "hydra.scala.utils", "hydra.scala.serde", "hydra.formatting", "hydra.names",
       "hydra.scoping", "hydra.strip", "hydra.variables", "hydra.analysis",
-      "hydra.environment", "hydra.predicates", "hydra.resolution", "hydra.show.core",
+      "hydra.environment", "hydra.predicates", "hydra.resolution", "hydra.print.core",
       "hydra.annotations", "hydra.constants", "hydra.inference", "hydra.sorting",
       "hydra.arity", "hydra.serialization", "hydra.reduction",
       "hydra.scala.syntax", "hydra.scala.language")

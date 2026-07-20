@@ -57,22 +57,22 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
+import qualified Hydra.Sources.Kernel.Terms.Parse.Docs        as ParseDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Docs        as PrintDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths      as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core       as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors      as PrintError
+import qualified Hydra.Sources.Kernel.Terms.Print.Error.Core as PrintErrorCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Error.Packaging as PrintErrorPackaging
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph      as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants       as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing     as PrintTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Util       as PrintUtil
 import qualified Hydra.Sources.Kernel.Terms.Parse.Regex      as ParseRegex
 import qualified Hydra.Sources.Kernel.Terms.Print.Emacs.Regex as PrintEmacsRegex
 import qualified Hydra.Sources.Kernel.Terms.Print.Pcre.Regex  as PrintPcreRegex
 import qualified Hydra.Sources.Kernel.Terms.Print.Posix.Regex as PrintPosixRegex
 import qualified Hydra.Sources.Kernel.Terms.Print.Regex      as PrintRegex
-import qualified Hydra.Sources.Kernel.Terms.Read.Docs        as ReadDocs
-import qualified Hydra.Sources.Kernel.Terms.Show.Docs        as ShowDocs
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowError
-import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error.Packaging as ShowErrorPackaging
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants       as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
-import qualified Hydra.Sources.Kernel.Terms.Show.Util       as ShowUtil
 import qualified Hydra.Sources.Kernel.Terms.Sorting         as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
@@ -141,22 +141,22 @@ kernelPrimaryTermsModules = [
   Scoping.module_,
   Serialization.module_,
   Strip.module_,
+  ParseDocs.module_,
+  PrintDocs.module_,
+  PrintPaths.module_,
+  PrintCore.module_,
+  PrintError.module_,
+  PrintErrorCore.module_,
+  PrintErrorPackaging.module_,
+  PrintGraph.module_,
+  PrintVariants.module_,
+  PrintTyping.module_,
+  PrintUtil.module_,
   ParseRegex.module_,
   PrintEmacsRegex.module_,
   PrintPcreRegex.module_,
   PrintPosixRegex.module_,
   PrintRegex.module_,
-  ReadDocs.module_,
-  ShowDocs.module_,
-  ShowPaths.module_,
-  ShowCore.module_,
-  ShowError.module_,
-  ShowErrorCore.module_,
-  ShowErrorPackaging.module_,
-  ShowGraph.module_,
-  ShowVariants.module_,
-  ShowTyping.module_,
-  ShowUtil.module_,
   Sorting.module_,
   Substitution.module_,
   Templates.module_,

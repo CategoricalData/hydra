@@ -155,7 +155,7 @@ coqReservedWords = define "coqReservedWords" $
       -- code tries to use the type.
       "list", "option", "prod", "sum", "unit", "bool", "nat", "string",
       -- Names that collide with Hydra kernel function names after namespace
-      -- stripping (e.g., hydra.show.core.term, hydra.show.core.type).
+      -- stripping (e.g., hydra.print.core.term, hydra.print.core.type).
       "term", "literal", "graph", "element"]
 
 -- | Reserved words that must be renamed when they appear as a stripped-local

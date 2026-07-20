@@ -12,7 +12,7 @@ import qualified Hydra.Extract.Core as ExtractCore
 import Hydra.Overlay.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations as Ann
 import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 import qualified Hydra.Reference.AlgorithmWBridge as W
 
 import qualified Hydra.TestUtils as TU
@@ -53,9 +53,9 @@ expectType term ts = do
       H.pendingWith err
     Right (iterm, its) -> do
       H.it "inferred type" $
-        H.shouldBe (ShowCore.typeScheme $ stripConstraints its) (ShowCore.typeScheme $ stripConstraints ts)
+        H.shouldBe (PrintCore.typeScheme $ stripConstraints its) (PrintCore.typeScheme $ stripConstraints ts)
       H.it "inferred term" $
-        H.shouldBe (ShowCore.term $ removeTypesFromTerm iterm) (ShowCore.term $ removeTypesFromTerm term)
+        H.shouldBe (PrintCore.term $ removeTypesFromTerm iterm) (PrintCore.term $ removeTypesFromTerm term)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase

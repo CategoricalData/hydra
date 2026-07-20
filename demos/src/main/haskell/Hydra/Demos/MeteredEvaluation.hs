@@ -6,13 +6,13 @@
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import Hydra.ExtGeneration
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
@@ -39,12 +39,12 @@ testModule = Module {
     test local tterm = TypedTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     definitions = [
         toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TypedTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        toDefinition $ test "describeType" $ PrintCore.type_ @@ (TypedTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
     case result of
-      Left err -> putStrLn $ "error: " <> ShowError.error err
+      Left err -> putStrLn $ "error: " <> PrintError.error err
       Right reduced -> putStrLn $ "result: " <> show reduced
   where
     graph = modulesToGraph [testModule] [testModule]

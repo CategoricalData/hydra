@@ -24,7 +24,7 @@ object equality:
   def compareTerms(t1: hydra.core.Term, t2: hydra.core.Term): Int =
     (t1, t2) match
       case (hydra.core.Term.literal(l1), hydra.core.Term.literal(l2)) => compareLiterals(l1, l2)
-      case _ => hydra.show.core.term(t1).compareTo(hydra.show.core.term(t2))
+      case _ => hydra.print.core.term(t1).compareTo(hydra.print.core.term(t2))
 
   private def compareLiterals(l1: hydra.core.Literal, l2: hydra.core.Literal): Int =
     (l1, l2) match
@@ -32,7 +32,7 @@ object equality:
       case (hydra.core.Literal.float(v1), hydra.core.Literal.float(v2)) => compareFloats(v1, v2)
       case (hydra.core.Literal.string(s1), hydra.core.Literal.string(s2)) => s1.compareTo(s2)
       case (hydra.core.Literal.boolean(b1), hydra.core.Literal.boolean(b2)) => java.lang.Boolean.compare(b1, b2)
-      case _ => hydra.show.core.literal(l1).compareTo(hydra.show.core.literal(l2))
+      case _ => hydra.print.core.literal(l1).compareTo(hydra.print.core.literal(l2))
 
   private def compareIntegers(v1: hydra.core.IntegerValue, v2: hydra.core.IntegerValue): Int =
     val b1 = integerToBigInt(v1)

@@ -2,7 +2,7 @@
   "name": "hydra.graphviz.coder",
   "metadata": {"description": "Functions for converting Hydra terms to Graphviz DOT graphs", "comments": [], "seeAlso": []},
   "dependencies": [
-    {"module": "hydra.show.paths"},
+    {"module": "hydra.print.paths"},
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},
     {"module": "hydra.graphviz.dot"},
@@ -1133,7 +1133,7 @@
                                                                                               "application": {
                                                                                                 "function": {"application": {"function": {"variable": "hydra.graphviz.coder.labelAttrs"}, "argument": {"variable": "sty"}}},
                                                                                                 "argument": {"variable": "s"}}}}}}},
-                                                                                    "argument": {"application": {"function": {"variable": "hydra.show.paths.subtermStep"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
+                                                                                    "argument": {"application": {"function": {"variable": "hydra.print.paths.subtermStep"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
                                                             "typeScheme": {
                                                               "variables": [],
                                                               "body": {
@@ -1933,7 +1933,7 @@
                             "term": {
                               "application": {
                                 "function": {
-                                  "application": {"function": {"variable": "hydra.show.paths.termToSubtermGraph"}, "argument": {"variable": "namespaces"}}},
+                                  "application": {"function": {"variable": "hydra.print.paths.termToSubtermGraph"}, "argument": {"variable": "namespaces"}}},
                                 "argument": {"variable": "term"}}},
                             "typeScheme": {"variables": [], "body": {"variable": "hydra.paths.SubtermGraph"}}},
                           {
@@ -2050,7 +2050,7 @@
                                                           "typeApplication": {
                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                             "type": {"optional": {"literal": "string"}}}},
-                                                        "argument": {"variable": "hydra.show.paths.subtermStep"}}},
+                                                        "argument": {"variable": "hydra.print.paths.subtermStep"}}},
                                                     "argument": {"variable": "pathAccessors"}}}}}}},
                                         "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                     "body": {

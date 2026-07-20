@@ -26,7 +26,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Literals       as HydraLiterals
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Yaml.Language           as YamlLanguage
 import           Prelude hiding ((++))
@@ -47,7 +47,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.show.core"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.print.core"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
             moduleMetadata = descriptionMetadata (Just "YAML encoding and decoding for Hydra terms")}
   where
     definitions = [
@@ -204,13 +204,13 @@ termCoder = define "termCoder" $
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   "encodeLiteral" <~ ("ac" ~> "term" ~>
     cases _Term (var "term")
-      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected literal term, found: ", ShowCore.term @@ var "term"]))) [
+      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected literal term, found: ", PrintCore.term @@ var "term"]))) [
       _Term_literal>>: "av" ~>
         "scalar" <<~ Coders.coderEncode (var "ac") @@ var "av" $
         right (Yaml.nodeScalar $ var "scalar")]) $
   "encodeList" <~ ("lc" ~> "term" ~>
     cases _Term (var "term")
-      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected list term, found: ", ShowCore.term @@ var "term"]))) [
+      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected list term, found: ", PrintCore.term @@ var "term"]))) [
       _Term_list>>: "els" ~>
         "encodedEls" <<~ Eithers.mapList ("el" ~> Coders.coderEncode (var "lc") @@ var "el") (var "els") $
         right (Yaml.nodeSequence $ var "encodedEls")]) $
@@ -223,7 +223,7 @@ termCoder = define "termCoder" $
   "encodeMaybe" <~ ("maybeElementCoder" ~> "maybeTerm" ~>
     "strippedMaybeTerm" <~ (Strip.deannotateTerm @@ var "maybeTerm") $
     cases _Term (var "strippedMaybeTerm")
-      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"]))) [
+      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected optional term, found: ", PrintCore.term @@ var "maybeTerm"]))) [
       _Term_optional>>: "maybeContents" ~>
         Optionals.cases (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
             "encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "innerTerm" $
@@ -242,7 +242,7 @@ termCoder = define "termCoder" $
   "result" <~ (cases _Type (var "stripped")
     (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [
       string "unsupported type in YAML: ",
-      ShowCore.type_ @@ var "typ"]))) [
+      PrintCore.type_ @@ var "typ"]))) [
     _Type_literal>>: "at" ~>
       "ac" <<~ literalYamlCoder @@ var "at" $
       right $ Coders.coder
@@ -278,7 +278,7 @@ termCoder = define "termCoder" $
       right $ Coders.coder
         ("term" ~>
           cases _Term (var "term")
-            (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected map term, found: ", ShowCore.term @@ var "term"]))) [
+            (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected map term, found: ", PrintCore.term @@ var "term"]))) [
             _Term_map>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "entry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
               right (Yaml.nodeMapping $ Maps.fromList $ var "entries")])
@@ -302,7 +302,7 @@ unitCoder = define "unitCoder" $
   doc "YAML coder for unit values" $
   "encodeUnit" <~ ("term" ~>
     cases _Term (Strip.deannotateTerm @@ var "term")
-      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected unit, found: ", ShowCore.term @@ var "term"]))) [
+      (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected unit, found: ", PrintCore.term @@ var "term"]))) [
       _Term_unit>>: constant $ right $ Yaml.nodeScalar Yaml.scalarNull]) $
   "decodeUnit" <~ ("n" ~>
     cases YM._Node (var "n")

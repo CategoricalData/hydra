@@ -7276,7 +7276,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path"}}}]}}}}},
+                  "value": {"literal": {"string": "Convert a Hydra namespace string (e.g. hydra.print.core) into a relative .v file path"}}}]}}}}},
     {
       "term": {
         "name": "hydra.coq.generate.renderRequireImports",

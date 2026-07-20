@@ -12,8 +12,8 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.scoping"},
     {"module": "hydra.resolution"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
     {"module": "hydra.paths"},
@@ -5264,7 +5264,7 @@
                                                                   "term": {
                                                                     "wrap": {
                                                                       "typeName": "hydra.errors.OtherError",
-                                                                      "body": {"application": {"function": {"variable": "hydra.show.errors.error"}, "argument": {"variable": "e"}}}}}}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.print.errors.error"}, "argument": {"variable": "e"}}}}}}}}}},
                                                         "typeScheme": {
                                                           "variables": [],
                                                           "body": {"function": {"domain": {"variable": "hydra.errors.Error"}, "codomain": {"variable": "hydra.errors.Error"}}}}}],

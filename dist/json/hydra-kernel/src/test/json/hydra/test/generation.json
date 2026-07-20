@@ -6,7 +6,7 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.codegen"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -196,11 +196,11 @@
                                                                                                                                         "lambda": {
                                                                                                                                           "parameter": "ts",
                                                                                                                                           "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
+                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
-                                                                                                                                      "function": {"variable": "hydra.show.core.term"},
+                                                                                                                                      "function": {"variable": "hydra.print.core.term"},
                                                                                                                                       "argument": {
                                                                                                                                         "application": {
                                                                                                                                           "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "body"}},
@@ -610,11 +610,11 @@
                                                                                                                                         "lambda": {
                                                                                                                                           "parameter": "ts",
                                                                                                                                           "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
+                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
-                                                                                                                                      "function": {"variable": "hydra.show.core.term"},
+                                                                                                                                      "function": {"variable": "hydra.print.core.term"},
                                                                                                                                       "argument": {
                                                                                                                                         "application": {
                                                                                                                                           "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "body"}},
@@ -1040,11 +1040,11 @@
                                                                                                                                         "lambda": {
                                                                                                                                           "parameter": "ts",
                                                                                                                                           "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
+                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
-                                                                                                                                      "function": {"variable": "hydra.show.core.term"},
+                                                                                                                                      "function": {"variable": "hydra.print.core.term"},
                                                                                                                                       "argument": {
                                                                                                                                         "application": {
                                                                                                                                           "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "body"}},
@@ -1547,11 +1547,11 @@
                                                                                                                                         "lambda": {
                                                                                                                                           "parameter": "ts",
                                                                                                                                           "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
+                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
-                                                                                                                                      "function": {"variable": "hydra.show.core.term"},
+                                                                                                                                      "function": {"variable": "hydra.print.core.term"},
                                                                                                                                       "argument": {
                                                                                                                                         "application": {
                                                                                                                                           "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "body"}},
@@ -2072,11 +2072,11 @@
                                                                                                                                         "lambda": {
                                                                                                                                           "parameter": "ts",
                                                                                                                                           "domain": {"variable": "hydra.core.TypeScheme"},
-                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.show.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
+                                                                                                                                          "body": {"application": {"function": {"variable": "hydra.print.core.typeScheme"}, "argument": {"variable": "ts"}}}}}}},
                                                                                                                                   {"literal": {"string": " = "}},
                                                                                                                                   {
                                                                                                                                     "application": {
-                                                                                                                                      "function": {"variable": "hydra.show.core.term"},
+                                                                                                                                      "function": {"variable": "hydra.print.core.term"},
                                                                                                                                       "argument": {
                                                                                                                                         "application": {
                                                                                                                                           "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "body"}},

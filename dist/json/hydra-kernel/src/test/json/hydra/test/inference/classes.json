@@ -4,7 +4,7 @@
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.inference"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -146,7 +146,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -235,7 +235,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -337,7 +337,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -457,7 +457,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -545,7 +545,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -646,7 +646,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -761,7 +761,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -855,7 +855,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -943,7 +943,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1050,7 +1050,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -1141,7 +1141,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1229,7 +1229,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -1307,7 +1307,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1383,7 +1383,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -1474,7 +1474,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1568,7 +1568,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -1686,7 +1686,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1724,7 +1724,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -1874,7 +1874,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -1912,7 +1912,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2062,7 +2062,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -2100,7 +2100,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2279,7 +2279,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -2317,7 +2317,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2497,7 +2497,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -2535,7 +2535,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2659,7 +2659,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -2697,7 +2697,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2815,7 +2815,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -2853,7 +2853,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -2985,7 +2985,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3023,7 +3023,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -3158,7 +3158,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3196,7 +3196,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -3378,7 +3378,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3416,7 +3416,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -3543,7 +3543,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3581,7 +3581,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -3721,7 +3721,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3759,7 +3759,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -3877,7 +3877,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -3915,7 +3915,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -4033,7 +4033,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -4071,7 +4071,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -4233,7 +4233,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -4301,7 +4301,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -4451,7 +4451,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -4549,7 +4549,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -4707,7 +4707,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -4775,7 +4775,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -4920,7 +4920,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -5018,7 +5018,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -5158,7 +5158,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -5245,7 +5245,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -5389,7 +5389,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -5516,7 +5516,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -5666,7 +5666,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -5793,7 +5793,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -5925,7 +5925,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -5992,7 +5992,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -6155,7 +6155,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -6271,7 +6271,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -6427,7 +6427,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -6524,7 +6524,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -6655,7 +6655,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -6835,7 +6835,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -7005,7 +7005,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -7139,7 +7139,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -7269,7 +7269,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -7386,7 +7386,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -7554,7 +7554,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -7641,7 +7641,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -7840,7 +7840,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -7927,7 +7927,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -8109,7 +8109,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -8196,7 +8196,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -8337,7 +8337,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -8490,7 +8490,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -8655,7 +8655,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -8711,7 +8711,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -8826,7 +8826,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -8899,7 +8899,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -9031,7 +9031,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -9094,7 +9094,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -9197,7 +9197,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -9271,7 +9271,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -9418,7 +9418,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -9476,7 +9476,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -9593,7 +9593,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -9672,7 +9672,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -9786,7 +9786,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -9873,7 +9873,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -10018,7 +10018,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -10117,7 +10117,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -10261,7 +10261,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -10306,7 +10306,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -10431,7 +10431,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -10494,7 +10494,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
@@ -10638,7 +10638,7 @@
                                                                           "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.show.core.typeScheme"},
+                                                                          "function": {"variable": "hydra.print.core.typeScheme"},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
@@ -10713,7 +10713,7 @@
                                                           "domain": "unit",
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.typeScheme"},
+                                                              "function": {"variable": "hydra.print.core.typeScheme"},
                                                               "argument": {
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",

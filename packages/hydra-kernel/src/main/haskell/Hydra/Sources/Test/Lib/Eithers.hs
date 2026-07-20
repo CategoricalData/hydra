@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Sets as Sets
 import qualified Hydra.Dsl.Lib.Strings as Strings
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
@@ -39,7 +39,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.eithers primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -51,43 +51,43 @@ showBool :: TypedTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
 showEitherIntInt :: TypedTerm (Either Int Int -> String)
-showEitherIntInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showInt32 @@ Phantoms.var "e"
+showEitherIntInt = Phantoms.lambda "e" $ PrintCore.either_ @@ showInt32 @@ showInt32 @@ Phantoms.var "e"
 
 showEitherIntString :: TypedTerm (Either Int String -> String)
-showEitherIntString = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showStr @@ Phantoms.var "e"
+showEitherIntString = Phantoms.lambda "e" $ PrintCore.either_ @@ showInt32 @@ showStr @@ Phantoms.var "e"
 
 showEitherStringIntList :: TypedTerm (Either String [Int] -> String)
-showEitherStringIntList = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showIntList @@ Phantoms.var "e"
+showEitherStringIntList = Phantoms.lambda "e" $ PrintCore.either_ @@ showStr @@ showIntList @@ Phantoms.var "e"
 
 showEitherIntIntSet :: TypedTerm (Either Int (S.Set Int) -> String)
-showEitherIntIntSet = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showIntSet @@ Phantoms.var "e"
+showEitherIntIntSet = Phantoms.lambda "e" $ PrintCore.either_ @@ showInt32 @@ showIntSet @@ Phantoms.var "e"
 
 showEitherStringInt :: TypedTerm (Either String Int -> String)
-showEitherStringInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showInt32 @@ Phantoms.var "e"
+showEitherStringInt = Phantoms.lambda "e" $ PrintCore.either_ @@ showStr @@ showInt32 @@ Phantoms.var "e"
 
 showEitherStringMaybeInt :: TypedTerm (Either String (Maybe Int) -> String)
-showEitherStringMaybeInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showMaybeInt @@ Phantoms.var "e"
+showEitherStringMaybeInt = Phantoms.lambda "e" $ PrintCore.either_ @@ showStr @@ showMaybeInt @@ Phantoms.var "e"
 
 showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showIntSet :: TypedTerm (S.Set Int -> String)
-showIntSet = Phantoms.lambda "s" $ ShowCore.set_ @@ showInt32 @@ Phantoms.var "s"
+showIntSet = Phantoms.lambda "s" $ PrintCore.set_ @@ showInt32 @@ Phantoms.var "s"
 
 showMaybeInt :: TypedTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
+showMaybeInt = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
 
 showPairIntListStringList :: TypedTerm (([Int], [String]) -> String)
-showPairIntListStringList = Phantoms.lambda "p" $ ShowCore.pair_ @@ showIntList @@ showStrList @@ Phantoms.var "p"
+showPairIntListStringList = Phantoms.lambda "p" $ PrintCore.pair_ @@ showIntList @@ showStrList @@ Phantoms.var "p"
 
 showStr :: TypedTerm (String -> String)
 showStr = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
 
 showStrList :: TypedTerm ([String] -> String)
-showStrList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showStr @@ Phantoms.var "xs"
+showStrList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showStr @@ Phantoms.var "xs"
 
 -- Phantom-typed helpers
 

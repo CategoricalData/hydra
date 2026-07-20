@@ -14,8 +14,8 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import qualified Hydra.Sources.Build.Routing as Routing
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Maps     as Maps
@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Routing.ns, ShowCore.ns, ShowError.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Routing.ns, PrintCore.ns, PrintError.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.build.routing")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -63,7 +63,7 @@ fixtureMap = Routing.buildRoutingMap @@ fixturePkgs
 
 -- | Show a routing map as a sorted association-list string, for stable test comparison.
 showRoutingMap :: TypedTerm (M.Map ModuleName String) -> TypedTerm String
-showRoutingMap rm = ShowCore.list_ @@ showEntry @@ (Lists.sortOn showEntryKey (Maps.toList rm))
+showRoutingMap rm = PrintCore.list_ @@ showEntry @@ (Lists.sortOn showEntryKey (Maps.toList rm))
   where
     showEntry :: TypedTerm ((ModuleName, String) -> String)
     showEntry = lambda "e" (Strings.cat2
@@ -74,7 +74,7 @@ showRoutingMap rm = ShowCore.list_ @@ showEntry @@ (Lists.sortOn showEntryKey (M
 
 showEither :: TypedTerm (Either Error String) -> TypedTerm String
 showEither = Eithers.either
-  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (ShowError.error_ @@ var "e") (string ")"))))
+  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (PrintError.error_ @@ var "e") (string ")"))))
   (lambda "s" (Strings.cat2 (string "right(") (Strings.cat2 (var "s") (string ")"))))
 
 buildRoutingMapGroup :: TypedTerm TestGroup
@@ -123,15 +123,15 @@ testMod s = Packaging.module_ (mn s) nothing (list ([] :: [TypedTerm ModuleDepen
 
 showGroups :: TypedTerm (Either Error [(String, [Module])]) -> TypedTerm String
 showGroups = Eithers.either
-  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (ShowError.error_ @@ var "e") (string ")"))))
+  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (PrintError.error_ @@ var "e") (string ")"))))
   (lambda "groups" (Strings.cat2 (string "right(") (Strings.cat2
-    (ShowCore.list_ @@ showGroup @@ var "groups")
+    (PrintCore.list_ @@ showGroup @@ var "groups")
     (string ")"))))
   where
     showGroup :: TypedTerm ((String, [Module]) -> String)
     showGroup = lambda "g" (Strings.cat2
       (Strings.cat2 (Pairs.first (var "g")) (string ": "))
-      (ShowCore.list_ @@ showModName @@ (Lists.sortOn showModName (Pairs.second (var "g")))))
+      (PrintCore.list_ @@ showModName @@ (Lists.sortOn showModName (Pairs.second (var "g")))))
     showModName :: TypedTerm (Module -> String)
     showModName = lambda "m" (Packaging.unModuleName (Packaging.moduleName (var "m")))
 

@@ -96,7 +96,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         hydra.core.Name("hydra.lexical"),
         hydra.core.Name("hydra.rewriting"),
         hydra.core.Name("hydra.scoping"),
-        hydra.core.Name("hydra.show.core"),
+        hydra.core.Name("hydra.print.core"),
         hydra.core.Name("hydra.strip"),
         hydra.core.Name("hydra.variables"),
     ]

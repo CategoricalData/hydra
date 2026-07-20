@@ -20,7 +20,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Lib.Eithers as Eithers
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
@@ -47,7 +47,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.inference", ModuleName "hydra.show.core", ModuleName "hydra.typing", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.inference", ModuleName "hydra.print.core", ModuleName "hydra.typing", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
             moduleMetadata = descriptionMetadata (Just "Test cases for term reduction/evaluation mechanics")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -131,7 +131,7 @@ etaCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithM
 etaCase cname input output = universalCase cname
   (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
-    (Phantoms.lambda "t" $ ShowCore.term # Phantoms.var "t")
+    (Phantoms.lambda "t" $ PrintCore.term # Phantoms.var "t")
     (Reduction.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))
   (showTerm output)
 
@@ -398,9 +398,9 @@ polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
   where
     test name input output = evalCase name input output
 
--- | Show a term as a string using ShowCore.term
+-- | Show a term as a string using PrintCore.term
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term # t
+showTerm t = PrintCore.term # t
 
 -- | Test cases for type-level beta reduction
 -- Property: Type applications of forall types are reduced by substitution.

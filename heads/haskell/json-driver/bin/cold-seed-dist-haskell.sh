@@ -61,6 +61,14 @@ mkdir -p "$HEADMODS"
 for m in Generation PackageRouting TargetFilePaths Digest; do
     cp "$HEAD_SRC/$m.hs" "$HEADMODS/$m.hs"
 done
+# #497 published-host shim: this copy compiles against the PUBLISHED hydra-kernel
+# (stack.yaml extra-deps, pinned below 0.17.2), which still exports Hydra.Show.* —
+# the canonical head source already uses the post-#497 Hydra.Print.* names (correct
+# for its own, local-kernel compile context). Patch ONLY this ephemeral copy back to
+# the published name; drop once hydra-kernel republishes with the #497 rename.
+sed -i \
+    -e 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
+    "$HEADMODS/Generation.hs"
 
 # 1. Build the cold-only seeder against the published Hackage packages.
 echo "[1/3] Building cold-only seeder (published 0.17.1 deps)..."

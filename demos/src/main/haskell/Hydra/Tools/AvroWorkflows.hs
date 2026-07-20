@@ -18,7 +18,7 @@ module Hydra.Tools.AvroWorkflows (
 
 import Hydra.Kernel hiding (Result)
 import Hydra.Workflow
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import Hydra.Overlay.Haskell.Dsl.Annotations
 import qualified Hydra.Avro.Schema as Avro
 import qualified Hydra.Json.Model as Json
@@ -72,7 +72,7 @@ parseJsonEither s = case JsonParser.parseJson s of
   ParseResultFailure err -> Left (parseErrorMessage err)
 
 eitherToIo :: Result a -> IO a
-eitherToIo (Left ic) = fail (ShowError.error ic)
+eitherToIo (Left ic) = fail (PrintError.error ic)
 eitherToIo (Right v) = return v
 
 data JsonPayloadFormat = Json | Jsonl

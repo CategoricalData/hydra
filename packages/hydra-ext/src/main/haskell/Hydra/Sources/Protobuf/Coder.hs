@@ -40,8 +40,8 @@ import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors     as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors     as PrintError
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
@@ -68,7 +68,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([moduleName ProtobufSerdeSource.module_, moduleName ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
-      Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
+      Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, PrintCore.ns, PrintError.ns,
       ModuleName "hydra.decode.core"] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions")}
   where
@@ -369,7 +369,7 @@ encodeFieldType = def "encodeFieldType" $
     "encodeSimpleType_">: "cx0" ~> "g0" ~> "ns0" ~> "noms" ~> "typ" ~> lets [
       "forNominal">: "name" ~> right (inject P3._SimpleType P3._SimpleType_reference (asTerm encodeTypeReference @@ var "ns0" @@ var "name"))] $
       cases _Type (asTerm simplifyType @@ var "typ")
-        (Just $ asTerm unexpectedE @@ var "cx0" @@ string "simple type" @@ (ShowCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
+        (Just $ asTerm unexpectedE @@ var "cx0" @@ string "simple type" @@ (PrintCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
         _Type_literal>>: "lt" ~>
           Eithers.map
             ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))
@@ -430,17 +430,17 @@ encodeScalarType = def "encodeScalarType" $
   doc "Encode a Hydra literal type as a Protobuf scalar type" $
   "cx" ~> "lt" ~>
     cases _LiteralType (var "lt")
-      (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported literal type" @@ (ShowCore.literalType @@ var "lt")) [
+      (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported literal type" @@ (PrintCore.literalType @@ var "lt")) [
       _LiteralType_binary>>: constant $ right (inject P3._ScalarType P3._ScalarType_bytes unit),
       _LiteralType_boolean>>: constant $ right (inject P3._ScalarType P3._ScalarType_bool unit),
       _LiteralType_float>>: "ft" ~>
         cases _FloatType (var "ft")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit floating-point type" @@ (ShowCore.floatType @@ var "ft")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit floating-point type" @@ (PrintCore.floatType @@ var "ft")) [
           _FloatType_float32>>: constant $ right (inject P3._ScalarType P3._ScalarType_float unit),
           _FloatType_float64>>: constant $ right (inject P3._ScalarType P3._ScalarType_double unit)],
       _LiteralType_integer>>: "it" ~>
         cases _IntegerType (var "it")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (ShowCore.integerType @@ var "it")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (PrintCore.integerType @@ var "it")) [
           _IntegerType_int32>>: constant $ right (inject P3._ScalarType P3._ScalarType_int32 unit),
           _IntegerType_int64>>: constant $ right (inject P3._ScalarType P3._ScalarType_int64 unit),
           _IntegerType_uint32>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint32 unit),
@@ -454,17 +454,17 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
     "toType">: "label" ~> right $
       inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (Strings.cat (list [string "google.protobuf.", var "label", string "Value"])))] $
     cases _LiteralType (var "lt")
-      (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported literal type" @@ (ShowCore.literalType @@ var "lt")) [
+      (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported literal type" @@ (PrintCore.literalType @@ var "lt")) [
       _LiteralType_binary>>: constant $ var "toType" @@ string "Bytes",
       _LiteralType_boolean>>: constant $ var "toType" @@ string "Bool",
       _LiteralType_float>>: "ft" ~>
         cases _FloatType (var "ft")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit floating-point type" @@ (ShowCore.floatType @@ var "ft")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit floating-point type" @@ (PrintCore.floatType @@ var "ft")) [
           _FloatType_float32>>: constant $ var "toType" @@ string "Float",
           _FloatType_float64>>: constant $ var "toType" @@ string "Double"],
       _LiteralType_integer>>: "it" ~>
         cases _IntegerType (var "it")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (ShowCore.integerType @@ var "it")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (PrintCore.integerType @@ var "it")) [
           _IntegerType_int32>>: constant $ var "toType" @@ string "Int32",
           _IntegerType_int64>>: constant $ var "toType" @@ string "Int64",
           _IntegerType_uint32>>: constant $ var "toType" @@ string "UInt32",
@@ -482,7 +482,7 @@ encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
     "forNominal">: "name" ~> right (inject P3._SimpleType P3._SimpleType_reference (asTerm encodeTypeReference @@ var "localNs" @@ var "name"))] $
     cases _Type (asTerm simplifyType @@ var "typ")
-      (Just $ asTerm unexpectedE @@ var "cx" @@ string "simple type in structural type helper" @@ (ShowCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
+      (Just $ asTerm unexpectedE @@ var "cx" @@ string "simple type in structural type helper" @@ (PrintCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
       _Type_literal>>: "lt" ~>
         Eithers.map
           ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))

@@ -69,11 +69,11 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -103,7 +103,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, PrintCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for mapping Hydra terms to property graph elements using mapping specifications")}
   where
     definitions = [
@@ -520,16 +520,16 @@ termToString = define "termToString" $
   doc "Convert a term to its string representation" $
   "term" ~>
     cases _Term (Strip.deannotateTerm @@ var "term")
-      (Just $ ShowCore.term @@ var "term") [
+      (Just $ PrintCore.term @@ var "term") [
       _Term_literal>>: "lit" ~>
-        cases _Literal (var "lit") (Just $ ShowCore.term @@ var "term") [
+        cases _Literal (var "lit") (Just $ PrintCore.term @@ var "term") [
           _Literal_string>>: lambda "s" $ var "s",
           _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
           _Literal_integer>>: "i" ~>
-            cases _IntegerValue (var "i") (Just $ ShowCore.term @@ var "term") [
+            cases _IntegerValue (var "i") (Just $ PrintCore.term @@ var "term") [
               _IntegerValue_int32>>: "n" ~> Literals.showInt32 (var "n")],
           _Literal_float>>: "f" ~>
-            cases _FloatValue (var "f") (Just $ ShowCore.term @@ var "term") [
+            cases _FloatValue (var "f") (Just $ PrintCore.term @@ var "term") [
               _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
       _Term_optional>>: "mt" ~>
         Optionals.cases (var "mt") (string "none") ("t" ~> termToString @@ var "t")]

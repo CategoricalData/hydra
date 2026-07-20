@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Differentiation as Diff
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Dsl.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Strings  as Strings
@@ -38,7 +38,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns, ModuleName "hydra.reduction", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, PrintCore.ns, ModuleName "hydra.reduction", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for automatic differentiation"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -380,7 +380,7 @@ roundedEvalDiffCase cname expr xVal expected = evalCase cname input output
 -- ============================================================
 
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term @@ t
+showTerm t = PrintCore.term @@ t
 
 structuralDiffGroup :: TypedTerm TestGroup
 structuralDiffGroup = subgroup "structural" [

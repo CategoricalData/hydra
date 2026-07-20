@@ -60,11 +60,11 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates

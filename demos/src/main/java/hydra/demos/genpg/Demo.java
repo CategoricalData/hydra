@@ -88,7 +88,7 @@ public class Demo {
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + hydra.show.Errors.error(((Either.Left<Error_, ?>) result).value));
+                "Transform error: " + hydra.print.Errors.error(((Either.Left<Error_, ?>) result).value));
         }
         return ((Either.Right<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }

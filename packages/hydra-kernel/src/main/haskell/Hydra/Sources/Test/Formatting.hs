@@ -15,7 +15,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import qualified Hydra.Dsl.Util as Util
-import qualified Hydra.Show.Util as ShowUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 import Hydra.Testing
@@ -85,9 +84,20 @@ testCase i fromConvention toConvention fromString toString =
     actual = Formatting.convertCase @@ metaConv fromConvention
       @@ metaConv toConvention @@ string fromString
     expected = string toString
-    name = "#" ++ show i ++ " (" ++ ShowUtil.caseConvention fromConvention ++ " -> " ++ ShowUtil.caseConvention toConvention ++ ")"
+    name = "#" ++ show i ++ " (" ++ showCaseConvention fromConvention ++ " -> " ++ showCaseConvention toConvention ++ ")"
     metaConv conv = case conv of
       CaseConventionLowerSnake -> Util.caseConventionLowerSnake
       CaseConventionUpperSnake -> Util.caseConventionUpperSnake
       CaseConventionCamel -> Util.caseConventionCamel
       CaseConventionPascal -> Util.caseConventionPascal
+
+-- Local mirror of hydra.print.util.caseConvention, for readable test names only.
+-- Deliberately not calling the generated Hydra.Print.Util here: this DSL source is
+-- compiled against BOTH the local (renamed) and #376-cold-seeded (published, pre-rename)
+-- kernels, and a single import can't satisfy both. See #497 plan for the general issue.
+showCaseConvention :: CaseConvention -> String
+showCaseConvention conv = case conv of
+  CaseConventionLowerSnake -> "lower_snake_case"
+  CaseConventionUpperSnake -> "UPPER_SNAKE_CASE"
+  CaseConventionCamel -> "camelCase"
+  CaseConventionPascal -> "PascalCase"

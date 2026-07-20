@@ -14,7 +14,7 @@ import Hydra.Overlay.Haskell.Dsl.Typed.Common
 import Hydra.Overlay.Haskell.Dsl.Typed.Literals
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations as Ann
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 import Hydra.Encoding (encodeBindingName)
 import Hydra.Decoding (decodeBindingName)
 
@@ -389,7 +389,7 @@ reify f = case (unTypedTerm $ f $ var "x") of
 reify2 :: (TypedTerm a -> TypedTerm b -> TypedTerm c) -> TypedTerm (a -> b -> c)
 reify2 f = case (unTypedTerm $ f (var "x") (var "y")) of
   TermApplication (Application (TermApplication (Application lhs _)) _) -> TypedTerm lhs
-  t -> TypedTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
+  t -> TypedTerm $ Terms.string $ "unexpected term as binary function: " <> PrintCore.term t
 
 
 

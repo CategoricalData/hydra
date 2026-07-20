@@ -6,7 +6,7 @@
     {"module": "hydra.constants"},
     {"module": "hydra.serialization"},
     {"module": "hydra.names"},
-    {"module": "hydra.show.docs"},
+    {"module": "hydra.print.docs"},
     {"module": "hydra.java.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -8620,7 +8620,7 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {"variable": "hydra.show.docs.renderDocStringWith"},
+                                                                            "function": {"variable": "hydra.print.docs.renderDocStringWith"},
                                                                             "argument": {"variable": "hydra.java.serde.javaDocEntityRef"}}},
                                                                         "argument": {"variable": "c"}}}}}}}}}}}}},
                                                 "argument": {"literal": {"string": "\n */"}}}}}}}},

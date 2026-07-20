@@ -406,19 +406,19 @@
 
 (define (show-term t)
   (guard (exn (#t #f))
-    (hydra_show_core_term t)))
+    (hydra_print_core_term t)))
 
 (define (show-type t)
   (guard (exn (#t #f))
-    (hydra_show_core_type t)))
+    (hydra_print_core_type t)))
 
 (define (show-type-scheme ts)
   (guard (exn (#t #f))
-    (hydra_show_core_type_scheme ts)))
+    (hydra_print_core_type_scheme ts)))
 
 (define (show-let l)
   (guard (exn (#t #f))
-    (hydra_show_core_let l)))
+    (hydra_print_core_let l)))
 
 (define (normalize-show s)
   (if (not s) s

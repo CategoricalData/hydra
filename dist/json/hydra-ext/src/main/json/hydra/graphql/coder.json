@@ -12,7 +12,7 @@
     {"module": "hydra.predicates"},
     {"module": "hydra.annotations"},
     {"module": "hydra.serialization"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.graphql.language"},
     {"module": "hydra.graphql.serde"},
     {"module": "hydra.graphql.syntax"},
@@ -395,7 +395,7 @@
                                                         "application": {
                                                           "function": {"variable": "hydra.lib.strings.cat2"},
                                                           "argument": {"literal": {"string": "Expected GraphQL-compatible literal type, found: "}}}},
-                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.literalType"}, "argument": {"variable": "lt"}}}}}}}}}}}},
+                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.literalType"}, "argument": {"variable": "lt"}}}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                             "cases": [
@@ -448,7 +448,7 @@
                                                                         "application": {
                                                                           "function": {"variable": "hydra.lib.strings.cat2"},
                                                                           "argument": {"literal": {"string": "Expected 64-bit float type, found: "}}}},
-                                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.floatType"}, "argument": {"variable": "ft_"}}}}}}}}}}}},
+                                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.floatType"}, "argument": {"variable": "ft_"}}}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                             "cases": [
@@ -502,7 +502,7 @@
                                                                         "application": {
                                                                           "function": {"variable": "hydra.lib.strings.cat2"},
                                                                           "argument": {"literal": {"string": "Expected 32-bit signed integer type, found: "}}}},
-                                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.integerType"}, "argument": {"variable": "it_"}}}}}}}}}}}},
+                                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.integerType"}, "argument": {"variable": "it_"}}}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.graphql.syntax.NamedType"}}},
                                             "cases": [
@@ -608,7 +608,7 @@
                                                                     "application": {
                                                                       "function": {"variable": "hydra.lib.strings.cat2"},
                                                                       "argument": {"literal": {"string": "Expected record or union type, found: "}}}},
-                                                                  "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
+                                                                  "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}}},
                                         "cases": [
@@ -1462,7 +1462,7 @@
                                                                     "application": {
                                                                       "function": {"variable": "hydra.lib.strings.cat2"},
                                                                       "argument": {"literal": {"string": "Expected GraphQL-compatible type, found: "}}}},
-                                                                  "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
+                                                                  "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                         "cases": [
@@ -1497,7 +1497,7 @@
                                                                                     "application": {
                                                                                       "function": {"variable": "hydra.lib.strings.cat2"},
                                                                                       "argument": {"literal": {"string": "Expected GraphQL-compatible type, found: "}}}},
-                                                                                  "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "et"}}}}}}}}}}}},
+                                                                                  "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "et"}}}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.graphql.syntax.Type"}}},
                                                         "cases": [

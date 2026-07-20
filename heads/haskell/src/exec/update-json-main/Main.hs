@@ -38,8 +38,8 @@ import qualified Hydra.Kernel as Kernel
 import qualified Hydra.Core as Core
 import qualified Hydra.Validate.Packaging as ValidatePackaging
 import qualified Hydra.Validate.Core as ValidateCore
-import qualified Hydra.Show.Error.Packaging as ShowErrorPackaging
-import qualified Hydra.Show.Error.Core as ShowErrorCore
+import qualified Hydra.Print.Error.Packaging as PrintErrorPackaging
+import qualified Hydra.Print.Error.Core as PrintErrorCore
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
@@ -411,7 +411,7 @@ checkUndeclaredDependenciesOrExit mods = do
         putStrLn ""
       else do
         putStrLn $ "  " ++ show (length findings) ++ " undeclared-dependency finding(s):"
-        mapM_ (\e -> putStrLn $ "    " ++ ShowErrorPackaging.invalidPackageError e) findings
+        mapM_ (\e -> putStrLn $ "    " ++ PrintErrorPackaging.invalidPackageError e) findings
         putStrLn ""
         putStrLn "=== FAILED: undeclared cross-module dependencies ==="
         exitFailure
@@ -435,11 +435,11 @@ reportAndExitOnFailure label findings = do
         ++ show (length typeFailures) ++ " core-type failure(s), "
         ++ show (length termFailures) ++ " core-term failure(s):"
       mapM_ (\(pkg, e) -> putStrLn $ "  [packaging] " ++ Packaging.unPackageName (Packaging.packageName pkg)
-               ++ ": " ++ ShowErrorPackaging.invalidPackageError e) pkgFailures
+               ++ ": " ++ PrintErrorPackaging.invalidPackageError e) pkgFailures
       mapM_ (\(m, td, e) -> putStrLn $ "  [core/type] " ++ Packaging.unModuleName (Kernel.moduleName m)
-               ++ "." ++ Core.unName (Packaging.typeDefinitionName td) ++ ": " ++ ShowErrorCore.invalidTypeError e) typeFailures
+               ++ "." ++ Core.unName (Packaging.typeDefinitionName td) ++ ": " ++ PrintErrorCore.invalidTypeError e) typeFailures
       mapM_ (\(m, td, e) -> putStrLn $ "  [core/term] " ++ Packaging.unModuleName (Kernel.moduleName m)
-               ++ "." ++ Core.unName (Packaging.termDefinitionName td) ++ ": " ++ ShowErrorCore.invalidTermError e) termFailures
+               ++ "." ++ Core.unName (Packaging.termDefinitionName td) ++ ": " ++ PrintErrorCore.invalidTermError e) termFailures
       putStrLn ""
       putStrLn $ "=== FAILED: " ++ label ++ " validation ==="
       exitFailure

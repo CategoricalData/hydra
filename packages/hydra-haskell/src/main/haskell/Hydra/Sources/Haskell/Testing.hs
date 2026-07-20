@@ -33,7 +33,7 @@ import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors    as PrintError
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.List                  as L
@@ -57,7 +57,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, Scoping.ns, ShowError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, Scoping.ns, PrintError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Haskell test code generation for HSpec-based generation tests")}
   where
     definitions = [
@@ -115,7 +115,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
         (var "testBindings")]] $
     Eithers.bind
       (Eithers.bimap
-        (lambda "e" $ ShowError.error_ @@ var "e")
+        (lambda "e" $ PrintError.error_ @@ var "e")
         (lambda "a" $ var "a")
         (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyInferenceContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [

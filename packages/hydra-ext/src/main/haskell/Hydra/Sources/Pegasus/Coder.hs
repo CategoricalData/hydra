@@ -64,11 +64,11 @@ import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PegasusSerdeSource.ns, moduleName PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns, Dependencies.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PegasusSerdeSource.ns, moduleName PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, PrintCore.ns, Dependencies.ns] L.++ (PdlSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files")}
   where
     definitions = [
@@ -155,7 +155,7 @@ encode = def "encode" $
             "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
             Eithers.either
               (lambda "schema" $ right (var "schema"))
-              (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
+              (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
               (var "res")) [
           -- special case for the unit type
           _Type_record>>: lambda "rt" $
@@ -164,7 +164,7 @@ encode = def "encode" $
               ("res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
                Eithers.either
                  (lambda "schema" $ right (var "schema"))
-                 (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
+                 (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
                  (var "res"))]
 
 encodeEnumField :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error PDL.EnumField)
@@ -241,7 +241,7 @@ encodeType_ = def "encodeType" $
   doc "Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
     cases _Type (var "typ")
-      (Just $ unexpectedE (var "cx") (string "PDL-supported type") (ShowCore.type_ @@ var "typ")) [
+      (Just $ unexpectedE (var "cx") (string "PDL-supported type") (PrintCore.type_ @@ var "typ")) [
       _Type_annotated>>: lambda "at" $
         encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at"),
       _Type_either>>: lambda "et" $
@@ -261,21 +261,21 @@ encodeType_ = def "encodeType" $
         right (left (inject PDL._Schema PDL._Schema_array (var "inner"))),
       _Type_literal>>: lambda "lt" $
         cases _LiteralType (var "lt")
-          (Just $ unexpectedE (var "cx") (string "PDL-supported literal type") (ShowCore.type_ @@ var "typ")) [
+          (Just $ unexpectedE (var "cx") (string "PDL-supported literal type") (PrintCore.type_ @@ var "typ")) [
           _LiteralType_binary>>: constant $
             right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_bytes (unit)))),
           _LiteralType_boolean>>: constant $
             right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_boolean (unit)))),
           _LiteralType_float>>: lambda "ft" $
             cases _FloatType (var "ft")
-              (Just $ unexpectedE (var "cx") (string "float32 or float64") (ShowCore.type_ @@ var "typ")) [
+              (Just $ unexpectedE (var "cx") (string "float32 or float64") (PrintCore.type_ @@ var "typ")) [
               _FloatType_float32>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_float (unit)))),
               _FloatType_float64>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_double (unit))))],
           _LiteralType_integer>>: lambda "it" $
             cases _IntegerType (var "it")
-              (Just $ unexpectedE (var "cx") (string "int32 or int64") (ShowCore.type_ @@ var "typ")) [
+              (Just $ unexpectedE (var "cx") (string "int32 or int64") (PrintCore.type_ @@ var "typ")) [
               _IntegerType_int32>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_int (unit)))),
               _IntegerType_int64>>: constant $

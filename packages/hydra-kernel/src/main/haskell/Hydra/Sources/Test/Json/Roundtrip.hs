@@ -32,7 +32,7 @@ import Hydra.Json.Model (Value)
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Encode.Json.Model as EncodeJsonModel
 import qualified Hydra.Typed as Typed
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
 import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Json.Writer as JsonWriter
@@ -45,7 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode", ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode", ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for JSON encoding and decoding"))}
   where
     definitions = [
@@ -78,10 +78,10 @@ roundtripTest testName typ term = universalCase testName
     (Phantoms.lambda "json" $
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
-        (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+        (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
         (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
     (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
-  (ShowCore.term @@ term)
+  (PrintCore.term @@ term)
 
 -- Helper that pins the encoder's exact wire shape: encodes a term to JSON, serializes
 -- the resulting Value to a JSON string, and compares against the literal expected text.
@@ -105,10 +105,10 @@ roundtripTestWithTypes testName types typ term = universalCase testName
     (Phantoms.lambda "json" $
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
-        (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+        (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
         (JsonDecode.fromJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
     (EncodeModule.toJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ term))
-  (ShowCore.term @@ term)
+  (PrintCore.term @@ term)
 
 ----------------------------------------
 -- Literal types
@@ -323,9 +323,9 @@ decodeTest :: String -> TypedTerm Type -> TypedTerm Value -> TypedTerm Term -> T
 decodeTest testName typ jsonVal expectedTerm = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
-    (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+    (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
     (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
-  (ShowCore.term @@ expectedTerm)
+  (PrintCore.term @@ expectedTerm)
 
 unionType :: TypedTerm Type
 unionType = T.union (name "test") [

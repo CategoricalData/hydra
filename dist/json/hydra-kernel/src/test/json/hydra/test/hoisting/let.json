@@ -2,7 +2,7 @@
   "name": "hydra.test.hoisting.let",
   "metadata": {"description": "Test cases for let-binding hoisting transformations", "comments": [], "seeAlso": []},
   "dependencies": [
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.hoisting"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -87,7 +87,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {"variable": "hydra.hoisting.hoistAllLetBindings"},
@@ -282,7 +282,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -507,7 +507,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {"variable": "hydra.hoisting.hoistAllLetBindings"},
@@ -682,7 +682,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -870,7 +870,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -945,7 +945,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -1032,7 +1032,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1176,7 +1176,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -1332,7 +1332,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1449,7 +1449,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -1578,7 +1578,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1802,7 +1802,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -2035,7 +2035,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -2336,7 +2336,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -2703,7 +2703,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3074,7 +3074,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -3588,7 +3588,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3982,7 +3982,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -4454,7 +4454,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -4817,7 +4817,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -5338,7 +5338,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -5699,7 +5699,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -6217,7 +6217,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -6716,7 +6716,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -7370,7 +7370,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -7494,7 +7494,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -7630,7 +7630,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -7946,7 +7946,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -8271,7 +8271,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -8686,7 +8686,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -9107,7 +9107,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -9609,7 +9609,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -10273,7 +10273,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -10702,7 +10702,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -11277,7 +11277,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -11634,7 +11634,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -12057,7 +12057,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -12298,7 +12298,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -12612,7 +12612,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -12977,7 +12977,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -13375,7 +13375,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -13527,7 +13527,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -13688,7 +13688,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -13928,7 +13928,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -14201,7 +14201,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -14505,7 +14505,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -14830,7 +14830,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -15131,7 +15131,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -15498,7 +15498,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -15715,7 +15715,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -15965,7 +15965,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -16182,7 +16182,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",
@@ -16432,7 +16432,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -16854,7 +16854,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.core.let"},
+                                                                  "function": {"variable": "hydra.print.core.let"},
                                                                   "argument": {
                                                                     "record": {
                                                                       "typeName": "hydra.core.Let",

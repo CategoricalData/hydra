@@ -1,0 +1,549 @@
+{
+  "name": "hydra.print.error.packaging",
+  "metadata": {"description": "String representations of hydra.error.packaging types", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.print.util"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.conflictingModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "module namespaces conflict when mapped to target language path: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingModuleNameError", "fieldName": "first"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " vs "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingModuleNameError", "fieldName": "second"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a conflicting module namespace error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.conflictingVariantNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "in module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingVariantNameError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ": variant "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingVariantNameError", "fieldName": "variantName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " of type "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingVariantNameError", "fieldName": "typeName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " produces constructor name "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.ConflictingVariantNameError", "fieldName": "conflictingName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " which conflicts with another type definition"}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a conflicting variant name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.definitionNotInModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "definition "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DefinitionNotInModuleNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " is not in module namespace "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DefinitionNotInModuleNameError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a definition-not-in-module-namespace error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.definitionsOutOfOrderError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "in module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DefinitionsOutOfOrderError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ": definitions out of order: "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DefinitionsOutOfOrderError", "fieldName": "precedingName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " precedes "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DefinitionsOutOfOrderError", "fieldName": "followingName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a definitions-out-of-order error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.duplicateDefinitionNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "in module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DuplicateDefinitionNameError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ": duplicate definition name "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DuplicateDefinitionNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate definition name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.duplicateModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "duplicate module namespace "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.DuplicateModuleNameError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show a duplicate module namespace error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.invalidDefinitionNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "in module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.InvalidDefinitionNameError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ": definition "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.InvalidDefinitionNameError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " does not match expected "}},
+                        {
+                          "application": {
+                            "function": {"variable": "hydra.print.util.caseConvention"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.InvalidDefinitionNameError", "fieldName": "expectedConvention"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid definition name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.invalidModuleError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.InvalidModuleError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid module: "}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.error.packaging.InvalidModuleError",
+                            "cases": [
+                              {"name": "conflictingVariantName", "handler": {"variable": "hydra.print.error.packaging.conflictingVariantNameError"}},
+                              {
+                                "name": "definitionNotInModuleName",
+                                "handler": {"variable": "hydra.print.error.packaging.definitionNotInModuleNameError"}},
+                              {"name": "definitionsOutOfOrder", "handler": {"variable": "hydra.print.error.packaging.definitionsOutOfOrderError"}},
+                              {"name": "duplicateDefinitionName", "handler": {"variable": "hydra.print.error.packaging.duplicateDefinitionNameError"}},
+                              {"name": "invalidDefinitionName", "handler": {"variable": "hydra.print.error.packaging.invalidDefinitionNameError"}},
+                              {
+                                "name": "invalidModuleNameConvention",
+                                "handler": {"variable": "hydra.print.error.packaging.invalidModuleNameConventionError"}},
+                              {"name": "missingDocumentation", "handler": {"variable": "hydra.print.error.packaging.missingDocumentationError"}}]}},
+                        "argument": {"variable": "e"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid module error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.invalidModuleNameConventionError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "namespace "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.InvalidModuleNameConventionError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " does not match the dotted-camelCase naming convention"}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an invalid namespace convention error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.invalidPackageError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.InvalidPackageError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid package: "}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.error.packaging.InvalidPackageError",
+                            "cases": [
+                              {"name": "conflictingModuleName", "handler": {"variable": "hydra.print.error.packaging.conflictingModuleNameError"}},
+                              {"name": "duplicateModuleName", "handler": {"variable": "hydra.print.error.packaging.duplicateModuleNameError"}},
+                              {"name": "invalidModule", "handler": {"variable": "hydra.print.error.packaging.invalidModuleError"}},
+                              {"name": "invalidPackageName", "handler": {"variable": "hydra.print.error.packaging.invalidPackageNameError"}},
+                              {"name": "undeclaredDependency", "handler": {"variable": "hydra.print.error.packaging.undeclaredDependencyError"}}]}},
+                        "argument": {"variable": "e"}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid package error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.invalidPackageNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.InvalidPackageNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "package name "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.PackageName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.InvalidPackageNameError", "fieldName": "packageName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " does not match the hyphen-separated lowercase naming convention"}}]}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid package name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.missingDocumentationError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.MissingDocumentationError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.MissingDocumentationError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "in module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.MissingDocumentationError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ": definition "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.MissingDocumentationError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " lacks a description annotation"}}]}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a missing documentation error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.undeclaredDependencyError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.UndeclaredDependencyError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " references "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "referencedName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ", whose owning module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "owningModuleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " is not among its declared dependencies; add it to moduleDependencies"}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undeclared dependency error as a string"}}}]}}}}}]}

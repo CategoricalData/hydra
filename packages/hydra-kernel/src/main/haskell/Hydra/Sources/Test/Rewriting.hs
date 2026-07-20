@@ -22,7 +22,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Dsl.Coders        as Coders
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Equality as Equality
@@ -46,7 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Rewriting.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Rewriting.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for core rewrite/fold combinators"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -146,13 +146,13 @@ rewriteTypeCase cname input output = universalCase cname
   (showType (Rewriting.rewriteType @@ replaceStringWithInt32Fn @@ input))
   (showType output)
 
--- | Show a term as a string using ShowCore.term
+-- | Show a term as a string using PrintCore.term
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term @@ t
+showTerm t = PrintCore.term @@ t
 
--- | Show a type as a string using ShowCore.type_
+-- | Show a type as a string using PrintCore.type_
 showType :: TypedTerm Type -> TypedTerm String
-showType t = ShowCore.type_ @@ t
+showType t = PrintCore.type_ @@ t
 
 -- | Fold operation: sum int32 literals
 -- \acc term -> acc + (case term of TermLiteral (LiteralInteger (IntegerValueInt32 n)) -> n; _ -> 0)

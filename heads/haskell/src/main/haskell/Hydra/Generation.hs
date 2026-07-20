@@ -19,7 +19,7 @@ import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Inference as Inference
@@ -50,7 +50,7 @@ import Data.Char (isAlphaNum, toUpper)
 
 
 showError :: Error.Error -> String
-showError = ShowError.error
+showError = PrintError.error
 
 -- | An initial InferenceContext (fresh-variable counter at 0, empty subterm-path trace).
 -- Note: emptyInferenceContext is now re-exported from Hydra.Kernel via Hydra.Lexical.

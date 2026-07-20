@@ -24,7 +24,7 @@ import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
@@ -39,7 +39,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for type unification operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -197,9 +197,9 @@ showConstraints cs = Strings.cat (Phantoms.list [
   Strings.intercalate (Phantoms.string ", ")
     (Lists.map (Phantoms.lambda "c" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
-      ShowCore.type_ @@ Typing.typeConstraintLeft (Phantoms.var "c"),
+      PrintCore.type_ @@ Typing.typeConstraintLeft (Phantoms.var "c"),
       Phantoms.string " ~ ",
-      ShowCore.type_ @@ Typing.typeConstraintRight (Phantoms.var "c"),
+      PrintCore.type_ @@ Typing.typeConstraintRight (Phantoms.var "c"),
       Phantoms.string ")"]))
       cs),
   Phantoms.string "]"])
@@ -212,7 +212,7 @@ showTypeSubst ts = Strings.cat (Phantoms.list [
     (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
       Core.unName (Pairs.first (Phantoms.var "p")),
       Phantoms.string ": ",
-      ShowCore.type_ @@ Pairs.second (Phantoms.var "p")]))
+      PrintCore.type_ @@ Pairs.second (Phantoms.var "p")]))
       (Maps.toList (Typing.unTypeSubst ts))),
   Phantoms.string "}"])
 

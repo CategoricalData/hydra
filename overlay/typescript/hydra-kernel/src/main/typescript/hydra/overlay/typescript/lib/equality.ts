@@ -56,7 +56,7 @@ export const gte = <A>(a: A, b: A): boolean => equal(a, b) || gt(a, b);
 
 // Hydra `compare` returns a hydra.util.Comparison value:
 //   { tag: "lessThan" } | { tag: "equalTo" } | { tag: "greaterThan" }
-// The kernel pattern-matches on the tag (see hydra/show/util.ts), so
+// The kernel pattern-matches on the tag (see hydra/print/util.ts), so
 // the runtime value must use this discriminated-union shape — not a
 // raw -1/0/1 number.
 export type Comparison =

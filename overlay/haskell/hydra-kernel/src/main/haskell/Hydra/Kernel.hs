@@ -6,12 +6,12 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Encode.Core
 - Hydra.Extract.Core
 - Hydra.Extract.Util
-- Hydra.Show.Variants
+- Hydra.Print.Variants
 - Hydra.Codegen
 - Hydra.Json.Parser
 - Hydra.Json.Writer
 - Hydra.Parsers
-- Hydra.Show.Core
+- Hydra.Print.Core
 - Hydra.Topology
 -}
 

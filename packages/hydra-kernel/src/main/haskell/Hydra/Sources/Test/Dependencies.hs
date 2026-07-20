@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Dsl.Lib.Maps as Maps
@@ -36,7 +36,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for dependency analysis and let-term transformations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -53,9 +53,9 @@ letExpr varName value body = lets [(nm varName, value)] body
 nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
--- | Show a term as a string using ShowCore.term
+-- | Show a term as a string using PrintCore.term
 showTerm :: TypedTerm Term -> TypedTerm String
-showTerm t = ShowCore.term @@ t
+showTerm t = PrintCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TypedTermDefinition (Term -> Term) -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
@@ -355,15 +355,15 @@ sortBindingsCase cname bindings expected = universalCase cname
   (showBindingGroups expected)
   where
     showBindingGroups :: TypedTerm [[(Name, Term)]] -> TypedTerm String
-    showBindingGroups groups = ShowCore.list_ @@ showGroupFn @@ groups
+    showBindingGroups groups = PrintCore.list_ @@ showGroupFn @@ groups
     showGroupFn :: TypedTerm ([(Name, Term)] -> String)
-    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ @@ showBindingFn @@ Phantoms.var "group"
+    showGroupFn = Phantoms.lambda "group" $ PrintCore.list_ @@ showBindingFn @@ Phantoms.var "group"
     showBindingFn :: TypedTerm ((Name, Term) -> String)
     showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
       Core.unName (Pairs.first (Phantoms.var "pair")),
       Phantoms.string ", ",
-      ShowCore.term @@ Pairs.second (Phantoms.var "pair"),
+      PrintCore.term @@ Pairs.second (Phantoms.var "pair"),
       Phantoms.string ")"])
 
 -- | Test cases for topological sort of bindings

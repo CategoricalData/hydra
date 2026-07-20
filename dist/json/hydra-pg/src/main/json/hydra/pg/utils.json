@@ -4,7 +4,7 @@
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.pg.coder"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.pg.model"},
     {"module": "hydra.pg.mapping"},
     {"module": "hydra.json.model"},
@@ -690,7 +690,7 @@
                                                                                                                 "typeName": "hydra.json.model.Value",
                                                                                                                 "field": {
                                                                                                                   "name": "string",
-                                                                                                                  "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}}}}},
+                                                                                                                  "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}}}}},
                                                                                                         "type": {"literal": "string"}}},
                                                                                                     "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                               {"variable": "propsJson"}]}}}}}}}}}},
@@ -882,7 +882,7 @@
                                                                                                                                                     "typeName": "hydra.json.model.Value",
                                                                                                                                                     "field": {
                                                                                                                                                       "name": "string",
-                                                                                                                                                      "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}}}}},
+                                                                                                                                                      "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}}}}},
                                                                                                                                             "type": {"literal": "string"}}},
                                                                                                                                         "type": {"variable": "hydra.json.model.Value"}}}}},
                                                                                                                                 "type": {"variable": "t3"}}},
@@ -1121,7 +1121,7 @@
                                                                                                                                 "typeName": "hydra.json.model.Value",
                                                                                                                                 "field": {
                                                                                                                                   "name": "string",
-                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}}}}},
+                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}}}}},
                                                                                                                         "type": {"literal": "string"}}},
                                                                                                                     "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                                               {
@@ -1137,7 +1137,7 @@
                                                                                                                                 "typeName": "hydra.json.model.Value",
                                                                                                                                 "field": {
                                                                                                                                   "name": "string",
-                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "termOut"}}}}}}}},
+                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "termOut"}}}}}}}},
                                                                                                                         "type": {"literal": "string"}}},
                                                                                                                     "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                                               {
@@ -1153,7 +1153,7 @@
                                                                                                                                 "typeName": "hydra.json.model.Value",
                                                                                                                                 "field": {
                                                                                                                                   "name": "string",
-                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "termIn"}}}}}}}},
+                                                                                                                                  "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "termIn"}}}}}}}},
                                                                                                                         "type": {"literal": "string"}}},
                                                                                                                     "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                                               {"variable": "propsJson"}]}}}}}}}}}},
@@ -1345,7 +1345,7 @@
                                                                                                                                                                     "typeName": "hydra.json.model.Value",
                                                                                                                                                                     "field": {
                                                                                                                                                                       "name": "string",
-                                                                                                                                                                      "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}}}}},
+                                                                                                                                                                      "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}}}}},
                                                                                                                                                             "type": {"literal": "string"}}},
                                                                                                                                                         "type": {"variable": "hydra.json.model.Value"}}}}},
                                                                                                                                                 "type": {"variable": "t3"}}},

@@ -102,11 +102,11 @@ pyright src/gen-main/python/hydra/describe/mantle.py
 pyright src/gen-main/python/hydra/encode/core.py
 pyright src/gen-main/python/hydra/extract/core.py
 pyright src/gen-main/python/hydra/extract/mantle.py
-pyright src/gen-main/python/hydra/show/accessors.py
-pyright src/gen-main/python/hydra/show/core.py
-pyright src/gen-main/python/hydra/show/graph.py
-pyright src/gen-main/python/hydra/show/mantle.py
-pyright src/gen-main/python/hydra/show/typing.py
+pyright src/gen-main/python/hydra/print/accessors.py
+pyright src/gen-main/python/hydra/print/core.py
+pyright src/gen-main/python/hydra/print/graph.py
+pyright src/gen-main/python/hydra/print/mantle.py
+pyright src/gen-main/python/hydra/print/typing.py
 pyright src/gen-main/python/hydra/annotations.py
 pyright src/gen-main/python/hydra/arity.py
 pyright src/gen-main/python/hydra/checking.py

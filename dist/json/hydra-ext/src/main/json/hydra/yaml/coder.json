@@ -7,7 +7,7 @@
     {"module": "hydra.literals"},
     {"module": "hydra.yaml.language"},
     {"module": "hydra.strip"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -2004,7 +2004,7 @@
                                                                                   "argument": {
                                                                                     "list": [
                                                                                       {"literal": {"string": "expected literal term, found: "}},
-                                                                                      {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
+                                                                                      {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.yaml.model.Node"}}},
                                                         "cases": [
@@ -2114,7 +2114,7 @@
                                                                                       "argument": {
                                                                                         "list": [
                                                                                           {"literal": {"string": "expected list term, found: "}},
-                                                                                          {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
+                                                                                          {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "hydra.yaml.model.Node"}}},
                                                             "cases": [
@@ -2363,7 +2363,7 @@
                                                                                                   "argument": {
                                                                                                     "list": [
                                                                                                       {"literal": {"string": "expected optional term, found: "}},
-                                                                                                      {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "maybeTerm"}}}]}}}}}}}}}},
+                                                                                                      {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "maybeTerm"}}}]}}}}}}}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                         "cases": [
@@ -2641,7 +2641,7 @@
                                                                                               "argument": {
                                                                                                 "list": [
                                                                                                   {"literal": {"string": "unsupported type in YAML: "}},
-                                                                                                  {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}]}}}}}}}}}},
+                                                                                                  {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}]}}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {
                                                                           "application": {
@@ -3270,7 +3270,7 @@
                                                                                                                                                                                   "argument": {
                                                                                                                                                                                     "list": [
                                                                                                                                                                                       {"literal": {"string": "expected map term, found: "}},
-                                                                                                                                                                                      {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
+                                                                                                                                                                                      {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
                                                                                                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                                                             "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                                                                                                         "cases": [
@@ -3633,7 +3633,7 @@
                                                           "argument": {
                                                             "list": [
                                                               {"literal": {"string": "expected unit, found: "}},
-                                                              {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
+                                                              {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}]}}}}}}}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.yaml.model.Node"}}},
                                 "cases": [

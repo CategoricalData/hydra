@@ -13,7 +13,7 @@
     {"module": "hydra.names"},
     {"module": "hydra.predicates"},
     {"module": "hydra.reflect"},
-    {"module": "hydra.show.variants"},
+    {"module": "hydra.print.variants"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
     {"module": "hydra.json.schema.serde"},
@@ -2004,7 +2004,7 @@
                                                                       "argument": {"literal": {"string": "JSON Schema: unsupported type variant: "}}}},
                                                                   "argument": {
                                                                     "application": {
-                                                                      "function": {"variable": "hydra.show.variants.typeVariant"},
+                                                                      "function": {"variable": "hydra.print.variants.typeVariant"},
                                                                       "argument": {"application": {"function": {"variable": "hydra.reflect.typeVariant"}, "argument": {"variable": "typ"}}}}}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"list": {"variable": "hydra.json.schema.Restriction"}}}},

@@ -12,7 +12,7 @@
     {"module": "hydra.strip"},
     {"module": "hydra.annotations"},
     {"module": "hydra.serialization"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.dependencies"},
     {"module": "hydra.pegasus.pdl"},
     {"module": "hydra.paths"},
@@ -446,7 +446,7 @@
                                                                                     "application": {
                                                                                       "function": {"variable": "hydra.lib.strings.cat2"},
                                                                                       "argument": {"literal": {"string": "type resolved to an unsupported nested named schema: "}}}},
-                                                                                  "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
+                                                                                  "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
                                                 "argument": {"variable": "res"}}}}}}},
@@ -568,7 +568,7 @@
                                                                                                 "application": {
                                                                                                   "function": {"variable": "hydra.lib.strings.cat2"},
                                                                                                   "argument": {"literal": {"string": "type resolved to an unsupported nested named schema: "}}}},
-                                                                                              "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
+                                                                                              "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
                                                             "argument": {"variable": "res"}}}}}}}}}}}}]}},
@@ -1543,7 +1543,7 @@
                                                                       "argument": {
                                                                         "application": {
                                                                           "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ", found: "}}}},
-                                                                          "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
+                                                                          "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {
                                               "either": {"left": {"variable": "hydra.pegasus.pdl.Schema"}, "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
@@ -1778,7 +1778,7 @@
                                                                                       "argument": {
                                                                                         "application": {
                                                                                           "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ", found: "}}}},
-                                                                                          "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
+                                                                                          "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {
                                                               "either": {"left": {"variable": "hydra.pegasus.pdl.Schema"}, "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
@@ -1876,7 +1876,7 @@
                                                                                                       "argument": {
                                                                                                         "application": {
                                                                                                           "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ", found: "}}}},
-                                                                                                          "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {
                                                                               "either": {"left": {"variable": "hydra.pegasus.pdl.Schema"}, "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
@@ -1975,7 +1975,7 @@
                                                                                                       "argument": {
                                                                                                         "application": {
                                                                                                           "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ", found: "}}}},
-                                                                                                          "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}}}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {
                                                                               "either": {"left": {"variable": "hydra.pegasus.pdl.Schema"}, "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},

@@ -9,7 +9,7 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.inference"},
     {"module": "hydra.scoping"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.test.testTypes"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -149,7 +149,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -240,7 +240,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -296,7 +296,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -390,7 +390,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -470,7 +470,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -564,7 +564,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -620,7 +620,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -666,7 +666,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -722,7 +722,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -832,7 +832,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -948,7 +948,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1039,7 +1039,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -1119,7 +1119,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1210,7 +1210,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -1290,7 +1290,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1374,7 +1374,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -1476,7 +1476,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1549,7 +1549,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -1624,7 +1624,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1708,7 +1708,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -1827,7 +1827,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -1986,7 +1986,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -2059,7 +2059,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -2197,7 +2197,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -2313,7 +2313,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -2438,7 +2438,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -2511,7 +2511,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -2605,7 +2605,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -2723,7 +2723,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -2872,7 +2872,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3127,7 +3127,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3173,7 +3173,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3248,7 +3248,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3294,7 +3294,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3369,7 +3369,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3415,7 +3415,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3495,7 +3495,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3541,7 +3541,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3621,7 +3621,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3667,7 +3667,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3764,7 +3764,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -3882,7 +3882,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -3940,7 +3940,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4058,7 +4058,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4121,7 +4121,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4236,7 +4236,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4316,7 +4316,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4362,7 +4362,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4464,7 +4464,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4510,7 +4510,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4612,7 +4612,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4658,7 +4658,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4760,7 +4760,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -4806,7 +4806,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -4947,7 +4947,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5058,7 +5058,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -5121,7 +5121,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5236,7 +5236,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -5299,7 +5299,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5396,7 +5396,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -5471,7 +5471,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5547,7 +5547,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -5622,7 +5622,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5698,7 +5698,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -5800,7 +5800,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -5917,7 +5917,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6028,7 +6028,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -6189,7 +6189,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6247,7 +6247,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -6317,7 +6317,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6433,7 +6433,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -6497,7 +6497,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6594,7 +6594,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -6640,7 +6640,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6800,7 +6800,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -6918,7 +6918,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -6978,7 +6978,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -7179,7 +7179,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -7424,7 +7424,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -7627,7 +7627,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -7690,7 +7690,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -7879,7 +7879,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -7947,7 +7947,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -8224,7 +8224,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -8302,7 +8302,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -8446,7 +8446,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -8543,7 +8543,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -8589,7 +8589,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -8691,7 +8691,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -8737,7 +8737,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -8861,7 +8861,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9087,7 +9087,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9252,7 +9252,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9305,7 +9305,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9361,7 +9361,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9414,7 +9414,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9470,7 +9470,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9523,7 +9523,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9596,7 +9596,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9662,7 +9662,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9718,7 +9718,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9784,7 +9784,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9840,7 +9840,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -9908,7 +9908,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -9964,7 +9964,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10025,7 +10025,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10098,7 +10098,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10211,7 +10211,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10296,7 +10296,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10357,7 +10357,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10432,7 +10432,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10498,7 +10498,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10595,7 +10595,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10655,7 +10655,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10740,7 +10740,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10800,7 +10800,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -10875,7 +10875,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -10941,7 +10941,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11038,7 +11038,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11109,7 +11109,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11211,7 +11211,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11282,7 +11282,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11401,7 +11401,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11486,7 +11486,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11561,7 +11561,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11665,7 +11665,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11726,7 +11726,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11815,7 +11815,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -11907,7 +11907,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -11973,7 +11973,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -12082,7 +12082,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -12142,7 +12142,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -12246,7 +12246,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -12359,7 +12359,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -12490,7 +12490,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -12682,7 +12682,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -13076,7 +13076,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -13204,7 +13204,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -13279,7 +13279,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -13425,7 +13425,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -13505,7 +13505,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -13664,7 +13664,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -13739,7 +13739,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -13845,7 +13845,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -13925,7 +13925,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -14061,7 +14061,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -14136,7 +14136,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -14330,7 +14330,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -14393,7 +14393,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -14510,7 +14510,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -14622,7 +14622,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -14744,7 +14744,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -14838,7 +14838,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -14998,7 +14998,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -15073,7 +15073,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -15203,7 +15203,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -15302,7 +15302,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -15476,7 +15476,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -15534,7 +15534,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -15694,7 +15694,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -15793,7 +15793,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -15936,7 +15936,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -16057,7 +16057,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -16312,7 +16312,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -16532,7 +16532,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -16642,7 +16642,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -16717,7 +16717,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -16805,7 +16805,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -16885,7 +16885,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -17010,7 +17010,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -17102,7 +17102,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -17338,7 +17338,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -17430,7 +17430,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -17595,7 +17595,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -17711,7 +17711,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -17868,7 +17868,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -17943,7 +17943,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -18156,7 +18156,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -18212,7 +18212,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -18397,7 +18397,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -18482,7 +18482,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -18618,7 +18618,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -18741,7 +18741,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -18946,7 +18946,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -19009,7 +19009,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -19209,7 +19209,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -19495,7 +19495,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -19827,7 +19827,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -20008,7 +20008,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -20211,7 +20211,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -20274,7 +20274,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -20451,7 +20451,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -20531,7 +20531,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -20711,7 +20711,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -20808,7 +20808,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21003,7 +21003,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21118,7 +21118,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21171,7 +21171,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21227,7 +21227,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21280,7 +21280,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21336,7 +21336,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21408,7 +21408,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21500,7 +21500,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21578,7 +21578,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21658,7 +21658,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21724,7 +21724,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21799,7 +21799,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -21870,7 +21870,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -21989,7 +21989,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22083,7 +22083,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22139,7 +22139,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22221,7 +22221,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22277,7 +22277,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22355,7 +22355,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22433,7 +22433,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22518,7 +22518,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22617,7 +22617,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22689,7 +22689,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22774,7 +22774,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -22854,7 +22854,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -22970,7 +22970,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -23029,7 +23029,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -23090,7 +23090,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -23194,7 +23194,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -23296,7 +23296,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -23408,7 +23408,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -23507,7 +23507,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -23640,7 +23640,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -23805,7 +23805,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -24135,7 +24135,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -24348,7 +24348,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -24387,7 +24387,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -24479,7 +24479,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -24518,7 +24518,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -24642,7 +24642,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -24712,7 +24712,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -24770,7 +24770,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -24865,7 +24865,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -24950,7 +24950,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -25063,7 +25063,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -25121,7 +25121,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -25179,7 +25179,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -25273,7 +25273,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -25342,7 +25342,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -25434,7 +25434,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -25585,7 +25585,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -25733,7 +25733,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -25904,7 +25904,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -26045,7 +26045,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -26210,7 +26210,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -26368,7 +26368,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -26475,7 +26475,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -26550,7 +26550,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -26682,7 +26682,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -26808,7 +26808,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -26928,7 +26928,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -27108,7 +27108,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -27184,7 +27184,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -27259,7 +27259,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -27335,7 +27335,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",
@@ -27437,7 +27437,7 @@
                                                               "second": {"variable": "hydra.typing.InferenceContext"}}},
                                                           "body": {
                                                             "application": {
-                                                              "function": {"variable": "hydra.show.core.type"},
+                                                              "function": {"variable": "hydra.print.core.type"},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {"variable": "hydra.scoping.typeSchemeToFType"},
@@ -27554,7 +27554,7 @@
                                               "domain": "unit",
                                               "body": {
                                                 "application": {
-                                                  "function": {"variable": "hydra.show.core.type"},
+                                                  "function": {"variable": "hydra.print.core.type"},
                                                   "argument": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Type",

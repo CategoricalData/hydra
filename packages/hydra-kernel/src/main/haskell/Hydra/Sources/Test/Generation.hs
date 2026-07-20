@@ -26,7 +26,7 @@ import qualified Data.Map                     as M
 
 import qualified Hydra.Sources.Kernel.Terms.Generation as Generation
 import qualified Hydra.Sources.Kernel.Terms.Scoping    as Scoping
-import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core  as PrintCore
 
 
 -- Local alias for polymorphic application.
@@ -41,7 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Generation.ns, PrintCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for code generation operations such as inferModules and inferModulesGiven"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -196,9 +196,9 @@ showDef d = Phantoms.cases _Definition d Nothing [
       Strings.cat (list [
         Core.unName (Packaging.termDefinitionName (var "td")),
         Phantoms.string " :: ",
-        Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> ShowCore.typeScheme # var "ts"),
+        Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> PrintCore.typeScheme # var "ts"),
         Phantoms.string " = ",
-        ShowCore.term # (Packaging.termDefinitionBody (var "td")),
+        PrintCore.term # (Packaging.termDefinitionBody (var "td")),
         Phantoms.string "\n"]),
     _Definition_primitive>>: "pd" ~>
       Strings.cat (list [

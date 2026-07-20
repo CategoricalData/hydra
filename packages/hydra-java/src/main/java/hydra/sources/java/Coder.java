@@ -179,6 +179,18 @@ import hydra.util.CaseConvention;
 public class Coder {
     public static final ModuleName NS = new ModuleName("hydra.java.coder");
 
+    /**
+     * Local mirror of the published {@code hydra.Refs.showRef} (#497): that helper hardcodes
+     * the "hydra.show" category prefix, which predates the hydra.print.* rename and cannot be
+     * changed without a new hydra-java release. {@code hydra.Names.derivedBindingName} is a
+     * generic, prefix-parameterized utility unaffected by the rename, so we call it directly
+     * with the correct "hydra.print" prefix instead of going through {@code Refs.showRef}.
+     */
+    private static <T0> hydra.core.Term printRef(hydra.typed.TypedName<T0> tn) {
+        return new hydra.core.Term.Variable(
+            hydra.Names.derivedBindingName(hydra.overlay.java.util.ConsList.of("hydra", "print"), true, tn.value));
+    }
+
     private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return define(NS, localName, body);
     }
@@ -5097,7 +5109,7 @@ public class Coder {
                                     Literal.STRING,
                                     Strings.cat2(
                                         string("Unimplemented function variant: "),
-                                        apply(tterm(Refs.showRef(Core.termTerm())), var("funTerm")))))),
+                                        apply(tterm(printRef(Core.termTerm())), var("funTerm")))))),
                         field(
                             Term.PROJECT,
                             constant(
@@ -5168,7 +5180,7 @@ public class Coder {
                                                                         Strings.cat2(
                                                                             string("expected function type for lambda body, but got: "),
                                                                             apply(
-                                                                                tterm(Refs.showRef(Core.typeType())),
+                                                                                tterm(printRef(Core.typeType())),
                                                                                 var("cod")))))),
                                                             field(
                                                                 Type.FUNCTION,
@@ -5904,7 +5916,7 @@ public class Coder {
                                     string("nullary function"),
                                     Strings.cat2(
                                         string(" in "),
-                                        apply(tterm(Refs.showRef(Core.termTerm())), var("funTerm")))))))));
+                                        apply(tterm(printRef(Core.termTerm())), var("funTerm")))))))));
 
     public static final Def encodeNullaryConstant_typeArgsFromReturnType = def("encodeNullaryConstant_typeArgsFromReturnType")
         .lam("aliases").lam("t").lam("cx").lam("g")
@@ -8578,7 +8590,7 @@ public class Coder {
                                 wrap(OtherError.TYPE_,
                                     Strings.cat2(
                                         string("can't encode unsupported type in Java: "),
-                                        apply(tterm(Refs.showRef(Core.typeType())), var("t")))))),
+                                        apply(tterm(printRef(Core.typeType())), var("t")))))),
                         field(
                             Type.APPLICATION,
                             lambda("at",
@@ -10176,7 +10188,7 @@ public class Coder {
                                             wrap(OtherError.TYPE_,
                                                 Strings.cat2(
                                                     string("expected function type, got: "),
-                                                    apply(tterm(Refs.showRef(Core.typeType())), var("t")))))),
+                                                    apply(tterm(printRef(Core.typeType())), var("t")))))),
                                     field(Type.FUNCTION, lambda("ft", right(var("ft"))))))))));
 
     public static final Def groupPairsByFirst = def("groupPairsByFirst")
@@ -13506,7 +13518,7 @@ public class Coder {
                                     Strings.cat2(
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
-                                            tterm(Refs.showRef(Core.termTerm())),
+                                            tterm(printRef(Core.termTerm())),
                                             proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")))))),
                         field(
                             Term.LAMBDA,
@@ -13963,7 +13975,7 @@ public class Coder {
         new ModuleName("hydra.environment"),
         new ModuleName("hydra.predicates"),
         new ModuleName("hydra.resolution"),
-        new ModuleName("hydra.show.core"),
+        new ModuleName("hydra.print.core"),
         new ModuleName("hydra.annotations"),
         new ModuleName("hydra.constants"),
         new ModuleName("hydra.inference"),

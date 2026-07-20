@@ -66,8 +66,8 @@ import qualified Hydra.Sources.Kernel.Terms.Resolution as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
@@ -83,7 +83,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+      Resolution.ns, PrintCore.ns, PrintError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for reducing terms and types, i.e. performing computations.")}
   where
    definitions = [
@@ -746,7 +746,7 @@ etaReduceTerm = define "etaReduceTerm" $
     _Term_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 reduceTerm :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
@@ -770,7 +770,7 @@ reduceTerm = define "reduceTerm" $
           (Core.termApplication $ Core.application (var "fun") (Pairs.first $ var "uc")) @@
           (Pairs.second $ var "uc"))) $
   "mapErrorToString" <~ ("e" ~>
-    Error.errorOther $ Error.otherError (ShowError.error_ @@ var "e")) $
+    Error.errorOther $ Error.otherError (PrintError.error_ @@ var "e")) $
   "applyProjection" <~ ("proj" ~> "reducedArg" ~>
     "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
     "matching" <~ (Lists.find

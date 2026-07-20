@@ -13,7 +13,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Differentiation as Diff
 import qualified Hydra.Variables as Vars
 import qualified Hydra.Reduction as Reduction
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 import qualified Hydra.Overlay.Haskell.Libraries as Lib
 import qualified Hydra.Overlay.Haskell.Lib.Math as HMath
 
@@ -54,7 +54,7 @@ eval term = case Reduction.reduceTerm emptyInferenceContext primGraph True term 
 evalShow :: Term -> String
 evalShow term = case eval term of
   Left err -> "<<error: " ++ err ++ ">>"
-  Right t -> ShowCore.term t
+  Right t -> PrintCore.term t
 
 -- | Extract a Double from a reduced Term, if possible.
 evalDouble :: Term -> Maybe Double
@@ -221,8 +221,8 @@ showSymbolic :: DemoFunction -> IO Term
 showSymbolic df = do
   let deriv = Diff.differentiateTerm (Name "x") (dfTerm df)
   putStrLn $ "  f(x) = " ++ dfName df
-  putStrLn $ "    term:       " ++ ShowCore.term (dfTerm df)
-  putStrLn $ "    derivative: " ++ ShowCore.term deriv
+  putStrLn $ "    term:       " ++ PrintCore.term (dfTerm df)
+  putStrLn $ "    derivative: " ++ PrintCore.term deriv
   putStrLn ""
   return deriv
 
@@ -243,10 +243,10 @@ evaluateFunction outDir (df, deriv) = do
     [ "f(x) = " ++ dfName df
     , ""
     , "Original term:"
-    , "  " ++ ShowCore.term (dfTerm df)
+    , "  " ++ PrintCore.term (dfTerm df)
     , ""
     , "Derivative term:"
-    , "  " ++ ShowCore.term deriv
+    , "  " ++ PrintCore.term deriv
     ]
   where
     sanitize = map (\c -> if c `elem` ("*^() " :: String) then '_' else c)
@@ -307,8 +307,8 @@ optimizationDemo outDir = do
   -- Differentiate once — this produces the gradient term
   let gradTerm = Diff.differentiateTerm (Name "x") lossTerm
 
-  putStrLn $ "  Loss term:     " ++ ShowCore.term lossTerm
-  putStrLn $ "  Gradient term: " ++ ShowCore.term gradTerm
+  putStrLn $ "  Loss term:     " ++ PrintCore.term lossTerm
+  putStrLn $ "  Gradient term: " ++ PrintCore.term gradTerm
   putStrLn ""
 
   -- Gradient descent loop

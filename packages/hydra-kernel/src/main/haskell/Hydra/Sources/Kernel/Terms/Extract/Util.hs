@@ -52,7 +52,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 
 
 ns :: ModuleName
@@ -62,7 +62,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PrintError.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.util types"))}
   where
    definitions = [
@@ -85,4 +85,4 @@ comparison = define "comparison" $
               (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "comparison") (Core.unName (var "fname"))))))
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"

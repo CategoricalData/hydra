@@ -58,8 +58,8 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
@@ -83,7 +83,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, PrintCore.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term decoders from type modules")}
   where
     definitions = [

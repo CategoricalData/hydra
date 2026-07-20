@@ -3,7 +3,7 @@
   "metadata": {"description": "Utilities for type unification.", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.rewriting"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.strip"},
     {"module": "hydra.substitution"},
     {"module": "hydra.paths"},
@@ -152,9 +152,9 @@
                                                                                               "application": {
                                                                                                 "function": {
                                                                                                   "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "cannot unify "}}}},
-                                                                                                "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "sleft"}}}}}}},
+                                                                                                "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "sleft"}}}}}}},
                                                                                         "argument": {"literal": {"string": " with "}}}}}},
-                                                                                "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "sright"}}}}}}]}}}},
+                                                                                "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "sright"}}}}}}]}}}},
                                                                 "type": {"variable": "hydra.errors.UnificationError"}}},
                                                             "type": {"variable": "t1"}}}}},
                                                     "typeScheme": {
@@ -1229,7 +1229,7 @@
                                                                                                                                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "Variable "}}}},
                                                                                                                                                         "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "v"}}}}}}},
                                                                                                                                                 "argument": {"literal": {"string": " appears free in type "}}}}}},
-                                                                                                                                        "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}}}}}},
+                                                                                                                                        "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}},
                                                                                                                                 "argument": {"literal": {"string": " ("}}}}}},
                                                                                                                         "argument": {"variable": "comment"}}}}},
                                                                                                                 "argument": {"literal": {"string": ")"}}}}}]}}}},

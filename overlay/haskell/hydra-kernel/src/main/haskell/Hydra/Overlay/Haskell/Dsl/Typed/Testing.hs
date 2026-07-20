@@ -234,22 +234,22 @@ removeTypesFromTermRef :: TypedTerm (Term -> Term)
 removeTypesFromTermRef = TypedTerm $ TermVariable $ Name "hydra.strip.removeTypesFromTerm"
 
 showInvalidModuleErrorRef :: TypedTerm (InvalidModuleError -> String)
-showInvalidModuleErrorRef = TypedTerm $ TermVariable $ Name "hydra.show.error.packaging.invalidModuleError"
+showInvalidModuleErrorRef = TypedTerm $ TermVariable $ Name "hydra.print.error.packaging.invalidModuleError"
 
 showInvalidPackageErrorRef :: TypedTerm (InvalidPackageError -> String)
-showInvalidPackageErrorRef = TypedTerm $ TermVariable $ Name "hydra.show.error.packaging.invalidPackageError"
+showInvalidPackageErrorRef = TypedTerm $ TermVariable $ Name "hydra.print.error.packaging.invalidPackageError"
 
 showInvalidTermErrorRef :: TypedTerm (InvalidTermError -> String)
-showInvalidTermErrorRef = TypedTerm $ TermVariable $ Name "hydra.show.error.core.invalidTermError"
+showInvalidTermErrorRef = TypedTerm $ TermVariable $ Name "hydra.print.error.core.invalidTermError"
 
 showTermRef :: TypedTerm (Term -> String)
-showTermRef = TypedTerm $ TermVariable $ Name "hydra.show.core.term"
+showTermRef = TypedTerm $ TermVariable $ Name "hydra.print.core.term"
 
 showTypeRef :: TypedTerm (Type -> String)
-showTypeRef = TypedTerm $ TermVariable $ Name "hydra.show.core.type"
+showTypeRef = TypedTerm $ TermVariable $ Name "hydra.print.core.type"
 
 showTypeSchemeRef :: TypedTerm (TypeScheme -> String)
-showTypeSchemeRef = TypedTerm $ TermVariable $ Name "hydra.show.core.typeScheme"
+showTypeSchemeRef = TypedTerm $ TermVariable $ Name "hydra.print.core.typeScheme"
 
 -- | evalPair for String-typed expressions (identity show)
 stringEvalPair :: String -> TypedTerm String -> TypedTerm String -> TypedTerm TestCaseWithMetadata

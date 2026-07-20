@@ -9,7 +9,7 @@
     {"module": "hydra.extract.core"},
     {"module": "hydra.strip"},
     {"module": "hydra.resolution"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.pg.model"},
     {"module": "hydra.pg.mapping"},
     {"module": "hydra.paths"},
@@ -5767,7 +5767,7 @@
                     "function": {
                       "cases": {
                         "typeName": "hydra.core.Term",
-                        "default": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}},
+                        "default": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}},
                         "cases": [
                           {
                             "name": "literal",
@@ -5780,7 +5780,7 @@
                                     "function": {
                                       "cases": {
                                         "typeName": "hydra.core.Literal",
-                                        "default": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}},
+                                        "default": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}},
                                         "cases": [
                                           {
                                             "name": "string",
@@ -5812,7 +5812,7 @@
                                                     "function": {
                                                       "cases": {
                                                         "typeName": "hydra.core.IntegerValue",
-                                                        "default": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}},
+                                                        "default": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}},
                                                         "cases": [
                                                           {
                                                             "name": "int32",
@@ -5833,7 +5833,7 @@
                                                     "function": {
                                                       "cases": {
                                                         "typeName": "hydra.core.FloatValue",
-                                                        "default": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}},
+                                                        "default": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}},
                                                         "cases": [
                                                           {
                                                             "name": "float64",

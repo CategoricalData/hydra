@@ -1,12 +1,12 @@
 module Hydra.Demos.Genpg.Runtime where
 
 import Hydra.Kernel hiding (Result)
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Overlay.Haskell.Dsl.Pg.Mappings
 import Hydra.Overlay.Haskell.Lib.Literals
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 import Hydra.Sources.Kernel.Types.Core (hydraCoreGraph)
 
@@ -46,7 +46,7 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
         TermOptional mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
-        _ -> Left $ ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)
+        _ -> Left $ ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ PrintCore.term value)
 
 evaluateVertex :: InferenceContext -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
@@ -118,7 +118,7 @@ transformTable tableType@(TableType (RelationName tableName) _) path vspecs espe
     (Table _ rows) <- decodeTableIo tableType path
     let cx = emptyInferenceContext
     pairs <- case CM.mapM (transformRecord cx hydraCoreGraph vspecs especs . termRowToRecord tableType) rows of
-      Left ic -> fail $ ShowError.error ic
+      Left ic -> fail $ PrintError.error ic
       Right ps -> return ps
     return $ L.foldl addRow ([], []) pairs
   where
@@ -173,10 +173,10 @@ decodeTable (TableType _ colTypes) (Table mheader rows) = do
               _ -> unsupported
             where
               toEither mv = case mv of
-                Nothing -> Left $ "Invalid value of type " ++ ShowCore.type_ typ ++ " for column " ++ show cname
+                Nothing -> Left $ "Invalid value of type " ++ PrintCore.type_ typ ++ " for column " ++ show cname
                   ++ " on line " ++ show lineno ++ ": " ++ value
                 Just v -> Right v
-              unsupported = Left $ "Unsupported type for column " ++ show cname ++ ": " ++ ShowCore.type_ typ
+              unsupported = Left $ "Unsupported type for column " ++ show cname ++ ": " ++ PrintCore.type_ typ
               readValue cons read value = (Just . cons) <$> (toEither $ read value)
 
 decodeTableIo :: TableType -> FilePath -> IO (Table Term)

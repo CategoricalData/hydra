@@ -17,7 +17,7 @@ import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 import Hydra.Overlay.Haskell.Dsl.Terms (ToPrimName(..))
 import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Print.Core as PrintCore
 
 import Data.Int
 import qualified Data.ByteString as B
@@ -171,7 +171,7 @@ floatValue = TermCoder (TypeVariable _FloatValue) encode decode
 function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
-    encode cx _g term = Left $ otherErr cx $ "cannot encode term to a function: " ++ ShowCore.term term
+    encode cx _g term = Left $ otherErr cx $ "cannot encode term to a function: " ++ PrintCore.term term
     decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
 
 -- | A graph-free TermCoder for function types (issue #446). Instead of calling the reducer to

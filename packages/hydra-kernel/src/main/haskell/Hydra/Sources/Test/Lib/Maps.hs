@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Lib.Chars as Chars
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
@@ -37,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.maps primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -57,22 +57,22 @@ showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showIntStringMap :: TypedTerm (M.Map Int String -> String)
-showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
+showIntStringMap = Phantoms.lambda "m" $ PrintCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showString' @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showString' @@ Phantoms.var "mx"
 
 showPairList :: TypedTerm ([(Int, String)] -> String)
-showPairList = Phantoms.lambda "xs" $ ShowCore.list_ @@ (Phantoms.lambda "p" $ ShowCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
+showPairList = Phantoms.lambda "xs" $ PrintCore.list_ @@ (Phantoms.lambda "p" $ PrintCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
 
 showString' :: TypedTerm (String -> String)
 showString' = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
 
 showStringList :: TypedTerm ([String] -> String)
-showStringList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showString' @@ Phantoms.var "xs"
+showStringList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showString' @@ Phantoms.var "xs"
 
 -- Test groups
 

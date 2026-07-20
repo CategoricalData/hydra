@@ -5,7 +5,7 @@
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},
     {"module": "hydra.scoping"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.strip"},
     {"module": "hydra.substitution"},
     {"module": "hydra.variables"},
@@ -428,7 +428,7 @@
                                                                       {"name": "expected", "term": {"literal": {"string": "record or union type"}}},
                                                                       {
                                                                         "name": "actual",
-                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}}}]}}}}}}}}}},
+                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}]}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}},
                                         "cases": [
@@ -1612,7 +1612,7 @@
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ": "}}}},
-                                                                                                    "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "t"}}}}}}}}]}}}}}}}}}},
+                                                                                                    "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}}}]}}}}}}}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "t1"}}}}},
                                                         "argument": {

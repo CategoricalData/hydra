@@ -3,7 +3,7 @@
         (scheme bytevector)
         (only (guile) mkdir rmdir opendir readdir closedir)  ; #494: directory ops for effectful temp-dir prep
         (hydra core) (hydra graph) (hydra prims)
-        (hydra reduction) (hydra rewriting) (hydra show core) (hydra testing)
+        (hydra reduction) (hydra rewriting) (hydra print core) (hydra testing)
         (hydra formatting) (hydra sorting) (hydra serialization)
         (hydra inference) (hydra checking) (hydra hoisting)
         (hydra unification) (hydra substitution) (hydra typing)

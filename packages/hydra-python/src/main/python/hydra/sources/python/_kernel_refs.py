@@ -4,7 +4,7 @@ Kernel-function references have been replaced by the generated hydra.dsl.* modul
 (#467): e.g. hydra.dsl.strip.deannotate_type, hydra.dsl.names.qualify_name.
 This package's OWN modules (hydra.python.utils, hydra.python.names) are also now
 generated (#556): hydra.dsl.python.utils.*, hydra.dsl.python.names.*. The last
-derived-family reference (hydra.show.core.type) was retired in favor of the typed
+derived-family reference (hydra.print.core.type) was retired in favor of the typed
 hydra.refs.show_ref + hydra.dsl.core.type_type (see #555). What remains here is a
 handful of permanent partial-application exceptions (see bottom of file) that the
 arity-saturated generated wrappers cannot express.
@@ -17,7 +17,20 @@ from hydra.dsl.python import utils as _utils
 from hydra.dsl.python import names as _names
 from hydra.typed import TypedTerm
 import hydra.dsl.core
-import hydra.refs
+import hydra.names
+import hydra.core
+
+
+def _print_ref(tn):
+    """Look up the string-printer function for a type given its TypedName token.
+
+    Local mirror of the published hydra.refs.show_ref (#497): that helper hardcodes
+    the "hydra.show" category prefix, which predates the hydra.print.* rename and
+    cannot be changed without a new hydra-python release. hydra.names.derived_binding_name
+    is a generic, prefix-parameterized utility unaffected by the rename, so we call it
+    directly with the correct "hydra.print" prefix instead of going through show_ref.
+    """
+    return hydra.core.TermVariable(hydra.names.derived_binding_name(["hydra", "print"], True, tn.value))
 
 
 # hydra.constants
@@ -72,7 +85,7 @@ utils_raise_type_error = _utils.raise_type_error
 utils_return_single = _utils.return_single
 utils_name_and_params = _utils.name_and_params
 utils_py_none = _utils.py_none()
-show_core_type = TypedTerm(hydra.refs.show_ref(hydra.dsl.core.type_type))
+show_core_type = TypedTerm(_print_ref(hydra.dsl.core.type_type))
 names_type_variable_reference = _names.type_variable_reference
 names_term_variable_reference = _names.term_variable_reference
 names_encode_name_qualified = _names.encode_name_qualified

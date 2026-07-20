@@ -4,8 +4,8 @@
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -137,7 +137,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "bigint"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "bigint"}}}},
                         "cases": [
@@ -236,7 +236,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "binary"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": "binary"}}},
                         "cases": [
@@ -335,7 +335,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "boolean"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": "boolean"}}},
                         "cases": [
@@ -424,7 +424,7 @@
                                                                       {"name": "expected", "term": {"literal": {"string": "case statement"}}},
                                                                       {
                                                                         "name": "actual",
-                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.core.CaseStatement"}}},
                                         "cases": [
@@ -490,7 +490,7 @@
                                                                                         "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "name"}}}}}},
                                                                                   {
                                                                                     "name": "actual",
-                                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.core.CaseStatement"}}}}}}}}]}},
                                     "argument": {"variable": "term"}}}}}}}}}}}}},
@@ -580,7 +580,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "decimal"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": "decimal"}}},
                         "cases": [
@@ -1657,7 +1657,7 @@
                                                                                   {"name": "expected", "term": {"literal": {"string": "either value"}}},
                                                                                   {
                                                                                     "name": "actual",
-                                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "t1"}}}}},
                                                     "cases": [
@@ -1786,7 +1786,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "either type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.EitherType"}}},
                             "cases": [
@@ -2120,7 +2120,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "float32"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.float"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.float"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"float": "float32"}}}},
                         "cases": [
@@ -2238,7 +2238,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "float64"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.float"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.float"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"float": "float64"}}}},
                         "cases": [
@@ -2296,7 +2296,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "floating-point value"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "lit"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "lit"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"variable": "hydra.core.FloatValue"}}},
                         "cases": [
@@ -2404,7 +2404,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "function type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.FunctionType"}}},
                             "cases": [
@@ -2491,7 +2491,7 @@
                                                                       {"name": "expected", "term": {"literal": {"string": "injection"}}},
                                                                       {
                                                                         "name": "actual",
-                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.core.Field"}}},
                                         "cases": [
@@ -2677,7 +2677,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "int16"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "int16"}}}},
                         "cases": [
@@ -2795,7 +2795,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "int32"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "int32"}}}},
                         "cases": [
@@ -2913,7 +2913,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "int64"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "int64"}}}},
                         "cases": [
@@ -3031,7 +3031,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "int8"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "int8"}}}},
                         "cases": [
@@ -3089,7 +3089,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "integer value"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "lit"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "lit"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"variable": "hydra.core.IntegerValue"}}},
                         "cases": [
@@ -3216,7 +3216,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "lambda"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Lambda"}}},
                                     "cases": [
@@ -3334,7 +3334,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "let term"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Let"}}},
                                     "cases": [
@@ -3612,7 +3612,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "list"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"list": {"variable": "hydra.core.Term"}}}},
                                     "cases": [
@@ -3749,7 +3749,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "list type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.Type"}}},
                             "cases": [
@@ -3832,7 +3832,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "literal"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Literal"}}},
                                     "cases": [
@@ -4041,7 +4041,7 @@
                                                                                       {"name": "expected", "term": {"literal": {"string": "map"}}},
                                                                                       {
                                                                                         "name": "actual",
-                                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                                                         "cases": [
@@ -4145,7 +4145,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "map type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.MapType"}}},
                             "cases": [
@@ -4348,7 +4348,7 @@
                                                                           {"name": "expected", "term": {"literal": {"string": "optional value"}}},
                                                                           {
                                                                             "name": "actual",
-                                                                            "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                            "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"optional": {"variable": "t0"}}}},
                                             "cases": [
@@ -4447,7 +4447,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "optional type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.Type"}}},
                             "cases": [
@@ -4568,7 +4568,7 @@
                                                                                   {"name": "expected", "term": {"literal": {"string": "pair"}}},
                                                                                   {
                                                                                     "name": "actual",
-                                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}},
                                                     "cases": [
@@ -4818,7 +4818,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "record type"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                     "cases": [
@@ -5005,7 +5005,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "set"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "stripped"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"set": {"variable": "hydra.core.Term"}}}},
                                     "cases": [
@@ -5142,7 +5142,7 @@
                                                           {"name": "expected", "term": {"literal": {"string": "set type"}}},
                                                           {
                                                             "name": "actual",
-                                                            "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                            "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                     "type": {"variable": "hydra.errors.Error"}}},
                                 "type": {"variable": "hydra.core.Type"}}},
                             "cases": [
@@ -5240,7 +5240,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "string"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": "string"}}},
                         "cases": [
@@ -5300,7 +5300,7 @@
                                     "body": {
                                       "wrap": {
                                         "typeName": "hydra.errors.DecodingError",
-                                        "body": {"application": {"function": {"variable": "hydra.show.errors.error"}, "argument": {"variable": "_e"}}}}}}}}},
+                                        "body": {"application": {"function": {"variable": "hydra.print.errors.error"}, "argument": {"variable": "_e"}}}}}}}}},
                             "argument": {"lambda": {"parameter": "x", "domain": {"variable": "hydra.core.Term"}, "body": {"variable": "x"}}}}},
                         "argument": {
                           "application": {
@@ -5378,7 +5378,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "record"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Record"}}},
                                     "cases": [
@@ -5545,7 +5545,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "uint16"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "uint16"}}}},
                         "cases": [
@@ -5663,7 +5663,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "uint32"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "uint32"}}}},
                         "cases": [
@@ -5781,7 +5781,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "uint64"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "uint64"}}}},
                         "cases": [
@@ -5899,7 +5899,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "uint8"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.integer"}, "argument": {"variable": "v"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": {"literal": {"integer": "uint8"}}}},
                         "cases": [
@@ -5974,7 +5974,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "union type"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                     "cases": [
@@ -6032,7 +6032,7 @@
                                                       {"name": "expected", "term": {"literal": {"string": "unit"}}},
                                                       {
                                                         "name": "actual",
-                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                 "type": {"variable": "hydra.errors.Error"}}},
                             "type": "unit"}},
                         "cases": [
@@ -6211,7 +6211,7 @@
                                                                             "argument": {"literal": {"string": ")"}}}}},
                                                                       {
                                                                         "name": "actual",
-                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "cases": [
@@ -6355,7 +6355,7 @@
                                                                   {"name": "expected", "term": {"literal": {"string": "wrapped type"}}},
                                                                   {
                                                                     "name": "actual",
-                                                                    "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                                    "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
                                         "type": {"variable": "hydra.core.Type"}}},
                                     "cases": [

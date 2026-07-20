@@ -2,7 +2,7 @@
 ;;;
 ;;; Slim test runner modeled after the Haskell TestSuiteSpec.hs and Clojure test_runner.clj.
 ;;; Delegates evaluation to the generated hydra_reduction_reduce_term and display to
-;;; hydra_show_core_term. Only annotation primitives are implemented inline.
+;;; hydra_print_core_term. Only annotation primitives are implemented inline.
 
 (in-package :cl-user)
 
@@ -726,7 +726,7 @@
 ;; ==========================================================================
 
 (defun show-term (t_)
-  (handler-case (funcall hydra_show_core_term t_)
+  (handler-case (funcall hydra_print_core_term t_)
     (error () nil)))
 
 (defun normalize-show (s)
@@ -1007,13 +1007,13 @@
 (defun a (key alist) (cdr (assoc key alist :test #'eq)))
 
 (defun show-type (t_)
-  (handler-case (funcall hydra_show_core_type t_) (error () nil)))
+  (handler-case (funcall hydra_print_core_type t_) (error () nil)))
 
 (defun show-type-scheme (ts)
-  (handler-case (funcall hydra_show_core_type_scheme ts) (error () nil)))
+  (handler-case (funcall hydra_print_core_type_scheme ts) (error () nil)))
 
 (defun show-let-fn (l)
-  (handler-case (funcall hydra_show_core_let l) (error () nil)))
+  (handler-case (funcall hydra_print_core_let l) (error () nil)))
 
 (defun normalize-type-var-names (s)
   "Simple alpha-equivalence normalization for type variable names."
@@ -1210,9 +1210,9 @@
                          (list 0 1 0))
                   (let* ((reconstructed-type (funcall hydra_overlay_common_lisp_lib_pairs_first (second type-of-result)))
                          ;; Compare using show strings
-                         (show-ts (when (boundp 'hydra_show_core_type_scheme) hydra_show_core_type_scheme))
-                         (show-tp (when (boundp 'hydra_show_core_type) hydra_show_core_type))
-                         (show-tm (when (boundp 'hydra_show_core_term) hydra_show_core_term))
+                         (show-ts (when (boundp 'hydra_print_core_type_scheme) hydra_print_core_type_scheme))
+                         (show-tp (when (boundp 'hydra_print_core_type) hydra_print_core_type))
+                         (show-tm (when (boundp 'hydra_print_core_term) hydra_print_core_term))
                          (term-ok (equal (when show-tm (funcall show-tm (a :output_term tc)))
                                          (when show-tm (funcall show-tm inferred-term))))
                          (type-ok (equal (when show-tp (funcall show-tp (a :output_type tc)))

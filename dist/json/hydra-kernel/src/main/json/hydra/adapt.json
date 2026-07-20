@@ -15,9 +15,9 @@
     {"module": "hydra.scoping"},
     {"module": "hydra.environment"},
     {"module": "hydra.resolution"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
-    {"module": "hydra.show.graph"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
+    {"module": "hydra.print.graph"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
     {"module": "hydra.paths"},
@@ -2046,7 +2046,7 @@
                                         "typeName": "hydra.core.Literal",
                                         "field": {
                                           "name": "string",
-                                          "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "l"}}}}}}}},
+                                          "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "l"}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "lt2",
@@ -2806,7 +2806,7 @@
                                                                                                                     "application": {
                                                                                                                       "function": {
                                                                                                                         "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "no alternatives for term: "}}}},
-                                                                                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term1"}}}}}}}}}}}},
+                                                                                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term1"}}}}}}}}}}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                 "type": {"variable": "hydra.core.Term"}}}}},
                                                                                         "argument": {
@@ -3440,7 +3440,7 @@
                                                                                     "application": {
                                                                                       "function": {
                                                                                         "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "no alternatives for type: "}}}},
-                                                                                      "argument": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
+                                                                                      "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}}}}}}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "hydra.core.Type"}}}}},
                                                         "argument": {

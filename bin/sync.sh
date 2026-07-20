@@ -538,6 +538,57 @@ done
 # Hand-written host runtime under heads/java/src/main/java/hydra/rdf/
 # imports hydra.rdf.syntax.*, so dist/java/hydra-rdf/ must be populated
 # before the Java host compiles.
+#
+# Cold-start bootstrap for the self-hosting coder packages (hydra-{jvm,java,python,scala};
+# sourceLanguage != haskell in their package.json, so Phase 3's kernel/build/rdf/pg loop
+# below never touches them) plus two haskell-sourced packages (hydra-haskell, hydra-lisp)
+# that Phase 3 ALSO never touches (its loop is hardcoded to kernel/build/rdf/pg only).
+# Multiple consumers need these assembled from dist/json/ (tracked) before anything
+# compiles against them, and none of that assembly is covered elsewhere:
+#   - Each self-hosting package needs ITSELF assembled into ITS OWN target language
+#     (dist/java/hydra-java, dist/python/hydra-python, dist/scala/hydra-scala) before
+#     packages/hydra-<lang>'s own DSL source can compile — it imports its own generated
+#     hydra.dsl.<lang>.* wrapper modules (packages/hydra-java/build.gradle srcDirs).
+#   - hydra-java (and hydra-scala, transitively) also needs hydra-jvm (shared JVM serde
+#     helpers, "sourceLanguage": "java") assembled into the SAME target — hydra.jvm.serde.*
+#     is a compiled-import dependency of hydra-java's/hydra-scala's own generated Serde.
+#   - heads/scala/src/main/scala/hydra/Generation.scala imports hydra.{java,python,scala,
+#     haskell,lisp}.{coder,language} UNCONDITIONALLY at the top of the file (its multi-
+#     target dispatch table for writeJava/writePython/writeScala/writeHaskell/writeLisp),
+#     so dist/scala/{hydra-jvm,hydra-java,hydra-python,hydra-scala,hydra-haskell,hydra-lisp}
+#     must ALL exist before ANY Scala head code compiles, not just when generating those
+#     targets specifically. hydra-haskell/hydra-lisp are "sourceLanguage": "haskell" (like
+#     hydra-kernel), but Phase 3's loop below is hardcoded to kernel/build/rdf/pg, so they
+#     need the same explicit seeding here.
+# On a warm tree this is silently already satisfied by a previous sync; a genuinely cold
+# checkout has none of these directories and nothing else creates them (confirmed: this
+# bug predates #497, reproduces on main from an equally cold dist/, unrelated to the
+# hydra.print.* rename). Guarded by a directory-exists sentinel + HOSTS/TARGETS membership
+# so this is a no-op on a warm tree and skips languages not in scope for this sync.
+if printf '%s\n' $LANG_UNION | grep -qx java; then
+    for pkg in hydra-jvm hydra-java; do
+        if [ ! -d "$HYDRA_ROOT/dist/java/$pkg" ]; then
+            echo ""
+            echo "Cold-start detected (missing dist/java/$pkg); self-assembling from tracked dist/json/..."
+            "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg"
+        fi
+    done
+fi
+if printf '%s\n' $LANG_UNION | grep -qx python && [ ! -d "$HYDRA_ROOT/dist/python/hydra-python" ]; then
+    echo ""
+    echo "Cold-start detected (missing dist/python/hydra-python); self-assembling from tracked dist/json/..."
+    "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
+fi
+if printf '%s\n' $LANG_UNION | grep -qx scala; then
+    for pkg in hydra-jvm hydra-java hydra-python hydra-scala hydra-haskell hydra-lisp; do
+        if [ ! -d "$HYDRA_ROOT/dist/scala/$pkg" ]; then
+            echo ""
+            echo "Cold-start detected (missing dist/scala/$pkg); assembling from tracked dist/json/"
+            echo "(heads/scala/Generation.scala imports all six packages unconditionally)..."
+            "$HYDRA_ROOT/heads/scala/bin/assemble-distribution.sh" "$pkg"
+        fi
+    done
+fi
 
 banner1 "Phase 3: hydra-kernel + hydra-build + hydra-pg + hydra-rdf into each language"
 echo ""

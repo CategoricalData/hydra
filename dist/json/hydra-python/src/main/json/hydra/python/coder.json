@@ -17,7 +17,7 @@
     {"module": "hydra.scoping"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.reduction"},
     {"module": "hydra.sorting"},
     {"module": "hydra.inference"},
@@ -15455,7 +15455,7 @@
                                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "type = "}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"variable": "hydra.show.core.type"},
+                                                            "function": {"variable": "hydra.print.core.type"},
                                                             "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}}}}}}}}}},
                                             "type": {"variable": "t1"}}},
                                         "type": {"variable": "hydra.python.syntax.Expression"}}}}},

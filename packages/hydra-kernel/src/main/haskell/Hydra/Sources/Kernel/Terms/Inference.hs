@@ -82,9 +82,9 @@ import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Scoping      as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing  as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Core    as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors  as PrintError
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing  as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Unification  as Unification
@@ -98,7 +98,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
-      Rewriting.ns, Names.ns, Resolution.ns, Scoping.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
+      Rewriting.ns, Names.ns, Resolution.ns, Scoping.ns, PrintCore.ns, PrintError.ns, PrintTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just $ "Type inference for Hydra: Hindley-Milner with elaboration to System F."
               L.++ " Extends textbook Algorithm W with nominal types, explicit type abstraction"
@@ -161,7 +161,7 @@ define = definitionInModule module_
 
 -- | Format an Error as a string
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 -- | Format a UnificationError as a string
 formatUnifError :: TypedTerm (UnificationError -> String)
@@ -1352,11 +1352,11 @@ showInferenceResult = define "showInferenceResult" $
   "subst" <~ Typing.inferenceResultSubst (var "result") $
   Strings.cat $ list [
     (string "{term="),
-    ShowCore.term @@ var "term",
+    PrintCore.term @@ var "term",
     (string ", type="),
-    ShowCore.type_ @@ var "typ",
+    PrintCore.type_ @@ var "typ",
     (string ", subst="),
-    ShowTyping.typeSubst @@ var "subst",
+    PrintTyping.typeSubst @@ var "subst",
     (string "}")]
 
 yield :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)

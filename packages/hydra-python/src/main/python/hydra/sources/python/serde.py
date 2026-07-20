@@ -43,7 +43,7 @@ DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.constants")),
     unqualified_dep(ModuleName("hydra.names")),
     unqualified_dep(ModuleName("hydra.serialization")),
-    unqualified_dep(ModuleName("hydra.show.docs")),
+    unqualified_dep(ModuleName("hydra.print.docs")),
     unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
@@ -2076,7 +2076,7 @@ def _to_python_comments():
                         Strings.cat2(string("# "), var("line")),
                     ),
                 ),
-                Strings.lines(var("hydra.show.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),
+                Strings.lines(var("hydra.print.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),
             ),
         ),
     )

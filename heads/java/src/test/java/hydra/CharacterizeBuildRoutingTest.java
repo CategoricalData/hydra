@@ -58,6 +58,12 @@ public class CharacterizeBuildRoutingTest {
         EXPECTED_DIVERGENCES.put("hydra.test.build.modules", "hydra-build");
         EXPECTED_DIVERGENCES.put("hydra.test.build.reconcile", "hydra-build");
         EXPECTED_DIVERGENCES.put("hydra.test.build.routing", "hydra-build");
+        // #497: hydra.show.* -> hydra.print.* rename. The legacy PACKAGE_PREFIXES table's
+        // hydra-pg entry is still keyed "hydra.show.error.pg" (pinned to the PUBLISHED
+        // hydra-java host's pre-rename namespace; see Generation.java's own note on that
+        // entry), so it has no prefix match for the new "hydra.print.error.pg" and falls
+        // back to hydra-kernel, while the manifest correctly routes it to hydra-pg.
+        EXPECTED_DIVERGENCES.put("hydra.print.error.pg", "hydra-pg");
     }
 
     // Minimal hand-rolled extraction for manifest.json's flat {"package": "...",

@@ -77,6 +77,10 @@ def unwrap_either(result):
     match result:
         case Left(value=err):
             try:
+                # hydra.show.error: resolves against the PUBLISHED hydra-python host, which
+                # still exports the pre-#497 name. Flip to hydra.print.error only when
+                # hydra-python next publishes with the rename (same commit as hostVersion
+                # bump). See #497 plan, W1 §4 (published-host version-pin shim).
                 from hydra.show.error import error
                 raise RuntimeError(f"Error: {error(err)}")
             except ImportError:
@@ -429,6 +433,10 @@ _PACKAGE_PREFIXES = [
     ("hydra.graphviz.",             "hydra-pg"),
     ("hydra.tinkerpop.",            "hydra-pg"),
     ("hydra.error.pg",              "hydra-pg"),
+    # hydra.show.error.pg: this table is compared against namespaces produced by the
+    # PUBLISHED hydra-python host, so it must match that host's (pre-#497) name. Add
+    # "hydra.print.error.pg" alongside once hydra-python publishes with the rename; don't
+    # just flip this line, since older published versions still emit the old name.
     ("hydra.show.error.pg",         "hydra-pg"),
     ("hydra.validate.pg",           "hydra-pg"),
     ("hydra.decode.pg.",            "hydra-pg"),

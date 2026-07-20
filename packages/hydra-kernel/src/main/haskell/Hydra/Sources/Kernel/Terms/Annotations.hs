@@ -64,9 +64,9 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core    as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors  as PrintError
 import Hydra.Encoding (encodeBindingName)
 
 
@@ -78,7 +78,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, ModuleName "hydra.decode.core", ModuleName "hydra.encode.core", ExtractCore.ns, Lexical.ns,
-      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
+      Strip.ns, PrintCore.ns, PrintError.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for reading and writing type and term annotations")}
   where
    definitions = [
@@ -135,7 +135,7 @@ commentsFromFieldType = define "commentsFromFieldType" $
   getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 getDescription :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
 getDescription = define "getDescription" $

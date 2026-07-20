@@ -23,7 +23,7 @@ import qualified Data.Set                     as S
 
 import Hydra.Testing
 import qualified Hydra.Sources.Build.Reconcile as Reconcile
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
@@ -37,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Reconcile.ns, ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Reconcile.ns, PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for the pure orphan-reconcile decision"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -77,12 +77,12 @@ showString' = lambda "s" $ Literals.showString (var "s")
 -- serialized forms, so both actual and expected are rendered to String; passing a
 -- bare [String] would leave the element type ambiguous during DSL inference.
 showStringList :: TypedTerm ([String] -> String)
-showStringList = lambda "xs" $ ShowCore.list_ @@ showString' @@ var "xs"
+showStringList = lambda "xs" $ PrintCore.list_ @@ showString' @@ var "xs"
 
--- | Render a set of strings deterministically (ShowCore.set_ sorts), for comparing
+-- | Render a set of strings deterministically (PrintCore.set_ sorts), for comparing
 -- the S.Set String results of keepPathsForModules / ownedPrefixes.
 showStringSet :: TypedTerm (S.Set String -> String)
-showStringSet = lambda "s" $ ShowCore.set_ @@ showString' @@ var "s"
+showStringSet = lambda "s" $ PrintCore.set_ @@ showString' @@ var "s"
 
 -- | A list of ModuleName terms from dotted names (e.g. "hydra.java.coder").
 moduleNames :: [String] -> TypedTerm [ModuleName]

@@ -8,19 +8,19 @@
 ;; ============================================================================
 
 (defun hydra-show-term (t_)
-  (condition-case nil (funcall hydra_show_core_term t_)
+  (condition-case nil (funcall hydra_print_core_term t_)
     (error nil)))
 
 (defun hydra-show-type-scheme (ts)
-  (condition-case nil (funcall hydra_show_core_type_scheme ts)
+  (condition-case nil (funcall hydra_print_core_type_scheme ts)
     (error nil)))
 
 (defun hydra-show-type (t_)
-  (condition-case nil (funcall hydra_show_core_type t_)
+  (condition-case nil (funcall hydra_print_core_type t_)
     (error nil)))
 
 (defun hydra-show-let (l)
-  (condition-case nil (funcall hydra_show_core_let l)
+  (condition-case nil (funcall hydra_print_core_let l)
     (error nil)))
 
 (defun hydra-terms-match-p (actual expected)

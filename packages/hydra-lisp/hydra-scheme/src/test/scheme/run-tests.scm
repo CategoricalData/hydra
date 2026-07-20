@@ -115,7 +115,7 @@
   (hydra schemas)
   (hydra serialization)
   (hydra show accessors)
-  (hydra show core)
+  (hydra print core)
   (hydra show graph)
   (hydra show meta)
   (hydra show typing)

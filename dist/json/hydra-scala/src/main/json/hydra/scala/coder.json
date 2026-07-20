@@ -13,7 +13,7 @@
     {"module": "hydra.environment"},
     {"module": "hydra.predicates"},
     {"module": "hydra.resolution"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},
     {"module": "hydra.inference"},

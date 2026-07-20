@@ -58,7 +58,7 @@ public class GenerationTargets {
         List<Pair<String, String>> files;
         if (result.isLeft()) {
             Error_ err = ((Either.Left<Error_, List<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.show.Errors.error(err));
+            throw new RuntimeException("Code generation failed: " + hydra.print.Errors.error(err));
         }
         files = ((Either.Right<Error_, List<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {

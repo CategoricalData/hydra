@@ -63,11 +63,11 @@ import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns, ShowCore.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns, PrintCore.ns,
       moduleName GraphqlLanguage.module_,
       GraphqlSerde.ns] L.++ (moduleName GraphqlSyntax.module_:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions")}
@@ -166,17 +166,17 @@ encodeLiteralType :: TypedTermDefinition (InferenceContext -> LiteralType -> Eit
 encodeLiteralType = define "encodeLiteralType" $
   "cx" ~> lambda "lt" $
     cases _LiteralType (var "lt")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (ShowCore.literalType @@ var "lt"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (PrintCore.literalType @@ var "lt"))) [
       _LiteralType_boolean>>: constant $
         right (wrap G._NamedType (wrap G._Name (string "Boolean"))),
       _LiteralType_float>>: lambda "ft_" $
         cases _FloatType (var "ft_")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 64-bit float type, found: ") (ShowCore.floatType @@ var "ft_"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 64-bit float type, found: ") (PrintCore.floatType @@ var "ft_"))) [
           _FloatType_float64>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Float")))],
       _LiteralType_integer>>: lambda "it_" $
         cases _IntegerType (var "it_")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 32-bit signed integer type, found: ") (ShowCore.integerType @@ var "it_"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 32-bit signed integer type, found: ") (PrintCore.integerType @@ var "it_"))) [
           _IntegerType_int32>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Int")))],
       _LiteralType_string>>: constant $
@@ -187,7 +187,7 @@ encodeNamedType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Modul
 encodeNamedType = define "encodeNamedType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_record>>: lambda "rt" $
         "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
         "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -261,10 +261,10 @@ encodeType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName
 encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "typ"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_optional>>: lambda "et" $
         cases _Type (Strip.deannotateType @@ var "et")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "et"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "et"))) [
           _Type_list>>: lambda "et2" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
               (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "et2"),

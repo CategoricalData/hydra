@@ -34,7 +34,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.packaging",
-              ModuleName "hydra.show.error.packaging"] ++ kernelTypesModuleNames),
+              ModuleName "hydra.print.error.packaging"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for module and package validation"))}
   where
     definitions = [

@@ -307,25 +307,25 @@
         (let* ((at (cadr t))
                (body (hydra_core_annotated_term-body at))
                (ann (hydra_core_annotated_term-annotation at))
-               (body-str (hydra_show_core_term body))
+               (body-str (hydra_print_core_term body))
                (ann-str (if (and (pair? ann) (eq? (car ann) 'map))
-                            (hydra_show_core_term ann)
+                            (hydra_print_core_term ann)
                             "{}")))
           (string-append "inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body="
                          (show-term body) ", annotation=" ann-str "}}"))
-        (hydra_show_core_term t))))
+        (hydra_print_core_term t))))
 
 (define (show-type t)
   (guard (exn (#t #f))
-    (hydra_show_core_type t)))
+    (hydra_print_core_type t)))
 
 (define (show-type-scheme ts)
   (guard (exn (#t #f))
-    (hydra_show_core_type_scheme ts)))
+    (hydra_print_core_type_scheme ts)))
 
 (define (show-let l)
   (guard (exn (#t #f))
-    (hydra_show_core_let l)))
+    (hydra_print_core_let l)))
 
 (define (normalize-show s)
   (if (not s) s

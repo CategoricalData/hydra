@@ -38,7 +38,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
@@ -62,7 +62,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_, Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, ModuleName "hydra.show.core"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_, Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, ModuleName "hydra.print.core"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Lisp code generator: converts Hydra type and term modules to Lisp AST")}
   where
     definitions = [
@@ -735,7 +735,7 @@ encodeTypeBody = def "encodeTypeBody" $
         L._TopLevelFormWithComments_doc>>: nothing,
         L._TopLevelFormWithComments_comment>>: just (record L._Comment [
           L._Comment_style>>: inject L._CommentStyle L._CommentStyle_line unit,
-          L._Comment_text>>: Strings.cat2 (Strings.cat2 (var "lname") (string " = ")) (ShowCore.type_ @@ var "origTyp")]),
+          L._Comment_text>>: Strings.cat2 (Strings.cat2 (var "lname") (string " = ")) (PrintCore.type_ @@ var "origTyp")]),
         L._TopLevelFormWithComments_form>>: inject L._TopLevelForm L._TopLevelForm_expression $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_nil unit]))

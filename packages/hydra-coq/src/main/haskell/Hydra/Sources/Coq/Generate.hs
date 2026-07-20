@@ -1093,11 +1093,11 @@ moduleToCoq = define "moduleToCoq" $
 
 -- | Convert a dot-separated Hydra namespace into a relative file path,
 -- using `/` as the directory separator and appending `.v`. For example,
--- `"hydra.show.core"` becomes `"hydra/show/core.v"`. The last dotted
+-- `"hydra.print.core"` becomes `"hydra/print/core.v"`. The last dotted
 -- segment becomes the file name; earlier segments become directories.
 namespaceToPath :: TypedTermDefinition (String -> String)
 namespaceToPath = define "namespaceToPath" $
-  doc "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path" $
+  doc "Convert a Hydra namespace string (e.g. hydra.print.core) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
     "dirParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),

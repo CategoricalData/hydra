@@ -61,11 +61,11 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants  as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -91,7 +91,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PrintPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for converting Hydra terms to Graphviz DOT graphs")}
   where
     definitions = [
@@ -291,7 +291,7 @@ termToDotStmts = define "termToDotStmts" $
       -- Edge to parent (accessor edge)
       "toAccessorEdgeStmt">: lambdas ["acc", "sty", "i1", "i2"] $
         toEdgeStmt @@ var "i1" @@ var "i2" @@
-          (Optionals.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowPaths.subtermStep @@ var "acc")),
+          (Optionals.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (PrintPaths.subtermStep @@ var "acc")),
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
       "parentStmt">: Optionals.cases (var "mparent") (list ([] :: [TypedTerm Dot.Stmt])) ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"]),
@@ -376,7 +376,7 @@ termToSubtermDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Term ->
 termToSubtermDotStmts = define "termToSubtermDotStmts" $
   doc "Convert a term to subterm-style DOT statements" $
   "namespaces" ~> "term" ~> lets [
-    "accessorGraph">: ShowPaths.termToSubtermGraph @@ var "namespaces" @@ var "term",
+    "accessorGraph">: PrintPaths.termToSubtermGraph @@ var "namespaces" @@ var "term",
     "nodes">: project _SubtermGraph _SubtermGraph_nodes @@ var "accessorGraph",
     "edges">: project _SubtermGraph _SubtermGraph_edges @@ var "accessorGraph",
     "nodeStmt">: "node" ~>
@@ -387,7 +387,7 @@ termToSubtermDotStmts = define "termToSubtermDotStmts" $
       "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
       "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
       "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
-      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map (asTerm ShowPaths.subtermStep) (var "pathAccessors")))]
+      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map (asTerm PrintPaths.subtermStep) (var "pathAccessors")))]
       $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
           (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))

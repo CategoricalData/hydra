@@ -52,7 +52,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
@@ -64,7 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, PrintCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for type unification."))}
   where
    definitions = [
@@ -86,7 +86,7 @@ joinTypes = define "joinTypes" $
   "sright" <~ Strip.deannotateType @@ var "right" $
   "joinOne" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") ((string "join types; ") ++ var "comment")) $
   "cannotUnify" <~ left (Error.unificationError (var "sleft") (var "sright")
-      ((string "cannot unify ") ++ (ShowCore.type_ @@ var "sleft") ++ (string " with ") ++ (ShowCore.type_ @@ var "sright"))) $
+      ((string "cannot unify ") ++ (PrintCore.type_ @@ var "sleft") ++ (string " with ") ++ (PrintCore.type_ @@ var "sright"))) $
   "assertEqual" <~ Logic.ifElse
     (Equality.equal (var "sleft") (var "sright"))
     (right (list ([] :: [TypedTerm TypeConstraint])))
@@ -169,7 +169,7 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
       Eithers.map (var "withResult") (unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Substitution.substituteInConstraints @@ var "subst" @@ var "rest"))) $
     "tryBinding" <~ ("v" ~> "t" ~> Logic.ifElse (variableOccursInType @@ var "v" @@ var "t")
       (left (Error.unificationError (var "sleft") (var "sright")
-          ((string "Variable ") ++ (Core.unName (var "v")) ++ (string " appears free in type ") ++ (ShowCore.type_ @@ var "t")
+          ((string "Variable ") ++ (Core.unName (var "v")) ++ (string " appears free in type ") ++ (PrintCore.type_ @@ var "t")
             ++ (string " (") ++ var "comment" ++ (string ")"))))
       (var "bind" @@ var "v" @@ var "t")) $
     "noVars" <~ (

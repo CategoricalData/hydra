@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Sorting as SortingModule
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
@@ -40,7 +40,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for topological sorting algorithms"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -75,11 +75,11 @@ showEitherResult = Eithers.either
 
 -- | Show a list of Int32 as a string like "[1, 2, 3]"
 showIntList :: TypedTerm [Int] -> TypedTerm String
-showIntList xs = ShowCore.list_ @@ reify Literals.showInt32 @@ xs
+showIntList xs = PrintCore.list_ @@ reify Literals.showInt32 @@ xs
 
 -- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
 showIntListList :: TypedTerm [[Int]] -> TypedTerm String
-showIntListList xs = ShowCore.list_ @@ reify showIntList @@ xs
+showIntListList xs = PrintCore.list_ @@ reify showIntList @@ xs
 
 -- Universal sort test case
 sortCase :: String -> TypedTerm [(Int, [Int])] -> TypedTerm (Either [[Int]] [Int]) -> TypedTerm TestCaseWithMetadata

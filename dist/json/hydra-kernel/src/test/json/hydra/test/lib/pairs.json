@@ -3,7 +3,7 @@
   "metadata": {"description": "Test cases for hydra.lib.pairs primitives", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.reduction"},
-    {"module": "hydra.show.core"},
+    {"module": "hydra.print.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

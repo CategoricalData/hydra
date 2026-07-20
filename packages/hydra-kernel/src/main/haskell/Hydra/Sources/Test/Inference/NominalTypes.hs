@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.show.core", ModuleName "hydra.test.testTerms", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.print.core", ModuleName "hydra.test.testTerms", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Inference tests for nominal types"))}
   where
     definitions = [

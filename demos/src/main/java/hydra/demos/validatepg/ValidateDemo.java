@@ -8,7 +8,7 @@ import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
 import hydra.error.pg.InvalidGraphError;
 import hydra.error.pg.InvalidValueError;
-import hydra.show.Core;
+import hydra.print.Core;
 import hydra.validate.Pg;
 import hydra.util.Maybe;
 import hydra.validation.ValidationResult;

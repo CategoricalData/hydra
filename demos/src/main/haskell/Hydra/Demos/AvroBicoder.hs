@@ -27,7 +27,7 @@ import qualified Hydra.Avro.SchemaJson as SchemaJson
 import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import Hydra.Tools.AvroWorkflows (propertyGraphGraphsonLastMile, transformAvroJsonDirectory)
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Util as Util
@@ -142,7 +142,7 @@ runReverseDemo = do
   let typeMap = M.fromList [(addressName, addressType), (personName, personType)]
 
   case Encoder.encodeType cx typeMap personName of
-    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
+    Left err -> putStrLn $ "  ERROR: " ++ PrintError.error err
     Right adapter -> do
       let avroSchema = Coders.adapterTarget adapter
       let json = SchemaJson.encodeSchema avroSchema
@@ -169,7 +169,7 @@ runReverseDemo = do
               Core.TermLiteral (Core.LiteralString "engineer"),
               Core.TermLiteral (Core.LiteralString "haskell")])]
       case Coders.coderEncode (Coders.adapterCoder adapter) personTerm of
-        Left err -> putStrLn $ "  Term encode ERROR: " ++ ShowError.error err
+        Left err -> putStrLn $ "  Term encode ERROR: " ++ PrintError.error err
         Right jsonVal -> do
           let termJsonStr = JsonWriter.printJson jsonVal
           putStrLn $ "  Term encoded as JSON: " ++ termJsonStr

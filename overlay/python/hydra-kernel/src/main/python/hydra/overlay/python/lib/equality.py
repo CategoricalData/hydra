@@ -39,9 +39,9 @@ def _compare_terms(t1: Any, t2: Any) -> int:
     import hydra.core
     if isinstance(t1, hydra.core.TermLiteral) and isinstance(t2, hydra.core.TermLiteral):
         return _compare_literals(t1.value, t2.value)
-    import hydra.show.core
-    s1 = hydra.show.core.term(t1)
-    s2 = hydra.show.core.term(t2)
+    import hydra.print.core
+    s1 = hydra.print.core.term(t1)
+    s2 = hydra.print.core.term(t2)
     return (s1 > s2) - (s1 < s2)
 
 
@@ -70,9 +70,9 @@ def _compare_literals(l1: Any, l2: Any) -> int:
         v2 = l2.value
         return (v1 > v2) - (v1 < v2)
     # Different variants: fall back to show representation
-    import hydra.show.core
-    s1 = hydra.show.core.literal(l1)
-    s2 = hydra.show.core.literal(l2)
+    import hydra.print.core
+    s1 = hydra.print.core.literal(l1)
+    s2 = hydra.print.core.literal(l2)
     return (s1 > s2) - (s1 < s2)
 
 

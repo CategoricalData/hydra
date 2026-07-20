@@ -9,7 +9,7 @@
     {"module": "hydra.names"},
     {"module": "hydra.serialization"},
     {"module": "hydra.haskell.operators"},
-    {"module": "hydra.show.docs"},
+    {"module": "hydra.print.docs"},
     {"module": "hydra.haskell.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -2703,7 +2703,7 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"variable": "hydra.show.docs.renderDocStringWith"},
+                                    "function": {"variable": "hydra.print.docs.renderDocStringWith"},
                                     "argument": {"variable": "hydra.haskell.serde.haddockEntityRef"}}},
                                 "argument": {"variable": "c"}}}}}}}}}}},
             "annotation": {

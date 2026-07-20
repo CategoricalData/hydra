@@ -250,7 +250,12 @@ public class Generation {
         return result.accept(new Either.Visitor<hydra.errors.Error_, Module, Module>() {
             @Override
             public Module visit(Either.Left<hydra.errors.Error_, Module> instance) {
-                throw new RuntimeException("Module decode error: " + hydra.show.Errors.error(instance.value));
+                // This file compiles in two contexts needing opposite kernel-package names:
+                // the json-driver (against the PUBLISHED host, pre-#497 hydra.show.*) and
+                // headsExtras (against the LOCAL dist, post-#497 hydra.print.*). Neither name
+                // works in both, so fall back to Object#toString rather than hard-depending
+                // on either printer package here.
+                throw new RuntimeException("Module decode error: " + instance.value);
             }
 
             @Override
@@ -590,6 +595,10 @@ public class Generation {
         new Pair<>("hydra.graphviz.",             "hydra-pg"),
         new Pair<>("hydra.tinkerpop.",            "hydra-pg"),
         new Pair<>("hydra.error.pg",              "hydra-pg"),
+        // hydra.show.error.pg: this whole table is compiled in the json-driver against the
+        // PUBLISHED hydra-java host, so it must match that host's (pre-#497) namespace names.
+        // Add "hydra.print.error.pg" alongside once hydra-java publishes with the rename;
+        // don't just flip this line, since older published versions still emit the old name.
         new Pair<>("hydra.show.error.pg",         "hydra-pg"),
         new Pair<>("hydra.validate.pg",           "hydra-pg"),
         new Pair<>("hydra.decode.pg.",            "hydra-pg"),
@@ -848,9 +857,9 @@ public class Generation {
             } else {
                 hydra.errors.Error_ err =
                     ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
+                // See the dual-compile-context note in decodeModuleFromJson above.
                 throw new RuntimeException(
-                    "inferAndWriteByPackage: inference failed for " + pkg + ": "
-                        + hydra.show.Errors.error(err));
+                    "inferAndWriteByPackage: inference failed for " + pkg + ": " + err);
             }
             List<Module> toWrite = new ArrayList<>();
             for (Module m : inferred) {

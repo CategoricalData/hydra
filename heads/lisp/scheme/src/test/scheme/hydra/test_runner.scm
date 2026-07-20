@@ -15,7 +15,7 @@
           (hydra hoisting)
           (hydra unification)
           (hydra substitution)
-          (hydra show core)
+          (hydra print core)
           (hydra testing)
           (hydra json bootstrap)
           (hydra json parser)
@@ -417,30 +417,30 @@
             (let* ((at (cadr t))
                    (body (hydra_core_annotated_term-body at))
                    (ann (hydra_core_annotated_term-annotation at))
-                   (body-str (hydra_show_core_term body))
+                   (body-str (hydra_print_core_term body))
                    ;; #386: ann is a Term (typically Inject{Term, map=...}). Show it as
                    ;; a Term directly; legacy (:map ...) shapes also show via the kernel.
                    (ann-str (cond
                               ((and (pair? ann) (eq? (car ann) 'inject))
-                               (hydra_show_core_term ann))
+                               (hydra_print_core_term ann))
                               ((and (pair? ann) (eq? (car ann) 'map))
-                               (hydra_show_core_term ann))
+                               (hydra_print_core_term ann))
                               (else "{}"))))
               (string-append "inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body="
                              (show-term body) ", annotation=" ann-str "}}"))
-            (hydra_show_core_term t))))
+            (hydra_print_core_term t))))
 
     (define (show-type t)
       (guard (exn (#t #f))
-        (hydra_show_core_type t)))
+        (hydra_print_core_type t)))
 
     (define (show-type-scheme ts)
       (guard (exn (#t #f))
-        (hydra_show_core_type_scheme ts)))
+        (hydra_print_core_type_scheme ts)))
 
     (define (show-let l)
       (guard (exn (#t #f))
-        (hydra_show_core_let l)))
+        (hydra_print_core_let l)))
 
     (define (normalize-show s)
       (if (not s) s

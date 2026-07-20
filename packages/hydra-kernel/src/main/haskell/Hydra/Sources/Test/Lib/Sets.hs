@@ -24,7 +24,7 @@ import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Sets as Sets
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 ns :: ModuleName
 ns = ModuleName "hydra.test.lib.sets"
@@ -33,7 +33,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.sets primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -50,10 +50,10 @@ showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showIntSet :: TypedTerm (S.Set Int -> String)
-showIntSet = Phantoms.lambda "s" $ ShowCore.set_ @@ showInt32 @@ Phantoms.var "s"
+showIntSet = Phantoms.lambda "s" $ PrintCore.set_ @@ showInt32 @@ Phantoms.var "s"
 
 -- Test groups for hydra.lib.sets primitives
 

@@ -1,7 +1,7 @@
 module Hydra.Demos.Genpg.Demo where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import Hydra.Demos.Genpg.Examples.Sales.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Sales.GraphSchema
 import Hydra.Demos.Genpg.Examples.Sales.Mapping
@@ -50,7 +50,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "  Edges: " ++ show (L.length edges)
   log $ "Writing GraphSON to " ++ outputPath
   jsonResult <- case pgElementsToGraphson encodeTermValue els of
-    Left ic -> fail (ShowError.error ic)
+    Left ic -> fail (PrintError.error ic)
     Right v -> return v
   writeFile outputPath (jsonValuesToString jsonResult)
   log $ "Done. Output written to " ++ outputPath
@@ -68,7 +68,7 @@ transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] ->
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
     case Transform.transformTableRows emptyInferenceContext hydraCoreGraph vspecs especs tableType rows of
-      Left ic -> fail $ "Error transforming " ++ tableName ++ ": " ++ ShowError.error ic
+      Left ic -> fail $ "Error transforming " ++ tableName ++ ": " ++ PrintError.error ic
       Right v -> return v
 
 -- | Transform multiple tables according to a graph mapping specification

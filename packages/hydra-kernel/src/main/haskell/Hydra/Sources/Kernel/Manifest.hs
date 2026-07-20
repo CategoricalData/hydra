@@ -52,7 +52,7 @@ import qualified Hydra.Sources.Kernel.Terms.Resolution as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Docs as ShowDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Docs as PrintDocs
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
@@ -108,7 +108,7 @@ dslTermModules = [
   Rewriting.module_,
   Scoping.module_,
   Serialization.module_,
-  ShowDocs.module_,
+  PrintDocs.module_,
   Sorting.module_,
   Strip.module_,
   Variables.module_]

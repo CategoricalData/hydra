@@ -3,7 +3,7 @@
 -- | Test cases for the pure module-list utilities in hydra.build.modules (#529).
 --
 -- Each case renders both the actual (function-applied) and expected values to a
--- String via ShowCore helpers, following the universalCase convention: the test
+-- String via PrintCore helpers, following the universalCase convention: the test
 -- runner reduces both string-typed thunks and compares. Rendering to String is
 -- required — universalCase's fields are String-typed, so raw list/module/optional
 -- terms cannot be passed directly.
@@ -27,7 +27,7 @@ import qualified Data.Map                     as M
 
 import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Kernel.Terms.Scoping       as Scoping
-import qualified Hydra.Sources.Kernel.Terms.Show.Core     as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core     as PrintCore
 
 
 ns :: ModuleName
@@ -37,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([BuildModules.ns, Scoping.ns, ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([BuildModules.ns, Scoping.ns, PrintCore.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for the pure module-list utilities in hydra.build.modules")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -109,15 +109,15 @@ idStr = Phantoms.lambda "s" (Phantoms.var "s")
 
 -- Show a list of strings.
 showStrs :: TypedTerm [String] -> TypedTerm String
-showStrs xs = ShowCore.list_ @@ idStr @@ xs
+showStrs xs = PrintCore.list_ @@ idStr @@ xs
 
 -- Show an optional string.
 showOptStr :: TypedTerm (Maybe String) -> TypedTerm String
-showOptStr mx = ShowCore.optional_ @@ idStr @@ mx
+showOptStr mx = PrintCore.optional_ @@ idStr @@ mx
 
 -- Show a list of modules by name only (sufficient for filter selection tests).
 showModuleNames :: TypedTerm [Module] -> TypedTerm String
-showModuleNames mods = ShowCore.list_ @@ nameFn @@ mods
+showModuleNames mods = PrintCore.list_ @@ nameFn @@ mods
   where
     nameFn :: TypedTerm (Module -> String)
     nameFn = Phantoms.lambda "m" (Packaging.unModuleName (Packaging.moduleName (Phantoms.var "m")))
@@ -129,7 +129,7 @@ showModuleDetail :: TypedTerm Module -> TypedTerm String
 showModuleDetail m = Strings.cat (Phantoms.list [
     Packaging.unModuleName (Packaging.moduleName m),
     Phantoms.string "|",
-    ShowCore.list_ @@ defFn @@ Packaging.moduleDefinitions m])
+    PrintCore.list_ @@ defFn @@ Packaging.moduleDefinitions m])
   where
     defFn :: TypedTerm (Definition -> String)
     defFn = Phantoms.lambda "d" $ Phantoms.cases _Definition (Phantoms.var "d") Nothing [
@@ -147,7 +147,7 @@ showModuleDetail m = Strings.cat (Phantoms.list [
 
 -- Show a list of modules, each via showModuleDetail (for stripAllTermTypes tests).
 showModulesDetail :: TypedTerm [Module] -> TypedTerm String
-showModulesDetail mods = ShowCore.list_ @@ Phantoms.lambda "m" (showModuleDetail (Phantoms.var "m")) @@ mods
+showModulesDetail mods = PrintCore.list_ @@ Phantoms.lambda "m" (showModuleDetail (Phantoms.var "m")) @@ mods
 
 ----------------------------------------
 -- Test groups

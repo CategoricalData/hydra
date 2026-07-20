@@ -70,11 +70,11 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants      as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -95,7 +95,7 @@ import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 
 
 module_ :: Module
@@ -103,7 +103,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([HaskellSerde.ns, HaskellUtilsSource.ns,
-      Adapt.ns, Analysis.ns, Annotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, HaskellLanguage.ns, Lexical.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Scoping.ns, Serialization.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+      Adapt.ns, Analysis.ns, Annotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, HaskellLanguage.ns, Lexical.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Scoping.ns, Serialization.ns, PrintCore.ns, PrintError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for encoding Hydra modules as Haskell modules")}
   where
     ns = ModuleName "hydra.haskell.coder"
@@ -358,7 +358,7 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
   doc "Encode a Hydra literal as a Haskell expression" $
   "l" ~> "cx" ~>
     cases _Literal (var "l")
-      (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal") (ShowCore.literal @@ var "l"))) [
+      (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal") (PrintCore.literal @@ var "l"))) [
       _Literal_binary>>: "bs" ~>
         right $ HaskellUtilsSource.hsapp
           @@ (HaskellUtilsSource.hsvar @@ string "Literals.stringToBinary")
@@ -438,7 +438,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ (var "s" :: TypedTerm (S.Set Term))) @@ var "cx" @@ var "g" $
       right $ HaskellUtilsSource.hsapp @@ var "lhs" @@ var "rhs") $
     cases _Term (Strip.deannotateTerm @@ var "term")
-      (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported term") (ShowCore.term @@ var "term"))) [
+      (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported term") (PrintCore.term @@ var "term"))) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
         "arg">: Core.applicationArgument $ var "app",
@@ -566,7 +566,7 @@ encodeType = haskellCoderDefinition "encodeType" $
     right $ inject H._Type H._Type_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "name",
   "unitTuple">: inject H._Type H._Type_tuple $ list ([] :: [TypedTerm H.Type])] $
   cases _Type (Strip.deannotateType @@ var "typ")
-    (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported type") (ShowCore.type_ @@ var "typ"))) [
+    (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported type") (PrintCore.type_ @@ var "typ"))) [
     _Type_application>>: "app" ~> lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
       "rhs">: Core.applicationTypeArgument $ var "app"] $
@@ -604,7 +604,7 @@ encodeType = haskellCoderDefinition "encodeType" $
         right $ inject H._Type H._Type_list $ var "hlt",
     _Type_literal>>: "lt" ~>
       cases _LiteralType (var "lt")
-        (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal type") (ShowCore.literalType @@ var "lt"))) [
+        (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal type") (PrintCore.literalType @@ var "lt"))) [
         _LiteralType_binary>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
@@ -619,7 +619,7 @@ encodeType = haskellCoderDefinition "encodeType" $
               right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Double"],
         _LiteralType_integer>>: "it" ~>
           cases _IntegerType (var "it")
-            (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported integer type") (ShowCore.integerType @@ var "it"))) [
+            (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported integer type") (PrintCore.integerType @@ var "it"))) [
             _IntegerType_bigint>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Integer",
             _IntegerType_int8>>: constant $
@@ -759,7 +759,7 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
     Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "fold" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 gatherMetadata :: TypedTermDefinition ([Definition] -> HE.HaskellModuleMetadata)
 gatherMetadata = haskellCoderDefinition "gatherMetadata" $

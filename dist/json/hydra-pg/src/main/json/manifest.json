@@ -33,7 +33,7 @@
     "hydra.pg.rdf.mappings",
     "hydra.pg.termsToElements",
     "hydra.pg.utils",
-    "hydra.show.error.pg",
+    "hydra.print.error.pg",
     "hydra.tinkerpop.examples.modern",
     "hydra.tinkerpop.features",
     "hydra.tinkerpop.gremlin",

@@ -22,7 +22,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Math as DefMath
@@ -35,7 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Hoisting.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Hoisting.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for let-binding hoisting transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -69,9 +69,9 @@ nm :: String -> TypedTerm Name
 nm s = Core.name $ Phantoms.string s
 
 
--- | Show a Let as a string using ShowCore.let_
+-- | Show a Let as a string using PrintCore.let_
 showLet :: TypedTerm Let -> TypedTerm String
-showLet l = ShowCore.let_ @@ l
+showLet l = PrintCore.let_ @@ l
 
 -- Helper for multi-binding let
 

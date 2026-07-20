@@ -14,9 +14,9 @@
     {"module": "hydra.names"},
     {"module": "hydra.resolution"},
     {"module": "hydra.scoping"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
-    {"module": "hydra.show.typing"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
+    {"module": "hydra.print.typing"},
     {"module": "hydra.sorting"},
     {"module": "hydra.substitution"},
     {"module": "hydra.variables"},
@@ -13218,11 +13218,11 @@
                                 "argument": {
                                   "list": [
                                     {"literal": {"string": "{term="}},
-                                    {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}},
+                                    {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}},
                                     {"literal": {"string": ", type="}},
-                                    {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}},
+                                    {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}},
                                     {"literal": {"string": ", subst="}},
-                                    {"application": {"function": {"variable": "hydra.show.typing.typeSubst"}, "argument": {"variable": "subst"}}},
+                                    {"application": {"function": {"variable": "hydra.print.typing.typeSubst"}, "argument": {"variable": "subst"}}},
                                     {"literal": {"string": "}"}}]}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an inference result for debugging"}}}]}}}}},

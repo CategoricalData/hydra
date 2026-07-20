@@ -34,7 +34,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
@@ -61,7 +61,7 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> ([moduleName CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
-      ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
+      PrintCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
       ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "C++ code generator: converts Hydra modules to C++ header files")}
   where
@@ -951,7 +951,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
-      left (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (ShowCore.type_ @@ var "typ")))
+      left (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (PrintCore.type_ @@ var "typ")))
     [_Type_forall>>: lambda "fa" $
        encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ Core.forallTypeBody (var "fa"),
      _Type_record>>: lambda "rt" $

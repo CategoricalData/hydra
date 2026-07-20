@@ -20,7 +20,7 @@ import Hydra.Generation (inferModulesGivenIO)
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
-import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Print.Errors as PrintError
 import qualified Hydra.Json.Model as JsonModel
 import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
 import qualified Hydra.PackageRouting as PackageRouting
@@ -67,7 +67,7 @@ loadModuleFromJson distJsonRoot universe ns = do
   case parseResult of
     Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ " at " ++ filePath ++ ": " ++ err
     Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universe jsonVal of
-      Left err -> fail $ "Module decode error for " ++ unModuleName ns ++ ": " ++ ShowError.error err
+      Left err -> fail $ "Module decode error for " ++ unModuleName ns ++ ": " ++ PrintError.error err
       Right m -> return m
 
 main :: IO ()

@@ -18,8 +18,8 @@
     {"module": "hydra.rewriting"},
     {"module": "hydra.scoping"},
     {"module": "hydra.serialization"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.errors"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.errors"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
     {"module": "hydra.haskell.environment"},
@@ -1953,7 +1953,7 @@
                                                               {"name": "expected", "term": {"literal": {"string": "supported literal"}}},
                                                               {
                                                                 "name": "actual",
-                                                                "term": {"application": {"function": {"variable": "hydra.show.core.literal"}, "argument": {"variable": "l"}}}}]}}}}}}}}}},
+                                                                "term": {"application": {"function": {"variable": "hydra.print.core.literal"}, "argument": {"variable": "l"}}}}]}}}}}}}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.haskell.syntax.Expression"}}},
                                 "cases": [
@@ -2822,7 +2822,7 @@
                                                                                       {"name": "expected", "term": {"literal": {"string": "supported term"}}},
                                                                                       {
                                                                                         "name": "actual",
-                                                                                        "term": {"application": {"function": {"variable": "hydra.show.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
+                                                                                        "term": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "term"}}}}]}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.haskell.syntax.Expression"}}},
                                                         "cases": [
@@ -4175,7 +4175,7 @@
                                                                               {"name": "expected", "term": {"literal": {"string": "supported type"}}},
                                                                               {
                                                                                 "name": "actual",
-                                                                                "term": {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
+                                                                                "term": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "typ"}}}}]}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.haskell.syntax.Type"}}},
                                                 "cases": [
@@ -4525,7 +4525,7 @@
                                                                                               {"name": "expected", "term": {"literal": {"string": "supported literal type"}}},
                                                                                               {
                                                                                                 "name": "actual",
-                                                                                                "term": {"application": {"function": {"variable": "hydra.show.core.literalType"}, "argument": {"variable": "lt"}}}}]}}}}}}}}}},
+                                                                                                "term": {"application": {"function": {"variable": "hydra.print.core.literalType"}, "argument": {"variable": "lt"}}}}]}}}}}}}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"variable": "hydra.haskell.syntax.Type"}}},
                                                                 "cases": [
@@ -4679,7 +4679,7 @@
                                                                                                               {"name": "expected", "term": {"literal": {"string": "supported integer type"}}},
                                                                                                               {
                                                                                                                 "name": "actual",
-                                                                                                                "term": {"application": {"function": {"variable": "hydra.show.core.integerType"}, "argument": {"variable": "it"}}}}]}}}}}}}}}},
+                                                                                                                "term": {"application": {"function": {"variable": "hydra.print.core.integerType"}, "argument": {"variable": "it"}}}}]}}}}}}}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                     "type": {"variable": "hydra.haskell.syntax.Type"}}},
                                                                                 "cases": [

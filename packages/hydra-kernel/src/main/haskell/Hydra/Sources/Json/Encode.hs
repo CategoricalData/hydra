@@ -65,11 +65,11 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
-import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
+import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants      as PrintVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Typing    as PrintTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Substitution.ns, ShowCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.")}
   where
     definitions = [
@@ -194,7 +194,7 @@ toJson = define "toJson" $
     cases _Type (var "fn")
       (Just $ left $ Strings.cat $ list [
         string "cannot apply a non-parametric type: ",
-        ShowCore.type_ @@ var "fn"]) [
+        PrintCore.type_ @@ var "fn"]) [
       _Type_application>>: "innerApp" ~>
         Eithers.either
           ("err" ~> left $ var "err")
@@ -212,7 +212,7 @@ toJson = define "toJson" $
   cases _Type (var "stripped")
     (Just $ left $ Strings.cat $ list [
       string "unsupported type for JSON encoding: ",
-      ShowCore.type_ @@ var "typ"]) [
+      PrintCore.type_ @@ var "typ"]) [
 
     -- Type applications (parametric type instantiation): beta-reduce, then encode
     _Type_application>>: "at" ~>
@@ -429,7 +429,7 @@ toJsonUntyped = define "toJsonUntyped" $
   cases _Term (var "stripped")
     (Just $ left $ Strings.cat $ list [
       string "unsupported term variant for JSON encoding: ",
-      ShowCore.term @@ var "term"]) [
+      PrintCore.term @@ var "term"]) [
     -- Literals
     _Term_literal>>: "lit" ~> encodeLiteral @@ var "lit",
 

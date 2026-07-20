@@ -3181,7 +3181,7 @@ public class Serde {
                                                                 ref(Serde.sanitizeJavaComment),
                                                                 apply(
                                                                     apply(
-                                                                        var("hydra.show.docs.renderDocStringWith"),
+                                                                        var("hydra.print.docs.renderDocStringWith"),
                                                                         ref(Serde.javaDocEntityRef)),
                                                                     var("c")))))),
                                                 string("\n */")))),
@@ -3379,7 +3379,7 @@ public class Serde {
         new ModuleName("hydra.constants"),
         new ModuleName("hydra.serialization"),
         new ModuleName("hydra.names"),
-        new ModuleName("hydra.show.docs"),
+        new ModuleName("hydra.print.docs"),
         new ModuleName("hydra.java.syntax"),
         new ModuleName("hydra.paths"),
         new ModuleName("hydra.ast"),

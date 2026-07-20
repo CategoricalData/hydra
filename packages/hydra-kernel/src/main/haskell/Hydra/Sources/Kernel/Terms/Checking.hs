@@ -103,9 +103,9 @@ import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
-import qualified Hydra.Sources.Kernel.Terms.Show.Variants    as ShowVariants
+import qualified Hydra.Sources.Kernel.Terms.Print.Core    as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors  as PrintError
+import qualified Hydra.Sources.Kernel.Terms.Print.Variants    as PrintVariants
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Lib.Pairs as DefPairs
 
@@ -118,7 +118,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
+      Scoping.ns, Names.ns, Resolution.ns, PrintCore.ns, PrintError.ns, PrintVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference")}
   where
     definitions = [
@@ -191,11 +191,11 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
       "at" <~ Pairs.second (var "uc") $
       cases _Type (var "t")
         (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
-          ShowCore.type_ @@ var "t",
+          PrintCore.type_ @@ var "t",
           string ". Trying to apply ",
           Literals.showInt32 (Lists.length $ var "typeArgs"),
           string " type args: ",
-          Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
+          Formatting.showList @@ PrintCore.type_ @@ var "typeArgs",
           string ". Context has vars: {",
           Strings.intercalate (string ", ") (Lists.map (reify $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
           string "}"]))) [
@@ -221,11 +221,11 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
           Eithers.either
             -- Unresolvable nominal name: preserve the original behaviour by failing.
             ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
-              ShowCore.type_ @@ var "t",
+              PrintCore.type_ @@ var "t",
               string ". Trying to apply ",
               Literals.showInt32 (Lists.length $ var "typeArgs"),
               string " type args: ",
-              Formatting.showList @@ ShowCore.type_ @@ var "typeArgs"])))
+              Formatting.showList @@ PrintCore.type_ @@ var "typeArgs"])))
             ("schemaRes" ~>
               "schemaType" <~ Pairs.first (var "schemaRes") $
               "schemaBody" <~ (Strip.deannotateType @@ (Core.typeSchemeBody $ var "schemaType")) $
@@ -335,7 +335,7 @@ checkTypeSubst = define "checkTypeSubst" $
       false (var "isNominal"))
     (Sets.toList (var "suspectVars" :: TypedTerm (S.Set Name)))) $
   "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars" :: TypedTerm (S.Set Name))) (Maps.toList (var "s" :: TypedTerm (M.Map Name Type))) $
-  "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ (string " --> ") ++ (ShowCore.type_ @@ Pairs.second (var "p"))) $
+  "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ (string " --> ") ++ (PrintCore.type_ @@ Pairs.second (var "p"))) $
   Logic.ifElse (Sets.null (var "badVars" :: TypedTerm (S.Set Name)))
     (right $ var "subst")
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorIncorrectUnification $ ErrorsChecking.incorrectUnificationError (var "subst")))
@@ -360,7 +360,7 @@ containsInScopeTypeVars = define "containsInScopeTypeVars" $
   Logic.not $ Sets.null $ Sets.intersection (var "vars" :: TypedTerm (S.Set Name)) (var "freeVars" :: TypedTerm (S.Set Name))
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 normalizeTypeFreeVars :: TypedTermDefinition (Type -> Type)
 normalizeTypeFreeVars = define "normalizeTypeFreeVars" $

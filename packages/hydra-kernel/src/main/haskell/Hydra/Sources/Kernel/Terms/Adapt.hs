@@ -76,9 +76,9 @@ import qualified Hydra.Sources.Kernel.Terms.Resolution   as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Scoping     as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip       as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables   as Variables
-import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
+import qualified Hydra.Sources.Kernel.Terms.Print.Core   as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
+import qualified Hydra.Sources.Kernel.Terms.Print.Graph  as PrintGraph
 
 
 ns :: ModuleName
@@ -89,7 +89,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Dependencies.ns, Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Environment.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+      Scoping.ns, Environment.ns, Resolution.ns, PrintCore.ns, PrintError.ns, PrintGraph.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Simple, one-way adapters for types and terms")}
   where
     definitions = [
@@ -342,7 +342,7 @@ adaptLiteralValue :: TypedTermDefinition (M.Map LiteralType LiteralType -> Liter
 adaptLiteralValue = define "adaptLiteralValue" $
   doc "Adapt a literal value using the given language constraints" $
   "litmap" ~> "lt" ~> "l" ~> optCases (Maps.lookup (var "lt" :: TypedTerm LiteralType) (var "litmap"))
-    (Core.literalString $ ShowCore.literal @@ var "l")
+    (Core.literalString $ PrintCore.literal @@ var "l")
     ("lt2" ~> adaptLiteral @@ var "lt2" @@ var "l")
 
 -- | Rewrite callback for adapting nested let binding TypeSchemes in a term.
@@ -428,7 +428,7 @@ adaptTerm = define "adaptTerm" $
       (Just $
         "mterm" <<~ var "tryTerm" @@ var "term1" $
         optCases (var "mterm")
-          (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
+          (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for term: ") ++ (PrintCore.term @@ var "term1"))
           ("term2" ~> right $ var "term2"))
       [_Term_annotated>>:        "_" ~> right $ var "term1",
        _Term_typeApplication>>: "ta" ~>
@@ -502,7 +502,7 @@ adaptType = define "adaptType" $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
-      (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
+      (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for type: ") ++ (PrintCore.type_ @@ var "typ"))
       ("type2" ~> right $ var "type2")) $
   Rewriting.rewriteTypeM @@ var "rewrite" @@ var "type0"
 
@@ -754,7 +754,7 @@ formatDecodingError :: TypedTerm (DecodingError -> Error)
 formatDecodingError = "e" ~> Error.errorDecoding $ var "e"
 
 formatError :: TypedTerm (Error -> String)
-formatError = "e" ~> ShowError.error_ @@ var "e"
+formatError = "e" ~> PrintError.error_ @@ var "e"
 
 literalTypeSupported :: TypedTermDefinition (LanguageConstraints -> LiteralType -> Bool)
 literalTypeSupported = define "literalTypeSupported" $

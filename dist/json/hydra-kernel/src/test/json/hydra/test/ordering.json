@@ -3,8 +3,8 @@
   "metadata": {"description": "Test cases for Ord instance comparisons on complex Hydra types", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.reduction"},
-    {"module": "hydra.show.core"},
-    {"module": "hydra.show.util"},
+    {"module": "hydra.print.core"},
+    {"module": "hydra.print.util"},
     {"module": "hydra.test.testTypes"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -89,7 +89,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -143,7 +143,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -171,7 +171,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -225,7 +225,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -253,7 +253,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -307,7 +307,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "greaterThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -335,7 +335,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -391,7 +391,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -419,7 +419,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -475,7 +475,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -696,7 +696,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -734,7 +734,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -762,7 +762,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -800,7 +800,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -828,7 +828,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -854,7 +854,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -882,7 +882,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -908,7 +908,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -936,7 +936,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -962,7 +962,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
@@ -1003,7 +1003,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1135,7 +1135,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1163,7 +1163,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1295,7 +1295,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1323,7 +1323,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1455,7 +1455,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1483,7 +1483,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1615,7 +1615,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1643,7 +1643,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1761,7 +1761,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1789,7 +1789,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1907,7 +1907,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1935,7 +1935,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -2053,7 +2053,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -2430,7 +2430,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -2596,7 +2596,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -2624,7 +2624,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -2790,7 +2790,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -2818,7 +2818,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -2984,7 +2984,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -3012,7 +3012,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3144,7 +3144,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -3172,7 +3172,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3304,7 +3304,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -3332,7 +3332,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3546,7 +3546,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -3574,7 +3574,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -3788,7 +3788,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -4233,7 +4233,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -4309,7 +4309,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -4337,7 +4337,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -4413,7 +4413,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -4441,7 +4441,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -4517,7 +4517,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -4545,7 +4545,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -4621,7 +4621,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.show.util.comparison"},
+                                                                  "function": {"variable": "hydra.print.util.comparison"},
                                                                   "argument": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
