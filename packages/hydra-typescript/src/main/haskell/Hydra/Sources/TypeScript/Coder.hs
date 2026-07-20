@@ -2013,7 +2013,7 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
 -- parsers deliberately deferred with `lazy(() -> otherParser)`). See #604.
 eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
-  doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested " ++
+  doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested " L.++
     "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.parsers.lazy") $
   lambda "term" $
     "dfltVars" <~ (lambda "_" $ Lists.foldl
