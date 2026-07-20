@@ -23,7 +23,7 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules)
+import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit, writeTestModulesJson, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -299,7 +299,11 @@ runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPyth
           putStrLn $ "  Generating DSL wrapper modules for "
             ++ show (length dslInputs) ++ " type modules..."
           writeDslJsonPackageSplit routingMap distRoot universe dslInputs
-    "test" -> writeModulesJson True outDir universe mods
+    -- #605: route through the per-package incremental test driver rather than
+    -- the flat 'writeModulesJson', which re-infers the entire main+test
+    -- universe on every cache miss and drives isolated per-package invocations
+    -- to unbounded memory (the same blowup #395 fixed for the batch path).
+    "test" -> writeTestModulesJson routingMap distRoot fullUniverse mods
     _      -> return ()
 
 -- | Batch mode: transform every package with one Haskell universe load.
@@ -346,16 +350,15 @@ runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = d
         writeDslJsonPackageSplit routingMap distRoot fullUniverse allDslInputs
     "test" -> do
       let allTestMods = concatMap packageTestModules allPackages
-          testUniverse = fullUniverse ++ allTestMods
       when (null allTestMods) $ do
         putStrLn "  (no test modules in any package; skipping)"
         exitSuccess
-      -- Today only hydra-kernel has tests, and its tests live at a flat
-      -- hydra-kernel/src/test/json/ location. writeModulesJson is the
-      -- direct (non-routing) writer.
-      let kernelTestDir = distRoot FP.</> "hydra-kernel" FP.</> "src"
-            FP.</> "test" FP.</> "json"
+      -- #605/#395: route through the per-package incremental test driver
+      -- (writeTestModulesJson), which routes each package's test modules to
+      -- its own src/test/json and bounds memory by per-package size, rather
+      -- than the flat 'writeModulesJson', which re-infers the whole
+      -- main+test universe in one Algorithm-W pass.
       putStrLn $ "  Writing " ++ show (length allTestMods)
-        ++ " test modules -> " ++ kernelTestDir
-      writeModulesJson True kernelTestDir testUniverse allTestMods
+        ++ " test modules (routed per-package)..."
+      writeTestModulesJson routingMap distRoot fullUniverse allTestMods
     _ -> return ()
