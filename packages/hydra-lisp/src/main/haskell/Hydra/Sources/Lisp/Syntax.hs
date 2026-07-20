@@ -32,111 +32,79 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just ("A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS)."
       ++ " Designed for code generation from Hydra types and terms."))}
   where
-    definitions = toplevel ++ defnTypes ++ expressions ++ specialForms ++ bindings
-      ++ patterns ++ literals ++ names ++ collections ++ types ++ modules ++ misc
-
-    -- Top-level constructs
-    toplevel = [
-      program,
-      topLevelForm,
-      topLevelFormWithComments]
-
-    -- Definitions
-    defnTypes = [
-      functionDefinition,
-      variableDefinition,
-      constantDefinition,
-      recordTypeDefinition,
-      fieldDefinition,
-      macroDefinition]
-
-    -- Expressions
-    expressions = [
-      expression,
-      application,
-      lambda,
-      variableReference,
-      fieldAccess,
-      typeAnnotation]
-
-    -- Special forms
-    specialForms = [
-      ifExpression,
-      condExpression,
-      condClause,
-      caseExpression,
-      caseClause,
+    -- Alphabetical order by local type name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness,
+    -- so the semantic grouping formerly used here cannot be preserved in this list;
+    -- the section comments remain in place below, next to the definitions
+    -- themselves, as documentation).
+    definitions = [
       andExpression,
-      orExpression,
-      notExpression,
-      doExpression,
+      application,
       beginExpression,
-      quoteExpression,
-      quasiquoteExpression,
-      unquoteExpression,
-      splicingUnquoteExpression]
-
-    -- Let bindings
-    bindings = [
-      letExpression,
-      letKind,
-      letBinding,
-      simpleBinding,
-      destructuringBinding,
-      destructuringPattern]
-
-    -- Patterns (for case/match)
-    patterns = [
-      pattern,
-      constructorPattern,
-      literalPattern,
-      wildcardPattern]
-
-    -- Literals
-    literals = [
-      literal,
-      integerLiteral,
-      floatLiteral,
-      characterLiteral,
       booleanStyle,
-      nilStyle]
-
-    -- Names and symbols
-    names = [
-      symbol,
-      keyword,
-      qualifiedSymbol,
-      namespaceName]
-
-    -- Collection literals
-    collections = [
-      listLiteral,
-      vectorLiteral,
-      mapLiteral,
-      mapEntry,
-      setLiteral,
-      consExpression,
-      dottedPair]
-
-    -- Type-related (for dialects with type hints)
-    types = [
-      typeHint,
-      typeSpecifier]
-
-    -- Module system
-    modules = [
-      moduleDeclaration,
-      importDeclaration,
-      importSpec,
-      exportDeclaration]
-
-    -- Miscellaneous
-    misc = [
+      caseClause,
+      caseExpression,
+      characterLiteral,
       comment,
       commentStyle,
-      docstring,
+      condClause,
+      condExpression,
+      consExpression,
+      constantDefinition,
+      constructorPattern,
+      destructuringBinding,
+      destructuringPattern,
       dialect,
-      sExpression]
+      doExpression,
+      docstring,
+      dottedPair,
+      exportDeclaration,
+      expression,
+      fieldAccess,
+      fieldDefinition,
+      floatLiteral,
+      functionDefinition,
+      ifExpression,
+      importDeclaration,
+      importSpec,
+      integerLiteral,
+      keyword,
+      lambda,
+      letBinding,
+      letExpression,
+      letKind,
+      listLiteral,
+      literal,
+      literalPattern,
+      macroDefinition,
+      mapEntry,
+      mapLiteral,
+      moduleDeclaration,
+      namespaceName,
+      nilStyle,
+      notExpression,
+      orExpression,
+      pattern,
+      program,
+      qualifiedSymbol,
+      quasiquoteExpression,
+      quoteExpression,
+      recordTypeDefinition,
+      sExpression,
+      setLiteral,
+      simpleBinding,
+      splicingUnquoteExpression,
+      symbol,
+      topLevelForm,
+      topLevelFormWithComments,
+      typeAnnotation,
+      typeHint,
+      typeSpecifier,
+      unquoteExpression,
+      variableDefinition,
+      variableReference,
+      vectorLiteral,
+      wildcardPattern]
 
 
 -- ================================================================================================
