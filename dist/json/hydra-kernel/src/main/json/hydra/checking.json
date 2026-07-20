@@ -498,7 +498,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Apply type arguments to a type, substituting forall-bound variables"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Apply type arguments to a type, substituting forall-bound variables. Paper: inference.tex, 'Checking the witness' (consuming the pending-type-argument stack)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.checkForUnboundTypeVariables",
@@ -1018,7 +1020,9 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Check that a term has no unbound type variables (Either version)"}}}]}}}}}}},
+                      "value": {
+                        "literal": {
+                          "string": "Check that a term has no unbound type variables (Either version). Paper: inference.tex, 'Checking the witness' (always-on finalization invariant)."}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.checking.checkNominalApplication",
@@ -1730,7 +1734,7 @@
                       "key": {"variable": "description"},
                       "value": {
                         "literal": {
-                          "string": "Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms."}}}]}}}}}}},
+                          "string": "Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms. Paper: inference.tex, 'Checking the witness' (always-on invariant: a substitution may not bind a type name as if it were an inference variable)."}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.checking.checkTypeVariables",
@@ -1948,7 +1952,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables."}}}]}}}}},
+                      "string": "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables. Paper: inference.tex, 'Checking the witness' (effective equality)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.toFContext",
@@ -2328,7 +2332,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Given a type context, reconstruct the type of a System F term"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Given a type context, reconstruct the type of a System F term. Paper: inference.tex, 'Checking the witness' -- the executable form of the System F typing judgment in the soundness theorem."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfAnnotatedTerm",
@@ -2377,7 +2383,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of an annotated term (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of an annotated term (Either/InferenceContext version). Paper: inference.tex, rule Ann (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfApplication",
@@ -2840,7 +2848,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of an application term (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of an application term (Either/InferenceContext version). Paper: inference.tex, rule App (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfCaseStatement",
@@ -3482,7 +3492,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a case statement (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a case statement (Either/InferenceContext version). Paper: inference.tex, rules Case and Case_d (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfEither",
@@ -3871,7 +3883,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of an either value (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of an either value (Either/InferenceContext version). Paper: inference.tex, rules Eith_L and Eith_R (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfInjection",
@@ -4083,7 +4097,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a union injection (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a union injection (Either/InferenceContext version). Paper: inference.tex, rule Inj (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfLambda",
@@ -4398,7 +4414,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a lambda function (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a lambda function (Either/InferenceContext version). Paper: inference.tex, rule Abs (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfLet",
@@ -4856,7 +4874,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a let binding (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a let binding (Either/InferenceContext version). Paper: inference.tex, rule Let (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfList",
@@ -5292,7 +5312,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a list (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a list (Either/InferenceContext version). Paper: inference.tex, rules Lst_0 and Lst_+ (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfLiteral",
@@ -5382,7 +5404,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a literal (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a literal (Either/InferenceContext version). Paper: inference.tex, rule Lit (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfMap",
@@ -6207,7 +6231,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a map (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a map (Either/InferenceContext version). Paper: inference.tex, rules Map_0 and Map_+ (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfMaybe",
@@ -6505,7 +6531,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of an optional value (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of an optional value (Either/InferenceContext version). Paper: inference.tex, rules Opt_0 and Opt_1 (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfPair",
@@ -6768,7 +6796,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a pair (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a pair (Either/InferenceContext version). Paper: inference.tex, rule Pair (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfPrimitive",
@@ -6972,7 +7002,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a primitive function (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a primitive function (Either/InferenceContext version). Paper: inference.tex, rule Prim (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfProjection",
@@ -7213,7 +7245,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a record projection (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a record projection (Either/InferenceContext version). Paper: inference.tex, rule Proj (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfRecord",
@@ -7505,7 +7539,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a record (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a record (Either/InferenceContext version). Paper: inference.tex, rule Rec (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfSet",
@@ -7944,7 +7980,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a set (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a set (Either/InferenceContext version). Paper: inference.tex, rules Set_0 and Set_+ (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfTerm",
@@ -8071,7 +8109,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a type application term (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a type application term (Either/InferenceContext version). Paper: inference.tex, 'Checking the witness' (pushes onto the pending-type-argument stack)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfTypeLambda",
@@ -8288,7 +8328,8 @@
                 {
                   "key": {"variable": "description"},
                   "value": {
-                    "literal": {"string": "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version)"}}}]}}}}},
+                    "literal": {
+                      "string": "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfUnit",
@@ -8361,7 +8402,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of the unit term (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of the unit term (Either/InferenceContext version). Paper: inference.tex, rule Unit (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfUnwrap",
@@ -8558,7 +8601,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of an unwrap operation (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of an unwrap operation (Either/InferenceContext version). Paper: inference.tex, rule Unwr (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfVariable",
@@ -8819,7 +8864,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a variable (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a variable (Either/InferenceContext version). Paper: inference.tex, rules Var and Prim (checking side); note the primitives-first lookup order, the reverse of inference."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typeOfWrappedTerm",
@@ -8934,7 +8981,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Reconstruct the type of a wrapped term (Either/InferenceContext version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Reconstruct the type of a wrapped term (Either/InferenceContext version). Paper: inference.tex, rule Wrp (checking side)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.checking.typesAllEffectivelyEqual",
@@ -9164,4 +9213,4 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards"}}}]}}}}}]}
+                      "string": "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards. Paper: inference.tex, 'Checking the witness' (effective equality, the type-level analogue of the referential-transparency equality of terms)."}}}]}}}}}]}

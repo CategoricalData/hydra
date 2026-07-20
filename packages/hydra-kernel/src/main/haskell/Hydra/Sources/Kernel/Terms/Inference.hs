@@ -303,7 +303,7 @@ freshVariableType = define "freshVariableType" $
 
 generalize :: TypedTermDefinition (Graph -> Type -> TypeScheme)
 generalize = define "generalize" $
-  doc "Generalize a type to a type scheme" $
+  doc "Generalize a type to a type scheme. Paper: inference.tex, gen() and rule Gen." $
   "cx" ~> "typ" ~>
   -- IMPORTANT: freeVariablesInTypeOrdered returns ALL names from Type_variable positions,
   -- including qualified type names (like hydra.core.Lambda) which are NOT actual type variables.
@@ -337,7 +337,8 @@ headOrFail = define "headOrFail" $
 inferGraphTypes :: TypedTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
-    <> " Returns both the inferred graph and the ordered inferred bindings.") $
+    <> " Returns both the inferred graph and the ordered inferred bindings."
+    <> " Paper: inference.tex, the SCC treatment of cycles (section introduction); the whole graph is one mutually recursive let.") $
   "fcx0" ~> "bindings0" ~> "g0" ~>
   "fcx" <~ (var "fcx0") $
   "let0" <~ Core.let_ (var "bindings0") Core.termUnit $
@@ -428,7 +429,7 @@ inferTypeOf = define "inferTypeOf" $
 
 inferTypeOfAnnotatedTerm :: TypedTermDefinition (InferenceContext -> Graph -> AnnotatedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
-  doc "Infer the type of an annotated term (Either version)" $
+  doc "Infer the type of an annotated term (Either version). Paper: inference.tex, rule Ann." $
   "fcx" ~> "cx" ~> "at" ~>
   "term" <~ Core.annotatedTermBody (var "at") $
   "ann" <~ Core.annotatedTermAnnotation (var "at") $
@@ -451,7 +452,7 @@ inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
 
 inferTypeOfApplication :: TypedTermDefinition (InferenceContext -> Graph -> Application -> Prelude.Either Error InferenceResult)
 inferTypeOfApplication = define "inferTypeOfApplication" $
-  doc "Infer the type of a function application (Either version)" $
+  doc "Infer the type of a function application (Either version). Paper: inference.tex, rule App (elaboration form)." $
   "fcx0" ~> "cx" ~> "app" ~>
   "e0" <~ Core.applicationFunction (var "app") $
   "e1" <~ Core.applicationArgument (var "app") $
@@ -502,7 +503,7 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
 
 inferTypeOfCaseStatement :: TypedTermDefinition (InferenceContext -> Graph -> CaseStatement -> Prelude.Either Error InferenceResult)
 inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
-  doc "Infer the type of a case statement (Either version)" $
+  doc "Infer the type of a case statement (Either version). Paper: inference.tex, rules Case and Case_d." $
   "fcx" ~> "cx" ~> "caseStmt" ~>
   "tname" <~ Core.caseStatementTypeName (var "caseStmt") $
   "dflt" <~ Core.caseStatementDefault (var "caseStmt") $
@@ -574,7 +575,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
 
 inferTypeOfCollection :: TypedTermDefinition (InferenceContext -> Graph -> (Type -> Type) -> ([Term] -> Term) -> String -> S.Set Name -> [Term] -> Prelude.Either Error InferenceResult)
 inferTypeOfCollection = define "inferTypeOfCollection" $
-  doc "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy." $
+  doc "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy. Paper: inference.tex, shared implementation of the collection introduction rules (Lst_0/Lst_+, Set_0/Set_+)." $
   "fcx" ~> "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "classNames" ~> "els" ~>
   "varResult" <~ Names.freshName @@ var "fcx" $
   "var" <~ Pairs.first (var "varResult") $
@@ -613,7 +614,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
 
 inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Prelude.Either Term Term -> Prelude.Either Error InferenceResult)
 inferTypeOfEither = define "inferTypeOfEither" $
-  doc "Infer the type of an either value (Either version)" $
+  doc "Infer the type of an either value (Either version). Paper: inference.tex, rules Eith_L and Eith_R." $
   "fcx" ~> "cx" ~> "e" ~>
   Eithers.either
     ("l" ~>
@@ -648,7 +649,7 @@ inferTypeOfEither = define "inferTypeOfEither" $
 
 inferTypeOfInjection :: TypedTermDefinition (InferenceContext -> Graph -> Injection -> Prelude.Either Error InferenceResult)
 inferTypeOfInjection = define "inferTypeOfInjection" $
-  doc "Infer the type of a union injection (Either version)" $
+  doc "Infer the type of a union injection (Either version). Paper: inference.tex, rule Inj." $
   "fcx" ~> "cx" ~> "injection" ~>
   "tname" <~ Core.injectionTypeName (var "injection") $
   "field" <~ Core.injectionField (var "injection") $
@@ -681,7 +682,7 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
 
 inferTypeOfLambda :: TypedTermDefinition (InferenceContext -> Graph -> Lambda -> Prelude.Either Error InferenceResult)
 inferTypeOfLambda = define "inferTypeOfLambda" $
-  doc "Infer the type of a lambda function (Either version)" $
+  doc "Infer the type of a lambda function (Either version). Paper: inference.tex, rule Abs (elaboration form)." $
   "fcx" ~> "cx" ~> "lambda" ~>
   "var" <~ Core.lambdaParameter (var "lambda") $
   "body" <~ Core.lambdaBody (var "lambda") $
@@ -715,7 +716,8 @@ inferTypeOfLet = define "inferTypeOfLet" $
     <> " lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of"
     <> " mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside"
     <> " the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize"
-    <> " individually as usual.") $
+    <> " individually as usual."
+    <> " Paper: inference.tex, the SCC treatment of cycles (section introduction) and the remark following the elaboration-form Let rule.") $
   "fcx0" ~> "cx" ~> "let0" ~>
   "fcx" <~ (var "fcx0") $
   "bindings0" <~ Core.letBindings (var "let0") $
@@ -768,7 +770,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
 
 inferTypeOfLetNormalized :: TypedTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
 inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
-  doc "Infer the type of a let (letrec) term which is already in a normal form (Either version)" $
+  doc "Infer the type of a let (letrec) term which is already in a normal form (Either version). Paper: inference.tex, rule Let (elaboration form)." $
   "fcx0" ~> "cx0" ~> "letTerm" ~>
   "fcx" <~ (var "fcx0") $
   "bins0" <~ Core.letBindings (var "letTerm") $
@@ -890,7 +892,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
 
 inferTypeOfList :: TypedTermDefinition (InferenceContext -> Graph -> [Term] -> Prelude.Either Error InferenceResult)
 inferTypeOfList = define "inferTypeOfList" $
-  doc "Infer the type of a list (Either version)" $
+  doc "Infer the type of a list (Either version). Paper: inference.tex, rules Lst_0 and Lst_+." $
   "fcx" ~> "cx" ~> inferTypeOfCollection
     @@ var "fcx"
     @@ var "cx"
@@ -901,7 +903,7 @@ inferTypeOfList = define "inferTypeOfList" $
 
 inferTypeOfLiteral :: TypedTermDefinition (InferenceContext -> Literal -> InferenceResult)
 inferTypeOfLiteral = define "inferTypeOfLiteral" $
-  doc "Infer the type of a literal" $
+  doc "Infer the type of a literal. Paper: inference.tex, rule Lit." $
   "fcx" ~> "lit" ~>
   Typing.inferenceResult
     (Core.termLiteral $ var "lit")
@@ -912,7 +914,7 @@ inferTypeOfLiteral = define "inferTypeOfLiteral" $
 
 inferTypeOfMap :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Term Term -> Prelude.Either Error InferenceResult)
 inferTypeOfMap = define "inferTypeOfMap" $
-  doc "Infer the type of a map (Either version)" $
+  doc "Infer the type of a map (Either version). Paper: inference.tex, rules Map_0 and Map_+." $
   "fcx" ~> "cx" ~> "m" ~>
   "kvarResult" <~ Names.freshName @@ var "fcx" $
   "kvar" <~ Pairs.first (var "kvarResult") $
@@ -961,7 +963,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
 
 inferTypeOfOptional :: TypedTermDefinition (InferenceContext -> Graph -> Maybe Term -> Prelude.Either Error InferenceResult)
 inferTypeOfOptional = define "inferTypeOfOptional" $
-  doc "Infer the type of a Maybe value" $
+  doc "Infer the type of a Maybe value. Paper: inference.tex, rules Opt_0 and Opt_1." $
   "fcx" ~> "cx" ~> "m" ~>
   "trmCons" <~ ("terms" ~> Core.termOptional (Lists.maybeHead $ var "terms")) $
   inferTypeOfCollection
@@ -975,7 +977,7 @@ inferTypeOfOptional = define "inferTypeOfOptional" $
 
 inferTypeOfPair :: TypedTermDefinition (InferenceContext -> Graph -> (Term, Term) -> Prelude.Either Error InferenceResult)
 inferTypeOfPair = define "inferTypeOfPair" $
-  doc "Infer the type of a pair (Either version)" $
+  doc "Infer the type of a pair (Either version). Paper: inference.tex, rule Pair." $
   "fcx" ~> "cx" ~> "p" ~>
   "rp" <<~ inferMany @@ var "fcx" @@ var "cx" @@ list [
     pair (Pairs.first $ var "p") (string "pair first element"),
@@ -1022,7 +1024,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
 
 inferTypeOfProjection :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Prelude.Either Error InferenceResult)
 inferTypeOfProjection = define "inferTypeOfProjection" $
-  doc "Infer the type of a record projection (Either version)" $
+  doc "Infer the type of a record projection (Either version). Paper: inference.tex, rule Proj." $
   "fcx" ~> "cx" ~> "proj" ~>
   "tname" <~ Core.projectionTypeName (var "proj") $
   "fname" <~ Core.projectionFieldName (var "proj") $
@@ -1044,7 +1046,7 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
 
 inferTypeOfRecord :: TypedTermDefinition (InferenceContext -> Graph -> Record -> Prelude.Either Error InferenceResult)
 inferTypeOfRecord = define "inferTypeOfRecord" $
-  doc "Infer the type of a record (Either version)" $
+  doc "Infer the type of a record (Either version). Paper: inference.tex, rule Rec." $
   "fcx" ~> "cx" ~> "record" ~>
   "tname" <~ Core.recordTypeName (var "record") $
   "fields" <~ Core.recordFields (var "record") $
@@ -1083,7 +1085,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
 
 inferTypeOfSet :: TypedTermDefinition (InferenceContext -> Graph -> S.Set Term -> Prelude.Either Error InferenceResult)
 inferTypeOfSet = define "inferTypeOfSet" $
-  doc "Infer the type of a set (Either version)" $
+  doc "Infer the type of a set (Either version). Paper: inference.tex, rules Set_0 and Set_+." $
   "fcx" ~> "cx" ~>
   "s" ~>
   inferTypeOfCollection
@@ -1125,7 +1127,7 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
 
 inferTypeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> TypeApplicationTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
-  doc "Infer the type of a type application (Either version)" $
+  doc "Infer the type of a type application (Either version). Paper: inference.tex, type application terms in the elaborated Term grammar." $
   "fcx" ~> "cx" ~> "tt" ~>
   -- Descend into the applied term with typeApplicationTerm step on the trace
   "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepTypeApplicationTerm @@ var "fcx" $
@@ -1141,7 +1143,7 @@ inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
 
 inferTypeOfTypeLambda :: TypedTermDefinition (InferenceContext -> Graph -> TypeLambda -> Prelude.Either Error InferenceResult)
 inferTypeOfTypeLambda = define "inferTypeOfTypeLambda" $
-  doc "Infer the type of a type abstraction (Either version)" $
+  doc "Infer the type of a type abstraction (Either version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar." $
   "fcx" ~> "cx" ~> "ta" ~>
   -- Descend into the type-lambda body with typeLambdaBody step on the trace
   "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepTypeLambdaBody @@ var "fcx" $
@@ -1157,7 +1159,7 @@ inferTypeOfTypeLambda = define "inferTypeOfTypeLambda" $
 
 inferTypeOfUnit :: TypedTermDefinition (InferenceContext -> InferenceResult)
 inferTypeOfUnit = define "inferTypeOfUnit" $
-  doc "The trivial inference rule for the unit term" $
+  doc "The trivial inference rule for the unit term. Paper: inference.tex, rule Unit." $
   "fcx" ~>
   Typing.inferenceResult
     (Core.termUnit)
@@ -1168,7 +1170,7 @@ inferTypeOfUnit = define "inferTypeOfUnit" $
 
 inferTypeOfUnwrap :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
-  doc "Infer the type of an unwrap operation (Either version)" $
+  doc "Infer the type of an unwrap operation (Either version). Paper: inference.tex, rule Unwr." $
   "fcx" ~> "cx" ~> "tname" ~>
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
@@ -1187,7 +1189,7 @@ inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
 
 inferTypeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfVariable = define "inferTypeOfVariable" $
-  doc "Infer the type of a variable (Either version)" $
+  doc "Infer the type of a variable (Either version). Paper: inference.tex, rule Var (elaboration form), with rule Prim as the primitive-namespace fallback." $
   "fcx" ~> "cx" ~> "name" ~>
   Optionals.cases
     (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "cx"))
@@ -1222,7 +1224,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
 
 inferTypeOfWrappedTerm :: TypedTermDefinition (InferenceContext -> Graph -> WrappedTerm -> Prelude.Either Error InferenceResult)
 inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
-  doc "Infer the type of a wrapped term (Either version)" $
+  doc "Infer the type of a wrapped term (Either version). Paper: inference.tex, rule Wrp." $
   "fcx" ~> "cx" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
   "term" <~ Core.wrappedTermBody (var "wt") $

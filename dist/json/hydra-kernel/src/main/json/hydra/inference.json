@@ -1244,7 +1244,11 @@
                                               {"name": "variables", "term": {"variable": "vars"}},
                                               {"name": "body", "term": {"variable": "typ"}},
                                               {"name": "constraints", "term": {"variable": "constraintsMaybe"}}]}}}}}}}}}}}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generalize a type to a type scheme"}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Generalize a type to a type scheme. Paper: inference.tex, gen() and rule Gen."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.headOrFail",
@@ -1644,7 +1648,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings."}}}]}}}}},
+                      "string": "Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings. Paper: inference.tex, the SCC treatment of cycles (section introduction); the whole graph is one mutually recursive let."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferInGraphContext",
@@ -2972,7 +2976,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of an annotated term (Either version)"}}}]}}}}},
+                  "value": {"literal": {"string": "Infer the type of an annotated term (Either version). Paper: inference.tex, rule Ann."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfApplication",
@@ -3488,7 +3492,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a function application (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a function application (Either version). Paper: inference.tex, rule App (elaboration form)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfCaseStatement",
@@ -4421,7 +4427,8 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a case statement (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "Infer the type of a case statement (Either version). Paper: inference.tex, rules Case and Case_d."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfCollection",
@@ -5006,7 +5013,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy."}}}]}}}}},
+                      "string": "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy. Paper: inference.tex, shared implementation of the collection introduction rules (Lst_0/Lst_+, Set_0/Set_+)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfEither",
@@ -5417,7 +5424,8 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of an either value (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "Infer the type of an either value (Either version). Paper: inference.tex, rules Eith_L and Eith_R."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfInjection",
@@ -5774,7 +5782,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a union injection (Either version)"}}}]}}}}},
+                  "value": {"literal": {"string": "Infer the type of a union injection (Either version). Paper: inference.tex, rule Inj."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfLambda",
@@ -6086,7 +6094,8 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a lambda function (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "Infer the type of a lambda function (Either version). Paper: inference.tex, rule Abs (elaboration form)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfLet",
@@ -6737,7 +6746,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Normalize a let term before inferring its type (Either version). The bindings are partitioned into strongly connected components and reorganized as nested lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize individually as usual."}}}]}}}}},
+                      "string": "Normalize a let term before inferring its type (Either version). The bindings are partitioned into strongly connected components and reorganized as nested lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize individually as usual. Paper: inference.tex, the SCC treatment of cycles (section introduction) and the remark following the elaboration-form Let rule."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfLetNormalized",
@@ -7952,7 +7961,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a let (letrec) term which is already in a normal form (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a let (letrec) term which is already in a normal form (Either version). Paper: inference.tex, rule Let (elaboration form)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfList",
@@ -7999,7 +8010,10 @@
                             "argument": {"literal": {"string": "list element"}}}},
                         "argument": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a list (Either version)"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a list (Either version). Paper: inference.tex, rules Lst_0 and Lst_+."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfLiteral",
@@ -8042,7 +8056,11 @@
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
                                 "type": {"variable": "hydra.core.TypeVariableConstraints"}}}},
                           {"name": "context", "term": {"variable": "fcx"}}]}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a literal"}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a literal. Paper: inference.tex, rule Lit."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfMap",
@@ -8912,7 +8930,10 @@
                                                                                                                                                   "typeApplication": {"body": {"either": {"right": {"variable": "mcResult"}}}, "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                                                 "type": {"variable": "hydra.typing.InferenceResult"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a map (Either version)"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a map (Either version). Paper: inference.tex, rules Map_0 and Map_+."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfOptional",
@@ -8994,7 +9015,11 @@
                                             "argument": {"variable": "m"}}},
                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}}},
                                     "argument": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a Maybe value"}}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a Maybe value. Paper: inference.tex, rules Opt_0 and Opt_1."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfPair",
@@ -9455,7 +9480,10 @@
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.typing.InferenceResult"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a pair (Either version)"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a pair (Either version). Paper: inference.tex, rule Pair."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfPrimitive",
@@ -9871,7 +9899,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a record projection (Either version)"}}}]}}}}},
+                  "value": {"literal": {"string": "Infer the type of a record projection (Either version). Paper: inference.tex, rule Proj."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfRecord",
@@ -10416,7 +10444,10 @@
                                                                                                               "typeApplication": {"body": {"either": {"right": {"variable": "mcResult"}}}, "type": {"variable": "hydra.errors.Error"}}},
                                                                                                             "type": {"variable": "hydra.typing.InferenceResult"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a record (Either version)"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a record (Either version). Paper: inference.tex, rule Rec."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfSet",
@@ -10484,7 +10515,10 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.core.Term"}}},
                                 "argument": {"variable": "s"}}}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a set (Either version)"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Infer the type of a set (Either version). Paper: inference.tex, rules Set_0 and Set_+."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfTerm",
@@ -10937,7 +10971,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a type application (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a type application (Either version). Paper: inference.tex, type application terms in the elaborated Term grammar."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfTypeLambda",
@@ -11056,7 +11092,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a type abstraction (Either version)"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a type abstraction (Either version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfUnit",
@@ -11085,7 +11123,10 @@
                             "type": {"variable": "hydra.core.TypeVariableConstraints"}}}},
                       {"name": "context", "term": {"variable": "fcx"}}]}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trivial inference rule for the unit term"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The trivial inference rule for the unit term. Paper: inference.tex, rule Unit."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfUnwrap",
@@ -11256,7 +11297,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of an unwrap operation (Either version)"}}}]}}}}},
+                  "value": {"literal": {"string": "Infer the type of an unwrap operation (Either version). Paper: inference.tex, rule Unwr."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfVariable",
@@ -11562,7 +11603,11 @@
                                                     "type": {"variable": "hydra.typing.InferenceResult"}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Infer the type of a variable (Either version)"}}}]}}}}},
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Infer the type of a variable (Either version). Paper: inference.tex, rule Var (elaboration form), with rule Prim as the primitive-namespace fallback."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypeOfWrappedTerm",
@@ -11853,7 +11898,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Infer the type of a wrapped term (Either version)"}}}]}}}}},
+                  "value": {"literal": {"string": "Infer the type of a wrapped term (Either version). Paper: inference.tex, rule Wrp."}}}]}}}}},
     {
       "term": {
         "name": "hydra.inference.inferTypesOfTemporaryBindings",

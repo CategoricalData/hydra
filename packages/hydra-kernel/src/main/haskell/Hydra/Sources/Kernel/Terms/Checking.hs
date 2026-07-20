@@ -183,7 +183,7 @@ allEqual = define "allEqual" $
 
 applyTypeArgumentsToType :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Type -> Prelude.Either Error Type)
 applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
-  doc "Apply type arguments to a type, substituting forall-bound variables" $
+  doc "Apply type arguments to a type, substituting forall-bound variables. Paper: inference.tex, 'Checking the witness' (consuming the pending-type-argument stack)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "t" ~>
   -- uncons typeArgs: Nothing means no args to apply (base case).
   Optionals.cases (Lists.uncons $ var "typeArgs") (right $ var "t") ("uc" ~>
@@ -239,7 +239,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
 
 checkForUnboundTypeVariables :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
-  doc "Check that a term has no unbound type variables (Either version)" $
+  doc "Check that a term has no unbound type variables (Either version). Paper: inference.tex, 'Checking the witness' (always-on finalization invariant)." $
   "cx" ~> "tx" ~> "term0" ~>
   "svars" <~ Sets.fromList (Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
   "checkRecursive" <~ ("vars" ~> "trace" ~> "lbinding" ~> "term" ~>
@@ -319,7 +319,8 @@ checkType = define "checkType" $
 checkTypeSubst :: TypedTermDefinition (InferenceContext -> Graph -> TypeSubst -> Prelude.Either Error TypeSubst)
 checkTypeSubst = define "checkTypeSubst" $
   doc ("Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been"
-    <> " inappropriately unified with type variables inferred from terms.") $
+    <> " inappropriately unified with type variables inferred from terms."
+    <> " Paper: inference.tex, 'Checking the witness' (always-on invariant: a substitution may not bind a type name as if it were an inference variable).") $
   "cx" ~> "tx" ~> "subst" ~>
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys (var "s" :: TypedTerm (M.Map Name Type))) $
@@ -364,7 +365,7 @@ formatError = "e" ~> PrintError.error_ @@ var "e"
 
 normalizeTypeFreeVars :: TypedTermDefinition (Type -> Type)
 normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
-  doc "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables." $
+  doc "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables. Paper: inference.tex, 'Checking the witness' (effective equality)." $
   "typ" ~>
   "collectVars" <~ ("acc" ~> "t" ~>
     cases _Type (var "t")
@@ -394,7 +395,7 @@ typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
 -- Old typeOf* variant functions removed; typeOf now uses Either-based typeOfE
 typeOf :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Term -> Prelude.Either Error (Type, InferenceContext))
 typeOf = define "typeOf" $
-  doc "Given a type context, reconstruct the type of a System F term" $
+  doc "Given a type context, reconstruct the type of a System F term. Paper: inference.tex, 'Checking the witness' -- the executable form of the System F typing judgment in the soundness theorem." $
   "cx" ~> "tx" ~> "typeArgs" ~> "term" ~>
   "cx1" <~ (var "cx") $
   cases _Term (var "term")
@@ -423,13 +424,13 @@ typeOf = define "typeOf" $
 
 typeOfAnnotatedTerm :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> AnnotatedTerm -> Prelude.Either Error (Type, InferenceContext))
 typeOfAnnotatedTerm = define "typeOfAnnotatedTerm" $
-  doc "Reconstruct the type of an annotated term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of an annotated term (Either/InferenceContext version). Paper: inference.tex, rule Ann (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "at" ~>
   typeOf @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at")
 
 typeOfApplication :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Application -> Prelude.Either Error (Type, InferenceContext))
 typeOfApplication = define "typeOfApplication" $
-  doc "Reconstruct the type of an application term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of an application term (Either/InferenceContext version). Paper: inference.tex, rule App (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "app" ~>
   "fun" <~ Core.applicationFunction (var "app") $
   "arg" <~ Core.applicationArgument (var "app") $
@@ -461,7 +462,7 @@ typeOfApplication = define "typeOfApplication" $
 
 typeOfCaseStatement :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> CaseStatement -> Prelude.Either Error (Type, InferenceContext))
 typeOfCaseStatement = define "typeOfCaseStatement" $
-  doc "Reconstruct the type of a case statement (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a case statement (Either/InferenceContext version). Paper: inference.tex, rules Case and Case_d (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "cs" ~>
   "tname" <~ Core.caseStatementTypeName (var "cs") $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
@@ -507,7 +508,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
 
 typeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Prelude.Either Term Term -> Prelude.Either Error (Type, InferenceContext))
 typeOfEither = define "typeOfEither" $
-  doc "Reconstruct the type of an either value (Either/InferenceContext version)" $
+  doc "Reconstruct the type of an either value (Either/InferenceContext version). Paper: inference.tex, rules Eith_L and Eith_R (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "et" ~>
   "n" <~ Lists.length (var "typeArgs") $
   "arityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeEither $ Core.eitherType Core.typeUnit Core.typeUnit) (int32 2) (var "n") (var "typeArgs"))) $
@@ -532,7 +533,7 @@ typeOfEither = define "typeOfEither" $
 
 typeOfInjection :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Injection -> Prelude.Either Error (Type, InferenceContext))
 typeOfInjection = define "typeOfInjection" $
-  doc "Reconstruct the type of a union injection (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a union injection (Either/InferenceContext version). Paper: inference.tex, rule Inj (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "injection" ~>
   "tname" <~ Core.injectionTypeName (var "injection") $
   "field" <~ Core.injectionField (var "injection") $
@@ -549,7 +550,7 @@ typeOfInjection = define "typeOfInjection" $
 
 typeOfLambda :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Lambda -> Prelude.Either Error (Type, InferenceContext))
 typeOfLambda = define "typeOfLambda" $
-  doc "Reconstruct the type of a lambda function (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a lambda function (Either/InferenceContext version). Paper: inference.tex, rule Abs (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "l" ~>
   "v" <~ Core.lambdaParameter (var "l") $
   "mdom" <~ Core.lambdaDomain (var "l") $
@@ -569,7 +570,7 @@ typeOfLambda = define "typeOfLambda" $
 
 typeOfLet :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Let -> Prelude.Either Error (Type, InferenceContext))
 typeOfLet = define "typeOfLet" $
-  doc "Reconstruct the type of a let binding (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a let binding (Either/InferenceContext version). Paper: inference.tex, rule Let (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "letTerm" ~>
   "bs" <~ Core.letBindings (var "letTerm") $
   "body" <~ Core.letBody (var "letTerm") $
@@ -600,7 +601,7 @@ typeOfLet = define "typeOfLet" $
 
 typeOfList :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> [Term] -> Prelude.Either Error (Type, InferenceContext))
 typeOfList = define "typeOfList" $
-  doc "Reconstruct the type of a list (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a list (Either/InferenceContext version). Paper: inference.tex, rules Lst_0 and Lst_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
   "listArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeList Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
   Logic.ifElse (Lists.null $ var "els")
@@ -627,7 +628,7 @@ typeOfList = define "typeOfList" $
 
 typeOfLiteral :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Literal -> Prelude.Either Error (Type, InferenceContext))
 typeOfLiteral = define "typeOfLiteral" $
-  doc "Reconstruct the type of a literal (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a literal (Either/InferenceContext version). Paper: inference.tex, rule Lit (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "lit" ~>
   "t" <~ Core.typeLiteral (Reflect.literalType @@ var "lit") $
   "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ var "t" $
@@ -635,7 +636,7 @@ typeOfLiteral = define "typeOfLiteral" $
 
 typeOfMap :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> M.Map Term Term -> Prelude.Either Error (Type, InferenceContext))
 typeOfMap = define "typeOfMap" $
-  doc "Reconstruct the type of a map (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a map (Either/InferenceContext version). Paper: inference.tex, rules Map_0 and Map_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "m" ~>
   "mapArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMap $ Core.mapType Core.typeUnit Core.typeUnit) (int32 2) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
   Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map Term Term)))
@@ -686,7 +687,7 @@ typeOfMap = define "typeOfMap" $
 
 typeOfMaybe :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Maybe Term -> Prelude.Either Error (Type, InferenceContext))
 typeOfMaybe = define "typeOfMaybe" $
-  doc "Reconstruct the type of an optional value (Either/InferenceContext version)" $
+  doc "Reconstruct the type of an optional value (Either/InferenceContext version). Paper: inference.tex, rules Opt_0 and Opt_1 (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "mt" ~>
   "forNothing" <~ (
     "n" <~ Lists.length (var "typeArgs") $
@@ -705,7 +706,7 @@ typeOfMaybe = define "typeOfMaybe" $
 
 typeOfPair :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> (Term, Term) -> Prelude.Either Error (Type, InferenceContext))
 typeOfPair = define "typeOfPair" $
-  doc "Reconstruct the type of a pair (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a pair (Either/InferenceContext version). Paper: inference.tex, rule Pair (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "n" <~ Lists.length (var "typeArgs") $
   Logic.ifElse (Equality.equal (var "n") (int32 2))
@@ -722,7 +723,7 @@ typeOfPair = define "typeOfPair" $
 
 typeOfPrimitive :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, InferenceContext))
 typeOfPrimitive = define "typeOfPrimitive" $
-  doc "Reconstruct the type of a primitive function (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a primitive function (Either/InferenceContext version). Paper: inference.tex, rule Prim (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   -- Look up the primitive directly in the graph's primitives map and extract its type.
   -- This avoids reconstructing a Map Name TypeScheme on every call (O(p) per call).
@@ -738,7 +739,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
 
 typeOfProjection :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Projection -> Prelude.Either Error (Type, InferenceContext))
 typeOfProjection = define "typeOfProjection" $
-  doc "Reconstruct the type of a record projection (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a record projection (Either/InferenceContext version). Paper: inference.tex, rule Proj (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
   "fname" <~ Core.projectionFieldName (var "p") $
@@ -757,7 +758,7 @@ typeOfProjection = define "typeOfProjection" $
 
 typeOfRecord :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Record -> Prelude.Either Error (Type, InferenceContext))
 typeOfRecord = define "typeOfRecord" $
-  doc "Reconstruct the type of a record (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a record (Either/InferenceContext version). Paper: inference.tex, rule Rec (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "record" ~>
   "tname" <~ Core.recordTypeName (var "record") $
   "fields" <~ Core.recordFields (var "record") $
@@ -779,7 +780,7 @@ typeOfRecord = define "typeOfRecord" $
 
 typeOfSet :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> S.Set Term -> Prelude.Either Error (Type, InferenceContext))
 typeOfSet = define "typeOfSet" $
-  doc "Reconstruct the type of a set (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a set (Either/InferenceContext version). Paper: inference.tex, rules Set_0 and Set_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
   "setArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
   Logic.ifElse (Sets.null (var "els" :: TypedTerm (S.Set Term)))
@@ -813,7 +814,7 @@ typeOfTerm = define "typeOfTerm" $
 
 typeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either Error (Type, InferenceContext))
 typeOfTypeApplication = define "typeOfTypeApplication" $
-  doc "Reconstruct the type of a type application term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a type application term (Either/InferenceContext version). Paper: inference.tex, 'Checking the witness' (pushes onto the pending-type-argument stack)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "tyapp" ~>
   "body" <~ Core.typeApplicationTermBody (var "tyapp") $
   "t" <~ Core.typeApplicationTermType (var "tyapp") $
@@ -821,7 +822,7 @@ typeOfTypeApplication = define "typeOfTypeApplication" $
 
 typeOfTypeLambda :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> TypeLambda -> Prelude.Either Error (Type, InferenceContext))
 typeOfTypeLambda = define "typeOfTypeLambda" $
-  doc "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar." $
   "cx" ~> "tx" ~> "typeArgs" ~> "tl" ~>
   "v" <~ Core.typeLambdaParameter (var "tl") $
   "body" <~ Core.typeLambdaBody (var "tl") $
@@ -836,14 +837,14 @@ typeOfTypeLambda = define "typeOfTypeLambda" $
 
 typeOfUnit :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Prelude.Either Error (Type, InferenceContext))
 typeOfUnit = define "typeOfUnit" $
-  doc "Reconstruct the type of the unit term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of the unit term (Either/InferenceContext version). Paper: inference.tex, rule Unit (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~>
   "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit $
   right $ pair (var "applied") (var "cx")
 
 typeOfUnwrap :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, InferenceContext))
 typeOfUnwrap = define "typeOfUnwrap" $
-  doc "Reconstruct the type of an unwrap operation (Either/InferenceContext version)" $
+  doc "Reconstruct the type of an unwrap operation (Either/InferenceContext version). Paper: inference.tex, rule Unwr (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "tname" ~>
   "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
@@ -859,7 +860,7 @@ typeOfUnwrap = define "typeOfUnwrap" $
 
 typeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, InferenceContext))
 typeOfVariable = define "typeOfVariable" $
-  doc "Reconstruct the type of a variable (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a variable (Either/InferenceContext version). Paper: inference.tex, rules Var and Prim (checking side); note the primitives-first lookup order, the reverse of inference." $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   "forScheme" <~ ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
@@ -890,7 +891,7 @@ typeOfVariable = define "typeOfVariable" $
 
 typeOfWrappedTerm :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> WrappedTerm -> Prelude.Either Error (Type, InferenceContext))
 typeOfWrappedTerm = define "typeOfWrappedTerm" $
-  doc "Reconstruct the type of a wrapped term (Either/InferenceContext version)" $
+  doc "Reconstruct the type of a wrapped term (Either/InferenceContext version). Paper: inference.tex, rule Wrp (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
   "body" <~ Core.wrappedTermBody (var "wt") $
@@ -920,7 +921,7 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
 
 typesEffectivelyEqual :: TypedTermDefinition (Graph -> Type -> Type -> Bool)
 typesEffectivelyEqual = define "typesEffectivelyEqual" $
-  doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards" $
+  doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards. Paper: inference.tex, 'Checking the witness' (effective equality, the type-level analogue of the referential-transparency equality of terms)." $
   "tx" ~> "t1" ~> "t2" ~>
   -- If either type contains in-scope type variables, treat them as matching
   -- This handles the case where fresh type variables from instantiation haven't been substituted
