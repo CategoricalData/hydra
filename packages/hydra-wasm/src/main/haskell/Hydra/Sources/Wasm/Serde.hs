@@ -98,43 +98,36 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "WebAssembly serializer: converts WAT AST to concrete WAT text format")}
   where
+    -- Alphabetical order by local name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness,
+    -- so the semantic grouping formerly used here cannot be preserved in this list).
     definitions = [
-      -- Top-level serialization
-      toDefinition moduleToExpr,
-      toDefinition moduleFieldToExpr,
-      -- Types
-      toDefinition valTypeToStr,
-      toDefinition funcTypeToExpr,
-      toDefinition typeUseToExpr,
-      toDefinition typeDefToExpr,
-      toDefinition paramToExpr,
-      -- Functions
-      toDefinition funcToExpr,
-      toDefinition funcLocalToExpr,
-      -- Instructions
-      toDefinition instructionToExpr,
       toDefinition blockInstructionToExpr,
       toDefinition blockTypeToExpr,
-      toDefinition ifInstructionToExpr,
-      -- Memory
-      toDefinition memoryDefToExpr,
+      toDefinition constValueToExpr,
       toDefinition dataSegmentToExpr,
-      toDefinition limitsToExpr,
-      -- Globals
-      toDefinition globalDefToExpr,
-      toDefinition globalTypeToExpr,
-      -- Tables
-      toDefinition tableDefToExpr,
-      -- Imports and exports
-      toDefinition importDefToExpr,
-      toDefinition importDescToExpr,
       toDefinition exportDefToExpr,
       toDefinition exportDescToExpr,
-      -- Constants
-      toDefinition constValueToExpr,
-      -- Helpers
+      toDefinition funcLocalToExpr,
+      toDefinition funcToExpr,
+      toDefinition funcTypeToExpr,
+      toDefinition globalDefToExpr,
+      toDefinition globalTypeToExpr,
+      toDefinition ifInstructionToExpr,
+      toDefinition importDefToExpr,
+      toDefinition importDescToExpr,
+      toDefinition instructionToExpr,
+      toDefinition limitsToExpr,
+      toDefinition memoryDefToExpr,
+      toDefinition moduleFieldToExpr,
+      toDefinition moduleToExpr,
+      toDefinition paramToExpr,
       toDefinition refTypeToStr,
-      toDefinition toWatComment]
+      toDefinition tableDefToExpr,
+      toDefinition toWatComment,
+      toDefinition typeDefToExpr,
+      toDefinition typeUseToExpr,
+      toDefinition valTypeToStr]
 
 
 -- =============================================================================

@@ -30,75 +30,50 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
       ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06"))}
   where
-    definitions = moduleLevel ++ types ++ functions ++ instructions ++ memory
-      ++ globals ++ tables ++ imports ++ exports ++ literals
-
-    -- Module-level constructs
-    moduleLevel = [
-      wasmModule,
-      moduleField]
-
-    -- Type system
-    types = [
-      valType,
-      funcType,
-      funcTypeRef,
-      typeUse,
-      typeDef]
-
-    -- Function definitions
-    functions = [
-      func,
-      funcLocal,
-      param]
-
-    -- Instructions
-    instructions = [
-      brTableArgs,
-      instruction,
+    -- Alphabetical order by local type name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness,
+    -- so the semantic grouping formerly used here cannot be preserved in this list;
+    -- the section comments remain in place below, next to the definitions
+    -- themselves, as documentation).
+    definitions = [
       blockInstruction,
       blockType,
-      memArg,
-      memoryInstruction,
-      ifInstruction,
-      numericOp]
-
-    -- Memory
-    memory = [
-      memoryDef,
-      dataSegment,
+      brTableArgs,
+      constValue,
       dataMode,
-      limits]
-
-    -- Globals
-    globals = [
-      globalDef,
-      globalType]
-
-    -- Tables
-    tables = [
-      tableDef,
+      dataSegment,
       elemActive,
-      elemSegment,
       elemMode,
-      refType]
-
-    -- Imports and exports
-    imports = [
+      elemSegment,
+      exportDef,
+      exportDesc,
+      func,
+      funcLocal,
+      funcType,
+      funcTypeRef,
+      globalDef,
+      globalType,
+      ifInstruction,
       importDef,
       importDesc,
       importFunc,
       importGlobal,
       importMemory,
-      importTable]
-
-    exports = [
-      exportDef,
-      exportDesc]
-
-    -- Literal values
-    literals = [
-      constValue]
+      importTable,
+      instruction,
+      limits,
+      memArg,
+      memoryDef,
+      memoryInstruction,
+      wasmModule,
+      moduleField,
+      numericOp,
+      param,
+      refType,
+      tableDef,
+      typeDef,
+      typeUse,
+      valType]
 
 
 -- ================================================================================================
