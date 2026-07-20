@@ -52,6 +52,13 @@ if not _PUBLISHED:
         "dist/python/hydra-kernel/src/main/python",
         "dist/python/hydra-python/src/main/python",
     ]
+# hydra-build's generated hydra.build.routing (#560): manifest-derived
+# module-to-package routing, consumed by Generation.group_by_package in
+# place of its former hand-coded _PACKAGE_PREFIXES table. hydra-build is
+# not published (no PyPI artifact), so — unlike hydra-kernel/hydra-python
+# above — its path is added unconditionally rather than gated on
+# _PUBLISHED; it is always resolved from the local dist/python tree.
+_subs += ["dist/python/hydra-build/src/main/python"]
 _subs += ["heads/python/src/main/python"]
 for sub in _subs:
     p = str(_ROOT / sub)
@@ -243,7 +250,7 @@ def main():
         print(f"  DSL wrappers: {len(written_dsl)} module(s) written", flush=True)
 
         # #556: write the native package's manifest.json source-driven (rich
-        # schema, partitioned by Generation.namespace_to_package), mirroring
+        # schema, partitioned by Generation.group_by_package, #560), mirroring
         # Java's writePackageManifests. Previously this manifest was a static
         # leftover from the retired Haskell DSL pass (legacy dslModules/
         # mainModules-only schema, #511), so it never picked up hydra.python.

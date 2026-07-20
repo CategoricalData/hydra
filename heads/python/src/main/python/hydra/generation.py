@@ -389,160 +389,78 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
         base_path, universe, mods)
 
 
-# Prefix-to-package table. Order matters: more-specific prefixes first.
-# Any namespace not matching any prefix falls through to "hydra-kernel".
-# Mirrors Hydra.PackageRouting.packagePrefixes on the Haskell side.
-_PACKAGE_PREFIXES = [
-    # Coder packages (main runtime modules)
-    ("hydra.haskell.",              "hydra-haskell"),
-    ("hydra.java.",                 "hydra-java"),
-    ("hydra.python.",               "hydra-python"),
-    ("hydra.scala.",                "hydra-scala"),
-    ("hydra.lisp.",                 "hydra-lisp"),
-    ("hydra.coq.",                  "hydra-coq"),
-    ("hydra.typeScript.",           "hydra-typescript"),
-    ("hydra.go.",                   "hydra-go"),
-    # DSL wrapper modules for coder packages
-    ("hydra.dsl.haskell.",          "hydra-haskell"),
-    ("hydra.dsl.java.",             "hydra-java"),
-    ("hydra.dsl.python.",           "hydra-python"),
-    ("hydra.dsl.scala.",            "hydra-scala"),
-    ("hydra.dsl.lisp.",             "hydra-lisp"),
-    ("hydra.dsl.coq.",              "hydra-coq"),
-    ("hydra.dsl.typeScript.",       "hydra-typescript"),
-    ("hydra.dsl.go.",               "hydra-go"),
-    # Synthesized decoder source modules for coder packages
-    ("hydra.sources.decode.haskell.",    "hydra-haskell"),
-    ("hydra.sources.decode.java.",       "hydra-java"),
-    ("hydra.sources.decode.python.",     "hydra-python"),
-    ("hydra.sources.decode.scala.",      "hydra-scala"),
-    ("hydra.sources.decode.lisp.",       "hydra-lisp"),
-    ("hydra.sources.decode.coq.",        "hydra-coq"),
-    ("hydra.sources.decode.typeScript.", "hydra-typescript"),
-    # Synthesized encoder source modules for coder packages
-    ("hydra.sources.encode.haskell.",    "hydra-haskell"),
-    ("hydra.sources.encode.java.",       "hydra-java"),
-    ("hydra.sources.encode.python.",     "hydra-python"),
-    ("hydra.sources.encode.scala.",      "hydra-scala"),
-    ("hydra.sources.encode.lisp.",       "hydra-lisp"),
-    ("hydra.sources.encode.coq.",        "hydra-coq"),
-    ("hydra.sources.encode.typeScript.", "hydra-typescript"),
-    # Property graph package
-    ("hydra.pg.",                   "hydra-pg"),
-    ("hydra.cypher.",               "hydra-pg"),
-    ("hydra.graphviz.",             "hydra-pg"),
-    ("hydra.tinkerpop.",            "hydra-pg"),
-    ("hydra.error.pg",              "hydra-pg"),
-    # hydra.show.error.pg: this table is compared against namespaces produced by the
-    # PUBLISHED hydra-python host, so it must match that host's (pre-#497) name. Add
-    # "hydra.print.error.pg" alongside once hydra-python publishes with the rename; don't
-    # just flip this line, since older published versions still emit the old name.
-    ("hydra.show.error.pg",         "hydra-pg"),
-    ("hydra.validate.pg",           "hydra-pg"),
-    ("hydra.decode.pg.",            "hydra-pg"),
-    ("hydra.encode.pg.",            "hydra-pg"),
-    ("hydra.sources.decode.pg.",    "hydra-pg"),
-    ("hydra.sources.encode.pg.",    "hydra-pg"),
-    ("hydra.demos.genpg.",          "hydra-pg"),
-    ("openGql.grammar",             "hydra-pg"),
-    ("com.gdblab.pathAlgebra.",     "hydra-pg"),
-    ("hydra.dsl.pg.",               "hydra-pg"),
-    ("hydra.dsl.cypher.",           "hydra-pg"),
-    ("hydra.dsl.graphviz.",         "hydra-pg"),
-    ("hydra.dsl.tinkerpop.",        "hydra-pg"),
-    ("hydra.dsl.error.pg",          "hydra-pg"),
-    ("hydra.dsl.openGql.",          "hydra-pg"),
-    ("hydra.dsl.com.gdblab.pathAlgebra.", "hydra-pg"),
-    # RDF / OWL / SHACL / ShEx / XML schema package
-    ("hydra.rdf.",                  "hydra-rdf"),
-    ("hydra.owl.",                  "hydra-rdf"),
-    ("hydra.shacl.",                "hydra-rdf"),
-    ("hydra.shex.",                 "hydra-rdf"),
-    ("hydra.xml.schema",            "hydra-rdf"),
-    ("hydra.dsl.rdf.",              "hydra-rdf"),
-    ("hydra.dsl.owl.",              "hydra-rdf"),
-    ("hydra.dsl.shacl.",            "hydra-rdf"),
-    ("hydra.dsl.shex.",             "hydra-rdf"),
-    ("hydra.dsl.xml.schema",        "hydra-rdf"),
-    # WebAssembly package
-    ("hydra.wasm.",                 "hydra-wasm"),
-    ("hydra.dsl.wasm.",             "hydra-wasm"),
-    # Benchmark package
-    ("hydra.bench.",                "hydra-bench"),
-    # Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
-    ("hydra.atlas",                 "hydra-ext"),
-    ("hydra.avro.",                 "hydra-ext"),
-    ("hydra.azure.",                "hydra-ext"),
-    ("hydra.cpp.",                  "hydra-ext"),
-    ("hydra.csharp.",               "hydra-ext"),
-    ("hydra.datalog.",              "hydra-ext"),
-    ("hydra.delta.",                "hydra-ext"),
-    ("hydra.geojson.",              "hydra-ext"),
-    ("hydra.graphql.",              "hydra-ext"),
-    ("hydra.iana.",                 "hydra-ext"),
-    ("hydra.json.schema",           "hydra-ext"),
-    ("hydra.kusto.",                "hydra-ext"),
-    ("hydra.osv.",                  "hydra-ext"),
-    ("hydra.parquet.",              "hydra-ext"),
-    ("hydra.pegasus.",              "hydra-ext"),
-    ("hydra.protobuf.",             "hydra-ext"),
-    ("hydra.rust.",                 "hydra-ext"),
-    ("hydra.sql.",                  "hydra-ext"),
-    ("hydra.stac.",                 "hydra-ext"),
-    ("hydra.typeScript.",           "hydra-ext"),
-    ("hydra.workflow",              "hydra-ext"),
-    ("hydra.dsl.atlas",             "hydra-ext"),
-    ("hydra.dsl.avro.",             "hydra-ext"),
-    ("hydra.dsl.azure.",            "hydra-ext"),
-    ("hydra.dsl.cpp.",              "hydra-ext"),
-    ("hydra.dsl.csharp.",           "hydra-ext"),
-    ("hydra.dsl.datalog.",          "hydra-ext"),
-    ("hydra.dsl.delta.",            "hydra-ext"),
-    ("hydra.dsl.geojson.",          "hydra-ext"),
-    ("hydra.dsl.graphql.",          "hydra-ext"),
-    ("hydra.dsl.iana.",             "hydra-ext"),
-    ("hydra.dsl.json.schema",       "hydra-ext"),
-    ("hydra.dsl.kusto.",            "hydra-ext"),
-    ("hydra.dsl.osv.",              "hydra-ext"),
-    ("hydra.dsl.parquet.",          "hydra-ext"),
-    ("hydra.dsl.pegasus.",          "hydra-ext"),
-    ("hydra.dsl.protobuf.",         "hydra-ext"),
-    ("hydra.dsl.rust.",             "hydra-ext"),
-    ("hydra.dsl.sql.",              "hydra-ext"),
-    ("hydra.dsl.stac.",             "hydra-ext"),
-    ("hydra.dsl.typeScript.",       "hydra-ext"),
-    ("hydra.dsl.workflow",          "hydra-ext"),
-    # hydra.yaml.model lives in hydra-kernel; route ext-owned yaml modules explicitly.
-    ("hydra.yaml.coder",            "hydra-ext"),
-    ("hydra.yaml.language",         "hydra-ext"),
-    ("hydra.yaml.serde",            "hydra-ext"),
-]
-
-
-def namespace_to_package(module_name):
-    """Map a ModuleName to its owning package name.
-
-    Mirrors Hydra.PackageRouting.namespaceToPackage. Falls back to
-    "hydra-kernel" if no prefix matches.
+def _list_package_dirs(dist_json_root):
+    """The package directory names under a dist/json root, i.e. every
+    immediate subdirectory containing a manifest.json. Used to discover the
+    full package list for routing-map construction without a hardcoded name
+    list.
     """
-    ns = module_name.value if hasattr(module_name, "value") else module_name
-    for prefix, pkg in _PACKAGE_PREFIXES:
-        if ns.startswith(prefix):
+    pkgs = []
+    for name in os.listdir(dist_json_root):
+        if os.path.isfile(os.path.join(dist_json_root, name, "src", "main", "json", "manifest.json")):
+            pkgs.append(name)
+    return sorted(pkgs)
+
+
+def _build_routing_map(dist_json_root):
+    """Build a module-to-package routing map from every package's
+    manifest.json under dist_json_root, delegating to the generated,
+    manifest-derived hydra.build.routing.build_routing_map (#560) — replaces
+    the former hand-coded _PACKAGE_PREFIXES table. Declared (direct) manifest
+    entries plus their derived DSL/encode/decode/source-wrapper names
+    (expanded by the generated module) route to the declaring package; an
+    unrouted namespace fails loudly rather than falling back to
+    "hydra-kernel".
+    """
+    from hydra.build.routing import build_routing_map
+
+    pkgs = []
+    for pkg in _list_package_dirs(dist_json_root):
+        m = read_package_manifest(os.path.join(dist_json_root, pkg, "src", "main", "json"))
+        declared = list(m.main_modules) + list(m.test_modules) + list(m.dsl_modules) + list(m.encoding_modules)
+        pkgs.append((pkg, declared))
+    return build_routing_map(pkgs)
+
+
+def namespace_to_package(dist_json_root, module_name):
+    """Map a ModuleName to its owning package name via a routing map built
+    by _build_routing_map. Fails loudly if the module is not in the map (see
+    hydra.build.routing.namespace_to_package_in) — every legitimate module is
+    declared in some package's manifest.json (directly or via derived-name
+    expansion); an unrouted module means the module is missing from its
+    owning package's manifest.
+    """
+    from hydra.build.routing import namespace_to_package_in
+
+    result = namespace_to_package_in(_build_routing_map(dist_json_root), module_name)
+    match result:
+        case Right(value=pkg):
             return pkg
-    return "hydra-kernel"
+        case Left(value=err):
+            raise RuntimeError(f"namespace_to_package: {err}")
 
 
-def group_by_package(mods):
-    """Partition a list of modules by owning package.
+def group_by_package(dist_json_root, mods):
+    """Partition a list of modules by owning package, via a routing map
+    built by _build_routing_map. Returns a list of (package_name, modules)
+    pairs sorted by package name for deterministic ordering (see
+    hydra.build.routing.group_by_package_in).
 
-    Returns a list of (package_name, modules) pairs sorted by package name
-    for deterministic output. Mirrors Hydra.PackageRouting.groupByPackage.
+    Each group's module list is normalized to a plain Python list: the
+    generated group_by_package_in returns persistent-list (ConsList)
+    sequences, but callers here (and the legacy group_by_package before
+    this migration) expect real lists, e.g. for "+" concatenation.
     """
-    groups = {}
-    for m in mods:
-        pkg = namespace_to_package(m.name)
-        groups.setdefault(pkg, []).append(m)
-    return sorted(groups.items(), key=lambda kv: kv[0])
+    from hydra.build.routing import group_by_package_in
+
+    routing_map = _build_routing_map(dist_json_root)
+    result = group_by_package_in(routing_map, mods)
+    match result:
+        case Right(value=groups):
+            return [(pkg, list(pkg_mods)) for pkg, pkg_mods in groups]
+        case Left(value=err):
+            raise RuntimeError(f"group_by_package: {err}")
+
 
 
 def load_package_deps(hydra_root, pkg):
@@ -604,8 +522,8 @@ def infer_and_write_by_package(
     grouping_universe = [m for m in universe_mods if m.name.value not in seed_ns]
     grouping_targets  = [m for m in mods          if m.name.value not in seed_ns]
 
-    target_groups   = group_by_package(grouping_targets)
-    universe_groups = group_by_package(grouping_universe)
+    target_groups   = group_by_package(dist_json_root, grouping_targets)
+    universe_groups = group_by_package(dist_json_root, grouping_universe)
     pkg_to_mods     = dict(target_groups)
     pkg_to_universe = dict(universe_groups)
 
@@ -791,7 +709,7 @@ def reload_term_signature_sources(dist_json_root, universe_mods, mods):
         if not _unsigned_term_names(m):
             result.append(m)
             continue
-        pkg = namespace_to_package(m.name)
+        pkg = namespace_to_package(dist_json_root, m.name)
         file_path = os.path.join(
             dist_json_root, pkg, "src", "main", "json",
             module_name_to_path(m.name) + ".json")
@@ -881,7 +799,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
         tuple(universe_mods) + tuple(universe_for_schema),
         tuple(universe_mods))
     schema_map = codegen.build_schema_map(graph)
-    for pkg, pkg_mods in group_by_package(to_write):
+    for pkg, pkg_mods in group_by_package(dist_json_root, to_write):
         pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
         print(f"  {pkg}: {len(pkg_mods)} modules -> {pkg_dir}", flush=True)
         for m in pkg_mods:
@@ -927,9 +845,9 @@ def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
     """
     from hydra.json.writer import print_json
 
-    main_by_pkg = dict(group_by_package(main_mods))
-    dsl_by_pkg = dict(group_by_package(dsl_mods))
-    enc_by_pkg = dict(group_by_package(enc_mods))
+    main_by_pkg = dict(group_by_package(dist_json_root, main_mods))
+    dsl_by_pkg = dict(group_by_package(dist_json_root, dsl_mods))
+    enc_by_pkg = dict(group_by_package(dist_json_root, enc_mods))
 
     for pkg in sorted(main_by_pkg.keys()):
         main = main_by_pkg.get(pkg, [])

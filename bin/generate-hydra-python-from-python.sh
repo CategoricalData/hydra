@@ -115,6 +115,13 @@ else
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
 fi
+# hydra-build's generated hydra.build.routing (#560): manifest-derived
+# module-to-package routing, consumed by Generation.group_by_package.
+# hydra-build is not published (no PyPI artifact), so — unlike
+# hydra-kernel/hydra-python above — its path is added unconditionally in
+# both published-host and bootstrap-shim modes rather than gated on $MODE;
+# it is always resolved from the local dist/python tree.
+PP="$PP:$HYDRA_ROOT/dist/python/hydra-build/src/main/python"
 PP="$PP:$HYDRA_ROOT/heads/python/src/main/python"
 
 echo ""
