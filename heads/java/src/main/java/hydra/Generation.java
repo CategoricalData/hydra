@@ -548,178 +548,81 @@ public class Generation {
     }
 
     /**
-     * Prefix-to-package table. Order matters: more-specific prefixes first.
-     * Any namespace not matching any prefix falls through to "hydra-kernel".
-     * Mirrors Hydra.PackageRouting.packagePrefixes on the Haskell side.
+     * The set of package directory names under a dist/json root, i.e. every
+     * immediate subdirectory containing a {@code manifest.json}. Used to
+     * discover the full package list for routing-map construction without a
+     * hardcoded name list.
      */
-    private static final List<Pair<String, String>> PACKAGE_PREFIXES = java.util.Arrays.asList(
-        // Coder packages (main runtime modules)
-        new Pair<>("hydra.haskell.",              "hydra-haskell"),
-        new Pair<>("hydra.jvm.",                  "hydra-jvm"),
-        new Pair<>("hydra.java.",                 "hydra-java"),
-        new Pair<>("hydra.python.",               "hydra-python"),
-        new Pair<>("hydra.scala.",                "hydra-scala"),
-        new Pair<>("hydra.lisp.",                 "hydra-lisp"),
-        new Pair<>("hydra.coq.",                  "hydra-coq"),
-        new Pair<>("hydra.typeScript.",           "hydra-typescript"),
-        new Pair<>("hydra.go.",                   "hydra-go"),
-        // DSL wrapper modules for coder packages
-        new Pair<>("hydra.dsl.haskell.",          "hydra-haskell"),
-        new Pair<>("hydra.dsl.jvm.",              "hydra-jvm"),
-        new Pair<>("hydra.dsl.java.",             "hydra-java"),
-        new Pair<>("hydra.dsl.python.",           "hydra-python"),
-        new Pair<>("hydra.dsl.scala.",            "hydra-scala"),
-        new Pair<>("hydra.dsl.lisp.",             "hydra-lisp"),
-        new Pair<>("hydra.dsl.coq.",              "hydra-coq"),
-        new Pair<>("hydra.dsl.typeScript.",       "hydra-typescript"),
-        new Pair<>("hydra.dsl.go.",               "hydra-go"),
-        // Synthesized decoder source modules for coder packages
-        new Pair<>("hydra.sources.decode.haskell.",    "hydra-haskell"),
-        new Pair<>("hydra.sources.decode.java.",       "hydra-java"),
-        new Pair<>("hydra.sources.decode.python.",     "hydra-python"),
-        new Pair<>("hydra.sources.decode.scala.",      "hydra-scala"),
-        new Pair<>("hydra.sources.decode.lisp.",       "hydra-lisp"),
-        new Pair<>("hydra.sources.decode.coq.",        "hydra-coq"),
-        new Pair<>("hydra.sources.decode.typeScript.", "hydra-typescript"),
-        // Synthesized encoder source modules for coder packages
-        new Pair<>("hydra.sources.encode.haskell.",    "hydra-haskell"),
-        new Pair<>("hydra.sources.encode.java.",       "hydra-java"),
-        new Pair<>("hydra.sources.encode.python.",     "hydra-python"),
-        new Pair<>("hydra.sources.encode.scala.",      "hydra-scala"),
-        new Pair<>("hydra.sources.encode.lisp.",       "hydra-lisp"),
-        new Pair<>("hydra.sources.encode.coq.",        "hydra-coq"),
-        new Pair<>("hydra.sources.encode.typeScript.", "hydra-typescript"),
-        // Property graph package
-        new Pair<>("hydra.pg.",                   "hydra-pg"),
-        new Pair<>("hydra.cypher.",               "hydra-pg"),
-        new Pair<>("hydra.graphviz.",             "hydra-pg"),
-        new Pair<>("hydra.tinkerpop.",            "hydra-pg"),
-        new Pair<>("hydra.error.pg",              "hydra-pg"),
-        // hydra.show.error.pg: this whole table is compiled in the json-driver against the
-        // PUBLISHED hydra-java host, so it must match that host's (pre-#497) namespace names.
-        // Add "hydra.print.error.pg" alongside once hydra-java publishes with the rename;
-        // don't just flip this line, since older published versions still emit the old name.
-        new Pair<>("hydra.show.error.pg",         "hydra-pg"),
-        new Pair<>("hydra.validate.pg",           "hydra-pg"),
-        new Pair<>("hydra.decode.pg.",            "hydra-pg"),
-        new Pair<>("hydra.encode.pg.",            "hydra-pg"),
-        new Pair<>("hydra.sources.decode.pg.",    "hydra-pg"),
-        new Pair<>("hydra.sources.encode.pg.",    "hydra-pg"),
-        new Pair<>("hydra.demos.genpg.",          "hydra-pg"),
-        new Pair<>("openGql.grammar",             "hydra-pg"),
-        new Pair<>("com.gdblab.pathAlgebra.",     "hydra-pg"),
-        new Pair<>("hydra.dsl.pg.",               "hydra-pg"),
-        new Pair<>("hydra.dsl.cypher.",           "hydra-pg"),
-        new Pair<>("hydra.dsl.graphviz.",         "hydra-pg"),
-        new Pair<>("hydra.dsl.tinkerpop.",        "hydra-pg"),
-        new Pair<>("hydra.dsl.error.pg",          "hydra-pg"),
-        new Pair<>("hydra.dsl.openGql.",          "hydra-pg"),
-        new Pair<>("hydra.dsl.com.gdblab.pathAlgebra.", "hydra-pg"),
-        // RDF / OWL / SHACL / ShEx / XML schema package
-        new Pair<>("hydra.rdf.",                  "hydra-rdf"),
-        new Pair<>("hydra.owl.",                  "hydra-rdf"),
-        new Pair<>("hydra.shacl.",                "hydra-rdf"),
-        new Pair<>("hydra.shex.",                 "hydra-rdf"),
-        new Pair<>("hydra.xml.schema",            "hydra-rdf"),
-        new Pair<>("hydra.dsl.rdf.",              "hydra-rdf"),
-        new Pair<>("hydra.dsl.owl.",              "hydra-rdf"),
-        new Pair<>("hydra.dsl.shacl.",            "hydra-rdf"),
-        new Pair<>("hydra.dsl.shex.",             "hydra-rdf"),
-        new Pair<>("hydra.dsl.xml.schema",        "hydra-rdf"),
-        // WebAssembly package
-        new Pair<>("hydra.wasm.",                 "hydra-wasm"),
-        new Pair<>("hydra.dsl.wasm.",             "hydra-wasm"),
-        // Benchmark package
-        new Pair<>("hydra.bench.",                "hydra-bench"),
-        // Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
-        new Pair<>("hydra.atlas",                 "hydra-ext"),
-        new Pair<>("hydra.avro.",                 "hydra-ext"),
-        new Pair<>("hydra.azure.",                "hydra-ext"),
-        new Pair<>("hydra.cpp.",                  "hydra-ext"),
-        new Pair<>("hydra.csharp.",               "hydra-ext"),
-        new Pair<>("hydra.datalog.",              "hydra-ext"),
-        new Pair<>("hydra.delta.",                "hydra-ext"),
-        new Pair<>("hydra.geojson.",              "hydra-ext"),
-        new Pair<>("hydra.graphql.",              "hydra-ext"),
-        new Pair<>("hydra.iana.",                 "hydra-ext"),
-        new Pair<>("hydra.json.schema",           "hydra-ext"),
-        new Pair<>("hydra.kusto.",                "hydra-ext"),
-        new Pair<>("hydra.osv.",                  "hydra-ext"),
-        new Pair<>("hydra.parquet.",              "hydra-ext"),
-        new Pair<>("hydra.pegasus.",              "hydra-ext"),
-        new Pair<>("hydra.protobuf.",             "hydra-ext"),
-        new Pair<>("hydra.rust.",                 "hydra-ext"),
-        new Pair<>("hydra.sql.",                  "hydra-ext"),
-        new Pair<>("hydra.stac.",                 "hydra-ext"),
-        new Pair<>("hydra.typeScript.",           "hydra-ext"),
-        new Pair<>("hydra.workflow",              "hydra-ext"),
-        new Pair<>("hydra.dsl.atlas",             "hydra-ext"),
-        new Pair<>("hydra.dsl.avro.",             "hydra-ext"),
-        new Pair<>("hydra.dsl.azure.",            "hydra-ext"),
-        new Pair<>("hydra.dsl.cpp.",              "hydra-ext"),
-        new Pair<>("hydra.dsl.csharp.",           "hydra-ext"),
-        new Pair<>("hydra.dsl.datalog.",          "hydra-ext"),
-        new Pair<>("hydra.dsl.delta.",            "hydra-ext"),
-        new Pair<>("hydra.dsl.geojson.",          "hydra-ext"),
-        new Pair<>("hydra.dsl.graphql.",          "hydra-ext"),
-        new Pair<>("hydra.dsl.iana.",             "hydra-ext"),
-        new Pair<>("hydra.dsl.json.schema",       "hydra-ext"),
-        new Pair<>("hydra.dsl.kusto.",            "hydra-ext"),
-        new Pair<>("hydra.dsl.osv.",              "hydra-ext"),
-        new Pair<>("hydra.dsl.parquet.",          "hydra-ext"),
-        new Pair<>("hydra.dsl.pegasus.",          "hydra-ext"),
-        new Pair<>("hydra.dsl.protobuf.",         "hydra-ext"),
-        new Pair<>("hydra.dsl.rust.",             "hydra-ext"),
-        new Pair<>("hydra.dsl.sql.",              "hydra-ext"),
-        new Pair<>("hydra.dsl.stac.",             "hydra-ext"),
-        new Pair<>("hydra.dsl.typeScript.",       "hydra-ext"),
-        new Pair<>("hydra.dsl.workflow",          "hydra-ext"),
-        // hydra.yaml.model lives in hydra-kernel; route ext-owned yaml modules explicitly.
-        new Pair<>("hydra.yaml.coder",            "hydra-ext"),
-        new Pair<>("hydra.yaml.language",         "hydra-ext"),
-        new Pair<>("hydra.yaml.serde",            "hydra-ext"),
-        // hydra.gradle is a build-config type module authored in hydra-java. Its
-        // namespace is build-system-keyed (no hydra.java. prefix), so route it —
-        // and its synthesized term-coder wrappers — to hydra-java explicitly
-        // rather than letting them fall through to the hydra-kernel default. The
-        // derived hydra.{encode,decode}.gradle modules need their own entries
-        // because this prefix table (unlike the Haskell buildRoutingMap) does not
-        // auto-expand derived names; cf. the hydra.{decode,encode}.pg entries (#511).
-        new Pair<>("hydra.gradle",                "hydra-java"),
-        new Pair<>("hydra.decode.gradle",         "hydra-java"),
-        new Pair<>("hydra.encode.gradle",         "hydra-java")
-    );
-
-    /**
-     * Map a ModuleName to its owning package name. Mirrors
-     * {@code Hydra.PackageRouting.namespaceToPackage}. Falls back to
-     * {@code "hydra-kernel"} if no prefix matches.
-     */
-    public static String namespaceToPackage(ModuleName ns) {
-        String s = ns.value;
-        for (Pair<String, String> p : PACKAGE_PREFIXES) {
-            if (s.startsWith(p.first)) {
-                return p.second;
+    private static List<String> listPackageDirs(String distJsonRoot) throws IOException {
+        List<String> pkgs = new ArrayList<>();
+        try (java.util.stream.Stream<Path> entries = Files.list(Paths.get(distJsonRoot))) {
+            for (Path p : (Iterable<Path>) entries::iterator) {
+                if (Files.isRegularFile(p.resolve("src/main/json/manifest.json"))) {
+                    pkgs.add(p.getFileName().toString());
+                }
             }
         }
-        return "hydra-kernel";
+        java.util.Collections.sort(pkgs);
+        return pkgs;
     }
 
     /**
-     * Partition a list of modules by owning package. Returns groups sorted
-     * by package name for deterministic ordering. Mirrors
-     * {@code Hydra.PackageRouting.groupByPackage}.
+     * Build a module-to-package routing map from every package's manifest.json
+     * under distJsonRoot, delegating to the generated, manifest-derived
+     * {@link hydra.build.Routing#buildRoutingMap} (#560) — replaces the former
+     * hand-coded PACKAGE_PREFIXES table. Declared (direct) manifest entries plus
+     * their derived DSL/encode/decode/source-wrapper names (expanded by the
+     * generated module) route to the declaring package; an unrouted namespace
+     * fails loudly rather than falling back to "hydra-kernel".
      */
-    public static List<Pair<String, List<Module>>> groupByPackage(List<Module> mods) {
-        Map<String, List<Module>> byPkg = new java.util.TreeMap<>();
-        for (Module m : mods) {
-            byPkg.computeIfAbsent(namespaceToPackage(m.name), k -> new ArrayList<>()).add(m);
+    public static Map<ModuleName, String> buildRoutingMap(String distJsonRoot) throws IOException {
+        List<Pair<String, List<ModuleName>>> pkgs = new ArrayList<>();
+        for (String pkg : listPackageDirs(distJsonRoot)) {
+            PackageManifest m = readPackageManifest(
+                Paths.get(distJsonRoot, pkg, "src", "main", "json").toString());
+            List<ModuleName> declared = new ArrayList<>(m.mainModules);
+            declared.addAll(m.testModules);
+            declared.addAll(m.dslModules);
+            declared.addAll(m.encodingModules);
+            pkgs.add(new Pair<>(pkg, declared));
         }
-        List<Pair<String, List<Module>>> out = new ArrayList<>();
-        for (Map.Entry<String, List<Module>> e : byPkg.entrySet()) {
-            out.add(new Pair<>(e.getKey(), e.getValue()));
+        return hydra.build.Routing.buildRoutingMap(pkgs);
+    }
+
+    /**
+     * Map a ModuleName to its owning package name via a routing map built by
+     * {@link #buildRoutingMap}. Fails loudly if the module is not in the map
+     * (see {@link hydra.build.Routing#namespaceToPackageIn}) — every legitimate
+     * module is declared in some package's manifest.json (directly or via
+     * derived-name expansion); an unrouted module means the module is missing
+     * from its owning package's manifest.
+     */
+    public static String namespaceToPackage(String distJsonRoot, ModuleName ns) throws IOException {
+        Either<hydra.errors.Error_, String> result =
+            hydra.build.Routing.namespaceToPackageIn(buildRoutingMap(distJsonRoot), ns);
+        if (result instanceof Either.Right) {
+            return ((Either.Right<hydra.errors.Error_, String>) result).value;
         }
-        return out;
+        hydra.errors.Error_ err = ((Either.Left<hydra.errors.Error_, String>) result).value;
+        throw new RuntimeException("namespaceToPackage: " + err);
+    }
+
+    /**
+     * Partition a list of modules by owning package, via a routing map built
+     * by {@link #buildRoutingMap}. Returns groups sorted by package name for
+     * deterministic ordering (see {@link hydra.build.Routing#groupByPackageIn}).
+     */
+    public static List<Pair<String, List<Module>>> groupByPackage(
+            String distJsonRoot, List<Module> mods) throws IOException {
+        Map<ModuleName, String> routingMap = buildRoutingMap(distJsonRoot);
+        Either<hydra.errors.Error_, List<Pair<String, List<Module>>>> result =
+            hydra.build.Routing.groupByPackageIn(routingMap, mods);
+        if (result instanceof Either.Right) {
+            return ((Either.Right<hydra.errors.Error_, List<Pair<String, List<Module>>>>) result).value;
+        }
+        hydra.errors.Error_ err =
+            ((Either.Left<hydra.errors.Error_, List<Pair<String, List<Module>>>>) result).value;
+        throw new RuntimeException("groupByPackage: " + err);
     }
 
     /**
@@ -793,8 +696,8 @@ public class Generation {
             if (!seedNs.contains(m.name.value)) groupingTargets.add(m);
         }
 
-        List<Pair<String, List<Module>>> universeGroups = groupByPackage(groupingUniverse);
-        List<Pair<String, List<Module>>> targetGroups   = groupByPackage(groupingTargets);
+        List<Pair<String, List<Module>>> universeGroups = groupByPackage(distJsonRoot, groupingUniverse);
+        List<Pair<String, List<Module>>> targetGroups   = groupByPackage(distJsonRoot, groupingTargets);
         Map<String, List<Module>> pkgToUniverse = new HashMap<>();
         for (Pair<String, List<Module>> p : universeGroups) pkgToUniverse.put(p.first, p.second);
         Map<String, List<Module>> pkgToMods = new HashMap<>();
@@ -1015,7 +918,7 @@ public class Generation {
         combined.addAll(universeForSchema);
         Graph graph = Codegen.modulesToGraph(bootstrapGraph(), combined, universeMods);
         Map<Name, hydra.core.Type> schemaMap = Codegen.buildSchemaMap(graph);
-        for (Pair<String, List<Module>> grp : groupByPackage(toWrite)) {
+        for (Pair<String, List<Module>> grp : groupByPackage(distJsonRoot, toWrite)) {
             String pkg = grp.first;
             List<Module> pkgMods = grp.second;
             Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
@@ -1068,11 +971,11 @@ public class Generation {
             List<Module> dslMods,
             List<Module> encMods) throws IOException {
         Map<String, List<Module>> mainByPkg = new java.util.TreeMap<>();
-        for (Pair<String, List<Module>> p : groupByPackage(mainMods)) mainByPkg.put(p.first, p.second);
+        for (Pair<String, List<Module>> p : groupByPackage(distJsonRoot, mainMods)) mainByPkg.put(p.first, p.second);
         Map<String, List<Module>> dslByPkg = new java.util.TreeMap<>();
-        for (Pair<String, List<Module>> p : groupByPackage(dslMods)) dslByPkg.put(p.first, p.second);
+        for (Pair<String, List<Module>> p : groupByPackage(distJsonRoot, dslMods)) dslByPkg.put(p.first, p.second);
         Map<String, List<Module>> encByPkg = new java.util.TreeMap<>();
-        for (Pair<String, List<Module>> p : groupByPackage(encMods)) encByPkg.put(p.first, p.second);
+        for (Pair<String, List<Module>> p : groupByPackage(distJsonRoot, encMods)) encByPkg.put(p.first, p.second);
 
         for (String pkg : mainByPkg.keySet()) {
             List<Module> main = mainByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
@@ -1148,7 +1051,7 @@ public class Generation {
                 result.add(m);
                 continue;
             }
-            String pkg = namespaceToPackage(m.name);
+            String pkg = namespaceToPackage(distJsonRoot, m.name);
             String filePath = distJsonRoot + File.separator + pkg + File.separator + "src"
                 + File.separator + "main" + File.separator + "json" + File.separator
                 + Codegen.moduleNameToPath(m.name) + ".json";

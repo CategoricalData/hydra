@@ -226,7 +226,7 @@ public class UpdateJavaJson {
             System.err.println("  encode/decode wrappers: " + writtenCoders.size() + " module(s) written");
 
             // #511: write the native packages' manifest.json source-driven (rich
-            // schema, partitioned by Generation.namespaceToPackage). Previously
+            // schema, partitioned by Generation.groupByPackage, #560). Previously
             // these manifests were static/stale, so a new module (hydra.gradle)
             // never appeared and routing silently fell back to hydra-kernel.
             // mainModules = the loaded source modules (includes hydra.gradle);

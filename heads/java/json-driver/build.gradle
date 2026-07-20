@@ -51,6 +51,15 @@ sourceSets {
             // hydra-java host JAR, so they are resolved from the classpath, not
             // recompiled (recompiling would split-package conflict with the JAR).
             srcDir file("$hydraRoot/overlay/java/hydra-kernel/src/main/java")
+            // hydra-build's generated hydra.build.Routing (#560): manifest-derived
+            // module-to-package routing, consumed by Generation.java in place of its
+            // former hand-coded PACKAGE_PREFIXES table. hydra-build is not published
+            // (no Maven artifact), so — like hydra-jvm/hydra-java below — it is
+            // compiled here from its generated dist/java source rather than resolved
+            // as a dependency. References only kernel types (from the published
+            // hydra-java host JAR + the overlay srcDir above), so no ordering
+            // dependency on the hydra-jvm/hydra-java srcDirs that follow.
+            srcDir file("$hydraRoot/dist/java/hydra-build/src/main/java")
             // hydra-jvm DSL authoring sources (shared JVM helpers; #505).
             // Must precede hydra-java (dependency order).
             srcDir file("$hydraRoot/packages/hydra-jvm/src/main/java")
@@ -61,6 +70,7 @@ sourceSets {
             srcDir file("$hydraRoot/heads/java/src/main/java")
             include 'hydra/overlay/java/dsl/meta/**'
             include 'hydra/overlay/java/dsl/Helpers.java'
+            include 'hydra/build/**'
             include 'hydra/sources/jvm/**'
             include 'hydra/sources/java/**'
             include 'hydra/dsl/**'
