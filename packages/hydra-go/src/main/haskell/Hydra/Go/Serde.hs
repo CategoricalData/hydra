@@ -40,7 +40,12 @@ packageClauseToExpr (Go.PackageClause ident) = spaceSep [cst "package", identifi
 importDeclToExpr :: Go.ImportDecl -> Ast.Expr
 importDeclToExpr (Go.ImportDecl specs) = case specs of
   [spec] -> spaceSep [cst "import", importSpecToExpr spec]
-  _ -> spaceSep [cst "import", parenList True (importSpecToExpr <$> specs)]
+  _ -> spaceSep [cst "import", goImportBlock (importSpecToExpr <$> specs)]
+
+-- | Grouped-import block: parenthesized, newline-separated, indented.
+-- Go import specs are not comma-separated, so parenList cannot be used here.
+goImportBlock :: [Ast.Expr] -> Ast.Expr
+goImportBlock items = brackets parentheses fullBlockStyle (newlineSep items)
 
 importSpecToExpr :: Go.ImportSpec -> Ast.Expr
 importSpecToExpr (Go.ImportSpec malias path) = case malias of

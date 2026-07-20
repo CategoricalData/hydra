@@ -95,5 +95,37 @@ if [ "$PACKAGE" = "hydra-kernel" ]; then
     "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 fi
 
+# Step 4: emit the Go module files. The coder emits imports rooted at
+# hydra.dev (Coder.hs goModulePath), so each source set must declare that
+# module path — a mismatch makes every intra-kernel import unresolvable.
+# Generated here, never hand-written into dist/.
+GO_MODULE_PATH="hydra.dev"
+GO_VERSION="1.22"
+
+emit_go_mod() {
+    local dir="$1" module="$2"
+    [ -d "$dir" ] || return 0
+    cat > "$dir/go.mod" <<EOF
+// Note: this is an automatically generated file. Do not edit.
+module $module
+
+go $GO_VERSION
+EOF
+}
+
+echo ""
+echo "Step 4: Writing Go module files..."
+emit_go_mod "$OUT_DIR/src/main/go" "$GO_MODULE_PATH"
+if [ -d "$OUT_DIR/src/test/go" ]; then
+    # The test source set is a separate module that consumes the main one.
+    emit_go_mod "$OUT_DIR/src/test/go" "$GO_MODULE_PATH/test"
+    cat >> "$OUT_DIR/src/test/go/go.mod" <<EOF
+
+require $GO_MODULE_PATH v0.0.0
+replace $GO_MODULE_PATH => ../../main/go
+EOF
+fi
+echo "  Wrote go.mod for main${TEST_MOD_NOTE:-} (module $GO_MODULE_PATH)"
+
 echo ""
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

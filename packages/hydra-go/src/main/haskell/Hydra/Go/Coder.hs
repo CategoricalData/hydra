@@ -15,6 +15,7 @@ import qualified Hydra.Go.Syntax as Go
 import Hydra.Go.Serde (moduleToExpr)
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 
+import qualified Data.ByteString as BS
 import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -146,21 +147,28 @@ resolveTypeRef name targs st =
 
 -- | Resolve a reference to a type in "hydra.util" (Either, Pair, etc.),
 -- handling same-namespace optimization.
+-- | Import path of the hand-written overlay util package (Optional, Either,
+-- Pair, Map, Set, comparison — see overlay/go/hydra-kernel). The package
+-- declares itself as "util", so no import alias is needed.
+goUtilImportPath :: String
+goUtilImportPath = goModulePath ++ "/hydra/overlay/go/util"
+
 resolveUtilType :: String -> [Go.Type] -> GoState -> (Go.Type, GoState)
 resolveUtilType name targs st =
-  let utilNs = ModuleName "hydra.util"
+  let utilNs = ModuleName "hydra.overlay.go.util"
   in if goStateCurrentNs st == utilNs
     then (goQualTypeName Nothing name targs, st)
-    else (goQualTypeName (Just "util") name targs, addImport (goModulePath ++ "/hydra/util") st)
+    else (goQualTypeName (Just "util") name targs, addImport goUtilImportPath st)
 
--- | Resolve a reference to an expression in "hydra.util" (Left, Right, etc.),
+-- | Resolve a reference to an expression in the overlay util package
+-- (Some, None, Left, Right, NewPair, NewMap, NewSet, ...),
 -- handling same-namespace optimization.
 resolveUtilExpr :: String -> GoState -> (Go.Expression, GoState)
 resolveUtilExpr name st =
-  let utilNs = ModuleName "hydra.util"
+  let utilNs = ModuleName "hydra.overlay.go.util"
   in if goStateCurrentNs st == utilNs
     then (goNameExpr name, st)
-    else (goQualNameExpr "util" name, addImport (goModulePath ++ "/hydra/util") st)
+    else (goQualNameExpr "util" name, addImport goUtilImportPath st)
 
 -- | Resolve a qualified Hydra Name to a Go expression reference, adding imports as needed.
 -- Unqualified names (local variables) stay unexported (camelCase).
@@ -278,6 +286,19 @@ goShortVar :: String -> Go.Expression -> Go.Statement
 goShortVar name val = Go.StatementSimple $ Go.SimpleStmtShortVarDecl $
   Go.ShortVarDecl [goIdent name] [val]
 
+-- | Construct a panic(expr) statement, used where reaching the statement
+-- indicates a coder or data error (e.g. an unmatched union variant).
+goPanicStmt :: Go.Expression -> Go.Statement
+goPanicStmt e = Go.StatementSimple $ Go.SimpleStmtExpression $
+  Go.ExpressionStmt $ goCallName "panic" [e]
+
+-- | Big-endian base-256 digits of a non-negative integer, for big.Int.SetBytes.
+integerBigEndianBytes :: Integer -> [Integer]
+integerBigEndianBytes n = if n == 0 then [0] else go n []
+  where
+    go 0 acc = acc
+    go m acc = go (m `div` 256) (m `mod` 256 : acc)
+
 -- | Construct a Go struct literal (composite literal with struct type).
 goStructLit :: Go.TypeName -> [(String, Go.Expression)] -> Go.Expression
 goStructLit tn fields = Go.ExpressionUnary $ Go.UnaryExprPrimary $
@@ -342,16 +363,6 @@ goInterfaceType = Go.TypeLiteral . Go.TypeLitInterface . Go.InterfaceType
 goAnyType :: Go.Type
 goAnyType = goSimpleTypeName "any"
 
--- | Construct a Go [2]any{a, b} array literal.
-goArrayLit2 :: Go.Expression -> Go.Expression -> Go.Expression
-goArrayLit2 a b = Go.ExpressionUnary $ Go.UnaryExprPrimary $
-  Go.PrimaryExprOperand $ Go.OperandLiteral $ Go.LiteralComposite $
-    Go.CompositeLit
-      (Go.LiteralTypeArray $ Go.ArrayType (goIntLitExpr 2) goAnyType)
-      (Go.LiteralValue
-        [ Go.KeyedElement Nothing (Go.ElementExpression a)
-        , Go.KeyedElement Nothing (Go.ElementExpression b)])
-
 -- ============================================================================
 -- Type encoding
 -- ============================================================================
@@ -404,16 +415,15 @@ encodeType cx g typ st = case deannotateType typ of
         encodeType cx g (Core.applicationTypeFunction at) st
   Core.TypeUnit -> pure (goEmptyStructType, st)
   Core.TypeLiteral lt -> encodeLiteralType lt st
-  -- Collections use any-typed elements to match the term-level representation.
-  -- Go's type system cannot express the polymorphism of Hydra collections
-  -- in struct field types without creating compilation mismatches with
-  -- the any-typed term encoding.
+  -- Composites and keyed collections use the monomorphic overlay util types
+  -- (canonical-order Map/Set; explicit Optional/Either/Pair). Payloads are
+  -- any-typed until expected-type threading (S1) enables element generics.
   Core.TypeList _ -> pure (goSliceType goAnyType, st)
-  Core.TypeSet _ -> pure (goSliceType goAnyType, st)   -- Sets use []any (deduplicated lists)
-  Core.TypeMap _ -> pure (goSliceType goAnyType, st)   -- Maps use []any of [2]any{k,v} pairs
-  Core.TypeOptional _ -> pure (goAnyType, st)  -- nil for Nothing, value for Just
-  Core.TypeEither _ -> pure (goAnyType, st)  -- Either is erased to any at the Go type level
-  Core.TypePair _ -> pure (goAnyType, st)    -- Pair is erased to any at the Go type level
+  Core.TypeSet _ -> let (t, st') = resolveUtilType "Set" [] st in pure (t, st')
+  Core.TypeMap _ -> let (t, st') = resolveUtilType "Map" [] st in pure (t, st')
+  Core.TypeOptional _ -> let (t, st') = resolveUtilType "Optional" [] st in pure (t, st')
+  Core.TypeEither _ -> let (t, st') = resolveUtilType "Either" [] st in pure (t, st')
+  Core.TypePair _ -> let (t, st') = resolveUtilType "Pair" [] st in pure (t, st')
   Core.TypeFunction ft -> do
     (dom, st1) <- encodeType cx g (Core.functionTypeDomain ft) st
     (cod, st2) <- encodeType cx g (Core.functionTypeCodomain ft) st1
@@ -461,7 +471,8 @@ encodeLiteral lit st = case lit of
   Core.LiteralString s -> pure (goStringLitExpr s, st)
   Core.LiteralFloat fv -> encodeFloatValue fv st
   Core.LiteralInteger iv -> encodeIntegerValue iv st
-  Core.LiteralBinary _ -> pure (goSliceLit (goSimpleTypeName "byte") [], st)
+  Core.LiteralBinary b -> pure (goSliceLit (goSimpleTypeName "byte")
+    (goIntLitExpr . fromIntegral <$> BS.unpack b), st)
 
 encodeFloatValue :: Core.FloatValue -> GoState -> GoResult Go.Expression
 encodeFloatValue fv st = case fv of
@@ -479,12 +490,18 @@ encodeIntegerValue iv st = case iv of
               Go.OperandName (goQualIdent (Just $ goIdent "big") "NewInt") []
         pure (goCall newIntExpr [goIntLitExpr i], st')
       else do
-        -- Overflow: func() *big.Int { n, _ := new(big.Int).SetString("...", 10); return n }()
-        -- Simplified: use a helper that constructs from string
-        let setStringCall = goCallName "func() any { n, _ := new(big.Int).SetString"
-              [goStringLitExpr (show i), goIntLitExpr 10]
-        -- Actually, just generate a func literal IIFE
-        pure (goNameExpr ("func() *big.Int { n, _ := new(big.Int).SetString(\"" ++ show i ++ "\", 10); return n }()"), st')
+        -- Overflow: new(big.Int).SetBytes([]byte{...}), negated via .Neg when i < 0.
+        -- SetBytes and Neg are single-valued, so the literal stays a pure expression.
+        let newBig = goCallName "new" [Go.ExpressionUnary $ Go.UnaryExprPrimary $
+              Go.PrimaryExprOperand $ Go.OperandNamed $
+                Go.OperandName (goQualIdent (Just $ goIdent "big") "Int") []]
+            bytesLit = goSliceLit (goSimpleTypeName "byte")
+              (goIntLitExpr <$> integerBigEndianBytes (abs i))
+            setBytes = goCall (goSelector (exprToPrimary newBig) "SetBytes") [bytesLit]
+            expr = if i < 0
+              then goCall (goSelector (exprToPrimary newBig) "Neg") [setBytes]
+              else setBytes
+        pure (expr, st')
   Core.IntegerValueInt8 i -> pure (goIntLitExpr (fromIntegral i), st)
   Core.IntegerValueInt16 i -> pure (goIntLitExpr (fromIntegral i), st)
   Core.IntegerValueInt32 i -> pure (goIntLitExpr (fromIntegral i), st)
@@ -543,7 +560,7 @@ encodeTermInner cx g term st = case term of
         | null (Core.caseStatementCases cs) ->
           case Core.caseStatementDefault cs of
             Just dt -> encodeTerm cx g dt st
-            Nothing -> pure (goNameExpr "nil", st)
+            Nothing -> failGo cx "case statement with no cases and no default"
       -- Record projection applied to an any-typed argument: emit arg.(Type).Field directly
       -- This preserves the field's concrete type instead of wrapping in func(any) any.
       -- Only do this when the arg produces any (concrete args can't be type-asserted).
@@ -609,10 +626,14 @@ encodeTermInner cx g term st = case term of
                     goCall (goTypeAssertFunc $ exprToPrimary acc) [arg])
                     firstCall (tail argExprs)
               pure (curried, st2)
+      -- Primitive head: direct multi-arg native call (V4) with lazy-param
+      -- thunking (V5); eta-expansion when under-saturated.
+      _ | Just primName <- primRefName funTerm ->
+          encodePrimCall cx g primName argTerms st
       _ -> if isCurriedRef funTerm
       then do
         -- Curried call: f(a).(func(any) any)(b)
-        -- Used for primitives, local variables, and lambdas
+        -- Used for local variables and lambdas (primitives are intercepted above)
         --
         -- For IIFE patterns (inline lambda applied to args), set expected type
         -- from the first arg's type to resolve the lambda's domain type vars.
@@ -645,18 +666,20 @@ encodeTermInner cx g term st = case term of
                              || S.member n (goStateCallableVars st1)
                 in isLocal && isConcrete && not isFunc
               _ -> False
+        -- Applying a non-function head is ill-typed input or a coder bug;
+        -- silently dropping the arguments (the old behavior) mis-generates.
         case deannotateTerm funTerm of
-          _ | isNonCallableVar -> pure (funExpr, st1)
-          Core.TermLiteral _ -> pure (funExpr, st1)
-          Core.TermList _ -> pure (funExpr, st1)
-          Core.TermEither _ -> pure (funExpr, st1)
-          Core.TermPair _ -> pure (funExpr, st1)
-          Core.TermRecord _ -> pure (funExpr, st1)
-          Core.TermInject _ -> pure (funExpr, st1)
-          Core.TermMap _ -> pure (funExpr, st1)
-          Core.TermSet _ -> pure (funExpr, st1)
-          Core.TermUnit -> pure (funExpr, st1)
-          Core.TermOptional _ -> pure (funExpr, st1)
+          _ | isNonCallableVar -> failGo cx "application of a non-callable local variable (var-type oracle disagrees; fix the oracle, not this guard)"
+          Core.TermLiteral _ -> failGo cx "application of a literal value"
+          Core.TermList _ -> failGo cx "application of a list value"
+          Core.TermEither _ -> failGo cx "application of an either value"
+          Core.TermPair _ -> failGo cx "application of a pair value"
+          Core.TermRecord _ -> failGo cx "application of a record value"
+          Core.TermInject _ -> failGo cx "application of an injection value"
+          Core.TermMap _ -> failGo cx "application of a map value"
+          Core.TermSet _ -> failGo cx "application of a set value"
+          Core.TermUnit -> failGo cx "application of the unit value"
+          Core.TermOptional _ -> failGo cx "application of an optional value"
           _ -> do
             -- Look up the first param type for local function calls
             let mFuncParamType = case deannotateTerm funTerm of
@@ -762,12 +785,13 @@ encodeTermInner cx g term st = case term of
             pure (goCall (exprToPrimary funExpr) argExprs, st2')
   Core.TermEither e -> case e of
     Left l -> do
-      (le, st') <- encodeTerm cx g l st
-      -- [2]any{"left", value} — matches the eithers lib representation
-      pure (goArrayLit2 (goStringLitExpr "left") le, st')
+      (le, st1) <- encodeTerm cx g l st
+      let (f, st2) = resolveUtilExpr "Left" st1
+      pure (goCall (exprToPrimary f) [le], st2)
     Right r -> do
-      (re, st') <- encodeTerm cx g r st
-      pure (goArrayLit2 (goStringLitExpr "right") re, st')
+      (re, st1) <- encodeTerm cx g r st
+      let (f, st2) = resolveUtilExpr "Right" st1
+      pure (goCall (exprToPrimary f) [re], st2)
   Core.TermLambda lam -> encodeLambda cx g lam st
   Core.TermProject proj -> encodeProjection cx g proj Nothing st
   Core.TermCases cs -> encodeCases cx g cs Nothing st
@@ -807,29 +831,28 @@ encodeTermInner cx g term st = case term of
     pure (goSliceLit goAnyType goEls, st')
   Core.TermLiteral lit -> encodeLiteral lit st
   Core.TermMap m -> do
-    -- Maps are encoded as []any of [2]any{key, value} pairs (association lists)
+    -- util.NewMap(util.NewPair(k, v), ...) — a canonical-order persistent map
     let entries = M.toList m
-    (goEntries, st') <- encodeMapEntries cx g entries st
-    let pairExprs = fmap (\(k, v) -> goArrayLit2 k v) goEntries
-    pure (goSliceLit goAnyType pairExprs, st')
+    (goEntries, st1) <- encodeMapEntries cx g entries st
+    let (pairF, st2) = resolveUtilExpr "NewPair" st1
+        (mapF, st3) = resolveUtilExpr "NewMap" st2
+        pairExprs = fmap (\(k, v) -> goCall (exprToPrimary pairF) [k, v]) goEntries
+    pure (goCall (exprToPrimary mapF) pairExprs, st3)
   Core.TermOptional mt -> case mt of
-    Nothing -> pure (goNameExpr "nil", st)
+    -- util.None() / util.Some(v): an explicit presence struct, never a pointer —
+    -- pointer encodings cannot distinguish None from Some(None) when nested.
+    Nothing -> do
+      let (f, st') = resolveUtilExpr "None" st
+      pure (goCall (exprToPrimary f) [], st')
     Just val -> do
-      (ve, st') <- encodeTerm cx g val st
-      -- func() any { v := val; return &v }() — temp var for addressability
-      pure (goCall (Go.PrimaryExprOperand $ Go.OperandLiteral $ Go.LiteralFunction $ Go.FunctionLit
-        (Go.Signature (Go.Parameters []) (Just $ Go.ResultType goAnyType))
-        (Go.FunctionBody $ Go.Block [
-          goShortVar "_v" ve,
-          goReturn [Go.ExpressionUnary $ Go.UnaryExprOp $
-            Go.UnaryOperation Go.UnaryOpAddressOf
-              (Go.UnaryExprPrimary $ Go.PrimaryExprOperand $ Go.OperandNamed $
-                Go.OperandName (goQualIdent Nothing "_v") [])]])) [], st')
+      (ve, st1) <- encodeTerm cx g val st
+      let (f, st2) = resolveUtilExpr "Some" st1
+      pure (goCall (exprToPrimary f) [ve], st2)
   Core.TermPair p -> do
     (fe, st1) <- encodeTerm cx g (fst p) st
     (se, st2) <- encodeTerm cx g (snd p) st1
-    -- [2]any{first, second} — matches the pairs lib representation
-    pure (goArrayLit2 fe se, st2)
+    let (f, st3) = resolveUtilExpr "NewPair" st2
+    pure (goCall (exprToPrimary f) [fe, se], st3)
   Core.TermRecord rec -> do
     let tname = Core.recordTypeName rec
         fields = Core.recordFields rec
@@ -846,10 +869,9 @@ encodeTermInner cx g term st = case term of
     -- Restore substitution after field encoding
     pure (goStructLit tn goFields, st3 { goStateTypeSubst = goStateTypeSubst st })
   Core.TermSet s -> do
-    (goEls, st') <- encodeTermList cx g (S.toList s) st
-    -- Sets are represented as map[T]struct{}, but for simplicity we use a slice here
-    -- TODO: proper set representation
-    pure (goSliceLit goAnyType goEls, st')
+    (goEls, st1) <- encodeTermList cx g (S.toList s) st
+    let (f, st2) = resolveUtilExpr "NewSet" st1
+    pure (goCall (exprToPrimary f) goEls, st2)
   Core.TermInject inj -> do
     let tname = Core.injectionTypeName inj
         field = Core.injectionField inj
@@ -891,9 +913,13 @@ encodeTermInner cx g term st = case term of
         pure (goStructLit variantTn [("Value", typedVe)],
               st3 { goStateTypeSubst = goStateTypeSubst st })
   Core.TermUnit -> pure (goEmptyStructLit, st)
-  Core.TermVariable name ->
-    let (expr, st') = resolveExprRef name st
-    in pure (expr, st')
+  Core.TermVariable name -> case primRefName (Core.TermVariable name) of
+    -- Bare primitive reference: arity-0 primitives are constants and emit as
+    -- calls (never bare references — #588); others eta-expand to closures.
+    Just primName -> encodePrimCall cx g primName [] st
+    Nothing ->
+      let (expr, st') = resolveExprRef name st
+      in pure (expr, st')
   Core.TermWrap wt -> do
     let tname = Core.wrappedTermTypeName wt
         inner = Core.wrappedTermBody wt
@@ -951,6 +977,12 @@ encodeTermInner cx g term st = case term of
               else st { goStateTypeSubst = M.union typeArgSubst (goStateTypeSubst st) }
         encodeTerm cx g innerTerm stWithArgs
       Nothing -> case deannotateTerm innerTerm of
+        -- Primitives are plain (non-generic) Go functions: never instantiate
+        -- them with type arguments; route through the primitive-call path so
+        -- arity, laziness and the overlay import are handled uniformly.
+        Core.TermVariable name
+          | Just primName <- primRefName (Core.TermVariable name) ->
+          encodePrimCall cx g primName [] st
         -- Variable with type args: generate Go generic function instantiation
         -- e.g., TypeApplication(Variable "alt", t0) → Alt[T0]
         Core.TermVariable name
@@ -1064,16 +1096,109 @@ encodeLambda cx g lam st = do
       (Just $ Go.ResultType goAnyType)
       [goReturn [bodyExpr]], st3)
 
--- | Resolve a Hydra primitive name to a Go expression, adding the import.
--- "hydra.lib.strings.cat" -> strings.Cat (with import "hydra/lib/strings")
+-- | Resolve a Hydra primitive name to a reference to its native overlay
+-- implementation: "hydra.lib.strings.cat" -> strings.Cat with import
+-- "hydra.dev/hydra/overlay/go/lib/strings". Overlay lib packages declare
+-- their short names, so no alias is needed (and buildImports never aliases
+-- overlay paths).
 resolvePrimRef :: Core.Name -> GoState -> (Go.Expression, GoState)
 resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
   ["hydra", "lib", lib, fn] ->
-    let ns = ModuleName ("hydra.lib." ++ lib)
-        pkg = namespaceToGoPackage ns
-        impPath = goModulePath ++ "/hydra/lib/" ++ lib
-    in (goQualNameExpr pkg (capitalize fn), addImport impPath st)
+    let impPath = goModulePath ++ "/hydra/overlay/go/lib/" ++ lib
+    in (goQualNameExpr lib (capitalize fn), addImport impPath st)
   _ -> (goNameExpr name, st)
+
+-- | Extract the primitive name from a (possibly type-wrapped) primitive reference.
+primRefName :: Core.Term -> Maybe Core.Name
+primRefName t = case deannotateTerm t of
+  Core.TermVariable name@(Core.Name n) | L.isPrefixOf "hydra.lib." n -> Just name
+  Core.TermTypeApplication ta -> primRefName (Core.typeApplicationTermBody ta)
+  Core.TermTypeLambda tl -> primRefName (Core.typeLambdaBody tl)
+  _ -> Nothing
+
+-- | Parameter types and per-parameter laziness for a primitive, read from the
+-- graph's PrimitiveDefinition signature — the single source of truth for
+-- names, arity, and laziness (never a hand-kept list).
+lookupPrimitiveSignature :: Graph -> Core.Name -> Maybe ([Core.Type], [Bool])
+lookupPrimitiveSignature g name = do
+  prim <- M.lookup name (graphPrimitives g)
+  let params = termSignatureParameters $
+        primitiveDefinitionSignature $ primitiveDefinition prim
+  Just (parameterType <$> params, parameterIsLazy <$> params)
+
+-- | Wrap an expression as a zero-argument thunk: func() any { return e }.
+goThunk :: Go.Expression -> Go.Expression
+goThunk e = goFuncLit [] (Just $ Go.ResultType goAnyType) [goReturn [e]]
+
+-- | Encode primitive-call arguments: strict positions are coerced to the
+-- primitive's (encoded) parameter types; lazy positions are wrapped as
+-- zero-argument thunks, uncoerced (thunks return any).
+encodePrimArgs :: InferenceContext -> Graph -> [Core.Term] -> [Core.Type] -> [Bool]
+  -> GoState -> GoResult [Go.Expression]
+encodePrimArgs _ _ [] _ _ st = pure ([], st)
+encodePrimArgs cx g (a:as) (d:ds) (l:ls) st = do
+  (e, st1) <- encodeTerm cx g a st
+  (e', st2) <- if l
+    then pure (goThunk e, st1)
+    else coerceToType cx g e d a st1
+  (rest, st3) <- encodePrimArgs cx g as ds ls st2
+  pure (e' : rest, st3)
+encodePrimArgs cx _ _ _ _ _ = failGo cx "primitive argument/signature length mismatch"
+
+-- | Call-site expressions for eta-expansion parameters (any-typed closure
+-- params): asserted to the primitive's parameter type where concrete,
+-- thunked where lazy.
+etaParamExprs :: InferenceContext -> Graph -> [String] -> [Core.Type] -> [Bool]
+  -> GoState -> GoResult [Go.Expression]
+etaParamExprs _ _ [] _ _ st = pure ([], st)
+etaParamExprs cx g (p:ps) (d:ds) (l:ls) st = do
+  (gd, st1) <- encodeTypeForTerm cx g d st
+  let e = goNameExpr p
+      e' | l = goThunk e
+         | gd == goAnyType = e
+         | otherwise = goTypeAssertExpr e gd
+  (rest, st2) <- etaParamExprs cx g ps ds ls st1
+  pure (e' : rest, st2)
+etaParamExprs cx _ _ _ _ _ = failGo cx "eta parameter/signature length mismatch"
+
+-- | Encode a call to a primitive as a direct multi-arg invocation of its
+-- native overlay implementation (typed params, any return; V4), thunking
+-- lazy-marked parameters (V5). Under-saturated calls eta-expand to any-typed
+-- curried closures; over-saturated calls apply the surplus arguments to the
+-- (function-valued) result via the curried chain. Arity-0 primitives
+-- (constants, incl. zero-arity effect prims — #588) always emit as calls.
+encodePrimCall :: InferenceContext -> Graph -> Core.Name -> [Core.Term] -> GoState
+  -> GoResult Go.Expression
+encodePrimCall cx g primName argTerms st = case lookupPrimitiveSignature g primName of
+  Nothing -> failGo cx $ "unknown primitive: " ++ unName primName
+  Just (domTypes, lazyFlags) -> do
+    let arity = length domTypes
+        (funExpr, st0) = resolvePrimRef primName st
+    if length argTerms >= arity
+      then do
+        let (nowArgs, restArgs) = splitAt arity argTerms
+        (nowExprs, st1) <- encodePrimArgs cx g nowArgs domTypes lazyFlags st0
+        let call = goCall (exprToPrimary funExpr) nowExprs
+        if null restArgs
+          then pure (call, st1)
+          else do
+            (restExprs, st2) <- encodeTermList cx g restArgs st1
+            pure (L.foldl' (\acc a ->
+              goCall (goTypeAssertFunc $ exprToPrimary acc) [a]) call restExprs, st2)
+      else do
+        let given = length argTerms
+        (givenExprs, st1) <- encodePrimArgs cx g argTerms
+          (take given domTypes) (take given lazyFlags) st0
+        let missingN = arity - given
+            paramNames = ["_e" ++ show i | i <- [0 .. missingN - 1]]
+        (etaExprs, st2) <- etaParamExprs cx g paramNames
+          (drop given domTypes) (drop given lazyFlags) st1
+        let call = goCall (exprToPrimary funExpr) (givenExprs ++ etaExprs)
+            wrapped = foldr (\p body -> goFuncLit
+              [Go.ParameterDecl [goIdent p] False goAnyType]
+              (Just $ Go.ResultType goAnyType)
+              [goReturn [body]]) call paramNames
+        pure (wrapped, st2)
 
 -- | Encode a Hydra record projection as a Go expression. Post-#332: takes a
 -- Projection directly (no longer wrapped in Elimination/Function).
@@ -1139,7 +1264,7 @@ encodeCases cx g cs marg st = do
           Nothing -> encodeTerm cx g dt st2  -- Return default function
           Just arg -> encodeTerm cx g
             (Core.TermApplication $ Core.Application dt arg) st2
-        Nothing -> pure (goNameExpr "nil", st2)  -- No cases at all
+        Nothing -> failGo cx "case statement with no cases and no default"
       else do
         let allArms = arms ++ defArm
             switchStmt = Go.StatementSwitch $ Go.SwitchStmtType $ Go.TypeSwitchStmt
@@ -1153,10 +1278,10 @@ encodeCases cx g cs marg st = do
             pure (goFuncLit
               [Go.ParameterDecl [goIdent "x"] False goAnyType]
               (Just $ Go.ResultType goAnyType)
-              [switchStmt, goReturn [goNameExpr "nil"]], st2)
+              [switchStmt, goPanicStmt (goNameExpr "x")], st2)
           Just arg -> do
             (argExpr, st') <- encodeTerm cx g arg st2
-            let body = [goShortVar "x" argExpr, switchStmt, goReturn [goNameExpr "nil"]]
+            let body = [goShortVar "x" argExpr, switchStmt, goPanicStmt (goNameExpr "x")]
             pure (goCall (Go.PrimaryExprOperand $ Go.OperandLiteral $ Go.LiteralFunction $ Go.FunctionLit
               (Go.Signature (Go.Parameters []) (Just $ Go.ResultType goAnyType))
               (Go.FunctionBody $ Go.Block body)) [], st')
@@ -1165,17 +1290,33 @@ encodeCases cx g cs marg st = do
 -- Post-#332: takes a Name (the wrapped type name) directly.
 encodeUnwrap :: InferenceContext -> Graph -> Core.Name -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
-encodeUnwrap cx g _ marg st = case marg of
-    Nothing ->
-      -- Unwrap: func(v any) any { return v.(WrappedType).Value }
-      -- For newtypes in Go, the unwrap is a type conversion
-      pure (goFuncLit
-        [Go.ParameterDecl [goIdent "v"] False goAnyType]
-        (Just $ Go.ResultType goAnyType)
-        [goReturn [goNameExpr "v"]], st)
-    Just arg -> do
-      (argExpr, st') <- encodeTerm cx g arg st
-      pure (argExpr, st')
+encodeUnwrap cx g tname marg st = do
+    -- Unwrap converts a defined (wrapper) type back to its underlying type,
+    -- symmetric with the wrap conversion. Any-typed sources are first narrowed
+    -- to the wrapper type: Go type assertions are exact, so a WrapType boxed in
+    -- any can never be asserted as its underlying type directly.
+    let resolvedArgs = resolveTypeArgs g tname st
+    (goTypeArgs, st0) <- encodeTypes cx g resolvedArgs st
+    let (wrapType, st1) = resolveTypeRef tname goTypeArgs st0
+    (mGoUnder, st2) <- case lookupWrapUnderlyingType g tname of
+      Just underType -> do
+        (ut, s) <- encodeTypeForTerm cx g underType st1
+        pure (Just ut, s)
+      Nothing -> pure (Nothing, st1)
+    let unwrapExpr fromAny e = case mGoUnder of
+          Nothing -> e
+          Just ut -> Go.ExpressionUnary $ Go.UnaryExprPrimary $
+            Go.PrimaryExprConversion $ Go.Conversion ut $
+              if fromAny then goTypeAssertExpr e wrapType else e
+    case marg of
+      Nothing ->
+        pure (goFuncLit
+          [Go.ParameterDecl [goIdent "v"] False goAnyType]
+          (Just $ Go.ResultType goAnyType)
+          [goReturn [unwrapExpr True (goNameExpr "v")]], st2)
+      Just arg -> do
+        (argExpr, st3) <- encodeTerm cx g arg st2
+        pure (unwrapExpr (producesAny st3 arg) argExpr, st3)
 
 -- | Encode case arms for a union type switch.
 encodeCaseArms :: InferenceContext -> Graph -> Core.Name -> [Core.CaseAlternative] -> GoState
@@ -1713,12 +1854,10 @@ coerceToType cx g expr targetType sourceTerm st
   | not (producesAny st sourceTerm) = pure (expr, st)
   | otherwise = do
     (goTarget, st') <- encodeTypeForTerm cx g targetType st
-    -- Only add type assertion for types that are valid Go assertion targets.
-    -- any is skipped (no-op). Slices, arrays, maps, and primitive types can't
-    -- be asserted on (they're not interfaces). Only named types (structs, wraps,
-    -- interfaces) and function types are valid targets.
-    -- Skip assertion for any, and for type params when the source is NOT any
-    -- (type param assertion is valid from any but not from another type param)
+    -- The source is any-typed here (producesAny guard above), and a Go type
+    -- assertion from an interface value is valid for ANY target type,
+    -- including slices and other non-interface types. Only assertion to any
+    -- itself is skipped (no-op).
     let isTypeParam = case targetType of
           Core.TypeVariable name -> S.member name (goStateFuncTypeParams st)
           _ -> False
@@ -1805,7 +1944,6 @@ isLocalRef t = case deannotateTerm t of
 -- inference/expansion passes may have added around variable references.
 isPrimitiveRef :: Core.Term -> Bool
 isPrimitiveRef t = case deannotateTerm t of
-  Core.TermVariable (Core.Name n) -> L.isPrefixOf "hydra.lib." n
   Core.TermVariable (Core.Name n) -> L.isPrefixOf "hydra.lib." n
   Core.TermTypeApplication ta -> isPrimitiveRef (Core.typeApplicationTermBody ta)
   Core.TermTypeLambda tl -> isPrimitiveRef (Core.typeLambdaBody tl)
@@ -1963,16 +2101,6 @@ encodeVariantStructs cx g baseName tparams (ft:fts) st = do
   (rest, st2) <- encodeVariantStructs cx g baseName tparams fts st1
   pure (structDecl : markerMethod : rest, st2)
 
--- | Encode a type for use as a struct field type.
--- Uses any for non-scalar types to avoid the any-vs-concrete mismatch
--- when struct literals are constructed from any-typed term expressions.
--- Scalars (string, int*, float*, bool) keep their concrete types.
-encodeFieldType :: InferenceContext -> Graph -> Core.Type -> GoState -> GoResult Go.Type
-encodeFieldType cx g typ st = case deannotateType typ of
-  Core.TypeLiteral lt -> encodeLiteralType lt st  -- Keep scalar types
-  Core.TypeUnit -> pure (goEmptyStructType, st)   -- Keep unit
-  _ -> pure (goAnyType, st)                       -- Everything else → any
-
 -- | Check if a name is a local (unqualified) type variable.
 isLocalVar :: Core.Name -> Bool
 isLocalVar (Core.Name n) = '.' `notElem` n
@@ -2054,14 +2182,6 @@ typeVarNeedsGoParam g varName types = any (varInGoVisiblePos varName) types
       Core.TypeMap _ -> False
       Core.TypeOptional _ -> False
       _ -> False
-
--- | Check if a function type has a function-typed domain (higher-order).
--- Used to skip adapter generation for higher-order functions (not yet supported).
-hasHigherOrderDomain :: Core.Type -> Bool
-hasHigherOrderDomain t = case deannotateType t of
-  Core.TypeFunction ft -> isFunctionType (Core.functionTypeDomain ft)
-  Core.TypeForall fa -> hasHigherOrderDomain (Core.forallTypeBody fa)
-  _ -> False
 
 -- | Check if a term is a function (lambda or elimination — primitives are
 -- variables post-#332 and are NOT counted here).
@@ -2681,8 +2801,10 @@ buildImports imps
           -- Reconstruct the namespace from the import path to get the Go alias
           ns = pathToNamespace path
           goAlias = namespaceToGoPackage ns
-          -- Add alias if the Go alias differs from the directory name
-          alias = if goAlias /= dirName
+          -- Add alias if the Go alias differs from the directory name.
+          -- Overlay packages (hydra/overlay/go/...) declare their own short
+          -- package names (util, lib subpackages), so they are never aliased.
+          alias = if goAlias /= dirName && not ("/hydra/overlay/go/" `L.isInfixOf` path)
             then Just $ Go.ImportAliasName $ Go.Identifier goAlias
             else Nothing
       in Go.ImportSpec alias (Go.ImportPath $ Go.StringLitInterpreted $
