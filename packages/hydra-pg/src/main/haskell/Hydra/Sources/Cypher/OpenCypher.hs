@@ -824,7 +824,7 @@ addOrSubtractRightHandSide = define "AddOrSubtractRightHandSide" $
 
 multiplyDivideModuloExpression :: TypeDefinition
 multiplyDivideModuloExpression = define "MultiplyDivideModuloExpression" $
-  doc "A multiplicative expression: a power expression with zero or more */÷/% terms" $
+  doc "A multiplicative expression: a power expression with zero or more multiply, divide, or modulo terms" $
   T.record [
     "left">: cypher "PowerOfExpression",
     "right">: T.list $ cypher "MultiplyDivideModuloRightHandSide"]
