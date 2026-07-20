@@ -1151,35 +1151,30 @@ subtermsWithSteps = define "subtermsWithSteps" $
       (Lists.map
         ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
         (Core.caseStatementCases $ var "cs")),
-    _Term_either>>: "e" ~> none, -- TODO: add steps when SubtermStep type is updated
+    _Term_either>>: "e" ~> single Paths.subtermStepSumTerm $ Eithers.either ("l" ~> var "l") ("r" ~> var "r") (var "e"),
     _Term_lambda>>: "l" ~> single Paths.subtermStepLambdaBody $ Core.lambdaBody $ var "l",
     _Term_let>>: "lt" ~> Lists.cons
       (result Paths.subtermStepLetBody $ Core.letBody $ var "lt")
       (Lists.map
         ("b" ~> result (Paths.subtermStepLetBinding $ Core.bindingName $ var "b") $ Core.bindingTerm $ var "b")
         (Core.letBindings $ var "lt")),
-    _Term_list>>: "l" ~> Lists.map
-      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Paths.subtermStepListElement $ int32 0) $ var "e")
-      (var "l"),
+    _Term_list>>: "l" ~> indexed Paths.subtermStepListElement $ var "l",
     _Term_literal>>: constant none,
     _Term_map>>: "m" ~> Lists.concat
       (Lists.map
-        ("p" ~> list [
-          -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-          result (Paths.subtermStepMapKey $ int32 0) $ Pairs.first $ var "p",
-          result (Paths.subtermStepMapValue $ int32 0) $ Pairs.second $ var "p"])
-        (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
+        ("ip" ~> list [
+          result (Paths.subtermStepMapKey $ Pairs.first $ var "ip") $ Pairs.first $ Pairs.second $ var "ip",
+          result (Paths.subtermStepMapValue $ Pairs.first $ var "ip") $ Pairs.second $ Pairs.second $ var "ip"])
+        (withIndices $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
     _Term_optional>>: "m" ~> Optionals.cases (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
-    _Term_pair>>: "p" ~> none, -- TODO: add steps when SubtermStep type is updated
+    _Term_pair>>: "p" ~> list [
+      result (Paths.subtermStepProductTerm $ int32 0) $ Pairs.first $ var "p",
+      result (Paths.subtermStepProductTerm $ int32 1) $ Pairs.second $ var "p"],
     _Term_project>>: constant none,
     _Term_record>>: "rt" ~> Lists.map
       ("f" ~> result (Paths.subtermStepRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt"),
-    _Term_set>>: "s" ~> Lists.map
-      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Paths.subtermStepListElement $ int32 0) $ var "e")
-      (Sets.toList (var "s" :: TypedTerm (S.Set Term))),
+    _Term_set>>: "s" ~> indexed Paths.subtermStepSetElement $ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
     _Term_typeApplication>>: "ta" ~>
       single Paths.subtermStepTypeApplicationTerm $
       Core.typeApplicationTermBody $ var "ta",
@@ -1197,6 +1192,14 @@ subtermsWithSteps = define "subtermsWithSteps" $
     none = list ([] :: [TypedTerm (SubtermStep, Term)])
     single step term = list [result step term]
     result step term = pair step term
+    -- Pair each element with its zero-based position, e.g. [a, b] ~> [(0, a), (1, b)]
+    withIndices els = Lists.reverse $ Pairs.second $ Lists.foldl
+      ("r" ~> "el" ~>
+        "idx" <~ Pairs.first (var "r") $
+        pair (Math.add (var "idx") (int32 1)) (Lists.cons (pair (var "idx") (var "el")) (Pairs.second $ var "r")))
+      (pair (int32 0) (list ([] :: [TypedTerm (I.Int32, Term)])))
+      els
+    indexed step els = Lists.map ("ip" ~> result (step $ Pairs.first $ var "ip") (Pairs.second $ var "ip")) (withIndices els)
 
 subtypes :: TypedTermDefinition (Type -> [Type])
 subtypes = define "subtypes" $

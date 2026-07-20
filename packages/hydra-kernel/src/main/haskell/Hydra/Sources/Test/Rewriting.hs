@@ -180,7 +180,8 @@ allTests = define "allTests" $
       foldOverTermGroup,
       rewriteTypeGroup,
       rewriteTermGroup,
-      rewriteAndFoldTermWithPathGroup]
+      rewriteAndFoldTermWithPathGroup,
+      subtermsWithStepsGroup]
 
 bar :: TypedTerm Term
 bar = string "bar"
@@ -480,6 +481,47 @@ rewriteTermGroup = subgroup "rewriteTerm" [
     rewriteTermCase "string in annotated wrapped record field"
       (annots emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", foo)])))
       (annots emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", bar)])))]
+
+-- | Universal subtermsWithSteps test case: shows the (step, term) pairs found for a term.
+-- The step half of each pair is rendered via Hydra.Sources.Kernel.Terms.Show.Paths.subtermStep
+-- (a Maybe String; Nothing steps show as "?") so the test also exercises step labeling, not just
+-- the child terms and their count.
+subtermsWithStepsCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+subtermsWithStepsCase cname input output = universalCase cname
+  (showTerm (Core.termList (Lists.map
+    (Phantoms.lambda "st" (Pairs.second (Phantoms.var "st")))
+    (Rewriting.subtermsWithSteps @@ input))))
+  (showTerm output)
+
+-- | Test cases for subtermsWithSteps (#597): verifies that every Term variant's children are
+-- found (matching subterms' child count) with correctly labeled, correctly indexed steps.
+subtermsWithStepsGroup :: TypedTerm TestGroup
+subtermsWithStepsGroup = subgroup "subtermsWithSteps" [
+    subtermsWithStepsCase "either left child is found"
+      (left (int32 1))
+      (list [int32 1]),
+
+    subtermsWithStepsCase "either right child is found"
+      (right (int32 2))
+      (list [int32 2]),
+
+    subtermsWithStepsCase "pair children are found in order"
+      (pair (int32 1) (int32 2))
+      (list [int32 1, int32 2]),
+
+    subtermsWithStepsCase "list elements are found in order"
+      (list [int32 1, int32 2, int32 3])
+      (list [int32 1, int32 2, int32 3]),
+
+    subtermsWithStepsCase "set elements are all found"
+      (set [int32 1, int32 2, int32 3])
+      (list [int32 1, int32 2, int32 3]),
+
+    subtermsWithStepsCase "map keys and values are all found"
+      (Core.termMap (Phantoms.map (M.fromList [(nStr "a", int32 1), (nStr "b", int32 2)])))
+      (list [nStr "a", int32 1, nStr "b", int32 2])]
+  where
+    nStr s = Core.termLiteral (Core.literalString (Phantoms.string s))
 
 -- | Test cases for rewriteType
 -- Using predefined type rewriter: replaceStringWithInt32
