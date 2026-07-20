@@ -8,6 +8,35 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.go.syntax.AddOp",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "add", "type": "unit"},
+                  {"name": "subtract", "type": "unit"},
+                  {"name": "bitwiseOr", "type": "unit"},
+                  {"name": "bitwiseXor", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go additive operator: +, -, |, or ^"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.AliasDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type alias declaration: identifier = Type"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.go.syntax.AnnotatedDeclaration",
         "body": {
           "variables": [],
@@ -22,6 +51,1072 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A top-level Go declaration together with its preceding comment"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Arguments",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "typeArg", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
+                  {"name": "expressions", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}},
+                  {"name": "ellipsis", "type": {"literal": "boolean"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The argument list of a Go call expression, with an optional leading type argument and an optional trailing ellipsis for spread calls"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ArrayType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "length", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "element", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go array type: a fixed length and an element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.AssignOp",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "simple", "type": "unit"},
+                  {"name": "add", "type": {"variable": "hydra.go.syntax.AddOp"}},
+                  {"name": "mul", "type": {"variable": "hydra.go.syntax.MulOp"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go assignment operator: plain =, or an additive/multiplicative compound assignment"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Assignment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "lhs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "op", "type": {"variable": "hydra.go.syntax.AssignOp"}},
+                  {
+                    "name": "rhs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Go assignment statement: a left-hand expression list, an assignment operator, and a right-hand expression list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.BasicLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "int", "type": {"variable": "hydra.go.syntax.IntLit"}},
+                  {"name": "float", "type": {"variable": "hydra.go.syntax.FloatLit"}},
+                  {"name": "imaginary", "type": {"variable": "hydra.go.syntax.ImaginaryLit"}},
+                  {"name": "rune", "type": {"variable": "hydra.go.syntax.RuneLit"}},
+                  {"name": "string", "type": {"variable": "hydra.go.syntax.StringLit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go basic literal: an integer, floating-point, imaginary, rune, or string literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.BinaryExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "op", "type": {"variable": "hydra.go.syntax.BinaryOp"}},
+                  {"name": "right", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go binary expression: a left operand, a binary operator, and a right operand"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.BinaryOp",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "or", "type": "unit"},
+                  {"name": "and", "type": "unit"},
+                  {"name": "equal", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "less", "type": "unit"},
+                  {"name": "lessEqual", "type": "unit"},
+                  {"name": "greater", "type": "unit"},
+                  {"name": "greaterEqual", "type": "unit"},
+                  {"name": "add", "type": "unit"},
+                  {"name": "subtract", "type": "unit"},
+                  {"name": "bitwiseOr", "type": "unit"},
+                  {"name": "bitwiseXor", "type": "unit"},
+                  {"name": "multiply", "type": "unit"},
+                  {"name": "divide", "type": "unit"},
+                  {"name": "remainder", "type": "unit"},
+                  {"name": "leftShift", "type": "unit"},
+                  {"name": "rightShift", "type": "unit"},
+                  {"name": "bitwiseAnd", "type": "unit"},
+                  {"name": "bitClear", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go binary operator, covering logical, relational, additive, and multiplicative operators"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Block",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Statement"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go block: a brace-delimited list of statements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.BreakStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go break statement, with an optional target label"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.CallExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "function", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "arguments", "type": {"variable": "hydra.go.syntax.Arguments"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go call expression: a function together with its arguments"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ChannelDirection",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "bidirectional", "type": "unit"}, {"name": "send", "type": "unit"}, {"name": "receive", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The direction of a Go channel type: bidirectional, send-only, or receive-only"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ChannelType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "direction", "type": {"variable": "hydra.go.syntax.ChannelDirection"}},
+                  {"name": "element", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go channel type: a direction and an element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.CommCase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "send", "type": {"variable": "hydra.go.syntax.SendStmt"}},
+                  {"name": "receive", "type": {"variable": "hydra.go.syntax.ReceiveCase"}},
+                  {"name": "default", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go communication case in a select statement: a send, a receive, or the default case"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.CommClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "case", "type": {"variable": "hydra.go.syntax.CommCase"}},
+                  {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go communication clause: a comm case together with its statement list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.CompositeLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.LiteralType"}},
+                  {"name": "value", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go composite literal: a literal type together with its literal value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ConstDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.ConstSpec"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go constant declaration: one or more constant specs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ConstSpec",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "names",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "type", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
+                  {"name": "values", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go constant spec: a list of names, an optional type, and a list of value expressions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ContinueStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go continue statement, with an optional target label"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Conversion",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type conversion expression: a target type applied to an expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Declaration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "const", "type": {"variable": "hydra.go.syntax.ConstDecl"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.TypeDecl"}},
+                  {"name": "var", "type": {"variable": "hydra.go.syntax.VarDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go declaration: a constant, type, or variable declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.DeferStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go defer statement, wrapping the deferred expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Element",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "literal", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go composite-literal element: an expression or a nested literal value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ElementList",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.KeyedElement"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty list of keyed elements in a Go composite literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ElseClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "if", "type": {"variable": "hydra.go.syntax.IfStmt"}},
+                  {"name": "block", "type": {"variable": "hydra.go.syntax.Block"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The else clause of a Go if statement: another if statement or a block"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.EmbeddedField",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "pointer", "type": {"literal": "boolean"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.TypeName"}},
+                  {"name": "tag", "type": {"optional": {"variable": "hydra.go.syntax.Tag"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go embedded (anonymous) struct field: a type name, an optional pointer marker, and an optional tag"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.EmptyStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go empty statement"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ExprCaseClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "case",
+                    "type": {
+                      "optional": {
+                        "annotated": {
+                          "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                          "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
+                  {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A case clause of a Go expression switch: an optional expression list (absent for default) and a statement list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ExprSwitchStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
+                  {"name": "expression", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
+                  {"name": "cases", "type": {"list": {"variable": "hydra.go.syntax.ExprCaseClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Go expression switch statement: an optional init statement, an optional tag expression, and its case clauses"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Expression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "unary", "type": {"variable": "hydra.go.syntax.UnaryExpr"}},
+                  {"name": "binary", "type": {"variable": "hydra.go.syntax.BinaryExpr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go expression: a unary expression, or a binary expression combining two expressions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ExpressionStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go expression statement, wrapping a single expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FallthroughStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go fallthrough statement"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FieldDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "named", "type": {"variable": "hydra.go.syntax.NamedField"}},
+                  {"name": "embedded", "type": {"variable": "hydra.go.syntax.EmbeddedField"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go struct field declaration: a named field or an embedded field"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FloatLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"float": "float64"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go floating-point literal, in decimal or hexadecimal form"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ForClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
+                  {"name": "condition", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
+                  {"name": "post", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Go C-style for-loop clause: an optional init statement, an optional condition, and an optional post statement"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ForClauseOrRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "condition", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "clause", "type": {"variable": "hydra.go.syntax.ForClause"}},
+                  {"name": "range", "type": {"variable": "hydra.go.syntax.RangeClause"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The header of a Go for statement: a bare condition, a for clause, or a range clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ForStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "clause", "type": {"optional": {"variable": "hydra.go.syntax.ForClauseOrRange"}}},
+                  {"name": "body", "type": {"variable": "hydra.go.syntax.Block"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go for statement: an optional loop header and a body block"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FullSlice",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "low", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
+                  {"name": "high", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "max", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go three-index slice expression, with low, high, and max bounds"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FunctionBody",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Block"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Go function: a block"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FunctionDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "typeParams", "type": {"optional": {"variable": "hydra.go.syntax.TypeParameters"}}},
+                  {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
+                  {"name": "body", "type": {"optional": {"variable": "hydra.go.syntax.FunctionBody"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go top-level function declaration: a name, optional type parameters, a signature, and an optional body"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FunctionLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
+                  {"name": "body", "type": {"variable": "hydra.go.syntax.FunctionBody"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go function literal: a signature together with its body"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.FunctionType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Signature"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go function type: a signature"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.GoStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go go statement, launching the given expression as a goroutine"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.GotoStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go goto statement, naming its target label"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Identifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go identifier: a letter followed by letters and unicode digits"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.IfStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
+                  {"name": "condition", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "then", "type": {"variable": "hydra.go.syntax.Block"}},
+                  {"name": "else", "type": {"optional": {"variable": "hydra.go.syntax.ElseClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go if statement: an optional init statement, a condition, a then block, and an optional else clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ImaginaryLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"float": "float64"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go imaginary literal: a decimal or floating-point literal suffixed with 'i'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ImportAlias",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "dot", "type": "unit"}, {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The optional alias of a Go import spec: a dot for a dot import, or an identifier for a named alias"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ImportDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.ImportSpec"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go import declaration: one or more import specs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ImportPath",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path string of a Go import spec"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ImportSpec",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "alias", "type": {"optional": {"variable": "hydra.go.syntax.ImportAlias"}}},
+                  {"name": "path", "type": {"variable": "hydra.go.syntax.ImportPath"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go import spec: an optional dot or package-name alias together with an import path"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.IncDecStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "increment", "type": {"literal": "boolean"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go increment or decrement statement: an expression followed by ++ or --"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Index",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go index expression's bracketed index"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.IndexExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "index", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go index expression: a primary expression subscripted by an index"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.IntLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go integer literal, in decimal, binary, octal, or hexadecimal form"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.InterfaceElem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "method", "type": {"variable": "hydra.go.syntax.MethodElem"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.TypeElem"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go interface element: a method element or a type element"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.InterfaceType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.InterfaceElem"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go interface type: a brace-delimited list of interface elements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.InterpretedStringLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go interpreted (double-quoted) string literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Key",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "field", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "literal", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The key of a Go keyed element: a field name, an expression, or a literal value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.KeyedElement",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "key", "type": {"optional": {"variable": "hydra.go.syntax.Key"}}},
+                  {"name": "element", "type": {"variable": "hydra.go.syntax.Element"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go composite-literal element with an optional key"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.LabeledStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "label", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "statement", "type": {"variable": "hydra.go.syntax.Statement"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go labeled statement: a label together with the statement it labels"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Literal",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "basic", "type": {"variable": "hydra.go.syntax.BasicLit"}},
+                  {"name": "composite", "type": {"variable": "hydra.go.syntax.CompositeLit"}},
+                  {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionLit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go literal: a basic literal, a composite literal, or a function literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.LiteralType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
+                  {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
+                  {"name": "inferredArray", "type": {"variable": "hydra.go.syntax.Type"}},
+                  {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceType"}},
+                  {"name": "map", "type": {"variable": "hydra.go.syntax.MapType"}},
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.TypeName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The type of a Go composite literal: a struct, array, elided-length array, slice, map, or named type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.LiteralValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go composite literal's brace-delimited value: an optional element list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.MapType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "key", "type": {"variable": "hydra.go.syntax.Type"}},
+                  {"name": "value", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go map type: a key type and an element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.MethodDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "receiver", "type": {"variable": "hydra.go.syntax.Receiver"}},
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
+                  {"name": "body", "type": {"optional": {"variable": "hydra.go.syntax.FunctionBody"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go method declaration: a receiver, a method name, a signature, and an optional body"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.MethodElem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go interface method element: a method name together with its signature"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.MethodExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "receiver", "type": {"variable": "hydra.go.syntax.Type"}},
+                  {"name": "method", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go method expression: a receiver type together with a method name"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.go.syntax.Module",
@@ -39,1121 +1134,970 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}}}}},
-    {"type": {"name": "hydra.go.syntax.Identifier", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.go.syntax.IntLit", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "bigint"}}}}}},
-    {
-      "type": {"name": "hydra.go.syntax.FloatLit", "body": {"variables": [], "body": {"wrap": {"literal": {"float": "float64"}}}}}},
-    {
-      "type": {"name": "hydra.go.syntax.ImaginaryLit", "body": {"variables": [], "body": {"wrap": {"literal": {"float": "float64"}}}}}},
-    {
-      "type": {"name": "hydra.go.syntax.RuneLit", "body": {"variables": [], "body": {"wrap": {"literal": {"integer": "int32"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.StringLit",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "raw", "type": {"variable": "hydra.go.syntax.RawStringLit"}},
-              {"name": "interpreted", "type": {"variable": "hydra.go.syntax.InterpretedStringLit"}}]}}}},
-    {"type": {"name": "hydra.go.syntax.RawStringLit", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.go.syntax.InterpretedStringLit", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SourceFile",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "package", "type": {"variable": "hydra.go.syntax.PackageClause"}},
-              {"name": "imports", "type": {"list": {"variable": "hydra.go.syntax.ImportDecl"}}},
-              {"name": "declarations", "type": {"list": {"variable": "hydra.go.syntax.TopLevelDecl"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.PackageClause",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ImportDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.ImportSpec"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ImportSpec",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "alias", "type": {"optional": {"variable": "hydra.go.syntax.ImportAlias"}}},
-              {"name": "path", "type": {"variable": "hydra.go.syntax.ImportPath"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ImportAlias",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "dot", "type": "unit"}, {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ImportPath",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Declaration",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "const", "type": {"variable": "hydra.go.syntax.ConstDecl"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.TypeDecl"}},
-              {"name": "var", "type": {"variable": "hydra.go.syntax.VarDecl"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TopLevelDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "declaration", "type": {"variable": "hydra.go.syntax.Declaration"}},
-              {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionDecl"}},
-              {"name": "method", "type": {"variable": "hydra.go.syntax.MethodDecl"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ConstDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.ConstSpec"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ConstSpec",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "names",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "type", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
-              {"name": "values", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.VarDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.VarSpec"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.VarSpec",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "names",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "type", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
-              {"name": "values", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ShortVarDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "names",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "values",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.TypeSpec"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeSpec",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "alias", "type": {"variable": "hydra.go.syntax.AliasDecl"}},
-              {"name": "definition", "type": {"variable": "hydra.go.syntax.TypeDef"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.AliasDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeDef",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "typeParams", "type": {"optional": {"variable": "hydra.go.syntax.TypeParameters"}}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeParameters",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.TypeParamDecl"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeParamDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "names",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "constraint", "type": {"variable": "hydra.go.syntax.TypeConstraint"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeConstraint",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.TypeElem"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FunctionDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "typeParams", "type": {"optional": {"variable": "hydra.go.syntax.TypeParameters"}}},
-              {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
-              {"name": "body", "type": {"optional": {"variable": "hydra.go.syntax.FunctionBody"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FunctionBody",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Block"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.MethodDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "receiver", "type": {"variable": "hydra.go.syntax.Receiver"}},
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
-              {"name": "body", "type": {"optional": {"variable": "hydra.go.syntax.FunctionBody"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Receiver",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Type",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "named", "type": {"variable": "hydra.go.syntax.TypeName"}},
-              {"name": "literal", "type": {"variable": "hydra.go.syntax.TypeLit"}},
-              {"name": "paren", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeName",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.QualifiedIdent"}},
-              {"name": "typeArgs", "type": {"list": {"variable": "hydra.go.syntax.Type"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.QualifiedIdent",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "package", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeLit",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
-              {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
-              {"name": "pointer", "type": {"variable": "hydra.go.syntax.PointerType"}},
-              {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionType"}},
-              {"name": "interface", "type": {"variable": "hydra.go.syntax.InterfaceType"}},
-              {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceType"}},
-              {"name": "map", "type": {"variable": "hydra.go.syntax.MapType"}},
-              {"name": "channel", "type": {"variable": "hydra.go.syntax.ChannelType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ArrayType",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "length", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "element", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {"name": "hydra.go.syntax.SliceType", "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Type"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.StructType",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.FieldDecl"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FieldDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "named", "type": {"variable": "hydra.go.syntax.NamedField"}},
-              {"name": "embedded", "type": {"variable": "hydra.go.syntax.EmbeddedField"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.NamedField",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "names",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}},
-              {"name": "tag", "type": {"optional": {"variable": "hydra.go.syntax.Tag"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.EmbeddedField",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "pointer", "type": {"literal": "boolean"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.TypeName"}},
-              {"name": "tag", "type": {"optional": {"variable": "hydra.go.syntax.Tag"}}}]}}}},
-    {
-      "type": {"name": "hydra.go.syntax.Tag", "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.PointerType",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Type"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FunctionType",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Signature"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Signature",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "parameters", "type": {"variable": "hydra.go.syntax.Parameters"}},
-              {"name": "result", "type": {"optional": {"variable": "hydra.go.syntax.Result"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Result",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "parameters", "type": {"variable": "hydra.go.syntax.Parameters"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Parameters",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.ParameterDecl"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ParameterDecl",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "names", "type": {"list": {"variable": "hydra.go.syntax.Identifier"}}},
-              {"name": "variadic", "type": {"literal": "boolean"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.InterfaceType",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.InterfaceElem"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.InterfaceElem",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "method", "type": {"variable": "hydra.go.syntax.MethodElem"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.TypeElem"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.MethodElem",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeElem",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.TypeTerm"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeTerm",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [{"name": "underlying", "type": {"literal": "boolean"}}, {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.MapType",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "key", "type": {"variable": "hydra.go.syntax.Type"}},
-              {"name": "value", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ChannelType",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "direction", "type": {"variable": "hydra.go.syntax.ChannelDirection"}},
-              {"name": "element", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ChannelDirection",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [{"name": "bidirectional", "type": "unit"}, {"name": "send", "type": "unit"}, {"name": "receive", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Expression",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "unary", "type": {"variable": "hydra.go.syntax.UnaryExpr"}},
-              {"name": "binary", "type": {"variable": "hydra.go.syntax.BinaryExpr"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.UnaryExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "primary", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "op", "type": {"variable": "hydra.go.syntax.UnaryOperation"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.UnaryOperation",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "op", "type": {"variable": "hydra.go.syntax.UnaryOp"}},
-              {"name": "operand", "type": {"variable": "hydra.go.syntax.UnaryExpr"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.BinaryExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "op", "type": {"variable": "hydra.go.syntax.BinaryOp"}},
-              {"name": "right", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.BinaryOp",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "or", "type": "unit"},
-              {"name": "and", "type": "unit"},
-              {"name": "equal", "type": "unit"},
-              {"name": "notEqual", "type": "unit"},
-              {"name": "less", "type": "unit"},
-              {"name": "lessEqual", "type": "unit"},
-              {"name": "greater", "type": "unit"},
-              {"name": "greaterEqual", "type": "unit"},
-              {"name": "add", "type": "unit"},
-              {"name": "subtract", "type": "unit"},
-              {"name": "bitwiseOr", "type": "unit"},
-              {"name": "bitwiseXor", "type": "unit"},
-              {"name": "multiply", "type": "unit"},
-              {"name": "divide", "type": "unit"},
-              {"name": "remainder", "type": "unit"},
-              {"name": "leftShift", "type": "unit"},
-              {"name": "rightShift", "type": "unit"},
-              {"name": "bitwiseAnd", "type": "unit"},
-              {"name": "bitClear", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.PrimaryExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "operand", "type": {"variable": "hydra.go.syntax.Operand"}},
-              {"name": "conversion", "type": {"variable": "hydra.go.syntax.Conversion"}},
-              {"name": "methodExpr", "type": {"variable": "hydra.go.syntax.MethodExpr"}},
-              {"name": "selector", "type": {"variable": "hydra.go.syntax.SelectorExpr"}},
-              {"name": "index", "type": {"variable": "hydra.go.syntax.IndexExpr"}},
-              {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceExpr"}},
-              {"name": "typeAssertion", "type": {"variable": "hydra.go.syntax.TypeAssertionExpr"}},
-              {"name": "call", "type": {"variable": "hydra.go.syntax.CallExpr"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SelectorExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "selector", "type": {"variable": "hydra.go.syntax.Identifier"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.IndexExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "index", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SliceExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "slice", "type": {"variable": "hydra.go.syntax.Slice"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeAssertionExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.CallExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "function", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
-              {"name": "arguments", "type": {"variable": "hydra.go.syntax.Arguments"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Operand",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "literal", "type": {"variable": "hydra.go.syntax.Literal"}},
-              {"name": "named", "type": {"variable": "hydra.go.syntax.OperandName"}},
-              {"name": "paren", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.OperandName",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.go.syntax.QualifiedIdent"}},
-              {"name": "typeArgs", "type": {"list": {"variable": "hydra.go.syntax.Type"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Literal",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "basic", "type": {"variable": "hydra.go.syntax.BasicLit"}},
-              {"name": "composite", "type": {"variable": "hydra.go.syntax.CompositeLit"}},
-              {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionLit"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.BasicLit",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "int", "type": {"variable": "hydra.go.syntax.IntLit"}},
-              {"name": "float", "type": {"variable": "hydra.go.syntax.FloatLit"}},
-              {"name": "imaginary", "type": {"variable": "hydra.go.syntax.ImaginaryLit"}},
-              {"name": "rune", "type": {"variable": "hydra.go.syntax.RuneLit"}},
-              {"name": "string", "type": {"variable": "hydra.go.syntax.StringLit"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.CompositeLit",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.go.syntax.LiteralType"}},
-              {"name": "value", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.LiteralType",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
-              {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
-              {"name": "inferredArray", "type": {"variable": "hydra.go.syntax.Type"}},
-              {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceType"}},
-              {"name": "map", "type": {"variable": "hydra.go.syntax.MapType"}},
-              {"name": "name", "type": {"variable": "hydra.go.syntax.TypeName"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.LiteralValue",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.KeyedElement"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ElementList",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.KeyedElement"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.KeyedElement",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "key", "type": {"optional": {"variable": "hydra.go.syntax.Key"}}},
-              {"name": "element", "type": {"variable": "hydra.go.syntax.Element"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Key",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "field", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "literal", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Element",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "literal", "type": {"variable": "hydra.go.syntax.LiteralValue"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FunctionLit",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "signature", "type": {"variable": "hydra.go.syntax.Signature"}},
-              {"name": "body", "type": {"variable": "hydra.go.syntax.FunctionBody"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Selector",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Index",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Slice",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "simple", "type": {"variable": "hydra.go.syntax.SimpleSlice"}},
-              {"name": "full", "type": {"variable": "hydra.go.syntax.FullSlice"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SimpleSlice",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "low", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
-              {"name": "high", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.FullSlice",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "low", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
-              {"name": "high", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "max", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeAssertion",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Type"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Arguments",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "typeArg", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
-              {"name": "expressions", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}},
-              {"name": "ellipsis", "type": {"literal": "boolean"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.MethodExpr",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "receiver", "type": {"variable": "hydra.go.syntax.Type"}},
-              {"name": "method", "type": {"variable": "hydra.go.syntax.Identifier"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Conversion",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Statement",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "declaration", "type": {"variable": "hydra.go.syntax.Declaration"}},
-              {"name": "labeled", "type": {"variable": "hydra.go.syntax.LabeledStmt"}},
-              {"name": "simple", "type": {"variable": "hydra.go.syntax.SimpleStmt"}},
-              {"name": "go", "type": {"variable": "hydra.go.syntax.GoStmt"}},
-              {"name": "return", "type": {"variable": "hydra.go.syntax.ReturnStmt"}},
-              {"name": "break", "type": {"variable": "hydra.go.syntax.BreakStmt"}},
-              {"name": "continue", "type": {"variable": "hydra.go.syntax.ContinueStmt"}},
-              {"name": "goto", "type": {"variable": "hydra.go.syntax.GotoStmt"}},
-              {"name": "fallthrough", "type": {"variable": "hydra.go.syntax.FallthroughStmt"}},
-              {"name": "block", "type": {"variable": "hydra.go.syntax.Block"}},
-              {"name": "if", "type": {"variable": "hydra.go.syntax.IfStmt"}},
-              {"name": "switch", "type": {"variable": "hydra.go.syntax.SwitchStmt"}},
-              {"name": "select", "type": {"variable": "hydra.go.syntax.SelectStmt"}},
-              {"name": "for", "type": {"variable": "hydra.go.syntax.ForStmt"}},
-              {"name": "defer", "type": {"variable": "hydra.go.syntax.DeferStmt"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SimpleStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "empty", "type": {"variable": "hydra.go.syntax.EmptyStmt"}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.ExpressionStmt"}},
-              {"name": "send", "type": {"variable": "hydra.go.syntax.SendStmt"}},
-              {"name": "incDec", "type": {"variable": "hydra.go.syntax.IncDecStmt"}},
-              {"name": "assignment", "type": {"variable": "hydra.go.syntax.Assignment"}},
-              {"name": "shortVarDecl", "type": {"variable": "hydra.go.syntax.ShortVarDecl"}}]}}}},
-    {"type": {"name": "hydra.go.syntax.EmptyStmt", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.LabeledStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "label", "type": {"variable": "hydra.go.syntax.Identifier"}},
-              {"name": "statement", "type": {"variable": "hydra.go.syntax.Statement"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ExpressionStmt",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SendStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "channel", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "value", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.IncDecStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "increment", "type": {"literal": "boolean"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Assignment",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "lhs",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "op", "type": {"variable": "hydra.go.syntax.AssignOp"}},
-              {
-                "name": "rhs",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.AssignOp",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "simple", "type": "unit"},
-              {"name": "add", "type": {"variable": "hydra.go.syntax.AddOp"}},
-              {"name": "mul", "type": {"variable": "hydra.go.syntax.MulOp"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.IfStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
-              {"name": "condition", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "then", "type": {"variable": "hydra.go.syntax.Block"}},
-              {"name": "else", "type": {"optional": {"variable": "hydra.go.syntax.ElseClause"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ElseClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "if", "type": {"variable": "hydra.go.syntax.IfStmt"}},
-              {"name": "block", "type": {"variable": "hydra.go.syntax.Block"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SwitchStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.ExprSwitchStmt"}},
-              {"name": "type", "type": {"variable": "hydra.go.syntax.TypeSwitchStmt"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ExprSwitchStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
-              {"name": "expression", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
-              {"name": "cases", "type": {"list": {"variable": "hydra.go.syntax.ExprCaseClause"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ExprCaseClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "case",
-                "type": {
-                  "optional": {
-                    "annotated": {
-                      "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                      "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
-              {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeSwitchStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
-              {"name": "guard", "type": {"variable": "hydra.go.syntax.TypeSwitchGuard"}},
-              {"name": "cases", "type": {"list": {"variable": "hydra.go.syntax.TypeCaseClause"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeSwitchGuard",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "name", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.TypeCaseClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "case",
-                "type": {
-                  "optional": {
-                    "annotated": {
-                      "body": {"list": {"variable": "hydra.go.syntax.Type"}},
-                      "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
-              {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ForStmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "clause", "type": {"optional": {"variable": "hydra.go.syntax.ForClauseOrRange"}}},
-              {"name": "body", "type": {"variable": "hydra.go.syntax.Block"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ForClauseOrRange",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "condition", "type": {"variable": "hydra.go.syntax.Expression"}},
-              {"name": "clause", "type": {"variable": "hydra.go.syntax.ForClause"}},
-              {"name": "range", "type": {"variable": "hydra.go.syntax.RangeClause"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ForClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
-              {"name": "condition", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
-              {"name": "post", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.RangeClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "vars", "type": {"optional": {"variable": "hydra.go.syntax.RangeVars"}}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.RangeVars",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {
-                "name": "assign",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "declare",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.GoStmt",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.SelectStmt",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.CommClause"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.CommClause",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "case", "type": {"variable": "hydra.go.syntax.CommCase"}},
-              {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.CommCase",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "send", "type": {"variable": "hydra.go.syntax.SendStmt"}},
-              {"name": "receive", "type": {"variable": "hydra.go.syntax.ReceiveCase"}},
-              {"name": "default", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ReceiveCase",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "vars", "type": {"optional": {"variable": "hydra.go.syntax.RangeVars"}}},
-              {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ReturnStmt",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.BreakStmt",
-        "body": {"variables": [], "body": {"wrap": {"optional": {"variable": "hydra.go.syntax.Identifier"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.ContinueStmt",
-        "body": {"variables": [], "body": {"wrap": {"optional": {"variable": "hydra.go.syntax.Identifier"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.GotoStmt",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}}}}},
-    {"type": {"name": "hydra.go.syntax.FallthroughStmt", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.DeferStmt",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.go.syntax.Expression"}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.Block",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Statement"}}}}}},
-    {
-      "type": {
-        "name": "hydra.go.syntax.UnaryOp",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "plus", "type": "unit"},
-              {"name": "minus", "type": "unit"},
-              {"name": "not", "type": "unit"},
-              {"name": "xor", "type": "unit"},
-              {"name": "deref", "type": "unit"},
-              {"name": "addressOf", "type": "unit"},
-              {"name": "receive", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.go.syntax.MulOp",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "multiply", "type": "unit"},
-              {"name": "divide", "type": "unit"},
-              {"name": "remainder", "type": "unit"},
-              {"name": "leftShift", "type": "unit"},
-              {"name": "rightShift", "type": "unit"},
-              {"name": "bitwiseAnd", "type": "unit"},
-              {"name": "bitClear", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "multiply", "type": "unit"},
+                  {"name": "divide", "type": "unit"},
+                  {"name": "remainder", "type": "unit"},
+                  {"name": "leftShift", "type": "unit"},
+                  {"name": "rightShift", "type": "unit"},
+                  {"name": "bitwiseAnd", "type": "unit"},
+                  {"name": "bitClear", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go multiplicative operator: *, /, %, <<, >>, &, or &^"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.go.syntax.AddOp",
+        "name": "hydra.go.syntax.NamedField",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "add", "type": "unit"},
-              {"name": "subtract", "type": "unit"},
-              {"name": "bitwiseOr", "type": "unit"},
-              {"name": "bitwiseXor", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "names",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}},
+                  {"name": "tag", "type": {"optional": {"variable": "hydra.go.syntax.Tag"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go named struct field: a list of names, a type, and an optional tag"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Operand",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "literal", "type": {"variable": "hydra.go.syntax.Literal"}},
+                  {"name": "named", "type": {"variable": "hydra.go.syntax.OperandName"}},
+                  {"name": "paren", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go operand: a literal, an operand name with optional type arguments, or a parenthesized expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.OperandName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.QualifiedIdent"}},
+                  {"name": "typeArgs", "type": {"list": {"variable": "hydra.go.syntax.Type"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go operand name: a plain identifier or a package-qualified identifier"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.PackageClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go package clause, naming the package"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ParameterDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "names", "type": {"list": {"variable": "hydra.go.syntax.Identifier"}}},
+                  {"name": "variadic", "type": {"literal": "boolean"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go parameter declaration: an optional identifier list, an optional variadic marker, and a type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Parameters",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.ParameterDecl"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go parameter list, parenthesized and comma-separated"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.PointerType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go pointer type: a pointer to a base type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.PrimaryExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "operand", "type": {"variable": "hydra.go.syntax.Operand"}},
+                  {"name": "conversion", "type": {"variable": "hydra.go.syntax.Conversion"}},
+                  {"name": "methodExpr", "type": {"variable": "hydra.go.syntax.MethodExpr"}},
+                  {"name": "selector", "type": {"variable": "hydra.go.syntax.SelectorExpr"}},
+                  {"name": "index", "type": {"variable": "hydra.go.syntax.IndexExpr"}},
+                  {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceExpr"}},
+                  {"name": "typeAssertion", "type": {"variable": "hydra.go.syntax.TypeAssertionExpr"}},
+                  {"name": "call", "type": {"variable": "hydra.go.syntax.CallExpr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Go primary expression: an operand, conversion, or method expression, possibly followed by a selector, index, slice, type assertion, or call"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.QualifiedIdent",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "package", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go qualified identifier: a package name together with an identifier"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.RangeClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "vars", "type": {"optional": {"variable": "hydra.go.syntax.RangeVars"}}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go range clause: an optional assignment or short variable declaration over a ranged expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.RangeVars",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "assign",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "declare",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The loop variables of a Go range clause: an assignment or a short variable declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.RawStringLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go raw (back-quoted) string literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ReceiveCase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "vars", "type": {"optional": {"variable": "hydra.go.syntax.RangeVars"}}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go receive case in a select statement, with an optional assignment or declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Receiver",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The receiver of a Go method declaration: a single non-variadic parameter"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.go.syntax.RelOp",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "equal", "type": "unit"},
-              {"name": "notEqual", "type": "unit"},
-              {"name": "less", "type": "unit"},
-              {"name": "lessEqual", "type": "unit"},
-              {"name": "greater", "type": "unit"},
-              {"name": "greaterEqual", "type": "unit"}]}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "equal", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "less", "type": "unit"},
+                  {"name": "lessEqual", "type": "unit"},
+                  {"name": "greater", "type": "unit"},
+                  {"name": "greaterEqual", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go relational operator: ==, !=, <, <=, >, or >="}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Result",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "parameters", "type": {"variable": "hydra.go.syntax.Parameters"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The result of a Go function signature: a parameter list or a bare type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ReturnStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.Expression"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go return statement, with an optional expression list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.RuneLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go rune literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SelectStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.CommClause"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go select statement: a brace-delimited list of communication clauses"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Selector",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go selector: a dot followed by an identifier"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SelectorExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "selector", "type": {"variable": "hydra.go.syntax.Identifier"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go selector expression: a primary expression together with a field or method selector"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SendStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "channel", "type": {"variable": "hydra.go.syntax.Expression"}},
+                  {"name": "value", "type": {"variable": "hydra.go.syntax.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go send statement: a channel expression together with the value sent on it"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.ShortVarDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "names",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "values",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go short variable declaration: an identifier list assigned via :="}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Signature",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "parameters", "type": {"variable": "hydra.go.syntax.Parameters"}},
+                  {"name": "result", "type": {"optional": {"variable": "hydra.go.syntax.Result"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go function signature: a parameter list and an optional result"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SimpleSlice",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "low", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}},
+                  {"name": "high", "type": {"optional": {"variable": "hydra.go.syntax.Expression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go two-index slice expression, with optional low and high bounds"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SimpleStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "empty", "type": {"variable": "hydra.go.syntax.EmptyStmt"}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.ExpressionStmt"}},
+                  {"name": "send", "type": {"variable": "hydra.go.syntax.SendStmt"}},
+                  {"name": "incDec", "type": {"variable": "hydra.go.syntax.IncDecStmt"}},
+                  {"name": "assignment", "type": {"variable": "hydra.go.syntax.Assignment"}},
+                  {"name": "shortVarDecl", "type": {"variable": "hydra.go.syntax.ShortVarDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Go simple statement: an empty, expression, send, increment/decrement, assignment, or short variable declaration statement"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Slice",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "simple", "type": {"variable": "hydra.go.syntax.SimpleSlice"}},
+                  {"name": "full", "type": {"variable": "hydra.go.syntax.FullSlice"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go slice expression's bracketed bounds, either two-index or three-index"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SliceExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "slice", "type": {"variable": "hydra.go.syntax.Slice"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go slice expression: a primary expression together with a simple or full slice"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SliceType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go slice type: an element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SourceFile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "package", "type": {"variable": "hydra.go.syntax.PackageClause"}},
+                  {"name": "imports", "type": {"list": {"variable": "hydra.go.syntax.ImportDecl"}}},
+                  {"name": "declarations", "type": {"list": {"variable": "hydra.go.syntax.TopLevelDecl"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Statement",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "declaration", "type": {"variable": "hydra.go.syntax.Declaration"}},
+                  {"name": "labeled", "type": {"variable": "hydra.go.syntax.LabeledStmt"}},
+                  {"name": "simple", "type": {"variable": "hydra.go.syntax.SimpleStmt"}},
+                  {"name": "go", "type": {"variable": "hydra.go.syntax.GoStmt"}},
+                  {"name": "return", "type": {"variable": "hydra.go.syntax.ReturnStmt"}},
+                  {"name": "break", "type": {"variable": "hydra.go.syntax.BreakStmt"}},
+                  {"name": "continue", "type": {"variable": "hydra.go.syntax.ContinueStmt"}},
+                  {"name": "goto", "type": {"variable": "hydra.go.syntax.GotoStmt"}},
+                  {"name": "fallthrough", "type": {"variable": "hydra.go.syntax.FallthroughStmt"}},
+                  {"name": "block", "type": {"variable": "hydra.go.syntax.Block"}},
+                  {"name": "if", "type": {"variable": "hydra.go.syntax.IfStmt"}},
+                  {"name": "switch", "type": {"variable": "hydra.go.syntax.SwitchStmt"}},
+                  {"name": "select", "type": {"variable": "hydra.go.syntax.SelectStmt"}},
+                  {"name": "for", "type": {"variable": "hydra.go.syntax.ForStmt"}},
+                  {"name": "defer", "type": {"variable": "hydra.go.syntax.DeferStmt"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go statement, covering every statement form in the grammar"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.StringLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "raw", "type": {"variable": "hydra.go.syntax.RawStringLit"}},
+                  {"name": "interpreted", "type": {"variable": "hydra.go.syntax.InterpretedStringLit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go string literal: a raw or interpreted string literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.StructType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.go.syntax.FieldDecl"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go struct type: a brace-delimited list of field declarations"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.SwitchStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.ExprSwitchStmt"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.TypeSwitchStmt"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go switch statement: an expression switch or a type switch"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Tag",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go struct field tag: a string literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TopLevelDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "declaration", "type": {"variable": "hydra.go.syntax.Declaration"}},
+                  {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionDecl"}},
+                  {"name": "method", "type": {"variable": "hydra.go.syntax.MethodDecl"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go top-level declaration: a plain declaration, a function declaration, or a method declaration"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.Type",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "named", "type": {"variable": "hydra.go.syntax.TypeName"}},
+                  {"name": "literal", "type": {"variable": "hydra.go.syntax.TypeLit"}},
+                  {"name": "paren", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type: a type name with optional type arguments, a type literal, or a parenthesized type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeAssertion",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type assertion's parenthesized target type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeAssertionExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expr", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type assertion expression: a primary expression together with its asserted type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeCaseClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "case",
+                    "type": {
+                      "optional": {
+                        "annotated": {
+                          "body": {"list": {"variable": "hydra.go.syntax.Type"}},
+                          "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
+                  {"name": "statements", "type": {"list": {"variable": "hydra.go.syntax.Statement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A case clause of a Go type switch: an optional type list (absent for default) and a statement list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.go.syntax.TypeElem"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type parameter constraint: a type element"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.TypeSpec"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type declaration: one or more type specs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeDef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.Identifier"}},
+                  {"name": "typeParams", "type": {"optional": {"variable": "hydra.go.syntax.TypeParameters"}}},
+                  {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type definition: an identifier, optional type parameters, and an underlying type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeElem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.TypeTerm"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type element: one or more type terms joined by union operators"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeLit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.go.syntax.ArrayType"}},
+                  {"name": "struct", "type": {"variable": "hydra.go.syntax.StructType"}},
+                  {"name": "pointer", "type": {"variable": "hydra.go.syntax.PointerType"}},
+                  {"name": "function", "type": {"variable": "hydra.go.syntax.FunctionType"}},
+                  {"name": "interface", "type": {"variable": "hydra.go.syntax.InterfaceType"}},
+                  {"name": "slice", "type": {"variable": "hydra.go.syntax.SliceType"}},
+                  {"name": "map", "type": {"variable": "hydra.go.syntax.MapType"}},
+                  {"name": "channel", "type": {"variable": "hydra.go.syntax.ChannelType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go type literal: an array, struct, pointer, function, interface, slice, map, or channel type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.go.syntax.QualifiedIdent"}},
+                  {"name": "typeArgs", "type": {"list": {"variable": "hydra.go.syntax.Type"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type name: a plain identifier or a package-qualified identifier"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeParamDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "names",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "constraint", "type": {"variable": "hydra.go.syntax.TypeConstraint"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type parameter declaration: an identifier list together with a type constraint"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeParameters",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.TypeParamDecl"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type parameter list, bracketed and comma-separated"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeSpec",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "alias", "type": {"variable": "hydra.go.syntax.AliasDecl"}},
+                  {"name": "definition", "type": {"variable": "hydra.go.syntax.TypeDef"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type spec: an alias declaration or a type definition"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeSwitchGuard",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"optional": {"variable": "hydra.go.syntax.Identifier"}}},
+                  {"name": "expression", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The guard of a Go type switch: an optional bound identifier together with the asserted primary expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeSwitchStmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "init", "type": {"optional": {"variable": "hydra.go.syntax.SimpleStmt"}}},
+                  {"name": "guard", "type": {"variable": "hydra.go.syntax.TypeSwitchGuard"}},
+                  {"name": "cases", "type": {"list": {"variable": "hydra.go.syntax.TypeCaseClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Go type switch statement: an optional init statement, a type switch guard, and its case clauses"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.TypeTerm",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [{"name": "underlying", "type": {"literal": "boolean"}}, {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go type element term: a type, or its underlying-type form"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.UnaryExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "primary", "type": {"variable": "hydra.go.syntax.PrimaryExpr"}},
+                  {"name": "op", "type": {"variable": "hydra.go.syntax.UnaryOperation"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go unary expression: a primary expression or a unary operator applied to a unary expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.UnaryOp",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "plus", "type": "unit"},
+                  {"name": "minus", "type": "unit"},
+                  {"name": "not", "type": "unit"},
+                  {"name": "xor", "type": "unit"},
+                  {"name": "deref", "type": "unit"},
+                  {"name": "addressOf", "type": "unit"},
+                  {"name": "receive", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go unary operator: +, -, !, ^, *, &, or <-"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.UnaryOperation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "op", "type": {"variable": "hydra.go.syntax.UnaryOp"}},
+                  {"name": "operand", "type": {"variable": "hydra.go.syntax.UnaryExpr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go unary expression's operator together with its operand"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.VarDecl",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.go.syntax.VarSpec"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go variable declaration: one or more var specs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.go.syntax.VarSpec",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "names",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.go.syntax.Identifier"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "type", "type": {"optional": {"variable": "hydra.go.syntax.Type"}}},
+                  {"name": "values", "type": {"list": {"variable": "hydra.go.syntax.Expression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Go var spec: an identifier list with a type, an initializer expression list, or both"}}}]}}}}}}]}
