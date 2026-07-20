@@ -1,12 +1,12 @@
 # Branch promotion flow
 
-Hydra uses a four-tier promotion ladder: `feature → integration → staging → main`.
+Hydra uses a three-tier promotion ladder: `feature → staging → main`.
 Each tier has its own long-lived worktree. Promotion happens by merge.
 
 ```
-feature_NNN  ──→  integration  ──→  staging  ──→  main  ──→  origin/main
- (active           (passive          (active        (passive         (remote)
- sessions)         collector)        checks)        local mirror)
+feature_NNN  ──→  staging  ──→  main  ──→  origin/main
+ (active           (active        (passive         (remote)
+ sessions)         checks)        local mirror)
 ```
 
 For the read/modify rules across worktrees, see CLAUDE.md ("Working with worktrees").
@@ -22,34 +22,32 @@ work, the per-machine staging model, and cross-machine push coordination — see
 
 - **Feature worktrees** are where agent sessions live and where conflicts are
   resolved. They are the only tier with active, ongoing work.
-- **integration** is a passive collector. It typically has no agent session
-  attached. It receives merges from feature branches and forwards them to staging.
-- **staging** is the only intermediate tier with an attached agent session.
-  After integration's batch arrives, the staging session runs `/sync`, `/test`,
+- **staging** is the intermediate tier with an attached agent session.
+  When a ready feature branch arrives, the staging session runs `/sync`, `/test`,
   `/bootstrap`, and any optional checks the user specifies. Only after those pass
   does the batch advance to main. Staging also owns a set of **top-level
   non-issue duties** (orphan-issue triage, cross-machine coordination, fleet
   reconciliation) — its second half, distinct from promotion; see
   [Staging's non-issue duties](#stagings-non-issue-duties).
 - **main** is a local stable mirror. No active session. It receives only from
-  staging. The user pulls into local main first (so feature branches can pull
-  from it to refresh their base), then pushes to `origin/main`.
+  staging. The user pulls into local main first (so feature branches can rebase
+  onto it to refresh their base), then pushes to `origin/main`.
 
 ## Conflict resolution happens in the feature worktree
 
-When promoting a feature branch up to integration, the conflict-resolution work
-belongs in the *feature* worktree, not in integration. Sequence:
+When promoting a feature branch up to staging, the conflict-resolution work
+belongs in the *feature* worktree, not in staging. Sequence:
 
-1. In the feature worktree, pull `integration` into the feature branch
-   (`git pull . integration` or `git merge integration`).
+1. In the feature worktree, rebase the feature branch onto the latest
+   `origin/main` (`git fetch origin main` then `git rebase origin/main`).
 2. Resolve any conflicts there, using the agent session attached to the
    feature worktree.
-3. Once the feature branch is clean and merges into integration would be
-   conflict-free, perform the merge into integration's worktree.
+3. Once the feature branch is clean and rebased, hand it off to staging,
+   which runs the gate and lands it.
 
-This keeps the active agent session in the loop and keeps integration passive.
-The same principle applies one level up: staging pulls from integration in the
-staging worktree, with the staging agent session resolving any conflicts.
+This keeps the active agent session in the loop. If staging itself hits a
+conflict when landing (e.g. main moved underneath), the staging agent session
+resolves it in the staging worktree.
 
 ## Cadence
 
@@ -59,7 +57,7 @@ staging worktree, with the staging agent session resolving any conflicts.
 - Every promotion is `git merge --no-ff`. Use a commit message of the form
   `Merge branch '<source>' into <dest>. For #NNN [#MMM ...]`.
 - The destination worktree is where the merge command runs. If the feature
-  session needs to drive a merge into a passive worktree (integration, main),
+  session needs to drive a merge into a passive worktree (main),
   the user must explicitly authorize it — per the "modify only your assigned
   worktree" rule in CLAUDE.md.
 - `main` is pushed to `origin/main` by the staging session as part of its
@@ -79,7 +77,7 @@ staging worktree, with the staging agent session resolving any conflicts.
   intrinsic to the cycle, not a confirmation step: the pre-push `WIP:`-scan (never
   push `WIP:` to main), the cross-machine claim + read-before-push (don't collide
   with another machine's staging), and no automatic force-push of a shared branch.
-  Feature and integration sessions never push to `origin/main`.
+  Feature sessions never push to `origin/main`.
 
 ## Staging workflow
 
@@ -90,15 +88,15 @@ cadence — but by default this belongs to staging.)
 
 Each iteration:
 
-1. **Pull in new work.** Merge the local `integration` branch into staging
-   (`git merge integration` from the staging worktree). When the user directs,
+1. **Pull in new work.** Merge a ready feature branch into staging
+   (`git merge <feature-branch>` from the staging worktree). When the user directs,
    also pull a remote GCE-based branch they name. Resolve any conflicts here,
    in the staging worktree.
 1a. **WIP-commit check on the pulled history.** Immediately after pulling,
    scan the newly-arrived commits for the `WIP:` prefix
    (`git log --oneline <prev-staging-tip>..staging | grep '^[0-9a-f]* WIP:'`).
    `WIP:` marks unfinalized work that must **not** reach `origin/main` (see the
-   commit-workflow rules in CLAUDE.md). Feature/integration sessions routinely
+   commit-workflow rules in CLAUDE.md). Feature sessions routinely
    leave `WIP:` commits, and a merge drags them in wholesale — this is the main
    way the prefix leaks onto main. If any are found, **stop and propose a
    remediation to the user before continuing the cycle** (see
@@ -181,7 +179,7 @@ to do" is the characteristic — and most damaging — failure of this role. On 
 tick (every ~20–30 min, even when quiet), sweep:
 
 1. **Landable sweep — the heart of the loop.** Enumerate *every* worktree with
-   commits ahead of `origin/main` (not just `integration`; the whole fleet). For
+   commits ahead of `origin/main` (the whole fleet). For
    each, check whether it is a clean, rebased-onto-current-`main`, no-`WIP:`,
    owner-accepted branch ready to land. **Land clean ones now** (full
    read-before-push each). If a branch is *almost* ready — stale base needs a
@@ -232,7 +230,7 @@ until the requester has been told.
 
 ### Handling pulled WIP commits
 
-When step 1a finds `WIP:` commits inside a merge from `integration` or another
+When step 1a finds `WIP:` commits inside a merge from a feature branch or another
 user-named shared remote branch, remediation has **two parts** — cleaning
 staging is necessary but *not sufficient*; the source must also be corrected, or
 the same WIP commits leak again on the next pull.
@@ -247,8 +245,8 @@ the same WIP commits leak again on the next pull.
 2. **Correct the source (required follow-up; needs explicit approval).** The
    source branch still carries the `WIP:` commits, so they will return on the
    next pull. Propose bringing it in line with the cleaned history. If the source
-   is a shared remote branch (e.g. `integration`), this means a **force-push**,
-   which can disrupt another agent actively working there. So:
+   is a shared remote branch (e.g. a GCE-based staging branch), this means a
+   **force-push**, which can disrupt another agent actively working there. So:
    - **Never force-push a shared remote branch automatically.** Stop, show the
      user the exact `WIP:` commits and the proposed cleaned history (old → new
      SHAs), and get **explicit approval** before any `git push --force`.

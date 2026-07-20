@@ -5,7 +5,7 @@ through the staging cycle to `main`, and finalizes each child once its
 change is fully landed. This is the coordinator-side companion to
 [`agent-handoff.md`](agent-handoff.md) (the *assigned agent's* view of
 the same lifecycle) and [`branch-flow.md`](branch-flow.md) (the promotion
-ladder a change travels: feature → integration → staging → main).
+ladder a change travels: feature → staging → main).
 
 "Coordinator" is a *responsibility an issue agent takes on*, not a separate
 kind of agent: every issue agent whose issue has actively-worked children, by

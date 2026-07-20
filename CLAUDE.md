@@ -173,7 +173,7 @@ At the beginning of every new session, follow these steps **before doing any oth
     The absence of `WIP:` is what tells a reader the work is finalized.
     See [.claude/commands/squash.md](.claude/commands/squash.md).
   - **`WIP:` must never reach `origin/main`.** It leaks two ways: dragged in by a
-    merge from integration/a feature branch, and self-authored fix commits pushed
+    merge from a feature branch, and self-authored fix commits pushed
     without finalizing. The staging loop gates both — a post-pull check and a
     pre-push scan of `origin/main..staging`. See
     [Handling pulled WIP commits](claude/branch-flow.md#handling-pulled-wip-commits).
@@ -241,12 +241,12 @@ between worktrees), see [claude/worktree-workflow.md](claude/worktree-workflow.m
 
 ### Branch promotion flow
 
-Hydra uses a four-tier ladder: `feature → integration → staging → main`.
+Hydra uses a three-tier ladder: `feature → staging → main`.
 Feature worktrees have active agent sessions and own conflict resolution
-(pull *integration* into the feature branch first, resolve there, then merge
-upward). `integration` and `main` are passive, typically with no attached
-session. `staging` is the only intermediate tier with active checks — its
-session runs a repeating loop: pull from `integration` (and, when directed, a
+(rebase onto the latest `origin/main` in the feature worktree, resolve there,
+then hand off to staging). `main` is passive, typically with no attached
+session. `staging` is the intermediate tier with active checks — its
+session runs a repeating loop: pull a ready feature branch (and, when directed, a
 named remote branch) → `/sync` → `/test` → `/bootstrap` → push to `origin/main`
 → monitor CI, fixing failures and re-running the failing step until green.
 **Staging's push to `origin/main` is NOT user-gated** — landing validated batches
