@@ -12,140 +12,248 @@
         "body": {
           "variables": [],
           "body": {
-            "wrap": {
-              "annotated": {
-                "body": {
-                  "list": {
-                    "annotated": {
-                      "body": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}},
-                      "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {
+                      "list": {
+                        "annotated": {
+                          "body": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}},
+                          "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT attribute list: one or more comma/semicolon-separated lists of key-value pairs"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.AttrStmt",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.graphviz.dot.AttrType"}},
-              {"name": "attributes", "type": {"variable": "hydra.graphviz.dot.AttrList"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.graphviz.dot.AttrType"}},
+                  {"name": "attributes", "type": {"variable": "hydra.graphviz.dot.AttrList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Graphviz DOT attribute statement applying default attributes to graph, node, or edge elements"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.AttrType",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "graph", "type": "unit"}, {"name": "node", "type": "unit"}, {"name": "edge", "type": "unit"}]}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "graph", "type": "unit"}, {"name": "node", "type": "unit"}, {"name": "edge", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The target of a Graphviz DOT attribute statement: graph, node, or edge"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.CompassPt",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "n", "type": "unit"},
-              {"name": "ne", "type": "unit"},
-              {"name": "e", "type": "unit"},
-              {"name": "se", "type": "unit"},
-              {"name": "s", "type": "unit"},
-              {"name": "sw", "type": "unit"},
-              {"name": "w", "type": "unit"},
-              {"name": "nw", "type": "unit"},
-              {"name": "c", "type": "unit"},
-              {"name": "none", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "n", "type": "unit"},
+                  {"name": "ne", "type": "unit"},
+                  {"name": "e", "type": "unit"},
+                  {"name": "se", "type": "unit"},
+                  {"name": "s", "type": "unit"},
+                  {"name": "sw", "type": "unit"},
+                  {"name": "w", "type": "unit"},
+                  {"name": "nw", "type": "unit"},
+                  {"name": "c", "type": "unit"},
+                  {"name": "none", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT compass point, used to select a specific side of a node for edge attachment"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.EdgeStmt",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
-              {
-                "name": "right",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
+                  {
+                    "name": "right",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT edge statement connecting a chain of nodes or subgraphs"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.EqualityPair",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "hydra.graphviz.dot.Id"}},
-              {"name": "right", "type": {"variable": "hydra.graphviz.dot.Id"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "hydra.graphviz.dot.Id"}},
+                  {"name": "right", "type": {"variable": "hydra.graphviz.dot.Id"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Graphviz DOT key = value pair"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Graph",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "strict", "type": {"literal": "boolean"}},
-              {"name": "directed", "type": {"literal": "boolean"}},
-              {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
-              {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]}}}},
-    {"type": {"name": "hydra.graphviz.dot.Id", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "strict", "type": {"literal": "boolean"}},
+                  {"name": "directed", "type": {"literal": "boolean"}},
+                  {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
+                  {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Graphviz DOT graph: an optionally strict, optionally directed graph with an optional ID and a list of statements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphviz.dot.Id",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Graphviz DOT identifier"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.NodeId",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"variable": "hydra.graphviz.dot.Id"}},
-              {"name": "port", "type": {"optional": {"variable": "hydra.graphviz.dot.Port"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"variable": "hydra.graphviz.dot.Id"}},
+                  {"name": "port", "type": {"optional": {"variable": "hydra.graphviz.dot.Port"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT node identifier, with an optional port"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.NodeOrSubgraph",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
-              {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
+                  {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT node or subgraph, as an edge endpoint"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.NodeStmt",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
-              {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
+                  {"name": "attributes", "type": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT node statement, with an optional attribute list"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Port",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
-              {"name": "position", "type": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
+                  {"name": "position", "type": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A Graphviz DOT port: an optional identifier and/or compass point specifying an edge attachment point"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Stmt",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}},
-              {"name": "edge", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}},
-              {"name": "attr", "type": {"variable": "hydra.graphviz.dot.AttrStmt"}},
-              {"name": "equals", "type": {"variable": "hydra.graphviz.dot.EqualityPair"}},
-              {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}},
+                  {"name": "edge", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}},
+                  {"name": "attr", "type": {"variable": "hydra.graphviz.dot.AttrStmt"}},
+                  {"name": "equals", "type": {"variable": "hydra.graphviz.dot.EqualityPair"}},
+                  {"name": "subgraph", "type": {"variable": "hydra.graphviz.dot.Subgraph"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT statement: a node, edge, attribute, equality, or subgraph statement"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Subgraph",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "subgraphId", "type": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
-              {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "subgraphId", "type": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}},
+                  {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Graphviz DOT subgraph, with an optional ID and a list of statements"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.SubgraphId",
-        "body": {"variables": [], "body": {"wrap": {"optional": {"variable": "hydra.graphviz.dot.Id"}}}}}}]}
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The optional identifier of a Graphviz DOT subgraph"}}}]}}}}}}]}

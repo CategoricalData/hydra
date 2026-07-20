@@ -27,119 +27,121 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/"))}
   where
+    -- Alphabetical order by local type name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness).
     definitions = [
-      query,
-      regularQuery,
-      union_,
-      singleQuery,
-      singlePartQuery,
-      withClause,
-      multiPartQuery,
-      updatingClause,
-      readingClause,
-      match,
-      unwind,
-      merge,
-      matchOrCreate,
-      mergeAction,
-      create,
-      set,
-      setItem,
-      propertyEquals,
-      variableEquals,
-      variablePlusEquals,
-      variableAndNodeLabels,
-      delete,
-      remove,
-      removeItem,
-      inQueryCall,
-      procedureInvocation,
-      starOrYieldItems,
-      standaloneCall,
-      yieldItems,
-      yieldItem,
-      with,
-      return_,
-      projectionBody,
-      projectionItems,
-      projectionItem,
-      order,
-      skip,
-      limit,
-      sortOrder,
-      sortItem,
-      where_,
-      pattern,
-      patternPart,
-      anonymousPatternPart,
-      nodePatternChain,
-      patternElement,
-      relationshipsPattern,
-      nodePattern,
-      patternElementChain,
-      relationshipPattern,
-      relationshipDetail,
-      properties,
-      relationshipTypes,
-      nodeLabels,
-      nodeLabel,
-      rangeLiteral,
-      relTypeName,
-      propertyExpression,
-      expression,
-      orExpression,
-      xorExpression,
+      addOrSubtractExpression,
+      addOrSubtractOperator,
+      addOrSubtractRightHandSide,
       andExpression,
-      notExpression,
+      anonymousPatternPart,
+      atom,
+      caseAlternative,
+      caseExpression,
       comparisonExpression,
       comparisonOperator,
-      partialComparisonExpression,
-      stringListNullPredicateExpression,
-      stringListNullPredicateRightHandSide,
-      stringPredicateExpression,
-      stringPredicateOperator,
-      listPredicateExpression,
-      nullPredicateExpression,
-      addOrSubtractExpression,
-      addOrSubtractRightHandSide,
-      addOrSubtractOperator,
-      multiplyDivideModuloExpression,
-      multiplyDivideModuloRightHandSide,
-      multiplyDivideModuloOperator,
-      powerOfExpression,
-      unaryAddOrSubtractExpression,
-      listOperatorExpressionOrPropertyLookup,
-      nonArithmeticOperatorExpression,
-      rangeExpression,
-      listOperatorExpression,
-      propertyLookup,
-      atom,
-      caseExpression,
-      caseAlternative,
-      listComprehension,
-      patternComprehension,
-      quantifier,
-      quantifierOperator,
-      filterExpression,
-      patternPredicate,
-      parenthesizedExpression,
-      idInColl,
-      functionInvocation,
-      qualifiedName,
-      patternWhere,
+      create,
+      delete,
       existentialSubquery,
       explicitProcedureInvocation,
+      expression,
+      filterExpression,
+      functionInvocation,
+      idInColl,
       implicitProcedureInvocation,
-      procedureResultField,
-      variable,
-      literal,
-      numberLiteral,
-      stringLiteral,
-      listLiteral,
-      mapLiteral,
+      inQueryCall,
       keyValuePair,
+      limit,
+      listComprehension,
+      listLiteral,
+      listOperatorExpression,
+      listOperatorExpressionOrPropertyLookup,
+      listPredicateExpression,
+      literal,
+      mapLiteral,
+      match,
+      matchOrCreate,
+      merge,
+      mergeAction,
+      multiPartQuery,
+      multiplyDivideModuloExpression,
+      multiplyDivideModuloOperator,
+      multiplyDivideModuloRightHandSide,
+      nodeLabel,
+      nodeLabels,
+      nodePattern,
+      nodePatternChain,
+      nonArithmeticOperatorExpression,
+      notExpression,
+      nullPredicateExpression,
+      numberLiteral,
+      orExpression,
+      order,
+      parameter,
+      parenthesizedExpression,
+      partialComparisonExpression,
+      pattern,
+      patternComprehension,
+      patternElement,
+      patternElementChain,
+      patternPart,
+      patternPredicate,
+      patternWhere,
+      powerOfExpression,
+      procedureInvocation,
+      procedureResultField,
+      projectionBody,
+      projectionItem,
+      projectionItems,
+      properties,
+      propertyEquals,
+      propertyExpression,
       propertyKeyName,
-      parameter]
+      propertyLookup,
+      qualifiedName,
+      quantifier,
+      quantifierOperator,
+      query,
+      rangeExpression,
+      rangeLiteral,
+      readingClause,
+      regularQuery,
+      relTypeName,
+      relationshipDetail,
+      relationshipPattern,
+      relationshipTypes,
+      relationshipsPattern,
+      remove,
+      removeItem,
+      return_,
+      set,
+      setItem,
+      singlePartQuery,
+      singleQuery,
+      skip,
+      sortItem,
+      sortOrder,
+      standaloneCall,
+      starOrYieldItems,
+      stringListNullPredicateExpression,
+      stringListNullPredicateRightHandSide,
+      stringLiteral,
+      stringPredicateExpression,
+      stringPredicateOperator,
+      unaryAddOrSubtractExpression,
+      union_,
+      unwind,
+      updatingClause,
+      variable,
+      variableAndNodeLabels,
+      variableEquals,
+      variablePlusEquals,
+      where_,
+      with,
+      withClause,
+      xorExpression,
+      yieldItem,
+      yieldItems]
 
 -- Cypher = [SP], Statement, [[SP], ';'], [SP], EOI ;
 --
@@ -154,6 +156,7 @@ cypher = typeref ns
 
 query :: TypeDefinition
 query = define "Query" $
+  doc "An openCypher query: a regular query or a standalone procedure call" $
   T.union [
     "regular">: cypher "RegularQuery",
     "standalone">: cypher "StandaloneCall"]
@@ -162,6 +165,7 @@ query = define "Query" $
 
 regularQuery :: TypeDefinition
 regularQuery = define "RegularQuery" $
+  doc "A regular openCypher query: a single query, optionally unioned with further queries" $
   T.record [
     "head">: cypher "SingleQuery",
     "rest">: T.list $ cypher "Union"]
@@ -172,6 +176,7 @@ regularQuery = define "RegularQuery" $
 
 singlePartQuery :: TypeDefinition
 singlePartQuery = define "SinglePartQuery" $
+  doc "A single-part query: reading and updating clauses followed by an optional RETURN clause" $
   T.record [
     "reading">: T.list $ cypher "ReadingClause",
     "updating">: T.list $ cypher "UpdatingClause",
@@ -182,6 +187,7 @@ singlePartQuery = define "SinglePartQuery" $
 --             ;
 singleQuery :: TypeDefinition
 singleQuery = define "SingleQuery" $
+  doc "A single openCypher query: a single-part query or a multi-part query" $
   T.union [
     "singlePart">: cypher "SinglePartQuery",
     "multiPart">: cypher "MultiPartQuery"]
@@ -192,6 +198,7 @@ singleQuery = define "SingleQuery" $
 
 union_ :: TypeDefinition
 union_ = define "Union" $
+  doc "A UNION combining a single query with a preceding query, with optional ALL semantics" $
   T.record [
     "all">: T.boolean,
     "query">: cypher "SingleQuery"]
@@ -200,6 +207,7 @@ union_ = define "Union" $
 
 multiPartQuery :: TypeDefinition
 multiPartQuery = define "MultiPartQuery" $
+  doc "A multi-part query: one or more WITH-delimited parts followed by a single-part query" $
   T.record [
     "with">: T.list $ cypher "WithClause",
     "body">: cypher "SinglePartQuery"]
@@ -213,6 +221,7 @@ multiPartQuery = define "MultiPartQuery" $
 
 readingClause :: TypeDefinition
 readingClause = define "ReadingClause" $
+  doc "A reading clause: MATCH, UNWIND, or an in-query CALL" $
   T.union [
     "match">: cypher "Match",
     "unwind">: cypher "Unwind",
@@ -220,6 +229,7 @@ readingClause = define "ReadingClause" $
 
 updatingClause :: TypeDefinition
 updatingClause = define "UpdatingClause" $
+  doc "An updating clause: CREATE, MERGE, SET, DELETE, or REMOVE" $
   T.union [
     "create">: cypher "Create",
     "merge">: cypher "Merge",
@@ -234,6 +244,7 @@ updatingClause = define "UpdatingClause" $
 
 withClause :: TypeDefinition
 withClause = define "WithClause" $
+  doc "A WITH clause carrying projected values forward, with optional WHERE filtering" $
   T.record [
     "reading">: T.list $ cypher "ReadingClause",
     "updating">: T.list $ cypher "UpdatingClause",
@@ -243,6 +254,7 @@ withClause = define "WithClause" $
 
 match :: TypeDefinition
 match = define "Match" $
+  doc "A MATCH clause, optionally OPTIONAL, over a pattern with an optional WHERE clause" $
   T.record [
     "optional">: T.boolean,
     "pattern">: cypher "Pattern",
@@ -252,6 +264,7 @@ match = define "Match" $
 
 unwind :: TypeDefinition
 unwind = define "Unwind" $
+  doc "An UNWIND clause expanding a list expression into bound rows" $
   T.record [
     "expression">: cypher "Expression",
     "variable">: cypher "Variable"]
@@ -260,10 +273,12 @@ unwind = define "Unwind" $
 
 matchOrCreate :: TypeDefinition
 matchOrCreate = define "MatchOrCreate" $
+  doc "Either a MATCH or a CREATE, used within a MERGE action" $
   T.enum ["match", "create"]
 
 merge :: TypeDefinition
 merge = define "Merge" $
+  doc "A MERGE clause matching or creating a pattern, with optional merge actions" $
   T.record [
     "patternPart">: cypher "PatternPart",
     "actions">: T.list $ cypher "MergeAction"]
@@ -274,6 +289,7 @@ merge = define "Merge" $
 
 mergeAction :: TypeDefinition
 mergeAction = define "MergeAction" $
+  doc "An ON MATCH or ON CREATE action attached to a MERGE clause" $
   T.record [
     "action">: cypher "MatchOrCreate",
     "set">: cypher "Set"]
@@ -282,18 +298,21 @@ mergeAction = define "MergeAction" $
 
 create :: TypeDefinition
 create = define "Create" $
+  doc "A CREATE clause creating a pattern" $
   T.wrap $ cypher "Pattern"
 
 -- Set = (S,E,T), [SP], SetItem, { [SP], ',', [SP], SetItem } ;
 
 propertyEquals :: TypeDefinition
 propertyEquals = define "PropertyEquals" $
+  doc "A property assignment of the form property = expression" $
   T.record [
     "lhs">: cypher "PropertyExpression",
     "rhs">: cypher "Expression"]
 
 set :: TypeDefinition
 set = define "Set" $
+  doc "A SET clause updating properties or labels" $
   T.wrap $ T.list $ cypher "SetItem"
 
 -- SetItem = (PropertyExpression, [SP], '=', [SP], Expression)
@@ -304,6 +323,7 @@ set = define "Set" $
 
 setItem :: TypeDefinition
 setItem = define "SetItem" $
+  doc "One item of a SET clause" $
   T.union [
     "property">: cypher "PropertyEquals",
     "variableEqual">: cypher "VariableEquals",
@@ -312,18 +332,21 @@ setItem = define "SetItem" $
 
 variableAndNodeLabels :: TypeDefinition
 variableAndNodeLabels = define "VariableAndNodeLabels" $
+  doc "A variable together with node labels to set, as in SET n:Label" $
   T.record [
     "variable">: cypher "Variable",
     "labels">: cypher "NodeLabels"]
 
 variableEquals :: TypeDefinition
 variableEquals = define "VariableEquals" $
+  doc "A variable assignment of the form variable = expression" $
   T.record [
     "lhs">: cypher "Variable",
     "rhs">: cypher "Expression"]
 
 variablePlusEquals :: TypeDefinition
 variablePlusEquals = define "VariablePlusEquals" $
+  doc "A variable increment assignment of the form variable += expression" $
   T.record [
     "lhs">: cypher "Variable",
     "rhs">: cypher "Expression"]
@@ -332,6 +355,7 @@ variablePlusEquals = define "VariablePlusEquals" $
 
 delete :: TypeDefinition
 delete = define "Delete" $
+  doc "A DELETE clause, optionally DETACH, removing nodes or relationships" $
   T.record [
     "detach">: T.boolean,
     "expressions">: T.list $ cypher "Expression"]
@@ -340,6 +364,7 @@ delete = define "Delete" $
 
 remove :: TypeDefinition
 remove = define "Remove" $
+  doc "A REMOVE clause removing properties or labels" $
   T.wrap $ T.list $ cypher "RemoveItem"
 
 -- RemoveItem = (Variable, NodeLabels)
@@ -348,6 +373,7 @@ remove = define "Remove" $
 
 removeItem :: TypeDefinition
 removeItem = define "RemoveItem" $
+  doc "One item of a REMOVE clause" $
   T.union [
     "variableLabels">: cypher "VariableAndNodeLabels",
     "property">: cypher "PropertyExpression"]
@@ -356,6 +382,7 @@ removeItem = define "RemoveItem" $
 
 inQueryCall :: TypeDefinition
 inQueryCall = define "InQueryCall" $
+  doc "An in-query CALL to a procedure" $
   T.record [
     "call">: cypher "ExplicitProcedureInvocation",
     "yieldItems">: T.optional $ cypher "YieldItems"]
@@ -364,18 +391,21 @@ inQueryCall = define "InQueryCall" $
 
 procedureInvocation :: TypeDefinition
 procedureInvocation = define "ProcedureInvocation" $
+  doc "A procedure invocation: explicit (with arguments) or implicit" $
   T.union [
     "explicit">: cypher "ExplicitProcedureInvocation",
     "implicit">: cypher "ImplicitProcedureInvocation"]
 
 standaloneCall :: TypeDefinition
 standaloneCall = define "StandaloneCall" $
+  doc "A standalone CALL statement invoking a procedure without a surrounding query" $
   T.record [
     "call">: cypher "ProcedureInvocation",
     "yieldItems">: T.optional $ cypher "StarOrYieldItems"]
 
 starOrYieldItems :: TypeDefinition
 starOrYieldItems = define "StarOrYieldItems" $
+  doc "The result-selection clause of a standalone CALL: a star, or explicit YIELD items" $
   T.union [
     "star">: T.unit,
     "items">: cypher "YieldItems"]
@@ -384,6 +414,7 @@ starOrYieldItems = define "StarOrYieldItems" $
 
 yieldItems :: TypeDefinition
 yieldItems = define "YieldItems" $
+  doc "The YIELD items of a standalone CALL, with an optional WHERE clause" $
   T.record [
     "items">: T.list $ cypher "YieldItem",
     "where">: T.optional $ cypher "Where"]
@@ -392,6 +423,7 @@ yieldItems = define "YieldItems" $
 
 yieldItem :: TypeDefinition
 yieldItem = define "YieldItem" $
+  doc "One yielded field of a procedure call, with an optional alias" $
   T.record [
     "field">: T.optional $ cypher "ProcedureResultField",
     "variable">: cypher "Variable"]
@@ -400,6 +432,7 @@ yieldItem = define "YieldItem" $
 
 with :: TypeDefinition
 with = define "With" $
+  doc "The WITH keyword clause: a projection body carrying values forward" $
   T.record [
     "projection">: cypher "ProjectionBody",
     "where">: T.optional $ cypher "Where"]
@@ -408,12 +441,14 @@ with = define "With" $
 
 return_ :: TypeDefinition
 return_ = define "Return" $
+  doc "The RETURN clause: a projection body producing the query's result" $
   T.wrap $ cypher "ProjectionBody"
 
 -- ProjectionBody = [[SP], (D,I,S,T,I,N,C,T)], SP, ProjectionItems, [SP, Order], [SP, Skip], [SP, Limit] ;
 
 projectionBody :: TypeDefinition
 projectionBody = define "ProjectionBody" $
+  doc "The body of a WITH or RETURN clause: distinctness, projection items, and ordering/paging" $
   T.record [
     "distinct">: T.boolean,
     "projectionItems">: cypher "ProjectionItems",
@@ -427,12 +462,14 @@ projectionBody = define "ProjectionBody" $
 
 projectionItem :: TypeDefinition
 projectionItem = define "ProjectionItem" $
+  doc "One item of a projection: an expression, optionally aliased" $
     T.record [
       "expression">: cypher "Expression",
       "variable">: T.optional $ cypher "Variable"]
 
 projectionItems :: TypeDefinition
 projectionItems = define "ProjectionItems" $
+  doc "The list of items in a projection, or a star for all variables" $
   T.record [
     "star">: T.boolean,
     "explicit">: T.list $ cypher "ProjectionItem"]
@@ -445,42 +482,49 @@ projectionItems = define "ProjectionItems" $
 
 order :: TypeDefinition
 order = define "Order" $
+  doc "An ORDER BY clause" $
   T.wrap $ T.list $ cypher "SortItem"
 
 -- Skip = (S,K,I,P), SP, Expression ;
 
 skip :: TypeDefinition
 skip = define "Skip" $
+  doc "A SKIP clause limiting the starting offset of results" $
   T.wrap $ cypher "Expression"
 
 -- Limit = (L,I,M,I,T), SP, Expression ;
 
 limit :: TypeDefinition
 limit = define "Limit" $
+  doc "A LIMIT clause limiting the number of results" $
   T.wrap $ cypher "Expression"
 
 -- SortItem = Expression, [[SP], ((A,S,C,E,N,D,I,N,G) | (A,S,C) | (D,E,S,C,E,N,D,I,N,G) | (D,E,S,C))] ;
 
 sortItem :: TypeDefinition
 sortItem = define "SortItem" $
+  doc "One item of an ORDER BY clause: an expression and its sort order" $
   T.record [
     "expression">: cypher "Expression",
     "order">: T.optional $ cypher "SortOrder"]
 
 sortOrder :: TypeDefinition
 sortOrder = define "SortOrder" $
+  doc "The sort order of a sort item: ascending or descending" $
   T.enum ["ascending", "descending"]
 
 -- Where = (W,H,E,R,E), SP, Expression ;
 
 where_ :: TypeDefinition
 where_ = define "Where" $
+  doc "A WHERE clause filtering by an expression" $
   T.wrap $ cypher "Expression"
 
 -- Pattern = PatternPart, { [SP], ',', [SP], PatternPart } ;
 
 pattern :: TypeDefinition
 pattern = define "Pattern" $
+  doc "A graph pattern: one or more pattern parts" $
   T.wrap $ T.list $ cypher "PatternPart"
 
 -- PatternPart = (Variable, [SP], '=', [SP], AnonymousPatternPart)
@@ -489,6 +533,7 @@ pattern = define "Pattern" $
 
 patternPart :: TypeDefinition
 patternPart = define "PatternPart" $
+  doc "One part of a graph pattern, optionally bound to a variable" $
   T.record [
     "variable">: T.optional $ cypher "Variable",
     "pattern">: cypher "AnonymousPatternPart"]
@@ -497,6 +542,7 @@ patternPart = define "PatternPart" $
 
 anonymousPatternPart :: TypeDefinition
 anonymousPatternPart = define "AnonymousPatternPart" $
+  doc "A pattern part with no bound path variable" $
     T.wrap $ cypher "PatternElement"
 
 -- PatternElement = (NodePattern, { [SP], PatternElementChain })
@@ -505,12 +551,14 @@ anonymousPatternPart = define "AnonymousPatternPart" $
 
 nodePatternChain :: TypeDefinition
 nodePatternChain = define "NodePatternChain" $
+  doc "A node pattern followed by a chain of pattern-element continuations" $
   T.record [
     "nodePattern">: cypher "NodePattern",
     "chain">: T.list $ cypher "PatternElementChain"]
 
 patternElement :: TypeDefinition
 patternElement = define "PatternElement" $
+  doc "A pattern element: a node pattern chain or a parenthesized pattern element" $
   T.union [
     "chained">: cypher "NodePatternChain",
     "parenthesized">: cypher "PatternElement"]
@@ -520,6 +568,7 @@ patternElement = define "PatternElement" $
 -- NodePattern = '(', [SP], [Variable, [SP]], [NodeLabels, [SP]], [Properties, [SP]], ')' ;
 nodePattern :: TypeDefinition
 nodePattern = define "NodePattern" $
+  doc "A node pattern: an optional variable, node labels, and properties" $
   T.record [
     "variable">: T.optional $ cypher "Variable",
     "labels">: T.optional $ cypher "NodeLabels",
@@ -527,6 +576,7 @@ nodePattern = define "NodePattern" $
 
 relationshipsPattern :: TypeDefinition
 relationshipsPattern = define "RelationshipsPattern" $
+  doc "A relationship pattern chain anchored at a node pattern" $
   T.record [
     "nodePattern">: cypher "NodePattern",
     "chain">: T.list $ cypher "PatternElementChain"]
@@ -535,6 +585,7 @@ relationshipsPattern = define "RelationshipsPattern" $
 
 patternElementChain :: TypeDefinition
 patternElementChain = define "PatternElementChain" $
+  doc "A relationship pattern followed by the node pattern it connects to" $
     T.record [
       "relationship">: cypher "RelationshipPattern",
       "node">: cypher "NodePattern"]
@@ -547,6 +598,7 @@ patternElementChain = define "PatternElementChain" $
 
 relationshipPattern :: TypeDefinition
 relationshipPattern = define "RelationshipPattern" $
+  doc "A relationship pattern: direction markers around an optional relationship detail" $
     T.record [
       "leftArrow">: T.boolean,
       "detail">: T.optional $ cypher "RelationshipDetail",
@@ -556,12 +608,14 @@ relationshipPattern = define "RelationshipPattern" $
 
 properties :: TypeDefinition
 properties = define "Properties" $
+  doc "A property map or parameter attached to a node or relationship pattern" $
   T.union [
     "map">: cypher "MapLiteral",
     "parameter">: cypher "Parameter"]
 
 relationshipDetail :: TypeDefinition
 relationshipDetail = define "RelationshipDetail" $
+  doc "The bracketed detail of a relationship pattern: variable, types, range, and properties" $
   T.record [
     "variable">: T.optional $ cypher "Variable",
     "types">: T.optional $ cypher "RelationshipTypes",
@@ -577,24 +631,28 @@ relationshipDetail = define "RelationshipDetail" $
 -- TODO: check whether the slight difference in colon syntax is significant
 relationshipTypes :: TypeDefinition
 relationshipTypes = define "RelationshipTypes" $
+  doc "The relationship type disjunction of a relationship pattern" $
   T.wrap $ T.list $ cypher "RelTypeName"
 
 -- NodeLabels = NodeLabel, { [SP], NodeLabel } ;
 
 nodeLabels :: TypeDefinition
 nodeLabels = define "NodeLabels" $
+  doc "One or more node labels attached to a node pattern" $
   T.wrap $ T.list $ cypher "NodeLabel"
 
 -- NodeLabel = ':', [SP], LabelName ;
 
 nodeLabel :: TypeDefinition
 nodeLabel = define "NodeLabel" $
+  doc "A single node label" $
   T.wrap T.string
 
 -- RangeLiteral = '*', [SP], [IntegerLiteral, [SP]], ['..', [SP], [IntegerLiteral, [SP]]] ;
 
 rangeLiteral :: TypeDefinition
 rangeLiteral = define "RangeLiteral" $
+  doc "A variable-length relationship range, as in *1..3" $
   T.record [
     "start">: T.optional T.bigint,
     "end">: T.optional T.bigint]
@@ -605,12 +663,14 @@ rangeLiteral = define "RangeLiteral" $
 
 relTypeName :: TypeDefinition
 relTypeName = define "RelTypeName" $
+  doc "The name of a relationship type" $
   T.wrap T.string
 
 -- PropertyExpression = Atom, { [SP], PropertyLookup }- ;
 
 propertyExpression :: TypeDefinition
 propertyExpression = define "PropertyExpression" $
+  doc "An atom followed by one or more property lookups" $
   T.record [
     "atom">: cypher "Atom",
     "lookups">: T.list $ cypher "PropertyLookup"]
@@ -619,30 +679,35 @@ propertyExpression = define "PropertyExpression" $
 
 expression :: TypeDefinition
 expression = define "Expression" $
+  doc "The top-level openCypher expression production: an OR expression" $
   T.wrap $ cypher "OrExpression"
 
 -- OrExpression = XorExpression, { SP, (O,R), SP, XorExpression } ;
 
 orExpression :: TypeDefinition
 orExpression = define "OrExpression" $
+  doc "A disjunction of XOR expressions" $
   T.wrap $ T.list $ cypher "XorExpression"
 
 -- XorExpression = AndExpression, { SP, (X,O,R), SP, AndExpression } ;
 
 xorExpression :: TypeDefinition
 xorExpression = define "XorExpression" $
+  doc "An exclusive-or of AND expressions" $
   T.wrap $ T.list $ cypher "AndExpression"
 
 -- AndExpression = NotExpression, { SP, (A,N,D), SP, NotExpression } ;
 
 andExpression :: TypeDefinition
 andExpression = define "AndExpression" $
+  doc "A conjunction of NOT expressions" $
   T.wrap $ T.list $ cypher "NotExpression"
 
 -- NotExpression = { (N,O,T), [SP] }, ComparisonExpression ;
 
 notExpression :: TypeDefinition
 notExpression = define "NotExpression" $
+  doc "A possibly-negated comparison expression" $
   T.record [
     "not">: T.boolean,
     "expression">: cypher "ComparisonExpression"]
@@ -651,6 +716,7 @@ notExpression = define "NotExpression" $
 
 comparisonExpression :: TypeDefinition
 comparisonExpression = define "ComparisonExpression" $
+  doc "A comparison expression: an add/subtract expression with zero or more partial comparisons" $
   T.record [
     "left">: cypher "StringListNullPredicateExpression",
     "right">: T.list $ cypher "PartialComparisonExpression"]
@@ -665,6 +731,7 @@ comparisonExpression = define "ComparisonExpression" $
 
 comparisonOperator :: TypeDefinition
 comparisonOperator = define "ComparisonOperator" $
+  doc "A comparison operator: equality, inequality, or an ordering relation" $
   T.enum [
     "eq",
     "neq",
@@ -675,6 +742,7 @@ comparisonOperator = define "ComparisonOperator" $
 
 partialComparisonExpression :: TypeDefinition
 partialComparisonExpression = define "PartialComparisonExpression" $
+  doc "A comparison operator applied to a right-hand add/subtract expression" $
   T.record [
     "operator">: cypher "ComparisonOperator",
     "right">: cypher "StringListNullPredicateExpression"]
@@ -683,12 +751,14 @@ partialComparisonExpression = define "PartialComparisonExpression" $
 
 stringListNullPredicateExpression :: TypeDefinition
 stringListNullPredicateExpression = define "StringListNullPredicateExpression" $
+  doc "An add/subtract expression with zero or more string, list, or null predicates" $
   T.record [
     "left">: cypher "AddOrSubtractExpression",
     "right">: T.list $ cypher "StringListNullPredicateRightHandSide"]
 
 stringListNullPredicateRightHandSide :: TypeDefinition
 stringListNullPredicateRightHandSide = define "StringListNullPredicateRightHandSide" $
+  doc "A string, list, or null predicate applied to an expression" $
   T.union [
     "string">: cypher "StringPredicateExpression",
     "list">: cypher "ListPredicateExpression",
@@ -698,12 +768,14 @@ stringListNullPredicateRightHandSide = define "StringListNullPredicateRightHandS
 
 stringPredicateExpression :: TypeDefinition
 stringPredicateExpression = define "StringPredicateExpression" $
+  doc "A string predicate: STARTS WITH, ENDS WITH, or CONTAINS" $
   T.record [
     "operator">: cypher "StringPredicateOperator",
     "expression">: cypher "AddOrSubtractExpression"]
 
 stringPredicateOperator :: TypeDefinition
 stringPredicateOperator = define "StringPredicateOperator" $
+  doc "A string predicate operator: STARTS WITH, ENDS WITH, or CONTAINS" $
   T.enum [
     "startsWith",
     "endsWith",
@@ -713,6 +785,7 @@ stringPredicateOperator = define "StringPredicateOperator" $
 
 listPredicateExpression :: TypeDefinition
 listPredicateExpression = define "ListPredicateExpression" $
+  doc "An IN predicate testing list membership" $
   T.wrap $ cypher "AddOrSubtractExpression"
 
 -- NullPredicateExpression = (SP, (I,S), SP, (N,U,L,L))
@@ -721,24 +794,28 @@ listPredicateExpression = define "ListPredicateExpression" $
 
 nullPredicateExpression :: TypeDefinition
 nullPredicateExpression = define "NullPredicateExpression" $
+  doc "An IS NULL or IS NOT NULL predicate" $
   T.wrap T.boolean -- true: NULL, false: NOT NULL
 
 -- AddOrSubtractExpression = MultiplyDivideModuloExpression, { ([SP], '+', [SP], MultiplyDivideModuloExpression) | ([SP], '-', [SP], MultiplyDivideModuloExpression) } ;
 
 addOrSubtractExpression :: TypeDefinition
 addOrSubtractExpression = define "AddOrSubtractExpression" $
+  doc "An additive expression: a multiply/divide/modulo expression with zero or more +/- terms" $
   T.record [
     "left">: cypher "MultiplyDivideModuloExpression",
     "right">: T.list $ cypher "AddOrSubtractRightHandSide"]
 
 addOrSubtractOperator :: TypeDefinition
 addOrSubtractOperator = define "AddOrSubtractOperator" $
+  doc "An additive operator: + or -" $
   T.enum [
     "add",
     "subtract"]
 
 addOrSubtractRightHandSide :: TypeDefinition
 addOrSubtractRightHandSide = define "AddOrSubtractRightHandSide" $
+  doc "An additive operator applied to a right-hand multiply/divide/modulo expression" $
   T.record [
     "operator">: cypher "AddOrSubtractOperator",
     "expression">: cypher "MultiplyDivideModuloExpression"]
@@ -747,12 +824,14 @@ addOrSubtractRightHandSide = define "AddOrSubtractRightHandSide" $
 
 multiplyDivideModuloExpression :: TypeDefinition
 multiplyDivideModuloExpression = define "MultiplyDivideModuloExpression" $
+  doc "A multiplicative expression: a power expression with zero or more */÷/% terms" $
   T.record [
     "left">: cypher "PowerOfExpression",
     "right">: T.list $ cypher "MultiplyDivideModuloRightHandSide"]
 
 multiplyDivideModuloOperator :: TypeDefinition
 multiplyDivideModuloOperator = define "MultiplyDivideModuloOperator" $
+  doc "A multiplicative operator: *, /, or %" $
   T.enum [
     "multiply",
     "divide",
@@ -760,6 +839,7 @@ multiplyDivideModuloOperator = define "MultiplyDivideModuloOperator" $
 
 multiplyDivideModuloRightHandSide :: TypeDefinition
 multiplyDivideModuloRightHandSide = define "MultiplyDivideModuloRightHandSide" $
+  doc "A multiplicative operator applied to a right-hand power expression" $
   T.record [
     "operator">: cypher "MultiplyDivideModuloOperator",
     "expression">: cypher "PowerOfExpression"]
@@ -768,6 +848,7 @@ multiplyDivideModuloRightHandSide = define "MultiplyDivideModuloRightHandSide" $
 
 powerOfExpression :: TypeDefinition
 powerOfExpression = define "PowerOfExpression" $
+  doc "An exponentiation expression: a unary expression with zero or more ^ terms" $
   T.wrap $ T.list $ cypher "UnaryAddOrSubtractExpression"
 
 -- UnaryAddOrSubtractExpression = NonArithmeticOperatorExpression
@@ -776,6 +857,7 @@ powerOfExpression = define "PowerOfExpression" $
 
 unaryAddOrSubtractExpression :: TypeDefinition
 unaryAddOrSubtractExpression = define "UnaryAddOrSubtractExpression" $
+  doc "A unary plus or minus applied to a list-operator expression" $
   T.record [
     "operator">: T.optional $ cypher "AddOrSubtractOperator",
     "expression">: cypher "NonArithmeticOperatorExpression"]
@@ -784,18 +866,21 @@ unaryAddOrSubtractExpression = define "UnaryAddOrSubtractExpression" $
 
 listOperatorExpression :: TypeDefinition
 listOperatorExpression = define "ListOperatorExpression" $
+  doc "A list operator applied to a non-arithmetic operator expression: indexing or slicing" $
   T.union [
     "single">: cypher "Expression",
     "range">: cypher "RangeExpression"]
 
 listOperatorExpressionOrPropertyLookup :: TypeDefinition
 listOperatorExpressionOrPropertyLookup = define "ListOperatorExpressionOrPropertyLookup" $
+  doc "A list operator or property lookup applied to an atom" $
   T.union [
     "list">: cypher "ListOperatorExpression",
     "property">: cypher "PropertyLookup"]
 
 nonArithmeticOperatorExpression :: TypeDefinition
 nonArithmeticOperatorExpression = define "NonArithmeticOperatorExpression" $
+  doc "An atom followed by zero or more list operators, property lookups, or node labels" $
   T.record [
     "atom">: cypher "Atom",
     "listsAndLookups">: T.list $ cypher "ListOperatorExpressionOrPropertyLookup",
@@ -807,6 +892,7 @@ nonArithmeticOperatorExpression = define "NonArithmeticOperatorExpression" $
 
 rangeExpression :: TypeDefinition
 rangeExpression = define "RangeExpression" $
+  doc "The bracketed range of a list-slice operator" $
    T.record [
       "start">: T.optional $ cypher "Expression",
       "end">: T.optional $ cypher "Expression"]
@@ -815,6 +901,7 @@ rangeExpression = define "RangeExpression" $
 
 atom :: TypeDefinition
 atom = define "Atom" $
+  doc "An atomic expression: a literal, variable, parenthesized expression, or function-like construct" $
   T.union [
     "literal">: cypher "Literal",
     "parameter">: cypher "Parameter",
@@ -831,6 +918,7 @@ atom = define "Atom" $
 
 propertyLookup :: TypeDefinition
 propertyLookup = define "PropertyLookup" $
+  doc "A single property access, as in .property" $
   T.wrap $ cypher "PropertyKeyName"
 
 -- Atom = Literal
@@ -851,6 +939,7 @@ propertyLookup = define "PropertyLookup" $
 
 caseExpression :: TypeDefinition
 caseExpression = define "CaseExpression" $
+  doc "A CASE expression, with an optional test and one or more alternatives" $
   T.record [
     "expression">: T.optional $ cypher "Expression",
     "alternatives">: T.list $ cypher "CaseAlternative",
@@ -860,6 +949,7 @@ caseExpression = define "CaseExpression" $
 
 caseAlternative :: TypeDefinition
 caseAlternative = define "CaseAlternative" $
+  doc "One WHEN/THEN alternative of a CASE expression" $
   T.record [
     "condition">: cypher "Expression",
     "result">: cypher "Expression"]
@@ -868,6 +958,7 @@ caseAlternative = define "CaseAlternative" $
 
 listComprehension :: TypeDefinition
 listComprehension = define "ListComprehension" $
+  doc "A list comprehension: a filter expression with an optional projection" $
   T.record [
     "left">: cypher "FilterExpression",
     "right">: T.optional $ cypher "Expression"]
@@ -876,6 +967,7 @@ listComprehension = define "ListComprehension" $
 
 patternComprehension :: TypeDefinition
 patternComprehension = define "PatternComprehension" $
+  doc "A pattern comprehension: a pattern with optional filter and projection expressions" $
   T.record [
     "variable">: T.optional $ cypher "Variable",
     "pattern">: cypher "RelationshipsPattern",
@@ -890,12 +982,14 @@ patternComprehension = define "PatternComprehension" $
 
 quantifier :: TypeDefinition
 quantifier = define "Quantifier" $
+  doc "A quantifier over a list predicate: all, any, none, or single" $
   T.record [
     "operator">: cypher "QuantifierOperator",
     "expression">: cypher "FilterExpression"]
 
 quantifierOperator :: TypeDefinition
 quantifierOperator = define "QuantifierOperator" $
+  doc "The keyword of a quantifier: ALL, ANY, NONE, or SINGLE" $
   T.enum [
     "all",
     "any",
@@ -906,6 +1000,7 @@ quantifierOperator = define "QuantifierOperator" $
 
 filterExpression :: TypeDefinition
 filterExpression = define "FilterExpression" $
+  doc "An id-in-collection clause with an optional WHERE filter" $
   T.record [
     "idInColl">: cypher "IdInColl",
     "where">: T.optional $ cypher "Where"]
@@ -914,18 +1009,21 @@ filterExpression = define "FilterExpression" $
 
 patternPredicate :: TypeDefinition
 patternPredicate = define "PatternPredicate" $
+  doc "A pattern used as a boolean existence predicate" $
   T.wrap $ cypher "RelationshipsPattern"
 
 -- ParenthesizedExpression = '(', [SP], Expression, [SP], ')' ;
 
 parenthesizedExpression :: TypeDefinition
 parenthesizedExpression = define "ParenthesizedExpression" $
+  doc "A parenthesized expression" $
   T.wrap $ cypher "Expression"
 
 -- IdInColl = Variable, SP, (I,N), SP, Expression ;
 
 idInColl :: TypeDefinition
 idInColl = define "IdInColl" $
+  doc "A variable bound over a list expression, as in x IN list" $
   T.record [
     "variable">: cypher "Variable",
     "expression">: cypher "Expression"]
@@ -934,6 +1032,7 @@ idInColl = define "IdInColl" $
 
 functionInvocation :: TypeDefinition
 functionInvocation = define "FunctionInvocation" $
+  doc "A function call: a qualified name, an optional DISTINCT, and arguments" $
   T.record [
     "name">: cypher "QualifiedName",
     "distinct">: T.boolean,
@@ -943,6 +1042,7 @@ functionInvocation = define "FunctionInvocation" $
 
 qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
+  doc "A namespace-qualified function or procedure name" $
   T.record [
     "namespace">: T.string,
     "local">: T.string]
@@ -951,12 +1051,14 @@ qualifiedName = define "QualifiedName" $
 
 existentialSubquery :: TypeDefinition
 existentialSubquery = define "ExistentialSubquery" $
+  doc "An EXISTS subquery pattern with an optional WHERE clause" $
   T.union [
     "regular">: cypher "RegularQuery",
     "pattern">: cypher "PatternWhere"]
 
 patternWhere :: TypeDefinition
 patternWhere = define "PatternWhere" $
+  doc "A pattern together with an optional WHERE clause, used in an existential subquery" $
   T.record [
     "pattern">: cypher "Pattern",
     "where">: T.optional $ cypher "Where"]
@@ -965,6 +1067,7 @@ patternWhere = define "PatternWhere" $
 
 explicitProcedureInvocation :: TypeDefinition
 explicitProcedureInvocation = define "ExplicitProcedureInvocation" $
+  doc "A procedure call with an explicit, parenthesized argument list" $
   T.record [
     "name">: cypher "QualifiedName",
     "arguments">: T.list $ cypher "Expression"]
@@ -973,12 +1076,14 @@ explicitProcedureInvocation = define "ExplicitProcedureInvocation" $
 
 implicitProcedureInvocation :: TypeDefinition
 implicitProcedureInvocation = define "ImplicitProcedureInvocation" $
+  doc "A procedure call with no argument list, taking its arguments from bound variables" $
   T.wrap $ cypher "QualifiedName"
 
 -- ProcedureResultField = SymbolicName ;
 
 literal :: TypeDefinition
 literal = define "Literal" $
+  doc "A literal value: a number, string, boolean, null, list, or map" $
   T.union [
     "boolean">: T.boolean,
     "null">: T.unit,
@@ -997,6 +1102,7 @@ literal = define "Literal" $
 
 numberLiteral :: TypeDefinition
 numberLiteral = define "NumberLiteral" $
+  doc "A numeric literal: a double or an integer" $
   T.union [
     "double">: T.float64,
     "integer">: T.bigint]
@@ -1014,6 +1120,7 @@ numberLiteral = define "NumberLiteral" $
 
 procedureResultField :: TypeDefinition
 procedureResultField = define "ProcedureResultField" $
+  doc "The name of a single field yielded by a procedure" $
   T.wrap T.string
 
 -- ProcedureName = ModuleName, SymbolicName ;
@@ -1024,10 +1131,12 @@ procedureResultField = define "ProcedureResultField" $
 
 stringLiteral :: TypeDefinition
 stringLiteral = define "StringLiteral" $
+  doc "A string literal" $
   T.wrap T.string
 
 variable :: TypeDefinition
 variable = define "Variable" $
+  doc "A variable name" $
   T.wrap T.string
 
 -- Literal = BooleanLiteral
@@ -1042,30 +1151,35 @@ variable = define "Variable" $
 
 listLiteral :: TypeDefinition
 listLiteral = define "ListLiteral" $
+  doc "A list literal" $
   T.wrap $ T.list $ cypher "Expression"
 
 -- MapLiteral = '{', [SP], [PropertyKeyName, [SP], ':', [SP], Expression, [SP], { ',', [SP], PropertyKeyName, [SP], ':', [SP], Expression, [SP] }], '}' ;
 
 keyValuePair :: TypeDefinition
 keyValuePair = define "KeyValuePair" $
+  doc "A key-value pair in a map literal" $
   T.record [
     "key">: cypher "PropertyKeyName",
     "value">: cypher "Expression"]
 
 mapLiteral :: TypeDefinition
 mapLiteral = define "MapLiteral" $
+  doc "A map literal" $
   T.wrap $ T.list $ cypher "KeyValuePair"
 
 -- PropertyKeyName = SchemaName ;
 
 propertyKeyName :: TypeDefinition
 propertyKeyName = define "PropertyKeyName" $
+  doc "The name of a property key" $
   T.wrap T.string
 
 -- Parameter = '$', (SymbolicName | DecimalInteger) ;
 
 parameter :: TypeDefinition
 parameter = define "Parameter" $
+  doc "A named or positional query parameter" $
   T.union [
     "symbolic">: T.string,
     "integer">: T.bigint]

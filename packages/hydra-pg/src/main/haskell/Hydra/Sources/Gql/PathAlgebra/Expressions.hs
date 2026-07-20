@@ -29,19 +29,47 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support")}
   where
+    -- Alphabetical order by local type name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness).
     definitions = [
-      queryExpression, pathExpression, baseExpression, graphReference,
-      selectionExpression, selectionCondition, simpleCondition, labelCondition,
-      propertyCondition, propertyComparisonCondition, comparisonOperator,
-      literalValue, lengthCondition, pathElement, andCondition, orCondition,
-      notCondition, joinExpression, unionExpression, recursiveExpression,
-      pathSemantics, solutionSpaceExpression, groupByExpression_, groupByCriterion,
-      orderByExpression_, orderByCriterion, projectionExpression, projectionSpec,
-      resultProjection, propertyExtraction, propertySource, nodePropertyRef,
-      edgePropertyRef, pathPropertyRef]
+      andCondition,
+      baseExpression,
+      comparisonOperator,
+      edgePropertyRef,
+      graphReference,
+      groupByCriterion,
+      groupByExpression_,
+      joinExpression,
+      labelCondition,
+      lengthCondition,
+      literalValue,
+      nodePropertyRef,
+      notCondition,
+      orCondition,
+      orderByCriterion,
+      orderByExpression_,
+      pathElement,
+      pathExpression,
+      pathPropertyRef,
+      pathSemantics,
+      projectionExpression,
+      projectionSpec,
+      propertyComparisonCondition,
+      propertyCondition,
+      propertyExtraction,
+      propertySource,
+      queryExpression,
+      recursiveExpression,
+      resultProjection,
+      selectionCondition,
+      selectionExpression,
+      simpleCondition,
+      solutionSpaceExpression,
+      unionExpression]
 
 andCondition :: TypeDefinition
 andCondition = define "AndCondition" $
+  doc "A conjunction of two selection conditions" $
   T.record [
     "left">: expr "SelectionCondition",
     "right">: expr "SelectionCondition"]
@@ -144,11 +172,13 @@ nodePropertyRef = define "NodePropertyRef" $
 
 notCondition :: TypeDefinition
 notCondition = define "NotCondition" $
+  doc "The negation of a selection condition" $
   T.record [
     "condition">: expr "SelectionCondition"]
 
 orCondition :: TypeDefinition
 orCondition = define "OrCondition" $
+  doc "A disjunction of two selection conditions" $
   T.record [
     "left">: expr "SelectionCondition",
     "right">: expr "SelectionCondition"]

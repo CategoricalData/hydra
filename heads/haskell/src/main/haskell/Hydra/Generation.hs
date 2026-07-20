@@ -220,7 +220,7 @@ validationFindingsNull (ValidationFindings pkgs types terms) =
 -- documentation"). This hardcoded list is deliberately the simplest thing
 -- that implements today's actual policy without blocking on that design.
 strictPackagingPackages :: [PackageName]
-strictPackagingPackages = PackageName <$> ["hydra-kernel", "hydra-build", "hydra-haskell", "hydra-go", "hydra-lisp", "hydra-wasm", "hydra-typescript", "hydra-rdf"]
+strictPackagingPackages = PackageName <$> ["hydra-kernel", "hydra-build", "hydra-haskell", "hydra-go", "hydra-lisp", "hydra-wasm", "hydra-typescript", "hydra-rdf", "hydra-pg"]
 
 -- | Packages whose dist/json is written by a separate NATIVE driver
 -- (bin/generate-hydra-java-from-java.sh, -python-from-python.sh), not by

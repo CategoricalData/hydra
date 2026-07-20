@@ -37,20 +37,266 @@
   "definitions": [
     {
       "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.QueryExpression",
+        "name": "com.gdblab.pathAlgebra.expressions.AndCondition",
         "body": {
           "variables": [],
           "body": {
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "pathExpression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
-                  {"name": "resultProjection", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.expressions.ResultProjection"}}}]},
+                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
+                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A conjunction of two selection conditions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.BaseExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "paths0",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Paths0(G): all paths of length 0 (nodes)"}}}]}}}},
+                  {
+                    "name": "paths1",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Paths1(G): all paths of length 1 (edges)"}}}]}}}},
+                  {
+                    "name": "pathsStar",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Paths*(G): all paths in graph (infinite without restrictions)"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Complete query with path algebra and result projection"}}}]}}}}}},
+                    "value": {"literal": {"string": "Base path expressions that extract paths from graph"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.ComparisonOperator",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "equal", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "lessThan", "type": "unit"},
+                  {"name": "lessThanOrEqual", "type": "unit"},
+                  {"name": "greaterThan", "type": "unit"},
+                  {"name": "greaterThanOrEqual", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Comparison operators for property conditions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.EdgePropertyRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
+                  {"name": "property", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to an edge property: edge.property"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.GraphReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a property graph"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.GroupByCriterion",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "none", "type": "unit"},
+                  {"name": "source", "type": "unit"},
+                  {"name": "target", "type": "unit"},
+                  {"name": "length", "type": "unit"},
+                  {"name": "sourceTarget", "type": "unit"},
+                  {"name": "sourceLength", "type": "unit"},
+                  {"name": "targetLength", "type": "unit"},
+                  {"name": "sourceTargetLength", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Grouping criteria corresponding to paper's γ variants"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.GroupByExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "criterion", "type": {"variable": "com.gdblab.pathAlgebra.expressions.GroupByCriterion"}},
+                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Group-by operator: γ_criterion(expression)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.JoinExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
+                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Join operator: expr1 ⊲⊳ expr2"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.LabelCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
+                  {"name": "value", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Conditions on node/edge labels: label(node(i)) = v"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.LengthCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "length", "type": {"literal": {"integer": "int32"}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Condition on path length: len() = i"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.LiteralValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "string", "type": {"literal": "string"}},
+                  {"name": "integer", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "float", "type": {"literal": {"float": "float64"}}},
+                  {"name": "boolean", "type": {"literal": "boolean"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Literal values for comparisons"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.NodePropertyRef",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
+                  {"name": "property", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a node property: node.property"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.NotCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "condition", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The negation of a selection condition"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.OrCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
+                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A disjunction of two selection conditions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.OrderByCriterion",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "partition", "type": "unit"},
+                  {"name": "group", "type": "unit"},
+                  {"name": "path", "type": "unit"},
+                  {"name": "partitionGroup", "type": "unit"},
+                  {"name": "partitionPath", "type": "unit"},
+                  {"name": "groupPath", "type": "unit"},
+                  {"name": "partitionGroupPath", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Ordering criteria corresponding to paper's τ variants"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.OrderByExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "criterion", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrderByCriterion"}},
+                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Order-by operator: τ_criterion(solutionSpace)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.PathElement",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "node", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "edge", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "first", "type": "unit"},
+                  {"name": "last", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "References to elements within a path"}}}]}}}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathExpression",
@@ -137,257 +383,18 @@
                     "value": {"literal": {"string": "A path algebra expression that evaluates to a set of paths"}}}]}}}}}},
     {
       "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.BaseExpression",
+        "name": "com.gdblab.pathAlgebra.expressions.PathPropertyRef",
         "body": {
           "variables": [],
           "body": {
             "annotated": {
               "body": {
-                "union": [
-                  {
-                    "name": "paths0",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Paths0(G): all paths of length 0 (nodes)"}}}]}}}},
-                  {
-                    "name": "paths1",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
-                        "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Paths1(G): all paths of length 1 (edges)"}}}]}}}},
-                  {
-                    "name": "pathsStar",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "com.gdblab.pathAlgebra.expressions.GraphReference"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Paths*(G): all paths in graph (infinite without restrictions)"}}}]}}}}]},
+                "union": [{"name": "length", "type": "unit"}, {"name": "startNode", "type": "unit"}, {"name": "endNode", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Base path expressions that extract paths from graph"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.GraphReference",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a property graph"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.SelectionExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "condition", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
-                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Selection operator: σ_condition(expression)"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.SelectionCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "simple", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SimpleCondition"}},
-                  {"name": "and", "type": {"variable": "com.gdblab.pathAlgebra.expressions.AndCondition"}},
-                  {"name": "or", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrCondition"}},
-                  {"name": "not", "type": {"variable": "com.gdblab.pathAlgebra.expressions.NotCondition"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Conditions for filtering paths"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.SimpleCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "labelEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LabelCondition"}},
-                  {"name": "propertyEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyCondition"}},
-                  {"name": "propertyComparison", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"}},
-                  {"name": "lengthEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LengthCondition"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Atomic selection conditions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.LabelCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "value", "type": {"literal": "string"}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Conditions on node/edge labels: label(node(i)) = v"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.PropertyCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": "string"}},
-                  {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
-              "annotation": {
-                "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Property equality conditions: node(i).prop = v"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": "string"}},
-                  {"name": "operator", "type": {"variable": "com.gdblab.pathAlgebra.expressions.ComparisonOperator"}},
-                  {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Property comparison conditions: node(i).prop > v, etc."}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.ComparisonOperator",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "equal", "type": "unit"},
-                  {"name": "notEqual", "type": "unit"},
-                  {"name": "lessThan", "type": "unit"},
-                  {"name": "lessThanOrEqual", "type": "unit"},
-                  {"name": "greaterThan", "type": "unit"},
-                  {"name": "greaterThanOrEqual", "type": "unit"}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Comparison operators for property conditions"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.LiteralValue",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "string", "type": {"literal": "string"}},
-                  {"name": "integer", "type": {"literal": {"integer": "int32"}}},
-                  {"name": "float", "type": {"literal": {"float": "float64"}}},
-                  {"name": "boolean", "type": {"literal": "boolean"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Literal values for comparisons"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.LengthCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {"record": [{"name": "length", "type": {"literal": {"integer": "int32"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Condition on path length: len() = i"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.PathElement",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "node", "type": {"literal": {"integer": "int32"}}},
-                  {"name": "edge", "type": {"literal": {"integer": "int32"}}},
-                  {"name": "first", "type": "unit"},
-                  {"name": "last", "type": "unit"}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "References to elements within a path"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.AndCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
-              {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.OrCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
-              {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.NotCondition",
-        "body": {
-          "variables": [],
-          "body": {"record": [{"name": "condition", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}}]}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.JoinExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
-                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Join operator: expr1 ⊲⊳ expr2"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.UnionExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
-                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Union operator: expr1 ∪ expr2"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.RecursiveExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "semantics", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathSemantics"}},
-                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Recursive operator with path semantics"}}}]}}}}}},
+                    "value": {"literal": {"string": "Reference to path-level properties: length, etc."}}}]}}}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathSemantics",
@@ -404,89 +411,6 @@
                   {"name": "shortest", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path semantics for recursive operations"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "groupBy", "type": {"variable": "com.gdblab.pathAlgebra.expressions.GroupByExpression"}},
-                  {"name": "orderBy", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrderByExpression"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Expressions that work with solution spaces"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.GroupByExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "criterion", "type": {"variable": "com.gdblab.pathAlgebra.expressions.GroupByCriterion"}},
-                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Group-by operator: γ_criterion(expression)"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.GroupByCriterion",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "none", "type": "unit"},
-                  {"name": "source", "type": "unit"},
-                  {"name": "target", "type": "unit"},
-                  {"name": "length", "type": "unit"},
-                  {"name": "sourceTarget", "type": "unit"},
-                  {"name": "sourceLength", "type": "unit"},
-                  {"name": "targetLength", "type": "unit"},
-                  {"name": "sourceTargetLength", "type": "unit"}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Grouping criteria corresponding to paper's γ variants"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.OrderByExpression",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "criterion", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrderByCriterion"}},
-                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression"}}]},
-              "annotation": {
-                "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Order-by operator: τ_criterion(solutionSpace)"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.OrderByCriterion",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "partition", "type": "unit"},
-                  {"name": "group", "type": "unit"},
-                  {"name": "path", "type": "unit"},
-                  {"name": "partitionGroup", "type": "unit"},
-                  {"name": "partitionPath", "type": "unit"},
-                  {"name": "groupPath", "type": "unit"},
-                  {"name": "partitionGroupPath", "type": "unit"}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Ordering criteria corresponding to paper's τ variants"}}}]}}}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ProjectionExpression",
@@ -518,18 +442,37 @@
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "Projection specification: * or specific number"}}}]}}}}}},
     {
       "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.ResultProjection",
+        "name": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition",
         "body": {
           "variables": [],
           "body": {
             "annotated": {
               "body": {
-                "record": [{"name": "projections", "type": {"list": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyExtraction"}}}]},
+                "record": [
+                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
+                  {"name": "property", "type": {"literal": "string"}},
+                  {"name": "operator", "type": {"variable": "com.gdblab.pathAlgebra.expressions.ComparisonOperator"}},
+                  {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Extract specific values from paths for RETURN clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "Property comparison conditions: node(i).prop > v, etc."}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.PropertyCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
+                  {"name": "property", "type": {"literal": "string"}},
+                  {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Property equality conditions: node(i).prop = v"}}}]}}}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyExtraction",
@@ -558,41 +501,110 @@
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Source of a property value"}}}]}}}}}},
     {
       "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.NodePropertyRef",
+        "name": "com.gdblab.pathAlgebra.expressions.QueryExpression",
         "body": {
           "variables": [],
           "body": {
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": "string"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a node property: node.property"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.EdgePropertyRef",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": "string"}}]},
-              "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to an edge property: edge.property"}}}]}}}}}},
-    {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.expressions.PathPropertyRef",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [{"name": "length", "type": "unit"}, {"name": "startNode", "type": "unit"}, {"name": "endNode", "type": "unit"}]},
+                  {"name": "pathExpression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
+                  {"name": "resultProjection", "type": {"optional": {"variable": "com.gdblab.pathAlgebra.expressions.ResultProjection"}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Reference to path-level properties: length, etc."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Complete query with path algebra and result projection"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.RecursiveExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "semantics", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathSemantics"}},
+                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Recursive operator with path semantics"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.ResultProjection",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [{"name": "projections", "type": {"list": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyExtraction"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Extract specific values from paths for RETURN clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.SelectionCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "simple", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SimpleCondition"}},
+                  {"name": "and", "type": {"variable": "com.gdblab.pathAlgebra.expressions.AndCondition"}},
+                  {"name": "or", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrCondition"}},
+                  {"name": "not", "type": {"variable": "com.gdblab.pathAlgebra.expressions.NotCondition"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Conditions for filtering paths"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.SelectionExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "condition", "type": {"variable": "com.gdblab.pathAlgebra.expressions.SelectionCondition"}},
+                  {"name": "expression", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Selection operator: σ_condition(expression)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.SimpleCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "labelEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LabelCondition"}},
+                  {"name": "propertyEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyCondition"}},
+                  {"name": "propertyComparison", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"}},
+                  {"name": "lengthEquals", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LengthCondition"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Atomic selection conditions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "groupBy", "type": {"variable": "com.gdblab.pathAlgebra.expressions.GroupByExpression"}},
+                  {"name": "orderBy", "type": {"variable": "com.gdblab.pathAlgebra.expressions.OrderByExpression"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Expressions that work with solution spaces"}}}]}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.expressions.UnionExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}},
+                  {"name": "right", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathExpression"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Union operator: expr1 ∪ expr2"}}}]}}}}}}]}
