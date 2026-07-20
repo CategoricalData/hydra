@@ -28,6 +28,9 @@ if [ ! -d "$DIST_DIR" ]; then
     exit 0
 fi
 
+source "$SCRIPT_DIR/go-guard.sh"
+go_guard_assert
+
 source "$HYDRA_ROOT_DIR/bin/lib/test-cache.sh"
 if test_cache_check go "$HYDRA_ROOT_DIR/dist/go" "$HYDRA_GO_HEAD/src" "$THIS_SCRIPT"; then
     echo "  Cache hit: no changes since last successful Go test run; skipping."
@@ -42,12 +45,9 @@ echo ""
 cd "$DIST_DIR"
 
 if [ ! -f go.mod ]; then
-    echo "Initializing per-package go.mod for $PACKAGE..."
-    cat > go.mod <<EOF
-module github.com/CategoricalData/hydra/dist/go/$PACKAGE
-
-go 1.22
-EOF
+    echo "No go.mod at $DIST_DIR — run heads/go/bin/assemble-distribution.sh $PACKAGE first" >&2
+    echo "(the assembler emits the module files; this script never fabricates them)" >&2
+    exit 1
 fi
 
 echo "Running go build ./..."
@@ -55,7 +55,7 @@ go build ./...
 
 if find . -name '*_test.go' -print -quit | grep -q .; then
     echo "Running go test ./..."
-    go test ./...
+    go test -timeout 900s ./...
 else
     echo "(no _test.go files in $PACKAGE; skipping go test)"
 fi
