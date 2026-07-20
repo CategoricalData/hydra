@@ -516,7 +516,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A multiplicative expression: a power expression with zero or more */÷/% terms"}}}]}}}}}},
+                    "value": {
+                      "literal": {"string": "A multiplicative expression: a power expression with zero or more multiply, divide, or modulo terms"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.cypher.openCypher.MultiplyDivideModuloOperator",
