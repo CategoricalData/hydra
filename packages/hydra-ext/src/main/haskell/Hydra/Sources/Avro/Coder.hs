@@ -103,10 +103,10 @@ module_ = Module {
   where
     definitions = [
       toDefinition annotateAdapter,
+      toDefinition avroForeignKey,
       toDefinition avroHydraAdapter,
       toDefinition avroNameToHydraName,
-      toDefinition avro_foreignKey,
-      toDefinition avro_primaryKey,
+      toDefinition avroPrimaryKey,
       toDefinition emptyAvroEnvironment,
       toDefinition encodeAnnotationValue,
       toDefinition err,
@@ -455,12 +455,14 @@ avroNameToHydraName = define "avroNameToHydraName" $
 avroSchemaPhantomNs :: ModuleName
 avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-avro_foreignKey :: TypedTermDefinition String
-avro_foreignKey = define "avro_foreignKey" $
+avroForeignKey :: TypedTermDefinition String
+avroForeignKey = define "avroForeignKey" $
+  doc "The annotation key for foreign key metadata on an Avro field" $
   string "@foreignKey"
 
-avro_primaryKey :: TypedTermDefinition String
-avro_primaryKey = define "avro_primaryKey" $
+avroPrimaryKey :: TypedTermDefinition String
+avroPrimaryKey = define "avroPrimaryKey" $
+  doc "The annotation key for primary key metadata on an Avro field" $
   string "@primaryKey"
 
 emptyAvroEnvironment :: TypedTermDefinition AvroEnv.AvroEnvironment
@@ -550,7 +552,7 @@ foreignKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Result (Ma
 foreignKeyE = define "foreignKeyE" $
   doc "Extract a foreign key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (asTerm avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
+    Optionals.cases (Maps.lookup (asTerm avroForeignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
         Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
         Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
         Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
@@ -714,7 +716,7 @@ primaryKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Maybe Avro
 primaryKeyE = define "primaryKeyE" $
   doc "Extract a primary key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (asTerm avro_primaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
+    Optionals.cases (Maps.lookup (asTerm avroPrimaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
         Eithers.either
           (lambda "_" $ nothing)
           (lambda "s" $ just $ record AvroEnv._AvroPrimaryKey [

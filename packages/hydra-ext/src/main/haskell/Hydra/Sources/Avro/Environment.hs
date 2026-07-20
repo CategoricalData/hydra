@@ -25,10 +25,10 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "Type definitions for the Avro code generation environment")}
   where
     definitions = [
-      avroQualifiedNameType,
+      avroEnvironmentType,
       avroForeignKeyType,
       avroPrimaryKeyType,
-      avroEnvironmentType,
+      avroQualifiedNameType,
       encodeEnvironmentType]
 
 -- | The environment for Avro-to-Hydra code generation

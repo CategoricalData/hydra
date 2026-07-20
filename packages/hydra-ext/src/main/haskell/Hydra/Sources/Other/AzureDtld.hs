@@ -178,12 +178,16 @@ idOptionalField cat = idField False 2048 $
   "The ID of the " ++ cat ++ ". If no @id is provided, the digital twin interface processor will assign one."
 
 integerOrString :: TypeDefinition
-integerOrString = define "IntegerOrString" $ T.union [
+integerOrString = define "IntegerOrString" $
+  doc "A value which may be either an integer or a string" $
+  T.union [
   "integer">: T.int32,
   "string">: T.string]
 
 interface_ :: TypeDefinition
-interface_ = define "Interface" $ T.record [
+interface_ = define "Interface" $
+  doc "An Interface describes the contents (Telemetry, Properties, Commands, Relationships, and Components) of any digital twin." $
+  T.record [
   idField True 128 "A digital twin model identifier for the interface",
   typeField "This must be 'Interface'",
   "context">:
@@ -209,7 +213,9 @@ interface_ = define "Interface" $ T.record [
     T.optional $ T.set $ dtld "SchemaInterface"]
 
 interfaceContents :: TypeDefinition
-interfaceContents = define "InterfaceContents" $ T.union [
+interfaceContents = define "InterfaceContents" $
+  doc "One of the kinds of content an Interface may contain: a Command, Component, Property, Relationship, or Telemetry" $
+  T.union [
   "command">: dtld "Command",
   "component">: dtld "Component",
   "property">: dtld "Property",
@@ -217,7 +223,9 @@ interfaceContents = define "InterfaceContents" $ T.union [
   "telemetry">: dtld "Telemetry"]
 
 iri :: TypeDefinition
-iri = define "Iri" $ T.wrap T.string
+iri = define "Iri" $
+  doc "An Internationalized Resource Identifier" $
+  T.wrap T.string
 
 mapKey :: TypeDefinition
 mapKey = define "MapKey" $
@@ -384,7 +392,9 @@ schemaInterface = define "SchemaInterface" $
     displayNameField]
 
 schemaInterfaceType :: TypeDefinition
-schemaInterfaceType = define "SchemaInterfaceType" $ T.union [
+schemaInterfaceType = define "SchemaInterfaceType" $
+  doc "The type of a reusable interface schema: Array, Enum, Map, or Object" $
+  T.union [
   "array">: dtld "SchemaArray",
   "enum">: dtld "SchemaEnum",
   "map">: dtld "SchemaMap",
@@ -468,7 +478,9 @@ unitField cat = "unit">:
   T.optional $ dtld "Unit"
 
 unit_ :: TypeDefinition
-unit_ = define "Unit" $ T.wrap T.unit
+unit_ = define "Unit" $
+  doc "The unit type of a Property or Telemetry value, available when a semantic type is present" $
+  T.wrap T.unit
 
 writableField :: String -> FieldType
 writableField cat = "writable">:

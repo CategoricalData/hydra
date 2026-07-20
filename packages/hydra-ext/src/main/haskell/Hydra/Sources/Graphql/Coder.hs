@@ -121,6 +121,7 @@ define = definitionInModule module_
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error (Maybe G.Description))
 descriptionFromType = define "descriptionFromType" $
+  doc "Get the description from a type as a GraphQL Description" $
   "cx" ~> "g" ~> lambda "typ" $
     Eithers.map
       (lambda "mval" $ Optionals.map
@@ -131,11 +132,13 @@ descriptionFromType = define "descriptionFromType" $
 -- | Encode a field name to a GraphQL EnumValue
 encodeEnumFieldName :: TypedTermDefinition (Name -> G.EnumValue)
 encodeEnumFieldName = define "encodeEnumFieldName" $
+  doc "Encode a field name to a GraphQL EnumValue" $
   lambda "name" $ wrap G._EnumValue (wrap G._Name (sanitize @@ (Core.unName $ var "name")))
 
 -- | Encode an enum field type to a GraphQL EnumValueDefinition
 encodeEnumFieldType :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error G.EnumValueDefinition)
 encodeEnumFieldType = define "encodeEnumFieldType" $
+  doc "Encode an enum field type to a GraphQL EnumValueDefinition" $
   "cx" ~> "g" ~> lambda "ft" $
     "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
     right (record G._EnumValueDefinition [
@@ -146,11 +149,13 @@ encodeEnumFieldType = define "encodeEnumFieldType" $
 -- | Encode a field name to a GraphQL Name
 encodeFieldName :: TypedTermDefinition (Name -> G.Name)
 encodeFieldName = define "encodeFieldName" $
+  doc "Encode a field name to a GraphQL Name" $
   lambda "name" $ wrap G._Name (sanitize @@ (Core.unName $ var "name"))
 
 -- | Encode a field type to a GraphQL FieldDefinition
 encodeFieldType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error G.FieldDefinition)
 encodeFieldType = define "encodeFieldType" $
+  doc "Encode a field type to a GraphQL FieldDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $
     "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
     "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
@@ -164,6 +169,7 @@ encodeFieldType = define "encodeFieldType" $
 -- | Encode a literal type to a GraphQL NamedType
 encodeLiteralType :: TypedTermDefinition (InferenceContext -> LiteralType -> Either Error G.NamedType)
 encodeLiteralType = define "encodeLiteralType" $
+  doc "Encode a literal type to a GraphQL NamedType" $
   "cx" ~> lambda "lt" $
     cases _LiteralType (var "lt")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (PrintCore.literalType @@ var "lt"))) [
@@ -185,6 +191,7 @@ encodeLiteralType = define "encodeLiteralType" $
 -- | Encode a named type to a GraphQL type definition.
 encodeNamedType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Name -> Type -> Either Error G.TypeDefinition)
 encodeNamedType = define "encodeNamedType" $
+  doc "Encode a named type to a GraphQL type definition." $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (PrintCore.type_ @@ var "typ"))) [
@@ -259,6 +266,7 @@ encodeNamedType = define "encodeNamedType" $
 -- | Encode a Hydra type as a GraphQL type reference
 encodeType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error G.Type)
 encodeType = define "encodeType" $
+  doc "Encode a Hydra type as a GraphQL type reference" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "typ"))) [
@@ -339,6 +347,7 @@ encodeType = define "encodeType" $
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition
 encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> TypeDefinition -> Either Error G.TypeDefinition)
 encodeTypeDefinition = define "encodeTypeDefinition" $
+  doc "Encode a TypeDefinition to a GraphQL TypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
       @@ (Packaging.typeDefinitionName $ var "tdef")
@@ -347,6 +356,7 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TypedTermDefinition (M.Map ModuleName String -> Name -> G.Name)
 encodeTypeName = define "encodeTypeName" $
+  doc "Encode a Hydra Name as a GraphQL Name with namespace prefix" $
   lambda "prefixes" $ lambda "name" $ lets [
     "qualName">: Names.qualifyName @@ var "name",
     "local">: Util.qualifiedNameLocal (var "qualName"),
@@ -358,6 +368,7 @@ encodeTypeName = define "encodeTypeName" $
 -- Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable.
 encodeUnionFieldType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error G.FieldDefinition)
 encodeUnionFieldType = define "encodeUnionFieldType" $
+  doc "Encode a union variant field type to a nullable GraphQL FieldDefinition. Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable." $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $ lets [
     "innerType">: Core.fieldTypeType $ var "ft",
     "isUnit">: Predicates.isUnitType @@ (Strip.deannotateType @@ var "innerType"),
@@ -390,6 +401,7 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
 -- | Top-level entry point: convert a module to GraphQL schema files.
 moduleToGraphql :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToGraphql = define "moduleToGraphql" $
+  doc "Top-level entry point: convert a module to GraphQL schema files." $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~> lets [
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
@@ -410,6 +422,7 @@ moduleToGraphql = define "moduleToGraphql" $
 -- | Sanitize a string for use as a GraphQL identifier
 sanitize :: TypedTermDefinition (String -> String)
 sanitize = define "sanitize" $
+  doc "Sanitize a string for use as a GraphQL identifier" $
   lambda "s" $ Formatting.sanitizeWithUnderscores @@ GraphqlLanguage.graphqlReservedWords @@ var "s"
 
 -- | Helper: wrap a type in a record with a single "value" field

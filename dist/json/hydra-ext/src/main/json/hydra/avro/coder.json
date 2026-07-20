@@ -287,6 +287,18 @@
                                   "value": {"literal": {"string": "Annotate an adapter's target type with optional annotations"}}}]}}}}}}}}}}}}},
     {
       "term": {
+        "name": "hydra.avro.coder.avroForeignKey",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "@foreignKey"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The annotation key for foreign key metadata on an Avro field"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.avro.coder.avroHydraAdapter",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
@@ -5912,14 +5924,16 @@
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an Avro qualified name to a Hydra name"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.avro.coder.avro_foreignKey",
+        "name": "hydra.avro.coder.avroPrimaryKey",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "@foreignKey"}}}},
-    {
-      "term": {
-        "name": "hydra.avro.coder.avro_primaryKey",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "@primaryKey"}}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "@primaryKey"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The annotation key for primary key metadata on an Avro field"}}}]}}}}},
     {
       "term": {
         "name": "hydra.avro.coder.emptyAvroEnvironment",
@@ -6586,7 +6600,7 @@
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": "string"}}},
                                                 "type": {"variable": "hydra.json.model.Value"}}},
-                                            "argument": {"variable": "hydra.avro.coder.avro_foreignKey"}}},
+                                            "argument": {"variable": "hydra.avro.coder.avroForeignKey"}}},
                                         "argument": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.avro.schema.Field", "fieldName": "annotations"}},
@@ -9422,7 +9436,7 @@
                                               "typeApplication": {
                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": "string"}}},
                                                 "type": {"variable": "hydra.json.model.Value"}}},
-                                            "argument": {"variable": "hydra.avro.coder.avro_primaryKey"}}},
+                                            "argument": {"variable": "hydra.avro.coder.avroPrimaryKey"}}},
                                         "argument": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.avro.schema.Field", "fieldName": "annotations"}},

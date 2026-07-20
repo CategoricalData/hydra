@@ -516,138 +516,172 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "integer", "type": {"literal": {"integer": "int32"}}}, {"name": "string", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [{"name": "integer", "type": {"literal": {"integer": "int32"}}}, {"name": "string", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value which may be either an integer or a string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Interface",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {
-                "name": "id",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "A digital twin model identifier for the interface"}}},
-                        {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 128}}}}]}}}},
-              {
-                "name": "type",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.azure.dtld.Iri"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "This must be 'Interface'"}}}]}}}},
-              {
-                "name": "context",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.azure.dtld.Iri"},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "The context to use when processing this interface. For this version, it must be set to 'dtmi:dtdl:context;2'"}}}]}}}},
-              {
-                "name": "comment",
-                "type": {
-                  "annotated": {
-                    "body": {
-                      "optional": {
-                        "annotated": {
-                          "body": {"literal": "string"},
-                          "annotation": {
-                            "map": [
-                              {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
-              {
-                "name": "contents",
-                "type": {
-                  "annotated": {
-                    "body": {
-                      "optional": {
-                        "annotated": {
-                          "body": {"set": {"variable": "hydra.azure.dtld.InterfaceContents"}},
-                          "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface"}}}]}}}},
-              {
-                "name": "description",
-                "type": {
-                  "annotated": {
-                    "body": {
-                      "optional": {
-                        "annotated": {
-                          "body": {"literal": "string"},
-                          "annotation": {
-                            "map": [
-                              {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-                    "annotation": {
-                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
-              {
-                "name": "displayName",
-                "type": {
-                  "annotated": {
-                    "body": {
-                      "optional": {
-                        "annotated": {
-                          "body": {"literal": "string"},
-                          "annotation": {
-                            "map": [
-                              {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
-              {
-                "name": "extends",
-                "type": {
-                  "annotated": {
-                    "body": {
-                      "optional": {
-                        "annotated": {
-                          "body": {"set": {"variable": "hydra.azure.dtld.Interface"}},
-                          "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces."}}}]}}}},
-              {
-                "name": "schemas",
-                "type": {
-                  "annotated": {
-                    "body": {"optional": {"set": {"variable": "hydra.azure.dtld.SchemaInterface"}}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "A set of IRIs or objects that refer to the reusable schemas within this interface."}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.azure.dtld.Dtmi"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A digital twin model identifier for the interface"}}},
+                            {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 128}}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.azure.dtld.Iri"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "This must be 'Interface'"}}}]}}}},
+                  {
+                    "name": "context",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.azure.dtld.Iri"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The context to use when processing this interface. For this version, it must be set to 'dtmi:dtdl:context;2'"}}}]}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"literal": "string"},
+                              "annotation": {
+                                "map": [
+                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
+                  {
+                    "name": "contents",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"set": {"variable": "hydra.azure.dtld.InterfaceContents"}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface"}}}]}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"literal": "string"},
+                              "annotation": {
+                                "map": [
+                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"literal": "string"},
+                              "annotation": {
+                                "map": [
+                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
+                  {
+                    "name": "extends",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"set": {"variable": "hydra.azure.dtld.Interface"}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces."}}}]}}}},
+                  {
+                    "name": "schemas",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"set": {"variable": "hydra.azure.dtld.SchemaInterface"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A set of IRIs or objects that refer to the reusable schemas within this interface."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An Interface describes the contents (Telemetry, Properties, Commands, Relationships, and Components) of any digital twin."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.azure.dtld.InterfaceContents",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "command", "type": {"variable": "hydra.azure.dtld.Command"}},
-              {"name": "component", "type": {"variable": "hydra.azure.dtld.Component"}},
-              {"name": "property", "type": {"variable": "hydra.azure.dtld.Property"}},
-              {"name": "relationship", "type": {"variable": "hydra.azure.dtld.Relationship"}},
-              {"name": "telemetry", "type": {"variable": "hydra.azure.dtld.Telemetry"}}]}}}},
-    {"type": {"name": "hydra.azure.dtld.Iri", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "command", "type": {"variable": "hydra.azure.dtld.Command"}},
+                  {"name": "component", "type": {"variable": "hydra.azure.dtld.Component"}},
+                  {"name": "property", "type": {"variable": "hydra.azure.dtld.Property"}},
+                  {"name": "relationship", "type": {"variable": "hydra.azure.dtld.Relationship"}},
+                  {"name": "telemetry", "type": {"variable": "hydra.azure.dtld.Telemetry"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "One of the kinds of content an Interface may contain: a Command, Component, Property, Relationship, or Telemetry"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Iri",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.azure.dtld.MapKey",
@@ -1406,11 +1440,18 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "array", "type": {"variable": "hydra.azure.dtld.SchemaArray"}},
-              {"name": "enum", "type": {"variable": "hydra.azure.dtld.SchemaEnum"}},
-              {"name": "map", "type": {"variable": "hydra.azure.dtld.SchemaMap"}},
-              {"name": "object", "type": {"variable": "hydra.azure.dtld.SchemaObject"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.azure.dtld.SchemaArray"}},
+                  {"name": "enum", "type": {"variable": "hydra.azure.dtld.SchemaEnum"}},
+                  {"name": "map", "type": {"variable": "hydra.azure.dtld.SchemaMap"}},
+                  {"name": "object", "type": {"variable": "hydra.azure.dtld.SchemaObject"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The type of a reusable interface schema: Array, Enum, Map, or Object"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaMap",
@@ -1786,4 +1827,16 @@
                     "value": {
                       "literal": {
                         "string": "Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message."}}}]}}}}}},
-    {"type": {"name": "hydra.azure.dtld.Unit", "body": {"variables": [], "body": {"wrap": "unit"}}}}]}
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Unit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The unit type of a Property or Telemetry value, available when a semantic type is present"}}}]}}}}}}]}

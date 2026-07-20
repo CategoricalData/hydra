@@ -6,829 +6,1574 @@
     "seeAlso": []},
   "dependencies": [],
   "definitions": [
-    {"type": {"name": "hydra.graphql.syntax.Name", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.graphql.syntax.IntValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.graphql.syntax.FloatValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.graphql.syntax.StringValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Document",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Definition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Definition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "executable", "type": {"variable": "hydra.graphql.syntax.ExecutableDefinition"}},
-              {"name": "typeSystem", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ExecutableDocument",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.ExecutableDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ExecutableDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "operation", "type": {"variable": "hydra.graphql.syntax.OperationDefinition"}},
-              {"name": "fragment", "type": {"variable": "hydra.graphql.syntax.FragmentDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.OperationDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.OperationDefinitionSequence"}},
-              {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.OperationDefinitionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "OperationType", "type": {"variable": "hydra.graphql.syntax.OperationType"}},
-              {"name": "Name", "type": {"optional": {"variable": "hydra.graphql.syntax.Name"}}},
-              {"name": "VariablesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.VariablesDefinition"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.OperationType",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [{"name": "Query", "type": "unit"}, {"name": "Mutation", "type": "unit"}, {"name": "Subscription", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.SelectionSet",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Selection"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Selection",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Field", "type": {"variable": "hydra.graphql.syntax.Field"}},
-              {"name": "FragmentSpread", "type": {"variable": "hydra.graphql.syntax.FragmentSpread"}},
-              {"name": "InlineFragment", "type": {"variable": "hydra.graphql.syntax.InlineFragment"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Field",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Alias", "type": {"optional": {"variable": "hydra.graphql.syntax.Alias"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "SelectionSet", "type": {"optional": {"variable": "hydra.graphql.syntax.SelectionSet"}}}]}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Alias",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}}, {"name": "Colon", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Arguments",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Argument"}}}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}}, {"name": "Colon", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL field alias, immediately followed by a colon."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Argument",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Value", "type": {"variable": "hydra.graphql.syntax.Value"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Value", "type": {"variable": "hydra.graphql.syntax.Value"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single GraphQL argument, consisting of a name and a value."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.graphql.syntax.FragmentSpread",
+        "name": "hydra.graphql.syntax.Arguments",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Argument"}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A parenthesized list of GraphQL arguments."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.graphql.syntax.InlineFragment",
+        "name": "hydra.graphql.syntax.ArgumentsDefinition",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "TypeCondition", "type": {"optional": {"variable": "hydra.graphql.syntax.TypeCondition"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.FragmentDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
-              {"name": "TypeCondition", "type": {"variable": "hydra.graphql.syntax.TypeCondition"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.FragmentName",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeCondition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [{"name": "On", "type": "unit"}, {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Value",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Variable", "type": {"variable": "hydra.graphql.syntax.Variable"}},
-              {"name": "int", "type": {"variable": "hydra.graphql.syntax.IntValue"}},
-              {"name": "float", "type": {"variable": "hydra.graphql.syntax.FloatValue"}},
-              {"name": "string", "type": {"variable": "hydra.graphql.syntax.StringValue"}},
-              {"name": "boolean", "type": {"variable": "hydra.graphql.syntax.BooleanValue"}},
-              {"name": "null", "type": {"variable": "hydra.graphql.syntax.NullValue"}},
-              {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumValue"}},
-              {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListValue"}},
-              {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectValue"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.InputValueDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A parenthesized list of GraphQL input value definitions for a field's arguments."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.BooleanValue",
-        "body": {"variables": [], "body": {"union": [{"name": "True", "type": "unit"}, {"name": "False", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.graphql.syntax.NullValue", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumValue",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ListValue",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ListValueSequence"}},
-              {"name": "sequence2", "type": {"list": {"variable": "hydra.graphql.syntax.Value"}}}]}}}},
-    {"type": {"name": "hydra.graphql.syntax.ListValueSequence", "body": {"variables": [], "body": "unit"}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectValue",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ObjectValueSequence"}},
-              {"name": "sequence2", "type": {"list": {"variable": "hydra.graphql.syntax.ObjectField"}}}]}}}},
-    {"type": {"name": "hydra.graphql.syntax.ObjectValueSequence", "body": {"variables": [], "body": "unit"}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectField",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Value", "type": {"variable": "hydra.graphql.syntax.Value"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.VariablesDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Variable", "type": {"variable": "hydra.graphql.syntax.Variable"}},
-              {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Variable",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}}}}},
+            "annotated": {
+              "body": {"union": [{"name": "True", "type": "unit"}, {"name": "False", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL boolean literal, either true or false."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DefaultValue",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Value"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Type",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "named", "type": {"variable": "hydra.graphql.syntax.NamedType"}},
-              {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListType"}},
-              {"name": "nonNull", "type": {"variable": "hydra.graphql.syntax.NonNullType"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Value"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A default value for a GraphQL variable or input field, introduced by an equals sign."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.graphql.syntax.NamedType",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ListType",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.Type"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.NonNullType",
+        "name": "hydra.graphql.syntax.Definition",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "named", "type": {"variable": "hydra.graphql.syntax.NamedType"}},
-              {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListType"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "executable", "type": {"variable": "hydra.graphql.syntax.ExecutableDefinition"}},
+                  {"name": "typeSystem", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A top-level GraphQL definition, either executable or part of the type system."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.graphql.syntax.Directives",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Directive"}}}}}},
+        "name": "hydra.graphql.syntax.Description",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.StringValue"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An optional string description preceding a GraphQL type system definition."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Directive",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeSystemDocment",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeSystemDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "schema", "type": {"variable": "hydra.graphql.syntax.SchemaDefinition"}},
-              {"name": "type", "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}},
-              {"name": "directive", "type": {"variable": "hydra.graphql.syntax.DirectiveDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeSystemExtensionDocument",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "definition", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}},
-              {"name": "extension", "type": {"variable": "hydra.graphql.syntax.TypeSystemExtension"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeSystemExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "schema", "type": {"variable": "hydra.graphql.syntax.SchemaExtension"}},
-              {"name": "type", "type": {"variable": "hydra.graphql.syntax.TypeExtension"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.SchemaDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.SchemaExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.SchemaExtensionSequence"}},
-              {"name": "sequence2", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.SchemaExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.RootOperationTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "OperationType", "type": {"variable": "hydra.graphql.syntax.OperationType"}},
-              {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.Description",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.graphql.syntax.StringValue"}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "scalar", "type": {"variable": "hydra.graphql.syntax.ScalarTypeDefinition"}},
-              {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectTypeDefinition"}},
-              {"name": "interface", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinition"}},
-              {"name": "union", "type": {"variable": "hydra.graphql.syntax.UnionTypeDefinition"}},
-              {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumTypeDefinition"}},
-              {"name": "inputObject", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.TypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "scalar", "type": {"variable": "hydra.graphql.syntax.ScalarTypeExtension"}},
-              {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtension"}},
-              {"name": "interface", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension"}},
-              {"name": "union", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtension"}},
-              {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtension"}},
-              {"name": "inputObject", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ScalarTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ScalarTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "FieldsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence2"}},
-              {"name": "seq3", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence3"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence3",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ImplementsInterfaces",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfacesSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfacesSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ImplementsInterfacesSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}},
-              {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ImplementsInterfacesSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Amp", "type": {"optional": "unit"}},
-              {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.FieldsDefinition",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.FieldDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.FieldDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
-              {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.ArgumentsDefinition",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.InputValueDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputValueDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
-              {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence2"}},
-              {"name": "seq3", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence3"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
-              {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence3",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "UnionMemberTypes", "type": {"optional": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionMemberTypes",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypesSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypesSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionMemberTypesSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "UnionMemberTypes", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}},
-              {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionMemberTypesSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Or", "type": {"optional": "unit"}},
-              {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtensionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtensionSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionTypeExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "UnionMemberTypes", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.UnionTypeExtensionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "EnumValuesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumValuesDefinition",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumValueDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "EnumValue", "type": {"variable": "hydra.graphql.syntax.EnumValue"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtensionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtensionSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumTypeExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "EnumValuesDefinition", "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.EnumTypeExtensionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeDefinition",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputFieldsDefinition",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.InputValueDefinition"}}}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtensionSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtensionSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
-              {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single GraphQL directive, consisting of a name and optional arguments."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveDefinition",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
-              {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
-              {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
-              {"name": "Repeatable", "type": {"optional": "unit"}},
-              {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.DirectiveLocations",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "seq", "type": {"variable": "hydra.graphql.syntax.DirectiveLocationsSequence"}},
-              {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.DirectiveLocationsSequence2"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.DirectiveLocationsSequence",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}},
-              {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.graphql.syntax.DirectiveLocationsSequence2",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Or", "type": {"optional": "unit"}},
-              {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
+                  {"name": "Repeatable", "type": {"optional": "unit"}},
+                  {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL directive definition, giving its name, arguments, repeatability, and locations."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveLocation",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "executable", "type": {"variable": "hydra.graphql.syntax.ExecutableDirectiveLocation"}},
-              {"name": "typeSystem", "type": {"variable": "hydra.graphql.syntax.TypeSystemDirectiveLocation"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "executable", "type": {"variable": "hydra.graphql.syntax.ExecutableDirectiveLocation"}},
+                  {"name": "typeSystem", "type": {"variable": "hydra.graphql.syntax.TypeSystemDirectiveLocation"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A location at which a GraphQL directive may be applied, either executable or type-system."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.DirectiveLocations",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.DirectiveLocationsSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.DirectiveLocationsSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A pipe-separated list of GraphQL directive locations."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.DirectiveLocationsSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}},
+                  {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty DirectiveLocations sequence with a leading list of locations."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.DirectiveLocationsSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Or", "type": {"optional": "unit"}},
+                  {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The base case of a DirectiveLocations sequence: a single, optionally pipe-prefixed location."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Directives",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Directive"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A list of GraphQL directives applied to a definition or selection."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Document",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Definition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL document, consisting of a list of definitions."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "EnumValuesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL enum type definition, giving its name, directives, and enum values."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtensionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtensionSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL enum type, either adding enum values or only directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumTypeExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "EnumValuesDefinition", "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An enum type extension that adds new enum values, with optional directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumTypeExtensionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An enum type extension consisting of directives only, with no new enum values."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL enum value, represented as a name (excluding true, false, and null)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumValueDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "EnumValue", "type": {"variable": "hydra.graphql.syntax.EnumValue"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A single value definition within a GraphQL enum type, with optional description and directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.EnumValuesDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.EnumValueDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The braced list of enum value definitions in a GraphQL enum type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ExecutableDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "operation", "type": {"variable": "hydra.graphql.syntax.OperationDefinition"}},
+                  {"name": "fragment", "type": {"variable": "hydra.graphql.syntax.FragmentDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL executable definition, either an operation or a fragment definition."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ExecutableDirectiveLocation",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "QUERY", "type": "unit"},
-              {"name": "MUTATION", "type": "unit"},
-              {"name": "SUBSCRIPTION", "type": "unit"},
-              {"name": "FIELD", "type": "unit"},
-              {"name": "FRAGMENT_DEFINITION", "type": "unit"},
-              {"name": "FRAGMENT_SPREAD", "type": "unit"},
-              {"name": "INLINE_FRAGMENT", "type": "unit"},
-              {"name": "VARIABLE_DEFINITION", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "QUERY", "type": "unit"},
+                  {"name": "MUTATION", "type": "unit"},
+                  {"name": "SUBSCRIPTION", "type": "unit"},
+                  {"name": "FIELD", "type": "unit"},
+                  {"name": "FRAGMENT_DEFINITION", "type": "unit"},
+                  {"name": "FRAGMENT_SPREAD", "type": "unit"},
+                  {"name": "INLINE_FRAGMENT", "type": "unit"},
+                  {"name": "VARIABLE_DEFINITION", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A directive location valid on GraphQL executable definitions (queries, fields, fragments, etc.)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ExecutableDocument",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.ExecutableDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL document consisting only of executable definitions."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Field",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Alias", "type": {"optional": {"variable": "hydra.graphql.syntax.Alias"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Arguments", "type": {"optional": {"variable": "hydra.graphql.syntax.Arguments"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "SelectionSet", "type": {"optional": {"variable": "hydra.graphql.syntax.SelectionSet"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL field selection, with optional alias, arguments, directives, and sub-selection set."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FieldDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
+                  {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A field definition within a GraphQL object or interface type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FieldsDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.FieldDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The braced list of field definitions in a GraphQL object or interface type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FloatValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL floating-point literal."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FragmentDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
+                  {"name": "TypeCondition", "type": {"variable": "hydra.graphql.syntax.TypeCondition"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL fragment definition, naming a type condition and a selection set."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FragmentName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The name of a GraphQL fragment (any name other than \"on\")."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.FragmentSpread",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "FragmentName", "type": {"variable": "hydra.graphql.syntax.FragmentName"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL fragment spread, referencing a named fragment with optional directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ImplementsInterfaces",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfacesSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfacesSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A clause declaring the interfaces implemented by a GraphQL object or interface type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ImplementsInterfacesSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}},
+                  {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty ImplementsInterfaces list with a leading list of interfaces."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ImplementsInterfacesSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Amp", "type": {"optional": "unit"}},
+                  {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The base case of an ImplementsInterfaces list: a single, optionally ampersand-prefixed interface."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InlineFragment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "TypeCondition", "type": {"optional": {"variable": "hydra.graphql.syntax.TypeCondition"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL inline fragment, with optional type condition, directives, and a selection set."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputFieldsDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.InputValueDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The braced list of input field definitions in a GraphQL input object type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL input object type definition, either with or without input fields."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An input object type definition that includes an input fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An input object type definition with no input fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtensionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtensionSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL input object type, either with or without input fields."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "InputFieldsDefinition", "type": {"variable": "hydra.graphql.syntax.InputFieldsDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An input object type extension that adds an input fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An input object type extension consisting of directives only."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InputValueDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
+                  {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single input value definition, used for field arguments and input object fields."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.IntValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL integer literal."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL interface type definition, either with or without a fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An interface type definition that includes a fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An interface type definition with no fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence2"}},
+                  {"name": "seq3", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtensionSequence3"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL interface type, in one of three forms."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An interface type extension that adds a fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An interface type extension that adds directives but no fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence3",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An interface type extension that adds only implemented interfaces."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ListType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Type"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL list type, wrapping an inner type in square brackets."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ListValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ListValueSequence"}},
+                  {"name": "sequence2", "type": {"list": {"variable": "hydra.graphql.syntax.Value"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL list literal, either empty or containing a sequence of values."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ListValueSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": "unit",
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The empty-list form of a GraphQL ListValue."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Name",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL name: an identifier matching [_A-Za-z][_0-9A-Za-z]*."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.NamedType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL named type, referencing a type by its name."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.NonNullType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "named", "type": {"variable": "hydra.graphql.syntax.NamedType"}},
+                  {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL non-null type, wrapping a named or list type with a trailing exclamation mark."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.NullValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The GraphQL null literal."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectField",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Value", "type": {"variable": "hydra.graphql.syntax.Value"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single field of a GraphQL object literal, consisting of a name and a value."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "FieldsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL object type definition, giving its name, interfaces, directives, and fields."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence2"}},
+                  {"name": "seq3", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtensionSequence3"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL object type, in one of three forms."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "FieldsDefinition", "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An object type extension that adds a fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"optional": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An object type extension that adds directives but no fields definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence3",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "ImplementsInterfaces", "type": {"variable": "hydra.graphql.syntax.ImplementsInterfaces"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An object type extension that adds only implemented interfaces."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.ObjectValueSequence"}},
+                  {"name": "sequence2", "type": {"list": {"variable": "hydra.graphql.syntax.ObjectField"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL object literal, either empty or containing a sequence of object fields."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ObjectValueSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": "unit",
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The empty-object form of a GraphQL ObjectValue."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.OperationDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.OperationDefinitionSequence"}},
+                  {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL operation definition, either a shorthand query or an explicit operation."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.OperationDefinitionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "OperationType", "type": {"variable": "hydra.graphql.syntax.OperationType"}},
+                  {"name": "Name", "type": {"optional": {"variable": "hydra.graphql.syntax.Name"}}},
+                  {"name": "VariablesDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.VariablesDefinition"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "SelectionSet", "type": {"variable": "hydra.graphql.syntax.SelectionSet"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "An explicit GraphQL operation definition with a type, optional name, variables, and directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.OperationType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "Query", "type": "unit"}, {"name": "Mutation", "type": "unit"}, {"name": "Subscription", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The type of a GraphQL operation: query, mutation, or subscription."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.RootOperationTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "OperationType", "type": {"variable": "hydra.graphql.syntax.OperationType"}},
+                  {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A mapping from a GraphQL operation type to its root object type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ScalarTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL scalar type definition, with optional description and directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.ScalarTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL scalar type, adding directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.SchemaDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL schema definition, declaring its root operation types."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.SchemaExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.SchemaExtensionSequence"}},
+                  {"name": "sequence2", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL schema, adding root operation types or directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.SchemaExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "RootOperationTypeDefinition", "type": {"variable": "hydra.graphql.syntax.RootOperationTypeDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A schema extension that adds a root operation type definition."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Selection",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Field", "type": {"variable": "hydra.graphql.syntax.Field"}},
+                  {"name": "FragmentSpread", "type": {"variable": "hydra.graphql.syntax.FragmentSpread"}},
+                  {"name": "InlineFragment", "type": {"variable": "hydra.graphql.syntax.InlineFragment"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A single selection within a GraphQL selection set: a field, fragment spread, or inline fragment."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.SelectionSet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Selection"}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A braced list of GraphQL selections."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.StringValue",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL string literal."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Type",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "named", "type": {"variable": "hydra.graphql.syntax.NamedType"}},
+                  {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListType"}},
+                  {"name": "nonNull", "type": {"variable": "hydra.graphql.syntax.NonNullType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL type reference: named, list, or non-null."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeCondition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "On", "type": "unit"}, {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL type condition, naming the type a fragment applies to."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "scalar", "type": {"variable": "hydra.graphql.syntax.ScalarTypeDefinition"}},
+                  {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectTypeDefinition"}},
+                  {"name": "interface", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeDefinition"}},
+                  {"name": "union", "type": {"variable": "hydra.graphql.syntax.UnionTypeDefinition"}},
+                  {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumTypeDefinition"}},
+                  {"name": "inputObject", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL type system definition for a single named type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "scalar", "type": {"variable": "hydra.graphql.syntax.ScalarTypeExtension"}},
+                  {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectTypeExtension"}},
+                  {"name": "interface", "type": {"variable": "hydra.graphql.syntax.InterfaceTypeExtension"}},
+                  {"name": "union", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtension"}},
+                  {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtension"}},
+                  {"name": "inputObject", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL named type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeSystemDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "schema", "type": {"variable": "hydra.graphql.syntax.SchemaDefinition"}},
+                  {"name": "type", "type": {"variable": "hydra.graphql.syntax.TypeDefinition"}},
+                  {"name": "directive", "type": {"variable": "hydra.graphql.syntax.DirectiveDefinition"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL type system definition: schema, type, or directive."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "definition", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}},
+                  {"name": "extension", "type": {"variable": "hydra.graphql.syntax.TypeSystemExtension"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Either a GraphQL type system definition or an extension of one."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDirectiveLocation",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "SCHEMA", "type": "unit"},
-              {"name": "SCALAR", "type": "unit"},
-              {"name": "OBJECT", "type": "unit"},
-              {"name": "FIELD_DEFINITION", "type": "unit"},
-              {"name": "ARGUMENT_DEFINITION", "type": "unit"},
-              {"name": "INTERFACE", "type": "unit"},
-              {"name": "UNION", "type": "unit"},
-              {"name": "ENUM", "type": "unit"},
-              {"name": "ENUM_VALUE", "type": "unit"},
-              {"name": "INPUT_OBJECT", "type": "unit"},
-              {"name": "INPUT_FIELD_DEFINITION", "type": "unit"}]}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "SCHEMA", "type": "unit"},
+                  {"name": "SCALAR", "type": "unit"},
+                  {"name": "OBJECT", "type": "unit"},
+                  {"name": "FIELD_DEFINITION", "type": "unit"},
+                  {"name": "ARGUMENT_DEFINITION", "type": "unit"},
+                  {"name": "INTERFACE", "type": "unit"},
+                  {"name": "UNION", "type": "unit"},
+                  {"name": "ENUM", "type": "unit"},
+                  {"name": "ENUM_VALUE", "type": "unit"},
+                  {"name": "INPUT_OBJECT", "type": "unit"},
+                  {"name": "INPUT_FIELD_DEFINITION", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A directive location valid on GraphQL type system definitions."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeSystemDocment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL document consisting only of type system definitions."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeSystemExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "schema", "type": {"variable": "hydra.graphql.syntax.SchemaExtension"}},
+                  {"name": "type", "type": {"variable": "hydra.graphql.syntax.TypeExtension"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL schema or type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.TypeSystemExtensionDocument",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL document consisting of type system definitions and extensions."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionMemberTypes",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypesSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypesSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The list of member types of a GraphQL union type, introduced by an equals sign."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionMemberTypesSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "UnionMemberTypes", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}},
+                  {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty UnionMemberTypes list with a leading list of member types."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionMemberTypesSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Or", "type": {"optional": "unit"}},
+                  {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The base case of a UnionMemberTypes list: a single, optionally pipe-prefixed member type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionTypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "UnionMemberTypes", "type": {"optional": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL union type definition, giving its name, directives, and member types."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionTypeExtension",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "seq", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtensionSequence"}},
+                  {"name": "seq2", "type": {"variable": "hydra.graphql.syntax.UnionTypeExtensionSequence2"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An extension of a GraphQL union type, either adding member types or only directives."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionTypeExtensionSequence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}},
+                  {"name": "UnionMemberTypes", "type": {"variable": "hydra.graphql.syntax.UnionMemberTypes"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A union type extension that adds new member types."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.UnionTypeExtensionSequence2",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
+                  {"name": "Directives", "type": {"variable": "hydra.graphql.syntax.Directives"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A union type extension consisting of directives only."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Value",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Variable", "type": {"variable": "hydra.graphql.syntax.Variable"}},
+                  {"name": "int", "type": {"variable": "hydra.graphql.syntax.IntValue"}},
+                  {"name": "float", "type": {"variable": "hydra.graphql.syntax.FloatValue"}},
+                  {"name": "string", "type": {"variable": "hydra.graphql.syntax.StringValue"}},
+                  {"name": "boolean", "type": {"variable": "hydra.graphql.syntax.BooleanValue"}},
+                  {"name": "null", "type": {"variable": "hydra.graphql.syntax.NullValue"}},
+                  {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumValue"}},
+                  {"name": "list", "type": {"variable": "hydra.graphql.syntax.ListValue"}},
+                  {"name": "object", "type": {"variable": "hydra.graphql.syntax.ObjectValue"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL value: a variable, literal, list, or object."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.Variable",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.graphql.syntax.Name"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GraphQL variable reference, introduced by a dollar sign."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.graphql.syntax.VariablesDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Variable", "type": {"variable": "hydra.graphql.syntax.Variable"}},
+                  {"name": "Type", "type": {"variable": "hydra.graphql.syntax.Type"}},
+                  {"name": "DefaultValue", "type": {"optional": {"variable": "hydra.graphql.syntax.DefaultValue"}}},
+                  {"name": "Directives", "type": {"optional": {"variable": "hydra.graphql.syntax.Directives"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single variable definition in a GraphQL operation's variable list."}}}]}}}}}}]}

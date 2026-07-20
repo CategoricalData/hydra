@@ -121,7 +121,9 @@ link = define "Link" $
       T.optional T.string]
 
 mediaType :: TypeDefinition
-mediaType = define "MediaType" $ T.wrap T.string
+mediaType = define "MediaType" $
+  doc "An IANA media type (MIME type) string identifying the format of an asset or linked resource" $
+  T.wrap T.string
 
 relationType :: TypeDefinition
 relationType = define "RelationType" $
@@ -166,6 +168,7 @@ stac = typeref ns
 
 stacRelationType :: TypeDefinition
 stacRelationType = define "StacRelationType" $
+  doc "A STAC-specific link relation type used to describe relationships between STAC entities" $
   T.union [
     "self">:
       doc ("STRONGLY RECOMMENDED. Absolute URL to the Item if it is available at a public URL. This is " ++
@@ -183,10 +186,16 @@ stacRelationType = define "StacRelationType" $
       doc ("URL to a STAC Item that was used as input data in the creation of this Item.") T.unit]
 
 stacVersion :: TypeDefinition
-stacVersion = define "StacVersion" $ T.wrap T.string
+stacVersion = define "StacVersion" $
+  doc "The version of the STAC specification that an Item implements" $
+  T.wrap T.string
 
 uri :: TypeDefinition
-uri = define "Uri" $ T.wrap T.string
+uri = define "Uri" $
+  doc "A URI string, used for asset and other resource references" $
+  T.wrap T.string
 
 url_ :: TypeDefinition
-url_ = define "Url" $ T.wrap T.string
+url_ = define "Url" $
+  doc "A URL string, used for links to related entities" $
+  T.wrap T.string

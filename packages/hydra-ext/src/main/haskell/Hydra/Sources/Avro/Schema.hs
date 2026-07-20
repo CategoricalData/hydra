@@ -46,6 +46,7 @@ module_ = Module {
 
 array_ :: TypeDefinition
 array_ = define "Array" $
+  doc "An Avro array schema" $
   T.record [
     "items">: avro "Schema"]
 
@@ -54,6 +55,7 @@ avro = typeref ns
 
 enum_ :: TypeDefinition
 enum_ = define "Enum" $
+  doc "An Avro enum schema" $
   T.record [
     "symbols">:
       doc ("a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; " ++
@@ -68,6 +70,7 @@ enum_ = define "Enum" $
 
 field_ :: TypeDefinition
 field_ = define "Field" $
+  doc "An Avro record field" $
   T.record [
     "name">:
       doc "a JSON string providing the name of the field"
@@ -93,6 +96,7 @@ field_ = define "Field" $
 
 fixed_ :: TypeDefinition
 fixed_ = define "Fixed" $
+  doc "An Avro fixed-size binary schema" $
   T.record [
     "size">:
       doc "an integer, specifying the number of bytes per value"
@@ -103,11 +107,13 @@ json = typeref $ JsonModel.ns
 
 map_ :: TypeDefinition
 map_ = define "Map" $
+  doc "An Avro map schema" $
   T.record [
     "values">: avro "Schema"]
 
 named :: TypeDefinition
 named = define "Named" $
+  doc "An Avro named schema: enum, fixed, or record" $
   T.record [
     "name">:
       doc "a string naming this schema"
@@ -128,6 +134,7 @@ named = define "Named" $
 
 namedType :: TypeDefinition
 namedType = define "NamedType" $
+  doc "The type-specific content of an Avro named schema" $
   T.union [
     "enum">: avro "Enum",
     "fixed">: avro "Fixed",
@@ -135,10 +142,12 @@ namedType = define "NamedType" $
 
 order :: TypeDefinition
 order = define "Order" $
+  doc "Specifies how a field impacts sort ordering of its enclosing record" $
   T.enum ["ascending", "descending", "ignore"]
 
 primitive :: TypeDefinition
 primitive = define "Primitive" $
+  doc "An Avro primitive type" $
   T.union [
     "null">:
       doc "no value" T.unit,
@@ -159,6 +168,7 @@ primitive = define "Primitive" $
 
 record_ :: TypeDefinition
 record_ = define "Record" $
+  doc "An Avro record schema" $
   T.record [
     "fields">:
       doc "a JSON array, listing fields" $
@@ -166,6 +176,7 @@ record_ = define "Record" $
 
 schema :: TypeDefinition
 schema = define "Schema" $
+  doc "An Avro schema, in any of its forms" $
   T.union [
     "array">: avro "Array",
     "map">: avro "Map",
@@ -178,4 +189,5 @@ schema = define "Schema" $
 
 union_ :: TypeDefinition
 union_ = define "Union" $
+  doc "An Avro union schema: a list of alternative schemas" $
   T.wrap $ T.list $ avro "Schema"

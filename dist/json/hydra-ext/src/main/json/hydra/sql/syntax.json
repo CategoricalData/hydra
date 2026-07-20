@@ -9,687 +9,1940 @@
     {
       "type": {
         "name": "hydra.sql.syntax.ApproximateNumericLiteral",
-        "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.sql.syntax.BinaryStringLiteral", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.CharacterStringLiteral", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.sql.syntax.DateString", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.DomainName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ExactNumericLiteral", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.LeftBracketOrTrigraph", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.RightBracketOrTrigraph", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.NationalCharacterStringLiteral", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.PathResolvedUserDefinedTypeName",
-        "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.sql.syntax.TableName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.sql.syntax.TimeString", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.TimestampLiteral", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.UnicodeCharacterStringLiteral", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.UnsignedInteger", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An approximate (floating-point) numeric literal, such as 1.5E10"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ApproximateNumericType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "float", "type": {"optional": {"variable": "hydra.sql.syntax.Precision"}}},
-              {"name": "real", "type": "unit"},
-              {"name": "double", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "float", "type": {"optional": {"variable": "hydra.sql.syntax.Precision"}}},
+                  {"name": "real", "type": "unit"},
+                  {"name": "double", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An approximate numeric type: FLOAT, REAL, or DOUBLE PRECISION"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayElement",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single element of an array value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayElementList",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "first", "type": {"variable": "hydra.sql.syntax.ArrayElement"}},
-              {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ArrayElement"}}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ArrayElementReference", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.ArrayType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "first", "type": {"variable": "hydra.sql.syntax.ArrayElement"}},
+                  {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ArrayElement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of array elements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ArrayElementReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an element of an array by index"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ArrayType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ARRAY collection type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueConstructor",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "enumeration", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByEnumeration"}},
-              {"name": "query", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByQuery"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ArrayValueConstructorByQuery", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "enumeration", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByEnumeration"}},
+                  {"name": "query", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructorByQuery"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A constructor for an array value, either by enumeration or by query"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueConstructorByEnumeration",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "LeftBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.LeftBracketOrTrigraph"}},
-              {"name": "ArrayElementList", "type": {"variable": "hydra.sql.syntax.ArrayElementList"}},
-              {"name": "RightBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.RightBracketOrTrigraph"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ArrayValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.AsSubqueryClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.AttributeOrMethodReference", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "LeftBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.LeftBracketOrTrigraph"}},
+                  {"name": "ArrayElementList", "type": {"variable": "hydra.sql.syntax.ArrayElementList"}},
+                  {"name": "RightBracketOrTrigraph", "type": {"variable": "hydra.sql.syntax.RightBracketOrTrigraph"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An array value constructed by explicitly enumerating its elements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ArrayValueConstructorByQuery",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An array value constructed from the result of a query"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ArrayValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to an array value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.AsSubqueryClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A clause introducing a table's contents as the result of a subquery"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.AttributeOrMethodReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to an attribute or method of a structured value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BinaryLargeObjectStringType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "binary", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
-              {"name": "blob", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "binary", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
+                  {"name": "blob", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A binary large object string type: BINARY LARGE OBJECT or BLOB"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.BinaryStringLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary string literal, e.g. X'FF00'"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanFactor",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "NOT", "type": {"optional": "unit"}},
-              {"name": "BooleanTest", "type": {"variable": "hydra.sql.syntax.BooleanTest"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NOT", "type": {"optional": "unit"}},
+                  {"name": "BooleanTest", "type": {"variable": "hydra.sql.syntax.BooleanTest"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean test, optionally negated with NOT"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanLiteral",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "TRUE", "type": "unit"}, {"name": "FALSE", "type": "unit"}, {"name": "UNKNOWN", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.sql.syntax.BooleanPredicand", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "TRUE", "type": "unit"}, {"name": "FALSE", "type": "unit"}, {"name": "UNKNOWN", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal: TRUE, FALSE, or UNKNOWN"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.BooleanPredicand",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operand of a boolean predicate"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanPrimary",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "predicate", "type": {"variable": "hydra.sql.syntax.Predicate"}},
-              {"name": "predicand", "type": {"variable": "hydra.sql.syntax.BooleanPredicand"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "predicate", "type": {"variable": "hydra.sql.syntax.Predicate"}},
+                  {"name": "predicand", "type": {"variable": "hydra.sql.syntax.BooleanPredicand"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A boolean primary expression: either a predicate or a boolean predicand"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTerm",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "factor", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}},
-              {"name": "conjunction", "type": {"variable": "hydra.sql.syntax.BooleanTermAnd"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "factor", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}},
+                  {"name": "conjunction", "type": {"variable": "hydra.sql.syntax.BooleanTermAnd"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A boolean term: a factor, or a conjunction of terms with AND"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTermAnd",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
-              {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
+                  {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanFactor"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A conjunction of two boolean terms joined by AND"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTest",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "BooleanPrimary", "type": {"variable": "hydra.sql.syntax.BooleanPrimary"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.BooleanTestSequenceOption"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "BooleanPrimary", "type": {"variable": "hydra.sql.syntax.BooleanPrimary"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.BooleanTestSequenceOption"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A boolean primary, optionally compared against a truth value with IS"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTestSequenceOption",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "NOT", "type": {"optional": "unit"}},
-              {"name": "TruthValue", "type": {"variable": "hydra.sql.syntax.TruthValue"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.BooleanType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "NOT", "type": {"optional": "unit"}},
+                  {"name": "TruthValue", "type": {"variable": "hydra.sql.syntax.TruthValue"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The IS [NOT] truth-value suffix of a boolean test"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.BooleanType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The BOOLEAN data type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "term", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
-              {"name": "disjunction", "type": {"variable": "hydra.sql.syntax.BooleanValueExpressionOr"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "term", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}},
+                  {"name": "disjunction", "type": {"variable": "hydra.sql.syntax.BooleanValueExpressionOr"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A boolean value expression: a term, or a disjunction of terms with OR"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanValueExpressionOr",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
-              {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.CaseExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.CastSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.CharacterSetSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "lhs", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
+                  {"name": "rhs", "type": {"variable": "hydra.sql.syntax.BooleanTerm"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A disjunction of two boolean value expressions joined by OR"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.CaseExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A CASE expression, selecting a result from among several alternatives"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.CastSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A CAST expression, converting a value to a specified data type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.CharacterSetSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a character set"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.CharacterStringLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A character string literal, e.g. 'hello'"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CharacterStringType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "character", "type": {"optional": {"variable": "hydra.sql.syntax.Length"}}},
-              {"name": "char", "type": {"optional": {"variable": "hydra.sql.syntax.Length"}}},
-              {"name": "characterVarying", "type": {"variable": "hydra.sql.syntax.Length"}},
-              {"name": "charVarying", "type": {"variable": "hydra.sql.syntax.Length"}},
-              {"name": "varchar", "type": {"variable": "hydra.sql.syntax.Length"}},
-              {"name": "characterLargeObject", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
-              {"name": "charLargeObject", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
-              {"name": "clob", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.CollateClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "character", "type": {"optional": {"variable": "hydra.sql.syntax.Length"}}},
+                  {"name": "char", "type": {"optional": {"variable": "hydra.sql.syntax.Length"}}},
+                  {"name": "characterVarying", "type": {"variable": "hydra.sql.syntax.Length"}},
+                  {"name": "charVarying", "type": {"variable": "hydra.sql.syntax.Length"}},
+                  {"name": "varchar", "type": {"variable": "hydra.sql.syntax.Length"}},
+                  {"name": "characterLargeObject", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
+                  {"name": "charLargeObject", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}},
+                  {"name": "clob", "type": {"optional": {"variable": "hydra.sql.syntax.LargeObjectLength"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A character string type: CHARACTER, VARCHAR, or CHARACTER LARGE OBJECT"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.CollateClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A COLLATE clause specifying the collation to apply to a character value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayType"}},
-              {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetType"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayType"}},
+                  {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetType"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A collection type: ARRAY or MULTISET"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionValueConstructor",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructor"}},
-              {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueConstructor"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueConstructor"}},
+                  {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueConstructor"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A constructor for a collection value: an array or multiset constructor"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueExpression"}},
-              {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueExpression"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnConstraintDefinition", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayValueExpression"}},
+                  {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetValueExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a collection value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ColumnConstraintDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A constraint attached to a single column definition"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnDefinition",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
-              {"name": "typeOrDomain", "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption"}}},
-              {"name": "refScope", "type": {"optional": {"variable": "hydra.sql.syntax.ReferenceScopeCheck"}}},
-              {
-                "name": "defaultOrIdentityOrGeneration",
-                "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption"}}},
-              {"name": "constraints", "type": {"list": {"variable": "hydra.sql.syntax.ColumnConstraintDefinition"}}},
-              {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "DataType", "type": {"variable": "hydra.sql.syntax.DataType"}},
-              {"name": "DomainName", "type": {"variable": "hydra.sql.syntax.DomainName"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
+                  {"name": "typeOrDomain", "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption"}}},
+                  {"name": "refScope", "type": {"optional": {"variable": "hydra.sql.syntax.ReferenceScopeCheck"}}},
+                  {
+                    "name": "defaultOrIdentityOrGeneration",
+                    "type": {"optional": {"variable": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption"}}},
+                  {"name": "constraints", "type": {"list": {"variable": "hydra.sql.syntax.ColumnConstraintDefinition"}}},
+                  {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The definition of a single column within a table definition"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "DefaultClause", "type": {"variable": "hydra.sql.syntax.DefaultClause"}},
-              {"name": "IdentityColumnSpecification", "type": {"variable": "hydra.sql.syntax.IdentityColumnSpecification"}},
-              {"name": "GenerationClause", "type": {"variable": "hydra.sql.syntax.GenerationClause"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "DefaultClause", "type": {"variable": "hydra.sql.syntax.DefaultClause"}},
+                  {"name": "IdentityColumnSpecification", "type": {"variable": "hydra.sql.syntax.IdentityColumnSpecification"}},
+                  {"name": "GenerationClause", "type": {"variable": "hydra.sql.syntax.GenerationClause"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A column's default value, identity, or generation specification"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "DataType", "type": {"variable": "hydra.sql.syntax.DataType"}},
+                  {"name": "DomainName", "type": {"variable": "hydra.sql.syntax.DomainName"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A column's declared data type or domain"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ColumnName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnNameList",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "first", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
-              {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ColumnName"}}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnOptions", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.ColumnReference", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "first", "type": {"variable": "hydra.sql.syntax.ColumnName"}},
+                  {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ColumnName"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of column names"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ColumnOptions",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The WITH OPTIONS clause of a column definition inherited via LIKE"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ColumnReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to a column, optionally qualified by a table or correlation name"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CommonValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericValueExpression"}},
-              {"name": "string", "type": {"variable": "hydra.sql.syntax.StringValueExpression"}},
-              {"name": "datetime", "type": {"variable": "hydra.sql.syntax.DatetimeValueExpression"}},
-              {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalValueExpression"}},
-              {"name": "userDefined", "type": {"variable": "hydra.sql.syntax.UserDefinedTypeValueExpression"}},
-              {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceValueExpression"}},
-              {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionValueExpression"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericValueExpression"}},
+                  {"name": "string", "type": {"variable": "hydra.sql.syntax.StringValueExpression"}},
+                  {"name": "datetime", "type": {"variable": "hydra.sql.syntax.DatetimeValueExpression"}},
+                  {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalValueExpression"}},
+                  {"name": "userDefined", "type": {"variable": "hydra.sql.syntax.UserDefinedTypeValueExpression"}},
+                  {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceValueExpression"}},
+                  {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionValueExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A value expression common to numeric, string, datetime, interval, user-defined, reference, and collection types"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A row value constructor whose element types are inferred from context"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "specialCase", "type": {"variable": "hydra.sql.syntax.RowValueSpecialCase"}},
-              {"name": "constructor", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor"}}]}}}},
-    {
-      "type": {"name": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "specialCase", "type": {"variable": "hydra.sql.syntax.RowValueSpecialCase"}},
+                  {"name": "constructor", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A contextually typed row value expression: a special case or a constructor"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "first", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}},
-              {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "first", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}},
+                  {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of contextually typed row value expressions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A table value constructor built from a list of contextually typed row values"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DataType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "predefined", "type": {"variable": "hydra.sql.syntax.PredefinedType"}},
-              {"name": "row", "type": {"variable": "hydra.sql.syntax.RowType"}},
-              {"name": "named", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
-              {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceType"}},
-              {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionType"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "predefined", "type": {"variable": "hydra.sql.syntax.PredefinedType"}},
+                  {"name": "row", "type": {"variable": "hydra.sql.syntax.RowType"}},
+                  {"name": "named", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
+                  {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceType"}},
+                  {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A data type: predefined, row, named, reference, or collection"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DateLiteral",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.DateString"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.DateString"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A DATE literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.DateString",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The string representation of a date literal, e.g. '2003-01-01'"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DatetimeLiteral",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "date", "type": {"variable": "hydra.sql.syntax.DateLiteral"}},
-              {"name": "time", "type": {"variable": "hydra.sql.syntax.TimeLiteral"}},
-              {"name": "timestamp", "type": {"variable": "hydra.sql.syntax.TimestampLiteral"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.DatetimeType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.DatetimeValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.DefaultClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "date", "type": {"variable": "hydra.sql.syntax.DateLiteral"}},
+                  {"name": "time", "type": {"variable": "hydra.sql.syntax.TimeLiteral"}},
+                  {"name": "timestamp", "type": {"variable": "hydra.sql.syntax.TimestampLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A datetime literal: a date, time, or timestamp literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.DatetimeType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A datetime type: DATE, TIME, or TIMESTAMP"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.DatetimeValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a datetime value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.DefaultClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A DEFAULT clause specifying a column's default value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.DomainName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined domain"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ExactNumericLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An exact numeric literal, such as an integer or fixed-point decimal"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "numeric", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeNumericOption"}}},
-              {"name": "decimal", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecimalOption"}}},
-              {"name": "dec", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecOption"}}},
-              {"name": "smallint", "type": "unit"},
-              {"name": "integer", "type": "unit"},
-              {"name": "int", "type": "unit"},
-              {"name": "bigint", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ExactNumericTypeNumericOption",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ExactNumericTypeDecimalOption",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "numeric", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeNumericOption"}}},
+                  {"name": "decimal", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecimalOption"}}},
+                  {"name": "dec", "type": {"optional": {"variable": "hydra.sql.syntax.ExactNumericTypeDecOption"}}},
+                  {"name": "smallint", "type": "unit"},
+                  {"name": "integer", "type": "unit"},
+                  {"name": "int", "type": "unit"},
+                  {"name": "bigint", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An exact numeric type: NUMERIC, DECIMAL, DEC, SMALLINT, INTEGER, INT, or BIGINT"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericTypeDecOption",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
-              {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.FieldReference", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The precision and optional scale of a DEC type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ExactNumericTypeDecimalOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The precision and optional scale of a DECIMAL type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ExactNumericTypeNumericOption",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Precision", "type": {"variable": "hydra.sql.syntax.Precision"}},
+                  {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The precision and optional scale of a NUMERIC type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.FieldReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to a field of a row or structured value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.FromConstructor",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "columns", "type": {"optional": {"variable": "hydra.sql.syntax.InsertColumnList"}}},
-              {"name": "override", "type": {"optional": {"variable": "hydra.sql.syntax.OverrideClause"}}},
-              {"name": "values", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.FromDefault", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.FromSubquery", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "columns", "type": {"optional": {"variable": "hydra.sql.syntax.InsertColumnList"}}},
+                  {"name": "override", "type": {"optional": {"variable": "hydra.sql.syntax.OverrideClause"}}},
+                  {"name": "values", "type": {"variable": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "An INSERT source specified by an explicit value constructor, with optional column list and override clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.FromDefault",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INSERT source specified as DEFAULT VALUES"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.FromSubquery",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An INSERT source specified as the result of a subquery"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GeneralLiteral",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "string", "type": {"variable": "hydra.sql.syntax.CharacterStringLiteral"}},
-              {"name": "nationalString", "type": {"variable": "hydra.sql.syntax.NationalCharacterStringLiteral"}},
-              {"name": "unicode", "type": {"variable": "hydra.sql.syntax.UnicodeCharacterStringLiteral"}},
-              {"name": "binary", "type": {"variable": "hydra.sql.syntax.BinaryStringLiteral"}},
-              {"name": "dateTime", "type": {"variable": "hydra.sql.syntax.DatetimeLiteral"}},
-              {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalLiteral"}},
-              {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanLiteral"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.GeneralValueSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.GenerationClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "string", "type": {"variable": "hydra.sql.syntax.CharacterStringLiteral"}},
+                  {"name": "nationalString", "type": {"variable": "hydra.sql.syntax.NationalCharacterStringLiteral"}},
+                  {"name": "unicode", "type": {"variable": "hydra.sql.syntax.UnicodeCharacterStringLiteral"}},
+                  {"name": "binary", "type": {"variable": "hydra.sql.syntax.BinaryStringLiteral"}},
+                  {"name": "dateTime", "type": {"variable": "hydra.sql.syntax.DatetimeLiteral"}},
+                  {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalLiteral"}},
+                  {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A general literal: a string, datetime, interval, or boolean literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.GeneralValueSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A general value specification, such as a parameter or dynamic value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.GenerationClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GENERATED ALWAYS AS clause for a computed column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GlobalOrLocal",
-        "body": {"variables": [], "body": {"union": [{"name": "global", "type": "unit"}, {"name": "local", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.sql.syntax.IdentityColumnSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "global", "type": "unit"}, {"name": "local", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The GLOBAL or LOCAL qualifier of a temporary table scope"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.IdentityColumnSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A GENERATED ... AS IDENTITY column specification"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertColumnList",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ColumnNameList"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ColumnNameList"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The parenthesized list of target column names in an INSERT statement"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertColumnsAndSource",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "subquery", "type": {"variable": "hydra.sql.syntax.FromSubquery"}},
-              {"name": "constructor", "type": {"variable": "hydra.sql.syntax.FromConstructor"}},
-              {"name": "default", "type": {"variable": "hydra.sql.syntax.FromDefault"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "subquery", "type": {"variable": "hydra.sql.syntax.FromSubquery"}},
+                  {"name": "constructor", "type": {"variable": "hydra.sql.syntax.FromConstructor"}},
+                  {"name": "default", "type": {"variable": "hydra.sql.syntax.FromDefault"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The column list and value source of an INSERT statement: a subquery, constructor, or default"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertStatement",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "target", "type": {"variable": "hydra.sql.syntax.InsertionTarget"}},
-              {"name": "columnsAndSource", "type": {"variable": "hydra.sql.syntax.InsertColumnsAndSource"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "target", "type": {"variable": "hydra.sql.syntax.InsertionTarget"}},
+                  {"name": "columnsAndSource", "type": {"variable": "hydra.sql.syntax.InsertColumnsAndSource"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL INSERT statement"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertionTarget",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.TableName"}}}}},
-    {"type": {"name": "hydra.sql.syntax.IntervalLiteral", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.IntervalType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.IntervalValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.LargeObjectLength", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.TableName"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The table into which an INSERT statement inserts rows"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.IntervalLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INTERVAL literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.IntervalType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The INTERVAL data type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.IntervalValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to an interval value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.LargeObjectLength",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The length specification of a large object type, e.g. 1K, 1M, or 1G"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.LeftBracketOrTrigraph",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A left square bracket, or its trigraph equivalent ??("}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Length",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}}}},
-    {"type": {"name": "hydra.sql.syntax.LikeClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.MethodInvocation", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.MultisetElementReference", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The length specification of a character or binary string type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.LikeClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A LIKE clause, copying column definitions from another table"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.MethodInvocation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An invocation of a method on a structured value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.MultisetElementReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to an element of a multiset by way of the ELEMENT function"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MultisetType",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.DataType"}}}}},
-    {"type": {"name": "hydra.sql.syntax.MultisetValueConstructor", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.MultisetValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.NationalCharacterStringType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.NewSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.NextValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.NumericType",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericType"}},
-              {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericType"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.NumericValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.DataType"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A MULTISET collection type over a given element data type"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.OverrideClause",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "OVERRIDINGspUSERspVALUE", "type": "unit"}, {"name": "OVERRIDINGspSYSTEMspVALUE", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.ParenthesizedValueExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.Precision",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}}}},
-    {
-      "type": {
-        "name": "hydra.sql.syntax.PredefinedType",
+        "name": "hydra.sql.syntax.MultisetValueConstructor",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "stringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeString"}},
-              {"name": "nationalStringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeNationalString"}},
-              {"name": "blob", "type": {"variable": "hydra.sql.syntax.BinaryLargeObjectStringType"}},
-              {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericType"}},
-              {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanType"}},
-              {"name": "datetime", "type": {"variable": "hydra.sql.syntax.DatetimeType"}},
-              {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalType"}}]}}}},
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor for a multiset value"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedTypeString",
+        "name": "hydra.sql.syntax.MultisetValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.sql.syntax.CharacterStringType"}},
-              {"name": "characters", "type": {"optional": {"variable": "hydra.sql.syntax.CharacterSetSpecification"}}},
-              {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]}}}},
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a multiset value"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.PredefinedTypeNationalString",
+        "name": "hydra.sql.syntax.NationalCharacterStringLiteral",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.sql.syntax.NationalCharacterStringType"}},
-              {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.Predicate", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.QueryExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.ReferenceScopeCheck", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.ReferenceType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.RowType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A national character string literal, e.g. N'hello'"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.sql.syntax.RowValueSpecialCase",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}}}},
+        "name": "hydra.sql.syntax.NationalCharacterStringType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A national character string type: NATIONAL CHARACTER or NATIONAL CHARACTER VARYING"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.NewSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A NEW invocation, constructing an instance of a structured type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.NextValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A NEXT VALUE FOR expression, retrieving the next value of a sequence generator"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "unsigned", "type": {"variable": "hydra.sql.syntax.UnsignedValueSpecification"}},
-              {"name": "column", "type": {"variable": "hydra.sql.syntax.ColumnReference"}},
-              {"name": "setFunction", "type": {"variable": "hydra.sql.syntax.SetFunctionSpecification"}},
-              {"name": "windowFunction", "type": {"variable": "hydra.sql.syntax.WindowFunction"}},
-              {"name": "scalarSubquery", "type": {"variable": "hydra.sql.syntax.ScalarSubquery"}},
-              {"name": "cases", "type": {"variable": "hydra.sql.syntax.CaseExpression"}},
-              {"name": "cast", "type": {"variable": "hydra.sql.syntax.CastSpecification"}},
-              {"name": "field", "type": {"variable": "hydra.sql.syntax.FieldReference"}},
-              {"name": "subtype", "type": {"variable": "hydra.sql.syntax.SubtypeTreatment"}},
-              {"name": "method", "type": {"variable": "hydra.sql.syntax.MethodInvocation"}},
-              {"name": "staticMethod", "type": {"variable": "hydra.sql.syntax.StaticMethodInvocation"}},
-              {"name": "new", "type": {"variable": "hydra.sql.syntax.NewSpecification"}},
-              {"name": "attributeOrMethod", "type": {"variable": "hydra.sql.syntax.AttributeOrMethodReference"}},
-              {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceResolution"}},
-              {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionValueConstructor"}},
-              {"name": "arrayElement", "type": {"variable": "hydra.sql.syntax.ArrayElementReference"}},
-              {"name": "multisetElement", "type": {"variable": "hydra.sql.syntax.MultisetElementReference"}},
-              {"name": "routine", "type": {"variable": "hydra.sql.syntax.RoutineInvocation"}},
-              {"name": "next", "type": {"variable": "hydra.sql.syntax.NextValueExpression"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.ReferenceResolution", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "unsigned", "type": {"variable": "hydra.sql.syntax.UnsignedValueSpecification"}},
+                  {"name": "column", "type": {"variable": "hydra.sql.syntax.ColumnReference"}},
+                  {"name": "setFunction", "type": {"variable": "hydra.sql.syntax.SetFunctionSpecification"}},
+                  {"name": "windowFunction", "type": {"variable": "hydra.sql.syntax.WindowFunction"}},
+                  {"name": "scalarSubquery", "type": {"variable": "hydra.sql.syntax.ScalarSubquery"}},
+                  {"name": "cases", "type": {"variable": "hydra.sql.syntax.CaseExpression"}},
+                  {"name": "cast", "type": {"variable": "hydra.sql.syntax.CastSpecification"}},
+                  {"name": "field", "type": {"variable": "hydra.sql.syntax.FieldReference"}},
+                  {"name": "subtype", "type": {"variable": "hydra.sql.syntax.SubtypeTreatment"}},
+                  {"name": "method", "type": {"variable": "hydra.sql.syntax.MethodInvocation"}},
+                  {"name": "staticMethod", "type": {"variable": "hydra.sql.syntax.StaticMethodInvocation"}},
+                  {"name": "new", "type": {"variable": "hydra.sql.syntax.NewSpecification"}},
+                  {"name": "attributeOrMethod", "type": {"variable": "hydra.sql.syntax.AttributeOrMethodReference"}},
+                  {"name": "reference", "type": {"variable": "hydra.sql.syntax.ReferenceResolution"}},
+                  {"name": "collection", "type": {"variable": "hydra.sql.syntax.CollectionValueConstructor"}},
+                  {"name": "arrayElement", "type": {"variable": "hydra.sql.syntax.ArrayElementReference"}},
+                  {"name": "multisetElement", "type": {"variable": "hydra.sql.syntax.MultisetElementReference"}},
+                  {"name": "routine", "type": {"variable": "hydra.sql.syntax.RoutineInvocation"}},
+                  {"name": "next", "type": {"variable": "hydra.sql.syntax.NextValueExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value expression primary that does not begin with a parenthesis"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.NumericType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericType"}},
+                  {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericType"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric type: exact or approximate"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.NumericValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a numeric value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.OverrideClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "OVERRIDINGspUSERspVALUE", "type": "unit"}, {"name": "OVERRIDINGspSYSTEMspVALUE", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An OVERRIDING USER VALUE or OVERRIDING SYSTEM VALUE clause of an INSERT statement"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ParenthesizedValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A value expression enclosed in parentheses"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.PathResolvedUserDefinedTypeName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A user-defined type name, resolved against the current schema path"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.Precision",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The precision of a numeric type, as an unsigned integer"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.PredefinedType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "stringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeString"}},
+                  {"name": "nationalStringType", "type": {"variable": "hydra.sql.syntax.PredefinedTypeNationalString"}},
+                  {"name": "blob", "type": {"variable": "hydra.sql.syntax.BinaryLargeObjectStringType"}},
+                  {"name": "numeric", "type": {"variable": "hydra.sql.syntax.NumericType"}},
+                  {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanType"}},
+                  {"name": "datetime", "type": {"variable": "hydra.sql.syntax.DatetimeType"}},
+                  {"name": "interval", "type": {"variable": "hydra.sql.syntax.IntervalType"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A predefined data type: string, numeric, boolean, datetime, or interval"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.PredefinedTypeNationalString",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.sql.syntax.NationalCharacterStringType"}},
+                  {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A national character string type together with an optional COLLATE clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.PredefinedTypeString",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.sql.syntax.CharacterStringType"}},
+                  {"name": "characters", "type": {"optional": {"variable": "hydra.sql.syntax.CharacterSetSpecification"}}},
+                  {"name": "collate", "type": {"optional": {"variable": "hydra.sql.syntax.CollateClause"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A character string type together with an optional character set and COLLATE clause"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.Predicate",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A predicate, evaluating to a boolean truth value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.QueryExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A query expression, such as a SELECT statement possibly combined with set operators"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ReferenceResolution",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The DEREF operator, resolving a reference to the value it targets"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ReferenceScopeCheck",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A REFERENCES ARE [NOT] CHECKED clause on a reference-typed column"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.ReferenceType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A REF reference type over a given referenced type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ReferenceValueExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}}}},
-    {"type": {"name": "hydra.sql.syntax.RowValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.RoutineInvocation", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a reference value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.RightBracketOrTrigraph",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A right square bracket, or its trigraph equivalent ??)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.RoutineInvocation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An invocation of a user-defined SQL routine"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.RowType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A ROW type, defined by a list of field name and data type pairs"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.RowValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to a row value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.RowValueSpecialCase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A row value expressed as a single nonparenthesized value expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ScalarSubquery",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.Subquery"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.Subquery"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A subquery that returns exactly one row and one column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Scale",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.UnsignedInteger"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The scale of a numeric type, as an unsigned integer"}}}]}}}}}},
     {
-      "type": {"name": "hydra.sql.syntax.SelfReferencingColumnSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.SetFunctionSpecification", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.StaticMethodInvocation", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.StringValueExpression", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+      "type": {
+        "name": "hydra.sql.syntax.SelfReferencingColumnSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A REF IS clause identifying a table's self-referencing column"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.SetFunctionSpecification",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A set (aggregate) function invocation, such as COUNT or SUM"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.StaticMethodInvocation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An invocation of a static method on a user-defined type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.StringValueExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a character, binary, or Unicode string value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Subquery",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.QueryExpression"}}}}},
-    {"type": {"name": "hydra.sql.syntax.SubtableClause", "body": {"variables": [], "body": {"wrap": "unit"}}}},
-    {"type": {"name": "hydra.sql.syntax.SubtypeTreatment", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.QueryExpression"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A parenthesized query expression used as an operand"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.SubtableClause",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An UNDER clause declaring a table as a subtable of a supertable"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.SubtypeTreatment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A TREAT AS expression, treating a value as an instance of a subtype"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableCommitAction",
-        "body": {"variables": [], "body": {"union": [{"name": "preserve", "type": "unit"}, {"name": "delete", "type": "unit"}]}}}},
-    {"type": {"name": "hydra.sql.syntax.TableConstraintDefinition", "body": {"variables": [], "body": {"wrap": "unit"}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "preserve", "type": "unit"}, {"name": "delete", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The ON COMMIT action of a temporary table: PRESERVE ROWS or DELETE ROWS"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.TableConstraintDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table-level constraint definition"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableContentsSource",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "list", "type": {"variable": "hydra.sql.syntax.TableElementList"}},
-              {"name": "subtableOf", "type": {"variable": "hydra.sql.syntax.TableContentsSourceSubtable"}},
-              {"name": "subquery", "type": {"variable": "hydra.sql.syntax.AsSubqueryClause"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "list", "type": {"variable": "hydra.sql.syntax.TableElementList"}},
+                  {"name": "subtableOf", "type": {"variable": "hydra.sql.syntax.TableContentsSourceSubtable"}},
+                  {"name": "subquery", "type": {"variable": "hydra.sql.syntax.AsSubqueryClause"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The source of a table's contents: an element list, a supertable, or a query"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableContentsSourceSubtable",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
-              {"name": "subtable", "type": {"optional": {"variable": "hydra.sql.syntax.SubtableClause"}}},
-              {"name": "elements", "type": {"optional": {"variable": "hydra.sql.syntax.TableElementList"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.sql.syntax.PathResolvedUserDefinedTypeName"}},
+                  {"name": "subtable", "type": {"optional": {"variable": "hydra.sql.syntax.SubtableClause"}}},
+                  {"name": "elements", "type": {"optional": {"variable": "hydra.sql.syntax.TableElementList"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A table's contents defined as a subtable of a named user-defined type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableDefinition",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "scope", "type": {"optional": {"variable": "hydra.sql.syntax.TableScope"}}},
-              {"name": "name", "type": {"variable": "hydra.sql.syntax.TableName"}},
-              {"name": "source", "type": {"variable": "hydra.sql.syntax.TableContentsSource"}},
-              {"name": "commitActions", "type": {"optional": {"variable": "hydra.sql.syntax.TableCommitAction"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "scope", "type": {"optional": {"variable": "hydra.sql.syntax.TableScope"}}},
+                  {"name": "name", "type": {"variable": "hydra.sql.syntax.TableName"}},
+                  {"name": "source", "type": {"variable": "hydra.sql.syntax.TableContentsSource"}},
+                  {"name": "commitActions", "type": {"optional": {"variable": "hydra.sql.syntax.TableCommitAction"}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL CREATE TABLE statement"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableElement",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "column", "type": {"variable": "hydra.sql.syntax.ColumnDefinition"}},
-              {"name": "tableConstraint", "type": {"variable": "hydra.sql.syntax.TableConstraintDefinition"}},
-              {"name": "like", "type": {"variable": "hydra.sql.syntax.LikeClause"}},
-              {"name": "selfReferencingColumn", "type": {"variable": "hydra.sql.syntax.SelfReferencingColumnSpecification"}},
-              {"name": "columOptions", "type": {"variable": "hydra.sql.syntax.ColumnOptions"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "column", "type": {"variable": "hydra.sql.syntax.ColumnDefinition"}},
+                  {"name": "tableConstraint", "type": {"variable": "hydra.sql.syntax.TableConstraintDefinition"}},
+                  {"name": "like", "type": {"variable": "hydra.sql.syntax.LikeClause"}},
+                  {"name": "selfReferencingColumn", "type": {"variable": "hydra.sql.syntax.SelfReferencingColumnSpecification"}},
+                  {"name": "columOptions", "type": {"variable": "hydra.sql.syntax.ColumnOptions"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An element of a table definition: a column, constraint, LIKE clause, or related option"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableElementList",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "first", "type": {"variable": "hydra.sql.syntax.TableElement"}},
-              {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.TableElement"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "first", "type": {"variable": "hydra.sql.syntax.TableElement"}},
+                  {"name": "rest", "type": {"list": {"variable": "hydra.sql.syntax.TableElement"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of table elements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.TableName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableScope",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.GlobalOrLocal"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.GlobalOrLocal"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The GLOBAL or LOCAL TEMPORARY scope of a table definition"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TimeLiteral",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.TimeString"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.TimeString"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A TIME literal"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.TimeString",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The string representation of a time literal, e.g. '12:00:00'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.TimestampLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A timestamp literal, combining a date and a time"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TruthValue",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "TRUE", "type": "unit"}, {"name": "FALSE", "type": "unit"}, {"name": "UNKNOWN", "type": "unit"}]}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "TRUE", "type": "unit"}, {"name": "FALSE", "type": "unit"}, {"name": "UNKNOWN", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A three-valued logic truth value: TRUE, FALSE, or UNKNOWN"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.UnicodeCharacterStringLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Unicode character string literal, e.g. U&'hello'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.UnsignedInteger",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An unsigned integer literal"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedLiteral",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "numeric", "type": {"variable": "hydra.sql.syntax.UnsignedNumericLiteral"}},
-              {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralLiteral"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "numeric", "type": {"variable": "hydra.sql.syntax.UnsignedNumericLiteral"}},
+                  {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An unsigned literal: a numeric or general literal"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedNumericLiteral",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericLiteral"}},
-              {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericLiteral"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericLiteral"}},
+                  {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericLiteral"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An unsigned numeric literal: exact or approximate"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedValueSpecification",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "literal", "type": {"variable": "hydra.sql.syntax.UnsignedLiteral"}},
-              {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralValueSpecification"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "literal", "type": {"variable": "hydra.sql.syntax.UnsignedLiteral"}},
+                  {"name": "general", "type": {"variable": "hydra.sql.syntax.GeneralValueSpecification"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An unsigned value specification: a literal or a general value specification"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UserDefinedTypeValueExpression",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpressionPrimary"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression that evaluates to a value of a user-defined type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ValueExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "common", "type": {"variable": "hydra.sql.syntax.CommonValueExpression"}},
-              {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
-              {"name": "row", "type": {"variable": "hydra.sql.syntax.RowValueExpression"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "common", "type": {"variable": "hydra.sql.syntax.CommonValueExpression"}},
+                  {"name": "boolean", "type": {"variable": "hydra.sql.syntax.BooleanValueExpression"}},
+                  {"name": "row", "type": {"variable": "hydra.sql.syntax.RowValueExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value expression: common, boolean, or row-valued"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ValueExpressionPrimary",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "parens", "type": {"variable": "hydra.sql.syntax.ParenthesizedValueExpression"}},
-              {"name": "noparens", "type": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}]}}}},
-    {"type": {"name": "hydra.sql.syntax.WindowFunction", "body": {"variables": [], "body": {"wrap": "unit"}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "parens", "type": {"variable": "hydra.sql.syntax.ParenthesizedValueExpression"}},
+                  {"name": "noparens", "type": {"variable": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value expression primary, optionally parenthesized"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.sql.syntax.WindowFunction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": "unit"},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A window function invocation, such as ROW_NUMBER() OVER (...)"}}}]}}}}}}]}

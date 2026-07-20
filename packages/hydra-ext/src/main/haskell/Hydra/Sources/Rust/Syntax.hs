@@ -30,162 +30,109 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just ("A Rust syntax model, based on the Rust Reference grammar"
       ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29"))}
   where
-    definitions = crateLevel ++ items ++ useDeclarations ++ structDefinitions
-      ++ enumDefinitions ++ functionDefinitions ++ typeAliases ++ constStaticMod
-      ++ implBlocks ++ traitDefinitions ++ genericsAndWhere ++ types
-      ++ expressions ++ statements ++ patterns ++ literals ++ attributesVisibility
-      ++ helperTypes
-
-    -- Crate-level constructs
-    crateLevel = [
+    -- Definitions in alphabetical order by local (unqualified) type name.
+    -- Originally grouped by section (crate-level, use declarations, struct/enum/function
+    -- definitions, type aliases, const/static/mod, impl blocks, trait definitions,
+    -- generics/where clauses, type expressions, expressions, statements, patterns, literals,
+    -- attributes/visibility, helper types); see the section comments below for the grouping.
+    definitions = [
+      angleBracketedArgs,
+      arrayExpr,
+      arrayRepeat,
+      arrayType,
+      assignExpr,
+      attribute,
+      binaryExpr,
+      binaryOp,
+      block,
+      callExpr,
+      castExpr,
+      closureExpr,
+      closureParam,
+      compoundAssignExpr,
+      compoundAssignOp,
+      constDef,
       crate,
-      item,
-      itemWithComments]
-
-    -- Item definitions
-    items = []
-
-    -- Use declarations
-    useDeclarations = [
-      useDeclaration,
-      useTree,
-      usePath,
-      useRename,
-      useGroup]
-
-    -- Struct definitions
-    structDefinitions = [
-      structDef,
-      structBody,
-      structField,
-      tupleField]
-
-    -- Enum definitions
-    enumDefinitions = [
       enumDef,
       enumVariant,
-      enumVariantBody]
-
-    -- Function definitions
-    functionDefinitions = [
+      enumVariantBody,
+      exprPath,
+      expression,
+      fieldAccessExpr,
+      fieldPattern,
+      fieldValue,
+      floatLiteral,
       fnDef,
       fnParam,
-      selfParam,
-      methodParam]
-
-    -- Type aliases
-    typeAliases = [
-      typeAlias]
-
-    -- Const, static, and module definitions
-    constStaticMod = [
-      constDef,
-      staticDef,
-      modDef]
-
-    -- Impl blocks
-    implBlocks = [
+      fnPointerType,
+      forExpr,
+      genericArg,
+      genericArguments,
+      genericParam,
+      identifierPattern,
+      ifCondition,
+      ifExpr,
       implBlock,
       implItem,
-      implMethod]
-
-    -- Trait definitions
-    traitDefinitions = [
+      implMethod,
+      indexExpr,
+      integerLiteral,
+      item,
+      itemWithComments,
+      letCondition,
+      letStatement,
+      lifetime,
+      literal,
+      loopExpr,
+      macroDelimiter,
+      macroInvocation,
+      matchArm,
+      matchExpr,
+      methodCallExpr,
+      methodParam,
+      modDef,
+      parenthesizedArgs,
+      pathSegment,
+      pattern,
+      rangeExpr,
+      rangePattern,
+      rawPointerType,
+      refExpr,
+      refPattern,
+      referenceType,
+      selfParam,
+      statement,
+      staticDef,
+      structBody,
+      structDef,
+      structExpr,
+      structField,
+      structPattern,
+      traitConst,
       traitDef,
       traitItem,
       traitMethod,
       traitType,
-      traitConst]
-
-    -- Generics and where clauses
-    genericsAndWhere = [
-      genericParam,
-      typeParamBound,
-      lifetime,
-      whereClause,
-      wherePredicate]
-
-    -- Type expressions
-    types = [
-      type_,
-      typePath,
-      pathSegment,
-      genericArguments,
-      angleBracketedArgs,
-      genericArg,
-      typeBinding,
-      parenthesizedArgs,
-      referenceType,
-      arrayType,
-      fnPointerType,
-      rawPointerType]
-
-    -- Expressions
-    expressions = [
-      expression,
-      exprPath,
-      callExpr,
-      methodCallExpr,
-      fieldAccessExpr,
+      tupleField,
       tupleIndexExpr,
-      closureExpr,
-      closureParam,
-      ifExpr,
-      ifCondition,
-      matchExpr,
-      matchArm,
-      loopExpr,
-      whileExpr,
-      forExpr,
-      binaryExpr,
-      binaryOp,
+      tupleStructPattern,
+      type_,
+      typeAlias,
+      typeAscriptionExpr,
+      typeBinding,
+      typeParamBound,
+      typePath,
       unaryExpr,
       unaryOp,
-      refExpr,
-      structExpr,
-      fieldValue,
-      arrayExpr,
-      indexExpr,
-      rangeExpr,
-      castExpr,
-      typeAscriptionExpr,
-      assignExpr,
-      compoundAssignExpr,
-      compoundAssignOp,
-      macroInvocation,
-      macroDelimiter]
-
-    -- Statements
-    statements = [
-      statement,
-      letStatement,
-      block]
-
-    -- Patterns
-    patterns = [
-      pattern,
-      identifierPattern,
-      refPattern,
-      structPattern,
-      fieldPattern,
-      tupleStructPattern,
-      rangePattern]
-
-    -- Literals
-    literals = [
-      literal,
-      integerLiteral,
-      floatLiteral]
-
-    -- Attributes and visibility
-    attributesVisibility = [
-      attribute,
-      visibility]
-
-    -- Helper types (used in expressions)
-    helperTypes = [
-      letCondition,
-      arrayRepeat]
+      useDeclaration,
+      useGroup,
+      usePath,
+      useRename,
+      useTree,
+      visibility,
+      whereClause,
+      wherePredicate,
+      whileExpr]
 
 
 -- ================================================================================================

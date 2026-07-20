@@ -149,6 +149,7 @@ doc_ = def "doc" $
 
 encode :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error PDL.Schema)
 encode = def "encode" $
+  doc "Encode a Hydra type as a PDL schema, failing if it resolves to a nested named schema" $
       "cx" ~> "g" ~> "aliases" ~> "t" ~>
         cases _Type (Strip.deannotateType @@ var "t")
           (Just $
@@ -169,6 +170,7 @@ encode = def "encode" $
 
 encodeEnumField :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error PDL.EnumField)
 encodeEnumField = def "encodeEnumField" $
+  doc "Encode a Hydra field type as a PDL enum field, converting the name to upper snake case" $
   "cx" ~> "g" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
     "typ" <~ Core.fieldTypeType (var "ft") $
@@ -179,6 +181,7 @@ encodeEnumField = def "encodeEnumField" $
 
 encodePossiblyOptionalType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Type -> Either Error (PDL.Schema, Bool))
 encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
+  doc "Encode a type as a PDL schema together with a flag indicating whether it was optional" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
     cases _Type (Strip.deannotateType @@ var "typ") Nothing [
       _Type_optional>>: lambda "ot" $
@@ -222,6 +225,7 @@ encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
 
 encodeRecordField :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.RecordField)
 encodeRecordField = def "encodeRecordField" $
+  doc "Encode a Hydra field type as a PDL record field" $
   "cx" ~> "g" ~> "aliases" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
     "typ" <~ Core.fieldTypeType (var "ft") $
@@ -334,6 +338,7 @@ encodeType_ = def "encodeType" $
 
 encodeUnionField :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> FieldType -> Either Error PDL.UnionMember)
 encodeUnionField = def "encodeUnionField" $
+  doc "Encode a Hydra field type as a PDL union member, wrapping optional types in a null union" $
   "cx" ~> "g" ~> "aliases" ~> "ft" ~>
     "name" <~ Core.fieldTypeName (var "ft") $
     "typ" <~ Core.fieldTypeType (var "ft") $
@@ -355,6 +360,7 @@ err _cx msg = left (Error.errorOther $ Error.otherError msg)
 
 getAnns :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error PDL.Annotations)
 getAnns = def "getAnns" $
+  doc "Get PDL annotations for a type by looking up its description in the graph" $
   "cx" ~> "g" ~> "typ" ~>
     "r" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
     right (doc_ @@ var "r")
@@ -430,6 +436,7 @@ slashesToDots = def "slashesToDots" $
 
 toPair :: TypedTermDefinition (Module -> M.Map ModuleName String -> (PDL.NamedSchema, [PDL.QualifiedName]) -> (FilePath, PDL.SchemaFile))
 toPair = def "toPair" $
+  doc "Pair a file path derived from a module and schema name with the resulting PDL schema file" $
   "mod" ~> "aliases" ~> "schemaPair" ~>
     "schema" <~ Pairs.first (var "schemaPair") $
     "imports" <~ Pairs.second (var "schemaPair") $
@@ -444,6 +451,7 @@ toPair = def "toPair" $
 
 typeToSchema :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName String -> Module -> TypeDefinition -> Either Error (PDL.NamedSchema, [PDL.QualifiedName]))
 typeToSchema = def "typeToSchema" $
+  doc "Convert a Hydra type definition into a named PDL schema together with its imports" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")) $
     "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $

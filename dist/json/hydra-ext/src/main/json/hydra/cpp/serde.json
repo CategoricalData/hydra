@@ -636,53 +636,6 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a boolean literal to an expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.cpp.serde.captureToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.cpp.syntax.Capture"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "cap",
-                "domain": {"variable": "hydra.cpp.syntax.Capture"},
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "name",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "name"}},
-                            "argument": {"variable": "cap"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                      {
-                        "name": "byRef",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "byReference"}},
-                            "argument": {"variable": "cap"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
-                    "body": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}},
-                                "argument": {"variable": "byRef"}}},
-                            "argument": {
-                              "application": {
-                                "function": {"variable": "hydra.serialization.cst"},
-                                "argument": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "&"}}}},
-                                    "argument": {"variable": "name"}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "name"}}}}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture to an expression"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.cpp.serde.captureListToExpr",
         "signature": {
           "typeParameters": [],
@@ -732,6 +685,53 @@
                     "argument": {"variable": "cl"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture list to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.cpp.serde.captureToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.cpp.syntax.Capture"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "cap",
+                "domain": {"variable": "hydra.cpp.syntax.Capture"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "name",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "name"}},
+                            "argument": {"variable": "cap"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                      {
+                        "name": "byRef",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "byReference"}},
+                            "argument": {"variable": "cap"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "argument": {"variable": "byRef"}}},
+                            "argument": {
+                              "application": {
+                                "function": {"variable": "hydra.serialization.cst"},
+                                "argument": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "&"}}}},
+                                    "argument": {"variable": "name"}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "name"}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture to an expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.caseStatementToExpr",
@@ -3713,6 +3713,54 @@
                   "value": {"literal": {"string": "Convert a logical or operation to an expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.cpp.serde.mapEntryToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.cpp.syntax.MapEntry"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "me",
+                "domain": {"variable": "hydra.cpp.syntax.MapEntry"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "key",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "key"}}, "argument": {"variable": "me"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                      {
+                        "name": "val",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "value"}},
+                            "argument": {"variable": "me"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.serialization.spaceSep"},
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.serialization.curlyBracesList"},
+                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
+                                    "argument": {"variable": "hydra.serialization.inlineStyle"}}},
+                                "argument": {
+                                  "list": [{"application": {"function": {"variable": "hydra.cpp.serde.expressionToExpr"}, "argument": {"variable": "key"}}}]}}},
+                            {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "->"}}}},
+                            {"application": {"function": {"variable": "hydra.cpp.serde.expressionToExpr"}, "argument": {"variable": "val"}}}]}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a map entry to an expression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.cpp.serde.mapToExpr",
         "signature": {
           "typeParameters": [],
@@ -3777,54 +3825,6 @@
                                         "argument": {"variable": "hydra.cpp.serde.mapEntryToExpr"}}},
                                     "argument": {"variable": "entries"}}}}}]}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a map to an expression"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.cpp.serde.mapEntryToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.cpp.syntax.MapEntry"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "me",
-                "domain": {"variable": "hydra.cpp.syntax.MapEntry"},
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "key",
-                        "term": {
-                          "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "key"}}, "argument": {"variable": "me"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
-                      {
-                        "name": "val",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "value"}},
-                            "argument": {"variable": "me"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
-                    "body": {
-                      "application": {
-                        "function": {"variable": "hydra.serialization.spaceSep"},
-                        "argument": {
-                          "list": [
-                            {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"variable": "hydra.serialization.curlyBracesList"},
-                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
-                                    "argument": {"variable": "hydra.serialization.inlineStyle"}}},
-                                "argument": {
-                                  "list": [{"application": {"function": {"variable": "hydra.cpp.serde.expressionToExpr"}, "argument": {"variable": "key"}}}]}}},
-                            {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "->"}}}},
-                            {"application": {"function": {"variable": "hydra.cpp.serde.expressionToExpr"}, "argument": {"variable": "val"}}}]}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a map entry to an expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.cpp.serde.memInitializerToExpr",

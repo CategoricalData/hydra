@@ -67,6 +67,7 @@ basePrimitiveType = define "BasePrimitiveType" $
 
 dataType :: TypeDefinition
 dataType = define "DataType" $
+  doc "A Delta Parquet data type, either array, primitive, decimal, map, or struct." $
   T.union [
     "array">:
       doc "Represent array data type." $

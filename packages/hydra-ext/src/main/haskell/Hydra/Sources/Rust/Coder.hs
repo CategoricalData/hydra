@@ -96,6 +96,7 @@ def = definitionInModule module_
 -- | Encode a Hydra union field as a Rust enum variant
 encodeEnumVariant :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
+  doc "Encode a Hydra union field as a Rust enum variant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
     "ftyp" <~ Core.fieldTypeType (var "ft") $
@@ -132,6 +133,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 -- | Encode a Hydra literal value as a Rust expression
 encodeLiteral :: TypedTermDefinition (Literal -> R.Expression)
 encodeLiteral = def "encodeLiteral" $
+  doc "Encode a Hydra literal value as a Rust expression" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
       inject R._Expression R._Expression_literal $
@@ -217,6 +219,7 @@ encodeLiteral = def "encodeLiteral" $
 -- | Encode a Hydra literal type as a Rust type
 encodeLiteralType :: TypedTermDefinition (LiteralType -> R.Type)
 encodeLiteralType = def "encodeLiteralType" $
+  doc "Encode a Hydra literal type as a Rust type" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       rustApply1 @@ string "Vec" @@ (rustPath @@ string "u8"),
@@ -248,6 +251,7 @@ encodeLiteralType = def "encodeLiteralType" $
 -- Takes an optional argument for applied projections.
 encodeProjectionElim :: TypedTermDefinition (InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
+  doc "Encode a Hydra record projection as a Rust expression. Takes an optional argument for applied projections." $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         Optionals.cases (var "marg")
@@ -267,6 +271,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
 -- | Encode a Hydra record field as a Rust struct field
 encodeStructField :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error R.StructField)
 encodeStructField = def "encodeStructField" $
+  doc "Encode a Hydra record field as a Rust struct field" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
     "ftyp" <~ Core.fieldTypeType (var "ft") $
@@ -284,6 +289,7 @@ encodeStructField = def "encodeStructField" $
 -- | Encode a Hydra term as a Rust expression
 encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either Error R.Expression)
 encodeTerm = def "encodeTerm" $
+  doc "Encode a Hydra term as a Rust expression" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
       left (Error.errorOther $ Error.otherError $ string "unexpected term variant"))
@@ -406,6 +412,7 @@ encodeTerm = def "encodeTerm" $
 -- | Encode a Hydra term definition as a Rust function item
 encodeTermDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
+  doc "Encode a Hydra term definition as a Rust function item" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
@@ -439,6 +446,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- | Encode a Hydra type as a Rust syntax type
 encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error R.Type)
 encodeType = def "encodeType" $
+  doc "Encode a Hydra type as a Rust syntax type" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "typ") Nothing [
@@ -507,6 +515,7 @@ encodeType = def "encodeType" $
 -- | Encode a Hydra type definition as a Rust item
 encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
+  doc "Encode a Hydra type definition as a Rust item" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tdef")) $
@@ -580,6 +589,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- Takes an optional argument for applied case statements.
 encodeUnionElim :: TypedTermDefinition (InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
 encodeUnionElim = def "encodeUnionElim" $
+  doc "Encode a Hydra case statement (union elimination) as a Rust expression. Takes an optional argument for applied case statements." $
   "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
         "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
         "caseFields" <~ Core.caseStatementCases (var "cs") $
@@ -637,6 +647,7 @@ encodeUnionElim = def "encodeUnionElim" $
 -- Takes an optional argument for applied unwraps.
 encodeUnwrapElim :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
+  doc "Encode a Hydra wrap elimination (unwrap) as a Rust expression. Takes an optional argument for applied unwraps." $
   "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
         Optionals.cases (var "marg")
           -- Unapplied: |v| v.0
@@ -659,6 +670,7 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
 moduleToRust :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
+  doc "Convert a Hydra module to a map of file paths to Rust source code strings" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
@@ -674,6 +686,7 @@ moduleToRust = def "moduleToRust" $
 -- | Apply a type constructor to one type argument (e.g., Vec<T>)
 rustApply1 :: TypedTermDefinition (String -> R.Type -> R.Type)
 rustApply1 = def "rustApply1" $
+  doc "Apply a type constructor to one type argument (e.g., Vec<T>)" $
   lambda "name" $ lambda "arg" $
     inject R._Type R._Type_path $
       record R._TypePath [
@@ -690,6 +703,7 @@ rustApply1 = def "rustApply1" $
 -- | Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)
 rustApply2 :: TypedTermDefinition (String -> R.Type -> R.Type -> R.Type)
 rustApply2 = def "rustApply2" $
+  doc "Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)" $
   lambda "name" $ lambda "arg1" $ lambda "arg2" $
     inject R._Type R._Type_path $
       record R._TypePath [
@@ -707,6 +721,7 @@ rustApply2 = def "rustApply2" $
 -- | Block expression with statements and trailing expression
 rustBlock :: TypedTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
 rustBlock = def "rustBlock" $
+  doc "Block expression with statements and trailing expression" $
   lambda "stmts" $ lambda "expr" $
     inject R._Expression R._Expression_block $
       record R._Block [
@@ -716,6 +731,7 @@ rustBlock = def "rustBlock" $
 -- | Function call expression
 rustCall :: TypedTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
 rustCall = def "rustCall" $
+  doc "Function call expression" $
   lambda "fun" $ lambda "args" $
     inject R._Expression R._Expression_call $
       record R._CallExpr [
@@ -725,6 +741,7 @@ rustCall = def "rustCall" $
 -- | Closure expression: |params| body
 rustClosure :: TypedTermDefinition ([String] -> R.Expression -> R.Expression)
 rustClosure = def "rustClosure" $
+  doc "Closure expression: |params| body" $
   lambda "params" $ lambda "body" $
     inject R._Expression R._Expression_closure $
       record R._ClosureExpr [
@@ -750,6 +767,7 @@ rustClosure = def "rustClosure" $
 -- | Variable reference as a path expression
 rustExprPath :: TypedTermDefinition (String -> R.Expression)
 rustExprPath = def "rustExprPath" $
+  doc "Variable reference as a path expression" $
   lambda "name" $
     inject R._Expression R._Expression_path $
       record R._ExprPath [
@@ -762,6 +780,7 @@ rustExprPath = def "rustExprPath" $
 -- | Let statement: let name = expr;
 rustLetStmt :: TypedTermDefinition (String -> R.Expression -> R.Statement)
 rustLetStmt = def "rustLetStmt" $
+  doc "Let statement: let name = expr;" $
   lambda "name" $ lambda "expr" $
     inject R._Statement R._Statement_let $
       record R._LetStatement [
@@ -778,6 +797,7 @@ rustLetStmt = def "rustLetStmt" $
 -- | Construct a simple Rust path type (e.g., "String" -> String)
 rustPath :: TypedTermDefinition (String -> R.Type)
 rustPath = def "rustPath" $
+  doc "Construct a simple Rust path type (e.g., \"String\" -> String)" $
   lambda "name" $
     inject R._Type R._Type_path $
       record R._TypePath [
@@ -790,6 +810,7 @@ rustPath = def "rustPath" $
 -- | Construct a Rust path type with multiple segments (e.g., ["num", "BigInt"] -> num::BigInt)
 rustPathSegmented :: TypedTermDefinition ([String] -> R.Type)
 rustPathSegmented = def "rustPathSegmented" $
+  doc "Construct a Rust path type with multiple segments (e.g., [\"num\", \"BigInt\"] -> num::BigInt)" $
   lambda "segs" $
     inject R._Type R._Type_path $
       record R._TypePath [
@@ -804,14 +825,17 @@ rustPathSegmented = def "rustPathSegmented" $
 -- | The Rust unit type ()
 rustUnit :: TypedTermDefinition R.Type
 rustUnit = def "rustUnit" $
+  doc "The Rust unit type ()" $
   inject R._Type R._Type_unit unit
 
 -- =============================================================================
 -- Rust expression AST helpers
 -- =============================================================================
 
+-- | The standard set of derive macros applied to generated structs and enums
 standardDerives :: TypedTermDefinition [String]
 standardDerives = def "standardDerives" $
+  doc "The standard set of derive macros applied to generated structs and enums" $
   list $ string <$> ["Clone", "Debug", "PartialEq", "Eq", "PartialOrd", "Ord"]
 
 -- =============================================================================

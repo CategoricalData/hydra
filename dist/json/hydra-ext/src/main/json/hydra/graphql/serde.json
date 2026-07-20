@@ -242,26 +242,6 @@
                   "value": {"literal": {"string": "Convert a GraphQL enum type definition to an expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.graphql.serde.enumValueToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.EnumValue"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "ev",
-                "domain": {"variable": "hydra.graphql.syntax.EnumValue"},
-                "body": {
-                  "application": {
-                    "function": {"variable": "hydra.graphql.serde.nameToExpr"},
-                    "argument": {"application": {"function": {"unwrap": "hydra.graphql.syntax.EnumValue"}, "argument": {"variable": "ev"}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL enum value to an expression"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.graphql.serde.enumValueDefinitionToExpr",
         "signature": {
           "typeParameters": [],
@@ -299,6 +279,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Convert a GraphQL enum value definition to an expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.graphql.serde.enumValueToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.EnumValue"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ev",
+                "domain": {"variable": "hydra.graphql.syntax.EnumValue"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.graphql.serde.nameToExpr"},
+                    "argument": {"application": {"function": {"unwrap": "hydra.graphql.syntax.EnumValue"}, "argument": {"variable": "ev"}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL enum value to an expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.graphql.serde.fieldDefinitionToExpr",
@@ -574,49 +574,6 @@
                   "value": {"literal": {"string": "Convert a GraphQL object type definition to an expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.graphql.serde.typeToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.Type"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.ast.Expr"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "typ",
-                "domain": {"variable": "hydra.graphql.syntax.Type"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.graphql.syntax.Type",
-                        "cases": [
-                          {
-                            "name": "named",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "nt",
-                                "domain": {"variable": "hydra.graphql.syntax.NamedType"},
-                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.namedTypeToExpr"}, "argument": {"variable": "nt"}}}}}},
-                          {
-                            "name": "list",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "lt",
-                                "domain": {"variable": "hydra.graphql.syntax.ListType"},
-                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.listTypeToExpr"}, "argument": {"variable": "lt"}}}}}},
-                          {
-                            "name": "nonNull",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "nnt",
-                                "domain": {"variable": "hydra.graphql.syntax.NonNullType"},
-                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.nonNullTypeToExpr"}, "argument": {"variable": "nnt"}}}}}}]}},
-                    "argument": {"variable": "typ"}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.graphql.serde.typeDefinitionToExpr",
         "signature": {
           "typeParameters": [],
@@ -698,6 +655,49 @@
                   "value": {"literal": {"string": "Convert a GraphQL type definition to an expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.graphql.serde.typeSystemDefinitionOrExtensionToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "de",
+                "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension",
+                        "cases": [
+                          {
+                            "name": "definition",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "d",
+                                "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.graphql.serde.typeSystemDefinitionToExpr"}, "argument": {"variable": "d"}}}}}},
+                          {
+                            "name": "extension",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"variable": "hydra.graphql.syntax.TypeSystemExtension"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.serialization.cst"},
+                                    "argument": {"literal": {"string": "Unsupported: type system extension"}}}}}}}]}},
+                    "argument": {"variable": "de"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a GraphQL type system definition or extension to an expression"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.graphql.serde.typeSystemDefinitionToExpr",
         "signature": {
           "typeParameters": [],
@@ -750,47 +750,47 @@
                   "value": {"literal": {"string": "Convert a GraphQL type system definition to an expression"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.graphql.serde.typeSystemDefinitionOrExtensionToExpr",
+        "name": "hydra.graphql.serde.typeToExpr",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.graphql.syntax.Type"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "de",
-                "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"},
+                "parameter": "typ",
+                "domain": {"variable": "hydra.graphql.syntax.Type"},
                 "body": {
                   "application": {
                     "function": {
                       "cases": {
-                        "typeName": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension",
+                        "typeName": "hydra.graphql.syntax.Type",
                         "cases": [
                           {
-                            "name": "definition",
+                            "name": "named",
                             "handler": {
                               "lambda": {
-                                "parameter": "d",
-                                "domain": {"variable": "hydra.graphql.syntax.TypeSystemDefinition"},
-                                "body": {
-                                  "application": {"function": {"variable": "hydra.graphql.serde.typeSystemDefinitionToExpr"}, "argument": {"variable": "d"}}}}}},
+                                "parameter": "nt",
+                                "domain": {"variable": "hydra.graphql.syntax.NamedType"},
+                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.namedTypeToExpr"}, "argument": {"variable": "nt"}}}}}},
                           {
-                            "name": "extension",
+                            "name": "list",
                             "handler": {
                               "lambda": {
-                                "parameter": "_",
-                                "domain": {"variable": "hydra.graphql.syntax.TypeSystemExtension"},
-                                "body": {
-                                  "application": {
-                                    "function": {"variable": "hydra.serialization.cst"},
-                                    "argument": {"literal": {"string": "Unsupported: type system extension"}}}}}}}]}},
-                    "argument": {"variable": "de"}}}}},
+                                "parameter": "lt",
+                                "domain": {"variable": "hydra.graphql.syntax.ListType"},
+                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.listTypeToExpr"}, "argument": {"variable": "lt"}}}}}},
+                          {
+                            "name": "nonNull",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "nnt",
+                                "domain": {"variable": "hydra.graphql.syntax.NonNullType"},
+                                "body": {"application": {"function": {"variable": "hydra.graphql.serde.nonNullTypeToExpr"}, "argument": {"variable": "nnt"}}}}}}]}},
+                    "argument": {"variable": "typ"}}}}},
             "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a GraphQL type system definition or extension to an expression"}}}]}}}}},
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphQL type to an expression"}}}]}}}}},
     {
       "term": {
         "name": "hydra.graphql.serde.withDescription",

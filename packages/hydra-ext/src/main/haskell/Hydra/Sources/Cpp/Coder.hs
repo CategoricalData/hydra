@@ -66,78 +66,70 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "C++ code generator: converts Hydra modules to C++ header files")}
   where
     definitions = [
-      -- Cpp AST helper functions
+      toDefinition bindingNameToFilePath,
+      toDefinition className,
+      toDefinition constParameter,
       toDefinition cppClassDeclaration,
       toDefinition cppEnumDeclaration,
       toDefinition cppEnumForwardDeclaration,
-      toDefinition memberSpecificationPublic,
-      toDefinition memberSpecificationProtected,
-      toDefinition createTemplateType,
-      toDefinition createIdentifierExpr,
-      toDefinition createLiteralBoolExpr,
-      toDefinition createLiteralIntExpr,
-      toDefinition createFunctionCallExpr,
-      toDefinition createHeaderFile,
-      toDefinition createConstructorBody,
-      toDefinition constParameter,
-      toDefinition unnamedParameter,
-      toDefinition toConstType,
-      toDefinition createTypeIdNameCall,
-      toDefinition createThrowStmt,
-      -- Expression chain helpers
+      toDefinition cppPostfixExpressionToCppExpression,
       toDefinition cppPrimaryExpressionToCppExpression,
       toDefinition cppUnaryExpressionToCppExpression,
-      toDefinition cppPostfixExpressionToCppExpression,
       toDefinition cppUnaryExpressionToCppLogicalOrExpression,
-      -- Naming functions
-      toDefinition encodeName,
-      toDefinition encodeNamespace,
-      toDefinition encodeFieldName,
-      toDefinition encodeEnumValue,
-      toDefinition sanitizeCppName,
-      toDefinition className,
-      toDefinition variantName,
-      toDefinition visitorName,
-      toDefinition partialVisitorName,
-      toDefinition fwdHeaderName,
-      toDefinition namespaceDecl,
-      toDefinition createTypeReference,
-      -- Type encoding
-      toDefinition encodeLiteralType,
-      toDefinition encodeType,
-      toDefinition encodeForallType,
-      toDefinition encodeFunctionType,
-      toDefinition encodeApplicationType,
-      toDefinition encodeTypeAlias,
-      toDefinition encodeTypeDefinition,
-      -- Struct/union/enum encoding
-      toDefinition encodeFieldType,
-      toDefinition encodeRecordType,
-      toDefinition encodeUnionType,
-      toDefinition encodeEnumType,
-      toDefinition encodeVariantType,
-      toDefinition encodeWrappedType,
-      -- Visitor pattern
-      toDefinition createVisitorInterface,
+      toDefinition createAcceptImplementation,
+      toDefinition createConstructorBody,
+      toDefinition createFunctionCallExpr,
+      toDefinition createHeaderFile,
+      toDefinition createIdentifierExpr,
+      toDefinition createLessThanOperator,
+      toDefinition createLiteralBoolExpr,
+      toDefinition createLiteralIntExpr,
       toDefinition createPartialVisitorInterface,
+      toDefinition createTemplateType,
+      toDefinition createThrowStmt,
+      toDefinition createTypeIdNameCall,
+      toDefinition createTypeReference,
       toDefinition createUnionBaseClass,
       toDefinition createVariantClass,
-      toDefinition createAcceptImplementation,
-      toDefinition generateForwardDeclarations,
-      toDefinition createLessThanOperator,
-      -- File generation
-      toDefinition serializeHeaderFile,
-      toDefinition bindingNameToFilePath,
+      toDefinition createVisitorInterface,
+      toDefinition encodeApplicationType,
+      toDefinition encodeEnumType,
+      toDefinition encodeEnumValue,
+      toDefinition encodeFieldName,
+      toDefinition encodeFieldType,
+      toDefinition encodeForallType,
+      toDefinition encodeFunctionType,
+      toDefinition encodeLiteralType,
+      toDefinition encodeName,
+      toDefinition encodeNamespace,
+      toDefinition encodeRecordType,
+      toDefinition encodeType,
+      toDefinition encodeTypeAlias,
+      toDefinition encodeTypeDefinition,
+      toDefinition encodeUnionType,
+      toDefinition encodeVariantType,
+      toDefinition encodeWrappedType,
       toDefinition findIncludes,
       toDefinition findTypeDependencies,
+      toDefinition fwdHeaderName,
       toDefinition gatherMetadata,
+      toDefinition generateForwardDeclarations,
+      toDefinition generateTypeFile,
+      toDefinition generateTypeFiles,
       toDefinition isStdContainerType,
       toDefinition isStructType,
       toDefinition isTemplateType,
-      -- Module entry point
-      toDefinition generateTypeFile,
-      toDefinition generateTypeFiles,
-      toDefinition moduleToCpp]
+      toDefinition memberSpecificationProtected,
+      toDefinition memberSpecificationPublic,
+      toDefinition moduleToCpp,
+      toDefinition namespaceDecl,
+      toDefinition partialVisitorName,
+      toDefinition sanitizeCppName,
+      toDefinition serializeHeaderFile,
+      toDefinition toConstType,
+      toDefinition unnamedParameter,
+      toDefinition variantName,
+      toDefinition visitorName]
 
 
 -- ============================================================================
@@ -147,6 +139,7 @@ module_ = Module {
 -- | Convert a binding name to a file path
 bindingNameToFilePath :: TypedTermDefinition (Name -> FilePath)
 bindingNameToFilePath = def "bindingNameToFilePath" $
+  doc "Convert a binding name to a file path" $
   lambda "name" $
     Names.nameToFilePath
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
@@ -157,12 +150,14 @@ bindingNameToFilePath = def "bindingNameToFilePath" $
 -- | Get the class name from a fully qualified Name
 className :: TypedTermDefinition (Name -> String)
 className = def "className" $
+  doc "Get the class name from a fully qualified Name" $
   lambda "name" $
     sanitizeCppName @@ (Names.localNameOf @@ var "name")
 
 -- | Create a const reference parameter
 constParameter :: TypedTermDefinition (String -> Cpp.TypeExpression -> Cpp.Parameter)
 constParameter = def "constParameter" $
+  doc "Create a const reference parameter" $
   lambda "name" $ lambda "typ" $
     record Cpp._Parameter [
       Cpp._Parameter_type>>:
@@ -181,6 +176,7 @@ constParameter = def "constParameter" $
 -- | Create a class declaration
 cppClassDeclaration :: TypedTermDefinition (String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration)
 cppClassDeclaration = def "cppClassDeclaration" $
+  doc "Create a class declaration" $
   lambda "name" $ lambda "baseSpecs" $ lambda "mbody" $
     inject Cpp._Declaration Cpp._Declaration_class $
       record Cpp._ClassDeclaration [
@@ -194,6 +190,7 @@ cppClassDeclaration = def "cppClassDeclaration" $
 -- | Create an enum class declaration
 cppEnumDeclaration :: TypedTermDefinition (String -> Maybe Cpp.ClassBody -> Cpp.Declaration)
 cppEnumDeclaration = def "cppEnumDeclaration" $
+  doc "Create an enum class declaration" $
   lambda "name" $ lambda "mbody" $
     inject Cpp._Declaration Cpp._Declaration_class $
       record Cpp._ClassDeclaration [
@@ -207,12 +204,14 @@ cppEnumDeclaration = def "cppEnumDeclaration" $
 -- | Create an enum forward declaration (no body)
 cppEnumForwardDeclaration :: TypedTermDefinition (String -> Cpp.Declaration)
 cppEnumForwardDeclaration = def "cppEnumForwardDeclaration" $
+  doc "Create an enum forward declaration (no body)" $
   lambda "name" $
     cppEnumDeclaration @@ var "name" @@ nothing
 
 -- | Convert a PostfixExpression to a full Expression
 cppPostfixExpressionToCppExpression :: TypedTermDefinition (Cpp.PostfixExpression -> Cpp.Expression)
 cppPostfixExpressionToCppExpression = def "cppPostfixExpressionToCppExpression" $
+  doc "Convert a PostfixExpression to a full Expression" $
   lambda "pe" $
     cppUnaryExpressionToCppExpression @@
       (inject Cpp._UnaryExpression Cpp._UnaryExpression_postfix (var "pe"))
@@ -220,6 +219,7 @@ cppPostfixExpressionToCppExpression = def "cppPostfixExpressionToCppExpression" 
 -- | Convert a PrimaryExpression to a full Expression
 cppPrimaryExpressionToCppExpression :: TypedTermDefinition (Cpp.PrimaryExpression -> Cpp.Expression)
 cppPrimaryExpressionToCppExpression = def "cppPrimaryExpressionToCppExpression" $
+  doc "Convert a PrimaryExpression to a full Expression" $
   lambda "prim" $
     cppPostfixExpressionToCppExpression @@
       (inject Cpp._PostfixExpression Cpp._PostfixExpression_primary (var "prim"))
@@ -227,6 +227,7 @@ cppPrimaryExpressionToCppExpression = def "cppPrimaryExpressionToCppExpression" 
 -- | Convert a UnaryExpression to a full Expression
 cppUnaryExpressionToCppExpression :: TypedTermDefinition (Cpp.UnaryExpression -> Cpp.Expression)
 cppUnaryExpressionToCppExpression = def "cppUnaryExpressionToCppExpression" $
+  doc "Convert a UnaryExpression to a full Expression" $
   lambda "ue" $
     inject Cpp._Expression Cpp._Expression_assignment $
       inject Cpp._AssignmentExpression Cpp._AssignmentExpression_conditional $
@@ -236,6 +237,7 @@ cppUnaryExpressionToCppExpression = def "cppUnaryExpressionToCppExpression" $
 -- | Convert a UnaryExpression to a LogicalOrExpression
 cppUnaryExpressionToCppLogicalOrExpression :: TypedTermDefinition (Cpp.UnaryExpression -> Cpp.LogicalOrExpression)
 cppUnaryExpressionToCppLogicalOrExpression = def "cppUnaryExpressionToCppLogicalOrExpression" $
+  doc "Convert a UnaryExpression to a LogicalOrExpression" $
   lambda "ue" $
     inject Cpp._LogicalOrExpression Cpp._LogicalOrExpression_logicalAnd $
       inject Cpp._LogicalAndExpression Cpp._LogicalAndExpression_inclusiveOr $
@@ -256,6 +258,7 @@ cppUnaryExpressionToCppLogicalOrExpression = def "cppUnaryExpressionToCppLogical
 -- | Create the accept() method implementation using dynamic_cast chain
 createAcceptImplementation :: TypedTermDefinition (Name -> [FieldType] -> Cpp.Declaration)
 createAcceptImplementation = def "createAcceptImplementation" $
+  doc "Create the accept() method implementation using a dynamic_cast chain" $
   lambda "tname" $ lambda "variants" $
     inject Cpp._Declaration Cpp._Declaration_template $
       record Cpp._TemplateDeclaration [
@@ -353,6 +356,7 @@ createAcceptImplementation = def "createAcceptImplementation" $
 -- | Create function body: default if no params, empty compound otherwise
 createConstructorBody :: TypedTermDefinition ([Cpp.Parameter] -> Cpp.FunctionBody)
 createConstructorBody = def "createConstructorBody" $
+  doc "Create a constructor function body: default if no params, empty compound otherwise" $
   lambda "params" $
     Logic.ifElse
       (Lists.null (var "params"))
@@ -363,6 +367,7 @@ createConstructorBody = def "createConstructorBody" $
 -- | Create a function call expression
 createFunctionCallExpr :: TypedTermDefinition (String -> [Cpp.Expression] -> Cpp.Expression)
 createFunctionCallExpr = def "createFunctionCallExpr" $
+  doc "Create a function call expression" $
   lambda "funcName" $ lambda "args" $
     cppPostfixExpressionToCppExpression @@
       (inject Cpp._PostfixExpression Cpp._PostfixExpression_functionCall $
@@ -375,6 +380,7 @@ createFunctionCallExpr = def "createFunctionCallExpr" $
 -- | Create a header file with pragma once, includes, and declarations
 createHeaderFile :: TypedTermDefinition ([Cpp.IncludeDirective] -> [Cpp.Declaration] -> Cpp.Program)
 createHeaderFile = def "createHeaderFile" $
+  doc "Create a header file with pragma once, includes, and declarations" $
   lambda "includes" $ lambda "decls" $
     record Cpp._Program [
       Cpp._Program_preprocessorDirectives>>: list [
@@ -386,6 +392,7 @@ createHeaderFile = def "createHeaderFile" $
 -- | Create an identifier expression
 createIdentifierExpr :: TypedTermDefinition (String -> Cpp.Expression)
 createIdentifierExpr = def "createIdentifierExpr" $
+  doc "Create an identifier expression" $
   lambda "name" $
     cppPrimaryExpressionToCppExpression @@
       (inject Cpp._PrimaryExpression Cpp._PrimaryExpression_identifier (var "name"))
@@ -393,6 +400,7 @@ createIdentifierExpr = def "createIdentifierExpr" $
 -- | Create a less-than operator for a record type (trivial/placeholder implementation)
 createLessThanOperator :: TypedTermDefinition (Name -> [FieldType] -> Cpp.Declaration)
 createLessThanOperator = def "createLessThanOperator" $
+  doc "Create a less-than operator for a record type (trivial/placeholder implementation)" $
   lambda "typeName" $ lambda "fields" $
     inject Cpp._Declaration Cpp._Declaration_function $
       record Cpp._FunctionDeclaration [
@@ -425,6 +433,7 @@ createLessThanOperator = def "createLessThanOperator" $
 -- | Create a boolean literal expression
 createLiteralBoolExpr :: TypedTermDefinition (Bool -> Cpp.Expression)
 createLiteralBoolExpr = def "createLiteralBoolExpr" $
+  doc "Create a boolean literal expression" $
   lambda "val" $
     cppPrimaryExpressionToCppExpression @@
       (inject Cpp._PrimaryExpression Cpp._PrimaryExpression_literal $
@@ -434,6 +443,7 @@ createLiteralBoolExpr = def "createLiteralBoolExpr" $
 -- | Create an integer literal expression
 createLiteralIntExpr :: TypedTermDefinition (Int -> Cpp.Expression)
 createLiteralIntExpr = def "createLiteralIntExpr" $
+  doc "Create an integer literal expression" $
   lambda "val" $
     cppPrimaryExpressionToCppExpression @@
       (inject Cpp._PrimaryExpression Cpp._PrimaryExpression_literal $
@@ -443,6 +453,7 @@ createLiteralIntExpr = def "createLiteralIntExpr" $
 -- | Create a partial visitor interface with default visit methods that delegate to otherwise()
 createPartialVisitorInterface :: TypedTermDefinition (Name -> [FieldType] -> Cpp.Declaration)
 createPartialVisitorInterface = def "createPartialVisitorInterface" $
+  doc "Create a partial visitor interface with default visit methods that delegate to otherwise()" $
   lambda "tname" $ lambda "variants" $
     inject Cpp._Declaration Cpp._Declaration_template $
       record Cpp._TemplateDeclaration [
@@ -503,6 +514,7 @@ createPartialVisitorInterface = def "createPartialVisitorInterface" $
 -- | Create a template type (e.g., std::vector<T>)
 createTemplateType :: TypedTermDefinition (String -> [Cpp.TypeExpression] -> Cpp.TypeExpression)
 createTemplateType = def "createTemplateType" $
+  doc "Create a template type (e.g. std::vector<T>)" $
   lambda "name" $ lambda "args" $
     inject Cpp._TypeExpression Cpp._TypeExpression_template $
       record Cpp._TemplateType [
@@ -515,6 +527,7 @@ createTemplateType = def "createTemplateType" $
 -- | Create a throw statement
 createThrowStmt :: TypedTermDefinition (String -> Cpp.Expression -> Cpp.Statement)
 createThrowStmt = def "createThrowStmt" $
+  doc "Create a throw statement" $
   lambda "exceptionType" $ lambda "arg" $
     inject Cpp._Statement Cpp._Statement_jump $
       inject Cpp._JumpStatement Cpp._JumpStatement_throw $
@@ -528,6 +541,7 @@ createThrowStmt = def "createThrowStmt" $
 -- | Create a typeid(*this).name() call expression
 createTypeIdNameCall :: TypedTermDefinition Cpp.Expression
 createTypeIdNameCall = def "createTypeIdNameCall" $
+  doc "Create a typeid(*this).name() call expression" $
   cppPostfixExpressionToCppExpression @@
     (inject Cpp._PostfixExpression Cpp._PostfixExpression_functionCall $
       record Cpp._FunctionCallOperation [
@@ -552,6 +566,7 @@ createTypeIdNameCall = def "createTypeIdNameCall" $
 -- | Create a type reference, optionally as a shared_ptr for struct types
 createTypeReference :: TypedTermDefinition (Bool -> Name -> Cpp.TypeExpression)
 createTypeReference = def "createTypeReference" $
+  doc "Create a type reference, optionally as a shared_ptr for struct types" $
   lambda "isPointer" $ lambda "name" $
     Logic.ifElse (var "isPointer")
       (createTemplateType @@ string "std::shared_ptr" @@
@@ -568,6 +583,7 @@ createTypeReference = def "createTypeReference" $
 -- | Create the union base class with protected constructor, virtual destructor, and accept method
 createUnionBaseClass :: TypedTermDefinition (Name -> [FieldType] -> Cpp.Declaration)
 createUnionBaseClass = def "createUnionBaseClass" $
+  doc "Create the union base class with protected constructor, virtual destructor, and accept method" $
   lambda "name" $ lambda "variants" $
     cppClassDeclaration @@ (className @@ var "name") @@ list ([] :: [TypedTerm Cpp.BaseSpecifier]) @@
       (just (wrap Cpp._ClassBody (list [
@@ -624,6 +640,7 @@ createUnionBaseClass = def "createUnionBaseClass" $
 -- | Create a variant subclass (one branch of a union type)
 createVariantClass :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Name -> FieldType -> Either Error Cpp.Declaration)
 createVariantClass = def "createVariantClass" $
+  doc "Create a variant subclass (one branch of a union type)" $
   "cx" ~> "g" ~> lambda "tname" $ lambda "parentClass" $ lambda "ft" $
     "fname" <~ Core.fieldTypeName (var "ft") $
     "variantType" <~ Core.fieldTypeType (var "ft") $
@@ -675,6 +692,7 @@ createVariantClass = def "createVariantClass" $
 -- | Create a visitor interface with pure virtual visit methods
 createVisitorInterface :: TypedTermDefinition (Name -> [FieldType] -> Cpp.Declaration)
 createVisitorInterface = def "createVisitorInterface" $
+  doc "Create a visitor interface with pure virtual visit methods" $
   lambda "tname" $ lambda "variants" $
     inject Cpp._Declaration Cpp._Declaration_template $
       record Cpp._TemplateDeclaration [
@@ -735,6 +753,7 @@ emptyList = TypedTerm $ TermList []
 -- | Encode a type application (template instantiation)
 encodeApplicationType :: TypedTermDefinition (InferenceContext -> Graph -> ApplicationType -> Either Error Cpp.TypeExpression)
 encodeApplicationType = def "encodeApplicationType" $
+  doc "Encode a type application (template instantiation)" $
   "cx" ~> "g" ~> lambda "at" $
     "body" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at")) $
     "arg" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeArgument (var "at")) $
@@ -743,6 +762,7 @@ encodeApplicationType = def "encodeApplicationType" $
 -- | Encode an enum type as a C++ enum class
 encodeEnumType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeEnumType = def "encodeEnumType" $
+  doc "Encode an enum type as a C++ enum class" $
   "cx" ~> "g" ~> lambda "name" $ lambda "tfields" $ lambda "comment" $
     right (list [
       cppEnumDeclaration @@ (className @@ var "name") @@
@@ -760,18 +780,21 @@ encodeEnumType = def "encodeEnumType" $
 -- | Encode an enum value in UPPER_SNAKE_CASE
 encodeEnumValue :: TypedTermDefinition (Name -> String)
 encodeEnumValue = def "encodeEnumValue" $
+  doc "Encode an enum value in UPPER_SNAKE_CASE" $
   lambda "fname" $
     sanitizeCppName @@ (Formatting.convertCaseCamelToUpperSnake @@ Core.unName (var "fname"))
 
 -- | Encode a field name in lower_snake_case
 encodeFieldName :: TypedTermDefinition (Name -> String)
 encodeFieldName = def "encodeFieldName" $
+  doc "Encode a field name in lower_snake_case" $
   lambda "fname" $
     sanitizeCppName @@ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "fname"))
 
 -- | Encode a field type as a VariableDeclaration
 encodeFieldType :: TypedTermDefinition (Bool -> FieldType -> InferenceContext -> Graph -> Either Error Cpp.VariableDeclaration)
 encodeFieldType = def "encodeFieldType" $
+  doc "Encode a field type as a VariableDeclaration" $
   lambda "isParameter" $ lambda "ft" $ "cx" ~> lambda "g" $
     "fname" <~ Core.fieldTypeName (var "ft") $
     "ftype" <~ Core.fieldTypeType (var "ft") $
@@ -785,12 +808,14 @@ encodeFieldType = def "encodeFieldType" $
 -- | Encode a forall type (strip the quantifier)
 encodeForallType :: TypedTermDefinition (InferenceContext -> Graph -> ForallType -> Either Error Cpp.TypeExpression)
 encodeForallType = def "encodeForallType" $
+  doc "Encode a forall type (strip the quantifier)" $
   "cx" ~> "g" ~> lambda "lt" $
     encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "lt")
 
 -- | Encode a function type as std::function<R(Args...)>
 encodeFunctionType :: TypedTermDefinition (InferenceContext -> Graph -> FunctionType -> Either Error Cpp.TypeExpression)
 encodeFunctionType = def "encodeFunctionType" $
+  doc "Encode a function type as std::function<R(Args...)>" $
   "cx" ~> "g" ~> lambda "ft" $
     "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
     "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
@@ -807,6 +832,7 @@ encodeFunctionType = def "encodeFunctionType" $
 -- | Encode a literal type as a C++ type expression
 encodeLiteralType :: TypedTermDefinition (LiteralType -> Cpp.TypeExpression)
 encodeLiteralType = def "encodeLiteralType" $
+  doc "Encode a literal type as a C++ type expression" $
   lambda "lt" $
     inject Cpp._TypeExpression Cpp._TypeExpression_basic $
       cases _LiteralType (var "lt") Nothing [
@@ -839,6 +865,7 @@ encodeName = def "encodeName" $
 -- | Encode a namespace as a C++ namespace string (e.g., "hydra.cpp" -> "hydra::ext::cpp")
 encodeNamespace :: TypedTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
+  doc "Encode a namespace as a C++ namespace string (e.g. \"hydra.cpp\" -> \"hydra::cpp\")" $
   lambda "ns" $
     Strings.intercalate (string "::")
       (Lists.map
@@ -848,6 +875,7 @@ encodeNamespace = def "encodeNamespace" $
 -- | Encode a record type as a C++ class with fields and constructor
 encodeRecordType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeRecordType = def "encodeRecordType" $
+  doc "Encode a record type as a C++ class with fields and constructor" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     "cppFields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "rt")) $
     "constructorParams" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean True @@ var "f" @@ var "cx" @@ var "g") (var "rt")) $
@@ -889,6 +917,7 @@ encodeRecordType = def "encodeRecordType" $
 -- | Encode a Hydra type as a C++ type expression
 encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error Cpp.TypeExpression)
 encodeType = def "encodeType" $
+  doc "Encode a Hydra type as a C++ type expression" $
   "cx" ~> "g" ~> lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
@@ -937,6 +966,7 @@ encodeType = def "encodeType" $
 -- | Encode a type as a typedef / using declaration
 encodeTypeAlias :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Type -> Maybe String -> Either Error Cpp.Declaration)
 encodeTypeAlias = def "encodeTypeAlias" $
+  doc "Encode a type as a typedef / using declaration" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
     "cppType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (inject Cpp._Declaration Cpp._Declaration_typedef $
@@ -948,6 +978,7 @@ encodeTypeAlias = def "encodeTypeAlias" $
 -- | Encode a top-level type definition (dispatches to record/union/wrap)
 encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Type -> Either Error [Cpp.Declaration])
 encodeTypeDefinition = def "encodeTypeDefinition" $
+  doc "Encode a top-level type definition (dispatches to record/union/wrap)" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $
@@ -969,6 +1000,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- | Encode a union type (dispatches to enum or variant based on content)
 encodeUnionType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeUnionType = def "encodeUnionType" $
+  doc "Encode a union type (dispatches to enum or variant based on content)" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
       (encodeEnumType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
@@ -977,6 +1009,7 @@ encodeUnionType = def "encodeUnionType" $
 -- | Encode a variant (tagged union) type as a class hierarchy with visitor pattern
 encodeVariantType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [FieldType] -> Maybe String -> Either Error [Cpp.Declaration])
 encodeVariantType = def "encodeVariantType" $
+  doc "Encode a variant (tagged union) type as a class hierarchy with visitor pattern" $
   "cx" ~> "g" ~> lambda "name" $ lambda "variants" $ lambda "comment" $
     "variantClasses" <<~ (Eithers.mapList
       (lambda "v" $ createVariantClass @@ var "cx" @@ var "g" @@ var "name" @@ var "name" @@ var "v")
@@ -992,6 +1025,7 @@ encodeVariantType = def "encodeVariantType" $
 -- | Encode a wrapped type as a single-field record
 encodeWrappedType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Type -> Maybe String -> Either Error [Cpp.Declaration])
 encodeWrappedType = def "encodeWrappedType" $
+  doc "Encode a wrapped type as a single-field record" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
     encodeRecordType @@ var "cx" @@ var "g" @@ var "name"
       @@ list [
@@ -1008,6 +1042,7 @@ encodeWrappedType = def "encodeWrappedType" $
 -- | Find includes for a set of type definitions
 findIncludes :: TypedTermDefinition (Bool -> ModuleName -> [TypeDefinition] -> [Cpp.IncludeDirective])
 findIncludes = def "findIncludes" $
+  doc "Find includes for a set of type definitions" $
   lambda "withFwd" $ lambda "ns" $ lambda "defs" $
     -- System includes based on metadata, plus domain includes for cross-namespace dependencies
     -- For simplicity, include the standard set that the staging code conditionally includes
@@ -1035,6 +1070,7 @@ findIncludes = def "findIncludes" $
 -- | Find type dependencies that are in other namespaces
 findTypeDependencies :: TypedTermDefinition (ModuleName -> [TypeDefinition] -> [Name])
 findTypeDependencies = def "findTypeDependencies" $
+  doc "Find type dependencies that are in other namespaces" $
   lambda "ns" $ lambda "defs" $
     Lists.filter
       (lambda "n" $
@@ -1050,6 +1086,7 @@ findTypeDependencies = def "findTypeDependencies" $
 -- | Construct the forward-declaration header name for a namespace
 fwdHeaderName :: TypedTermDefinition (ModuleName -> Name)
 fwdHeaderName = def "fwdHeaderName" $
+  doc "Construct the forward-declaration header name for a namespace" $
   lambda "ns" $
     Names.unqualifyName @@
       (record _QualifiedName [
@@ -1059,11 +1096,13 @@ fwdHeaderName = def "fwdHeaderName" $
 -- | Gather metadata from definitions (simplified: always include common headers)
 gatherMetadata :: TypedTermDefinition ([Definition] -> Bool)
 gatherMetadata = def "gatherMetadata" $
+  doc "Gather metadata from definitions (simplified: always include common headers)" $
   lambda "defs" $ boolean True
 
 -- | Generate forward declarations for all variant subclasses
 generateForwardDeclarations :: TypedTermDefinition (Name -> [FieldType] -> [Cpp.Declaration])
 generateForwardDeclarations = def "generateForwardDeclarations" $
+  doc "Generate forward declarations for all variant subclasses" $
   lambda "tname" $ lambda "fields" $
     Lists.map (lambda "ft" $
       cppClassDeclaration @@ (variantName @@ var "tname" @@ Core.fieldTypeName (var "ft")) @@ list ([] :: [TypedTerm Cpp.BaseSpecifier]) @@ nothing)
@@ -1072,6 +1111,7 @@ generateForwardDeclarations = def "generateForwardDeclarations" $
 -- | Generate a single type header file
 generateTypeFile :: TypedTermDefinition (ModuleName -> TypeDefinition -> InferenceContext -> Graph -> Either Error (FilePath, String))
 generateTypeFile = def "generateTypeFile" $
+  doc "Generate a single type header file" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Packaging.typeDefinitionName (var "def_") $
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "def_")) $
@@ -1083,6 +1123,7 @@ generateTypeFile = def "generateTypeFile" $
 -- | Generate all type header files for a module (fwd file + individual class files)
 generateTypeFiles :: TypedTermDefinition (ModuleName -> [TypeDefinition] -> InferenceContext -> Graph -> Either Error [(FilePath, String)])
 generateTypeFiles = def "generateTypeFiles" $
+  doc "Generate all type header files for a module (fwd file + individual class files)" $
   lambda "ns" $ lambda "defs" $ "cx" ~> lambda "g" $
     "classFiles" <<~ (Eithers.mapList
       (lambda "d" $ generateTypeFile @@ var "ns" @@ var "d" @@ var "cx" @@ var "g")
@@ -1092,6 +1133,7 @@ generateTypeFiles = def "generateTypeFiles" $
 -- | Check whether a type maps to an STL container type
 isStdContainerType :: TypedTermDefinition (Type -> Bool)
 isStdContainerType = def "isStdContainerType" $
+  doc "Check whether a type maps to an STL container type" $
   lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "t") (Just $ boolean False)
@@ -1105,6 +1147,7 @@ isStdContainerType = def "isStdContainerType" $
 -- | Check whether a type is a struct type (not a literal and not an enum)
 isStructType :: TypedTermDefinition (Type -> Bool)
 isStructType = def "isStructType" $
+  doc "Check whether a type is a struct type (not a literal and not an enum)" $
   lambda "rawType" $
     "t" <~ (Resolution.fullyStripType @@ var "rawType") $
     "isLiteral" <~ cases _Type (var "t") (Just $ boolean False)
@@ -1116,6 +1159,7 @@ isStructType = def "isStructType" $
 -- | Check whether a type maps to a C++ template type (string or STL container)
 isTemplateType :: TypedTermDefinition (Type -> Bool)
 isTemplateType = def "isTemplateType" $
+  doc "Check whether a type maps to a C++ template type (string or STL container)" $
   lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     Logic.or
@@ -1133,18 +1177,21 @@ isTemplateType = def "isTemplateType" $
 -- | Protected access label
 memberSpecificationProtected :: TypedTermDefinition Cpp.MemberSpecification
 memberSpecificationProtected = def "memberSpecificationProtected" $
+  doc "A protected access label" $
   inject Cpp._MemberSpecification Cpp._MemberSpecification_accessLabel $
     inject Cpp._AccessSpecifier Cpp._AccessSpecifier_protected unit
 
 -- | Public access label
 memberSpecificationPublic :: TypedTermDefinition Cpp.MemberSpecification
 memberSpecificationPublic = def "memberSpecificationPublic" $
+  doc "A public access label" $
   inject Cpp._MemberSpecification Cpp._MemberSpecification_accessLabel $
     inject Cpp._AccessSpecifier Cpp._AccessSpecifier_public unit
 
 -- | Convert a module to C++ code files (entry point)
 moduleToCpp :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToCpp = def "moduleToCpp" $
+  doc "Convert a module to C++ code files (entry point)" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
     "ns" <~ Packaging.moduleName (var "mod") $
     "typeDefs" <~ Pairs.first (Environment.partitionDefinitions @@ var "defs") $
@@ -1154,6 +1201,7 @@ moduleToCpp = def "moduleToCpp" $
 -- | Create a namespace declaration wrapping declarations
 namespaceDecl :: TypedTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)
 namespaceDecl = def "namespaceDecl" $
+  doc "Create a namespace declaration wrapping declarations" $
   lambda "ns" $ lambda "decls" $
     inject Cpp._Declaration Cpp._Declaration_namespace $
       record Cpp._NamespaceDeclaration [
@@ -1163,18 +1211,21 @@ namespaceDecl = def "namespaceDecl" $
 -- | Construct a partial visitor interface name
 partialVisitorName :: TypedTermDefinition (Name -> String)
 partialVisitorName = def "partialVisitorName" $
+  doc "Construct a partial visitor interface name" $
   lambda "name" $
     sanitizeCppName @@ ((Names.localNameOf @@ var "name") ++ string "PartialVisitor")
 
 -- | Sanitize a name to be valid in C++
 sanitizeCppName :: TypedTermDefinition (String -> String)
 sanitizeCppName = def "sanitizeCppName" $
+  doc "Sanitize a name to be valid in C++" $
   lambda "name" $
     Formatting.sanitizeWithUnderscores @@ (asTerm CppLanguageSource.cppReservedWords) @@ var "name"
 
 -- | Serialize a header file from name, includes, and declarations
 serializeHeaderFile :: TypedTermDefinition (Name -> [Cpp.IncludeDirective] -> [Cpp.Declaration] -> (FilePath, String))
 serializeHeaderFile = def "serializeHeaderFile" $
+  doc "Serialize a header file from name, includes, and declarations" $
   lambda "name" $ lambda "includes" $ lambda "decls" $
     pair
       (bindingNameToFilePath @@ var "name")
@@ -1186,6 +1237,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
 -- | Wrap a type expression with const qualifier
 toConstType :: TypedTermDefinition (Cpp.TypeExpression -> Cpp.TypeExpression)
 toConstType = def "toConstType" $
+  doc "Wrap a type expression with a const qualifier" $
   lambda "baseType" $
     inject Cpp._TypeExpression Cpp._TypeExpression_qualified $
       record Cpp._QualifiedType [
@@ -1195,6 +1247,7 @@ toConstType = def "toConstType" $
 -- | Create an unnamed parameter (for operator overloads, etc.)
 unnamedParameter :: TypedTermDefinition (String -> Cpp.TypeExpression -> Cpp.Parameter)
 unnamedParameter = def "unnamedParameter" $
+  doc "Create an unnamed parameter (for operator overloads, etc.)" $
   lambda "name" $ lambda "typ" $
     record Cpp._Parameter [
       Cpp._Parameter_type>>: var "typ",
@@ -1205,6 +1258,7 @@ unnamedParameter = def "unnamedParameter" $
 -- | Construct a variant class name (e.g., "MyType" + "field" -> "MyTypeField")
 variantName :: TypedTermDefinition (Name -> Name -> String)
 variantName = def "variantName" $
+  doc "Construct a variant class name (e.g. \"MyType\" + \"field\" -> \"MyTypeField\")" $
   lambda "tname" $ lambda "fname" $
     sanitizeCppName @@ (
       (Names.localNameOf @@ var "tname")
@@ -1213,5 +1267,6 @@ variantName = def "variantName" $
 -- | Construct a visitor interface name
 visitorName :: TypedTermDefinition (Name -> String)
 visitorName = def "visitorName" $
+  doc "Construct a visitor interface name" $
   lambda "name" $
     sanitizeCppName @@ ((Names.localNameOf @@ var "name") ++ string "Visitor")

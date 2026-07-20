@@ -100,18 +100,18 @@ module_ = Module {
       toDefinition descriptionToExpr,
       toDefinition documentToExpr,
       toDefinition enumTypeDefinitionToExpr,
-      toDefinition enumValueToExpr,
       toDefinition enumValueDefinitionToExpr,
+      toDefinition enumValueToExpr,
       toDefinition fieldDefinitionToExpr,
       toDefinition listTypeToExpr,
       toDefinition nameToExpr,
       toDefinition namedTypeToExpr,
       toDefinition nonNullTypeToExpr,
       toDefinition objectTypeDefinitionToExpr,
-      toDefinition typeToExpr,
       toDefinition typeDefinitionToExpr,
-      toDefinition typeSystemDefinitionToExpr,
       toDefinition typeSystemDefinitionOrExtensionToExpr,
+      toDefinition typeSystemDefinitionToExpr,
+      toDefinition typeToExpr,
       toDefinition withDescription]
 
 

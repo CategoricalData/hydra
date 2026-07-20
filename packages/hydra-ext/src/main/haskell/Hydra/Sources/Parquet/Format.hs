@@ -29,50 +29,51 @@ module_ = Module {
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift"))}
   where
     definitions = [
-      type_,
-      fieldRepetitionType,
-      statistics,
+      aesGcmCtrV1,
+      aesGcmV1,
+      bloomFilterAlgorithm,
+      bloomFilterCompression,
+      bloomFilterHash,
+      bloomFilterHeader,
+      boundaryOrder,
+      columnChunk,
+      columnCryptoMetaData,
+      columnIndex,
+      columnMetaData,
+      columnOrder,
+      compressionCodec,
+      dataPageHeader,
+      dataPageHeaderV2,
       decimalType,
+      dictionaryPageHeader,
+      encoding,
+      encryptionAlgorithm,
+      encryptionWithColumnKey,
+      encryptionWithFooterKey,
+      fieldRepetitionType,
+      fileCryptoMetaData,
+      fileMetaData,
+      indexPageHeader,
+      intType,
+      keyValue,
+      logicalType,
+      offsetIndex,
+      pageEncodingStats,
+      pageHeader,
+      pageLocation,
+      pageType,
+      rowGroup,
+      schemaElement,
+      sortingColumn,
+      statistics,
+      timeType,
       timeUnit,
       timestampType,
-      timeType,
-      intType,
-      logicalType,
-      schemaElement,
-      encoding,
-      compressionCodec,
-      pageType,
-      boundaryOrder,
-      dataPageHeader,
-      indexPageHeader,
-      dictionaryPageHeader,
-      dataPageHeaderV2,
-      bloomFilterAlgorithm,
-      bloomFilterHash,
-      bloomFilterCompression,
-      bloomFilterHeader,
-      pageHeader,
-      keyValue,
-      sortingColumn,
-      pageEncodingStats,
-      columnMetaData,
-      encryptionWithFooterKey,
-      encryptionWithColumnKey,
-      columnCryptoMetaData,
-      columnChunk,
-      rowGroup,
-      columnOrder,
-      pageLocation,
-      offsetIndex,
-      columnIndex,
-      aesGcmV1,
-      aesGcmCtrV1,
-      encryptionAlgorithm,
-      fileMetaData,
-      fileCryptoMetaData]
+      type_]
 
 aesGcmCtrV1 :: TypeDefinition
 aesGcmCtrV1 = define "AesGcmCtrV1" $
+  doc "AES GCM CTR mode encryption parameters" $
   T.record [
     "aadPrefix">:
       doc "AAD prefix" $
@@ -87,6 +88,7 @@ aesGcmCtrV1 = define "AesGcmCtrV1" $
 
 aesGcmV1 :: TypeDefinition
 aesGcmV1 = define "AesGcmV1" $
+  doc "AES GCM mode encryption parameters" $
   T.record [
     "aadPrefix">:
       doc "AAD prefix" $
@@ -149,6 +151,7 @@ boundaryOrder = define "BoundaryOrder" $
 
 columnChunk :: TypeDefinition
 columnChunk = define "ColumnChunk" $
+  doc "Metadata and location of a single column's data within a row group" $
   T.record [
     "filePath">:
       doc ("File where column data is stored.  If not set, assumed to be same file as " ++
@@ -183,6 +186,7 @@ columnChunk = define "ColumnChunk" $
 
 columnCryptoMetaData :: TypeDefinition
 columnCryptoMetaData = define "ColumnCryptoMetaData" $
+  doc "Crypto metadata for a column, specifying which key was used to encrypt it" $
   T.union [
     "encryptionWithFooterKey">: parquet "EncryptionWithFooterKey",
     "encryptionWithColumnKey">: parquet "EncryptionWithColumnKey"]
@@ -467,12 +471,14 @@ encoding = define "Encoding" $
 
 encryptionAlgorithm :: TypeDefinition
 encryptionAlgorithm = define "EncryptionAlgorithm" $
+  doc "The encryption algorithm used to protect a Parquet file, with its parameters" $
   T.union [
     "aesGcmV1">: parquet "AesGcmV1",
     "aesGcmCtrV1">: parquet "AesGcmCtrV1"]
 
 encryptionWithColumnKey :: TypeDefinition
 encryptionWithColumnKey = define "EncryptionWithColumnKey" $
+  doc "Identifies a column as encrypted with its own per-column encryption key" $
   T.record [
     "pathInSchema">:
       doc "Column path in schema" $
@@ -482,7 +488,9 @@ encryptionWithColumnKey = define "EncryptionWithColumnKey" $
       T.optional T.binary]
 
 encryptionWithFooterKey :: TypeDefinition
-encryptionWithFooterKey = define "EncryptionWithFooterKey" T.unit
+encryptionWithFooterKey = define "EncryptionWithFooterKey" $
+  doc "Identifies a column as encrypted with the same key used to encrypt the footer" $
+  T.unit
 
 fieldRepetitionType :: TypeDefinition
 fieldRepetitionType = define "FieldRepetitionType" $
@@ -560,7 +568,9 @@ fileMetaData = define "FileMetaData" $
       T.optional T.binary]
 
 indexPageHeader :: TypeDefinition
-indexPageHeader = define "IndexPageHeader" T.unit
+indexPageHeader = define "IndexPageHeader" $
+  doc "Header for an index page (currently unused in the Parquet format)" $
+  T.unit
 
 intType :: TypeDefinition
 intType = define "IntType" $
@@ -612,6 +622,7 @@ logicalType = define "LogicalType" $
 
 offsetIndex :: TypeDefinition
 offsetIndex = define "OffsetIndex" $
+  doc "The offset index for a column chunk, giving byte offsets and row indices of its pages" $
   T.record [
     "pageLocations">:
       doc ("PageLocations, ordered by increasing PageLocation.offset. It is required " ++
@@ -634,6 +645,7 @@ pageEncodingStats = define "PageEncodingStats" $
 
 pageHeader :: TypeDefinition
 pageHeader = define "PageHeader" $
+  doc "Common header shared by all page types, wrapping a type-specific header" $
   T.record [
     "type">:
       doc "the type of the page: indicates which of the *_header fields is set" $
@@ -682,6 +694,7 @@ pageHeader = define "PageHeader" $
 
 pageLocation :: TypeDefinition
 pageLocation = define "PageLocation" $
+  doc "Location and size of a single page, used as an entry in an OffsetIndex" $
   T.record [
     "offset">:
       doc "Offset of the page in the file"
@@ -697,6 +710,7 @@ pageLocation = define "PageLocation" $
 
 pageType :: TypeDefinition
 pageType = define "PageType" $
+  doc "The type of a page within a column chunk" $
   T.enum [
     "dataPage",
     "indexPage",
@@ -708,6 +722,7 @@ parquet = typeref ns
 
 rowGroup :: TypeDefinition
 rowGroup = define "RowGroup" $
+  doc "Metadata for a horizontal partition of the data into a row group" $
   T.record [
     "columns">:
       doc ("Metadata for each column chunk in this row group. " ++
@@ -816,6 +831,7 @@ timeType = define "TimeType" $
 
 timeUnit :: TypeDefinition
 timeUnit = define "TimeUnit" $
+  doc "The unit of measurement for a TIME or TIMESTAMP logical type" $
   T.enum [
     "millis",
     "micros",

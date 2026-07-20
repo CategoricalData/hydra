@@ -98,7 +98,7 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.protobuf.environment.StructuralTypeRef"}}},
                                             "argument": {"variable": "acc"}}},
                                         "argument": {
-                                          "application": {"function": {"variable": "hydra.protobuf.coder.collectStructuralTypes_collectFromType"}, "argument": {"variable": "t"}}}}}}}}}}},
+                                          "application": {"function": {"variable": "hydra.protobuf.coder.collectStructuralTypesFromType"}, "argument": {"variable": "t"}}}}}}}}}}},
                         "argument": {
                           "typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.protobuf.environment.StructuralTypeRef"}}}}},
                     "argument": {"variable": "types"}}}}},
@@ -109,7 +109,7 @@
                   "value": {"literal": {"string": "Collect all structural type references (Either, Pair) from a list of types"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.protobuf.coder.collectStructuralTypes_collectFromType",
+        "name": "hydra.protobuf.coder.collectStructuralTypesFromType",
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
@@ -3623,25 +3623,32 @@
               "typeLambda": {
                 "parameter": "t1",
                 "body": {
-                  "lambda": {
-                    "parameter": "cx",
-                    "domain": {"variable": "t0"},
+                  "annotated": {
                     "body": {
                       "lambda": {
-                        "parameter": "msg",
-                        "domain": {"literal": "string"},
+                        "parameter": "cx",
+                        "domain": {"variable": "t0"},
                         "body": {
-                          "typeApplication": {
+                          "lambda": {
+                            "parameter": "msg",
+                            "domain": {"literal": "string"},
                             "body": {
                               "typeApplication": {
                                 "body": {
-                                  "either": {
-                                    "left": {
-                                      "inject": {
-                                        "typeName": "hydra.errors.Error",
-                                        "field": {"name": "other", "term": {"wrap": {"typeName": "hydra.errors.OtherError", "body": {"variable": "msg"}}}}}}}},
-                                "type": {"variable": "hydra.errors.Error"}}},
-                            "type": {"variable": "t1"}}}}}}}}}}}}},
+                                  "typeApplication": {
+                                    "body": {
+                                      "either": {
+                                        "left": {
+                                          "inject": {
+                                            "typeName": "hydra.errors.Error",
+                                            "field": {"name": "other", "term": {"wrap": {"typeName": "hydra.errors.OtherError", "body": {"variable": "msg"}}}}}}}},
+                                    "type": {"variable": "hydra.errors.Error"}}},
+                                "type": {"variable": "t1"}}}}}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct a Left error result from an error message, ignoring the encoder state"}}}]}}}}}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.findOptions",
@@ -3893,39 +3900,46 @@
               "typeLambda": {
                 "parameter": "t1",
                 "body": {
-                  "lambda": {
-                    "parameter": "cx",
-                    "domain": {"variable": "t0"},
+                  "annotated": {
                     "body": {
                       "lambda": {
-                        "parameter": "e",
-                        "domain": {"either": {"left": {"literal": "string"}, "right": {"variable": "t1"}}},
+                        "parameter": "cx",
+                        "domain": {"variable": "t0"},
                         "body": {
-                          "application": {
-                            "function": {
+                          "lambda": {
+                            "parameter": "e",
+                            "domain": {"either": {"left": {"literal": "string"}, "right": {"variable": "t1"}}},
+                            "body": {
                               "application": {
                                 "function": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"literal": "string"}}},
-                                                "type": {"variable": "t1"}}},
-                                            "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"variable": "t1"}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "msg",
-                                        "domain": {"literal": "string"},
-                                        "body": {
-                                          "inject": {
-                                            "typeName": "hydra.errors.Error",
-                                            "field": {"name": "other", "term": {"wrap": {"typeName": "hydra.errors.OtherError", "body": {"variable": "msg"}}}}}}}}}},
-                                "argument": {"lambda": {"parameter": "a", "domain": {"variable": "t1"}, "body": {"variable": "a"}}}}},
-                            "argument": {"variable": "e"}}}}}}}}}}}}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"literal": "string"}}},
+                                                    "type": {"variable": "t1"}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"variable": "t1"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "msg",
+                                            "domain": {"literal": "string"},
+                                            "body": {
+                                              "inject": {
+                                                "typeName": "hydra.errors.Error",
+                                                "field": {"name": "other", "term": {"wrap": {"typeName": "hydra.errors.OtherError", "body": {"variable": "msg"}}}}}}}}}},
+                                    "argument": {"lambda": {"parameter": "a", "domain": {"variable": "t1"}, "body": {"variable": "a"}}}}},
+                                "argument": {"variable": "e"}}}}}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Convert an Either String result into an Either Error result"}}}]}}}}}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.generateStructuralTypeMessage",
@@ -4659,17 +4673,35 @@
       "term": {
         "name": "hydra.protobuf.coder.javaMultipleFilesOptionName",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "java_multiple_files"}}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "java_multiple_files"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The name of the Protobuf java_multiple_files option"}}}]}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.javaPackageOptionName",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "java_package"}}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "java_package"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the Protobuf java_package option"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.protobuf.coder.key_proto_field_index",
+        "name": "hydra.protobuf.coder.keyProtoFieldIndex",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}},
-        "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "proto_field_index"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "proto_field_index"}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Annotation key under which the assigned Protobuf field index is recorded"}}}]}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.mapAccumResult",
@@ -5443,32 +5475,39 @@
               "typeLambda": {
                 "parameter": "t1",
                 "body": {
-                  "lambda": {
-                    "parameter": "cx",
-                    "domain": {"variable": "t0"},
+                  "annotated": {
                     "body": {
                       "lambda": {
-                        "parameter": "expected",
-                        "domain": {"literal": "string"},
+                        "parameter": "cx",
+                        "domain": {"variable": "t0"},
                         "body": {
                           "lambda": {
-                            "parameter": "found",
+                            "parameter": "expected",
                             "domain": {"literal": "string"},
                             "body": {
-                              "application": {
-                                "function": {
+                              "lambda": {
+                                "parameter": "found",
+                                "domain": {"literal": "string"},
+                                "body": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.protobuf.coder.err"}, "type": {"variable": "t0"}}},
-                                        "type": {"variable": "t1"}}},
-                                    "argument": {"variable": "cx"}}},
-                                "argument": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.protobuf.coder.err"}, "type": {"variable": "t0"}}},
+                                            "type": {"variable": "t1"}}},
+                                        "argument": {"variable": "cx"}}},
                                     "argument": {
-                                      "list": [
-                                        {"literal": {"string": "Expected "}},
-                                        {"variable": "expected"},
-                                        {"literal": {"string": ", found: "}},
-                                        {"variable": "found"}]}}}}}}}}}}}}}}}}}]}
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "argument": {
+                                          "list": [
+                                            {"literal": {"string": "Expected "}},
+                                            {"variable": "expected"},
+                                            {"literal": {"string": ", found: "}},
+                                            {"variable": "found"}]}}}}}}}}}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "Construct an error reporting an expected construct versus what was actually found"}}}]}}}}}}}}}]}

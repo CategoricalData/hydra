@@ -103,8 +103,8 @@ module_ = Module {
       toDefinition primitiveTypeToExpr,
       toDefinition qualifiedNameToExpr,
       toDefinition recordFieldToExpr,
-      toDefinition schemaToExpr,
       toDefinition schemaFileToExpr,
+      toDefinition schemaToExpr,
       toDefinition unionMemberToExpr,
       toDefinition withAnnotations]
 

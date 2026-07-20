@@ -12,378 +12,591 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "not", "type": {"literal": "boolean"}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "lowerBound", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "upperBound", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "not", "type": {"literal": "boolean"}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "lowerBound", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "upperBound", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'between' range test on an expression, optionally negated"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BinaryExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "left", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "operator", "type": {"variable": "hydra.kusto.kql.BinaryOperator"}},
-              {"name": "right", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "left", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "operator", "type": {"variable": "hydra.kusto.kql.BinaryOperator"}},
+                  {"name": "right", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A binary operator expression, combining a left and right operand"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BinaryOperator",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "caseInsensitiveEqual", "type": "unit"},
-              {"name": "contains", "type": "unit"},
-              {"name": "divide", "type": "unit"},
-              {"name": "endsWith", "type": "unit"},
-              {"name": "equal", "type": "unit"},
-              {"name": "greater", "type": "unit"},
-              {"name": "greaterOrEqual", "type": "unit"},
-              {"name": "has", "type": "unit"},
-              {"name": "hasPrefix", "type": "unit"},
-              {"name": "hasSuffix", "type": "unit"},
-              {"name": "less", "type": "unit"},
-              {"name": "lessOrEqual", "type": "unit"},
-              {"name": "matchesRegex", "type": "unit"},
-              {"name": "minus", "type": "unit"},
-              {"name": "notEqual", "type": "unit"},
-              {"name": "plus", "type": "unit"},
-              {"name": "startsWith", "type": "unit"},
-              {"name": "times", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "caseInsensitiveEqual", "type": "unit"},
+                  {"name": "contains", "type": "unit"},
+                  {"name": "divide", "type": "unit"},
+                  {"name": "endsWith", "type": "unit"},
+                  {"name": "equal", "type": "unit"},
+                  {"name": "greater", "type": "unit"},
+                  {"name": "greaterOrEqual", "type": "unit"},
+                  {"name": "has", "type": "unit"},
+                  {"name": "hasPrefix", "type": "unit"},
+                  {"name": "hasSuffix", "type": "unit"},
+                  {"name": "less", "type": "unit"},
+                  {"name": "lessOrEqual", "type": "unit"},
+                  {"name": "matchesRegex", "type": "unit"},
+                  {"name": "minus", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "plus", "type": "unit"},
+                  {"name": "startsWith", "type": "unit"},
+                  {"name": "times", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A binary comparison or arithmetic operator used in KQL expressions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BuiltInFunction",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "ago", "type": "unit"},
-              {"name": "bin", "type": "unit"},
-              {"name": "count", "type": "unit"},
-              {"name": "dcount", "type": "unit"},
-              {"name": "endofday", "type": "unit"},
-              {"name": "extract", "type": "unit"},
-              {"name": "format_datetime", "type": "unit"},
-              {"name": "materialize", "type": "unit"},
-              {"name": "now", "type": "unit"},
-              {"name": "range", "type": "unit"},
-              {"name": "startofday", "type": "unit"},
-              {"name": "strcat", "type": "unit"},
-              {"name": "todynamic", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "ago", "type": "unit"},
+                  {"name": "bin", "type": "unit"},
+                  {"name": "count", "type": "unit"},
+                  {"name": "dcount", "type": "unit"},
+                  {"name": "endofday", "type": "unit"},
+                  {"name": "extract", "type": "unit"},
+                  {"name": "format_datetime", "type": "unit"},
+                  {"name": "materialize", "type": "unit"},
+                  {"name": "now", "type": "unit"},
+                  {"name": "range", "type": "unit"},
+                  {"name": "startofday", "type": "unit"},
+                  {"name": "strcat", "type": "unit"},
+                  {"name": "todynamic", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One of the built-in scalar or aggregation functions supported by KQL"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ColumnAlias",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "alias", "type": {"variable": "hydra.kusto.kql.ColumnName"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {"name": "alias", "type": {"variable": "hydra.kusto.kql.ColumnName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An association between a column and an alternate (renamed) column name"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ColumnAssignment",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
-    {"type": {"name": "hydra.kusto.kql.ColumnName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An assignment of a computed expression to a column"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.ColumnName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Columns",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "all", "type": "unit"}, {"name": "single", "type": {"variable": "hydra.kusto.kql.ColumnName"}}]}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "all", "type": "unit"}, {"name": "single", "type": {"variable": "hydra.kusto.kql.ColumnName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A selection of either all columns, or a single named column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Command",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "count", "type": "unit"},
-              {
-                "name": "distinct",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}},
-                        {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "extend",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "join", "type": {"variable": "hydra.kusto.kql.JoinCommand"}},
-              {"name": "limit", "type": {"literal": {"integer": "int32"}}},
-              {"name": "mvexpand", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {
-                "name": "orderBy",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "parse", "type": {"variable": "hydra.kusto.kql.ParseCommand"}},
-              {"name": "print", "type": {"variable": "hydra.kusto.kql.PrintCommand"}},
-              {
-                "name": "project",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.Projection"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "projectAway",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "projectRename",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAlias"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "render", "type": {"literal": "string"}},
-              {"name": "search", "type": {"variable": "hydra.kusto.kql.SearchCommand"}},
-              {
-                "name": "sortBy",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "summarize", "type": {"variable": "hydra.kusto.kql.SummarizeCommand"}},
-              {
-                "name": "take",
-                "type": {
-                  "annotated": {
-                    "body": {"literal": {"integer": "int32"}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "Limit a search to a specified number of results"}}}]}}}},
-              {"name": "top", "type": {"variable": "hydra.kusto.kql.TopCommand"}},
-              {"name": "union", "type": {"variable": "hydra.kusto.kql.UnionCommand"}},
-              {"name": "where", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
-    {"type": {"name": "hydra.kusto.kql.Datetime", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "count", "type": "unit"},
+                  {
+                    "name": "distinct",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "extend",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "join", "type": {"variable": "hydra.kusto.kql.JoinCommand"}},
+                  {"name": "limit", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "mvexpand", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {
+                    "name": "orderBy",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "parse", "type": {"variable": "hydra.kusto.kql.ParseCommand"}},
+                  {"name": "print", "type": {"variable": "hydra.kusto.kql.PrintCommand"}},
+                  {
+                    "name": "project",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.Projection"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "projectAway",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "projectRename",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.ColumnAlias"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "render", "type": {"literal": "string"}},
+                  {"name": "search", "type": {"variable": "hydra.kusto.kql.SearchCommand"}},
+                  {
+                    "name": "sortBy",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "summarize", "type": {"variable": "hydra.kusto.kql.SummarizeCommand"}},
+                  {
+                    "name": "take",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Limit a search to a specified number of results"}}}]}}}},
+                  {"name": "top", "type": {"variable": "hydra.kusto.kql.TopCommand"}},
+                  {"name": "union", "type": {"variable": "hydra.kusto.kql.UnionCommand"}},
+                  {"name": "where", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A tabular operator, applied in sequence within a pipeline expression"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.Datetime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL datetime literal"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Duration",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "value", "type": {"literal": {"integer": "int32"}}},
-              {"name": "unit", "type": {"variable": "hydra.kusto.kql.DurationUnit"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "value", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "unit", "type": {"variable": "hydra.kusto.kql.DurationUnit"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A duration (timespan) literal, expressed as a value and a unit"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.DurationUnit",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "second", "type": "unit"}, {"name": "minute", "type": "unit"}, {"name": "hour", "type": "unit"}]}}}},
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "second", "type": "unit"}, {"name": "minute", "type": "unit"}, {"name": "hour", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unit of measure of a Duration value"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Expression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "and",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "any", "type": "unit"},
-              {"name": "between", "type": {"variable": "hydra.kusto.kql.BetweenExpression"}},
-              {"name": "binary", "type": {"variable": "hydra.kusto.kql.BinaryExpression"}},
-              {"name": "braces", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "dataset", "type": {"variable": "hydra.kusto.kql.TableName"}},
-              {"name": "index", "type": {"variable": "hydra.kusto.kql.IndexExpression"}},
-              {"name": "list", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}},
-              {"name": "literal", "type": {"variable": "hydra.kusto.kql.Literal"}},
-              {
-                "name": "or",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "parentheses", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "property", "type": {"variable": "hydra.kusto.kql.PropertyExpression"}},
-              {"name": "unary", "type": {"variable": "hydra.kusto.kql.UnaryExpression"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "and",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "any", "type": "unit"},
+                  {"name": "between", "type": {"variable": "hydra.kusto.kql.BetweenExpression"}},
+                  {"name": "binary", "type": {"variable": "hydra.kusto.kql.BinaryExpression"}},
+                  {"name": "braces", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {"name": "dataset", "type": {"variable": "hydra.kusto.kql.TableName"}},
+                  {"name": "index", "type": {"variable": "hydra.kusto.kql.IndexExpression"}},
+                  {"name": "list", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}},
+                  {"name": "literal", "type": {"variable": "hydra.kusto.kql.Literal"}},
+                  {
+                    "name": "or",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "parentheses", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "property", "type": {"variable": "hydra.kusto.kql.PropertyExpression"}},
+                  {"name": "unary", "type": {"variable": "hydra.kusto.kql.UnaryExpression"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL scalar expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Function",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "builtIn", "type": {"variable": "hydra.kusto.kql.BuiltInFunction"}},
-              {"name": "custom", "type": {"variable": "hydra.kusto.kql.FunctionName"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "builtIn", "type": {"variable": "hydra.kusto.kql.BuiltInFunction"}},
+                  {"name": "custom", "type": {"variable": "hydra.kusto.kql.FunctionName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A reference to either a built-in or a user-defined function"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.FunctionExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "function", "type": {"variable": "hydra.kusto.kql.Function"}},
-              {"name": "arguments", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}}]}}}},
-    {"type": {"name": "hydra.kusto.kql.FunctionName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "function", "type": {"variable": "hydra.kusto.kql.Function"}},
+                  {"name": "arguments", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An invocation of a function with a list of argument expressions"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.FunctionName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined function"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.IndexExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "index", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "index", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An indexing operation applied to an expression, e.g. array or property access"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.JoinCommand",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "kind", "type": {"variable": "hydra.kusto.kql.JoinKind"}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.TableName"}},
-              {"name": "on", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "kind", "type": {"variable": "hydra.kusto.kql.JoinKind"}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.TableName"}},
+                  {"name": "on", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'join' operator combining rows from the current and a second tabular expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.JoinKind",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "leftouter", "type": "unit"},
-              {"name": "leftsemi", "type": "unit"},
-              {"name": "leftanti", "type": "unit"},
-              {"name": "fullouter", "type": "unit"},
-              {"name": "inner", "type": "unit"},
-              {"name": "innerunique", "type": "unit"},
-              {"name": "rightouter", "type": "unit"},
-              {"name": "rightsemi", "type": "unit"},
-              {"name": "rightanti", "type": "unit"}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "leftouter", "type": "unit"},
+                  {"name": "leftsemi", "type": "unit"},
+                  {"name": "leftanti", "type": "unit"},
+                  {"name": "fullouter", "type": "unit"},
+                  {"name": "inner", "type": "unit"},
+                  {"name": "innerunique", "type": "unit"},
+                  {"name": "rightouter", "type": "unit"},
+                  {"name": "rightsemi", "type": "unit"},
+                  {"name": "rightanti", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The kind of join to perform, e.g. inner, left outer, or left semi/anti"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.KeyValuePair",
         "body": {
           "variables": [],
           "body": {
-            "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A key-value pair extracted by a 'parse' command"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.LetBinding",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "name", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single 'let' binding of a name to an expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.LetExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {
-                "name": "bindings",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.LetBinding"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.TabularExpression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "bindings",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.LetBinding"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.TabularExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A sequence of 'let' bindings followed by a tabular expression that may reference them"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Literal",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "duration", "type": {"variable": "hydra.kusto.kql.Duration"}},
-              {"name": "datetime", "type": {"variable": "hydra.kusto.kql.Datetime"}},
-              {"name": "string", "type": {"literal": "string"}},
-              {"name": "int", "type": {"literal": {"integer": "int32"}}},
-              {"name": "long", "type": {"literal": {"integer": "int64"}}},
-              {"name": "double", "type": {"literal": {"float": "float64"}}},
-              {"name": "boolean", "type": {"literal": "boolean"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "duration", "type": {"variable": "hydra.kusto.kql.Duration"}},
+                  {"name": "datetime", "type": {"variable": "hydra.kusto.kql.Datetime"}},
+                  {"name": "string", "type": {"literal": "string"}},
+                  {"name": "int", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "long", "type": {"literal": {"integer": "int64"}}},
+                  {"name": "double", "type": {"literal": {"float": "float64"}}},
+                  {"name": "boolean", "type": {"literal": "boolean"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal value in a KQL expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Order",
-        "body": {"variables": [], "body": {"union": [{"name": "ascending", "type": "unit"}, {"name": "descending", "type": "unit"}]}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "ascending", "type": "unit"}, {"name": "descending", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The sort direction for an 'order by' or 'sort by' clause"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Parameter",
         "body": {
           "variables": [],
           "body": {
-            "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"variable": "hydra.kusto.kql.Literal"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"variable": "hydra.kusto.kql.Literal"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A named parameter with a literal value, e.g. for a union operator"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ParseCommand",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {
-                "name": "pairs",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.KeyValuePair"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {
+                    "name": "pairs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.KeyValuePair"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'parse' command that extracts key-value pairs from a column into new columns"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PipelineExpression",
         "body": {
           "variables": [],
           "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.kusto.kql.TabularExpression"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.TabularExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A pipe ('|')-separated sequence of tabular expressions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PrintCommand",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "column", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "column", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'print' command that outputs the value of an expression, optionally naming a column"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Projection",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "alias", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "alias", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression to project as a column, with an optional alias, used by a 'project' command"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PropertyExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
-              {"name": "property", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}},
+                  {"name": "property", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A dotted property access on an expression, e.g. 'x.property'"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Query",
-        "body": {"variables": [], "body": {"wrap": {"variable": "hydra.kusto.kql.TabularExpression"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"variable": "hydra.kusto.kql.TabularExpression"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A complete KQL query, consisting of a single tabular expression"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.SearchCommand",
@@ -402,79 +615,144 @@
                     "value": {"literal": {"string": "Search across all datasets and columns or, if provided, specific datasets and/or columns"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.kusto.kql.SummarizeCommand",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {
-                "name": "columns",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "by", "type": {"list": {"variable": "hydra.kusto.kql.ColumnName"}}}]}}}},
-    {"type": {"name": "hydra.kusto.kql.TableName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.kusto.kql.TopCommand",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "count", "type": {"literal": {"integer": "int32"}}},
-              {"name": "sort", "type": {"list": {"variable": "hydra.kusto.kql.SortBy"}}}]}}}},
-    {
-      "type": {
         "name": "hydra.kusto.kql.SortBy",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "order", "type": {"optional": {"variable": "hydra.kusto.kql.Order"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
+                  {"name": "order", "type": {"optional": {"variable": "hydra.kusto.kql.Order"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single sort key with an optional sort order, used by 'order by'/'sort by'"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.SummarizeCommand",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "columns",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "by", "type": {"list": {"variable": "hydra.kusto.kql.ColumnName"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'summarize' command that computes aggregate columns, optionally grouped by other columns"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.TableName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table or dataset"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.TabularExpression",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "command", "type": {"variable": "hydra.kusto.kql.Command"}},
-              {"name": "pipeline", "type": {"variable": "hydra.kusto.kql.PipelineExpression"}},
-              {"name": "let", "type": {"variable": "hydra.kusto.kql.LetExpression"}},
-              {"name": "table", "type": {"variable": "hydra.kusto.kql.TableName"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "command", "type": {"variable": "hydra.kusto.kql.Command"}},
+                  {"name": "pipeline", "type": {"variable": "hydra.kusto.kql.PipelineExpression"}},
+                  {"name": "let", "type": {"variable": "hydra.kusto.kql.LetExpression"}},
+                  {"name": "table", "type": {"variable": "hydra.kusto.kql.TableName"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An expression which produces a table: a command, pipeline, let expression, or table reference"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.kusto.kql.TopCommand",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "count", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "sort", "type": {"list": {"variable": "hydra.kusto.kql.SortBy"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'top' command that returns the first N rows sorted by the given columns"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnaryExpression",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "operator", "type": {"variable": "hydra.kusto.kql.UnaryOperator"}},
-              {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "operator", "type": {"variable": "hydra.kusto.kql.UnaryOperator"}},
+                  {"name": "expression", "type": {"variable": "hydra.kusto.kql.Expression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A unary operator expression applied to a single operand"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnaryOperator",
-        "body": {"variables": [], "body": {"union": [{"name": "not", "type": "unit"}]}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "not", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator used in KQL expressions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnionCommand",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "parameters", "type": {"list": {"variable": "hydra.kusto.kql.Parameter"}}},
-              {"name": "kind", "type": {"optional": {"variable": "hydra.kusto.kql.UnionKind"}}},
-              {"name": "withSource", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
-              {"name": "isFuzzy", "type": {"optional": {"literal": "boolean"}}},
-              {
-                "name": "tables",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.kusto.kql.TableName"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "parameters", "type": {"list": {"variable": "hydra.kusto.kql.Parameter"}}},
+                  {"name": "kind", "type": {"optional": {"variable": "hydra.kusto.kql.UnionKind"}}},
+                  {"name": "withSource", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
+                  {"name": "isFuzzy", "type": {"optional": {"literal": "boolean"}}},
+                  {
+                    "name": "tables",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.kusto.kql.TableName"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'union' command that combines rows from multiple tables"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnionKind",
-        "body": {"variables": [], "body": {"union": [{"name": "inner", "type": "unit"}, {"name": "outer", "type": "unit"}]}}}}]}
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "inner", "type": "unit"}, {"name": "outer", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Whether a union preserves only common columns (inner) or all columns (outer)"}}}]}}}}}}]}

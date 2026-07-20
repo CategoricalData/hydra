@@ -8,200 +8,330 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.json.schema.Document",
+        "name": "hydra.json.schema.AdditionalItems",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "id", "type": {"optional": {"literal": "string"}}},
-              {
-                "name": "definitions",
-                "type": {
-                  "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
-              {"name": "root", "type": {"variable": "hydra.json.schema.Schema"}}]}}}},
-    {"type": {"name": "hydra.json.schema.Keyword", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.Schema",
-        "body": {
-          "variables": [],
-          "body": {
-            "wrap": {
-              "annotated": {
-                "body": {"list": {"variable": "hydra.json.schema.Restriction"}},
-                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.Restriction",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "type", "type": {"variable": "hydra.json.schema.Type"}},
-              {"name": "string", "type": {"variable": "hydra.json.schema.StringRestriction"}},
-              {"name": "number", "type": {"variable": "hydra.json.schema.NumericRestriction"}},
-              {"name": "array", "type": {"variable": "hydra.json.schema.ArrayRestriction"}},
-              {"name": "object", "type": {"variable": "hydra.json.schema.ObjectRestriction"}},
-              {"name": "multiple", "type": {"variable": "hydra.json.schema.MultipleRestriction"}},
-              {"name": "reference", "type": {"variable": "hydra.json.schema.SchemaReference"}},
-              {"name": "title", "type": {"literal": "string"}},
-              {"name": "description", "type": {"literal": "string"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.Type",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "single", "type": {"variable": "hydra.json.schema.TypeName"}},
-              {
-                "name": "multiple",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.TypeName"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.TypeName",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "string", "type": "unit"},
-              {"name": "integer", "type": "unit"},
-              {"name": "number", "type": "unit"},
-              {"name": "boolean", "type": "unit"},
-              {"name": "null", "type": "unit"},
-              {"name": "array", "type": "unit"},
-              {"name": "object", "type": "unit"}]}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.StringRestriction",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "minLength", "type": {"literal": {"integer": "int32"}}},
-              {"name": "maxLength", "type": {"literal": {"integer": "int32"}}},
-              {"name": "pattern", "type": {"variable": "hydra.json.schema.RegularExpression"}}]}}}},
-    {
-      "type": {"name": "hydra.json.schema.RegularExpression", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.NumericRestriction",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "minimum", "type": {"variable": "hydra.json.schema.Limit"}},
-              {"name": "maximum", "type": {"variable": "hydra.json.schema.Limit"}},
-              {"name": "multipleOf", "type": {"literal": {"integer": "int32"}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.Limit",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [{"name": "value", "type": {"literal": {"integer": "int32"}}}, {"name": "exclusive", "type": {"literal": "boolean"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [{"name": "any", "type": {"literal": "boolean"}}, {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "Whether additional array items beyond those explicitly typed are permitted, and if so, their schema"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.json.schema.ArrayRestriction",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "items", "type": {"variable": "hydra.json.schema.Items"}},
-              {"name": "additionalItems", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
-              {"name": "minItems", "type": {"literal": {"integer": "int32"}}},
-              {"name": "maxItems", "type": {"literal": {"integer": "int32"}}},
-              {"name": "uniqueItems", "type": {"literal": "boolean"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "items", "type": {"variable": "hydra.json.schema.Items"}},
+                  {"name": "additionalItems", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
+                  {"name": "minItems", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "maxItems", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "uniqueItems", "type": {"literal": "boolean"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A restriction on array-typed values: items, additionalItems, minItems, maxItems, or uniqueItems"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.Document",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"optional": {"literal": "string"}}},
+                  {
+                    "name": "definitions",
+                    "type": {
+                      "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
+                  {"name": "root", "type": {"variable": "hydra.json.schema.Schema"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A JSON Schema document: an optional id, optional local definitions, and a root schema"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.json.schema.Items",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "sameItems", "type": {"variable": "hydra.json.schema.Schema"}},
-              {
-                "name": "varItems",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "sameItems", "type": {"variable": "hydra.json.schema.Schema"}},
+                  {
+                    "name": "varItems",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The schema(s) for array items: either a single schema shared by all items, or one schema per item"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.json.schema.AdditionalItems",
+        "name": "hydra.json.schema.Keyword",
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "any", "type": {"literal": "boolean"}}, {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A property name used as a key in a JSON Schema keyword-to-schema map"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.json.schema.ObjectRestriction",
+        "name": "hydra.json.schema.Limit",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "properties",
-                "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}},
-              {"name": "additionalProperties", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
-              {
-                "name": "required",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.Keyword"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "minProperties", "type": {"literal": {"integer": "int32"}}},
-              {"name": "maxProperties", "type": {"literal": {"integer": "int32"}}},
-              {
-                "name": "dependencies",
-                "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.SchemaOrArray"}}}},
-              {
-                "name": "patternProperties",
-                "type": {
-                  "map": {"keys": {"variable": "hydra.json.schema.RegularExpression"}, "values": {"variable": "hydra.json.schema.Schema"}}}}]}}}},
-    {
-      "type": {
-        "name": "hydra.json.schema.SchemaOrArray",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "array", "type": {"list": {"variable": "hydra.json.schema.Keyword"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [{"name": "value", "type": {"literal": {"integer": "int32"}}}, {"name": "exclusive", "type": {"literal": "boolean"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A numeric bound with a flag indicating whether the bound itself is excluded"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.json.schema.MultipleRestriction",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "allOf",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "anyOf",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {
-                "name": "oneOf",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              {"name": "not", "type": {"variable": "hydra.json.schema.Schema"}},
-              {
-                "name": "enum",
-                "type": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.json.model.Value"}},
-                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "allOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "anyOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {
+                    "name": "oneOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "not", "type": {"variable": "hydra.json.schema.Schema"}},
+                  {
+                    "name": "enum",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.model.Value"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A restriction combining multiple schemas: allOf, anyOf, oneOf, not, or enum"}}}]}}}}}},
     {
-      "type": {"name": "hydra.json.schema.SchemaReference", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}}]}
+      "type": {
+        "name": "hydra.json.schema.NumericRestriction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "minimum", "type": {"variable": "hydra.json.schema.Limit"}},
+                  {"name": "maximum", "type": {"variable": "hydra.json.schema.Limit"}},
+                  {"name": "multipleOf", "type": {"literal": {"integer": "int32"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A restriction on numeric-typed values: a minimum, a maximum, or a multipleOf constraint"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.ObjectRestriction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "properties",
+                    "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}},
+                  {"name": "additionalProperties", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
+                  {
+                    "name": "required",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.Keyword"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+                  {"name": "minProperties", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "maxProperties", "type": {"literal": {"integer": "int32"}}},
+                  {
+                    "name": "dependencies",
+                    "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.SchemaOrArray"}}}},
+                  {
+                    "name": "patternProperties",
+                    "type": {
+                      "map": {"keys": {"variable": "hydra.json.schema.RegularExpression"}, "values": {"variable": "hydra.json.schema.Schema"}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A restriction on object-typed values: properties, additionalProperties, required, and related keywords"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.RegularExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A regular expression pattern, as used by the pattern and patternProperties keywords"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.Restriction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "type", "type": {"variable": "hydra.json.schema.Type"}},
+                  {"name": "string", "type": {"variable": "hydra.json.schema.StringRestriction"}},
+                  {"name": "number", "type": {"variable": "hydra.json.schema.NumericRestriction"}},
+                  {"name": "array", "type": {"variable": "hydra.json.schema.ArrayRestriction"}},
+                  {"name": "object", "type": {"variable": "hydra.json.schema.ObjectRestriction"}},
+                  {"name": "multiple", "type": {"variable": "hydra.json.schema.MultipleRestriction"}},
+                  {"name": "reference", "type": {"variable": "hydra.json.schema.SchemaReference"}},
+                  {"name": "title", "type": {"literal": "string"}},
+                  {"name": "description", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single JSON Schema restriction: a type, value restriction, reference, title, or description"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.Schema",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Restriction"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A JSON schema: a non-empty list of restrictions that a conforming value must satisfy"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.SchemaOrArray",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "schema", "type": {"variable": "hydra.json.schema.Schema"}},
+                  {"name": "array", "type": {"list": {"variable": "hydra.json.schema.Keyword"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A dependency value: either a schema, or a list of required keyword names"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.SchemaReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to another schema by URI"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.StringRestriction",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "minLength", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "maxLength", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "pattern", "type": {"variable": "hydra.json.schema.RegularExpression"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A restriction on string-typed values: minLength, maxLength, or pattern"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.Type",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "single", "type": {"variable": "hydra.json.schema.TypeName"}},
+                  {
+                    "name": "multiple",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.json.schema.TypeName"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A type restriction: a single type name, or a list of alternative type names"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.json.schema.TypeName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "string", "type": "unit"},
+                  {"name": "integer", "type": "unit"},
+                  {"name": "number", "type": "unit"},
+                  {"name": "boolean", "type": "unit"},
+                  {"name": "null", "type": "unit"},
+                  {"name": "array", "type": "unit"},
+                  {"name": "object", "type": "unit"}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a JSON Schema primitive type"}}}]}}}}}}]}

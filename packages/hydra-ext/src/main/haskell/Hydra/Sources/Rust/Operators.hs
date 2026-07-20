@@ -96,60 +96,50 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "AST operators for Rust serialization")}
   where
     definitions = [
-      -- Assignment operators (lowest precedence)
-      toDefinition assignOp,
       toDefinition addAssignOp,
-      toDefinition subAssignOp,
-      toDefinition mulAssignOp,
-      toDefinition divAssignOp,
-      toDefinition remAssignOp,
-      toDefinition bitAndAssignOp,
-      toDefinition bitOrAssignOp,
-      toDefinition bitXorAssignOp,
-      toDefinition shlAssignOp,
-      toDefinition shrAssignOp,
-      -- Range operators
-      toDefinition rangeOp,
-      toDefinition rangeInclusiveOp,
-      -- Logical operators
-      toDefinition orOp,
-      toDefinition andOp,
-      -- Comparison operators
-      toDefinition eqOp,
-      toDefinition neOp,
-      toDefinition ltOp,
-      toDefinition leOp,
-      toDefinition gtOp,
-      toDefinition geOp,
-      -- Bitwise operators
-      toDefinition bitOrOp,
-      toDefinition bitXorOp,
-      toDefinition bitAndOp,
-      -- Shift operators
-      toDefinition shlOp,
-      toDefinition shrOp,
-      -- Arithmetic operators
       toDefinition addOp,
-      toDefinition subOp,
-      toDefinition mulOp,
-      toDefinition divOp,
-      toDefinition remOp,
-      -- Cast and type ascription
+      toDefinition andOp,
+      toDefinition appOp,
+      toDefinition arrowOp,
       toDefinition asOp,
+      toDefinition assignOp,
+      toDefinition bitAndAssignOp,
+      toDefinition bitAndOp,
+      toDefinition bitOrAssignOp,
+      toDefinition bitOrOp,
+      toDefinition bitXorAssignOp,
+      toDefinition bitXorOp,
+      toDefinition colonColonOp,
       toDefinition colonOp,
-      -- Unary operators (highest precedence)
+      toDefinition derefOp,
+      toDefinition divAssignOp,
+      toDefinition divOp,
+      toDefinition doubleColonOp,
+      toDefinition eqOp,
+      toDefinition fatArrowOp,
+      toDefinition fieldOp,
+      toDefinition geOp,
+      toDefinition gtOp,
+      toDefinition leOp,
+      toDefinition ltOp,
+      toDefinition methodOp,
+      toDefinition mulAssignOp,
+      toDefinition mulOp,
+      toDefinition neOp,
       toDefinition negOp,
       toDefinition notOp,
-      toDefinition derefOp,
+      toDefinition orOp,
+      toDefinition rangeInclusiveOp,
+      toDefinition rangeOp,
       toDefinition refOp,
-      -- Other operators
-      toDefinition appOp,
-      toDefinition fieldOp,
-      toDefinition methodOp,
-      toDefinition arrowOp,
-      toDefinition fatArrowOp,
-      toDefinition doubleColonOp,
-      toDefinition colonColonOp]
+      toDefinition remAssignOp,
+      toDefinition remOp,
+      toDefinition shlAssignOp,
+      toDefinition shlOp,
+      toDefinition shrAssignOp,
+      toDefinition shrOp,
+      toDefinition subAssignOp,
+      toDefinition subOp]
 
 -- =============================================================================
 -- Assignment operators (precedence 1, right associative)

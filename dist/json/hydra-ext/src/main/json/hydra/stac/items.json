@@ -193,7 +193,19 @@
                     "value": {
                       "literal": {
                         "string": "This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type."}}}]}}}}}},
-    {"type": {"name": "hydra.stac.items.MediaType", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {
+      "type": {
+        "name": "hydra.stac.items.MediaType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An IANA media type (MIME type) string identifying the format of an asset or linked resource"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.stac.items.RelationType",
@@ -282,61 +294,104 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "self",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "STRONGLY RECOMMENDED. Absolute URL to the Item if it is available at a public URL. This is particularly useful when in a download package that includes metadata, so that the downstream user can know where the data has come from."}}}]}}}},
-              {
-                "name": "root",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "URL to the root STAC entity (Catalog or Collection)."}}}]}}}},
-              {
-                "name": "parent",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "URL to the parent STAC entity (Catalog or Collection)."}}}]}}}},
-              {
-                "name": "collection",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "STRONGLY RECOMMENDED. URL to a Collection. Absolute URLs should be used whenever possible. The referenced Collection is STRONGLY RECOMMENDED to implement the same STAC version as the Item. A link with this rel type is required if the collection field in properties is present."}}}]}}}},
-              {
-                "name": "derivedFrom",
-                "type": {
-                  "annotated": {
-                    "body": "unit",
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}]}}}}]}}}},
-    {"type": {"name": "hydra.stac.items.StacVersion", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.stac.items.Uri", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.stac.items.Url", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}}]}
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "self",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "STRONGLY RECOMMENDED. Absolute URL to the Item if it is available at a public URL. This is particularly useful when in a download package that includes metadata, so that the downstream user can know where the data has come from."}}}]}}}},
+                  {
+                    "name": "root",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "URL to the root STAC entity (Catalog or Collection)."}}}]}}}},
+                  {
+                    "name": "parent",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "URL to the parent STAC entity (Catalog or Collection)."}}}]}}}},
+                  {
+                    "name": "collection",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "STRONGLY RECOMMENDED. URL to a Collection. Absolute URLs should be used whenever possible. The referenced Collection is STRONGLY RECOMMENDED to implement the same STAC version as the Item. A link with this rel type is required if the collection field in properties is present."}}}]}}}},
+                  {
+                    "name": "derivedFrom",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A STAC-specific link relation type used to describe relationships between STAC entities"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.stac.items.StacVersion",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The version of the STAC specification that an Item implements"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.stac.items.Uri",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A URI string, used for asset and other resource references"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.stac.items.Url",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A URL string, used for links to related entities"}}}]}}}}}}]}

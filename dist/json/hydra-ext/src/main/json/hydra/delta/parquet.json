@@ -129,42 +129,49 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {
-                "name": "array",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.delta.parquet.ArrayType"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}},
-              {
-                "name": "base",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.delta.parquet.BasePrimitiveType"},
-                    "annotation": {
-                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}}},
-              {
-                "name": "decimal",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.delta.parquet.DecimalType"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A decimal data type."}}}]}}}},
-              {
-                "name": "map",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.delta.parquet.MapType"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}},
-              {
-                "name": "struct",
-                "type": {
-                  "annotated": {
-                    "body": {"variable": "hydra.delta.parquet.StructType"},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "array",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.delta.parquet.ArrayType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}},
+                  {
+                    "name": "base",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.delta.parquet.BasePrimitiveType"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}}},
+                  {
+                    "name": "decimal",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.delta.parquet.DecimalType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A decimal data type."}}}]}}}},
+                  {
+                    "name": "map",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.delta.parquet.MapType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}},
+                  {
+                    "name": "struct",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.delta.parquet.StructType"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Delta Parquet data type, either array, primitive, decimal, map, or struct."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.delta.parquet.DecimalType",

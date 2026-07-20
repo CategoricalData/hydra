@@ -52,6 +52,7 @@ module_ = Module {
 
 credited :: TypeDefinition
 credited = define "Credited" $
+  doc "A person or entity credited with discovering, fixing, or reporting a vulnerability" $
   T.record [
     "name">: T.string,
     "contact">: T.optional $ T.list $ osv "Url"]
@@ -64,6 +65,7 @@ ecosystem = define "Ecosystem" $
 
 entry :: TypeDefinition
 entry = define "Entry" $
+  doc "A single OSV vulnerability entry" $
   T.record [
     "schemaVersion">:
       doc "The default value is '1.0.0', matching version 1.0 of the OSV Schema" $
@@ -83,6 +85,7 @@ entry = define "Entry" $
 
 event :: TypeDefinition
 event = define "Event" $
+  doc "A version event marking a point in a range where a vulnerability's status changes" $
   T.union [
     "introduced">: osv "VersionOrZero",
     "fixed">: osv "Version",
@@ -110,6 +113,7 @@ osvVersion = define "OsvVersion" $
 
 packageVersions :: TypeDefinition
 packageVersions = define "PackageVersions" $
+  doc "The package affected by a vulnerability, along with its affected version ranges and versions" $
   T.record [
     "package">: osv "Package",
     "ranges">: T.optional $ T.list $ osv "VersionRange",
@@ -117,6 +121,7 @@ packageVersions = define "PackageVersions" $
 
 package_ :: TypeDefinition
 package_ = define "Package" $
+  doc "The identity of a software package within a given ecosystem" $
   T.record [
     "ecosystem">: osv "Ecosystem",
     "name">: T.string,
@@ -124,6 +129,7 @@ package_ = define "Package" $
 
 reference :: TypeDefinition
 reference = define "Reference" $
+  doc "A link to additional information about a vulnerability, together with its type" $
   T.record [
     "type">: osv "ReferenceType",
     "url">: osv "Url"]
@@ -135,12 +141,15 @@ referenceType = define "ReferenceType" $
 
 severity :: TypeDefinition
 severity = define "Severity" $
+  doc "A severity score for a vulnerability, together with the scoring type used" $
   T.record [
     "type">: osv "SeverityType",
     "score">: osv "SeverityScore"]
 
 severityScore :: TypeDefinition
-severityScore = define "SeverityScore" $ T.wrap T.string
+severityScore = define "SeverityScore" $
+  doc "The severity score value, formatted according to its severity type" $
+  T.wrap T.string
 
 severityType :: TypeDefinition
 severityType = define "SeverityType" $
@@ -153,7 +162,9 @@ timestamp = define "Timestamp" $
   T.wrap T.string
 
 url :: TypeDefinition
-url = define "Url" $ T.wrap T.string
+url = define "Url" $
+  doc "A URL string" $
+  T.wrap T.string
 
 version :: TypeDefinition
 version = define "Version" $
@@ -172,6 +183,7 @@ versionOrZero = define "VersionOrZero" $
 
 versionRange :: TypeDefinition
 versionRange = define "VersionRange" $
+  doc "A range of affected versions, expressed as a type and an ordered list of events" $
   T.record [
     "type">: osv "VersionType",
     "repo">: T.optional $ osv "Url",

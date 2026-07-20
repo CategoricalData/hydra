@@ -37,8 +37,8 @@ module_ = Module {
       coordinateRange,
       feature,
       featureCollection,
-      geometryCollection,
       geometry,
+      geometryCollection,
       id_,
       lineString,
       multiLineString,
@@ -62,6 +62,7 @@ boundingBox = define "BoundingBox" $
 
 coordinateRange :: TypeDefinition
 coordinateRange = define "CoordinateRange" $
+  doc "The minimum and maximum values along one axis of a bounding box" $
   T.record [
     "min">: T.float64,
     "max">: T.float64]
@@ -131,6 +132,7 @@ geometryCollection = define "GeometryCollection" $
 
 id_ :: TypeDefinition
 id_ = define "Id" $
+  doc "A Feature's commonly used identifier, either a JSON string or a number" $
   T.union [
     "number">: T.float64,
     "string">: T.string]

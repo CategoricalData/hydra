@@ -1202,6 +1202,108 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.FieldName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.nameName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.name",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.pegasus.pdl.Name wrapper"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.unName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "unwrap",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.Name"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.namedSchemaNamedSchema",
         "signature": {
           "typeParameters": [],
@@ -2051,108 +2153,6 @@
                   "value": {"literal": {"string": "DSL injection for the typeref variant of hydra.pegasus.pdl.NamedSchemaType"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.pegasus.pdl.nameName",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Name"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.pegasus.pdl.name",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "wrap",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.WrappedTerm",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}},
-                                {
-                                  "name": "body",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for the hydra.pegasus.pdl.Name wrapper"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.pegasus.pdl.unName",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "unwrap",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.Name"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.dsl.pegasus.pdl.namespaceNamespace",
         "signature": {
           "typeParameters": [],
@@ -2659,115 +2659,6 @@
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.pegasus.pdl.PrimitiveType"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.pegasus.pdl.propertyKeyPropertyKey",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.pegasus.pdl.propertyKey",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "wrap",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.WrappedTerm",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}},
-                                {
-                                  "name": "body",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for the hydra.pegasus.pdl.PropertyKey wrapper"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.pegasus.pdl.unPropertyKey",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "unwrap",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.dsl.pegasus.pdl.propertyProperty",
         "signature": {
           "typeParameters": [],
@@ -2855,7 +2746,7 @@
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.pegasus.pdl.Property"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.pegasus.pdl.propertyKey2",
+        "name": "hydra.dsl.pegasus.pdl.propertyKey",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -3159,6 +3050,115 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.pegasus.pdl.Property"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.propertyKeyPropertyKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.propertyKey2",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for the hydra.pegasus.pdl.PropertyKey wrapper"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.unPropertyKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "unwrap",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.qualifiedNameQualifiedName",

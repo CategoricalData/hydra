@@ -26,19 +26,19 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "Test case types for the bidirectional Avro coder")}
   where
     definitions = [
-      typeLevelForwardTestCase,
-      typeLevelReverseTestCase,
-      typeLevelRoundTripAvroTestCase,
-      typeLevelRoundTripHydraTestCase,
+      avroTestCase,
+      lossinessTestCase,
+      nameMappingTestCase,
+      schemaSerializationTestCase,
       termLevelForwardTestCase,
       termLevelReverseTestCase,
       termLevelRoundTripJsonTestCase,
       termLevelRoundTripTermTestCase,
-      unionTestCase,
-      nameMappingTestCase,
-      lossinessTestCase,
-      schemaSerializationTestCase,
-      avroTestCase]
+      typeLevelForwardTestCase,
+      typeLevelReverseTestCase,
+      typeLevelRoundTripAvroTestCase,
+      typeLevelRoundTripHydraTestCase,
+      unionTestCase]
 
 avro :: String -> Type
 avro = typeref AvroSchema.ns

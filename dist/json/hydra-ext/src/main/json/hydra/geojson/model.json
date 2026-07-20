@@ -27,7 +27,14 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [{"name": "min", "type": {"literal": {"float": "float64"}}}, {"name": "max", "type": {"literal": {"float": "float64"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [{"name": "min", "type": {"literal": {"float": "float64"}}}, {"name": "max", "type": {"literal": {"float": "float64"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The minimum and maximum values along one axis of a bounding box"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.geojson.model.Feature",
@@ -101,24 +108,6 @@
                         "string": "A GeoJSON object with the type \"FeatureCollection\" is a FeatureCollection object.  A FeatureCollection object has a member with the name \"features\".  The value of \"features\" is a JSON array. Each element of the array is a Feature object as defined above.  It is possible for this array to be empty."}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.geojson.model.GeometryCollection",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {"name": "geometries", "type": {"list": {"variable": "hydra.geojson.model.Geometry"}}},
-                  {"name": "bbox", "type": {"optional": {"variable": "hydra.geojson.model.BoundingBox"}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "A GeoJSON object with type \"GeometryCollection\" is a Geometry object. A GeometryCollection has a member with the name \"geometries\".  The value of \"geometries\" is an array.  Each element of this array is a GeoJSON Geometry object.  It is possible for this array to be empty."}}}]}}}}}},
-    {
-      "type": {
         "name": "hydra.geojson.model.Geometry",
         "body": {
           "variables": [],
@@ -142,11 +131,36 @@
                         "string": "A Geometry object represents points, curves, and surfaces in coordinate space.  Every Geometry object is a GeoJSON object no matter where it occurs in a GeoJSON text."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.geojson.model.GeometryCollection",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "geometries", "type": {"list": {"variable": "hydra.geojson.model.Geometry"}}},
+                  {"name": "bbox", "type": {"optional": {"variable": "hydra.geojson.model.BoundingBox"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A GeoJSON object with type \"GeometryCollection\" is a Geometry object. A GeometryCollection has a member with the name \"geometries\".  The value of \"geometries\" is an array.  Each element of this array is a GeoJSON Geometry object.  It is possible for this array to be empty."}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.geojson.model.Id",
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "number", "type": {"literal": {"float": "float64"}}}, {"name": "string", "type": {"literal": "string"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [{"name": "number", "type": {"literal": {"float": "float64"}}}, {"name": "string", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Feature's commonly used identifier, either a JSON string or a number"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.geojson.model.LineString",

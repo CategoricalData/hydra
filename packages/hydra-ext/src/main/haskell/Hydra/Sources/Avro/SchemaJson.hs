@@ -101,70 +101,36 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON serialization and deserialization for Avro schemas")}
   where
     definitions = [
-      -- String constants
-      toDefinition avro_aliases,
-      toDefinition avro_array,
-      toDefinition avro_ascending,
-      toDefinition avro_boolean,
-      toDefinition avro_bytes,
-      toDefinition avro_default,
-      toDefinition avro_descending,
-      toDefinition avro_doc,
-      toDefinition avro_double,
-      toDefinition avro_enum,
-      toDefinition avro_fields,
-      toDefinition avro_fixed,
-      toDefinition avro_float,
-      toDefinition avro_ignore,
-      toDefinition avro_int,
-      toDefinition avro_items,
-      toDefinition avro_long,
-      toDefinition avro_map,
-      toDefinition avro_name,
-      toDefinition avro_namespace,
-      toDefinition avro_null,
-      toDefinition avro_order,
-      toDefinition avro_record,
-      toDefinition avro_size,
-      toDefinition avro_string,
-      toDefinition avro_symbols,
-      toDefinition avro_type,
-      toDefinition avro_values,
-      -- Error helpers
-      toDefinition err,
-      toDefinition unexpectedE,
-      -- JSON extraction helpers
-      toDefinition expectArrayE,
-      toDefinition expectNumberE,
-      toDefinition expectObjectE,
-      toDefinition expectStringE,
-      toDefinition requireE,
-      toDefinition requireArrayE,
-      toDefinition requireNumberE,
-      toDefinition requireStringE,
-      toDefinition optE,
-      toDefinition optArrayE,
-      toDefinition optStringE,
-      toDefinition showJsonValue,
-      toDefinition stringToJsonValue,
-      -- Encode functions
-      toDefinition encodeSchema,
-      toDefinition encodePrimitive,
-      toDefinition encodeArray,
-      toDefinition encodeMap,
-      toDefinition encodeNamed,
-      toDefinition encodeNamedType,
-      toDefinition encodeEnumE,
-      toDefinition encodeFixedE,
-      toDefinition encodeRecordE,
-      toDefinition encodeFieldE,
-      toDefinition encodeOrderE,
-      toDefinition encodeUnion,
-      toDefinition encodeAnnotations,
-      -- Coder functions
+      toDefinition avroAliases,
+      toDefinition avroArray,
+      toDefinition avroAscending,
+      toDefinition avroBoolean,
+      toDefinition avroBytes,
+      toDefinition avroDefault,
+      toDefinition avroDescending,
+      toDefinition avroDoc,
+      toDefinition avroDouble,
+      toDefinition avroEnum,
+      toDefinition avroFields,
+      toDefinition avroFixed,
+      toDefinition avroFloat,
+      toDefinition avroIgnore,
+      toDefinition avroInt,
+      toDefinition avroItems,
+      toDefinition avroLong,
+      toDefinition avroMap,
+      toDefinition avroName,
+      toDefinition avroNamespace,
+      toDefinition avroNull,
+      toDefinition avroOrder,
+      toDefinition avroRecord,
       toDefinition avroSchemaJsonCoder,
       toDefinition avroSchemaStringCoder,
-      -- Decode functions
+      toDefinition avroSize,
+      toDefinition avroString,
+      toDefinition avroSymbols,
+      toDefinition avroType,
+      toDefinition avroValues,
       toDefinition decodeAliases,
       toDefinition decodeArraySchema,
       toDefinition decodeEnum,
@@ -177,7 +143,35 @@ module_ = Module {
       toDefinition decodePrimitiveName,
       toDefinition decodeRecord,
       toDefinition decodeSchema,
-      toDefinition getAnnotations]
+      toDefinition encodeAnnotations,
+      toDefinition encodeArray,
+      toDefinition encodeEnumE,
+      toDefinition encodeFieldE,
+      toDefinition encodeFixedE,
+      toDefinition encodeMap,
+      toDefinition encodeNamed,
+      toDefinition encodeNamedType,
+      toDefinition encodeOrderE,
+      toDefinition encodePrimitive,
+      toDefinition encodeRecordE,
+      toDefinition encodeSchema,
+      toDefinition encodeUnion,
+      toDefinition err,
+      toDefinition expectArrayE,
+      toDefinition expectNumberE,
+      toDefinition expectObjectE,
+      toDefinition expectStringE,
+      toDefinition getAnnotations,
+      toDefinition optArrayE,
+      toDefinition optE,
+      toDefinition optStringE,
+      toDefinition requireArrayE,
+      toDefinition requireE,
+      toDefinition requireNumberE,
+      toDefinition requireStringE,
+      toDefinition showJsonValue,
+      toDefinition stringToJsonValue,
+      toDefinition unexpectedE]
 
 
 -- | Error helpers
@@ -211,89 +205,145 @@ avroSchemaStringCoder = define "avroSchemaStringCoder" $
 
 -- | Decode functions
 
-avro_aliases :: TypedTermDefinition String
-avro_aliases = define "avro_aliases" $ string "aliases"
+avroAliases :: TypedTermDefinition String
+avroAliases = define "avroAliases" $
+  doc "The JSON attribute name for the list of alternate names of a named type or field" $
+  string "aliases"
 
-avro_array :: TypedTermDefinition String
-avro_array = define "avro_array" $ string "array"
+avroArray :: TypedTermDefinition String
+avroArray = define "avroArray" $
+  doc "The JSON type-name value identifying an Avro array schema" $
+  string "array"
 
-avro_ascending :: TypedTermDefinition String
-avro_ascending = define "avro_ascending" $ string "ascending"
+avroAscending :: TypedTermDefinition String
+avroAscending = define "avroAscending" $
+  doc "The JSON value identifying ascending field order" $
+  string "ascending"
 
-avro_boolean :: TypedTermDefinition String
-avro_boolean = define "avro_boolean" $ string "boolean"
+avroBoolean :: TypedTermDefinition String
+avroBoolean = define "avroBoolean" $
+  doc "The JSON type-name value identifying the Avro boolean primitive" $
+  string "boolean"
 
-avro_bytes :: TypedTermDefinition String
-avro_bytes = define "avro_bytes" $ string "bytes"
+avroBytes :: TypedTermDefinition String
+avroBytes = define "avroBytes" $
+  doc "The JSON type-name value identifying the Avro bytes primitive" $
+  string "bytes"
 
-avro_default :: TypedTermDefinition String
-avro_default = define "avro_default" $ string "default"
+avroDefault :: TypedTermDefinition String
+avroDefault = define "avroDefault" $
+  doc "The JSON attribute name for a field's or enum's default value" $
+  string "default"
 
-avro_descending :: TypedTermDefinition String
-avro_descending = define "avro_descending" $ string "descending"
+avroDescending :: TypedTermDefinition String
+avroDescending = define "avroDescending" $
+  doc "The JSON value identifying descending field order" $
+  string "descending"
 
-avro_doc :: TypedTermDefinition String
-avro_doc = define "avro_doc" $ string "doc"
+avroDoc :: TypedTermDefinition String
+avroDoc = define "avroDoc" $
+  doc "The JSON attribute name for a named type's or field's documentation string" $
+  string "doc"
 
-avro_double :: TypedTermDefinition String
-avro_double = define "avro_double" $ string "double"
+avroDouble :: TypedTermDefinition String
+avroDouble = define "avroDouble" $
+  doc "The JSON type-name value identifying the Avro double primitive" $
+  string "double"
 
-avro_enum :: TypedTermDefinition String
-avro_enum = define "avro_enum" $ string "enum"
+avroEnum :: TypedTermDefinition String
+avroEnum = define "avroEnum" $
+  doc "The JSON type-name value identifying an Avro enum schema" $
+  string "enum"
 
-avro_fields :: TypedTermDefinition String
-avro_fields = define "avro_fields" $ string "fields"
+avroFields :: TypedTermDefinition String
+avroFields = define "avroFields" $
+  doc "The JSON attribute name for a record's list of fields" $
+  string "fields"
 
-avro_fixed :: TypedTermDefinition String
-avro_fixed = define "avro_fixed" $ string "fixed"
+avroFixed :: TypedTermDefinition String
+avroFixed = define "avroFixed" $
+  doc "The JSON type-name value identifying an Avro fixed schema" $
+  string "fixed"
 
-avro_float :: TypedTermDefinition String
-avro_float = define "avro_float" $ string "float"
+avroFloat :: TypedTermDefinition String
+avroFloat = define "avroFloat" $
+  doc "The JSON type-name value identifying the Avro float primitive" $
+  string "float"
 
-avro_ignore :: TypedTermDefinition String
-avro_ignore = define "avro_ignore" $ string "ignore"
+avroIgnore :: TypedTermDefinition String
+avroIgnore = define "avroIgnore" $
+  doc "The JSON value identifying ignored field order" $
+  string "ignore"
 
-avro_int :: TypedTermDefinition String
-avro_int = define "avro_int" $ string "int"
+avroInt :: TypedTermDefinition String
+avroInt = define "avroInt" $
+  doc "The JSON type-name value identifying the Avro int primitive" $
+  string "int"
 
-avro_items :: TypedTermDefinition String
-avro_items = define "avro_items" $ string "items"
+avroItems :: TypedTermDefinition String
+avroItems = define "avroItems" $
+  doc "The JSON attribute name for an array schema's item type" $
+  string "items"
 
-avro_long :: TypedTermDefinition String
-avro_long = define "avro_long" $ string "long"
+avroLong :: TypedTermDefinition String
+avroLong = define "avroLong" $
+  doc "The JSON type-name value identifying the Avro long primitive" $
+  string "long"
 
-avro_map :: TypedTermDefinition String
-avro_map = define "avro_map" $ string "map"
+avroMap :: TypedTermDefinition String
+avroMap = define "avroMap" $
+  doc "The JSON type-name value identifying an Avro map schema" $
+  string "map"
 
-avro_name :: TypedTermDefinition String
-avro_name = define "avro_name" $ string "name"
+avroName :: TypedTermDefinition String
+avroName = define "avroName" $
+  doc "The JSON attribute name for a named type's or field's name" $
+  string "name"
 
-avro_namespace :: TypedTermDefinition String
-avro_namespace = define "avro_namespace" $ string "namespace"
+avroNamespace :: TypedTermDefinition String
+avroNamespace = define "avroNamespace" $
+  doc "The JSON attribute name for a named type's namespace" $
+  string "namespace"
 
-avro_null :: TypedTermDefinition String
-avro_null = define "avro_null" $ string "null"
+avroNull :: TypedTermDefinition String
+avroNull = define "avroNull" $
+  doc "The JSON type-name value identifying the Avro null primitive" $
+  string "null"
 
-avro_order :: TypedTermDefinition String
-avro_order = define "avro_order" $ string "order"
+avroOrder :: TypedTermDefinition String
+avroOrder = define "avroOrder" $
+  doc "The JSON attribute name for a field's sort order" $
+  string "order"
 
-avro_record :: TypedTermDefinition String
-avro_record = define "avro_record" $ string "record"
+avroRecord :: TypedTermDefinition String
+avroRecord = define "avroRecord" $
+  doc "The JSON type-name value identifying an Avro record schema" $
+  string "record"
 
-avro_size :: TypedTermDefinition String
-avro_size = define "avro_size" $ string "size"
+avroSize :: TypedTermDefinition String
+avroSize = define "avroSize" $
+  doc "The JSON attribute name for a fixed schema's byte size" $
+  string "size"
 
-avro_string :: TypedTermDefinition String
-avro_string = define "avro_string" $ string "string"
+avroString :: TypedTermDefinition String
+avroString = define "avroString" $
+  doc "The JSON type-name value identifying the Avro string primitive" $
+  string "string"
 
-avro_symbols :: TypedTermDefinition String
-avro_symbols = define "avro_symbols" $ string "symbols"
+avroSymbols :: TypedTermDefinition String
+avroSymbols = define "avroSymbols" $
+  doc "The JSON attribute name for an enum schema's list of symbols" $
+  string "symbols"
 
-avro_type :: TypedTermDefinition String
-avro_type = define "avro_type" $ string "type"
+avroType :: TypedTermDefinition String
+avroType = define "avroType" $
+  doc "The JSON attribute name for a schema's type name" $
+  string "type"
 
-avro_values :: TypedTermDefinition String
-avro_values = define "avro_values" $ string "values"
+avroValues :: TypedTermDefinition String
+avroValues = define "avroValues" $
+  doc "The JSON attribute name for a map schema's value type" $
+  string "values"
 
 
 -- | Encode functions
@@ -302,7 +352,7 @@ decodeAliases :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value 
 decodeAliases = define "decodeAliases" $
   doc "Decode aliases from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (optArrayE @@ var "cx" @@ avro_aliases @@ var "m")
+    Eithers.bind (optArrayE @@ var "cx" @@ avroAliases @@ var "m")
       (lambda "mArr" $
         Optionals.cases (var "mArr") (Phantoms.right nothing) (lambda "arr" $
             Eithers.map
@@ -313,7 +363,7 @@ decodeArraySchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Va
 decodeArraySchema = define "decodeArraySchema" $
   doc "Decode an Avro array schema from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireE @@ var "cx" @@ avro_items @@ var "m")
+    Eithers.bind (requireE @@ var "cx" @@ avroItems @@ var "m")
       (lambda "items" $
         Eithers.map
           (lambda "s" $ inject Avro._Schema Avro._Schema_array (record Avro._Array [
@@ -324,11 +374,11 @@ decodeEnum :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> 
 decodeEnum = define "decodeEnum" $
   doc "Decode an Avro enum type from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireArrayE @@ var "cx" @@ avro_symbols @@ var "m")
+    Eithers.bind (requireArrayE @@ var "cx" @@ avroSymbols @@ var "m")
       (lambda "syms" $
         Eithers.bind (Eithers.mapList (expectStringE @@ var "cx") (var "syms"))
           (lambda "symbols" $
-            Eithers.bind (optStringE @@ var "cx" @@ avro_default @@ var "m")
+            Eithers.bind (optStringE @@ var "cx" @@ avroDefault @@ var "m")
               (lambda "defVal" $
                 Phantoms.right (inject Avro._NamedType Avro._NamedType_enum
                   (record Avro._Enum [
@@ -339,15 +389,15 @@ decodeField :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value ->
 decodeField = define "decodeField" $
   doc "Decode an Avro field from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireStringE @@ var "cx" @@ avro_name @@ var "m")
+    Eithers.bind (requireStringE @@ var "cx" @@ avroName @@ var "m")
       (lambda "name" $
-        Eithers.bind (optStringE @@ var "cx" @@ avro_doc @@ var "m")
+        Eithers.bind (optStringE @@ var "cx" @@ avroDoc @@ var "m")
           (lambda "fdoc" $
-            Eithers.bind (requireE @@ var "cx" @@ avro_type @@ var "m")
+            Eithers.bind (requireE @@ var "cx" @@ avroType @@ var "m")
               (lambda "typeJson" $
                 Eithers.bind (decodeSchema @@ var "cx" @@ var "typeJson")
                   (lambda "fieldType" $
-                    Eithers.bind (Eithers.bind (optStringE @@ var "cx" @@ avro_order @@ var "m")
+                    Eithers.bind (Eithers.bind (optStringE @@ var "cx" @@ avroOrder @@ var "m")
                       (lambda "mOrd" $
                         Eithers.mapOptional (decodeOrder @@ var "cx") (var "mOrd")))
                       (lambda "order" $
@@ -357,7 +407,7 @@ decodeField = define "decodeField" $
                               Avro._Field_name>>: var "name",
                               Avro._Field_doc>>: var "fdoc",
                               Avro._Field_type>>: var "fieldType",
-                              Avro._Field_default>>: optE @@ avro_default @@ var "m",
+                              Avro._Field_default>>: optE @@ avroDefault @@ var "m",
                               Avro._Field_order>>: var "order",
                               Avro._Field_aliases>>: var "aliases",
                               Avro._Field_annotations>>: getAnnotations @@ var "m"])))))))
@@ -366,7 +416,7 @@ decodeFixed :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value ->
 decodeFixed = define "decodeFixed" $
   doc "Decode an Avro fixed type from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireNumberE @@ var "cx" @@ avro_size @@ var "m")
+    Eithers.bind (requireNumberE @@ var "cx" @@ avroSize @@ var "m")
       (lambda "n" $
         lets ["size">: Literals.bigintToInt32 (Literals.decimalToBigint (var "n"))] $
         Phantoms.right $ inject Avro._NamedType Avro._NamedType_fixed $
@@ -377,7 +427,7 @@ decodeMapSchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Valu
 decodeMapSchema = define "decodeMapSchema" $
   doc "Decode an Avro map schema from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireE @@ var "cx" @@ avro_values @@ var "m")
+    Eithers.bind (requireE @@ var "cx" @@ avroValues @@ var "m")
       (lambda "values" $
         Eithers.map
           (lambda "s" $ inject Avro._Schema Avro._Schema_map (record Avro._Map [
@@ -388,11 +438,11 @@ decodeNamedSchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Va
 decodeNamedSchema = define "decodeNamedSchema" $
   doc "Decode a named Avro schema from a JSON object map and a decoded named type result" $
   lambda "cx" $ lambda "m" $ lambda "namedTypeResult" $
-    Eithers.bind (requireStringE @@ var "cx" @@ avro_name @@ var "m")
+    Eithers.bind (requireStringE @@ var "cx" @@ avroName @@ var "m")
       (lambda "name" $
-        Eithers.bind (optStringE @@ var "cx" @@ avro_namespace @@ var "m")
+        Eithers.bind (optStringE @@ var "cx" @@ avroNamespace @@ var "m")
           (lambda "ns" $
-            Eithers.bind (optStringE @@ var "cx" @@ avro_doc @@ var "m")
+            Eithers.bind (optStringE @@ var "cx" @@ avroDoc @@ var "m")
               (lambda "sdoc" $
                 Eithers.bind (decodeAliases @@ var "cx" @@ var "m")
                   (lambda "aliases" $
@@ -462,7 +512,7 @@ decodeRecord :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -
 decodeRecord = define "decodeRecord" $
   doc "Decode an Avro record type from a JSON object map" $
   lambda "cx" $ lambda "m" $
-    Eithers.bind (requireArrayE @@ var "cx" @@ avro_fields @@ var "m")
+    Eithers.bind (requireArrayE @@ var "cx" @@ avroFields @@ var "m")
       (lambda "fieldJsons" $
         Eithers.bind (Eithers.mapList
           (lambda "fj" $
@@ -491,7 +541,7 @@ decodeSchema = define "decodeSchema" $
       -- decoding looks fields up by name, so convert to a map up front.
       JM._Value_object>>: lambda "mList" $ lets [
         "m">: (Maps.fromList (var "mList") :: TypedTerm (M.Map String JM.Value))] $
-        Eithers.bind (requireStringE @@ var "cx" @@ avro_type @@ var "m")
+        Eithers.bind (requireStringE @@ var "cx" @@ avroType @@ var "m")
           (lambda "typeName" $ decodeObjectSchema @@ var "cx" @@ var "m" @@ var "typeName")]
 
 encodeAnnotations :: TypedTermDefinition (M.Map String JM.Value -> [(String, JM.Value)])

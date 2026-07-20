@@ -74,7 +74,7 @@ module_ = Module {
   where
     definitions = [
       toDefinition collectStructuralTypes,
-      toDefinition collectStructuralTypes_collectFromType,
+      toDefinition collectStructuralTypesFromType,
       toDefinition constructModule,
       toDefinition encodeDefinition,
       toDefinition encodeEnumDefinition,
@@ -96,7 +96,7 @@ module_ = Module {
       toDefinition isEnumFields,
       toDefinition javaMultipleFilesOptionName,
       toDefinition javaPackageOptionName,
-      toDefinition key_proto_field_index,
+      toDefinition keyProtoFieldIndex,
       toDefinition mapAccumResult,
       toDefinition moduleToProtobuf,
       toDefinition namespaceToFileReference,
@@ -131,12 +131,12 @@ collectStructuralTypes = def "collectStructuralTypes" $
   doc "Collect all structural type references (Either, Pair) from a list of types" $
   "types" ~>
     Lists.foldl
-      ("acc" ~> "t" ~> Sets.union (var "acc") (asTerm collectStructuralTypes_collectFromType @@ var "t"))
+      ("acc" ~> "t" ~> Sets.union (var "acc") (asTerm collectStructuralTypesFromType @@ var "t"))
       (Sets.empty :: TypedTerm (S.Set Term))
       (var "types")
 
-collectStructuralTypes_collectFromType :: TypedTermDefinition (Type -> S.Set Term)
-collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFromType" $
+collectStructuralTypesFromType :: TypedTermDefinition (Type -> S.Set Term)
+collectStructuralTypesFromType = def "collectStructuralTypesFromType" $
   doc "Collect structural type references from a single type" $
   "typ" ~>
     Rewriting.foldOverType @@ Coders.traversalOrderPre @@
@@ -518,6 +518,7 @@ encodeTypeReference = def "encodeTypeReference" $
 
 err :: TypedTermDefinition (PE.EncoderState -> String -> Either Error a)
 err = def "err" $
+  doc "Construct a Left error result from an error message, ignoring the encoder state" $
   "cx" ~> "msg" ~>
   left (Error.errorOther $ Error.otherError (var "msg"))
 
@@ -580,6 +581,7 @@ flattenType = def "flattenType" $
 
 fromEitherString :: TypedTermDefinition (PE.EncoderState -> Either String a -> Either Error a)
 fromEitherString = def "fromEitherString" $
+  doc "Convert an Either String result into an Either Error result" $
   "cx" ~> "e" ~>
   Eithers.bimap
     ("msg" ~> Error.errorOther (Error.otherError (var "msg")))
@@ -668,18 +670,21 @@ isEnumFields = def "isEnumFields" $
 
 javaMultipleFilesOptionName :: TypedTermDefinition String
 javaMultipleFilesOptionName = def "javaMultipleFilesOptionName" $
+  doc "The name of the Protobuf java_multiple_files option" $
   string "java_multiple_files"
 
 javaPackageOptionName :: TypedTermDefinition String
 javaPackageOptionName = def "javaPackageOptionName" $
+  doc "The name of the Protobuf java_package option" $
   string "java_package"
 
 -- =============================================================================
 -- Module construction
 -- =============================================================================
 
-key_proto_field_index :: TypedTermDefinition Name
-key_proto_field_index = def "key_proto_field_index" $
+keyProtoFieldIndex :: TypedTermDefinition Name
+keyProtoFieldIndex = def "keyProtoFieldIndex" $
+  doc "Annotation key under which the assigned Protobuf field index is recorded" $
   Core.name (string "proto_field_index")
 
 -- =============================================================================
@@ -825,5 +830,6 @@ structuralTypeName = def "structuralTypeName" $
 
 unexpectedE :: TypedTermDefinition (PE.EncoderState -> String -> String -> Either Error a)
 unexpectedE = def "unexpectedE" $
+  doc "Construct an error reporting an expected construct versus what was actually found" $
   "cx" ~> "expected" ~> "found" ~>
   asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))

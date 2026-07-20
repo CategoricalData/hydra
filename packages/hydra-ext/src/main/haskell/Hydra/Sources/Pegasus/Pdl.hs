@@ -36,14 +36,14 @@ module_ = Module {
       enumFieldName,
       enumSchema,
       fieldName_,
+      name_,
       namedSchema,
       namedSchemaType,
-      name_,
       namespace_,
       package_,
       primitiveType_,
-      propertyKey,
       property_,
+      propertyKey,
       qualifiedName,
       recordField,
       recordSchema,
@@ -61,21 +61,25 @@ annotations = define "Annotations" $
 
 enumField :: TypeDefinition
 enumField = define "EnumField" $
+  doc "A single symbol of a PDL enum schema, with its optional annotations" $
   T.record [
     "name">: pdl "EnumFieldName",
     "annotations">: pdl "Annotations"]
 
 enumFieldName :: TypeDefinition
 enumFieldName = define "EnumFieldName" $
+  doc "The name of a PDL enum symbol, conventionally in upper snake case" $
   T.wrap T.string
 
 enumSchema :: TypeDefinition
 enumSchema = define "EnumSchema" $
+  doc "A PDL enum schema, defined as a fixed set of enumerated symbols" $
   T.record [
     "fields">: T.list $ pdl "EnumField"]
 
 fieldName_ :: TypeDefinition
 fieldName_ = define "FieldName" $
+  doc "The name of a record field or an aliased union member" $
   T.wrap T.string
 
 json :: String -> Type
@@ -83,10 +87,12 @@ json = typeref $ JsonModel.ns
 
 name_ :: TypeDefinition
 name_ = define "Name" $
+  doc "The unqualified (non-namespaced) name of a PDL named schema" $
   T.wrap T.string
 
 namedSchema :: TypeDefinition
 namedSchema = define "NamedSchema" $
+  doc "A PDL schema that has a qualified name: a record, enum, or typeref" $
   T.record [
     "qualifiedName">: pdl "QualifiedName",
     "type">: pdl "NamedSchemaType",
@@ -94,6 +100,7 @@ namedSchema = define "NamedSchema" $
 
 namedSchemaType :: TypeDefinition
 namedSchemaType = define "NamedSchemaType" $
+  doc "The variety of a PDL named schema: record, enum, or typeref" $
   T.union [
     "record">: pdl "RecordSchema",
     "enum">: pdl "EnumSchema",
@@ -101,10 +108,12 @@ namedSchemaType = define "NamedSchemaType" $
 
 namespace_ :: TypeDefinition
 namespace_ = define "Namespace" $
+  doc "A dot-separated PDL namespace, analogous to a Java package name" $
   T.wrap T.string
 
 package_ :: TypeDefinition
 package_ = define "Package" $
+  doc "The Java package under which generated bindings for a schema file are placed" $
   T.wrap T.string
 
 pdl :: String -> Type
@@ -112,6 +121,7 @@ pdl = typeref ns
 
 primitiveType_ :: TypeDefinition
 primitiveType_ = define "PrimitiveType" $
+  doc "One of the built-in PDL primitive types" $
   T.enum [
     "boolean",
     "bytes",
@@ -123,16 +133,19 @@ primitiveType_ = define "PrimitiveType" $
 
 propertyKey :: TypeDefinition
 propertyKey = define "PropertyKey" $
+  doc "The key of a custom PDL schema property, e.g. a dot-separated path" $
   T.wrap T.string
 
 property_ :: TypeDefinition
 property_ = define "Property" $
+  doc "A custom key/value property attached to a PDL schema, field, or member" $
   T.record [
     "key">: pdl "PropertyKey",
     "value">: T.optional $ json "Value"]
 
 qualifiedName :: TypeDefinition
 qualifiedName = define "QualifiedName" $
+  doc "A PDL name together with the optional namespace that qualifies it" $
   T.record [
     "name">: pdl "Name",
     "namespace">: T.optional $ pdl "Namespace"]
@@ -156,6 +169,7 @@ recordSchema = define "RecordSchema" $
 
 schema :: TypeDefinition
 schema = define "Schema" $
+  doc "A PDL data schema: either a primitive, a reference by name, or a complex type" $
   T.union [
     "array">: pdl "Schema",
     "fixed">: T.int32,
@@ -168,6 +182,7 @@ schema = define "Schema" $
 
 schemaFile :: TypeDefinition
 schemaFile = define "SchemaFile" $
+  doc "A .pdl source file: a namespace declaration, imports, and one or more named schemas" $
   T.record [
     "namespace">: pdl "Namespace",
     "package">: T.optional $ pdl "Package",

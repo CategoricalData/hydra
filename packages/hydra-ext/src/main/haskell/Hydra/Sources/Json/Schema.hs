@@ -34,31 +34,93 @@ module_ = Module {
     keywordSchemaOrArrayMap = T.map (js "Keyword") (js "SchemaOrArray")
     regexSchemaMap = T.map (js "RegularExpression") (js "Schema")
 
+    -- Alphabetical order by local type name, per the definition-ordering style guide
+    -- (Validate.Packaging.checkDefinitionOrdering has no section-boundary awareness).
+    -- Grammar production comments (from https://cswr.github.io/JsonSchema/spec/grammar) are kept
+    -- next to their definitions as documentation only; they do not reflect list order.
     definitions = [
--- Json Documents and Schemas
--- Let JDOC be an arbitrary JSON Schema Document. We can define its syntax using the following grammar:
---
--- JSDoc := { ( id, )? ( defs, )? JSch }
+--  additems :=  "additionalItems": (bool | { JSch })
+      def "AdditionalItems" $
+        doc "Whether additional array items beyond those explicitly typed are permitted, and if so, their schema" $
+        T.union [
+          "any">: T.boolean,
+          "schema">: js "Schema"],
 
-      def "Document" $ T.record [
+--  arrRes := items | additems | minitems | maxitems  | unique
+      def "ArrayRestriction" $
+        doc "A restriction on array-typed values: items, additionalItems, minItems, maxItems, or uniqueItems" $
+        T.union [
+          "items">: js "Items",
+          "additionalItems">: js "AdditionalItems",
+          "minItems">: T.nonNegativeInt32,
+          "maxItems">: T.nonNegativeInt32,
+          "uniqueItems">: T.boolean],
+
+-- JSDoc := { ( id, )? ( defs, )? JSch }
+      def "Document" $
+        doc "A JSON Schema document: an optional id, optional local definitions, and a root schema" $
+        T.record [
         "id">: T.optional T.string,
         "definitions">: T.optional keywordSchemaMap,
         "root">: js "Schema"],
 
--- id := "id": "uri"
--- defs := "definitions": { kSch (, kSch)*}
--- kSch := kword: { JSch }
+--  items := ( sameitems |  varitems )
+      def "Items" $
+        doc "The schema(s) for array items: either a single schema shared by all items, or one schema per item" $
+        T.union [
+          "sameItems">: js "Schema",
+          "varItems">: nonemptyList $ js "Schema"],
 
+-- kSch := kword: { JSch }
       def "Keyword" $
+        doc "A property name used as a key in a JSON Schema keyword-to-schema map" $
         T.wrap T.string,
 
--- JSch := ( res (, res)*)
-      def "Schema" $
-        T.wrap $ nonemptyList $ js "Restriction",
+-- min := "minimum": r (,exMin)?
+      def "Limit" $
+        doc "A numeric bound with a flag indicating whether the bound itself is excluded" $
+       T.record [
+         "value">: T.int32,
+         "exclusive">: T.boolean],
+
+-- multRes := allOf | anyOf| oneOf | not | enum
+      def "MultipleRestriction" $
+        doc "A restriction combining multiple schemas: allOf, anyOf, oneOf, not, or enum" $
+        T.union [
+          "allOf">: nonemptyList $ js "Schema",
+          "anyOf">: nonemptyList $ js "Schema",
+          "oneOf">: nonemptyList $ js "Schema",
+          "not">: js "Schema",
+          "enum">: nonemptyList $ json "Value"],
+
+-- numRes := min | max | multiple
+      def "NumericRestriction" $
+        doc "A restriction on numeric-typed values: a minimum, a maximum, or a multipleOf constraint" $
+        T.union [
+          "minimum">: js "Limit",
+          "maximum">: js "Limit",
+          "multipleOf">: T.nonNegativeInt32],
+
+-- objRes := prop | addprop | req | minprop | maxprop | dep | pattprop
+      def "ObjectRestriction" $
+        doc "A restriction on object-typed values: properties, additionalProperties, required, and related keywords" $
+        T.union [
+          "properties">: keywordSchemaMap,
+          "additionalProperties">: js "AdditionalItems",
+          "required">: nonemptyList $ js "Keyword",
+          "minProperties">: T.nonNegativeInt32,
+          "maxProperties">: T.nonNegativeInt32,
+          "dependencies">: keywordSchemaOrArrayMap,
+          "patternProperties">: regexSchemaMap],
+
+-- pattern := "pattern": "regExp"
+      def "RegularExpression" $
+        doc "A regular expression pattern, as used by the pattern and patternProperties keywords" $
+        T.wrap T.string,
 
 -- res := type | strRes | numRes | arrRes | objRes | multRes | refSch | title | description
-
       def "Restriction" $
+        doc "A single JSON Schema restriction: a type, value restriction, reference, title, or description" $
         T.union [
           "type">: js "Type",
           "string">: js "StringRestriction",
@@ -70,156 +132,48 @@ module_ = Module {
           "title">: T.string,
           "description">: T.string],
 
--- type := "type" : ([typename (, typename)*] | typename)
+-- JSch := ( res (, res)*)
+      def "Schema" $
+        doc "A JSON schema: a non-empty list of restrictions that a conforming value must satisfy" $
+        T.wrap $ nonemptyList $ js "Restriction",
 
-      def "Type" $
+-- kDep := (kArr | kSch)
+      def "SchemaOrArray" $
+        doc "A dependency value: either a schema, or a list of required keyword names" $
         T.union [
-          "single">: js "TypeName",
-          "multiple">: nonemptyList $ js "TypeName"],
+          "schema">: js "Schema",
+          "array">: T.list $ js "Keyword"],
 
--- typename := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"
+-- refSch := "$ref": "uriRef"
+      def "SchemaReference" $
+        doc "A reference to another schema by URI" $
+        T.wrap T.string,
 
-      def "TypeName" $
-        T.enum ["string", "integer", "number", "boolean", "null", "array", "object"],
-
--- title := "title":  string
--- description := "description":  string
-
--- Here each res and typename must be different from each other(otherwise they would be superfluous).
--- We must also note that each kword is representing a keyword that must be unique in the nest level that is occurs.
--- Besides, string is any string to describe either the title or de description of the nested schema.
--- Finally, a uri is any possible uri as defined in the standard. Next we specify the remaining restrictions:
--- strRes, numRes, arrRes, objRes and multRes, as well as referred schemas refSch.
---
--- String Restrictions
 -- strRes :=  minLen | maxLen | pattern
-
       def "StringRestriction" $
+        doc "A restriction on string-typed values: minLength, maxLength, or pattern" $
         T.union [
           "minLength">: T.int32,
           "maxLength">: T.int32,
           "pattern">: js "RegularExpression"],
 
--- minLen := "minLength": n
--- maxLen := "maxLength": n
--- pattern := "pattern": "regExp"
+-- type := "type" : ([typename (, typename)*] | typename)
+      def "Type" $
+        doc "A type restriction: a single type name, or a list of alternative type names" $
+        T.union [
+          "single">: js "TypeName",
+          "multiple">: nonemptyList $ js "TypeName"],
 
-      def "RegularExpression" $
-        T.wrap T.string,
+-- typename := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"
+      def "TypeName" $
+        doc "The name of a JSON Schema primitive type" $
+        T.enum ["string", "integer", "number", "boolean", "null", "array", "object"]]
 
--- Here n is a natural number and r is a regular expression.
+-- Here each res and typename must be different from each other(otherwise they would be superfluous).
+-- We must also note that each kword is representing a keyword that must be unique in the nest level that is occurs.
+-- Besides, string is any string to describe either the title or de description of the nested schema.
+-- Finally, a uri is any possible uri as defined in the standard.
 --
--- Numeric Restrictions
--- numRes := min | max | multiple
-
-      def "NumericRestriction" $
-        T.union [
-          "minimum">: js "Limit",
-          "maximum">: js "Limit",
-          "multipleOf">: T.nonNegativeInt32],
-
-     def "Limit" $
-       T.record [
-         "value">: T.int32,
-         "exclusive">: T.boolean],
-
--- min := "minimum": r (,exMin)?
--- exMin := "exclusiveMinimum": bool
--- max := "maximum": r (,exMax)?
--- exMax := "exclusiveMaximum": bool
--- multiple := "multipleOf": r   (r >= 0)
--- Here r is a decimal number and bool is either true or false.
---
--- Array Restrictions
---  arrRes := items | additems | minitems | maxitems  | unique
-
-      def "ArrayRestriction" $
-        T.union [
-          "items">: js "Items",
-          "additionalItems">: js "AdditionalItems",
-          "minItems">: T.nonNegativeInt32,
-          "maxItems">: T.nonNegativeInt32,
-          "uniqueItems">: T.boolean],
-
---  items := ( sameitems |  varitems )
-
-      def "Items" $
-        T.union [
-          "sameItems">: js "Schema",
-          "varItems">: nonemptyList $ js "Schema"],
-
---  sameitems := "items": { JSch }
---  varitems := "items": [{ JSch }(,{ JSch })*]
---  additems :=  "additionalItems": (bool | { JSch })
-
-      def "AdditionalItems" $
-        T.union [
-          "any">: T.boolean,
-          "schema">: js "Schema"],
-
---  minitems := "minItems": n
---  maxitems := "maxItems": n
---  unique := "uniqueItems": bool
--- Here n is a natural number and bool is either true or false.
---
--- Object Restrictions
--- objRes := prop | addprop | req | minprop | maxprop | dep | pattprop
-
-      def "ObjectRestriction" $
-        T.union [
-          "properties">: keywordSchemaMap,
-          "additionalProperties">: js "AdditionalItems",
-          "required">: nonemptyList $ js "Keyword",
-          "minProperties">: T.nonNegativeInt32,
-          "maxProperties">: T.nonNegativeInt32,
-          "dependencies">: keywordSchemaOrArrayMap,
-          "patternProperties">: regexSchemaMap],
-
--- prop := "properties": { kSch (, kSch)*}
--- kSch := kword: { JSch }
--- addprop := "additionalProperties": (bool | { JSch })
--- req := "required": [ kword (, kword)*]
--- minprop := "minProperties": n
--- maxprop := "maxProperties": n
--- dep := "dependencies": { kDep (, kDep)*}
--- kDep := (kArr | kSch)
-
-      def "SchemaOrArray" $
-        T.union [
-          "schema">: js "Schema",
-          "array">: T.list $ js "Keyword"],
-
--- kArr := kword: [ kword (, kword)*]
--- pattprop := "patternProperties": { patSch (, patSch)*}
--- patSch := "regExp": { JSch }
--- Here n is a natural number, bool is either true or false and regExp is a regular expression. As above, each kword is representing a keyword that must be unique in the nest level that is occurs.
---
--- Multiple Restrictions
--- multRes := allOf | anyOf| oneOf | not | enum
-
-      def "MultipleRestriction" $
-        T.union [
-          "allOf">: nonemptyList $ js "Schema",
-          "anyOf">: nonemptyList $ js "Schema",
-          "oneOf">: nonemptyList $ js "Schema",
-          "not">: js "Schema",
-          "enum">: nonemptyList $ json "Value"],
-
--- anyOf := "anyOf": [ { JSch } (, { JSch }) * ]
--- allOf := "allOf": [ { JSch } (, { JSch }) * ]
--- oneOf := "oneOf": [ { JSch } (, { JSch }) * ]
--- not := "not": { JSch }
--- enum := "enum": [Jval (, Jval)*]
--- Here Jval is either a string, number, array, object, bool or a null value. Moreover each Jval must be different from each other(otherwise they would be superfluous).
-
--- Referred Schemas
--- Note that uriRef below is the same grammar we defined earlier for URIs.
---
--- refSch := "$ref": "uriRef"
-
-         def "SchemaReference" $
-            T.wrap T.string]
-
 -- uriRef := ( address )? ( # / JPointer )?
 -- JPointer := ( / path )
 -- path := ( unescaped | escaped )

@@ -111,7 +111,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_additionalItems"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyAdditionalItems"},
                                             "second": {
                                               "application": {"function": {"variable": "hydra.json.schema.serde.additionalItemsToExpr"}, "argument": {"variable": "ai"}}}}},
                                         "type": {"literal": "string"}}},
@@ -128,7 +128,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_minItems"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMinItems"},
                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "n"}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}},
@@ -144,7 +144,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_maxItems"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMaxItems"},
                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "n"}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}},
@@ -160,7 +160,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_uniqueItems"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyUniqueItems"},
                                             "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "boolean", "term": {"variable": "b"}}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}}]}},
@@ -170,6 +170,44 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Encode an array restriction as a key-value pair"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.fromObject",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.model.Value"}, "isLazy": false}],
+          "result": {"type": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {"variable": "hydra.json.model.Value"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.json.model.Value",
+                        "cases": [
+                          {
+                            "name": "object",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "mp",
+                                "domain": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": "string"}}},
+                                        "type": {"variable": "hydra.json.model.Value"}}},
+                                    "argument": {"variable": "mp"}}}}}}]}},
+                    "argument": {"variable": "v"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Extract a name-keyed map from a JSON object value (field order is dropped)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.json.schema.serde.integerToExpr",
@@ -213,7 +251,7 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {"variable": "hydra.json.schema.serde.key_items"},
+                            "first": {"variable": "hydra.json.schema.serde.keyItems"},
                             "second": {
                               "application": {
                                 "function": {
@@ -254,25 +292,534 @@
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode items as a key-value pair"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.json.schema.serde.keywordToExpr",
+        "name": "hydra.json.schema.serde.jsonSchemaDocumentToJsonValue",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Keyword"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Document"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "k",
-                "domain": {"variable": "hydra.json.schema.Keyword"},
+                "parameter": "doc",
+                "domain": {"variable": "hydra.json.schema.Document"},
                 "body": {
-                  "inject": {
-                    "typeName": "hydra.json.model.Value",
-                    "field": {
-                      "name": "string",
-                      "term": {"application": {"function": {"unwrap": "hydra.json.schema.Keyword"}, "argument": {"variable": "k"}}}}}}}},
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "mid",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "id"}},
+                            "argument": {"variable": "doc"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
+                      {
+                        "name": "mdefs",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "definitions"}},
+                            "argument": {"variable": "doc"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {
+                            "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}}},
+                      {
+                        "name": "root",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "root"}},
+                            "argument": {"variable": "doc"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Schema"}}},
+                      {
+                        "name": "schemaMap",
+                        "term": {
+                          "application": {
+                            "function": {"variable": "hydra.json.schema.serde.fromObject"},
+                            "argument": {"application": {"function": {"variable": "hydra.json.schema.serde.schemaToExpr"}, "argument": {"variable": "root"}}}}},
+                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                      {
+                        "name": "restMap",
+                        "term": {
+                          "application": {
+                            "function": {"variable": "hydra.json.schema.serde.fromObject"},
+                            "argument": {
+                              "application": {
+                                "function": {"variable": "hydra.json.schema.serde.toObject"},
+                                "argument": {
+                                  "list": [
+                                    {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.json.schema.serde.keyId"},
+                                                "second": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": "string"}}},
+                                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "i",
+                                                            "domain": {"literal": "string"},
+                                                            "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "i"}}}}}}}},
+                                                    "argument": {"variable": "mid"}}}}},
+                                            "type": {"literal": "string"}}},
+                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                    {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.json.schema.serde.keySchema"},
+                                                "second": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.json.model.Value"}}},
+                                                    "argument": {
+                                                      "inject": {
+                                                        "typeName": "hydra.json.model.Value",
+                                                        "field": {"name": "string", "term": {"literal": {"string": "http://json-schema.org/2020-12/schema"}}}}}}}}},
+                                            "type": {"literal": "string"}}},
+                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                    {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.json.schema.serde.keyDefinitions"},
+                                                "second": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.optionals.map"},
+                                                                "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
+                                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "mp",
+                                                            "domain": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}},
+                                                            "body": {
+                                                              "inject": {
+                                                                "typeName": "hydra.json.model.Value",
+                                                                "field": {
+                                                                  "name": "object",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
+                                                                                  "type": {"pair": {"first": {"variable": "hydra.json.schema.Keyword"}, "second": {"variable": "hydra.json.schema.Schema"}}}}},
+                                                                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "p",
+                                                                              "domain": {"pair": {"first": {"variable": "hydra.json.schema.Keyword"}, "second": {"variable": "hydra.json.schema.Schema"}}},
+                                                                              "body": {
+                                                                                "let": {
+                                                                                  "bindings": [
+                                                                                    {
+                                                                                      "name": "k",
+                                                                                      "term": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
+                                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
+                                                                                          "argument": {"variable": "p"}}},
+                                                                                      "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Keyword"}}},
+                                                                                    {
+                                                                                      "name": "schema",
+                                                                                      "term": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
+                                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
+                                                                                          "argument": {"variable": "p"}}},
+                                                                                      "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Schema"}}}],
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "pair": {
+                                                                                              "first": {"application": {"function": {"unwrap": "hydra.json.schema.Keyword"}, "argument": {"variable": "k"}}},
+                                                                                              "second": {"application": {"function": {"variable": "hydra.json.schema.serde.schemaToExpr"}, "argument": {"variable": "schema"}}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
+                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
+                                                                          "argument": {"variable": "mp"}}}}}}}}}}}},
+                                                    "argument": {"variable": "mdefs"}}}}},
+                                            "type": {"literal": "string"}}},
+                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}},
+                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}}],
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.json.model.Value",
+                        "field": {
+                          "name": "object",
+                          "term": {
+                            "application": {
+                              "function": {
+                                "typeApplication": {
+                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"literal": "string"}}},
+                                  "type": {"variable": "hydra.json.model.Value"}}},
+                              "argument": {
+                                "application": {
+                                  "function": {
+                                    "application": {
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.union"}, "type": {"literal": "string"}}},
+                                          "type": {"variable": "hydra.json.model.Value"}}},
+                                      "argument": {"variable": "schemaMap"}}},
+                                  "argument": {"variable": "restMap"}}}}}}}}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a keyword as a JSON string value"}}}]}}}}},
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a JSON Schema document to a JSON value"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.jsonSchemaDocumentToString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Document"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "doc",
+                "domain": {"variable": "hydra.json.schema.Document"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.json.writer.printJson"},
+                    "argument": {
+                      "application": {"function": {"variable": "hydra.json.schema.serde.jsonSchemaDocumentToJsonValue"}, "argument": {"variable": "doc"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a JSON Schema document to a JSON string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyAdditionalItems",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "additionalItems"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"additionalItems\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyAdditionalProperties",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "additionalProperties"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The JSON Schema \"additionalProperties\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyAllOf",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "allOf"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"allOf\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyAnyOf",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "anyOf"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"anyOf\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyDefinitions",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "$defs"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The JSON Schema \"$defs\" keyword, used for reusable schema definitions"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyDependencies",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "dependencies"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"dependencies\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyDescription",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "description"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"description\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyEnum",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "enum"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"enum\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyExclusiveMaximum",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "exclusiveMaximum"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"exclusiveMaximum\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyExclusiveMinimum",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "exclusiveMinimum"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"exclusiveMinimum\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyId",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "$id"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The JSON Schema \"$id\" keyword, identifying the schema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyItems",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "items"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"items\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyLabel",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "label"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"label\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMaxItems",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "maxItems"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"maxItems\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMaxLength",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "maxLength"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"maxLength\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMaxProperties",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "maxProperties"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"maxProperties\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMaximum",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "maximum"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"maximum\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMinItems",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "minItems"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"minItems\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMinLength",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "minLength"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"minLength\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMinProperties",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "minProperties"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"minProperties\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMinimum",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "minimum"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"minimum\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyMultipleOf",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "multipleOf"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"multipleOf\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyNot",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "not"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"not\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyOneOf",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "oneOf"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"oneOf\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyPattern",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "pattern"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"pattern\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyPatternProperties",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "patternProperties"}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"patternProperties\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyProperties",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "properties"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"properties\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyRef",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "$ref"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The JSON Schema \"$ref\" keyword, used for schema references"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyRequired",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "required"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"required\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keySchema",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "$schema"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The JSON Schema \"$schema\" keyword, identifying the schema dialect"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyTitle",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "title"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"title\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyType",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "type"}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"type\" keyword"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.keyUniqueItems",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "uniqueItems"}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The JSON Schema \"uniqueItems\" keyword"}}}]}}}}},
     {
       "term": {
         "name": "hydra.json.schema.serde.keywordSchemaOrArrayToExpr",
@@ -333,6 +880,27 @@
                   "value": {"literal": {"string": "Encode a keyword-schema-or-array pair as a key-value pair"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.json.schema.serde.keywordToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Keyword"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "k",
+                "domain": {"variable": "hydra.json.schema.Keyword"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.json.model.Value",
+                    "field": {
+                      "name": "string",
+                      "term": {"application": {"function": {"unwrap": "hydra.json.schema.Keyword"}, "argument": {"variable": "k"}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a keyword as a JSON string value"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.json.schema.serde.multipleRestrictionToExpr",
         "signature": {
           "typeParameters": [],
@@ -362,7 +930,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_allOf"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyAllOf"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -392,7 +960,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_anyOf"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyAnyOf"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -422,7 +990,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_oneOf"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyOneOf"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -452,7 +1020,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_not"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyNot"},
                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.schemaToExpr"}, "argument": {"variable": "schema"}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}},
@@ -468,7 +1036,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_enum"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyEnum"},
                                             "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "array", "term": {"variable": "values"}}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}}]}},
@@ -536,7 +1104,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "pair": {
-                                                            "first": {"variable": "hydra.json.schema.serde.key_minimum"},
+                                                            "first": {"variable": "hydra.json.schema.serde.keyMinimum"},
                                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "value"}}}}},
                                                         "type": {"literal": "string"}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}]},
@@ -559,7 +1127,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "first": {"variable": "hydra.json.schema.serde.key_exclusiveMinimum"},
+                                                                    "first": {"variable": "hydra.json.schema.serde.keyExclusiveMinimum"},
                                                                     "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "boolean", "term": {"literal": {"boolean": true}}}}}}},
                                                                 "type": {"literal": "string"}}},
                                                             "type": {"variable": "hydra.json.model.Value"}}}]}}},
@@ -606,7 +1174,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "pair": {
-                                                            "first": {"variable": "hydra.json.schema.serde.key_maximum"},
+                                                            "first": {"variable": "hydra.json.schema.serde.keyMaximum"},
                                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "value"}}}}},
                                                         "type": {"literal": "string"}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}]},
@@ -629,7 +1197,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "pair": {
-                                                                    "first": {"variable": "hydra.json.schema.serde.key_exclusiveMaximum"},
+                                                                    "first": {"variable": "hydra.json.schema.serde.keyExclusiveMaximum"},
                                                                     "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "boolean", "term": {"literal": {"boolean": true}}}}}}},
                                                                 "type": {"literal": "string"}}},
                                                             "type": {"variable": "hydra.json.model.Value"}}}]}}},
@@ -651,7 +1219,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_multipleOf"},
+                                                "first": {"variable": "hydra.json.schema.serde.keyMultipleOf"},
                                                 "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "n"}}}}},
                                             "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]}}}}]}},
@@ -692,7 +1260,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_properties"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyProperties"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -731,7 +1299,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_additionalProperties"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyAdditionalProperties"},
                                             "second": {
                                               "application": {"function": {"variable": "hydra.json.schema.serde.additionalItemsToExpr"}, "argument": {"variable": "ai"}}}}},
                                         "type": {"literal": "string"}}},
@@ -748,7 +1316,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_required"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyRequired"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -778,7 +1346,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_minProperties"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMinProperties"},
                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "n"}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}},
@@ -794,7 +1362,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_maxProperties"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMaxProperties"},
                                             "second": {"application": {"function": {"variable": "hydra.json.schema.serde.integerToExpr"}, "argument": {"variable": "n"}}}}},
                                         "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}}}}},
@@ -810,7 +1378,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_dependencies"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyDependencies"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -851,7 +1419,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_patternProperties"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyPatternProperties"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -1030,7 +1598,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_type"},
+                                                "first": {"variable": "hydra.json.schema.serde.keyType"},
                                                 "second": {"application": {"function": {"variable": "hydra.json.schema.serde.typeToExpr"}, "argument": {"variable": "t"}}}}},
                                             "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]}}}},
@@ -1096,7 +1664,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_ref"},
+                                                "first": {"variable": "hydra.json.schema.serde.keyRef"},
                                                 "second": {
                                                   "application": {"function": {"variable": "hydra.json.schema.serde.schemaReferenceToExpr"}, "argument": {"variable": "sr"}}}}},
                                             "type": {"literal": "string"}}},
@@ -1115,7 +1683,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_title"},
+                                                "first": {"variable": "hydra.json.schema.serde.keyTitle"},
                                                 "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "s"}}}}}},
                                             "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]}}}},
@@ -1133,7 +1701,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_description"},
+                                                "first": {"variable": "hydra.json.schema.serde.keyDescription"},
                                                 "second": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "s"}}}}}},
                                             "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}]}}}}]}},
@@ -1143,43 +1711,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Encode a restriction as a list of key-value pairs"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.schemaToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Schema"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "s",
-                "domain": {"variable": "hydra.json.schema.Schema"},
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.json.model.Value",
-                    "field": {
-                      "name": "object",
-                      "term": {
-                        "application": {
-                          "function": {
-                            "typeApplication": {
-                              "body": {"variable": "hydra.lib.lists.concat"},
-                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
-                          "argument": {
-                            "application": {
-                              "function": {
-                                "application": {
-                                  "function": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.json.schema.Restriction"}}},
-                                      "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}},
-                                  "argument": {"variable": "hydra.json.schema.serde.restrictionToExpr"}}},
-                              "argument": {"application": {"function": {"unwrap": "hydra.json.schema.Schema"}, "argument": {"variable": "s"}}}}}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a schema as a JSON object value"}}}]}}}}},
     {
       "term": {
         "name": "hydra.json.schema.serde.schemaOrArrayToExpr",
@@ -1256,6 +1787,43 @@
                   "value": {"literal": {"string": "Encode a schema reference as a JSON string value"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.json.schema.serde.schemaToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Schema"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "domain": {"variable": "hydra.json.schema.Schema"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.json.model.Value",
+                    "field": {
+                      "name": "object",
+                      "term": {
+                        "application": {
+                          "function": {
+                            "typeApplication": {
+                              "body": {"variable": "hydra.lib.lists.concat"},
+                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                          "argument": {
+                            "application": {
+                              "function": {
+                                "application": {
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.json.schema.Restriction"}}},
+                                      "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}},
+                                  "argument": {"variable": "hydra.json.schema.serde.restrictionToExpr"}}},
+                              "argument": {"application": {"function": {"unwrap": "hydra.json.schema.Schema"}, "argument": {"variable": "s"}}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a schema as a JSON object value"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.json.schema.serde.stringRestrictionToExpr",
         "signature": {
           "typeParameters": [],
@@ -1285,7 +1853,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_maxLength"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMaxLength"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -1309,7 +1877,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_minLength"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyMinLength"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -1333,7 +1901,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "first": {"variable": "hydra.json.schema.serde.key_pattern"},
+                                            "first": {"variable": "hydra.json.schema.serde.keyPattern"},
                                             "second": {
                                               "inject": {
                                                 "typeName": "hydra.json.model.Value",
@@ -1348,564 +1916,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Encode a string restriction as a key-value pair"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.typeToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Type"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "t",
-                "domain": {"variable": "hydra.json.schema.Type"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.json.schema.Type",
-                        "cases": [
-                          {
-                            "name": "single",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "name",
-                                "domain": {"variable": "hydra.json.schema.TypeName"},
-                                "body": {"application": {"function": {"variable": "hydra.json.schema.serde.typeNameToExpr"}, "argument": {"variable": "name"}}}}}},
-                          {
-                            "name": "multiple",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "names",
-                                "domain": {"list": {"variable": "hydra.json.schema.TypeName"}},
-                                "body": {
-                                  "inject": {
-                                    "typeName": "hydra.json.model.Value",
-                                    "field": {
-                                      "name": "array",
-                                      "term": {
-                                        "application": {
-                                          "function": {
-                                            "application": {
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.json.schema.TypeName"}}},
-                                                  "type": {"variable": "hydra.json.model.Value"}}},
-                                              "argument": {"variable": "hydra.json.schema.serde.typeNameToExpr"}}},
-                                          "argument": {"variable": "names"}}}}}}}}}]}},
-                    "argument": {"variable": "t"}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type as a JSON value"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.typeNameToExpr",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.TypeName"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "t",
-                "domain": {"variable": "hydra.json.schema.TypeName"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.json.schema.TypeName",
-                        "cases": [
-                          {
-                            "name": "string",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "string"}}}}}}}},
-                          {
-                            "name": "integer",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "integer"}}}}}}}},
-                          {
-                            "name": "number",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "number"}}}}}}}},
-                          {
-                            "name": "boolean",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "boolean"}}}}}}}},
-                          {
-                            "name": "null",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "null"}}}}}}}},
-                          {
-                            "name": "array",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "array"}}}}}}}},
-                          {
-                            "name": "object",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "_",
-                                "domain": "unit",
-                                "body": {
-                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "object"}}}}}}}}]}},
-                    "argument": {"variable": "t"}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type name as a JSON string value"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.fromObject",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.model.Value"}, "isLazy": false}],
-          "result": {"type": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "v",
-                "domain": {"variable": "hydra.json.model.Value"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.json.model.Value",
-                        "cases": [
-                          {
-                            "name": "object",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "mp",
-                                "domain": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}},
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": "string"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "argument": {"variable": "mp"}}}}}}]}},
-                    "argument": {"variable": "v"}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Extract a name-keyed map from a JSON object value (field order is dropped)"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.jsonSchemaDocumentToJsonValue",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Document"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "doc",
-                "domain": {"variable": "hydra.json.schema.Document"},
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "mid",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "id"}},
-                            "argument": {"variable": "doc"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
-                      {
-                        "name": "mdefs",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "definitions"}},
-                            "argument": {"variable": "doc"}}},
-                        "typeScheme": {
-                          "variables": [],
-                          "body": {
-                            "optional": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}}},
-                      {
-                        "name": "root",
-                        "term": {
-                          "application": {
-                            "function": {"project": {"typeName": "hydra.json.schema.Document", "fieldName": "root"}},
-                            "argument": {"variable": "doc"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Schema"}}},
-                      {
-                        "name": "schemaMap",
-                        "term": {
-                          "application": {
-                            "function": {"variable": "hydra.json.schema.serde.fromObject"},
-                            "argument": {"application": {"function": {"variable": "hydra.json.schema.serde.schemaToExpr"}, "argument": {"variable": "root"}}}}},
-                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
-                      {
-                        "name": "restMap",
-                        "term": {
-                          "application": {
-                            "function": {"variable": "hydra.json.schema.serde.fromObject"},
-                            "argument": {
-                              "application": {
-                                "function": {"variable": "hydra.json.schema.serde.toObject"},
-                                "argument": {
-                                  "list": [
-                                    {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_id"},
-                                                "second": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": "string"}}},
-                                                            "type": {"variable": "hydra.json.model.Value"}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "i",
-                                                            "domain": {"literal": "string"},
-                                                            "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "i"}}}}}}}},
-                                                    "argument": {"variable": "mid"}}}}},
-                                            "type": {"literal": "string"}}},
-                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
-                                    {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_schema"},
-                                                "second": {
-                                                  "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.json.model.Value"}}},
-                                                    "argument": {
-                                                      "inject": {
-                                                        "typeName": "hydra.json.model.Value",
-                                                        "field": {"name": "string", "term": {"literal": {"string": "http://json-schema.org/2020-12/schema"}}}}}}}}},
-                                            "type": {"literal": "string"}}},
-                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
-                                    {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "pair": {
-                                                "first": {"variable": "hydra.json.schema.serde.key_definitions"},
-                                                "second": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.optionals.map"},
-                                                                "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}}},
-                                                            "type": {"variable": "hydra.json.model.Value"}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "mp",
-                                                            "domain": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}},
-                                                            "body": {
-                                                              "inject": {
-                                                                "typeName": "hydra.json.model.Value",
-                                                                "field": {
-                                                                  "name": "object",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"variable": "hydra.lib.lists.map"},
-                                                                                  "type": {"pair": {"first": {"variable": "hydra.json.schema.Keyword"}, "second": {"variable": "hydra.json.schema.Schema"}}}}},
-                                                                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
-                                                                          "argument": {
-                                                                            "lambda": {
-                                                                              "parameter": "p",
-                                                                              "domain": {"pair": {"first": {"variable": "hydra.json.schema.Keyword"}, "second": {"variable": "hydra.json.schema.Schema"}}},
-                                                                              "body": {
-                                                                                "let": {
-                                                                                  "bindings": [
-                                                                                    {
-                                                                                      "name": "k",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
-                                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
-                                                                                          "argument": {"variable": "p"}}},
-                                                                                      "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Keyword"}}},
-                                                                                    {
-                                                                                      "name": "schema",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "function": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
-                                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
-                                                                                          "argument": {"variable": "p"}}},
-                                                                                      "typeScheme": {"variables": [], "body": {"variable": "hydra.json.schema.Schema"}}}],
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "pair": {
-                                                                                              "first": {"application": {"function": {"unwrap": "hydra.json.schema.Keyword"}, "argument": {"variable": "k"}}},
-                                                                                              "second": {"application": {"function": {"variable": "hydra.json.schema.serde.schemaToExpr"}, "argument": {"variable": "schema"}}}}},
-                                                                                          "type": {"literal": "string"}}},
-                                                                                      "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.json.schema.Keyword"}}},
-                                                                              "type": {"variable": "hydra.json.schema.Schema"}}},
-                                                                          "argument": {"variable": "mp"}}}}}}}}}}}},
-                                                    "argument": {"variable": "mdefs"}}}}},
-                                            "type": {"literal": "string"}}},
-                                        "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}}],
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.json.model.Value",
-                        "field": {
-                          "name": "object",
-                          "term": {
-                            "application": {
-                              "function": {
-                                "typeApplication": {
-                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"literal": "string"}}},
-                                  "type": {"variable": "hydra.json.model.Value"}}},
-                              "argument": {
-                                "application": {
-                                  "function": {
-                                    "application": {
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.union"}, "type": {"literal": "string"}}},
-                                          "type": {"variable": "hydra.json.model.Value"}}},
-                                      "argument": {"variable": "schemaMap"}}},
-                                  "argument": {"variable": "restMap"}}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a JSON Schema document to a JSON value"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.jsonSchemaDocumentToString",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Document"}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "doc",
-                "domain": {"variable": "hydra.json.schema.Document"},
-                "body": {
-                  "application": {
-                    "function": {"variable": "hydra.json.writer.printJson"},
-                    "argument": {
-                      "application": {"function": {"variable": "hydra.json.schema.serde.jsonSchemaDocumentToJsonValue"}, "argument": {"variable": "doc"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert a JSON Schema document to a JSON string"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_additionalItems",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "additionalItems"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_additionalProperties",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "additionalProperties"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_allOf",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "allOf"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_anyOf",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "anyOf"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_definitions",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "$defs"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_dependencies",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "dependencies"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_description",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "description"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_enum",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "enum"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_exclusiveMaximum",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "exclusiveMaximum"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_exclusiveMinimum",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "exclusiveMinimum"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_id",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "$id"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_items",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "items"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_label",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "label"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_maxItems",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "maxItems"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_maxLength",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "maxLength"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_maxProperties",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "maxProperties"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_maximum",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "maximum"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_minItems",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "minItems"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_minLength",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "minLength"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_minProperties",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "minProperties"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_minimum",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "minimum"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_multipleOf",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "multipleOf"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_not",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "not"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_oneOf",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "oneOf"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_pattern",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "pattern"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_patternProperties",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "patternProperties"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_properties",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "properties"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_ref",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "$ref"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_required",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "required"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_schema",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "$schema"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_title",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "title"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_type",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "type"}}}},
-    {
-      "term": {
-        "name": "hydra.json.schema.serde.key_uniqueItems",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
-        "body": {"literal": {"string": "uniqueItems"}}}},
     {
       "term": {
         "name": "hydra.json.schema.serde.toObject",
@@ -1995,4 +2005,130 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values"}}}]}}}}}]}
+                  "value": {"literal": {"string": "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.typeNameToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.TypeName"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.json.schema.TypeName"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.json.schema.TypeName",
+                        "cases": [
+                          {
+                            "name": "string",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "string"}}}}}}}},
+                          {
+                            "name": "integer",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "integer"}}}}}}}},
+                          {
+                            "name": "number",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "number"}}}}}}}},
+                          {
+                            "name": "boolean",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "boolean"}}}}}}}},
+                          {
+                            "name": "null",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "null"}}}}}}}},
+                          {
+                            "name": "array",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "array"}}}}}}}},
+                          {
+                            "name": "object",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {
+                                  "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "object"}}}}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type name as a JSON string value"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.json.schema.serde.typeToExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.json.schema.Type"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.json.schema.Type"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.json.schema.Type",
+                        "cases": [
+                          {
+                            "name": "single",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.json.schema.TypeName"},
+                                "body": {"application": {"function": {"variable": "hydra.json.schema.serde.typeNameToExpr"}, "argument": {"variable": "name"}}}}}},
+                          {
+                            "name": "multiple",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "names",
+                                "domain": {"list": {"variable": "hydra.json.schema.TypeName"}},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.json.model.Value",
+                                    "field": {
+                                      "name": "array",
+                                      "term": {
+                                        "application": {
+                                          "function": {
+                                            "application": {
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.json.schema.TypeName"}}},
+                                                  "type": {"variable": "hydra.json.model.Value"}}},
+                                              "argument": {"variable": "hydra.json.schema.serde.typeNameToExpr"}}},
+                                          "argument": {"variable": "names"}}}}}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a type as a JSON value"}}}]}}}}}]}

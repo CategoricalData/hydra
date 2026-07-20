@@ -3,109 +3,217 @@
   "metadata": {"description": "A basic Datalog model", "comments": [], "seeAlso": []},
   "dependencies": [],
   "definitions": [
-    {"type": {"name": "hydra.datalog.syntax.Constant", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.datalog.syntax.Relation", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {"type": {"name": "hydra.datalog.syntax.Variable", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.Program",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.ProgramElmt",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "Fact", "type": {"variable": "hydra.datalog.syntax.Fact"}},
-              {"name": "Rule", "type": {"variable": "hydra.datalog.syntax.Rule"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.Fact",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
-              {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.Rule",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Atom",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
-              {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
+                  {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A relation applied to a list of terms"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {"name": "many", "type": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+                  {"name": "many", "type": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of atoms"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomListMultiple",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
-              {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+                  {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An atom followed by the remainder of a comma-separated atom list"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.datalog.syntax.Term",
+        "name": "hydra.datalog.syntax.Constant",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {"name": "Variable", "type": {"variable": "hydra.datalog.syntax.Variable"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.TermList",
-        "body": {
-          "variables": [],
-          "body": {
-            "union": [
-              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
-              {"name": "many", "type": {"variable": "hydra.datalog.syntax.TermListMultiple"}}]}}}},
-    {
-      "type": {
-        "name": "hydra.datalog.syntax.TermListMultiple",
-        "body": {
-          "variables": [],
-          "body": {
-            "record": [
-              {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
-              {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]}}}},
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A constant term, e.g. an atomic value such as a symbol or number"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {"name": "many", "type": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "single", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+                  {"name": "many", "type": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of constants"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantListMultiple",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
-              {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]}}}}]}
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+                  {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A constant followed by the remainder of a comma-separated constant list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Fact",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
+                  {"name": "ConstantList", "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An unconditional assertion of a relation applied to a list of constants"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Program",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Datalog program: a list of facts and rules"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.ProgramElmt",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Fact", "type": {"variable": "hydra.datalog.syntax.Fact"}},
+                  {"name": "Rule", "type": {"variable": "hydra.datalog.syntax.Rule"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A single element of a Datalog program: either a fact or a rule"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Relation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The name of a predicate (relation) used in facts, rules, and queries"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Rule",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+                  {"name": "AtomList", "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A conditional assertion: a head atom implied by a conjunction of body atoms"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Term",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "Constant", "type": {"variable": "hydra.datalog.syntax.Constant"}},
+                  {"name": "Variable", "type": {"variable": "hydra.datalog.syntax.Variable"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An argument to an atom: either a constant or a variable"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.TermList",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
+                  {"name": "many", "type": {"variable": "hydra.datalog.syntax.TermListMultiple"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of terms"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.TermListMultiple",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
+                  {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A term followed by the remainder of a comma-separated term list"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Variable",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A logic variable, which may be bound to different constants across a query"}}}]}}}}}}]}

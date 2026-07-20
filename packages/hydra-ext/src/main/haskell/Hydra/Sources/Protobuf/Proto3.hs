@@ -50,6 +50,7 @@ module_ = Module {
 
 definition :: TypeDefinition
 definition = define "Definition" $
+  doc "A top-level Protobuf definition, either an enum or a message type" $
   T.union [
     "enum">: proto3 "EnumDefinition",
     "message">: proto3 "MessageDefinition"]
@@ -84,6 +85,7 @@ enumValue = define "EnumValue" $
 
 enumValueName :: TypeDefinition
 enumValueName = define "EnumValueName" $
+  doc "The name of an enum value, conventionally an upper-snake-case identifier" $
   T.wrap T.string
 
 field :: TypeDefinition
@@ -113,6 +115,7 @@ fieldName_ = define "FieldName" $
 
 fieldType :: TypeDefinition
 fieldType = define "FieldType" $
+  doc "The type of a message field: a map, a oneof group, a repeated field, or a simple field" $
   T.union [
     "map">: proto3 "MapType",
     "oneof">: T.list $ proto3 "Field",
@@ -121,10 +124,12 @@ fieldType = define "FieldType" $
 
 fileReference :: TypeDefinition
 fileReference = define "FileReference" $
+  doc "A path to a .proto file, as used in import statements" $
   T.wrap T.string
 
 mapType :: TypeDefinition
 mapType = define "MapType" $
+  doc "The key and value types of a proto3 map field" $
   T.record [
     "keys">: proto3 "SimpleType",
     "values">: proto3 "SimpleType"]
@@ -160,6 +165,7 @@ option = define "Option" $
 
 packageName :: TypeDefinition
 packageName = define "PackageName" $
+  doc "A Protobuf package name, i.e. the value of a package declaration" $
   T.wrap T.string
 
 proto3 :: String -> Type

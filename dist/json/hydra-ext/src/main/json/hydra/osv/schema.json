@@ -9,9 +9,16 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "name", "type": {"literal": "string"}},
-              {"name": "contact", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Url"}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"literal": "string"}},
+                  {"name": "contact", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Url"}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A person or entity credited with discovering, fixing, or reporting a vulnerability"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Ecosystem",
@@ -33,40 +40,50 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {
-                "name": "schemaVersion",
-                "type": {
-                  "annotated": {
-                    "body": {"optional": {"variable": "hydra.osv.schema.OsvVersion"}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}]}}}},
-              {"name": "id", "type": {"variable": "hydra.osv.schema.Id"}},
-              {"name": "modified", "type": {"variable": "hydra.osv.schema.Timestamp"}},
-              {"name": "published", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
-              {"name": "withdrawn", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
-              {"name": "aliases", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
-              {"name": "related", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
-              {"name": "summary", "type": {"optional": {"literal": "string"}}},
-              {"name": "details", "type": {"optional": {"variable": "hydra.osv.schema.Markdown"}}},
-              {"name": "severity", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
-              {"name": "affected", "type": {"optional": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
-              {"name": "references", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Reference"}}}},
-              {"name": "credits", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Credited"}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "schemaVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.osv.schema.OsvVersion"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}]}}}},
+                  {"name": "id", "type": {"variable": "hydra.osv.schema.Id"}},
+                  {"name": "modified", "type": {"variable": "hydra.osv.schema.Timestamp"}},
+                  {"name": "published", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
+                  {"name": "withdrawn", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
+                  {"name": "aliases", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+                  {"name": "related", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+                  {"name": "summary", "type": {"optional": {"literal": "string"}}},
+                  {"name": "details", "type": {"optional": {"variable": "hydra.osv.schema.Markdown"}}},
+                  {"name": "severity", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
+                  {"name": "affected", "type": {"optional": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
+                  {"name": "references", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Reference"}}}},
+                  {"name": "credits", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Credited"}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single OSV vulnerability entry"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Event",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "introduced", "type": {"variable": "hydra.osv.schema.VersionOrZero"}},
-              {"name": "fixed", "type": {"variable": "hydra.osv.schema.Version"}},
-              {"name": "lastAffected", "type": {"variable": "hydra.osv.schema.Version"}},
-              {"name": "limit", "type": {"variable": "hydra.osv.schema.VersionOrStar"}}]}}}},
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "introduced", "type": {"variable": "hydra.osv.schema.VersionOrZero"}},
+                  {"name": "fixed", "type": {"variable": "hydra.osv.schema.Version"}},
+                  {"name": "lastAffected", "type": {"variable": "hydra.osv.schema.Version"}},
+                  {"name": "limit", "type": {"variable": "hydra.osv.schema.VersionOrStar"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A version event marking a point in a range where a vulnerability's status changes"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Id",
@@ -110,29 +127,50 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "ecosystem", "type": {"variable": "hydra.osv.schema.Ecosystem"}},
-              {"name": "name", "type": {"literal": "string"}},
-              {"name": "purl", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "ecosystem", "type": {"variable": "hydra.osv.schema.Ecosystem"}},
+                  {"name": "name", "type": {"literal": "string"}},
+                  {"name": "purl", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The identity of a software package within a given ecosystem"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.PackageVersions",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "package", "type": {"variable": "hydra.osv.schema.Package"}},
-              {"name": "ranges", "type": {"optional": {"list": {"variable": "hydra.osv.schema.VersionRange"}}}},
-              {"name": "versions", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Version"}}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "package", "type": {"variable": "hydra.osv.schema.Package"}},
+                  {"name": "ranges", "type": {"optional": {"list": {"variable": "hydra.osv.schema.VersionRange"}}}},
+                  {"name": "versions", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Version"}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The package affected by a vulnerability, along with its affected version ranges and versions"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Reference",
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.osv.schema.ReferenceType"}},
-              {"name": "url", "type": {"variable": "hydra.osv.schema.Url"}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.osv.schema.ReferenceType"}},
+                  {"name": "url", "type": {"variable": "hydra.osv.schema.Url"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A link to additional information about a vulnerability, together with its type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.ReferenceType",
@@ -152,10 +190,29 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.osv.schema.SeverityType"}},
-              {"name": "score", "type": {"variable": "hydra.osv.schema.SeverityScore"}}]}}}},
-    {"type": {"name": "hydra.osv.schema.SeverityScore", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.osv.schema.SeverityType"}},
+                  {"name": "score", "type": {"variable": "hydra.osv.schema.SeverityScore"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A severity score for a vulnerability, together with the scoring type used"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.SeverityScore",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The severity score value, formatted according to its severity type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.SeverityType",
@@ -179,7 +236,15 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "An RFC3339-formatted timestamp in UTC (ending in 'Z')"}}}]}}}}}},
-    {"type": {"name": "hydra.osv.schema.Url", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Url",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A URL string"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Version",
@@ -227,10 +292,17 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "type", "type": {"variable": "hydra.osv.schema.VersionType"}},
-              {"name": "repo", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}},
-              {"name": "events", "type": {"list": {"variable": "hydra.osv.schema.Event"}}}]}}}},
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"variable": "hydra.osv.schema.VersionType"}},
+                  {"name": "repo", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}},
+                  {"name": "events", "type": {"list": {"variable": "hydra.osv.schema.Event"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A range of affected versions, expressed as a type and an ordered list of events"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.VersionType",

@@ -96,25 +96,25 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions")}
   where
     definitions = [
+      toDefinition definitionToExpr,
       toDefinition deprecatedOptionName,
       toDefinition descriptionOptionName,
-      toDefinition excludeInternalOptions,
-      toDefinition optDesc,
-      toDefinition protoBlock,
-      toDefinition semi,
-      toDefinition definitionToExpr,
       toDefinition enumDefinitionToExpr,
       toDefinition enumValueToExpr,
-      toDefinition fieldToExpr,
+      toDefinition excludeInternalOptions,
       toDefinition fieldOptionToExpr,
       toDefinition fieldOptionsToExpr,
+      toDefinition fieldToExpr,
       toDefinition fieldTypeToExpr,
       toDefinition fileOptionToExpr,
       toDefinition fileOptionsToExpr,
       toDefinition importToExpr,
       toDefinition messageDefinitionToExpr,
+      toDefinition optDesc,
+      toDefinition protoBlock,
       toDefinition protoFileToExpr,
       toDefinition scalarTypeToExpr,
+      toDefinition semi,
       toDefinition simpleTypeToExpr,
       toDefinition valueToExpr]
 
