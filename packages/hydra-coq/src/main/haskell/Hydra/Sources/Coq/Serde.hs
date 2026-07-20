@@ -91,6 +91,7 @@ module_ = Module {
 -- | Serialize an Application
 applicationToExpr :: TypedTermDefinition (C.Application -> Expr)
 applicationToExpr = define "applicationToExpr" $
+  doc "Serialize a Coq application" $
   lambda "app" $ cases C._Application (var "app") Nothing [
     C._Application_normal>>: lambda "na" $ sp [
       term1ToExpr @@ (project C._NormalApplication C._NormalApplication_lhs @@ var "na"),
@@ -113,6 +114,7 @@ applicationToExpr = define "applicationToExpr" $
 -- | Serialize an AxiomDeclaration: `Axiom name : type.`
 axiomDeclarationToExpr :: TypedTermDefinition (C.AxiomDeclaration -> Expr)
 axiomDeclarationToExpr = define "axiomDeclarationToExpr" $
+  doc "Serialize an Axiom declaration: Axiom name : type" $
   lambda "a" $
     withDot $ sp [
       kw "Axiom",
@@ -123,6 +125,7 @@ axiomDeclarationToExpr = define "axiomDeclarationToExpr" $
 -- | Serialize a Binder
 binderToExpr :: TypedTermDefinition (C.Binder -> Expr)
 binderToExpr = define "binderToExpr" $
+  doc "Serialize a Coq binder" $
   lambda "b" $ cases C._Binder (var "b") Nothing [
     C._Binder_name>>: lambda "n" $
       Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"),
@@ -174,6 +177,7 @@ binderToExpr = define "binderToExpr" $
 -- | Serialize a Comment
 commentToExpr :: TypedTermDefinition (C.Comment -> Expr)
 commentToExpr = define "commentToExpr" $
+  doc "Serialize a Coq comment" $
   lambda "c" $
     Serialization.cst @@ Strings.cat (list [
       string "(* ", unwrap C._Comment @@ var "c", string " *)"])
@@ -181,6 +185,7 @@ commentToExpr = define "commentToExpr" $
 -- | Serialize a Constructor
 constructorToExpr :: TypedTermDefinition (C.Constructor -> Expr)
 constructorToExpr = define "constructorToExpr" $
+  doc "Serialize a constructor of an Inductive definition" $
   lambda "c" $ lets [
     "name">: identToExpr @@ (project C._Constructor C._Constructor_name @@ var "c"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
@@ -194,6 +199,7 @@ constructorToExpr = define "constructorToExpr" $
 -- | Serialize a Definition
 definitionToExpr :: TypedTermDefinition (C.Definition -> Expr)
 definitionToExpr = define "definitionToExpr" $
+  doc "Serialize a Coq Definition command" $
   lambda "d" $ lets [
     "locPart">: Optionals.cases (project C._Definition C._Definition_locality @@ var "d") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._Definition C._Definition_name @@ var "d"),
@@ -211,6 +217,7 @@ definitionToExpr = define "definitionToExpr" $
 -- | Serialize a Document (complete .v file)
 documentToExpr :: TypedTermDefinition (C.Document -> Expr)
 documentToExpr = define "documentToExpr" $
+  doc "Serialize a complete Coq .v file" $
   lambda "doc" $
     Serialization.doubleNewlineSep @@ Lists.map
       (lambda "s" $ sentenceToExpr @@ var "s")
@@ -233,6 +240,7 @@ fixDeclToExpr d = lets [
 -- | Serialize a FixpointDefinition
 fixpointDefinitionToExpr :: TypedTermDefinition (C.FixpointDefinition -> Expr)
 fixpointDefinitionToExpr = define "fixpointDefinitionToExpr" $
+  doc "Serialize a Coq Fixpoint command" $
   lambda "fd" $ lets [
     "locPart">: Optionals.cases (project C._FixpointDefinition C._FixpointDefinition_locality @@ var "fd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._FixpointDefinition C._FixpointDefinition_name @@ var "fd"),
@@ -250,12 +258,14 @@ fixpointDefinitionToExpr = define "fixpointDefinitionToExpr" $
 -- | Serialize an Ident
 identToExpr :: TypedTermDefinition (C.Ident -> Expr)
 identToExpr = define "identToExpr" $
+  doc "Serialize a Coq identifier" $
   lambda "ident" $
     Serialization.cst @@ (unwrap C._String @@ (unwrap C._Ident @@ var "ident"))
 
 -- | Serialize an InductiveBody
 inductiveBodyToExpr :: TypedTermDefinition (C.InductiveBody -> Expr)
 inductiveBodyToExpr = define "inductiveBodyToExpr" $
+  doc "Serialize one body of an Inductive definition" $
   lambda "ib" $ lets [
     "name">: identToExpr @@ (project C._InductiveBody C._InductiveBody_name @@ var "ib"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
@@ -275,6 +285,7 @@ inductiveBodyToExpr = define "inductiveBodyToExpr" $
 -- Produces "[Locality] Inductive body1 with body2 with body3." for mutual inductives.
 inductiveDefinitionToExpr :: TypedTermDefinition (C.InductiveDefinition -> Expr)
 inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
+  doc "Serialize an Inductive or CoInductive definition, joining mutually inductive bodies with 'with'" $
   lambda "id" $ lets [
     "locPart">: Optionals.cases (project C._InductiveDefinition C._InductiveDefinition_locality @@ var "id") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "kwPart">: Logic.ifElse (project C._InductiveDefinition C._InductiveDefinition_coinductive @@ var "id")
@@ -298,6 +309,7 @@ kw s = Serialization.cst @@ string s
 -- | Serialize a Locality qualifier
 localityToExpr :: TypedTermDefinition (C.Locality -> Expr)
 localityToExpr = define "localityToExpr" $
+  doc "Serialize a Local/Global locality qualifier" $
   lambda "loc" $ cases C._Locality (var "loc") Nothing [
     C._Locality_local>>: constant $ kw "Local",
     C._Locality_global>>: constant $ kw "Global"]
@@ -305,6 +317,7 @@ localityToExpr = define "localityToExpr" $
 -- | Serialize a Match expression
 matchToExpr :: TypedTermDefinition (C.Match -> Expr)
 matchToExpr = define "matchToExpr" $
+  doc "Serialize a Coq match expression" $
   lambda "m" $ lets [
     "items">: Lists.map
       (lambda "ci" $ lets [
@@ -339,6 +352,7 @@ matchToExpr = define "matchToExpr" $
 -- | Serialize a ModuleDefinition
 moduleDefinitionToExpr :: TypedTermDefinition (C.ModuleDefinition -> Expr)
 moduleDefinitionToExpr = define "moduleDefinitionToExpr" $
+  doc "Serialize a Module ... End block" $
   lambda "md" $ lets [
     "name">: identToExpr @@ (project C._ModuleDefinition C._ModuleDefinition_name @@ var "md"),
     "sentences">: Lists.map (lambda "s" $ sentenceToExpr @@ var "s")
@@ -372,6 +386,7 @@ optPart opt f = Optionals.cases opt (list ([] :: [TypedTerm Expr])) (lambda "x" 
 -- | Serialize a Pattern0 (primitive / grouped pattern)
 pattern0ToExpr :: TypedTermDefinition (C.Pattern0 -> Expr)
 pattern0ToExpr = define "pattern0ToExpr" $
+  doc "Serialize a primitive or grouped Coq pattern" $
   lambda "p" $ cases C._Pattern0 (var "p") Nothing [
     C._Pattern0_qualid>>: lambda "q" $ qualidToExpr @@ var "q",
     C._Pattern0_qualIdAndPattern>>: constant $ kw "...",
@@ -388,6 +403,7 @@ pattern0ToExpr = define "pattern0ToExpr" $
 -- | Serialize a Pattern10 (as-binding, juxtaposition, or qualid-with-args)
 pattern10ToExpr :: TypedTermDefinition (C.Pattern10 -> Expr)
 pattern10ToExpr = define "pattern10ToExpr" $
+  doc "Serialize the highest-precedence Coq pattern form: an as-binding, juxtaposition, or qualid with arguments" $
   lambda "p" $ cases C._Pattern10 (var "p") Nothing [
     C._Pattern10_as>>: lambda "pa" $ sp [
       pattern1ToExpr @@ (project C._Pattern10_As C._Pattern10_As_pattern @@ var "pa"),
@@ -409,11 +425,13 @@ pattern10ToExpr = define "pattern10ToExpr" $
 -- | Serialize a Pattern1 (scoped pattern; we ignore the scope for now)
 pattern1ToExpr :: TypedTermDefinition (C.Pattern1 -> Expr)
 pattern1ToExpr = define "pattern1ToExpr" $
+  doc "Serialize a scoped Coq pattern" $
   lambda "p" $ pattern0ToExpr @@ (project C._Pattern1 C._Pattern1_pattern @@ var "p")
 
 -- | Serialize a Pattern (top-level; we delegate to Pattern10 and ignore the annotation term)
 patternToExpr :: TypedTermDefinition (C.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
+  doc "Serialize a top-level Coq pattern" $
   lambda "p" $ cases C._Pattern (var "p") Nothing [
     C._Pattern_pattern>>: lambda "p10" $ pattern10ToExpr @@ var "p10",
     C._Pattern_term>>: constant $ kw "_"]
@@ -425,6 +443,7 @@ qualidAnnotatedToExpr qa = qualidToExpr @@ (project C._QualidAnnotated C._Qualid
 -- | Serialize a Qualid: ident.field1.field2
 qualidToExpr :: TypedTermDefinition (C.Qualid -> Expr)
 qualidToExpr = define "qualidToExpr" $
+  doc "Serialize a qualified identifier: ident.field1.field2" $
   lambda "q" $ lets [
     "idExpr">: identToExpr @@ (project C._Qualid C._Qualid_id @@ var "q"),
     "fieldIds">: project C._Qualid C._Qualid_fieldIds @@ var "q",
@@ -438,6 +457,7 @@ qualidToExpr = define "qualidToExpr" $
 -- | Serialize a RecordDefinition
 recordDefinitionToExpr :: TypedTermDefinition (C.RecordDefinition -> Expr)
 recordDefinitionToExpr = define "recordDefinitionToExpr" $
+  doc "Serialize a Record or Structure definition" $
   lambda "rd" $ lets [
     "locPart">: Optionals.cases (project C._RecordDefinition C._RecordDefinition_locality @@ var "rd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._RecordDefinition C._RecordDefinition_name @@ var "rd"),
@@ -464,6 +484,7 @@ recordDefinitionToExpr = define "recordDefinitionToExpr" $
 -- | Serialize a RecordField
 recordFieldToExpr :: TypedTermDefinition (C.RecordField -> Expr)
 recordFieldToExpr = define "recordFieldToExpr" $
+  doc "Serialize a field of a Record definition" $
   lambda "rf" $ sp [
     identToExpr @@ (project C._RecordField C._RecordField_name @@ var "rf"),
     kw ":",
@@ -472,6 +493,7 @@ recordFieldToExpr = define "recordFieldToExpr" $
 -- | Serialize a RequireImport
 requireImportToExpr :: TypedTermDefinition (C.RequireImport -> Expr)
 requireImportToExpr = define "requireImportToExpr" $
+  doc "Serialize a Require Import/Export command" $
   lambda "ri" $ lets [
     "fromPart">: Optionals.cases (project C._RequireImport C._RequireImport_from @@ var "ri") (list ([] :: [TypedTerm Expr])) (lambda "q" $ list [kw "From", qualidToExpr @@ var "q"]),
     "requirePart">: Logic.ifElse (project C._RequireImport C._RequireImport_require @@ var "ri")
@@ -491,6 +513,7 @@ requireImportToExpr = define "requireImportToExpr" $
 -- | Serialize a SectionDefinition
 sectionDefinitionToExpr :: TypedTermDefinition (C.SectionDefinition -> Expr)
 sectionDefinitionToExpr = define "sectionDefinitionToExpr" $
+  doc "Serialize a Section ... End block" $
   lambda "sd" $ lets [
     "name">: identToExpr @@ (project C._SectionDefinition C._SectionDefinition_name @@ var "sd"),
     "sentences">: Lists.map (lambda "s" $ sentenceToExpr @@ var "s")
@@ -503,6 +526,7 @@ sectionDefinitionToExpr = define "sectionDefinitionToExpr" $
 -- | Serialize a SentenceContent
 sentenceContentToExpr :: TypedTermDefinition (C.SentenceContent -> Expr)
 sentenceContentToExpr = define "sentenceContentToExpr" $
+  doc "Serialize the content of a top-level Coq sentence" $
   lambda "sc" $ cases C._SentenceContent (var "sc") Nothing [
     C._SentenceContent_axiom>>: lambda "a" $ axiomDeclarationToExpr @@ var "a",
     C._SentenceContent_definition>>: lambda "d" $ definitionToExpr @@ var "d",
@@ -518,6 +542,7 @@ sentenceContentToExpr = define "sentenceContentToExpr" $
 -- | Serialize a Sentence (optional comment + content)
 sentenceToExpr :: TypedTermDefinition (C.Sentence -> Expr)
 sentenceToExpr = define "sentenceToExpr" $
+  doc "Serialize a top-level Coq sentence, together with its optional comment" $
   lambda "s" $ lets [
     "cmtPart">: Optionals.cases (project C._Sentence C._Sentence_comment @@ var "s") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [commentToExpr @@ var "c"]),
     "content">: sentenceContentToExpr @@ (project C._Sentence C._Sentence_content @@ var "s")] $
@@ -526,6 +551,7 @@ sentenceToExpr = define "sentenceToExpr" $
 -- | Serialize a Sort
 sortToExpr :: TypedTermDefinition (C.Sort -> Expr)
 sortToExpr = define "sortToExpr" $
+  doc "Serialize a Coq sort" $
   lambda "s" $ cases C._Sort (var "s") Nothing [
     C._Sort_set>>: constant $ kw "Set",
     C._Sort_prop>>: constant $ kw "Prop",
@@ -542,6 +568,7 @@ sp xs = Serialization.spaceSep @@ list xs
 -- | Serialize a Term0
 term0ToExpr :: TypedTermDefinition (C.Term0 -> Expr)
 term0ToExpr = define "term0ToExpr" $
+  doc "Serialize a Coq term at the lowest precedence level" $
   lambda "t" $ cases C._Term0 (var "t") Nothing [
     C._Term0_qualidAnnotated>>: lambda "qa" $ qualidAnnotatedToExpr (var "qa"),
     C._Term0_sort>>: lambda "s" $ sortToExpr @@ var "s",
@@ -563,6 +590,7 @@ term0ToExpr = define "term0ToExpr" $
 -- | Serialize a Term100
 term100ToExpr :: TypedTermDefinition (C.Term100 -> Expr)
 term100ToExpr = define "term100ToExpr" $
+  doc "Serialize a Coq term with an optional trailing type cast" $
   lambda "t" $ cases C._Term100 (var "t") Nothing [
     C._Term100_cast>>: lambda "tc" $ sp [
       term10ToExpr @@ (project C._TypeCast C._TypeCast_term @@ var "tc"),
@@ -573,6 +601,7 @@ term100ToExpr = define "term100ToExpr" $
 -- | Serialize a Term10
 term10ToExpr :: TypedTermDefinition (C.Term10 -> Expr)
 term10ToExpr = define "term10ToExpr" $
+  doc "Serialize a Coq term at application precedence" $
   lambda "t" $ cases C._Term10 (var "t") Nothing [
     C._Term10_application>>: lambda "app" $ applicationToExpr @@ var "app",
     C._Term10_oneTerm>>: lambda "ot" $
@@ -583,6 +612,7 @@ term10ToExpr = define "term10ToExpr" $
 -- | Serialize a Term1
 term1ToExpr :: TypedTermDefinition (C.Term1 -> Expr)
 term1ToExpr = define "term1ToExpr" $
+  doc "Serialize a Coq term with optional trailing projection or scope annotations" $
   lambda "t" $ cases C._Term1 (var "t") Nothing [
     C._Term1_projection>>: constant $ kw "?projection",
     C._Term1_scope>>: constant $ kw "?scope",
@@ -591,6 +621,7 @@ term1ToExpr = define "term1ToExpr" $
 -- | Serialize a Term
 termToExpr :: TypedTermDefinition (C.Term -> Expr)
 termToExpr = define "termToExpr" $
+  doc "Serialize a Coq term" $
   lambda "t" $ cases C._Term (var "t") Nothing [
     C._Term_forallOrFun>>: lambda "fof" $
       cases C._ForallOrFun (var "fof") Nothing [
@@ -638,6 +669,7 @@ termToExpr = define "termToExpr" $
 -- | Serialize a TheoremBody
 theoremBodyToExpr :: TypedTermDefinition (C.TheoremBody -> Expr)
 theoremBodyToExpr = define "theoremBodyToExpr" $
+  doc "Serialize a Theorem/Lemma/Proposition with its proof term" $
   lambda "tb" $ lets [
     "kindKw">: cases C._TheoremKind (project C._TheoremBody C._TheoremBody_kind @@ var "tb") Nothing [
       C._TheoremKind_theorem>>: constant $ kw "Theorem",
@@ -662,6 +694,7 @@ theoremBodyToExpr = define "theoremBodyToExpr" $
 -- | Serialize a Type (which is just a wrapper around Term)
 typeToExpr :: TypedTermDefinition (C.Type -> Expr)
 typeToExpr = define "typeToExpr" $
+  doc "Serialize a Coq type, which wraps a term" $
   lambda "t" $ termToExpr @@ (unwrap C._Type @@ var "t")
 
 -- | Render with a period terminator
