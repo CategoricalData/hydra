@@ -86,6 +86,7 @@ module_ = Module {
      toDefinition invalidTypeError,
      toDefinition invalidTypeLambdaParameterNameError,
      toDefinition invalidTypeSchemeVariableNameError,
+     toDefinition missingCaseBranchesError,
      toDefinition nestedTermAnnotationError,
      toDefinition nestedTypeAnnotationError,
      toDefinition nonComparableMapKeyTypeError,
@@ -104,6 +105,7 @@ module_ = Module {
      toDefinition undefinedTypeVariableInTypeApplicationError,
      toDefinition unexpectedTermVariantError,
      toDefinition unexpectedTypeVariantError,
+     toDefinition unknownCaseAlternativeError,
      toDefinition unknownPrimitiveNameError,
      toDefinition unnecessaryIdentityApplicationError,
      toDefinition untypedTermVariableError,
@@ -224,6 +226,7 @@ invalidTermError = define "invalidTermError" $
       _InvalidTermError_invalidLambdaParameterName>>: invalidLambdaParameterNameError,
       _InvalidTermError_invalidLetBindingName>>: invalidLetBindingNameError,
       _InvalidTermError_invalidTypeLambdaParameterName>>: invalidTypeLambdaParameterNameError,
+      _InvalidTermError_missingCaseBranches>>: missingCaseBranchesError,
       _InvalidTermError_nestedTermAnnotation>>: nestedTermAnnotationError,
       _InvalidTermError_redundantWrapUnwrap>>: redundantWrapUnwrapError,
       _InvalidTermError_selfApplication>>: selfApplicationError,
@@ -233,6 +236,7 @@ invalidTermError = define "invalidTermError" $
       _InvalidTermError_undefinedTypeVariableInBindingType>>: undefinedTypeVariableInBindingTypeError,
       _InvalidTermError_undefinedTypeVariableInLambdaDomain>>: undefinedTypeVariableInLambdaDomainError,
       _InvalidTermError_undefinedTypeVariableInTypeApplication>>: undefinedTypeVariableInTypeApplicationError,
+      _InvalidTermError_unknownCaseAlternative>>: unknownCaseAlternativeError,
       _InvalidTermError_unknownPrimitiveName>>: unknownPrimitiveNameError,
       _InvalidTermError_unnecessaryIdentityApplication>>: unnecessaryIdentityApplicationError,
       _InvalidTermError_untypedTermVariable>>: untypedTermVariableError]
@@ -274,6 +278,18 @@ invalidTypeSchemeVariableNameError = define "invalidTypeSchemeVariableNameError"
   "e" ~> Strings.cat $ list [
     string "invalid type scheme variable name: ",
     Core.unName $ project _InvalidTypeSchemeVariableNameError _InvalidTypeSchemeVariableNameError_name @@ var "e"]
+
+missingCaseBranchesError :: TypedTermDefinition (MissingCaseBranchesError -> String)
+missingCaseBranchesError = define "missingCaseBranchesError" $
+  doc "Show a missing case branches error as a string" $
+  "e" ~>
+  "tname" <~ project _MissingCaseBranchesError _MissingCaseBranchesError_typeName @@ var "e" $
+  "variantNames" <~ project _MissingCaseBranchesError _MissingCaseBranchesError_variantNames @@ var "e" $
+  Strings.cat $ list [
+    string "case statement for type ",
+    Core.unName $ var "tname",
+    string " does not cover variant(s): ",
+    Strings.intercalate (string ", ") (Lists.map (reify Core.unName) (var "variantNames"))]
 
 nestedTermAnnotationError :: TypedTermDefinition (NestedTermAnnotationError -> String)
 nestedTermAnnotationError = define "nestedTermAnnotationError" $
@@ -416,6 +432,18 @@ unexpectedTypeVariantError = define "unexpectedTypeVariantError" $
 -- ============================================================================
 -- Term validation error show functions
 -- ============================================================================
+
+unknownCaseAlternativeError :: TypedTermDefinition (UnknownCaseAlternativeError -> String)
+unknownCaseAlternativeError = define "unknownCaseAlternativeError" $
+  doc "Show an unknown case alternative error as a string" $
+  "e" ~>
+  "tname" <~ project _UnknownCaseAlternativeError _UnknownCaseAlternativeError_typeName @@ var "e" $
+  "name" <~ project _UnknownCaseAlternativeError _UnknownCaseAlternativeError_name @@ var "e" $
+  Strings.cat $ list [
+    string "case alternative ",
+    Core.unName $ var "name",
+    string " is not a variant of type ",
+    Core.unName $ var "tname"]
 
 unknownPrimitiveNameError :: TypedTermDefinition (UnknownPrimitiveNameError -> String)
 unknownPrimitiveNameError = define "unknownPrimitiveNameError" $

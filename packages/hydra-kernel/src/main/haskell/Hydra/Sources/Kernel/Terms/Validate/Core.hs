@@ -75,6 +75,8 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Reflect   as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping   as Scoping
+import qualified Hydra.Sources.Kernel.Terms.Strip     as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
@@ -85,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Reflect.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Validation functions for core terms and types")}
   where
    definitions = [
@@ -109,6 +111,7 @@ module_ = Module {
      toDefinition firstTypeError,
      toDefinition isValidName,
      toDefinition kernelDefaultCoreProfile,
+     toDefinition resolveUnionFields,
      toDefinition term,
      toDefinition type_,
      toDefinition validateTypeNode]
@@ -476,6 +479,8 @@ checkTerm = define "checkTerm" $
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "csDefault" <~ Core.caseStatementDefault (var "cs") $
       "csCases" <~ Core.caseStatementCases (var "cs") $
+      "altNames" <~ (Sets.fromList (Lists.map (reify Core.caseAlternativeName) (var "csCases")) :: TypedTerm (S.Set Name)) $
+      "unionFields" <~ resolveUnionFields @@ var "cx" @@ var "tname" $
       firstFinding @@ list [
         -- T5. EmptyTypeNameInTermError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
@@ -497,7 +502,40 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_duplicateField
           (checkDuplicateFields @@ var "path" @@ (Lists.map
             (reify Core.caseAlternativeName)
-            (var "csCases")))],
+            (var "csCases"))),
+        -- T23. MissingCaseBranchesError: a default branch covers every variant by
+        -- definition, so only check when csDefault is absent. Skipped when tname
+        -- does not resolve to a union (a different validator's concern).
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_missingCaseBranches
+          (Logic.ifElse (Optionals.isNone $ var "csDefault")
+            (Optionals.cases (var "unionFields")
+              noError
+              ("fields" ~>
+                "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
+                "uncovered" <~ (Sets.difference (var "variantNames") (var "altNames") :: TypedTerm (S.Set Name)) $
+                Logic.ifElse (Sets.null $ (var "uncovered" :: TypedTerm (S.Set Name)))
+                  noError
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_missingCaseBranches $
+                    record _MissingCaseBranchesError [
+                      _MissingCaseBranchesError_location>>: var "path",
+                      _MissingCaseBranchesError_typeName>>: var "tname",
+                      _MissingCaseBranchesError_variantNames>>: Sets.toList (var "uncovered" :: TypedTerm (S.Set Name))])))
+            noError),
+        -- T24. UnknownCaseAlternativeError: an alternative naming a variant that
+        -- does not exist in the union. Checked regardless of a default branch.
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unknownCaseAlternative
+          (Optionals.cases (var "unionFields")
+            noError
+            ("fields" ~>
+              "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
+              "unknown" <~ (Sets.difference (var "altNames") (var "variantNames") :: TypedTerm (S.Set Name)) $
+              Optionals.cases (Lists.maybeHead $ Sets.toList (var "unknown" :: TypedTerm (S.Set Name)))
+                noError
+                ("firstUnknown" ~> mkJust $ inject _InvalidTermError _InvalidTermError_unknownCaseAlternative $
+                  record _UnknownCaseAlternativeError [
+                    _UnknownCaseAlternativeError_location>>: var "path",
+                    _UnknownCaseAlternativeError_typeName>>: var "tname",
+                    _UnknownCaseAlternativeError_name>>: var "firstUnknown"])))],
 
     -- T9. UndefinedTypeVariableInTypeApplicationError (typed mode only)
     _Term_typeApplication>>: "ta" ~>
@@ -803,6 +841,7 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
           , _InvalidTermError_invalidLambdaParameterName
           , _InvalidTermError_invalidLetBindingName
           , _InvalidTermError_invalidTypeLambdaParameterName
+          , _InvalidTermError_missingCaseBranches
           , _InvalidTermError_nestedTermAnnotation
           , _InvalidTermError_redundantWrapUnwrap
           , _InvalidTermError_selfApplication
@@ -812,6 +851,7 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
           , _InvalidTermError_undefinedTypeVariableInBindingType
           , _InvalidTermError_undefinedTypeVariableInLambdaDomain
           , _InvalidTermError_undefinedTypeVariableInTypeApplication
+          , _InvalidTermError_unknownCaseAlternative
           , _InvalidTermError_unknownPrimitiveName
           , _InvalidTermError_unnecessaryIdentityApplication
           , _InvalidTermError_untypedTermVariable]
@@ -856,6 +896,27 @@ noTypeError = TypedTerm $ TermOptional Nothing
 -- constants. Pure host-side helper; not exported as a kernel term.
 qualifiedRule :: Name -> Name -> Name
 qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
+
+-- | Resolve a type name to the field list of the union type it names, if
+-- any. Looks the name up in the current graph scope (schema types, falling
+-- back to bound types), strips annotations, and matches on TypeUnion.
+-- Returns Nothing both when the name does not resolve and when it resolves
+-- to a non-union type -- either case is a different validator's concern, not
+-- this one's.
+resolveUnionFields :: TypedTermDefinition (Graph -> Name -> Maybe [FieldType])
+resolveUnionFields = define "resolveUnionFields" $
+  doc "Resolve a type name to the field list of the union type it names, or Nothing if it does not resolve to a union type." $
+  "cx" ~> "tname" ~>
+  "toFields" <~ ("ts" ~>
+    "stripped" <~ Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts") $
+    cases _Type (var "stripped") (Just nothing) [
+      _Type_union>>: "fields" ~> just (var "fields")]) $
+  -- Look up in schema types first, then fall back to bound types
+  Optionals.cases (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
+    (Optionals.cases (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
+      nothing
+      (var "toFields"))
+    (var "toFields")
 
 -- | Validate a term against a profile, accumulating findings into a
 -- 'ValidationResult InvalidTermError'. The profile classifies each rule as
