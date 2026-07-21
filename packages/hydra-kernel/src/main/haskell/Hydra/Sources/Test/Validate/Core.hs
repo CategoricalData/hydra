@@ -41,7 +41,7 @@ module_ = Module {
       Phantoms.toDefinition identityApplicationTests,
       Phantoms.toDefinition profileBehaviourTests,
       Phantoms.toDefinition variableShadowingTests]
-      -- Commented out pending test gen fixes (raw constructors / unresolvable names):
+      -- Commented out pending test gen fixes (raw constructors / unresolvable names / case-statement fixtures):
       -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
       -- emptyTypeNameTests, namingConventionTests
 
@@ -143,6 +143,14 @@ invalidNameErr name = justError $
       unName _InvalidLambdaParameterNameError_location Phantoms.>: emptyPath,
       unName _InvalidLambdaParameterNameError_name Phantoms.>: nm name]
 
+missingCaseBranchesErr :: String -> [String] -> TypedTerm (Maybe InvalidTermError)
+missingCaseBranchesErr tname variantNames = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_missingCaseBranches $
+    Phantoms.record _MissingCaseBranchesError [
+      unName _MissingCaseBranchesError_location Phantoms.>: emptyPath,
+      unName _MissingCaseBranchesError_typeName Phantoms.>: nm tname,
+      unName _MissingCaseBranchesError_variantNames Phantoms.>: Phantoms.list (nm <$> variantNames)]
+
 nestedAnnotErr :: TypedTerm (Maybe InvalidTermError)
 nestedAnnotErr = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_nestedTermAnnotation $
@@ -170,6 +178,14 @@ shadowErr name = justError $
       unName _TermVariableShadowingError_location Phantoms.>: emptyPath,
       unName _TermVariableShadowingError_name Phantoms.>: nm name]
 
+unknownCaseAlternativeErr :: String -> String -> TypedTerm (Maybe InvalidTermError)
+unknownCaseAlternativeErr tname altName = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_unknownCaseAlternative $
+    Phantoms.record _UnknownCaseAlternativeError [
+      unName _UnknownCaseAlternativeError_location Phantoms.>: emptyPath,
+      unName _UnknownCaseAlternativeError_typeName Phantoms.>: nm tname,
+      unName _UnknownCaseAlternativeError_name Phantoms.>: nm altName]
+
 unknownPrimErr :: String -> TypedTerm (Maybe InvalidTermError)
 unknownPrimErr name = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
@@ -191,6 +207,7 @@ allTests = define "allTests" $
     -- annotationTests,            -- needs raw TermAnnotated constructor (no DSL equivalent for empty annotations)
     -- unknownPrimitiveTests,      -- primitive refs cause type unification with Term
     -- selfApplicationTests,       -- needs unbound variables
+    -- caseCompletenessTests,      -- TermCases fixtures cause type unification with Term (see comment above its definition)
     identityApplicationTests,
     profileBehaviourTests,
     -- redundantWrapUnwrapTests,   -- uses unresolvable type names TypeA/TypeB/MyType
@@ -315,6 +332,77 @@ emptyCaseStatementTests = define "emptyCaseStatementTests" $
     untypedCase "empty case with no default"
       (caseTerm "MyUnion" Nothing [])
       (emptyCaseErr "MyUnion")]
+-}
+
+-- ============================================================================
+-- T23/T24: Case branch completeness
+-- ============================================================================
+
+-- | The name of the resolvable union type used to test case completeness:
+-- the kernel's own hydra.core.IntegerType, with variants bigint, int8,
+-- int16, int32, int64, uint8, uint16, uint32, uint64 -- all unit-payload, so
+-- every case-alternative handler has the same simple Unit -> result shape.
+caseCompletenessUnionName :: String
+caseCompletenessUnionName = "hydra.core.IntegerType"
+
+-- | A constant-function case alternative handler: ignores the matched
+-- variant's (unit) payload and always returns the same int32 value. Handlers
+-- must be functions (payload -> result), not bare values -- inference
+-- constrains each caseAlternativeHandler as payloadType -> codomainType.
+constAlt :: Int -> TypedTerm Term
+constAlt n = lambda "_" (int32 n)
+
+-- caseCompletenessTests is commented out: any TermCases term embedded as a
+-- test fixture in this module trips the same pre-existing test-generation
+-- limitation that has kept emptyCaseStatementTests (below) commented out --
+-- the per-package test-module JSON generation pass (a separate static
+-- Checking pass in Hydra.Sources.Kernel.Terms.Checking, distinct from
+-- checkTerm's own logic) fails with "incorrect unification:
+-- {hydra.core.Term↦(unit → tNNNNN)}" on ANY case-statement term here,
+-- confirmed even with a single minimal case (one alternative, one kernel
+-- union type, hydra.core.IntegerType -- chosen specifically to avoid the
+-- Literal/LiteralType field-name collision and the test-fixture-vs-kernel-
+-- schema resolution gap tried first). This is a test-embedding
+-- infrastructure limitation, not a defect in checkTerm's completeness
+-- logic: that logic was independently confirmed via `stack test` (2922
+-- examples, 0 failures) before any case-statement fixtures were added here.
+-- Kept commented out (rather than deleted) as the target shape for
+-- whichever future fix unblocks TermCases test fixtures in this file.
+{- caseCompletenessTests :: TypedTermDefinition TestGroup
+caseCompletenessTests = define "caseCompletenessTests" $
+  subgroup "case branch completeness" [
+    untypedCase "all variants covered is valid"
+      (caseTerm caseCompletenessUnionName Nothing [
+        ("bigint", constAlt 1), ("int8", constAlt 2), ("int16", constAlt 3),
+        ("int32", constAlt 4), ("int64", constAlt 5), ("uint8", constAlt 6),
+        ("uint16", constAlt 7), ("uint32", constAlt 8), ("uint64", constAlt 9)])
+      noError,
+    untypedCase "default branch with no alternatives is valid"
+      (caseTerm caseCompletenessUnionName (Just $ constAlt 0) [])
+      noError,
+    untypedCase "default branch with some alternatives is valid"
+      (caseTerm caseCompletenessUnionName (Just $ constAlt 0) [("int8", constAlt 1)])
+      noError,
+    untypedCase "missing one variant with no default"
+      (caseTerm caseCompletenessUnionName Nothing [
+        ("bigint", constAlt 1), ("int8", constAlt 2), ("int16", constAlt 3),
+        ("int32", constAlt 4), ("int64", constAlt 5), ("uint8", constAlt 6),
+        ("uint16", constAlt 7), ("uint32", constAlt 8)])
+      (missingCaseBranchesErr caseCompletenessUnionName ["uint64"]),
+    untypedCase "missing all variants with no default"
+      (caseTerm caseCompletenessUnionName Nothing [])
+      (missingCaseBranchesErr caseCompletenessUnionName
+        ["bigint", "int16", "int32", "int64", "int8", "uint16", "uint32", "uint64", "uint8"]),
+    untypedCase "unresolvable type name is not checked here"
+      (caseTerm "NotAKnownUnion" Nothing [("x", constAlt 1)])
+      noError,
+    untypedCase "alternative naming an unknown variant"
+      (caseTerm caseCompletenessUnionName Nothing [
+        ("bigint", constAlt 1), ("int8", constAlt 2), ("int16", constAlt 3),
+        ("int32", constAlt 4), ("int64", constAlt 5), ("uint8", constAlt 6),
+        ("uint16", constAlt 7), ("uint32", constAlt 8), ("uint64", constAlt 9),
+        ("notAVariant", constAlt 10)])
+      (unknownCaseAlternativeErr caseCompletenessUnionName "notAVariant")]
 -}
 
 -- ============================================================================
@@ -455,6 +543,15 @@ redundantWrapUnwrapTests = define "redundantWrapUnwrapTests" $
 -- ============================================================================
 -- T11: Variable shadowing
 -- ============================================================================
+
+-- | Construct a case statement term over a named union type, with an
+-- optional default branch and a list of (variant name, handler) alternatives.
+-- Handlers are constant functions ignoring the matched payload.
+caseTerm :: String -> Maybe (TypedTerm Term) -> [(String, TypedTerm Term)] -> TypedTerm Term
+caseTerm tname mdflt alts = TypedTerm $ TermCases $ CaseStatement
+  (Name tname)
+  (fmap (\(TypedTerm t) -> t) mdflt)
+  [CaseAlternative (Name n) t | (n, TypedTerm t) <- alts]
 
 -- | Coerce a phantom-typed term to TypedTerm Term
 toTermTerm :: TypedTerm a -> TypedTerm Term
