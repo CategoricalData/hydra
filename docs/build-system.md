@@ -738,6 +738,23 @@ linking the published coders would mix the two entities. `--local-host` is not a
 published host — it is the **correct** tool whenever no published coder package exists for a required
 target (see the next subsection).
 
+The rule covers **every** build that compiles current-revision source — including cold-seed and bootstrap
+tools that run *before* `dist/haskell/` exists (e.g. the `#376` `cold-seed-from-json` seeder). Such a tool
+feels like an exception because it predates the co-generated tree, but it is not: if it source-dirs HEAD's
+authoring modules, it must generate the local kernel first and compile against *that* — it must never list
+a published `hydra-*` package as a library (extra-dep) dependency while source-dir'ing the matching local
+`packages/<pkg>` tree. That combination is the violation, however "cold" the tool is.
+
+The sharpest symptom is a **bootstrap circularity on new kernel types.** A DSL authoring source is often
+phantom-annotated with the *generated* type it helps define — e.g.
+`missingCaseBranchesError :: TypedTermDefinition (MissingCaseBranchesError -> String)`. When that source is
+compiled against a *published* kernel that predates the new type, the annotation resolves to a kernel that
+lacks the symbol and fails with `Not in scope: MissingCaseBranchesError` — on **every** new-kernel-type PR
+until the type is published. This is not a fact of life to tolerate: it is the oil-and-water violation
+surfacing, and the fix is always to compile the authoring sources against the locally-generated kernel,
+never the published one. A regression guard (no published `hydra-*` extra-dep alongside a source-dir of the
+matching local `packages/<pkg>`) keeps this invariant executable rather than prose-only.
+
 ### Bootstrapping `dist/haskell/` from the published host
 
 `dist/haskell/` is **not** tracked in source control — it is a local build artifact that never enters the
