@@ -86,9 +86,74 @@ kernelExemptTypeNames = S.fromList
 -- constant-condition rule flags it but the hack is load-bearing; see the
 -- comment in Sources/Kernel/Terms/Reduction.hs. Applied globally (every
 -- package, not just the kernel) since the name is fully-qualified.
+--
+-- The remaining 51 names below are exempted from the #598 case-branch-
+-- completeness rules (missingCaseBranches, unknownCaseAlternative), added to
+-- kernelDefaultCoreProfile's error rules in the same change. Each is a
+-- pre-existing case statement (mostly coder/serde modules deliberately
+-- covering only the variants that can appear in a given position) that
+-- predates the check and was flagged the first time this gate ran with the
+-- new rules active. This is exactly the class of gap #597 set out to find
+-- and fix by hand elsewhere in the kernel; #598's checker makes the
+-- "missing branch" half of that machine-checkable going forward for every
+-- NEW or edited case statement, without blocking this sync on an unrelated
+-- 51-site cleanup. #597 should shrink this list function-by-function as it
+-- lands (or as any of the below get separately corrected).
 kernelExemptTermNames :: S.Set Core.Name
 kernelExemptTermNames = S.fromList
-  [Core.Name "hydra.reduction.etaExpandTypedTerm"]
+  [ Core.Name "hydra.reduction.etaExpandTypedTerm"
+  , Core.Name "hydra.adapt.adaptLiteral"
+  , Core.Name "hydra.avro.coder.avroHydraAdapter"
+  , Core.Name "hydra.avro.coder.expectArrayE"
+  , Core.Name "hydra.avro.coder.expectObjectE"
+  , Core.Name "hydra.avro.coder.expectStringE"
+  , Core.Name "hydra.avro.encoder.encodeTypeInner"
+  , Core.Name "hydra.avro.encoder.enumAdapter"
+  , Core.Name "hydra.avro.encoder.floatAdapter"
+  , Core.Name "hydra.avro.encoder.integerAdapter"
+  , Core.Name "hydra.avro.encoder.literalAdapter"
+  , Core.Name "hydra.avro.encoder.termToJsonValue"
+  , Core.Name "hydra.avro.schemaJson.expectArrayE"
+  , Core.Name "hydra.avro.schemaJson.expectNumberE"
+  , Core.Name "hydra.avro.schemaJson.expectObjectE"
+  , Core.Name "hydra.avro.schemaJson.expectStringE"
+  , Core.Name "hydra.coq.coder.encodeType"
+  , Core.Name "hydra.cpp.coder.encodeLiteralType"
+  , Core.Name "hydra.demos.genpg.transform.evaluateProperties"
+  , Core.Name "hydra.environment.reorderDefs"
+  , Core.Name "hydra.haskell.coder.constructModule"
+  , Core.Name "hydra.haskell.coder.gatherMetadata"
+  , Core.Name "hydra.haskell.serde.expressionToExpr"
+  , Core.Name "hydra.haskell.serde.importToExpr"
+  , Core.Name "hydra.haskell.serde.patternToExpr"
+  , Core.Name "hydra.haskell.serde.typeToExpr"
+  , Core.Name "hydra.haskell.testing.generateTestCase"
+  , Core.Name "hydra.inference.inferGraphTypes"
+  , Core.Name "hydra.inference.inferTypeOfLet"
+  , Core.Name "hydra.json.schema.serde.fromObject"
+  , Core.Name "hydra.pegasus.coder.encodePossiblyOptionalType"
+  , Core.Name "hydra.pegasus.serde.schemaToExpr"
+  , Core.Name "hydra.pg.coder.edgeCoder"
+  , Core.Name "hydra.pg.coder.findAdjacenEdgeAdapters"
+  , Core.Name "hydra.pg.coder.hasVertexAdapters"
+  , Core.Name "hydra.pg.coder.vertexCoder"
+  , Core.Name "hydra.print.errors.checkingError"
+  , Core.Name "hydra.print.errors.error"
+  , Core.Name "hydra.rdf.utils.encodeLiteral"
+  , Core.Name "hydra.reduction.betaReduceType"
+  , Core.Name "hydra.rust.coder.encodeLiteral"
+  , Core.Name "hydra.rust.coder.encodeLiteralType"
+  , Core.Name "hydra.rust.coder.encodeType"
+  , Core.Name "hydra.shacl.coder.encodeLiteralType"
+  , Core.Name "hydra.shacl.coder.withType"
+  , Core.Name "hydra.templates.instantiateTemplate"
+  , Core.Name "hydra.typeScript.coder.encodeType"
+  , Core.Name "hydra.typeScript.serde.moduleItemToExpr"
+  , Core.Name "hydra.typeScript.serde.typeExpressionToString"
+  , Core.Name "hydra.wasm.coder.encodeLiteral"
+  , Core.Name "hydra.wasm.coder.encodeLiteralType"
+  , Core.Name "hydra.yaml.coder.literalYamlCoder"
+  ]
 
 main :: IO ()
 main = do
