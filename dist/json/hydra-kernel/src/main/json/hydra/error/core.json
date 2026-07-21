@@ -512,6 +512,16 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A type lambda parameter name violating naming conventions (optional)"}}}]}}}},
                   {
+                    "name": "missingCaseBranches",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.MissingCaseBranchesError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A case statement that does not cover every variant of the union it matches"}}}]}}}},
+                  {
                     "name": "nestedTermAnnotation",
                     "type": {
                       "annotated": {
@@ -592,6 +602,16 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An unbound type variable in a type application term"}}}]}}}},
+                  {
+                    "name": "unknownCaseAlternative",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.UnknownCaseAlternativeError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A case statement alternative naming a field that does not exist in the union it matches"}}}]}}}},
                   {
                     "name": "unknownPrimitiveName",
                     "type": {
@@ -830,6 +850,42 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A mismatch between an expected literal type and the type of an actual literal value"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.core.MissingCaseBranchesError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the case statement within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type being matched"}}}]}}}},
+                  {
+                    "name": "variantNames",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.Name"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The names of the uncovered variants"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A case statement without a default branch that fails to cover every variant of the union it matches"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.error.core.NestedTermAnnotationError",
@@ -1331,6 +1387,41 @@
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The actual type that was encountered"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An unexpected type variant was encountered"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnknownCaseAlternativeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the case statement within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type being matched"}}}]}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unknown alternative name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A case statement alternative naming a field that does not exist in the union it matches"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.error.core.UnknownPrimitiveNameError",

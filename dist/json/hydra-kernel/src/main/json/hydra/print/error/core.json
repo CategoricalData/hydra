@@ -471,6 +471,7 @@
                               {
                                 "name": "invalidTypeLambdaParameterName",
                                 "handler": {"variable": "hydra.print.error.core.invalidTypeLambdaParameterNameError"}},
+                              {"name": "missingCaseBranches", "handler": {"variable": "hydra.print.error.core.missingCaseBranchesError"}},
                               {
                                 "name": "nestedTermAnnotation",
                                 "handler": {
@@ -493,6 +494,7 @@
                               {
                                 "name": "undefinedTypeVariableInTypeApplication",
                                 "handler": {"variable": "hydra.print.error.core.undefinedTypeVariableInTypeApplicationError"}},
+                              {"name": "unknownCaseAlternative", "handler": {"variable": "hydra.print.error.core.unknownCaseAlternativeError"}},
                               {"name": "unknownPrimitiveName", "handler": {"variable": "hydra.print.error.core.unknownPrimitiveNameError"}},
                               {
                                 "name": "unnecessaryIdentityApplication",
@@ -643,6 +645,63 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Show an invalid type scheme variable name error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.missingCaseBranchesError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.MissingCaseBranchesError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.MissingCaseBranchesError"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "tname",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.error.core.MissingCaseBranchesError", "fieldName": "typeName"}},
+                            "argument": {"variable": "e"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "variantNames",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.MissingCaseBranchesError", "fieldName": "variantNames"}},
+                                "argument": {"variable": "e"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "case statement for type "}},
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "tname"}}},
+                                {"literal": {"string": " does not cover variant(s): "}},
+                                {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Name"}}},
+                                                "type": {"literal": "string"}}},
+                                            "argument": {"unwrap": "hydra.core.Name"}}},
+                                        "argument": {"variable": "variantNames"}}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a missing case branches error as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.print.error.core.nestedTermAnnotationError",
@@ -1223,6 +1282,53 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Show an unexpected type variant error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.core.unknownCaseAlternativeError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnknownCaseAlternativeError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.core.UnknownCaseAlternativeError"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "tname",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.error.core.UnknownCaseAlternativeError", "fieldName": "typeName"}},
+                            "argument": {"variable": "e"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.core.UnknownCaseAlternativeError", "fieldName": "name"}},
+                                "argument": {"variable": "e"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "argument": {
+                              "list": [
+                                {"literal": {"string": "case alternative "}},
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "name"}}},
+                                {"literal": {"string": " is not a variant of type "}},
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "tname"}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an unknown case alternative error as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.print.error.core.unknownPrimitiveNameError",
