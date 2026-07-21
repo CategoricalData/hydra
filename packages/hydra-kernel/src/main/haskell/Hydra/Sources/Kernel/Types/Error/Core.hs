@@ -45,6 +45,7 @@ module_ = Module {
       invalidTypeLambdaParameterNameError,
       invalidTypeSchemeVariableNameError,
       literalTypeMismatchError,
+      missingCaseBranchesError,
       nestedTermAnnotationError,
       nestedTypeAnnotationError,
       nonComparableMapKeyTypeError,
@@ -63,6 +64,7 @@ module_ = Module {
       undefinedTypeVariableInTypeApplicationError,
       unexpectedTermVariantError,
       unexpectedTypeVariantError,
+      unknownCaseAlternativeError,
       unknownPrimitiveNameError,
       unnecessaryIdentityApplicationError,
       untypedTermVariableError,
@@ -297,6 +299,9 @@ invalidTermError = define "InvalidTermError" $
     "invalidTypeLambdaParameterName">:
       doc "A type lambda parameter name violating naming conventions (optional)" $
       invalidTypeLambdaParameterNameError,
+    "missingCaseBranches">:
+      doc "A case statement that does not cover every variant of the union it matches" $
+      missingCaseBranchesError,
     "nestedTermAnnotation">:
       doc "Nested term annotations that should be merged (optional)" $
       nestedTermAnnotationError,
@@ -324,6 +329,9 @@ invalidTermError = define "InvalidTermError" $
     "undefinedTypeVariableInTypeApplication">:
       doc "An unbound type variable in a type application term" $
       undefinedTypeVariableInTypeApplicationError,
+    "unknownCaseAlternative">:
+      doc "A case statement alternative naming a field that does not exist in the union it matches" $
+      unknownCaseAlternativeError,
     "unknownPrimitiveName">:
       doc "A reference to an unknown primitive function" $
       unknownPrimitiveNameError,
@@ -451,6 +459,21 @@ literalTypeMismatchError = define "LiteralTypeMismatchError" $
     "actualType">:
       doc "The actual literal type, derived from the value" $
       Core.literalType]
+
+-- T23. MissingCaseBranchesError
+missingCaseBranchesError :: TypeDefinition
+missingCaseBranchesError = define "MissingCaseBranchesError" $
+  doc "A case statement without a default branch that fails to cover every variant of the union it matches" $
+  T.record [
+    "location">:
+      doc "The path to the case statement within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the union type being matched" $
+      Core.name,
+    "variantNames">:
+      doc "The names of the uncovered variants" $
+      T.list Core.name]
 
 -- InvalidTypeError: the union of all type validation errors
 -- T20. NestedTermAnnotationError (optional)
@@ -672,6 +695,21 @@ unexpectedTypeVariantError = define "UnexpectedTypeVariantError" $
     "actualType">:
       doc "The actual type that was encountered" $
       Core.type_]
+
+-- T24. UnknownCaseAlternativeError
+unknownCaseAlternativeError :: TypeDefinition
+unknownCaseAlternativeError = define "UnknownCaseAlternativeError" $
+  doc "A case statement alternative naming a field that does not exist in the union it matches" $
+  T.record [
+    "location">:
+      doc "The path to the case statement within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the union type being matched" $
+      Core.name,
+    "name">:
+      doc "The unknown alternative name" $
+      Core.name]
 
 -- ============================================================================
 -- Term validation errors
