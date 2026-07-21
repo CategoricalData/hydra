@@ -441,6 +441,20 @@ heal_java_python_native() {
     local jm pm pkg
     jm="$(java_host_mode)"
     pm="$(python_host_mode)"
+    # hydra-build (#560 red-main incident): json-driver/build.gradle and the
+    # Python native driver's PYTHONPATH both reference dist/{java,python}/hydra-build
+    # (heads/java/src/main/java/hydra/Generation.java and heads/python/.../generation.py
+    # call the generated hydra.build.Routing). Unlike hydra-kernel/hydra-java/etc. below,
+    # this pre-assembly is UNCONDITIONAL — hydra-build has no published artifact in
+    # EITHER language (there is no "published mode" that skips dist/ for it the way
+    # there is for hydra-kernel), so both json-driver's compile and the Python heal
+    # below need it present regardless of jm/pm. On a cold checkout this phase runs
+    # before Phase 3 (which normally populates dist/<lang>/hydra-build), so without
+    # this seed json-driver's :compileJava fails with "package hydra.build does not
+    # exist" the moment it reaches Generation.java. Cheap Layer-1 JSON->target
+    # transform, digest-skipped on a warm tree.
+    "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" hydra-build || return 1
+    "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-build || return 1
     if [ "$jm" = "local" ]; then
         # Mirror the srcDirs in packages/hydra-java/build.gradle so the local rollup
         # compiles against a complete dist/java on a cold checkout.

@@ -71,35 +71,6 @@ sourceSets {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
     }
-    // hydra-build (#560): heads/java/src/main/java/hydra/Generation.java calls
-    // hydra.build.Routing (manifest-derived routing, replacing the former
-    // hand-coded PACKAGE_PREFIXES table). Routing.java lives under
-    // dist/java/hydra-build/src/main/java, already a `main` srcDir above (#546),
-    // so headsExtras gets it transitively via `compileClasspath += main.output`.
-    // That transitive path depends on Gradle correctly ordering
-    // :hydra-java:compileJava before :hydra-java:compileHeadsExtrasJava, which
-    // it does locally (verified via --dry-run) but proved fragile in CI (#560
-    // red-main incident: compileHeadsExtrasJava failed with "package hydra.build
-    // does not exist" against a freshly-downloaded dist/java artifact). Root
-    // cause not fully pinned down (candidate: Gradle configuration-time srcDir
-    // evaluation racing the artifact-download step, or a similar timing gap
-    // outside a single local invocation's visibility) — this guard makes the
-    // dependency EXPLICIT and gives a clear, actionable failure instead of a
-    // cryptic javac error if it recurs, regardless of root cause.
-    tasks.named('compileHeadsExtrasJava') {
-        dependsOn tasks.named('compileJava')
-        doFirst {
-            def hydraBuildRouting = file("$projectDir/../../dist/java/hydra-build/src/main/java/hydra/build/Routing.java")
-            if (!hydraBuildRouting.exists()) {
-                throw new GradleException(
-                    "dist/java/hydra-build/src/main/java/hydra/build/Routing.java is missing. " +
-                    "heads/java/src/main/java/hydra/Generation.java imports hydra.build.Routing " +
-                    "(#560) and needs it on the compile classpath via the `main` source set's " +
-                    "srcDir. Run `bin/sync-packages.sh hydra-build --targets java` (or a full " +
-                    "`bin/sync.sh` including java) to regenerate it before compiling.")
-            }
-        }
-    }
     test {
         java {
             srcDirs += file("$projectDir/../../heads/java/src/test/java")

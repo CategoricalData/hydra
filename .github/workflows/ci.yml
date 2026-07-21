@@ -115,22 +115,6 @@ jobs:
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
-      # #560 red-main incident: heads/java/src/main/java/hydra/Generation.java
-      # imports hydra.build.Routing (manifest-derived routing), which needs
-      # dist/java/hydra-build present before the java job's `gradle
-      # :hydra-java:test` compiles headsExtras. hydra-build IS in the main
-      # sync.sh matrix above (unlike hydra-pg/hydra-rdf/hydra-ext) and should
-      # already be populated by Phase 3 — this step is a cheap (digest-cached
-      # if already fresh) explicit safety net closing a CI-specific gap where
-      # that coverage did not reliably hold (root cause not fully pinned down;
-      # see packages/hydra-java/build.gradle's compileHeadsExtrasJava guard
-      # for the loud failure this used to hit silently as a downstream javac
-      # error instead).
-      - name: Ensure hydra-build is populated for java/python (#560)
-        run: |
-          for tgt in java python; do
-            bin/sync-packages.sh hydra-build --targets "$tgt" --no-tests
-          done
       # #469/#376: pointed guard for the native-coder JSON->Haskell render gate.
       # Forces a cache miss by deleting the per-package output digest, re-runs
       # the assembler against committed JSON, and fails on any diff FROM A
