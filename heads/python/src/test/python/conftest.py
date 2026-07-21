@@ -10,11 +10,17 @@ root = Path(__file__).parent.parent.parent
 main_path = root / "main" / "python"
 gen_main_path = root / "gen-main" / "python"
 gen_test_path = root / "gen-test" / "python"
+# hydra.generation imports hydra.build.routing (#560), which is not published
+# (no PyPI artifact) and lives only under dist/python/hydra-build, not in
+# any of the paths above. Mirrors the same fix in
+# bin/generate-hydra-python-from-python.sh's PYTHONPATH assembly.
+hydra_build_path = root.parent.parent.parent / "dist" / "python" / "hydra-build" / "src" / "main" / "python"
 
 # Insert at beginning of sys.path to ensure they're found first
 sys.path.insert(0, str(gen_test_path.resolve()))
 sys.path.insert(0, str(gen_main_path.resolve()))
 sys.path.insert(0, str(main_path.resolve()))
+sys.path.insert(0, str(hydra_build_path.resolve()))
 
 
 def pytest_addoption(parser):
