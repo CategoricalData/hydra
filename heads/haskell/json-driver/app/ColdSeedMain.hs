@@ -36,7 +36,17 @@ import Hydra.Encoding (encodeModuleName)
 import Hydra.Decoding (decodeModuleName)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
-import Hydra.Sources.All (kernelModules)
+-- #608 oil-and-water fix: the decode-universe context is the Terms-FREE
+-- Hydra.Sources.Kernel.Types.All (kernelTypesModules), NOT Hydra.Sources.All
+-- (kernelModules). decodeModuleFromJson uses this context only to build a schema
+-- map of TYPE definitions (modulesToGraph -> buildSchemaMap); it never needs term
+-- definitions. kernelTypesModules defines every kernel type — including new,
+-- not-yet-published ones — as TypeDefinition VALUES with no phantom-typed terms,
+-- so it compiles against ANY published hydra-kernel. Depending on kernelModules
+-- (which drags in kernelTermsModules, phantom-annotated with HEAD-only kernel
+-- types like MissingCaseBranchesError) was the oil-and-water violation: linking
+-- published hydra-kernel while source-dirring HEAD's Terms authoring tree.
+import Hydra.Sources.Kernel.Types.All (kernelTypesModules)
 -- #376 cold-only seeder: generateSourcesWithTransform comes from the
 -- coder-agnostic Hydra.Generation (already imported unqualified above), NOT from
 -- Hydra.ExtGeneration (which transitively pulls the unpublished ext/coq/wasm
@@ -62,8 +72,10 @@ import Hydra.TypeScript.Coder (moduleToTypeScript)
 import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Lisp.Language (lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
-import qualified Hydra.Sources.Test.TestSuite as TestSuite
-import Hydra.Sources.Test.All (testSkipEmitModuleNames)
+-- #608: testSkipEmitModuleNames is inlined below rather than imported from
+-- Hydra.Sources.Test.All, which (like Hydra.Sources.All) transitively pulls in
+-- Terms-authoring modules (Test.TestSuite -> Test.Validate.Core, phantom-annotated
+-- with HEAD-only kernel types) — the oil-and-water hazard this seeder must avoid.
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
@@ -110,6 +122,18 @@ formatTime secs
 -- live) to the relocated native-impl namespace hydra.<lang>.lib.*.
 replaceAll :: String -> String -> String -> String
 replaceAll old new = L.intercalate new . LS.splitOn old
+
+-- | Test-suite module namespaces whose per-language counterparts are
+-- hand-written (type-only stubs) and must NOT be emitted by the seeder.
+--
+-- #608: inlined here as a Terms-free build constant rather than imported from
+-- Hydra.Sources.Test.All, whose transitive imports (Test.TestSuite ->
+-- Test.Validate.Core) are phantom-annotated with HEAD-only kernel types and so
+-- would reintroduce the oil-and-water violation. The canonical definition is
+-- @Hydra.Sources.Test.All.testSkipEmitModuleNames = [TestEnv.ns]@, where
+-- @TestEnv.ns = ModuleName "hydra.test.testEnv"@. Keep in sync if that changes.
+testSkipEmitModuleNames :: [ModuleName]
+testSkipEmitModuleNames = [ModuleName "hydra.test.testEnv"]
 
 -- | Count files with a given extension in a directory tree.
 countFiles :: FilePath -> String -> IO Int
@@ -369,7 +393,7 @@ main = do
           then return []
           else do
             putStrLn $ "  " ++ pkg ++ ": " ++ show (length allNs) ++ " modules from " ++ pkgDir
-            loadModulesFromJson pkgDir kernelModules allNs
+            loadModulesFromJson pkgDir kernelTypesModules allNs
 
   -- Load a single package's DSL wrapper modules.
   -- Load a package's generated DERIVED modules (hydra.{dsl,encode,decode}.<x>)
@@ -397,7 +421,7 @@ main = do
           then return []
           else do
             putStrLn $ "  " ++ pkg ++ ": " ++ show (length existingNs) ++ " derived modules from " ++ pkgDir
-            loadModulesFromJson pkgDir kernelModules existingNs
+            loadModulesFromJson pkgDir kernelTypesModules existingNs
 
   -- Step 1: Load baseline main modules (hydra-kernel + hydra-haskell).
   -- Both packages are part of the bootstrap baseline: hydra-haskell provides
@@ -978,7 +1002,7 @@ main = do
         testNs <- readManifestFieldOrEmpty pkgDir "testModules"
         if Prelude.null testNs
           then return []
-          else loadModulesFromJson (pkgTestDir pkg) kernelModules testNs
+          else loadModulesFromJson (pkgTestDir pkg) kernelTypesModules testNs
       putStrLn $ "  Loaded " ++ show (length testModsAll) ++ " test modules"
 
       -- Layer 1 per-package scoping for tests: if --package <pkg> is set,

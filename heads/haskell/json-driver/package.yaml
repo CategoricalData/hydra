@@ -1,10 +1,23 @@
 # Standalone #376 cold-only published-host DSL->dist seeder. See stack.yaml for
 # rationale. Compiles a haskell-target-ONLY seeder (app/ColdSeedMain.hs) + the
-# head's coder-agnostic generation modules + the kernel/haskell DSL authoring
-# sources — against the PUBLISHED Hydra packages (stack.yaml extra-deps, pinned
-# at 0.17.1). It links ONLY published coders and never imports the unpublished
-# ext/coq/wasm/go/bench coders; it still SEEDS all 16 dist/haskell source trees
-# from dist/json (they are loaded as JSON and rendered via the Haskell coder).
+# head's coder-agnostic generation modules — against the PUBLISHED Hydra packages
+# (stack.yaml extra-deps, pinned at 0.17.1). It links ONLY published coders and
+# never imports the unpublished ext/coq/wasm/go/bench coders; it still SEEDS all
+# 16 dist/haskell source trees from dist/json (they are loaded as JSON and
+# rendered via the Haskell coder).
+#
+# #608 (oil and water): the seeder does NOT source-dir HEAD's kernel/haskell Terms
+# authoring tree. Compiling packages/hydra-{kernel,haskell}/src/main/haskell while
+# also linking the published hydra-kernel was the oil-and-water violation — HEAD's
+# Terms DSL is phantom-annotated with kernel types that may not exist in the
+# published kernel yet (e.g. MissingCaseBranchesError, #598), giving "Not in scope"
+# on every new-kernel-type PR. The seeder needs those Sources only as a JSON
+# DECODE-universe context, which requires TYPE definitions only; ColdSeedMain now
+# obtains that context from the Terms-free Hydra.Sources.Kernel.Types.All
+# (kernelTypesModules). Only that Terms-free Types subtree is source-dir'd (copied
+# into typesmods/ by bin/cold-seed-dist-haskell.sh), and it compiles against ANY
+# published hydra-kernel. See the import comment in app/ColdSeedMain.hs and the
+# typesmods/ source-dir comment below.
 name:         hydra-json-driver
 version:      0.17.1
 author:       Joshua Shinavier <josh@fortytwo.net>
@@ -32,6 +45,11 @@ dependencies:
   # which #589 deliberately excludes from Hackage (no buildable sdists). The
   # cold seeder does not link their coders; their dist/haskell source is still
   # seeded from JSON via the Haskell coder.
+  #
+  # #608: hydra-kernel / hydra-haskell stay here as ordinary published deps.
+  # The seeder links their published generated code (kernel types + Haskell
+  # coder). It does NOT source-dir their HEAD Terms authoring tree — that
+  # combination was the oil-and-water violation (see the header comment).
   - hydra-kernel
   - hydra-haskell
   - hydra-java
@@ -64,13 +82,25 @@ executables:
       # fail on the unpublished coders. Mirrors the Java json-driver's selective
       # `include 'hydra/Generation.java'` (which excludes hydra.GenerationTargets).
       - headmods
-      # DSL authoring sources (Hydra.Sources.*) needed by Hydra.Sources.All +
-      # Hydra.Sources.Test.TestSuite: kernel + haskell + build. hydra-build ships
-      # the Hydra.Sources.Build.* test Sources that TestSuite imports (#546); it is
-      # a pure generated package with NO coder, so it pulls in no unpublished coder.
-      # NOT the ext/coq/wasm/go/bench DSL Sources (those packages are seeded from
-      # JSON, not compiled).
-      - ../../../packages/hydra-kernel/src/main/haskell
-      - ../../../packages/hydra-haskell/src/main/haskell
-      - ../../../packages/hydra-build/src/main/haskell
+      # #608: the ONLY DSL authoring source compiled here is the Terms-FREE Types
+      # subtree, which provides Hydra.Sources.Kernel.Types.All (kernelTypesModules)
+      # — ColdSeedMain's JSON decode-universe context. typesmods/ is a build-time
+      # copy of EXACTLY that closure: Hydra/Sources/Kernel/Types/** plus the single
+      # Hydra/Sources/Json/Model.hs it imports (verified: that is the complete
+      # transitive closure of Types.All, and none of it imports
+      # Hydra.Sources.Kernel.Terms.*). bin/cold-seed-dist-haskell.sh refreshes it
+      # from packages/hydra-kernel/src/main/haskell on every run (gitignored, never
+      # hand-edited). We copy the SUBTREE rather than source-dir the whole
+      # packages/hydra-kernel tree because hpack would then add the Terms modules
+      # (incl. Print.Error.Core, phantom-annotated with HEAD-only kernel types) as
+      # other-modules — the oil-and-water violation #608 fixes. Compiling only the
+      # Terms-free Type DEFINITIONS against the published kernel keeps a single type
+      # identity, so the published coders link with no local-vs-published mismatch.
+      #
+      # NO packages/hydra-{kernel,haskell,build}/src/main/haskell source-dirs, and
+      # NO local kernel: ColdSeedMain imports no Terms-carrying Hydra.Sources.* module
+      # (decode context is Types.All; testSkipEmitModuleNames is inlined).
+      # Hydra.Build.Routing (used by headmods/PackageRouting.hs) resolves from the
+      # published hydra-build library, not from Sources.Build.*.
+      - typesmods
     ghc-options: [-rtsopts]

@@ -73,6 +73,15 @@ jobs:
       # bootstrap. Needs only python3 + git, both preinstalled on the runner.
       - name: Check manifest-declared module JSON is tracked in git (#541)
         run: python3 bin/check-manifest-json-tracked.py
+      # #608: cheap, toolchain-free gate. Fails if any published-host driver
+      # (heads/**/package.yaml) links a published hydra-* package while ALSO
+      # source-dirring the matching packages/<pkg>/src/main/haskell HEAD authoring
+      # tree — the oil-and-water violation that reddened main on every new-kernel-
+      # type PR (the #376 cold-seeder linked published hydra-kernel-0.17.1 while
+      # source-dirring HEAD's kernel Terms DSL, phantom-annotated with #598 types
+      # absent from 0.17.1). Needs only python3 + git.
+      - name: Check oil-and-water invariant for published-host drivers (#608)
+        run: python3 bin/check-oil-and-water.py
       # ghc-version pinned: this job's bin/sync.sh cold-start path builds the
       # json-driver (heads/haskell/json-driver/, system-ghc/resolver lts-24.7 =>
       # ghc-9.10.2) whenever dist/haskell/ is absent — e.g. after a version bump

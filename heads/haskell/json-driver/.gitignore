@@ -8,3 +8,11 @@ hydra-json-driver.cabal
 # canonical heads/haskell/src/main/haskell source by bin/cold-seed-dist-haskell.sh
 # on every run. Generated artifact — never hand-edited, never committed.
 headmods/
+
+# typesmods/ (#608) holds a build-time copy of the Terms-free DSL Types subtree
+# — Hydra/Sources/Kernel/Types/** plus the single Hydra/Sources/Json/Model.hs it
+# imports — the exact transitive closure of Hydra.Sources.Kernel.Types.All, which
+# ColdSeedMain uses as its JSON decode-universe context. Refreshed from
+# packages/hydra-kernel/src/main/haskell by bin/cold-seed-dist-haskell.sh on every
+# run. Generated artifact — never hand-edited, never committed.
+typesmods/

@@ -55,7 +55,7 @@ echo ""
 #    artifact, gitignored) — never hand-edited, so there is no content drift.
 HEAD_SRC="$REPO_ROOT/heads/haskell/src/main/haskell/Hydra"
 HEADMODS="$DRIVER_DIR/headmods/Hydra"
-echo "[0/3] Refreshing headmods/ (4 head gen modules) from canonical head source..."
+echo "[0/4] Refreshing headmods/ (4 head gen modules) from canonical head source..."
 rm -rf "$DRIVER_DIR/headmods"
 mkdir -p "$HEADMODS"
 for m in Generation PackageRouting TargetFilePaths Digest; do
@@ -70,11 +70,29 @@ sed -i \
     -e 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
     "$HEADMODS/Generation.hs"
 
-# 1. Build the cold-only seeder against the published Hackage packages.
-echo "[1/3] Building cold-only seeder (published 0.17.1 deps)..."
+# 0b. (#608) Refresh typesmods/ with a build-time copy of the Terms-FREE DSL Types
+#     subtree the cold seeder compiles as its JSON decode-universe context:
+#     Hydra/Sources/Kernel/Types/** plus the single Hydra/Sources/Json/Model.hs it
+#     imports (the exact transitive closure of Hydra.Sources.Kernel.Types.All).
+#     Copied — not whole-tree source-dir'd from packages/hydra-kernel — so hpack
+#     never discovers the Terms modules (incl. Print.Error.Core, phantom-annotated
+#     with HEAD-only kernel types) under the source-dir. This is the oil-and-water
+#     fix (#608): compiling only Terms-free Type DEFINITIONS against the published
+#     kernel keeps a single type identity, so published coders link with no
+#     local-vs-published mismatch. Generated artifact, gitignored, never hand-edited.
+KERNEL_SRC="$REPO_ROOT/packages/hydra-kernel/src/main/haskell"
+TYPESMODS="$DRIVER_DIR/typesmods"
+echo "[1/4] Refreshing typesmods/ (Terms-free DSL Types subtree) from packages/hydra-kernel..."
+rm -rf "$TYPESMODS"
+mkdir -p "$TYPESMODS/Hydra/Sources/Kernel/Types" "$TYPESMODS/Hydra/Sources/Json"
+cp -R "$KERNEL_SRC/Hydra/Sources/Kernel/Types/." "$TYPESMODS/Hydra/Sources/Kernel/Types/"
+cp "$KERNEL_SRC/Hydra/Sources/Json/Model.hs" "$TYPESMODS/Hydra/Sources/Json/Model.hs"
+
+# 2. Build the cold-only seeder against the published Hackage packages.
+echo "[2/4] Building cold-only seeder (published 0.17.1 deps)..."
 ( cd "$DRIVER_DIR" && stack build )
 
-# 2. Seed all 16 package SOURCE trees from dist/json into dist/haskell.
+# 3. Seed all 16 package SOURCE trees from dist/json into dist/haskell.
 #    The seeder is invoked PER-PACKAGE with --package <pkg> (mirroring
 #    heads/haskell/bin/transform-json-to-target.sh): --all-packages mode only
 #    emits the bootstrapping core (kernel/haskell/build), whereas the full tree
@@ -97,7 +115,7 @@ echo "[1/3] Building cold-only seeder (published 0.17.1 deps)..."
 # plan.md "RESOLVED: jvm/wasm/ext +7 DELTA" for the full investigation.
 SEEDER_BIN="$( cd "$DRIVER_DIR" && stack path --local-install-root )/bin/cold-seed-from-json"
 echo ""
-echo "[2/3] Seeding dist/haskell source trees from dist/json (per-package)..."
+echo "[3/4] Seeding dist/haskell source trees from dist/json (per-package)..."
 # Two passes per package, mirroring heads/haskell/bin/assemble-distribution.sh
 # EXACTLY (Steps 1 and 2 there): a MAIN pass (--include-dsls, no --include-tests)
 # and a separate TEST pass (--include-tests, no --include-dsls). This is not a
@@ -147,7 +165,7 @@ for pkg in $(python3 "$REPO_ROOT/bin/lib/hydra-packages.py" list); do
     fi
 done
 
-# 3. Emit each package's package.yaml manifest so every dist/haskell/<pkg>/ is a
+# 4. Emit each package's package.yaml manifest so every dist/haskell/<pkg>/ is a
 #    self-contained buildable package (Default A). Covers all 16, including the
 #    5 unpublished ones — the generator already supports them.
 #
@@ -162,7 +180,7 @@ done
 # story (Default A, deliverable 4) fails at the final copy/register step even
 # though compilation itself succeeds (found running the hydra-ext build demo).
 echo ""
-echo "[3/3] Emitting per-package manifests (all 16)..."
+echo "[4/4] Emitting per-package manifests (all 16)..."
 PACKAGES="$(python3 "$REPO_ROOT/bin/lib/hydra-packages.py" list)"
 for pkg in $PACKAGES; do
     python3 "$REPO_ROOT/bin/lib/generate-haskell-package-build.py" "$pkg" \
