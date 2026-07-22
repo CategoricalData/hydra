@@ -567,24 +567,15 @@ jobs:
       - name: Verify Scala distribution self-containment
         run: heads/scala/bin/verify-distribution.sh
 
-  # #571: TypeScript is a self-hosting host (per CLAUDE.md) but had zero CI
-  # coverage until this job. Both steps below are NON-BLOCKING initially
-  # (continue-on-error) pending a pre-existing bug, not introduced by this
-  # job: the two original blockers this job was drafted against (#570
-  # hydra.test.build.* not emitted; the verify-distribution.sh smoke-test
-  # import doubling, #578) are BOTH FIXED on main. But a fresh dist/typescript/
-  # regenerated after the #567 regex work (hydra.parse.regex) surfaced a new,
-  # unrelated one: `tsc --strict` fails on dist/typescript/hydra-kernel/src/
-  # main/typescript/hydra/parse/regex.ts(129,24): "Block-scoped variable
-  # 'regexSequence' used before its declaration." The TypeScript coder emits
-  # `alternation` (which calls `regexSequence`) before the `regexSequence`
-  # const it depends on — a definition-ordering bug in the coder's handling
-  # of this particular forward reference (not full mutual recursion, which
-  # the coder does handle via `$mod_parsers.lazy` elsewhere in the same
-  # file). Confirmed by running both heads/typescript/bin/test-distribution.sh
-  # and verify-distribution.sh against a real fresh sync — both fail on this
-  # exact error, nothing else. Needs a coder-side ordering fix (not filed yet).
-  # Flip continue-on-error off on both steps once that lands.
+  # #571: TypeScript is a self-hosting host (per CLAUDE.md) and is gated here
+  # like every other host. Both steps were initially non-blocking pending a
+  # coder-side definition-ordering bug (#604: `alternation` emitted before the
+  # `regexSequence` const it depends on, TS2448). That bug is fixed on main by
+  # 41a9fe8192 ("Fix TS coder const-ordering to ignore lambda-guarded
+  # references"), so the guards are removed and TypeScript now blocks on
+  # failure. The two earlier blockers this job was drafted against (#570
+  # hydra.test.build.* not emitted; #578 verify-distribution.sh smoke-test
+  # import doubling) were already fixed.
   typescript:
     name: TypeScript tests
     needs: haskell
@@ -601,25 +592,13 @@ jobs:
           name: dist-typescript
           path: dist/typescript/
       - name: Run TypeScript distribution tests
-        id: test
-        continue-on-error: true
         run: heads/typescript/bin/test-distribution.sh hydra-kernel
-      - name: Flag if TypeScript tests failed (temporarily non-blocking)
-        if: steps.test.outcome == 'failure'
-        run: |
-          echo "::warning::TypeScript distribution tests failed — known blocker: TS coder emits hydra.parse.regex's alternation before its regexSequence dependency (TS2448). Non-blocking until fixed."
       # Self-containment gate: pack the npm publish-set packages from dist/
       # and verify a clean install resolves the kernel's core module, so a
       # published tarball missing files fails here — the TS analog of
       # #472/#519/#537 — before it reaches npm.
       - name: Verify TypeScript distribution self-containment
-        id: verify
-        continue-on-error: true
         run: heads/typescript/bin/verify-distribution.sh
-      - name: Flag if self-containment verify failed (temporarily non-blocking)
-        if: steps.verify.outcome == 'failure'
-        run: |
-          echo "::warning::TypeScript self-containment verify failed — same regex.ts ordering bug (TS2448) breaks tsc for the packed build too. Non-blocking until fixed."
 
   common-lisp:
     name: Common Lisp tests
