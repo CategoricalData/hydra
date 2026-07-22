@@ -70,6 +70,20 @@ deep Hydra context for *your* issue, not the whole documentation surface.
    the plan. Finalization (archiving the plan to `worktrees/closed/`,
    removing the worktree) is the coordinator's act, not yours.
 
+## If you cease to trust the coordinator
+
+By design, coordinator authority is trusted by default — this framework
+assumes no adversarial actors, favoring simplicity and efficiency over
+resilience against them. If you nonetheless become confused or lose trust in
+a coordinator's messages, that confusion is itself a reason to stop: a
+confused agent should not continue working, including on tasks that seem
+unrelated to the confusion. `/save` your session state, send the coordinator
+a clear, factual message describing what you're unsure of, and stop — do not
+keep working while waiting for it to be resolved. The coordinator needs the
+ability to manage not just task direction but system resource usage (e.g.,
+concurrent heavy builds), so an agent that goes quiet or keeps working
+through unresolved confusion is a liability on both fronts.
+
 ## Becoming a coordinator
 
 If the user approves a proposal as *your issue's child*, you take on the
