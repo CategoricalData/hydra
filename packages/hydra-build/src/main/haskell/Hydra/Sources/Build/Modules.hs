@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -90,7 +91,7 @@ module_ = Module {
 dedupPreservingOrder :: TypedTermDefinition ([String] -> [String])
 dedupPreservingOrder = define "dedupPreservingOrder" $
   doc "Deduplicate a list of strings, preserving first-occurrence order" $
-  "xs" ~> Lists.nub (var "xs")
+  "xs" ~> Lists.distinct (var "xs")
 
 -- | Keep only non-kernel modules: those whose name does NOT start with "hydra."
 -- and does NOT start with "hydra.json.yaml.".
@@ -152,9 +153,9 @@ secondLevelDir = define "secondLevelDir" $
   doc "The first two forward-slash-separated segments of a relative path, joined by /" $
   "rel" ~>
   "parts" <~ Strings.splitOn (string "/") (var "rel") $
-  Logic.ifElse (Equality.lt (Lists.length $ var "parts") (int32 2))
+  Logic.ifElse (Ordering.lt (Lists.length $ var "parts") (int32 2))
     nothing
-    (just $ Strings.intercalate (string "/") (Lists.take (int32 2) (var "parts")))
+    (just $ Strings.join (string "/") (Lists.take (int32 2) (var "parts")))
 
 -- | Strip System F type annotations from every module in a list.
 stripAllTermTypes :: TypedTermDefinition ([Module] -> [Module])

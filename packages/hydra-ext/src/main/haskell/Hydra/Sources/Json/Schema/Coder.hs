@@ -297,11 +297,11 @@ nameToPath = define "nameToPath" $
     "qn">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName (var "qn"),
     "local">: Util.qualifiedNameLocal (var "qn"),
-    "nsPart">: Optionals.cases (var "mns") (string "") ("ns" ~> Strings.cat2 (Packaging.unModuleName (var "ns")) (string "."))] $
+    "nsPart">: Optionals.cases (var "mns") (string "") ("ns" ~> Strings.concat2 (Packaging.unModuleName (var "ns")) (string "."))] $
     Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
-      @@ wrap _ModuleName (Strings.cat2 (var "nsPart") (var "local"))
+      @@ wrap _ModuleName (Strings.concat2 (var "nsPart") (var "local"))
 
 pairRestrictions :: TypedTermDefinition (Bool -> [JS.Restriction] -> [JS.Restriction] -> [JS.Restriction])
 pairRestrictions = define "pairRestrictions" $
@@ -326,7 +326,7 @@ referenceRestriction = define "referenceRestriction" $
   doc "Create a JSON Schema reference restriction for a named type" $
   lambda "name" $
     inject JS._Restriction JS._Restriction_reference
-      (wrap JS._SchemaReference (Strings.cat $ list [string "#/$defs/", encodeName @@ var "name"]))
+      (wrap JS._SchemaReference (Strings.concat $ list [string "#/$defs/", encodeName @@ var "name"]))
 
 transitiveTypeDeps :: TypedTermDefinition (M.Map Name Type -> S.Set Name -> Type -> S.Set Name)
 transitiveTypeDeps = define "transitiveTypeDeps" $
@@ -349,12 +349,12 @@ typeDefToDocument = define "typeDefToDocument" $
       (list [var "rootName"])
       (Lists.filter ("n" ~> Logic.not (Equality.equal (var "n") (var "rootName"))) (var "depNames")),
     "allTypes">: Lists.map
-      ("n" ~> Optionals.fromOptional (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))))
+      ("n" ~> Optionals.withDefault (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))))
       (var "allNames"),
     "nameSubst">: Dependencies.toShortNames @@ var "allNames",
     "types">: Lists.map ("t" ~> Variables.substituteTypeVariables @@ var "nameSubst" @@ var "t") (var "allTypes"),
-    "names">: Lists.map ("n" ~> Optionals.fromOptional (var "n") (Maps.lookup (var "n") (var "nameSubst" :: TypedTerm (M.Map Name Name)))) (var "allNames"),
-    "subRoot">: Optionals.fromOptional (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst" :: TypedTerm (M.Map Name Name))),
+    "names">: Lists.map ("n" ~> Optionals.withDefault (var "n") (Maps.lookup (var "n") (var "nameSubst" :: TypedTerm (M.Map Name Name)))) (var "allNames"),
+    "subRoot">: Optionals.withDefault (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst" :: TypedTerm (M.Map Name Name))),
     "pairs">: Lists.zip (var "names") (var "types")] $
     Eithers.bind
       (Eithers.mapList ("p" ~> typeToKeywordSchemaPair @@ var "cx" @@ var "g"
@@ -372,7 +372,7 @@ typeToExpr = define "typeToExpr" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
     cases _Type (var "typ")
       (Just (left (Error.errorOther (Error.otherError
-        (Strings.cat2 (string "JSON Schema: unsupported type variant: ")
+        (Strings.concat2 (string "JSON Schema: unsupported type variant: ")
           (PrintVariants.typeVariant @@ (Reflect.typeVariant @@ var "typ"))))))) [
 
       _Type_annotated>>: ("at" ~>

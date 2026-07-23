@@ -172,17 +172,17 @@ encodeLiteralType = define "encodeLiteralType" $
   doc "Encode a literal type to a GraphQL NamedType" $
   "cx" ~> lambda "lt" $
     cases _LiteralType (var "lt")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (PrintCore.literalType @@ var "lt"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible literal type, found: ") (PrintCore.literalType @@ var "lt"))) [
       _LiteralType_boolean>>: constant $
         right (wrap G._NamedType (wrap G._Name (string "Boolean"))),
       _LiteralType_float>>: lambda "ft_" $
         cases _FloatType (var "ft_")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 64-bit float type, found: ") (PrintCore.floatType @@ var "ft_"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected 64-bit float type, found: ") (PrintCore.floatType @@ var "ft_"))) [
           _FloatType_float64>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Float")))],
       _LiteralType_integer>>: lambda "it_" $
         cases _IntegerType (var "it_")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 32-bit signed integer type, found: ") (PrintCore.integerType @@ var "it_"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected 32-bit signed integer type, found: ") (PrintCore.integerType @@ var "it_"))) [
           _IntegerType_int32>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Int")))],
       _LiteralType_string>>: constant $
@@ -194,7 +194,7 @@ encodeNamedType = define "encodeNamedType" $
   doc "Encode a named type to a GraphQL type definition." $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (PrintCore.type_ @@ var "typ"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected record or union type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_record>>: lambda "rt" $
         "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
         "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -269,10 +269,10 @@ encodeType = define "encodeType" $
   doc "Encode a Hydra type as a GraphQL type reference" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
-      (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "typ"))) [
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_optional>>: lambda "et" $
         cases _Type (Strip.deannotateType @@ var "et")
-          (Just $ left (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "et"))) [
+          (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "et"))) [
           _Type_list>>: lambda "et2" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
               (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "et2"),
@@ -362,7 +362,7 @@ encodeTypeName = define "encodeTypeName" $
     "local">: Util.qualifiedNameLocal (var "qualName"),
     "mns">: Util.qualifiedNameModuleName (var "qualName"),
     "prefix">: Optionals.cases (var "mns") (string "") (lambda "ns_" $ Optionals.cases (Maps.lookup (var "ns_") (var "prefixes" :: TypedTerm (M.Map ModuleName String))) (string "") ("p" ~> var "p"))] $
-    wrap G._Name (Strings.cat2 (var "prefix") (sanitize @@ var "local"))
+    wrap G._Name (Strings.concat2 (var "prefix") (sanitize @@ var "local"))
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
 -- Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable.
@@ -388,14 +388,14 @@ encodeUnionFieldType = define "encodeUnionFieldType" $
 -- | Helper: find namespace prefixes from type definitions
 findPrefixes :: TypedTerm (ModuleName -> [TypeDefinition] -> M.Map ModuleName String)
 findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
-  "namespaces">: (Lists.nub :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Optionals.cat $ Lists.map
+  "namespaces">: (Lists.distinct :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Optionals.givens $ Lists.map
     (lambda "td" $ Names.moduleNameOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
   (Maps.fromList $ Lists.map
     (lambda "ns_" $ pair (var "ns_")
       (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
         (string "")
-        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
+        (Strings.concat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
     (var "namespaces") :: TypedTerm (M.Map ModuleName String))
 
 -- | Top-level entry point: convert a module to GraphQL schema files.

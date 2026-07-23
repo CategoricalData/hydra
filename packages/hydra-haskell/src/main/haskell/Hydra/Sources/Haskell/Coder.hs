@@ -158,7 +158,7 @@ constantForFieldName :: TypedTermDefinition (Name -> Name -> String)
 constantForFieldName = haskellCoderDefinition "constantForFieldName" $
   doc "Generate a constant name for a field (e.g., '_TypeName_fieldName')" $
   "tname" ~> "fname" ~>
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "_",
       Names.localNameOf @@ var "tname",
       string "_",
@@ -168,7 +168,7 @@ constantForTypeName :: TypedTermDefinition (Name -> String)
 constantForTypeName = haskellCoderDefinition "constantForTypeName" $
   doc "Generate a constant name for a type (e.g., '_TypeName')" $
   "tname" ~>
-    Strings.cat2 (string "_") (Names.localNameOf @@ var "tname")
+    Strings.concat2 (string "_") (Names.localNameOf @@ var "tname")
 
 constructModule :: TypedTermDefinition (HaskellNamespaces -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error H.Module)
 constructModule = haskellCoderDefinition "constructModule" $
@@ -198,8 +198,8 @@ constructModule = haskellCoderDefinition "constructModule" $
             (list [string "hydra", string "lib"])))
         (Logic.not
           (Equality.equal (var "raw") (string "hydra.lib.defaults"))))
-      (Strings.cat2 (string "hydra.overlay.haskell.lib.")
-        (Strings.intercalate (string ".") (Lists.drop (int32 2) (var "parts"))))
+      (Strings.concat2 (string "hydra.overlay.haskell.lib.")
+        (Strings.join (string ".") (Lists.drop (int32 2) (var "parts"))))
       (var "raw"),
   "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
@@ -211,7 +211,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
         right $ list [var "d"]],
     "importName">: "name" ~>
-      wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (asTerm Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
+      wrap H._ModuleName $ Strings.join (string ".") (Lists.map (asTerm Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
     "imports">: Lists.concat2 (var "domainImports") (var "standardImports"),
     "domainImports">: lets [
       "toImport">: "pair" ~> lets [
@@ -303,7 +303,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "toAlt">: "fieldMap" ~> "field" ~> lets [
       "fn">: Core.caseAlternativeName $ var "field",
       "fun'">: Core.caseAlternativeHandler $ var "field",
-      "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
+      "v0">: Strings.concat2 (string "v") (Literals.showInt32 $ var "depth"),
       "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
       "rhsTerm">: Dependencies.simplifyTerm @@ var "raw",
       "v1">: Logic.ifElse (Variables.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
@@ -693,7 +693,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
-            (Optionals.fromOptional (inject H._Constraint H._Constraint_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
+            (Optionals.withDefault (inject H._Constraint H._Constraint_tuple $ var "encoded") (Lists.head $ var "encoded"))
             (inject H._Constraint H._Constraint_tuple $ var "encoded")] $
           right $ inject H._Type H._Type_ctx $ record H._ConstrainedType [
             H._ConstrainedType_ctx>>: var "hassert",
@@ -704,7 +704,7 @@ encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
   doc "Encode an unwrap term as a Haskell expression" $
   "namespaces" ~> "name" ~>
   right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Optionals.fromOptional (wrap _ModuleName $ string "") (Names.moduleNameOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
+    (Names.qname @@ (Optionals.withDefault (wrap _ModuleName $ string "") (Names.moduleNameOf @@ var "name")) @@ (HaskellUtilsSource.newtypeAccessorName @@ var "name"))
 
 extendMetaForTerm :: TypedTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
@@ -977,7 +977,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
     "lname">: Names.localNameOf @@ var "elementName",
     "hname">: HaskellUtilsSource.simpleName @@ var "lname",
     "declHead">: "name" ~> "vars'" ~>
-      Optionals.fromOptional
+      Optionals.withDefault
         (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
         (Optionals.map
           ("p" ~> lets [
@@ -1004,7 +1004,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "toField">: "fieldType" ~> lets [
         "fname">: Core.fieldTypeName $ var "fieldType",
         "ftype">: Core.fieldTypeType $ var "fieldType",
-        "hname'">: HaskellUtilsSource.simpleName @@ Strings.cat2
+        "hname'">: HaskellUtilsSource.simpleName @@ Strings.concat2
           (Formatting.decapitalize @@ var "lname'")
           (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
         "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
@@ -1026,10 +1026,10 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
           _QualifiedName_moduleName>>: just $ Pairs.first $ Util.moduleNamesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'" :: TypedTerm (S.Set Name)))
-          (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
+          (var "deconflict" @@ Strings.concat2 (var "name") (string "_"))
           (var "name")] $
       "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $ lets [
-      "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
+      "nm">: var "deconflict" @@ Strings.concat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
       "typeList" <<~ (Logic.ifElse (Equality.equal (Strip.deannotateType @@ var "ftype") MetaTypes.unit)
         (right $ list ([] :: [TypedTerm H.CaseRhs])) $
         "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
@@ -1094,7 +1094,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     "typeName">: "ns" ~> "name'" ~>
       Names.qname @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
     "typeNameLocal">: "name'" ~>
-      Strings.cat $ list [string "_", Names.localNameOf @@ var "name'", string "_type_"],
+      Strings.concat $ list [string "_", Names.localNameOf @@ var "name'", string "_type_"],
     "rawTerm">: encoderFor _Type @@ var "typ",
     "rewrite">: "recurse" ~> "term" ~> lets [
       "variantResult">: cases _Term (Strip.deannotateTerm @@ var "term")
@@ -1124,8 +1124,8 @@ typeDecl = haskellCoderDefinition "typeDecl" $
         "qname">: Names.qualifyName @@ var "vname",
         "mns">: Util.qualifiedNameModuleName $ var "qname",
         "local">: Util.qualifiedNameLocal $ var "qname"] $
-        Optionals.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
-      Optionals.fromOptional (var "recurse" @@ var "term") (Optionals.bind (var "variantResult") (var "forType")),
+        Optionals.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.concat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
+      Optionals.withDefault (var "recurse" @@ var "term") (Optionals.bind (var "variantResult") (var "forType")),
     "finalTerm">: Rewriting.rewriteTerm @@ var "rewrite" @@ var "rawTerm"] $
     "expr" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "finalTerm" @@ var "cx" @@ var "g" $ lets [
     "rhs">: wrap H._RightHandSide $ var "expr",
@@ -1151,7 +1151,7 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
     Optionals.cases (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
         Maps.map
           ("meta" ~> ((Sets.fromList $
-            Optionals.cat $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
+            Optionals.givens $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
           (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 
 useCoreImport :: TypedTermDefinition Bool

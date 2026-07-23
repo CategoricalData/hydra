@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
@@ -126,7 +127,7 @@ buildFieldMapping = define "buildFieldMapping" $
               _Type_record>>: "fields" ~> Lists.map (lambda "ft" $ lets [
                 "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.fieldTypeName $ var "ft")),
                 "fn">: sanitize @@ var "rawFn",
-                "prefixed">: Strings.cat (list [
+                "prefixed">: Strings.concat (list [
                   Formatting.decapitalize @@ var "tname",
                   string "_",
                   var "fn"])] $
@@ -375,9 +376,9 @@ collectSanitizedAccessors = define "collectSanitizedAccessors" $
           "bodyTy">: Pairs.second (var "extracted")] $
           cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
             _Type_record>>: "fields" ~>
-              Optionals.cat $ Lists.map (lambda "f" $
+              Optionals.givens $ Lists.map (lambda "f" $
                 Logic.ifElse (fieldCausesPositivityIssue @@ var "groupNames" @@ (Core.fieldTypeType $ var "f"))
-                  (Phantoms.just $ Strings.cat (list [
+                  (Phantoms.just $ Strings.concat (list [
                     Formatting.decapitalize @@ var "typeName",
                     string "_",
                     sanitize @@ (localName @@ (unwrap _Name @@ (Core.fieldTypeName $ var "f")))]))
@@ -441,7 +442,7 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
     (var "grp") $
   -- Build a nested pair from the stripped binding terms
   "mkPair" <~ ("ts" ~>
-    Optionals.fromOptional (Core.termVariable $ wrap _Name (string "tt")) (Optionals.map
+    Optionals.withDefault (Core.termVariable $ wrap _Name (string "tt")) (Optionals.map
       (lambda "p" $
         Logic.ifElse (Equality.equal (Lists.length (var "ts")) (int32 1))
           (Pairs.first (var "p"))
@@ -496,15 +497,15 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
 
 -- | Extract the qualified-namespace part of a Hydra Name string.
 -- `"hydra.core.Term_Literal"` -> `"hydra.core"`.
--- `"hydra.lib.strings.cat"` -> `"hydra.lib.strings"`.
+-- `"hydra.lib.strings.concat"` -> `"hydra.lib.strings"`.
 -- Names without at least one dot are returned unchanged.
 extractQualifiedNamespace :: TypedTermDefinition (String -> String)
 extractQualifiedNamespace = define "extractQualifiedNamespace" $
   doc "Extract the namespace (everything except the last dot-separated component) from a qualified Hydra name" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Logic.ifElse (Equality.gte (Lists.length (var "parts")) (int32 2))
-      (Strings.intercalate (string ".") (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))))
+    Logic.ifElse (Ordering.gte (Lists.length (var "parts")) (int32 2))
+      (Strings.join (string ".") (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init (var "parts"))))
       (var "s")
 
 -- | Extract the leading forall-bound parameter names from a type, returning
@@ -610,7 +611,7 @@ isTypeVarLike = define "isTypeVarLike" $
   doc "Return True if the string is of the form `t<digits>` with at least one digit" $
   lambda "s" $ lets [
     "chars">: Strings.toList (var "s")] $
-    Optionals.fromOptional (boolean False) (Optionals.map
+    Optionals.withDefault (boolean False) (Optionals.map
       (lambda "p" $ lets [
         "firstCh">: Pairs.first (var "p"),
         "rest">: Pairs.second (var "p")] $
@@ -619,8 +620,8 @@ isTypeVarLike = define "isTypeVarLike" $
           (Logic.and (Logic.not (Lists.null (var "rest")))
                     (Lists.foldl
                       (lambdas ["acc", "c"] $ Logic.and (var "acc")
-                        (Logic.and (Equality.gte (var "c") (int32 48))
-                                   (Equality.lte (var "c") (int32 57))))
+                        (Logic.and (Ordering.gte (var "c") (int32 48))
+                                   (Ordering.lte (var "c") (int32 57))))
                       (boolean True)
                       (var "rest"))))
       (Lists.uncons (var "chars")))
@@ -632,7 +633,7 @@ localName = define "localName" $
   doc "Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "raw">: Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))] $
+    "raw">: Optionals.withDefault (var "s") (Lists.last (var "parts"))] $
     sanitize @@ var "raw"
 
 -- | Take the last dot-separated segment of a qualified Hydra name, without
@@ -643,7 +644,7 @@ localNameRaw = define "localNameRaw" $
   doc "Return the last dot-separated segment of a qualified Hydra name, unsanitized" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))
+    Optionals.withDefault (var "s") (Lists.last (var "parts"))
 
 -- | Collect the dependency namespaces of a Hydra Module, minus the module's
 -- own namespace, deduplicated while preserving first-occurrence order.
@@ -654,7 +655,7 @@ moduleDependencyNames = define "moduleDependencyNames" $
     "allDeps">: Lists.map (lambda "dep" $ Packaging.unModuleName (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
     "ownNs">: Packaging.unModuleName (Packaging.moduleName (var "m")),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
-    (Lists.nub :: TypedTerm [String] -> TypedTerm [String]) (var "filtered")
+    (Lists.distinct :: TypedTerm [String] -> TypedTerm [String]) (var "filtered")
 
 -- | Normalize inner TermTypeLambda nodes inside a term, rewriting them as
 -- regular term lambdas whose domain is `Type`. At each TermLet node, any
@@ -689,7 +690,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
     cases _Term (var "tm") (Just $ var "recurse" @@ var "polyNames" @@ var "tm") [
       _Term_let>>: "lt" ~>
         -- Newly converted names: bindings whose term is (transitively) a TermTypeLambda.
-        "newPoly" <~ (Sets.fromList (Optionals.cat $ Lists.map
+        "newPoly" <~ (Sets.fromList (Optionals.givens $ Lists.map
           ("b" ~> Logic.ifElse (isTypeLambdaTerm @@ (Core.bindingTerm $ var "b"))
             (Phantoms.just $ unwrap _Name @@ (Core.bindingName $ var "b"))
             (Phantoms.nothing :: TypedTerm (Maybe String)))
@@ -773,8 +774,8 @@ qualifiedFromName = define "qualifiedFromName" $
     "raw">: unwrap _Name @@ var "n",
     "parts">: Strings.splitOn (string ".") (var "raw")] $
     Logic.ifElse (Logic.and
-        (Equality.gte (Lists.length (var "parts")) (int32 2))
-        (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "parts"))) (string "hydra")))
+        (Ordering.gte (Lists.length (var "parts")) (int32 2))
+        (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "parts"))) (string "hydra")))
       (Sets.singleton (var "raw"))
       (Sets.empty :: TypedTerm (S.Set String))
 
@@ -844,7 +845,7 @@ rewriteTermFields = define "rewriteTermFields" $
           "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "p"),
           "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionFieldName $ var "p")),
           "key">: pair (var "tname") (var "rawFn"),
-          "newFname">: Optionals.fromOptional (Core.projectionFieldName $ var "p")
+          "newFname">: Optionals.withDefault (Core.projectionFieldName $ var "p")
             (Optionals.map (lambda "s" $ wrap _Name (var "s")) (Maps.lookup (var "key" :: TypedTerm (String, String)) (var "fm")))] $
           Core.termProject $ Core.projection
             (Core.projectionTypeName $ var "p")
@@ -897,14 +898,14 @@ sortTermDefsSCC = define "sortTermDefsSCC" $
       @@ (var "depsOf" :: TypedTerm ((String, Term) -> [String]))
       @@ (var "defs")] $
     Lists.map (lambda "grp" $
-      Logic.ifElse (Equality.gte (Lists.length $ var "grp") (int32 2))
+      Logic.ifElse (Ordering.gte (Lists.length $ var "grp") (int32 2))
         (pair (boolean True) (var "grp"))
-        (Optionals.fromOptional (pair (boolean False) (var "grp")) (Optionals.map
+        (Optionals.withDefault (pair (boolean False) (var "grp")) (Optionals.map
           (lambda "d" $ lets [
             "name">: Pairs.first $ var "d",
             "deps">: termRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
             pair (Sets.member (var "name" :: TypedTerm String) (var "deps")) (var "grp"))
-          (Lists.maybeHead (var "grp")))))
+          (Lists.head (var "grp")))))
       (var "comps")
 
 
@@ -925,15 +926,15 @@ sortTypeDefsSCC = define "sortTypeDefsSCC" $
       @@ (var "depsOf" :: TypedTerm ((String, Type) -> [String]))
       @@ (var "defs")] $
     Lists.map (lambda "grp" $
-      Logic.ifElse (Equality.gte (Lists.length $ var "grp") (int32 2))
+      Logic.ifElse (Ordering.gte (Lists.length $ var "grp") (int32 2))
         (pair (boolean True) (var "grp"))
         -- Singleton: cyclic iff it references itself.
-        (Optionals.fromOptional (pair (boolean False) (var "grp")) (Optionals.map
+        (Optionals.withDefault (pair (boolean False) (var "grp")) (Optionals.map
           (lambda "d" $ lets [
             "name">: Pairs.first $ var "d",
             "deps">: typeRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
             pair (Sets.member (var "name" :: TypedTerm String) (var "deps")) (var "grp"))
-          (Lists.maybeHead (var "grp")))))
+          (Lists.head (var "grp")))))
       (var "comps")
 
 -- | If a term is `hydra_fix (fun innerName => body)`, return `body` with

@@ -71,7 +71,7 @@ restrict ss = just (strSet ss)
 
 -- | Render a single string with quotes, for use in showStringList.
 showString' :: TypedTerm (String -> String)
-showString' = lambda "s" $ Literals.showString (var "s")
+showString' = lambda "s" $ Literals.printString (var "s")
 
 -- | Render a list of strings like "[\"a\", \"b\"]". universalCase compares the
 -- serialized forms, so both actual and expected are rendered to String; passing a

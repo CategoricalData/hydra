@@ -1097,7 +1097,7 @@ encodeLambda cx g lam st = do
       [goReturn [bodyExpr]], st3)
 
 -- | Resolve a Hydra primitive name to a reference to its native overlay
--- implementation: "hydra.lib.strings.cat" -> strings.Cat with import
+-- implementation: "hydra.lib.strings.concat" -> strings.Concat with import
 -- "hydra.dev/hydra/overlay/go/lib/strings". Overlay lib packages declare
 -- their short names, so no alias is needed (and buildImports never aliases
 -- overlay paths).

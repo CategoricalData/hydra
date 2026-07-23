@@ -130,9 +130,9 @@ sourceWrapperName = define "sourceWrapperName" $
   doc "The hydra.sources.<...> wrapper name for a derived encode/decode module name" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
-  "fallback" <~ Packaging.moduleName2 (Strings.cat $ list [string "hydra.sources.", Packaging.unModuleName (var "ns")]) $
+  "fallback" <~ Packaging.moduleName2 (Strings.concat $ list [string "hydra.sources.", Packaging.unModuleName (var "ns")]) $
   Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
-      Packaging.moduleName2 (Strings.cat $ list [string "hydra.sources.", Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+      Packaging.moduleName2 (Strings.concat $ list [string "hydra.sources.", Strings.join (string ".") (Pairs.second $ var "uc")]))
 
 -- | Map a module name to the package that owns it, via a routing map.
 --
@@ -147,7 +147,7 @@ namespaceToPackageIn = define "namespaceToPackageIn" $
   doc "Map a module name to the package that owns it, failing loudly if unrouted" $
   "rm" ~> "ns" ~>
   Optionals.cases (Maps.lookup (var "ns") (var "rm" :: TypedTerm (M.Map ModuleName String)))
-    (left $ Error.errorOther $ Error.otherError $ Strings.cat $ list [
+    (left $ Error.errorOther $ Error.otherError $ Strings.concat $ list [
       string "unrouted module: ",
       Packaging.unModuleName (var "ns"),
       string " is not declared in any package's manifest (RoutingMap). Add it to the owning package's Manifest.mainModules."])
@@ -165,7 +165,7 @@ groupByPackageIn = define "groupByPackageIn" $
     Eithers.bind (var "acc" :: TypedTerm (Either Error (M.Map String [Module]))) ("grouped" ~>
       Eithers.bind (namespaceToPackageIn @@ (var "rm" :: TypedTerm (M.Map ModuleName String)) @@ (Packaging.moduleName $ var "m")) ("pkg" ~>
         right $ Maps.alter
-          ("mods0" ~> just $ Lists.cons (var "m") (Optionals.fromOptional (list ([] :: [TypedTerm Module])) (var "mods0")))
+          ("mods0" ~> just $ Lists.cons (var "m") (Optionals.withDefault (list ([] :: [TypedTerm Module])) (var "mods0")))
           (var "pkg")
           (var "grouped" :: TypedTerm (M.Map String [Module]))))) $
   Eithers.map ("grouped" ~> Maps.toList (var "grouped" :: TypedTerm (M.Map String [Module])))

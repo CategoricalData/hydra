@@ -867,7 +867,7 @@ encodeNamespace :: TypedTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a C++ namespace string (e.g. \"hydra.cpp\" -> \"hydra::cpp\")" $
   lambda "ns" $
-    Strings.intercalate (string "::")
+    Strings.join (string "::")
       (Lists.map
         (lambda "seg" $ Formatting.convertCaseCamelToLowerSnake @@ var "seg")
         (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))))
@@ -894,7 +894,7 @@ encodeRecordType = def "encodeRecordType" $
                       Cpp._ConstructorDeclaration_parameters>>:
                         Lists.map (lambda "p" $
                           record Cpp._Parameter [
-                            Cpp._Parameter_type>>: Optionals.fromOptional
+                            Cpp._Parameter_type>>: Optionals.withDefault
                               (inject Cpp._TypeExpression Cpp._TypeExpression_basic $
                                 inject Cpp._BasicType Cpp._BasicType_int unit)
                               ((project Cpp._VariableDeclaration Cpp._VariableDeclaration_type @@ var "p")),

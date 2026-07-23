@@ -282,7 +282,7 @@ encodeTypeInner = define "encodeTypeInner" $
       _Type_wrap>>: lambda "inner" $
         encodeTypeInner @@ var "cx" @@ var "mName" @@ var "inner" @@ var "env",
       _Type_variable>>: lambda "name_" $
-        Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.cat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
+        Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
             right (pair
               (Coders.adapterWithTarget (var "existingAd") (inject Avro._Schema Avro._Schema_reference (localName @@ var "name_")))
               (var "env")))
@@ -292,14 +292,14 @@ encodeTypeWithEnv :: TypedTermDefinition (InferenceContext -> Name -> AvroEnv.En
 encodeTypeWithEnv = define "encodeTypeWithEnv" $
   doc "Encode with full environment threading. Returns the adapter and updated environment" $
   lambda "cx" $ lambda "name_" $ lambda "env" $
-    Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.cat2 (string "type not found in type map: ") (Literals.showString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
+    Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "type not found in type map: ") (Literals.printString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
 
 enumAdapter :: TypedTermDefinition (InferenceContext -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 enumAdapter = define "enumAdapter" $
   doc "Adapter for all-unit union types (enums)" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0" $ lets [
     "symbols">: Lists.map (lambda "ft" $ localName @@ (project _FieldType _FieldType_name @@ var "ft")) (var "fieldTypes"),
-    "typeName">: Optionals.fromOptional (typeToName @@ var "typ") (var "mName"),
+    "typeName">: Optionals.withDefault (typeToName @@ var "typ") (var "mName"),
     "avroAnnotations">: hydraAnnotationsToAvro @@ var "annotations",
     "avroSchema">: inject Avro._Schema Avro._Schema_named (record Avro._Named [
       Avro._Named_name>>: localName @@ var "typeName",
@@ -547,7 +547,7 @@ localName = define "localName" $
   lambda "name_" $ lets [
     "s">: unwrap _Name @@ var "name_",
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))
+    Optionals.withDefault (var "s") (Lists.last (var "parts"))
 
 nameNamespace :: TypedTermDefinition (Name -> Maybe String)
 nameNamespace = define "nameNamespace" $
@@ -557,7 +557,7 @@ nameNamespace = define "nameNamespace" $
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       nothing
-      (Optionals.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")))
+      (Optionals.map (lambda "ps" $ Strings.join (string ".") (var "ps")) (Lists.init (var "parts")))
 
 namedTypeAdapter :: TypedTermDefinition (InferenceContext -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment
   -> ([Avro.Field] -> Avro.NamedType)
@@ -568,7 +568,7 @@ namedTypeAdapter = define "namedTypeAdapter" $
   doc "Build a named type adapter (shared between record and union-as-record)" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0"
     $ lambda "mkNamedType" $ lambda "mkCoder" $ lets [
-    "typeName">: Optionals.fromOptional (typeToName @@ var "typ") (var "mName")] $
+    "typeName">: Optionals.withDefault (typeToName @@ var "typ") (var "mName")] $
     Optionals.cases (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Eithers.bind (foldFieldAdapters @@ var "cx" @@ var "fieldTypes" @@ var "env0") (lambda "faResult" $ lets [
         "fieldAdapters">: Pairs.first (var "faResult"),
         "env1">: Pairs.second (var "faResult"),
@@ -606,7 +606,7 @@ recordTermCoder = define "recordTermCoder" $
           "encodeField">: lambda "nameAd" $ lets [
             "fname">: Pairs.first (var "nameAd"),
             "ad">: Pairs.second (var "nameAd"),
-            "fTerm">: Optionals.fromOptional Core.termUnit (Maps.lookup (var "fname") (var "fieldMap" :: TypedTerm (M.Map Name Term)))] $
+            "fTerm">: Optionals.withDefault Core.termUnit (Maps.lookup (var "fname") (var "fieldMap" :: TypedTerm (M.Map Name Term)))] $
             Eithers.map (lambda "jv" $ pair (localName @@ var "fname") (var "jv"))
               (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "fTerm")] $
           Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
@@ -618,7 +618,7 @@ recordTermCoder = define "recordTermCoder" $
           "decodeField">: lambda "nameAd" $ lets [
             "fname">: Pairs.first (var "nameAd"),
             "ad">: Pairs.second (var "nameAd"),
-            "jv">: Optionals.fromOptional (injectUnit JM._Value JM._Value_null) (Maps.lookup (localName @@ var "fname") (var "mm" :: TypedTerm (M.Map String JM.Value)))] $
+            "jv">: Optionals.withDefault (injectUnit JM._Value JM._Value_null) (Maps.lookup (localName @@ var "fname") (var "mm" :: TypedTerm (M.Map String JM.Value)))] $
             Eithers.map (lambda "t" $ Core.field (var "fname") (var "t"))
               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "jv")] $
           Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "typeName") (var "fields")))
@@ -686,7 +686,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
             Avro._Field_aliases>>: nothing,
             Avro._Field_annotations>>: (Maps.empty :: TypedTerm (M.Map String JM.Value))])
         (var "fieldAdapters"),
-      "typeName">: Optionals.fromOptional (typeToName @@ var "typ") (var "mName"),
+      "typeName">: Optionals.withDefault (typeToName @@ var "typ") (var "mName"),
       "avroAnnotations">: hydraAnnotationsToAvro @@ var "annotations",
       "avroSchema">: inject Avro._Schema Avro._Schema_named (record Avro._Named [
         Avro._Named_name>>: localName @@ var "typeName",

@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -107,10 +108,10 @@ extensionOf = define "extensionOf" $
   doc "The extension of a relative path, or none if the filename has no '.'" $
   "path" ~>
   "segs" <~ Strings.splitOn (string "/") (var "path") $
-  Optionals.cases (Lists.maybeLast (var "segs")) nothing ("fileName" ~>
+  Optionals.cases (Lists.last (var "segs")) nothing ("fileName" ~>
     "dotParts" <~ Strings.splitOn (string ".") (var "fileName") $
-    Logic.ifElse (Equality.gt (Lists.length (var "dotParts")) (int32 1))
-      (Lists.maybeLast (var "dotParts"))
+    Logic.ifElse (Ordering.gt (Lists.length (var "dotParts")) (int32 1))
+      (Lists.last (var "dotParts"))
       nothing)
 
 -- | Whether a relative path lies under at least one of the given prefixes, matched
@@ -139,7 +140,7 @@ keepPathsForModules = define "keepPathsForModules" $
   doc "The keep-set of relative JSON paths (moduleNameToPath(ns) ++ .json) for written modules" $
   "mods" ~>
   Sets.fromList (Lists.map
-    ("m" ~> Strings.cat (list [Generation.moduleNameToPath @@ var "m", string ".json"]))
+    ("m" ~> Strings.concat (list [Generation.moduleNameToPath @@ var "m", string ".json"]))
     (var "mods") :: TypedTerm [String])
 
 -- | Whether a path's extension satisfies the optional extension restriction. A none
@@ -213,6 +214,6 @@ secondLevelDir = define "secondLevelDir" $
   doc "The second-level directory of a '/'-separated path (e.g. hydra/java/coder -> hydra/java), or none" $
   "path" ~>
   "segs" <~ Strings.splitOn (string "/") (var "path") $
-  Logic.ifElse (Equality.gte (Lists.length (var "segs")) (int32 2))
-    (just $ Strings.intercalate (string "/") (Lists.take (int32 2) (var "segs")))
+  Logic.ifElse (Ordering.gte (Lists.length (var "segs")) (int32 2))
+    (just $ Strings.join (string "/") (Lists.take (int32 2) (var "segs")))
     nothing

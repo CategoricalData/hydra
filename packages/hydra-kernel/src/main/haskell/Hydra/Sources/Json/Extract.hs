@@ -114,28 +114,28 @@ expectArray :: TypedTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value, failing if the value is not an array" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON array")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON array")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_array>>: lambda "els" $ right $ var "els"]
 
 expectNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value, failing if the value is not a number" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON number")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON number")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_number>>: lambda "d" $ right $ var "d"]
 
 expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name." $
   lambda "value" $ cases _Value (var "value")
-    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON object")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON object")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_object>>: lambda "m" $ right $ (Maps.fromList (var "m") :: TypedTerm (M.Map String Value))]
 
 expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value, failing if the value is not a string" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON string")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON string")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_string>>: lambda "s" $ right $ var "s"]
 
 opt :: TypedTermDefinition (String -> M.Map String Value -> Maybe Value)
@@ -156,7 +156,7 @@ optString = define "optString" $
 require :: TypedTermDefinition (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
-  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.cat $ list [
+  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.concat $ list [
       string "required attribute ",
       showValue @@ (Json.valueString $ var "fname"),
       string " not found"]) (lambda "value" $ right $ var "value")

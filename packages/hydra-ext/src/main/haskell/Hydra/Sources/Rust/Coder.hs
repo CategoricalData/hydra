@@ -393,9 +393,9 @@ encodeTerm = def "encodeTerm" $
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
-         (right (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")))
+         (right (rustExprPath @@ Strings.concat2 (Strings.concat2 (var "tname") (string "::")) (var "fname")))
          ("sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "fterm") $
-           right (rustCall @@ (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")) @@ list [var "sval"])),
+           right (rustCall @@ (rustExprPath @@ Strings.concat2 (Strings.concat2 (var "tname") (string "::")) (var "fname")) @@ list [var "sval"])),
      _Term_unit>>: constant $
        right (inject R._Expression R._Expression_tuple $ list ([] :: [TypedTerm R.Expression])),
      _Term_variable>>: lambda "name" $
@@ -608,7 +608,7 @@ encodeUnionElim = def "encodeUnionElim" $
                           R._ExprPath_global>>: boolean False,
                           R._ExprPath_segments>>: list [
                             record R._PathSegment [
-                              R._PathSegment_name>>: Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "cfname"),
+                              R._PathSegment_name>>: Strings.concat2 (Strings.concat2 (var "tname") (string "::")) (var "cfname"),
                               R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]],
                       R._TupleStructPattern_elements>>: list [
                         inject R._Pattern R._Pattern_identifier $

@@ -8,6 +8,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Literals               as Literals
@@ -74,8 +75,8 @@ hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
   Logic.or
-    (Optionals.fromOptional false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeHead (var "chars"))))
-    (Optionals.fromOptional false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeLast (var "chars"))))
+    (Optionals.withDefault false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.head (var "chars"))))
+    (Optionals.withDefault false (Optionals.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.last (var "chars"))))
 
 -- | Serialize a YAML node to a string
 hydraYamlToString :: TypedTermDefinition (YM.Node -> String)
@@ -88,10 +89,10 @@ indentString :: TypedTermDefinition (String -> String)
 indentString = define "indentString" $
   doc "Indent all lines of a string by 2 spaces" $
   "s" ~>
-  Strings.cat $ Lists.map
+  Strings.concat $ Lists.map
     ("line" ~> Logic.ifElse (Strings.null $ var "line")
       (string "")
-      (Strings.cat $ list [string "  ", var "line", string "\n"]))
+      (Strings.concat $ list [string "  ", var "line", string "\n"]))
     (Strings.lines $ var "s")
 
 -- | Check if a list of character codes represents a decimal number (digits.digits)
@@ -113,8 +114,8 @@ isDecimalString = define "isDecimalString" $
   Logic.ifElse (Lists.null $ var "after") false $
   -- Both parts must be all digits
   "isDigitFn" <~ ("c" ~> Logic.and
-    (Equality.gte (var "c") (int32 48))
-    (Equality.lte (var "c") (int32 57))) $
+    (Ordering.gte (var "c") (int32 48))
+    (Ordering.lte (var "c") (int32 57))) $
   Logic.and
     (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "before")))
     (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "after")))
@@ -125,7 +126,7 @@ looksLikeNumber = define "looksLikeNumber" $
   doc "Check if a string looks like a number" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
-  Optionals.fromOptional false $ Optionals.map
+  Optionals.withDefault false $ Optionals.map
     (lambda "p" $ lets [
       "firstCh">: Pairs.first (var "p"),
       "tailCh">: Pairs.second (var "p"),
@@ -134,8 +135,8 @@ looksLikeNumber = define "looksLikeNumber" $
         (var "tailCh")
         (var "chars"),
       "isDigitFn">: "c" ~> Logic.and
-        (Equality.gte (var "c") (int32 48))   -- '0'
-        (Equality.lte (var "c") (int32 57)),  -- '9'
+        (Ordering.gte (var "c") (int32 48))   -- '0'
+        (Ordering.lte (var "c") (int32 57)),  -- '9'
       "allDigits">: Logic.and
         (Logic.not (Lists.null (var "rest")))
         (Lists.null (Lists.filter
@@ -154,14 +155,14 @@ needsQuoting = define "needsQuoting" $
   -- Empty string needs quoting
   Logic.ifElse (Strings.null $ var "s") true $
   -- Reserved words need quoting
-  Logic.ifElse (Lists.elem (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
+  Logic.ifElse (Lists.member (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
   -- Looks like a number needs quoting
   Logic.ifElse (looksLikeNumber @@ var "s") true $
   -- Contains special characters needs quoting
   "chars" <~ Strings.toList (var "s") $
   "specials" <~ Strings.toList (var "hydra.yaml.serde.yamlSpecialChars" :: TypedTerm String) $
   "hasSpecial" <~ Logic.not (Lists.null (Lists.filter
-    ("c" ~> Lists.elem (var "c" :: TypedTerm Int) (var "specials"))
+    ("c" ~> Lists.member (var "c" :: TypedTerm Int) (var "specials"))
     (var "chars"))) $
   Logic.ifElse (var "hasSpecial") true $
   -- Leading or trailing space needs quoting
@@ -175,15 +176,15 @@ writeMappingEntry = define "writeMappingEntry" $
   "key" <~ Pairs.first (var "entry") $
   "value" <~ Pairs.second (var "entry") $
   cases YM._Node (var "value") Nothing [
-    YM._Node_scalar>>: "s" ~> Strings.cat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
+    YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ": []\n"])
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ": []\n"])
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
       Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ": {}\n"])
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ": {}\n"])
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a mapping entry for the first item of a sequence element
 writeMappingEntryInline :: TypedTermDefinition ((YM.Node, YM.Node) -> String)
@@ -193,30 +194,30 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
   "key" <~ Pairs.first (var "entry") $
   "value" <~ Pairs.second (var "entry") $
   cases YM._Node (var "value") Nothing [
-    YM._Node_scalar>>: "s" ~> Strings.cat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
+    YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ": []\n"])
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ": []\n"])
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
       Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ": {}\n"])
-        (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ": {}\n"])
+        (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
 -- | Write a YAML node as a top-level value (block style)
 writeNode :: TypedTermDefinition (YM.Node -> String)
 writeNode = define "writeNode" $
   doc "Write a YAML node as a top-level value in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
-    YM._Node_scalar>>: "s" ~> Strings.cat2 (writeScalar @@ var "s") (string "\n"),
+    YM._Node_scalar>>: "s" ~> Strings.concat2 (writeScalar @@ var "s") (string "\n"),
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
         (string "[]\n")
-        (Strings.cat $ Lists.map (lambda "item" $ writeSequenceItem @@ var "item") (var "items")),
+        (Strings.concat $ Lists.map (lambda "item" $ writeSequenceItem @@ var "item") (var "items")),
     YM._Node_mapping>>: "m" ~>
       Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (string "{}\n")
-        (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node))))]
+        (Strings.concat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node))))]
 
 -- | Write a node inline (for use as a mapping key)
 writeNodeInline :: TypedTermDefinition (YM.Node -> String)
@@ -225,19 +226,19 @@ writeNodeInline = define "writeNodeInline" $
   "node" ~> cases YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> writeScalar @@ var "s",
     YM._Node_sequence>>: "items" ~>
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "[",
-        Strings.intercalate (string ", ") (Lists.map (lambda "item" $ writeNodeInline @@ var "item") (var "items")),
+        Strings.join (string ", ") (Lists.map (lambda "item" $ writeNodeInline @@ var "item") (var "items")),
         string "]"],
     YM._Node_mapping>>: "m" ~>
       "writeFlowEntry" <~ ("e" ~>
-        Strings.cat $ list [
+        Strings.concat $ list [
           writeNodeInline @@ (Pairs.first $ var "e"),
           string ": ",
           writeNodeInline @@ (Pairs.second $ var "e")]) $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "{",
-        Strings.intercalate (string ", ") (Lists.map (var "writeFlowEntry") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node)))),
+        Strings.join (string ", ") (Lists.map (var "writeFlowEntry") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node)))),
         string "}"]]
 
 -- | Write a scalar value
@@ -257,22 +258,22 @@ writeSequenceItem :: TypedTermDefinition (YM.Node -> String)
 writeSequenceItem = define "writeSequenceItem" $
   doc "Write a sequence item in block style" $
   "node" ~> cases YM._Node (var "node") Nothing [
-    YM._Node_scalar>>: "s" ~> Strings.cat $ list [string "- ", writeScalar @@ var "s", string "\n"],
+    YM._Node_scalar>>: "s" ~> Strings.concat $ list [string "- ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
         (string "- []\n")
-        (Strings.cat2 (string "-\n") (indentString @@ (writeNode @@ var "node"))),
+        (Strings.concat2 (string "-\n") (indentString @@ (writeNode @@ var "node"))),
     YM._Node_mapping>>: "m" ~>
       Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (string "- {}\n")
         ("entries" <~ Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node)) $
-         Optionals.fromOptional (string "") $ Optionals.map
+         Optionals.withDefault (string "") $ Optionals.map
            (lambda "p" $ lets [
              "firstEntry">: Pairs.first (var "p"),
              "restEntries">: Pairs.second (var "p"),
              "firstStr">: writeMappingEntryInline @@ var "firstEntry",
-             "restStr">: Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (var "restEntries")] $
-             Strings.cat $ list [string "- ", var "firstStr", indentString @@ var "restStr"])
+             "restStr">: Strings.concat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (var "restEntries")] $
+             Strings.concat $ list [string "- ", var "firstStr", indentString @@ var "restStr"])
            (Lists.uncons (var "entries")))]
 
 -- | Write a string value, quoting if necessary
@@ -281,7 +282,7 @@ writeString = define "writeString" $
   doc "Write a string value, quoting if necessary" $
   "s" ~>
   Logic.ifElse (needsQuoting @@ var "s")
-    (Strings.cat $ list [string "'", escapeSingleQuotes @@ var "s", string "'"])
+    (Strings.concat $ list [string "'", escapeSingleQuotes @@ var "s", string "'"])
     (var "s")
 
 -- | YAML reserved words that need quoting

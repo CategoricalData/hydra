@@ -22,6 +22,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -354,11 +355,11 @@ importToExpr = haskellSerdeDefinition "importToExpr" $
             (Serialization.cst @@ (string "hiding "))
             (list [Serialization.parens @@
               (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm namedImportExportToExpr) (var "names")))]))],
-    "parts">: Optionals.cat $ list [
+    "parts">: Optionals.givens $ list [
       just $ Serialization.cst @@ (string "import"),
       Logic.ifElse (var "qual") (just $ Serialization.cst @@ (string "qualified")) nothing,
       just $ Serialization.cst @@ var "name",
-      Optionals.map (lambda "m" $ Serialization.cst @@ (Strings.cat2 (string "as ") (unwrap H._ModuleName @@ var "m"))) (var "mod"),
+      Optionals.map (lambda "m" $ Serialization.cst @@ (Strings.concat2 (string "as ") (unwrap H._ModuleName @@ var "m"))) (var "mod"),
       Optionals.map (var "hidingSec") (var "mspec")]] $
     Serialization.spaceSep @@ var "parts"
 
@@ -378,23 +379,23 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
 --literalToExpr = haskellSerdeDefinition "literalToExpr" $
 --  "lit" ~>
 --  "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
---    (Strings.cat $ list ["(", var "e", ")"])
+--    (Strings.concat $ list ["(", var "e", ")"])
 --    (var "e")) $
 --  Serialization.cst @@
 --    cases H._Literal (var "lit") Nothing [
---      H._Literal_char>>: lambda "c" $ Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
+--      H._Literal_char>>: lambda "c" $ Literals.printString $ Literals.showUint16 $ var "c", -- Simplified char handling
 --      H._Literal_double>>: "d" ~> var "parensIfNeg"
---        @@ (Equality.lt (var "d") (float64 0.0))
+--        @@ (Ordering.lt (var "d") (float64 0.0))
 --        @@ (Literals.showFloat64 $ var "d"),
 --      H._Literal_float>>: "f" ~> var "parensIfNeg"
---        @@ (Equality.lt (var "f") (float32 0.0))
+--        @@ (Ordering.lt (var "f") (float32 0.0))
 --        @@ (Literals.showFloat32 $ var "f"),
 --      H._Literal_int>>: "i" ~> var "parensIfNeg"
---        @@ (Equality.lt (var "i") (int32 0))
+--        @@ (Ordering.lt (var "i") (int32 0))
 --        @@ (Literals.showInt32 $ var "i"),
 --
 --      H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
---      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
+--      H._Literal_string>>: lambda "s" $ Literals.printString $ var "s"]
 
 -- KNOWN LIMITATION: when generating Haskell source from Double/Float values,
 -- NaN and Infinity come through as "NaN"/"Infinity"/"-Infinity" (from Haskell's Show),
@@ -409,7 +410,7 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
   doc "Convert a literal value to an AST expression" $
   "lit" ~>
   "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
-    (Strings.cat $ list [string "(", var "e", string ")"])
+    (Strings.concat $ list [string "(", var "e", string ")"])
     (var "e")) $
   "showFloat" <~ ("showFn" ~> "v" ~>
     "raw" <~ (var "showFn" @@ var "v") $
@@ -420,11 +421,11 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
     Logic.ifElse (Equality.equal (var "raw") (string "-Infinity"))
       (string "(-(1/0))") $
     var "parensIfNeg"
-      @@ Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (int32 0) (var "raw"))) (int32 45)
+      @@ Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "raw"))) (int32 45)
       @@ var "raw") $
   Serialization.cst @@
     cases H._Literal (var "lit") Nothing [
-      H._Literal_char>>: "c" ~> Literals.showString $ Literals.showUint16 $ var "c",
+      H._Literal_char>>: "c" ~> Literals.printString $ Literals.showUint16 $ var "c",
       H._Literal_double>>: "d" ~> var "showFloat"
         @@ (lambda "v" $ Literals.showFloat64 $ var "v")
         @@ var "d",
@@ -432,12 +433,12 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
         @@ (lambda "v" $ Literals.showFloat32 $ var "v")
         @@ var "f",
       H._Literal_int>>: "i" ~> var "parensIfNeg"
-        @@ (Equality.lt (var "i") (int32 0))
+        @@ (Ordering.lt (var "i") (int32 0))
         @@ (Literals.showInt32 $ var "i"),
       H._Literal_integer>>: "i" ~> var "parensIfNeg"
-        @@ (Equality.lt (var "i") (bigint 0))
+        @@ (Ordering.lt (var "i") (bigint 0))
         @@ (Literals.showBigint $ var "i"),
-      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
+      H._Literal_string>>: lambda "s" $ Literals.printString $ var "s"]
 
 localBindingToExpr :: TypedTermDefinition (H.LocalBinding -> Expr)
 localBindingToExpr = haskellSerdeDefinition "localBindingToExpr" $
@@ -484,7 +485,7 @@ nameToExpr = haskellSerdeDefinition "nameToExpr" $
   lambda "name" $
     Serialization.cst @@
       cases H._Name (var "name") Nothing [
-        H._Name_implicit>>: lambda "qn" $ Strings.cat2 (string "?") (writeQualifiedName @@ var "qn"),
+        H._Name_implicit>>: lambda "qn" $ Strings.concat2 (string "?") (writeQualifiedName @@ var "qn"),
         H._Name_normal>>: lambda "qn" $ writeQualifiedName @@ var "qn"]
 
 namedImportExportToExpr :: TypedTermDefinition (H.NamedImportExport -> Expr)
@@ -557,8 +558,8 @@ haddockEntityRef = haskellSerdeDefinition "haddockEntityRef" $
   doc "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax" $
   match _EntityReference_haskell Nothing [
     _EntityReference_definition_haskell>>: lambda "d" $
-      Strings.cat2 (string "'")
-        (Strings.cat2
+      Strings.concat2 (string "'")
+        (Strings.concat2
           (match _DefinitionReference_haskell Nothing [
             _DefinitionReference_primitive_haskell>>: lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_term_haskell>>:      lambda "n" $ Names.localNameOf @@ var "n",
@@ -567,8 +568,8 @@ haddockEntityRef = haskellSerdeDefinition "haddockEntityRef" $
           (string "'")),
     _EntityReference_module_haskell>>:    lambda "m" $ unwrap _ModuleName @@ var "m",
     _EntityReference_package_haskell>>:   lambda "p" $ unwrap _PackageName @@ var "p",
-    _EntityReference_term_expr_haskell>>: lambda "s" $ Strings.cat2 (string "@") (Strings.cat2 (var "s") (string "@")),
-    _EntityReference_type_expr_haskell>>: lambda "s" $ Strings.cat2 (string "@") (Strings.cat2 (var "s") (string "@"))]
+    _EntityReference_term_expr_haskell>>: lambda "s" $ Strings.concat2 (string "@") (Strings.concat2 (var "s") (string "@")),
+    _EntityReference_type_expr_haskell>>: lambda "s" $ Strings.concat2 (string "@") (Strings.concat2 (var "s") (string "@"))]
 
 toHaskellComments :: TypedTermDefinition (String -> String)
 toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
@@ -576,20 +577,20 @@ toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
     <> " emit `-- |` (no trailing space) so blank doc lines don't carry trailing"
     <> " whitespace into the generated file."
     <> " Doc-escape tags are rendered as Haddock links via haddockEntityRef.") $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+  lambda "c" $ Strings.join (string "\n") $ Lists.map
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "-- |")
-      (Strings.cat2 (string "-- | ") (var "s")))
+      (Strings.concat2 (string "-- | ") (var "s")))
     (Strings.lines $ PrintDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c")
 
 toSimpleComments :: TypedTermDefinition (String -> String)
 toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
   doc ("Convert a string to simple line comments. Empty source lines emit"
     <> " `--` (no trailing space) for the same reason as toHaskellComments.") $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+  lambda "c" $ Strings.join (string "\n") $ Lists.map
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "--")
-      (Strings.cat2 (string "-- ") (var "s")))
+      (Strings.concat2 (string "-- ") (var "s")))
     (Strings.lines $ var "c")
 
 typeSignatureToExpr :: TypedTermDefinition (H.TypeSignature -> Expr)
@@ -665,4 +666,4 @@ writeQualifiedName = haskellSerdeDefinition "writeQualifiedName" $
     "unqual">: project H._QualifiedName H._QualifiedName_unqualified @@ var "qname",
     "h">: lambda "namePart" $ unwrap H._NamePart @@ var "namePart",
     "allParts">: Lists.concat2 (Lists.map (var "h") (var "qualifiers")) (list [var "h" @@ var "unqual"])] $
-    Strings.intercalate (string ".") $ var "allParts"
+    Strings.join (string ".") $ var "allParts"

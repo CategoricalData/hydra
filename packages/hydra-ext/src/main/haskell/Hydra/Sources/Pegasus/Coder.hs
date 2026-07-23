@@ -23,6 +23,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -127,14 +128,14 @@ constructModule = def "constructModule" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDefs" ~>
     "groups" <~ (Dependencies.topologicalSortTypeDefinitions @@ var "typeDefs") $
     -- Check for cycles: if any group has more than one element, it's a cycle
-    Optionals.cases (Lists.find (lambda "grp" $ Equality.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
+    Optionals.cases (Lists.find (lambda "grp" $ Ordering.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
       -- No cycle found: flatten and process
       ("sortedDefs" <~ Lists.concat (var "groups") $
        "schemas" <<~ (Eithers.mapList (lambda "typeDef" $ typeToSchema @@ var "cx" @@ var "g" @@ var "aliases" @@ var "mod" @@ var "typeDef") (var "sortedDefs")) $
        right (Maps.fromList (Lists.map (toPair @@ var "mod" @@ var "aliases") (var "schemas"))))
       -- Cycle found
       (lambda "cycle" $
-        err (var "cx") (Strings.cat2 (string "types form a cycle (unsupported in PDL): [") (Strings.cat2 (Strings.intercalate (string ", ") (Lists.map (lambda "td" $ Core.unName (Packaging.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
+        err (var "cx") (Strings.concat2 (string "types form a cycle (unsupported in PDL): [") (Strings.concat2 (Strings.join (string ", ") (Lists.map (lambda "td" $ Core.unName (Packaging.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
 
 def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
@@ -156,7 +157,7 @@ encode = def "encode" $
             "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
             Eithers.either
               (lambda "schema" $ right (var "schema"))
-              (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
+              (lambda "_" $ err (var "cx") (Strings.concat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
               (var "res")) [
           -- special case for the unit type
           _Type_record>>: lambda "rt" $
@@ -165,7 +166,7 @@ encode = def "encode" $
               ("res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
                Eithers.either
                  (lambda "schema" $ right (var "schema"))
-                 (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
+                 (lambda "_" $ err (var "cx") (Strings.concat2 (string "type resolved to an unsupported nested named schema: ") (PrintCore.type_ @@ var "t")))
                  (var "res"))]
 
 encodeEnumField :: TypedTermDefinition (InferenceContext -> Graph -> FieldType -> Either Error PDL.EnumField)
@@ -432,7 +433,7 @@ simpleUnionMember = def "simpleUnionMember" $
 slashesToDots :: TypedTermDefinition (String -> String)
 slashesToDots = def "slashesToDots" $
   doc "Replace all forward slashes with dots in a string" $
-  "s" ~> Strings.intercalate (string ".") (Strings.splitOn (string "/") (var "s"))
+  "s" ~> Strings.join (string ".") (Strings.splitOn (string "/") (var "s"))
 
 toPair :: TypedTermDefinition (Module -> M.Map ModuleName String -> (PDL.NamedSchema, [PDL.QualifiedName]) -> (FilePath, PDL.SchemaFile))
 toPair = def "toPair" $
@@ -442,7 +443,7 @@ toPair = def "toPair" $
     "imports" <~ Pairs.second (var "schemaPair") $
     "ns_" <~ (pdlNameForModule @@ var "mod") $
     "local" <~ (unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ (project PDL._NamedSchema PDL._NamedSchema_qualifiedName @@ var "schema"))) $
-    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ Packaging.moduleName (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
+    "path" <~ (Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _ModuleName (Strings.concat2 (unwrap _ModuleName @@ Packaging.moduleName (var "mod")) (Strings.concat2 (string "/") (var "local"))))) $
     pair (var "path") (record PDL._SchemaFile [
       PDL._SchemaFile_namespace>>: var "ns_",
       PDL._SchemaFile_package>>: nothing,
@@ -470,5 +471,5 @@ typeToSchema = def "typeToSchema" $
 
 -- | unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
 unexpectedE :: TypedTerm InferenceContext -> TypedTerm String -> TypedTerm String -> TypedTerm (Either Error a)
-unexpectedE cx expected found = err cx (Strings.cat2 (string "Expected ") (Strings.cat2 expected (Strings.cat2 (string ", found: ") found)))
+unexpectedE cx expected found = err cx (Strings.concat2 (string "Expected ") (Strings.concat2 expected (Strings.concat2 (string ", found: ") found)))
 

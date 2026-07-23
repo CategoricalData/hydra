@@ -63,19 +63,19 @@ fixtureMap = Routing.buildRoutingMap @@ fixturePkgs
 
 -- | Show a routing map as a sorted association-list string, for stable test comparison.
 showRoutingMap :: TypedTerm (M.Map ModuleName String) -> TypedTerm String
-showRoutingMap rm = PrintCore.list_ @@ showEntry @@ (Lists.sortOn showEntryKey (Maps.toList rm))
+showRoutingMap rm = PrintCore.list_ @@ showEntry @@ (Lists.sortBy showEntryKey (Maps.toList rm))
   where
     showEntry :: TypedTerm ((ModuleName, String) -> String)
-    showEntry = lambda "e" (Strings.cat2
-      (Strings.cat2 (Packaging.unModuleName (Pairs.first (var "e"))) (string " -> "))
+    showEntry = lambda "e" (Strings.concat2
+      (Strings.concat2 (Packaging.unModuleName (Pairs.first (var "e"))) (string " -> "))
       (Pairs.second (var "e")))
     showEntryKey :: TypedTerm ((ModuleName, String) -> String)
     showEntryKey = lambda "e" (Packaging.unModuleName (Pairs.first (var "e")))
 
 showEither :: TypedTerm (Either Error String) -> TypedTerm String
 showEither = Eithers.either
-  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (PrintError.error_ @@ var "e") (string ")"))))
-  (lambda "s" (Strings.cat2 (string "right(") (Strings.cat2 (var "s") (string ")"))))
+  (lambda "e" (Strings.concat2 (string "left(") (Strings.concat2 (PrintError.error_ @@ var "e") (string ")"))))
+  (lambda "s" (Strings.concat2 (string "right(") (Strings.concat2 (var "s") (string ")"))))
 
 buildRoutingMapGroup :: TypedTerm TestGroup
 buildRoutingMapGroup = subgroup "buildRoutingMap" [
@@ -123,15 +123,15 @@ testMod s = Packaging.module_ (mn s) nothing (list ([] :: [TypedTerm ModuleDepen
 
 showGroups :: TypedTerm (Either Error [(String, [Module])]) -> TypedTerm String
 showGroups = Eithers.either
-  (lambda "e" (Strings.cat2 (string "left(") (Strings.cat2 (PrintError.error_ @@ var "e") (string ")"))))
-  (lambda "groups" (Strings.cat2 (string "right(") (Strings.cat2
+  (lambda "e" (Strings.concat2 (string "left(") (Strings.concat2 (PrintError.error_ @@ var "e") (string ")"))))
+  (lambda "groups" (Strings.concat2 (string "right(") (Strings.concat2
     (PrintCore.list_ @@ showGroup @@ var "groups")
     (string ")"))))
   where
     showGroup :: TypedTerm ((String, [Module]) -> String)
-    showGroup = lambda "g" (Strings.cat2
-      (Strings.cat2 (Pairs.first (var "g")) (string ": "))
-      (PrintCore.list_ @@ showModName @@ (Lists.sortOn showModName (Pairs.second (var "g")))))
+    showGroup = lambda "g" (Strings.concat2
+      (Strings.concat2 (Pairs.first (var "g")) (string ": "))
+      (PrintCore.list_ @@ showModName @@ (Lists.sortBy showModName (Pairs.second (var "g")))))
     showModName :: TypedTerm (Module -> String)
     showModName = lambda "m" (Packaging.unModuleName (Packaging.moduleName (var "m")))
 

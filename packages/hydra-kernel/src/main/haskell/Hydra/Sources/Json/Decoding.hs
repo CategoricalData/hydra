@@ -126,7 +126,7 @@ decodeField  = define "Field" $
       (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
       (lambda "mf" $ primitive DefOptionals.cases
         @@ var "mf"
-        @@ (left $ Strings.cat2 (string "missing field: ") (var "name"))
+        @@ (left $ Strings.concat2 (string "missing field: ") (var "name"))
         @@ (lambda "f" $ right $ var "f"))
 
 decodeNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)

@@ -364,7 +364,7 @@ captureToExpr = define "captureToExpr" $
     "name">: project Cpp._Capture Cpp._Capture_name @@ var "cap",
     "byRef">: project Cpp._Capture Cpp._Capture_byReference @@ var "cap"] $
     Logic.ifElse (var "byRef")
-      (Serialization.cst @@ (Strings.cat2 (string "&") (var "name")))
+      (Serialization.cst @@ (Strings.concat2 (string "&") (var "name")))
       (Serialization.cst @@ var "name")
 
 caseStatementToExpr :: TypedTermDefinition (Cpp.CaseStatement -> Expr)
@@ -406,7 +406,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "isEnum">: Logic.or
       (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enum unit))
       (Equality.equal (var "key") (inject Cpp._ClassKey Cpp._ClassKey_enumClass unit))] $
-    Serialization.withSemi @@ (Serialization.spaceSep @@ (Optionals.cat $ list [
+    Serialization.withSemi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
       just (classSpecifierToExpr @@ var "spec"),
       Optionals.map (lambda "body" $ classBodyToExpr @@ var "isEnum" @@ var "body") (var "mbody")]))
 
@@ -476,7 +476,7 @@ constructorDeclarationToExpr = define "constructorDeclarationToExpr" $
     "params">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_parameters @@ var "cd",
     "inits">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_initializers @@ var "cd",
     "body">: project Cpp._ConstructorDeclaration Cpp._ConstructorDeclaration_body @@ var "cd"] $
-    Serialization.spaceSep @@ (Optionals.cat $ list [
+    Serialization.spaceSep @@ (Optionals.givens $ list [
       just (Serialization.noSep @@ list [
         Serialization.cst @@ var "name",
         Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))]),
@@ -523,7 +523,7 @@ destructorDeclarationToExpr = define "destructorDeclarationToExpr" $
     Serialization.spaceSep @@ (Lists.concat $ list [
       Lists.map (asTerm functionSpecifierPrefixToExpr) (var "prefixSpecs"),
       list [Serialization.noSep @@ list [
-        Serialization.cst @@ (Strings.cat2 (string "~") (var "name")),
+        Serialization.cst @@ (Strings.concat2 (string "~") (var "name")),
         Serialization.parens @@ (Serialization.cst @@ string "")]],
       Lists.map (asTerm functionSpecifierSuffixToExpr) (var "suffixSpecs"),
       list [functionBodyToExpr @@ var "body"]])
@@ -795,8 +795,8 @@ includeDirectiveToExpr = define "includeDirectiveToExpr" $
     "name">: project Cpp._IncludeDirective Cpp._IncludeDirective_name @@ var "incl",
     "isSystem">: project Cpp._IncludeDirective Cpp._IncludeDirective_isSystem @@ var "incl"] $
     Logic.ifElse (var "isSystem")
-      (Serialization.cst @@ (Strings.cat $ list [string "#include <", var "name", string ">"]))
-      (Serialization.cst @@ (Strings.cat $ list [string "#include \"", var "name", string "\""]))
+      (Serialization.cst @@ (Strings.concat $ list [string "#include <", var "name", string ">"]))
+      (Serialization.cst @@ (Strings.concat $ list [string "#include \"", var "name", string "\""]))
 
 inclusiveOrExpressionToExpr :: TypedTermDefinition (Cpp.InclusiveOrExpression -> Expr)
 inclusiveOrExpressionToExpr = define "inclusiveOrExpressionToExpr" $
@@ -812,9 +812,9 @@ integerLiteralToExpr = define "integerLiteralToExpr" $
   lambda "i" $
     cases Cpp._IntegerLiteral (var "i") Nothing [
       Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.showBigint (var "n")),
-      Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.cat2 (string "0x") (var "h")),
-      Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.cat2 (string "0") (var "o")),
-      Cpp._IntegerLiteral_binary>>: lambda "b" $ Serialization.cst @@ (Strings.cat2 (string "0b") (var "b"))]
+      Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.concat2 (string "0x") (var "h")),
+      Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.concat2 (string "0") (var "o")),
+      Cpp._IntegerLiteral_binary>>: lambda "b" $ Serialization.cst @@ (Strings.concat2 (string "0b") (var "b"))]
 
 iterationStatementToExpr :: TypedTermDefinition (Cpp.IterationStatement -> Expr)
 iterationStatementToExpr = define "iterationStatementToExpr" $
@@ -846,7 +846,7 @@ labeledStatementToExpr = define "labeledStatementToExpr" $
     "label">: project Cpp._LabeledStatement Cpp._LabeledStatement_label @@ var "ls",
     "stmt">: project Cpp._LabeledStatement Cpp._LabeledStatement_statement @@ var "ls"] $
     Serialization.newlineSep @@ list [
-      Serialization.cst @@ (Strings.cat2 (var "label") (string ":")),
+      Serialization.cst @@ (Strings.concat2 (var "label") (string ":")),
       statementToExpr @@ var "stmt"]
 
 lambdaExpressionToExpr :: TypedTermDefinition (Cpp.LambdaExpression -> Expr)
@@ -906,7 +906,7 @@ lineDirectiveToExpr = define "lineDirectiveToExpr" $
     "filename">: project Cpp._LineDirective Cpp._LineDirective_filename @@ var "ld"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.showInt32 (var "lineNumber"))],
-      Optionals.cases (var "filename") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.cst @@ (Strings.cat $ list [string "\"", var "f", string "\""])])])
+      Optionals.cases (var "filename") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.cst @@ (Strings.concat $ list [string "\"", var "f", string "\""])])])
 
 literalToExpr :: TypedTermDefinition (Cpp.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
@@ -916,9 +916,9 @@ literalToExpr = define "literalToExpr" $
       Cpp._Literal_integer>>: lambda "i" $ integerLiteralToExpr @@ var "i",
       Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (unwrap Cpp._FloatingLiteral @@ var "f")),
       Cpp._Literal_character>>: lambda "c" $
-        Serialization.cst @@ (Strings.cat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
+        Serialization.cst @@ (Strings.concat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
       Cpp._Literal_string>>: lambda "s" $
-        Serialization.cst @@ (Strings.cat $ list [string "\"", unwrap Cpp._StringLiteral @@ var "s", string "\""]),
+        Serialization.cst @@ (Strings.concat $ list [string "\"", unwrap Cpp._StringLiteral @@ var "s", string "\""]),
       Cpp._Literal_boolean>>: lambda "b" $ booleanLiteralToExpr @@ var "b",
       Cpp._Literal_null>>: constant $ Serialization.cst @@ string "nullptr"]
 
@@ -1067,7 +1067,7 @@ namespaceDeclarationToExpr = define "namespaceDeclarationToExpr" $
     "name">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_name @@ var "nd",
     "decls">: project Cpp._NamespaceDeclaration Cpp._NamespaceDeclaration_declarations @@ var "nd"] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ (Strings.cat2 (string "namespace ") (var "name")),
+      Serialization.cst @@ (Strings.concat2 (string "namespace ") (var "name")),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
         (Serialization.doubleNewlineSep @@ (Lists.map (asTerm declarationToExpr) (var "decls")))]
 
@@ -1112,7 +1112,7 @@ parameterToExpr = define "parameterToExpr" $
     "unnamed">: project Cpp._Parameter Cpp._Parameter_unnamed @@ var "p",
     "defaultVal">: project Cpp._Parameter Cpp._Parameter_defaultValue @@ var "p",
     "nameExpr">: Serialization.cst @@ (Logic.ifElse (var "unnamed")
-      (Strings.cat $ list [string "/*", var "name", string "*/"])
+      (Strings.concat $ list [string "/*", var "name", string "*/"])
       (var "name"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [typeExpressionToExpr @@ var "typ", var "nameExpr"],
@@ -1161,7 +1161,7 @@ pragmaDirectiveToExpr :: TypedTermDefinition (Cpp.PragmaDirective -> Expr)
 pragmaDirectiveToExpr = define "pragmaDirectiveToExpr" $
   doc "Convert a pragma directive to an expression" $
   lambda "pd" $
-    Serialization.cst @@ (Strings.cat2 (string "#pragma ") (project Cpp._PragmaDirective Cpp._PragmaDirective_content @@ var "pd"))
+    Serialization.cst @@ (Strings.concat2 (string "#pragma ") (project Cpp._PragmaDirective Cpp._PragmaDirective_content @@ var "pd"))
 
 preprocessorDirectiveToExpr :: TypedTermDefinition (Cpp.PreprocessorDirective -> Expr)
 preprocessorDirectiveToExpr = define "preprocessorDirectiveToExpr" $
@@ -1203,7 +1203,7 @@ programToExpr = define "programToExpr" $
       Logic.ifElse (Lists.null (var "defs"))
         nothing
         (just (var "sep" @@ var "defs"))] $
-    Serialization.doubleNewlineSep @@ (Optionals.cat $ list [
+    Serialization.doubleNewlineSep @@ (Optionals.givens $ list [
       var "separate" @@ Serialization.newlineSep @@ (Lists.map (asTerm preprocessorDirectiveToExpr) (var "preps")),
       var "separate" @@ Serialization.newlineSep @@ (Lists.map (asTerm includeDirectiveToExpr) (var "includes")),
       var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map (asTerm declarationToExpr) (var "decls"))])
@@ -1214,7 +1214,7 @@ qualifiedIdentifierToExpr = define "qualifiedIdentifierToExpr" $
   lambda "qi" $ lets [
     "ns">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_namespace @@ var "qi",
     "name">: project Cpp._QualifiedIdentifier Cpp._QualifiedIdentifier_name @@ var "qi"] $
-    Serialization.cst @@ (Strings.cat $ list [var "ns", string "::", var "name"])
+    Serialization.cst @@ (Strings.concat $ list [var "ns", string "::", var "name"])
 
 qualifiedTypeToExpr :: TypedTermDefinition (Cpp.QualifiedType -> Expr)
 qualifiedTypeToExpr = define "qualifiedTypeToExpr" $
@@ -1429,10 +1429,10 @@ toCppCommentsToExpr = define "toCppComments" $
     <> " (no trailing space).") $
   lambda "s" $ lambda "isMultiline" $
     Logic.ifElse (var "isMultiline")
-      (Strings.cat $ list [string "/* ", var "s", string " */"])
+      (Strings.concat $ list [string "/* ", var "s", string " */"])
       (Logic.ifElse (Equality.equal (var "s") (string ""))
         (string "//")
-        (Strings.cat2 (string "// ") (var "s")))
+        (Strings.concat2 (string "// ") (var "s")))
 
 typeExpressionToExpr :: TypedTermDefinition (Cpp.TypeExpression -> Expr)
 typeExpressionToExpr = define "typeExpressionToExpr" $
@@ -1454,7 +1454,7 @@ typedefDeclarationToExpr = define "typedefDeclarationToExpr" $
     "isUsing">: project Cpp._TypedefDeclaration Cpp._TypedefDeclaration_isUsing @@ var "td"] $
     Logic.ifElse (var "isUsing")
       (Serialization.withSemi @@ (Serialization.spaceSep @@ list [
-        Serialization.cst @@ (Strings.cat2 (string "using ") (var "name")),
+        Serialization.cst @@ (Strings.concat2 (string "using ") (var "name")),
         Serialization.cst @@ string "=",
         typeExpressionToExpr @@ var "typ"]))
       (Serialization.withSemi @@ (Serialization.spaceSep @@ list [

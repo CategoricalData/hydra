@@ -160,7 +160,7 @@ commentToExpr = define "commentToExpr" $
     "text">: project L._Comment L._Comment_text @@ var "c"] $
     Serialization.cst @@ Logic.ifElse (Equality.equal (var "text") (string ""))
       (string ";")
-      (Strings.cat2 (string "; ") (var "text"))
+      (Strings.concat2 (string "; ") (var "text"))
 
 -- | Serialize a cond expression
 condExpressionToExpr :: TypedTermDefinition (L.Dialect -> L.CondExpression -> Expr)
@@ -276,7 +276,7 @@ docstringToExpr = define "docstringToExpr" $
     "text">: unwrap L._Docstring @@ var "ds"] $
     Serialization.cst @@ Logic.ifElse (Equality.equal (var "text") (string ""))
       (string ";;")
-      (Strings.cat (list [string ";; ", var "text"]))
+      (Strings.concat (list [string ";; ", var "text"]))
 
 -- | Serialize an export declaration
 exportDeclarationToExpr :: TypedTermDefinition (L.Dialect -> L.ExportDeclaration -> Expr)
@@ -530,7 +530,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
       L._Dialect_commonLisp>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ string ":use",
-          Serialization.cst @@ Strings.cat2 (string ":") (var "modName")]),
+          Serialization.cst @@ Strings.concat2 (string ":") (var "modName")]),
       -- (import (name))
       L._Dialect_scheme>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
@@ -546,7 +546,7 @@ keywordToExpr = define "keywordToExpr" $
     "ns">: project L._Keyword L._Keyword_namespace @@ var "k"] $
     cases L._Dialect (var "d") (Just $
       -- Default: :name or ns/:name
-      Serialization.cst @@ Optionals.cases (var "ns") (Strings.cat2 (string ":") (var "name")) (lambda "n" $ Strings.cat (list [var "n", string "/:", var "name"]))) [
+      Serialization.cst @@ Optionals.cases (var "ns") (Strings.concat2 (string ":") (var "name")) (lambda "n" $ Strings.concat (list [var "n", string "/:", var "name"]))) [
       -- Scheme: 'name (quoted symbol, since Scheme has no keywords)
       L._Dialect_scheme>>: constant $
         Serialization.noSep @@ list [
@@ -730,37 +730,37 @@ literalToExpr = define "literalToExpr" $
         -- Escape backslashes first, then control characters and double-quotes.
         -- Common Lisp does not support \n, \t, \r escape sequences in strings,
         -- so for CL we embed the literal characters directly (multi-line strings are valid).
-        "e1" <~ Strings.intercalate (string "\\\\") (Strings.splitOn (string "\\") (var "s")) $
+        "e1" <~ Strings.join (string "\\\\") (Strings.splitOn (string "\\") (var "s")) $
         cases L._Dialect (var "d") Nothing [
           L._Dialect_commonLisp>>: constant $
             -- CL only: escape double-quotes; leave control characters as literal bytes
-            "escaped" <~ Strings.intercalate (string "\\\"") (Strings.splitOn (string "\"") (var "e1")) $
-            Serialization.cst @@ (Strings.cat (list [string "\"", var "escaped", string "\""])),
+            "escaped" <~ Strings.join (string "\\\"") (Strings.splitOn (string "\"") (var "e1")) $
+            Serialization.cst @@ (Strings.concat (list [string "\"", var "escaped", string "\""])),
           L._Dialect_clojure>>: constant $
-            "e2" <~ Strings.intercalate (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
-            "e3" <~ Strings.intercalate (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
-            "e4" <~ Strings.intercalate (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
-            "escaped" <~ Strings.intercalate (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
-            Serialization.cst @@ (Strings.cat (list [string "\"", var "escaped", string "\""])),
+            "e2" <~ Strings.join (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
+            "e3" <~ Strings.join (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
+            "e4" <~ Strings.join (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
+            "escaped" <~ Strings.join (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
+            Serialization.cst @@ (Strings.concat (list [string "\"", var "escaped", string "\""])),
           L._Dialect_emacsLisp>>: constant $
-            "e2" <~ Strings.intercalate (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
-            "e3" <~ Strings.intercalate (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
-            "e4" <~ Strings.intercalate (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
-            "escaped" <~ Strings.intercalate (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
-            Serialization.cst @@ (Strings.cat (list [string "\"", var "escaped", string "\""])),
+            "e2" <~ Strings.join (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
+            "e3" <~ Strings.join (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
+            "e4" <~ Strings.join (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
+            "escaped" <~ Strings.join (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
+            Serialization.cst @@ (Strings.concat (list [string "\"", var "escaped", string "\""])),
           L._Dialect_scheme>>: constant $
-            "e2" <~ Strings.intercalate (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
-            "e3" <~ Strings.intercalate (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
-            "e4" <~ Strings.intercalate (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
-            "escaped" <~ Strings.intercalate (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
-            Serialization.cst @@ (Strings.cat (list [string "\"", var "escaped", string "\""]))],
+            "e2" <~ Strings.join (string "\\n") (Strings.splitOn (Strings.fromList (list [int32 10])) (var "e1")) $
+            "e3" <~ Strings.join (string "\\r") (Strings.splitOn (Strings.fromList (list [int32 13])) (var "e2")) $
+            "e4" <~ Strings.join (string "\\t") (Strings.splitOn (Strings.fromList (list [int32 9])) (var "e3")) $
+            "escaped" <~ Strings.join (string "\\\"") (Strings.splitOn (string "\"") (var "e4")) $
+            Serialization.cst @@ (Strings.concat (list [string "\"", var "escaped", string "\""]))],
       L._Literal_character>>: lambda "c" $ lets [
         "ch">: project L._CharacterLiteral L._CharacterLiteral_value @@ var "c"] $
         cases L._Dialect (var "d") Nothing [
-          L._Dialect_clojure>>: constant $ Serialization.cst @@ Strings.cat2 (string "\\") (var "ch"),
-          L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ Strings.cat2 (string "?") (var "ch"),
-          L._Dialect_commonLisp>>: constant $ Serialization.cst @@ Strings.cat2 (string "#\\") (var "ch"),
-          L._Dialect_scheme>>: constant $ Serialization.cst @@ Strings.cat2 (string "#\\") (var "ch")],
+          L._Dialect_clojure>>: constant $ Serialization.cst @@ Strings.concat2 (string "\\") (var "ch"),
+          L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ Strings.concat2 (string "?") (var "ch"),
+          L._Dialect_commonLisp>>: constant $ Serialization.cst @@ Strings.concat2 (string "#\\") (var "ch"),
+          L._Dialect_scheme>>: constant $ Serialization.cst @@ Strings.concat2 (string "#\\") (var "ch")],
       L._Literal_boolean>>: lambda "b" $
         Logic.ifElse (var "b") (trueExpr @@ var "d") (falseExpr @@ var "d"),
       L._Literal_nil>>: constant $ nilExpr @@ var "d",
@@ -870,10 +870,10 @@ moduleDeclarationToExpr = define "moduleDeclarationToExpr" $
         Serialization.newlineSep @@ list [
           Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "defpackage",
-            Serialization.cst @@ Strings.cat2 (string ":") (var "name")]),
+            Serialization.cst @@ Strings.concat2 (string ":") (var "name")]),
           Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ string "in-package",
-            Serialization.cst @@ Strings.cat2 (string ":") (var "name")])],
+            Serialization.cst @@ Strings.concat2 (string ":") (var "name")])],
       -- (define-library (name))
       L._Dialect_scheme>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
@@ -932,10 +932,10 @@ programToExpr = define "programToExpr" $
     -- the JSON value ("wrong-type-argument (listp :string)"). The cookie must be the first line, so
     -- it precedes the generated-file warning.
     "warning">: cases L._Dialect (var "d")
-      (Just (list [Serialization.cst @@ (Strings.cat2 (string "; ") (asTerm Constants.warningAutoGeneratedFile))]))
+      (Just (list [Serialization.cst @@ (Strings.concat2 (string "; ") (asTerm Constants.warningAutoGeneratedFile))]))
       [L._Dialect_emacsLisp>>: constant $ list [
         Serialization.cst @@ string ";; -*- lexical-binding: t -*-",
-        Serialization.cst @@ (Strings.cat2 (string "; ") (asTerm Constants.warningAutoGeneratedFile))]],
+        Serialization.cst @@ (Strings.concat2 (string "; ") (asTerm Constants.warningAutoGeneratedFile))]],
     -- Helper: get import module names as strings
     "importNames">: Lists.map (lambda "idecl" $
       unwrap L._NamespaceName @@ (project L._ImportDeclaration L._ImportDeclaration_module @@ var "idecl"))
@@ -1012,11 +1012,11 @@ programToExpr = define "programToExpr" $
       L._Dialect_commonLisp>>: constant $
         Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
-            "colonName">: Strings.cat2 (string ":") (var "nameStr"),
+            "colonName">: Strings.concat2 (string ":") (var "nameStr"),
             -- (:use :cl :dep1 :dep2 ...)
             "useClause">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
               (list [Serialization.cst @@ string ":use", Serialization.cst @@ string ":cl"])
-              (Lists.map (lambda "imp" $ Serialization.cst @@ Strings.cat2 (string ":") (var "imp"))
+              (Lists.map (lambda "imp" $ Serialization.cst @@ Strings.concat2 (string ":") (var "imp"))
                 (var "importNames"))),
             -- (:export :sym1 :sym2 ...)
             "exportClause">: Logic.ifElse (Lists.null (var "exportSyms"))
@@ -1100,10 +1100,10 @@ recordTypeDefinitionToExpr = define "recordTypeDefinitionToExpr" $
           sqBrackets (var "fields")]),
         "makeAlias">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
           list [Serialization.cst @@ string "defn",
-            Serialization.cst @@ Strings.cat2 (string "make-") (var "nameStr")],
+            Serialization.cst @@ Strings.concat2 (string "make-") (var "nameStr")],
           list [sqBrackets (var "fields")],
           list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
-            (list [Serialization.cst @@ Strings.cat2 (string "->") (var "nameStr")])
+            (list [Serialization.cst @@ Strings.concat2 (string "->") (var "nameStr")])
             (Lists.map (lambda "fn" $ Serialization.cst @@ var "fn") (var "fieldNames")))]]))] $
         Serialization.newlineSep @@ list [var "defrecordForm", var "makeAlias"],
       -- (cl-defstruct name field1 field2)
@@ -1123,13 +1123,13 @@ recordTypeDefinitionToExpr = define "recordTypeDefinitionToExpr" $
         "fieldNames">: Lists.map (lambda "f" $ unwrap L._Symbol @@ (project L._FieldDefinition L._FieldDefinition_name @@ var "f"))
           (project L._RecordTypeDefinition L._RecordTypeDefinition_fields @@ var "rdef"),
         "constructor">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
-          (list [Serialization.cst @@ Strings.cat2 (string "make-") (var "nameStr")])
+          (list [Serialization.cst @@ Strings.concat2 (string "make-") (var "nameStr")])
           (Lists.map (lambda "fn" $ Serialization.cst @@ var "fn") (var "fieldNames"))),
-        "predicate">: Serialization.cst @@ Strings.cat2 (var "nameStr") (string "?"),
+        "predicate">: Serialization.cst @@ Strings.concat2 (var "nameStr") (string "?"),
         "accessors">: Lists.map (lambda "fn" $
           Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
             Serialization.cst @@ var "fn",
-            Serialization.cst @@ Strings.cat (list [var "nameStr", string "-", var "fn"])]))
+            Serialization.cst @@ Strings.concat (list [var "nameStr", string "-", var "fn"])]))
           (var "fieldNames")] $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
           list [Serialization.cst @@ string "define-record-type", var "name", var "constructor", var "predicate"],

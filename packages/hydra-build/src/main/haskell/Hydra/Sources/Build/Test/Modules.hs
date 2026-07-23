@@ -126,18 +126,18 @@ showModuleNames mods = PrintCore.list_ @@ nameFn @@ mods
 -- so stripTermTypes' signature-clearing is observable. Each definition renders as:
 --   term:<name>:sig=<yes|no>   |   type:<name>   |   prim:<name>
 showModuleDetail :: TypedTerm Module -> TypedTerm String
-showModuleDetail m = Strings.cat (Phantoms.list [
+showModuleDetail m = Strings.concat (Phantoms.list [
     Packaging.unModuleName (Packaging.moduleName m),
     Phantoms.string "|",
     PrintCore.list_ @@ defFn @@ Packaging.moduleDefinitions m])
   where
     defFn :: TypedTerm (Definition -> String)
     defFn = Phantoms.lambda "d" $ Phantoms.cases _Definition (Phantoms.var "d") Nothing [
-      _Definition_type Phantoms.>>: Phantoms.lambda "td" (Strings.cat (Phantoms.list [
+      _Definition_type Phantoms.>>: Phantoms.lambda "td" (Strings.concat (Phantoms.list [
         Phantoms.string "type:", Core.unName (Packaging.typeDefinitionName (Phantoms.var "td"))])),
-      _Definition_primitive Phantoms.>>: Phantoms.lambda "pd" (Strings.cat (Phantoms.list [
+      _Definition_primitive Phantoms.>>: Phantoms.lambda "pd" (Strings.concat (Phantoms.list [
         Phantoms.string "prim:", Core.unName (Packaging.primitiveDefinitionName (Phantoms.var "pd"))])),
-      _Definition_term Phantoms.>>: Phantoms.lambda "td" (Strings.cat (Phantoms.list [
+      _Definition_term Phantoms.>>: Phantoms.lambda "td" (Strings.concat (Phantoms.list [
         Phantoms.string "term:",
         Core.unName (Packaging.termDefinitionName (Phantoms.var "td")),
         Phantoms.string ":sig=",

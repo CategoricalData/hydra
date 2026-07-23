@@ -16,6 +16,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -113,7 +114,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
     ("nt" ~> CoqCoderSource.encodeAxiomDefinitionPair @@ var "env" @@
       pair (Pairs.first $ var "nt") (var "typeOfType"))
     (var "typeDefs") $
-  "termAxioms" <~ (Optionals.cat $ Lists.map
+  "termAxioms" <~ (Optionals.givens $ Lists.map
     ("td" ~>
       "name" <~ (Pairs.first $ var "td") $
       "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
@@ -138,7 +139,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
   "doc_" <~ (CSyntax.document (var "allSentences")) $
   "body" <~ (Serialization.printExpr @@
     (Serialization.parenthesize @@ (CoqSerdeSource.documentToExpr @@ var "doc_"))) $
-  Strings.cat (list [var "desc", var "body", string "\n"])
+  Strings.concat (list [var "desc", var "body", string "\n"])
 
 -- | Assemble the source for a full (non-axiom) Coq module. Walks the type
 -- and term definitions through SCC sorting and term-level transforms,
@@ -171,7 +172,7 @@ buildFullModule = define "buildFullModule" $
     ("cg" ~>
       "cyc" <~ Pairs.first (var "cg") $
       "grp" <~ Pairs.second (var "cg") $
-      "enriched" <~ Optionals.cat (Lists.map
+      "enriched" <~ Optionals.givens (Lists.map
         ("nt" ~>
           "nm" <~ Pairs.first (var "nt") $
           "t" <~ Pairs.second (var "nt") $
@@ -219,15 +220,15 @@ buildFullModule = define "buildFullModule" $
             "rendered" <~ (renderSentences @@ var "sentences") $
             "argsLine" <~ Logic.ifElse (Lists.null $ var "allTypeVarNames")
               (string "")
-              (Strings.cat (list [
+              (Strings.concat (list [
                 string "\nArguments ",
                 var "nm",
                 string " ",
-                Strings.intercalate (string " ")
-                  (Lists.map ("v" ~> Strings.cat (list [string "{", var "v", string "}"]))
+                Strings.join (string " ")
+                  (Lists.map ("v" ~> Strings.concat (list [string "{", var "v", string "}"]))
                     (var "allTypeVarNames")),
                 string "."])) $
-            Strings.cat (list [var "rendered", var "argsLine", string "\n"]))
+            Strings.concat (list [var "rendered", var "argsLine", string "\n"]))
           (var "grp")))
     (var "termGroups2")) $
   -- Discover cross-module namespace dependencies via the already-ported
@@ -239,7 +240,7 @@ buildFullModule = define "buildFullModule" $
     ("td" ~> CoqUtils.collectQualifiedNamesInTerm @@
       (Pairs.first (Pairs.second (var "td"))))
     (var "termDefs")) :: TypedTerm (S.Set String)) $
-  "allQualifiedNamesFromTermTypes" <~ ((Sets.unions $ Optionals.cat $ Lists.map
+  "allQualifiedNamesFromTermTypes" <~ ((Sets.unions $ Optionals.givens $ Lists.map
     ("td" ~>
       "mty" <~ Pairs.second (Pairs.second (Pairs.second (var "td"))) $
       Optionals.map
@@ -259,7 +260,7 @@ buildFullModule = define "buildFullModule" $
   -- `hydra.foo.bar` redundantly).
   "strStartsWith" <~ ("pref" ~> "s" ~>
     Logic.and
-      (Equality.gte (Strings.length $ var "s") (Strings.length $ var "pref"))
+      (Ordering.gte (Strings.length $ var "s") (Strings.length $ var "pref"))
       (Equality.equal
         (Strings.fromList $ Lists.take (Strings.length $ var "pref") (Strings.toList $ var "s"))
         (var "pref"))) $
@@ -268,10 +269,10 @@ buildFullModule = define "buildFullModule" $
       ("other" ~> Logic.and
         (Logic.not (Equality.equal (var "other") (var "nsC")))
         (var "strStartsWith" @@
-          (Strings.cat (list [var "nsC", string "."])) @@
+          (Strings.concat (list [var "nsC", string "."])) @@
           (var "other")))
       (var "otherList")) $
-  "referencedNs" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String]) $ Lists.filter
+  "referencedNs" <~ ((Lists.distinct :: TypedTerm [String] -> TypedTerm [String]) $ Lists.filter
     ("nsC" ~> Logic.and
       (Logic.not (Equality.equal (var "nsC") (var "nsStr")))
       (Logic.not (var "hasStrictSuffix" @@ var "nsC" @@ (Sets.toList (var "nsSet" :: TypedTerm (S.Set String))))))
@@ -281,9 +282,9 @@ buildFullModule = define "buildFullModule" $
   -- parts + Arguments declarations for parameterized types.
   "importText" <~ (renderRequireImports @@ var "depSentences") $
   "typeSentencesText" <~ (renderSentences @@ var "typeSentences") $
-  "allTermText" <~ (Strings.cat $ var "termRenderedParts") $
+  "allTermText" <~ (Strings.concat $ var "termRenderedParts") $
   "typeArgsDecls" <~ (generateArgumentsDecls @@ var "typeDefs") $
-  "content" <~ Strings.cat (list [
+  "content" <~ Strings.concat (list [
     var "desc",
     var "importText",
     string "\n",
@@ -352,7 +353,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       pair (var "name") (pair (var "typeText") (var "bodyText")))
     (var "group")) $
   -- Collect type variable binders across the whole group.
-  "allTypeVarNames" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String]) $ Lists.concat $ Lists.map
+  "allTypeVarNames" <~ ((Lists.distinct :: TypedTerm [String] -> TypedTerm [String]) $ Lists.concat $ Lists.map
     ("td" ~>
       "rest1" <~ Pairs.second (var "td") $
       "b" <~ Pairs.first (var "rest1") $
@@ -362,8 +363,8 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       Pairs.first (var "binders"))
     (var "group")) $
   "names" <~ Lists.map ("fi" ~> Pairs.first (var "fi")) (var "funInfos") $
-  "bundleName" <~ Strings.cat (list [
-    Strings.intercalate (string "_") (Lists.take (int32 2) (var "names")),
+  "bundleName" <~ Strings.concat (list [
+    Strings.join (string "_") (Lists.take (int32 2) (var "names")),
     string "_bundle"]) $
   "n" <~ Lists.length (var "funInfos") $
   "types" <~ Lists.map
@@ -376,13 +377,13 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
     ("np" ~> lets [
       "nm">: Pairs.first $ Pairs.first $ var "np",
       "proj">: Pairs.second $ var "np"] $
-      Strings.cat (list [var "nm", string " := ", var "proj"]))
+      Strings.concat (list [var "nm", string " := ", var "proj"]))
     (Lists.zip (var "funInfos") (var "projExprs")) $
   "letBlock" <~ Logic.ifElse (Lists.null $ var "letParts")
     (string "")
-    (Strings.cat (list [
+    (Strings.concat (list [
       string "let ",
-      Strings.intercalate (string " in\n    let ") (var "letParts"),
+      Strings.join (string " in\n    let ") (var "letParts"),
       string " in\n    "])) $
   -- Product value: (pair body1 (pair body2 ...))
   "bodies" <~ Lists.map
@@ -392,13 +393,13 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
   -- Type binder text for the bundle Definition header.
   "typBindText" <~ Logic.ifElse (Lists.null $ var "allTypeVarNames")
     (string "")
-    (Strings.cat (list [
+    (Strings.concat (list [
       string " ",
-      Strings.intercalate (string " ")
-        (Lists.map ("v" ~> Strings.cat (list [string "(", var "v", string " : Type)"]))
+      Strings.join (string " ")
+        (Lists.map ("v" ~> Strings.concat (list [string "(", var "v", string " : Type)"]))
           (var "allTypeVarNames"))])) $
   "bundleArgsLine" <~ (implicitArgsLine @@ var "bundleName" @@ var "allTypeVarNames") $
-  "bundleDef" <~ Strings.cat (list [
+  "bundleDef" <~ Strings.concat (list [
     string "Definition ",
     var "bundleName",
     var "typBindText",
@@ -413,19 +414,19 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
   "indexed" <~ (Lists.zip
     (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
     (var "funInfos")) $
-  "projDefs" <~ Strings.cat (Lists.map
+  "projDefs" <~ Strings.concat (Lists.map
     ("iFi" ~>
       "i" <~ Pairs.first (var "iFi") $
       "fi" <~ Pairs.second (var "iFi") $
       "nm" <~ Pairs.first (var "fi") $
       "t" <~ Pairs.first (Pairs.second (var "fi")) $
-      "projText0" <~ Optionals.fromOptional (string "") (Maps.lookup (var "i")
+      "projText0" <~ Optionals.withDefault (string "") (Maps.lookup (var "i")
         (Maps.fromList $ Lists.zip
           (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
           (var "projExprs"))) $
       "projText" <~ (replaceBundle @@ var "projText0" @@ var "bundleName") $
       "argsDef" <~ (implicitArgsLine @@ var "nm" @@ var "allTypeVarNames") $
-      Strings.cat (list [
+      Strings.concat (list [
         string "Definition ",
         var "nm",
         var "typBindText",
@@ -436,7 +437,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
         string ".\n",
         var "argsDef"]))
     (var "indexed")) $
-  Strings.cat (list [var "bundleDef", string "\n", var "projDefs"])
+  Strings.concat (list [var "bundleDef", string "\n", var "projDefs"])
 
 -- | Encode a single acyclic term definition as a Coq `Definition` sentence.
 -- The body is first passed through `reorderLetBindings` and
@@ -482,8 +483,8 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
   "typeDefs" ~>
   -- Build the implicit-all text "{p1} {p2} ..." for a list of parameter names.
   "implicitAll" <~ ("params" ~>
-    Strings.intercalate (string " ") $ Lists.map
-      ("p" ~> Strings.cat (list [string "{", var "p", string "}"]))
+    Strings.join (string " ") $ Lists.map
+      ("p" ~> Strings.concat (list [string "{", var "p", string "}"]))
       (var "params")) $
   -- Emit all lines contributed by a single (name, params, bodyTy) triple.
   "linesFor" <~ ("triple" ~>
@@ -493,7 +494,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
     "impAll" <~ (var "implicitAll" @@ var "params") $
     cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
       _Type_union>>: "fields" ~> Lists.map
-        ("ft" ~> Strings.cat (list [
+        ("ft" ~> Strings.concat (list [
           string "Arguments ",
           var "name",
           string "_",
@@ -506,14 +507,14 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
         Logic.ifElse (Lists.null $ var "fields")
           (list ([] :: [TypedTerm String]))
           (lets [
-            "constrLine">: Strings.cat (list [
+            "constrLine">: Strings.concat (list [
               string "Arguments Build_",
               var "name",
               string " ",
               var "impAll",
               string "."]),
             "fieldLines">: Lists.map
-              ("ft" ~> Strings.cat (list [
+              ("ft" ~> Strings.concat (list [
                 string "Arguments ",
                 Formatting.decapitalize @@ var "name",
                 string "_",
@@ -525,7 +526,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
             Lists.cons (var "constrLine") (var "fieldLines"))]) $
   -- For each (name, ty), peel forall binders and only emit lines when there
   -- are actual type parameters to make implicit.
-  "triples" <~ (Optionals.cat $ Lists.map
+  "triples" <~ (Optionals.givens $ Lists.map
     ("nt" ~>
       "name" <~ (Pairs.first $ var "nt") $
       "ty" <~ (Pairs.second $ var "nt") $
@@ -539,9 +540,9 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
   "allLines" <~ (Lists.concat $ Lists.map (var "linesFor") (var "triples")) $
   Logic.ifElse (Lists.null $ var "allLines")
     (string "")
-    (Strings.cat (list [
+    (Strings.concat (list [
       string "\n",
-      Strings.intercalate (string "\n") (var "allLines"),
+      Strings.join (string "\n") (var "allLines"),
       string "\n"]))
 
 -- | Emit sentences for an SCC group of type definitions. Non-cyclic
@@ -557,10 +558,10 @@ generateTypeGroup = define "generateTypeGroup" $
   Logic.ifElse
     (Logic.and (Logic.not $ var "cyclic") (Equality.equal (Lists.length $ var "defs") (int32 1)))
     -- Non-cyclic singleton: delegate.
-    (Optionals.fromOptional (list ([] :: [TypedTerm C.Sentence])) (Optionals.map
+    (Optionals.withDefault (list ([] :: [TypedTerm C.Sentence])) (Optionals.map
       (lambda "d" $
         generateTypeSentence @@ var "env" @@ (Pairs.first $ var "d") @@ (Pairs.second $ var "d"))
-      (Lists.maybeHead $ var "defs")))
+      (Lists.head $ var "defs")))
     -- Mutual group (possibly with positivity sanitization).
     (lets [
       "groupNames">: ((Sets.fromList $ Lists.map (lambda "d" $ Pairs.first $ var "d") (var "defs")) :: TypedTerm (S.Set String)),
@@ -646,11 +647,11 @@ generateTypeSentence = define "generateTypeSentence" $
             (var "paramBinders")
             (Phantoms.just CSyntax.sortType)
             (CSyntax.recordBody
-              (Phantoms.just $ CoqCoderSource.coqIdent @@ Strings.cat (list [string "Build_", var "name"]))
+              (Phantoms.just $ CoqCoderSource.coqIdent @@ Strings.concat (list [string "Build_", var "name"]))
               (Lists.map
                 (lambda "ft" $ lets [
                   "fn">: CoqUtils.sanitize @@ (CoqUtils.localName @@ (unwrap _Name @@ (Core.fieldTypeName $ var "ft"))),
-                  "prefixedFn">: Strings.cat (list [
+                  "prefixedFn">: Strings.concat (list [
                     Formatting.decapitalize @@ var "name",
                     string "_",
                     var "fn"]),
@@ -678,23 +679,23 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
             _Definition_term>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))
               (var "nsStr")]] $
-        Optionals.cat $ Lists.map (var "fromDef") (Packaging.moduleDefinitions $ var "m"))
+        Optionals.givens $ Lists.map (var "fromDef") (Packaging.moduleDefinitions $ var "m"))
       (var "modules"),
     -- Group by local name, collecting the set of namespaces each name appears in.
     "nameToNs">: Lists.foldl
       ("acc" ~> "np" ~>
         "n" <~ Pairs.first (var "np") $
         "nsVal" <~ Pairs.second (var "np") $
-        "existing" <~ Optionals.fromOptional
+        "existing" <~ Optionals.withDefault
           (Sets.empty :: TypedTerm (S.Set String))
           (Maps.lookup (var "n") (var "acc" :: TypedTerm (M.Map String (S.Set String)))) $
         Maps.insert (var "n") (Sets.insert (var "nsVal") (var "existing" :: TypedTerm (S.Set String))) (var "acc" :: TypedTerm (M.Map String (S.Set String))))
       (Maps.empty :: TypedTerm (M.Map String (S.Set String)))
       (var "allNames")] $
     -- A name is ambiguous iff it appears in >= 2 distinct namespaces.
-    (Sets.fromList $ Optionals.cat $ Lists.map
+    (Sets.fromList $ Optionals.givens $ Lists.map
       ("entry" ~> Logic.ifElse
-        (Equality.gte (Lists.length $ Sets.toList $ (Pairs.second $ var "entry" :: TypedTerm (S.Set String))) (int32 2))
+        (Ordering.gte (Lists.length $ Sets.toList $ (Pairs.second $ var "entry" :: TypedTerm (S.Set String))) (int32 2))
         (Phantoms.just $ Pairs.first $ var "entry")
         (Phantoms.nothing :: TypedTerm (Maybe String)))
       (Maps.toList (var "nameToNs" :: TypedTerm (M.Map String (S.Set String)))) :: TypedTerm (S.Set String))
@@ -706,7 +707,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
   doc "Collect all type definitions from every module and run buildConstructorCounts over them" $
   lambda "modules" $ lets [
     "allTypeDefs">: Lists.concat $ Lists.map
-      ("m" ~> Optionals.cat $ Lists.map
+      ("m" ~> Optionals.givens $ Lists.map
         ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
@@ -732,7 +733,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
   lambda "modules" $ lets [
     "allTypeGroups">: Lists.concat $ Lists.map
       ("m" ~> lets [
-        "typeDefs">: Optionals.cat $ Lists.map
+        "typeDefs">: Optionals.givens $ Lists.map
           ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
@@ -751,12 +752,12 @@ implicitArgsLine = define "implicitArgsLine" $
   lambdas ["name", "typeVarNames"] $
     Logic.ifElse (Lists.null $ var "typeVarNames")
       (string "")
-      (Strings.cat (list [
+      (Strings.concat (list [
         string "Arguments ",
         var "name",
         string " ",
-        Strings.intercalate (string " ")
-          (Lists.map ("v" ~> Strings.cat (list [string "{", var "v", string "}"]))
+        Strings.join (string " ")
+          (Lists.map ("v" ~> Strings.concat (list [string "{", var "v", string "}"]))
             (var "typeVarNames")),
         string ".\n"]))
 
@@ -779,10 +780,10 @@ makeAccessorDefs = define "makeAccessorDefs" $
         (lets [
           "nFields">: Lists.length $ var "fields",
           "fieldVars">: Lists.map
-            (lambda "i" $ Strings.cat (list [string "f", Literals.showInt32 $ var "i"]))
+            (lambda "i" $ Strings.concat (list [string "f", Literals.showInt32 $ var "i"]))
             (Math.range (int32 0) (Math.sub (var "nFields") (int32 1))),
           "constrPat">: CSyntax.pattern10_Qualid
-            (CoqCoderSource.coqQualid @@ Strings.cat (list [string "Build_", var "name"]))
+            (CoqCoderSource.coqQualid @@ Strings.concat (list [string "Build_", var "name"]))
             (Lists.map
               (lambda "v" $ CSyntax.pattern1
                 (CSyntax.pattern0Qualid $ CoqCoderSource.coqQualid @@ var "v")
@@ -806,7 +807,7 @@ makeConstructor = define "makeConstructor" $
   doc "Build a Coq Constructor from a union field (prepended with the type name and capitalized field name)" $
   lambdas ["env", "typeName", "params", "ft"] $
   "fn" <~ (unwrap _Name @@ (Core.fieldTypeName $ var "ft")) $
-  "constrName" <~ Strings.cat (list [var "typeName", string "_", Formatting.capitalize @@ var "fn"]) $
+  "constrName" <~ Strings.concat (list [var "typeName", string "_", Formatting.capitalize @@ var "fn"]) $
   "fieldTy" <~ (Core.fieldTypeType $ var "ft") $
   "argType" <~ (CoqCoderSource.encodeType @@ var "env" @@ var "fieldTy") $
   "returnType" <~ (makeReturnType @@ var "typeName" @@ var "params") $
@@ -847,7 +848,7 @@ makeInductiveBody = define "makeInductiveBody" $
           (var "paramBinders")
           (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
           (list [CSyntax.constructor
-            (CoqCoderSource.coqIdent @@ Strings.cat (list [string "Build_", var "name"]))
+            (CoqCoderSource.coqIdent @@ Strings.concat (list [string "Build_", var "name"]))
             (list ([] :: [TypedTerm C.Binder]))
             (Phantoms.just $ CSyntax.type_ $ makeReturnType @@ var "name" @@ var "params")])])
         -- Non-empty record: Build_T with an arrow-chain of field types.
@@ -864,7 +865,7 @@ makeInductiveBody = define "makeInductiveBody" $
             (var "paramBinders")
             (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
             (list [CSyntax.constructor
-              (CoqCoderSource.coqIdent @@ Strings.cat (list [string "Build_", var "name"]))
+              (CoqCoderSource.coqIdent @@ Strings.concat (list [string "Build_", var "name"]))
               (list ([] :: [TypedTerm C.Binder]))
               (Phantoms.just $ CSyntax.type_ $ var "constrType")])])]
 
@@ -876,12 +877,12 @@ makeOneAccessor = define "makeOneAccessor" $
   doc "Emit a Definition for a record field accessor, keyed by the Build_T pattern" $
   lambdas ["typeName", "constrPat", "fieldVars", "idx", "ft"] $
   "fn" <~ (CoqUtils.sanitize @@ (CoqUtils.localName @@ (unwrap _Name @@ (Core.fieldTypeName $ var "ft")))) $
-  "prefixedFn" <~ Strings.cat (list [
+  "prefixedFn" <~ Strings.concat (list [
     Formatting.decapitalize @@ var "typeName",
     string "_",
     var "fn"]) $
   "returnExpr" <~ (CoqCoderSource.coqTermQualid @@
-    (Optionals.fromOptional (string "") (Maps.lookup (var "idx")
+    (Optionals.withDefault (string "") (Maps.lookup (var "idx")
       (Maps.fromList $ Lists.zip
         (Math.range (int32 0) (Math.sub (Lists.length $ var "fieldVars") (int32 1)))
         (var "fieldVars"))))) $
@@ -921,11 +922,11 @@ makeProdType :: TypedTermDefinition ([String] -> String)
 makeProdType = define "makeProdType" $
   doc "Emit nested `prod (T1) (prod ...)` textual type expression" $
   lambda "ts" $
-    Optionals.fromOptional (string "unit") (Optionals.map
+    Optionals.withDefault (string "unit") (Optionals.map
       (lambda "p" $
         Logic.ifElse (Equality.equal (Lists.length $ var "ts") (int32 1))
           (Pairs.first $ var "p")
-          (Strings.cat (list [
+          (Strings.concat (list [
             string "prod (",
             Pairs.first $ var "p",
             string ") (",
@@ -940,11 +941,11 @@ makeProdVal :: TypedTermDefinition ([String] -> String)
 makeProdVal = define "makeProdVal" $
   doc "Emit a nested `(pair (b1) (...))` textual value expression" $
   lambda "bs" $
-    Optionals.fromOptional (string "tt") (Optionals.map
+    Optionals.withDefault (string "tt") (Optionals.map
       (lambda "p" $
         Logic.ifElse (Equality.equal (Lists.length $ var "bs") (int32 1))
           (Pairs.first $ var "p")
-          (Strings.cat (list [
+          (Strings.concat (list [
             string "(pair (",
             Pairs.first $ var "p",
             string ") (",
@@ -963,14 +964,14 @@ makeProjectionExprs = define "makeProjectionExprs" $
     Logic.ifElse (Equality.equal (var "k") (int32 0))
       (var "v")
       (var "snds" @@ (Math.sub (var "k") (int32 1)) @@
-        (Strings.cat (list [string "(snd ", var "v", string ")"])))) $
+        (Strings.concat (list [string "(snd ", var "v", string ")"])))) $
   "mkProj" <~ ("i" ~> "total" ~> "v" ~>
     Logic.ifElse (Equality.equal (var "i") (int32 0))
-      (Strings.cat (list [string "(fst ", var "v", string ")"]))
+      (Strings.concat (list [string "(fst ", var "v", string ")"]))
       (Logic.ifElse (Equality.equal (var "i") (Math.sub (var "total") (int32 1)))
         (var "snds" @@ var "i" @@ var "v")
-        (Strings.cat (list [string "(fst ", var "snds" @@ var "i" @@ var "v", string ")"])))) $
-    Logic.ifElse (Equality.lte (var "n") (int32 0))
+        (Strings.concat (list [string "(fst ", var "snds" @@ var "i" @@ var "v", string ")"])))) $
+    Logic.ifElse (Ordering.lte (var "n") (int32 0))
       (list ([] :: [TypedTerm String]))
       (Logic.ifElse (Equality.equal (var "n") (int32 1))
         (list [var "bvar"])
@@ -1016,7 +1017,7 @@ mkTypeBinders = define "mkTypeBinders" $
   "extras" <~ (Lists.filter
     ("nm" ~> Logic.not (Sets.member (var "nm") (var "schemeVarNames" :: TypedTerm (S.Set String))))
     (Sets.toList (var "innerTypeVars" :: TypedTerm (S.Set String)))) $
-  "allTypeVarNames" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String])
+  "allTypeVarNames" <~ ((Lists.distinct :: TypedTerm [String] -> TypedTerm [String])
     (Lists.concat2 (var "explicit") (var "extras"))) $
   "binders" <~ Lists.map (lambda "v" $ makeTypeBinder @@ var "v") (var "allTypeVarNames") $
   pair (var "allTypeVarNames") (var "binders")
@@ -1039,19 +1040,19 @@ moduleToCoq = define "moduleToCoq" $
   lambdas ["fieldMap", "constrCounts", "ambiguousNames", "globalSanitizedAcc", "mod_", "defs"] $
   "nsStr" <~ (Packaging.unModuleName (Packaging.moduleName $ var "mod_")) $
   "path" <~ (namespaceToPath @@ var "nsStr") $
-  "desc" <~ Optionals.cases ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.cat (list [string "(* ", var "d", string " *)\n\n"])) $
+  "desc" <~ Optionals.cases ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.concat (list [string "(* ", var "d", string " *)\n\n"])) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
-  "isAxiomOnly" <~ ((Lists.elem :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
+  "isAxiomOnly" <~ ((Lists.member :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
     (var "nsStr") (var "axiomOnlyModules")) $
   -- Extract type and term definitions from the adapted definition list.
-  "typeDefs" <~ Optionals.cat (Lists.map
+  "typeDefs" <~ Optionals.givens (Lists.map
     ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
         (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
     (var "defs")) $
-  "termDefs" <~ Optionals.cat (Lists.map
+  "termDefs" <~ Optionals.givens (Lists.map
     ("def_" ~> cases _Definition (var "def_")
       (Just (Phantoms.nothing :: TypedTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
@@ -1100,12 +1101,12 @@ namespaceToPath = define "namespaceToPath" $
   doc "Convert a Hydra namespace string (e.g. hydra.print.core) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
-    "dirParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts")),
-    "fileName">: Strings.cat (list [Optionals.fromOptional (var "ns") (Lists.maybeLast (var "parts")), string ".v"])] $
+    "dirParts">: Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init (var "parts")),
+    "fileName">: Strings.concat (list [Optionals.withDefault (var "ns") (Lists.last (var "parts")), string ".v"])] $
     Logic.ifElse (Lists.null (var "dirParts"))
       (var "fileName")
-      (Strings.cat (list [
-        Strings.intercalate (string "/") (var "dirParts"),
+      (Strings.concat (list [
+        Strings.join (string "/") (var "dirParts"),
         string "/",
         var "fileName"]))
 
@@ -1135,4 +1136,4 @@ replaceBundle :: TypedTermDefinition (String -> String -> String)
 replaceBundle = define "replaceBundle" $
   doc "Replace literal `bundle_` with the given replacement string" $
   lambdas ["s", "bname"] $
-    Strings.intercalate (var "bname") (Strings.splitOn (string "bundle_") (var "s"))
+    Strings.join (var "bname") (Strings.splitOn (string "bundle_") (var "s"))

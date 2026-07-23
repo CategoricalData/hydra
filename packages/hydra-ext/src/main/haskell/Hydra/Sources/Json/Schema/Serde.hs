@@ -579,7 +579,7 @@ toObject = define "toObject" $
   doc "Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values" $
   lambda "pairs" $
     Json.valueObject
-      (Optionals.cat (Lists.map
+      (Optionals.givens (Lists.map
         (lambda "p" $ lets [
           "k">: Pairs.first (var "p"),
           "mv">: Pairs.second (var "p")] $

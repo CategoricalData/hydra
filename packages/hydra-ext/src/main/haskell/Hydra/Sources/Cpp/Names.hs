@@ -169,11 +169,11 @@ encodeName = def "encodeName" $
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName",
     "cppLocal">: sanitizeCppName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
-    "cppNs">: lambda "nsVal" $ Strings.intercalate (string "::")
+    "cppNs">: lambda "nsVal" $ Strings.join (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
-      (Optionals.cases (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Optionals.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.cat2 (var "cppNs" @@ var "nsVal") (Strings.cat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
+      (Optionals.cases (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Optionals.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.concat2 (var "cppNs" @@ var "nsVal") (Strings.concat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
       (var "cppLocal")
 
 -- | Encode a qualified name with namespace
@@ -191,7 +191,7 @@ encodeNameQualified = def "encodeNameQualified" $
     "local">: Util.qualifiedNameLocal $ var "qualName"] $
     Optionals.cases (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
-        (Strings.intercalate (string "::")
+        (Strings.join (string "::")
           (Lists.map (asTerm sanitizeCppName)
             (Strings.splitOn (string ".") (Core.unName $ var "name"))))) (lambda "n" $ var "n")
 
@@ -200,7 +200,7 @@ encodeNamespace :: TypedTermDefinition (ModuleName -> String)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a C++ namespace string" $
   lambda "nsVal" $
-    Strings.intercalate (string "::")
+    Strings.join (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))
 
@@ -234,7 +234,7 @@ partialVisitorName :: TypedTermDefinition (Name -> String)
 partialVisitorName = def "partialVisitorName" $
   doc "Get the partial visitor name for a type" $
   lambda "name" $
-    sanitizeCppName @@ (Strings.cat2 (Names.localNameOf @@ var "name") (string "PartialVisitor"))
+    sanitizeCppName @@ (Strings.concat2 (Names.localNameOf @@ var "name") (string "PartialVisitor"))
 
 -- | Sanitize a name to be valid in C++
 sanitizeCppName :: TypedTermDefinition (String -> String)
@@ -270,11 +270,11 @@ variantName = def "variantName" $
   doc "Get the variant name by combining type name and field name" $
   lambdas ["tname", "fname"] $
     sanitizeCppName @@
-      (Strings.cat2 (Names.localNameOf @@ var "tname") (Formatting.capitalize @@ (Core.unName $ var "fname")))
+      (Strings.concat2 (Names.localNameOf @@ var "tname") (Formatting.capitalize @@ (Core.unName $ var "fname")))
 
 -- | Get the visitor name for a type
 visitorName :: TypedTermDefinition (Name -> String)
 visitorName = def "visitorName" $
   doc "Get the visitor name for a type" $
   lambda "name" $
-    sanitizeCppName @@ (Strings.cat2 (Names.localNameOf @@ var "name") (string "Visitor"))
+    sanitizeCppName @@ (Strings.concat2 (Names.localNameOf @@ var "name") (string "Visitor"))

@@ -17,6 +17,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
@@ -256,7 +257,7 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
   doc "Encode let bindings as nested ((lambda (x) body) init) applications, for self-referential non-lambda bindings" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
-    Eithers.foldl
+    Eithers.foldList
       (lambda "acc" $ lambda "b" $
         "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
         "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
@@ -288,11 +289,11 @@ encodeLetAsNative = def "encodeLetAsNative" $
     "sccs" <~ ((Sorting.topologicalSortComponents :: TypedTermDefinition ([(Name, [Name])] -> [[Name]])) @@ var "adjList") $
     "nameToBinding" <~ (Maps.fromList
       (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) :: TypedTerm (M.Map Name Binding)) $
-    "sortedBindings" <~ Optionals.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding" :: TypedTerm (M.Map Name Binding)))
+    "sortedBindings" <~ Optionals.givens (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding" :: TypedTerm (M.Map Name Binding)))
       (Lists.concat (var "sccs"))) $
     -- A cycle is any SCC of size greater than one.
     "hasCycle" <~ (Lists.foldl (lambda "acc" $ lambda "scc" $
-      Logic.or (var "acc") (Equality.gt (Lists.length (var "scc")) (int32 1)))
+      Logic.or (var "acc") (Ordering.gt (Lists.length (var "scc")) (int32 1)))
       (boolean False)
       (var "sccs")) $
     -- Encode each binding, eta-expanding self-referential non-lambda bindings
@@ -348,7 +349,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
     "isRecursive" <~ (Logic.or (var "hasSelfRef") (var "hasCycle")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
-      (Logic.ifElse (Equality.lte (Lists.length (var "bindings")) (int32 1))
+      (Logic.ifElse (Ordering.lte (Lists.length (var "bindings")) (int32 1))
         (inject L._LetKind L._LetKind_parallel unit)
         (inject L._LetKind L._LetKind_sequential unit))) $
     "lispBindings" <~ (Lists.map
@@ -588,7 +589,7 @@ encodeTerm = def "encodeTerm" $
            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f"))
          (var "fields")) $
        -- Dialect-aware constructor: (make-TypeName ...) or (->TypeName ...)
-       "constructorName" <~ Strings.cat2 (dialectConstructorPrefix @@ var "dialect") (qualifiedSnakeName @@ var "rname") $
+       "constructorName" <~ Strings.concat2 (dialectConstructorPrefix @@ var "dialect") (qualifiedSnakeName @@ var "rname") $
          right (lispApp @@ (lispVar @@ var "constructorName") @@ var "sfields"),
 
      _Term_set>>: lambda "s" $
@@ -745,7 +746,7 @@ encodeTypeBody = def "encodeTypeBody" $
         L._TopLevelFormWithComments_doc>>: nothing,
         L._TopLevelFormWithComments_comment>>: just (record L._Comment [
           L._Comment_style>>: inject L._CommentStyle L._CommentStyle_line unit,
-          L._Comment_text>>: Strings.cat2 (Strings.cat2 (var "lname") (string " = ")) (PrintCore.type_ @@ var "origTyp")]),
+          L._Comment_text>>: Strings.concat2 (Strings.concat2 (var "lname") (string " = ")) (PrintCore.type_ @@ var "origTyp")]),
         L._TopLevelFormWithComments_form>>: inject L._TopLevelForm L._TopLevelForm_expression $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_nil unit]))
@@ -772,9 +773,9 @@ encodeTypeBody = def "encodeTypeBody" $
          (var "rt")) $
          right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
            record L._VariableDefinition [
-             L._VariableDefinition_name>>: wrap L._Symbol (Strings.cat2 (var "lname") (string "-variants")),
+             L._VariableDefinition_name>>: wrap L._Symbol (Strings.concat2 (var "lname") (string "-variants")),
              L._VariableDefinition_value>>: lispListExpr @@ var "variantNames",
-             L._VariableDefinition_doc>>: just (wrap L._Docstring (Strings.cat2 (string "Variants of the ") (var "lname")))])),
+             L._VariableDefinition_doc>>: just (wrap L._Docstring (Strings.concat2 (string "Variants of the ") (var "lname")))])),
      _Type_wrap>>: lambda "wt" $
        -- Newtypes become single-field records
        right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_recordType $
@@ -901,7 +902,7 @@ primIsLazyAt :: TypedTermDefinition (Graph -> Term -> Int -> Bool)
 primIsLazyAt = def "primIsLazyAt" $
   doc "Whether the primitive referenced by a head term is lazy in the parameter at the given zero-based position" $
   "g" ~> "headTerm" ~> "i" ~>
-    Optionals.fromOptional false (Lists.maybeAt (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
+    Optionals.withDefault false (Lists.at (var "i") (lazyFlagsForPrimitiveTerm @@ var "g" @@ var "headTerm"))
 
 -- | Check if a term is a reference to a specific primitive, stripping type
 -- applications, type lambdas, and annotations to find the underlying primitive.
@@ -1042,12 +1043,12 @@ moduleExports = def "moduleExports" $
           "fields" <~ (project L._RecordTypeDefinition L._RecordTypeDefinition_fields @@ var "rdef") $
           "fieldSyms" <~ Lists.map ("f" ~>
             "fn" <~ (unwrap L._Symbol @@ (project L._FieldDefinition L._FieldDefinition_name @@ var "f")) $
-            wrap L._Symbol (Strings.cat (list [var "rname", string "-", var "fn"])))
+            wrap L._Symbol (Strings.concat (list [var "rname", string "-", var "fn"])))
             (var "fields") $
           Lists.concat (list [
             list [
-              wrap L._Symbol (Strings.cat2 (string "make-") (var "rname")),
-              wrap L._Symbol (Strings.cat2 (var "rname") (string "?"))],
+              wrap L._Symbol (Strings.concat2 (string "make-") (var "rname")),
+              wrap L._Symbol (Strings.concat2 (var "rname") (string "?"))],
             var "fieldSyms"])])
       (var "forms")) $
     Logic.ifElse (Lists.null (var "symbols"))
@@ -1115,7 +1116,7 @@ qualifiedSnakeName = def "qualifiedSnakeName" $
     "raw" <~ Core.unName (var "name") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
     "snakeParts" <~ Lists.map (lambda "p" $ Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ var "p") (var "parts") $
-    "joined" <~ Strings.intercalate (string "_") (var "snakeParts") $
+    "joined" <~ Strings.join (string "_") (var "snakeParts") $
     Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "joined"
 
 -- | Convert a fully-qualified Hydra Name to a PascalCase type identifier string.

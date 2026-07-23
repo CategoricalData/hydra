@@ -269,6 +269,6 @@ withDescription :: TypedTermDefinition (Maybe G.Description -> Expr -> Expr)
 withDescription = define "withDescription" $
   doc "Prepend an optional description to an expression" $
   lambda "mdesc" $ lambda "expr" $
-    Serialization.newlineSep @@ (Optionals.cat $ list [
+    Serialization.newlineSep @@ (Optionals.givens $ list [
       Optionals.map (asTerm descriptionToExpr) (var "mdesc"),
       Optionals.pure (var "expr")])

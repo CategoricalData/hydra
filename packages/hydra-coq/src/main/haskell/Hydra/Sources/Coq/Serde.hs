@@ -179,7 +179,7 @@ commentToExpr :: TypedTermDefinition (C.Comment -> Expr)
 commentToExpr = define "commentToExpr" $
   doc "Serialize a Coq comment" $
   lambda "c" $
-    Serialization.cst @@ Strings.cat (list [
+    Serialization.cst @@ Strings.concat (list [
       string "(* ", unwrap C._Comment @@ var "c", string " *)"])
 
 -- | Serialize a Constructor
@@ -293,7 +293,7 @@ inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
       (kw "Inductive"),
     "bodyExprs">: Lists.map (lambda "b" $ inductiveBodyToExpr @@ var "b")
       (project C._InductiveDefinition C._InductiveDefinition_bodies @@ var "id"),
-    "firstBody">: Optionals.fromOptional (Serialization.cst @@ string "") (Lists.maybeHead $ var "bodyExprs"),
+    "firstBody">: Optionals.withDefault (Serialization.cst @@ string "") (Lists.head $ var "bodyExprs"),
     "restBodies">: Lists.map
       (lambda "b" $ Serialization.spaceSep @@ list [kw "with", var "b"])
       (Lists.drop (int32 1) $ var "bodyExprs"),

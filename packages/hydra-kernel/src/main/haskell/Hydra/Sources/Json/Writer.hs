@@ -21,6 +21,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -124,11 +125,11 @@ hexByte :: TypedTermDefinition (Int -> String)
 hexByte = jsonSerdeDefinition "hexByte" $
   doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
   "c" ~>
-  "nibble" <~ ("i" ~> Optionals.fromOptional (string "?") (Optionals.map
+  "nibble" <~ ("i" ~> Optionals.withDefault (string "?") (Optionals.map
     ("ch" ~> Strings.fromList (Lists.pure $ var "ch"))
-    (Strings.maybeCharAt (var "i") hexDigits))) $
-  "hi" <~ (var "nibble" @@ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "c") (int32 16))) $
-  "lo" <~ (var "nibble" @@ Optionals.fromOptional (int32 0) (Math.maybeMod (var "c") (int32 16))) $
+    (Strings.charAt (var "i") hexDigits))) $
+  "hi" <~ (var "nibble" @@ Optionals.withDefault (int32 0) (Math.div (var "c") (int32 16))) $
+  "lo" <~ (var "nibble" @@ Optionals.withDefault (int32 0) (Math.mod (var "c") (int32 16))) $
   var "hi" ++ var "lo"
 
 hexDigits :: TypedTerm String
@@ -160,11 +161,11 @@ jsonString = jsonSerdeDefinition "jsonString" $
                 (Logic.ifElse (Equality.equal (var "c") tabCode)
                   (string "\\t")
                   -- Escape any other control character (< 0x20) as \u00XX
-                  (Logic.ifElse (Equality.lt (var "c") (int32 32))
+                  (Logic.ifElse (Ordering.lt (var "c") (int32 32))
                     (var "hexEscape" @@ var "c")
                     -- Non-control character: pass through as-is
                     (Strings.fromList (Lists.pure (var "c"))))))))))) $
-  "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
+  "escaped" <~ Strings.concat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
 keyValueToExpr :: TypedTermDefinition ((String, J.Value) -> Expr)
@@ -205,7 +206,7 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       "plain" <~ (Literals.showBigint $ var "rounded") $
       Serialization.cst @@ (Logic.ifElse
         (Logic.and (var "isWhole")
-          (Equality.lte (Strings.length $ var "plain") (Strings.length $ var "shown")))
+          (Ordering.lte (Strings.length $ var "plain") (Strings.length $ var "shown")))
         (var "plain")
         (var "shown")),
     J._Value_object>>: "obj" ~>

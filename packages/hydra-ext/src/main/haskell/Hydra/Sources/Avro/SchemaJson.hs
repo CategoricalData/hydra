@@ -472,7 +472,7 @@ decodeObjectSchema = define "decodeObjectSchema" $
             (Logic.ifElse (Equality.equal (var "typeName") (string "fixed"))
               (decodeNamedSchema @@ var "cx" @@ var "m" @@ (decodeFixed @@ var "cx" @@ var "m"))
               -- Primitive type as object (unusual but valid, e.g. {"type": "string"})
-              (Optionals.cases (decodePrimitiveName @@ var "typeName") (err @@ var "cx" @@ (Strings.cat $ list [string "unknown type: ", var "typeName"])) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))))))))
+              (Optionals.cases (decodePrimitiveName @@ var "typeName") (err @@ var "cx" @@ (Strings.concat $ list [string "unknown type: ", var "typeName"])) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))))))))
 
 decodeOrder :: TypedTermDefinition (InferenceContext -> String -> Result Avro.Order)
 decodeOrder = define "decodeOrder" $
@@ -484,7 +484,7 @@ decodeOrder = define "decodeOrder" $
         (Phantoms.right (inject Avro._Order Avro._Order_descending unit))
         (Logic.ifElse (Equality.equal (var "o") (string "ignore"))
           (Phantoms.right (inject Avro._Order Avro._Order_ignore unit))
-          (err @@ var "cx" @@ (Strings.cat $ list [string "unknown order: ", var "o"]))))
+          (err @@ var "cx" @@ (Strings.concat $ list [string "unknown order: ", var "o"]))))
 
 decodePrimitiveName :: TypedTermDefinition (String -> Maybe Avro.Primitive)
 decodePrimitiveName = define "decodePrimitiveName" $
@@ -528,7 +528,7 @@ decodeSchema :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Avro
 decodeSchema = define "decodeSchema" $
   doc "Decode an Avro schema from a JSON value" $
   lambda "cx" $ lambda "v" $
-    cases JM._Value (var "v") (Just (err @@ var "cx" @@ (Strings.cat $ list [string "unexpected JSON value for schema: ", showJsonValue @@ var "v"]))) [
+    cases JM._Value (var "v") (Just (err @@ var "cx" @@ (Strings.concat $ list [string "unexpected JSON value for schema: ", showJsonValue @@ var "v"]))) [
       -- String: primitive type name or reference
       JM._Value_string>>: lambda "s" $
         Optionals.cases (decodePrimitiveName @@ var "s") (Phantoms.right (inject Avro._Schema Avro._Schema_reference (var "s"))) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))),
@@ -550,7 +550,7 @@ encodeAnnotations = define "encodeAnnotations" $
   lambda "m" $
     Lists.map
       (lambda "entry" $ pair
-        (Strings.cat2 (string "@") (Pairs.first (var "entry")))
+        (Strings.concat2 (string "@") (Pairs.first (var "entry")))
         (Pairs.second (var "entry")))
       (Maps.toList (var "m" :: TypedTerm (M.Map String JM.Value)))
 
@@ -718,12 +718,12 @@ getAnnotations :: TypedTermDefinition (M.Map String JM.Value -> M.Map String JM.
 getAnnotations = define "getAnnotations" $
   doc "Extract annotation entries (keys starting with @) from a JSON object map" $
   lambda "m" $
-    (Maps.fromList (Optionals.cat (Lists.map
+    (Maps.fromList (Optionals.givens (Lists.map
       (lambda "entry" $ lets [
         "k">: Pairs.first (var "entry"),
         "v">: Pairs.second (var "entry")] $
         Logic.ifElse
-          (Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (int32 0) (var "k"))) (int32 64))  -- 64 = '@'
+          (Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "k"))) (int32 64))  -- 64 = '@'
           (Optionals.pure (pair (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "k")))) (var "v")))
           nothing)
       (Maps.toList (var "m" :: TypedTerm (M.Map String JM.Value))))) :: TypedTerm (M.Map String JM.Value))
@@ -766,7 +766,7 @@ requireE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.V
 requireE = define "requireE" $
   doc "Look up a required attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
 
 requireNumberE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $
@@ -805,7 +805,7 @@ unexpectedE :: TypedTermDefinition (InferenceContext -> String -> String -> Resu
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected values" $
   lambda "cx" $ lambda "expected" $ lambda "found" $
-    err @@ var "cx" @@ (Strings.cat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
+    err @@ var "cx" @@ (Strings.concat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
 
 
 -- | JSON extraction helpers

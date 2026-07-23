@@ -20,6 +20,8 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Functions as Functions
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -161,8 +163,8 @@ digit = define "digit" $
   doc "Parse a single digit (0-9)" $
   Parsers.satisfy @@ ("c" ~>
     Logic.and
-      (Equality.gte (var "c") zeroCode)
-      (Equality.lte (var "c") nineCode))
+      (Ordering.gte (var "c") zeroCode)
+      (Ordering.lte (var "c") nineCode))
 
 -- | Parse one or more digits and convert to string
 -- | Parse one or more digits and convert to string
@@ -291,10 +293,10 @@ jsonNumber = define "jsonNumber" $
         Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
           "numStr" <~
             (var "intPart" ++
-             Optionals.cases (var "fracPart") (string "") (reify Equality.identity) ++
-             Optionals.cases (var "expPart") (string "") (reify Equality.identity)) $
+             Optionals.cases (var "fracPart") (string "") (reify Functions.identity) ++
+             Optionals.cases (var "expPart") (string "") (reify Functions.identity)) $
           Parsers.pure @@
-            (Json.valueNumber (Optionals.cases (Literals.readDecimal (var "numStr")) (decimal 0) (reify Equality.identity)))))))
+            (Json.valueNumber (Optionals.cases (Literals.readDecimal (var "numStr")) (decimal 0) (reify Functions.identity)))))))
 
 -- | Parse a JSON escape character
 -- | Parse a JSON object

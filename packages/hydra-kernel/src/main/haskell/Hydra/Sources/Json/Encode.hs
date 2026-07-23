@@ -192,7 +192,7 @@ toJson = define "toJson" $
     "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
     "arg" <~ (Core.applicationTypeArgument $ var "app") $
     cases _Type (var "fn")
-      (Just $ left $ Strings.cat $ list [
+      (Just $ left $ Strings.concat $ list [
         string "cannot apply a non-parametric type: ",
         PrintCore.type_ @@ var "fn"]) [
       _Type_application>>: "innerApp" ~>
@@ -206,11 +206,11 @@ toJson = define "toJson" $
           @@ (Core.forallTypeBody $ var "ft"),
       _Type_variable>>: "name" ~>
         "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
-        Optionals.cases (var "lookedUp") (left $ Strings.cat $ list [
+        Optionals.cases (var "lookedUp") (left $ Strings.concat $ list [
             string "unknown type variable: ",
             Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
   cases _Type (var "stripped")
-    (Just $ left $ Strings.cat $ list [
+    (Just $ left $ Strings.concat $ list [
       string "unsupported type for JSON encoding: ",
       PrintCore.type_ @@ var "typ"]) [
 
@@ -302,7 +302,7 @@ toJson = define "toJson" $
             (Lists.zip (var "fieldTypes") (var "fields"))) $
           -- Filter out Nothing entries (omitted optional fields) and build object
           Eithers.map ("pairs" ~>
-            Json.valueObject $ Optionals.cat $ var "pairs")
+            Json.valueObject $ Optionals.givens $ var "pairs")
             (var "encodedPairs")],
 
     -- Unions (single-key object)
@@ -317,7 +317,7 @@ toJson = define "toJson" $
           "ftypeResult" <~ (
             Optionals.cases (Lists.find
                 ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
-                (var "rt")) (left $ Strings.cat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
+                (var "rt")) (left $ Strings.concat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
           Eithers.either
             ("err" ~> left $ var "err")
             ("ftype" ~>
@@ -427,7 +427,7 @@ toJsonUntyped = define "toJsonUntyped" $
   "term" ~>
   "stripped" <~ (Strip.deannotateTerm @@ var "term") $
   cases _Term (var "stripped")
-    (Just $ left $ Strings.cat $ list [
+    (Just $ left $ Strings.concat $ list [
       string "unsupported term variant for JSON encoding: ",
       PrintCore.term @@ var "term"]) [
     -- Literals

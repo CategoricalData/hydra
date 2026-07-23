@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
@@ -221,7 +222,7 @@ encodeFloatLiteral = define "encodeFloatLiteral" $
       (coqTermQualid @@ string "hydra_negInf") $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
       (coqTermQualid @@ string "hydra_nan")
-      (coqTermQualid @@ Strings.cat (list [string "(", var "s", string ")"]))
+      (coqTermQualid @@ Strings.concat (list [string "(", var "s", string ")"]))
 
 -- | Encode a single Hydra Lambda term into a Coq `fun` term.
 encodeLambdaTerm :: TypedTermDefinition (CE.CoqEnvironment -> Lambda -> C.Term)
@@ -246,31 +247,31 @@ encodeLiteral = define "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: "b" ~>
       Logic.ifElse (var "b") (coqTermQualid @@ string "true") (coqTermQualid @@ string "false"),
-    _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.cat (list [
+    _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.concat (list [
       string "(", Literals.showDecimal (var "d"), string ")"]),
     _Literal_float>>: "fv" ~> cases _FloatValue (var "fv") Nothing [
       _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (Literals.float32ToFloat64 $ var "v"),
       _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (var "v")],
     _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") Nothing [
-      _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showBigint (var "v"), string ")%Z"]),
-      _IntegerValue_int8>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_int8>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showInt8 (var "v"), string ")%Z"]),
-      _IntegerValue_int16>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_int16>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showInt16 (var "v"), string ")%Z"]),
-      _IntegerValue_int32>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_int32>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showInt32 (var "v"), string ")%Z"]),
-      _IntegerValue_int64>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_int64>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showInt64 (var "v"), string ")%Z"]),
-      _IntegerValue_uint8>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_uint8>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showUint8 (var "v"), string ")"]),
-      _IntegerValue_uint16>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_uint16>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showUint16 (var "v"), string ")"]),
-      _IntegerValue_uint32>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_uint32>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showUint32 (var "v"), string ")"]),
-      _IntegerValue_uint64>>: "v" ~> coqTermQualid @@ Strings.cat (list [
+      _IntegerValue_uint64>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showUint64 (var "v"), string ")"])],
-    _Literal_string>>: "s" ~> coqTermQualid @@ Strings.cat (list [
+    _Literal_string>>: "s" ~> coqTermQualid @@ Strings.concat (list [
       string "\"", escapeCoqString @@ var "s", string "\"%string"]),
     _Literal_binary>>: constant (coqTermQualid @@ string "\"\"")]
 
@@ -419,7 +420,7 @@ encodeTerm = define "encodeTerm" $
         (coqTermQualid @@ string "tt")
         (coqTermApp
           @@ (coqTermQualid @@ (resolveQualifiedName @@ var "env"
-                @@ (Strings.cat2 (string "Build_") (unwrap _Name @@ var "rname"))))
+                @@ (Strings.concat2 (string "Build_") (unwrap _Name @@ var "rname"))))
           @@ Lists.map
             (lambda "f" $ encodeTerm @@ var "env" @@ (Core.fieldTerm $ var "f"))
             (var "rfields")),
@@ -583,7 +584,7 @@ encodeType = define "encodeType" $
       -- primitives like `Type`, locally-bound type-param names like `t0`);
       -- only `hydra.<ns>.<x>` / `Build_hydra.<ns>.<x>` references need to
       -- flow through the full qualified-name resolver.
-      "headSeg">: Optionals.fromOptional (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
+      "headSeg">: Optionals.withDefault (var "raw") (Lists.head (Strings.splitOn (string ".") (var "raw")))] $
       Logic.ifElse (Logic.or
           (Equality.equal (var "headSeg") (string "hydra"))
           (Equality.equal (var "headSeg") (string "Build_hydra")))
@@ -621,7 +622,7 @@ encodeUnionConstructor = define "encodeUnionConstructor" $
   lambdas ["env", "typeName", "f"] $ lets [
     "ufn">: Core.fieldTypeName $ var "f",
     "uft">: Core.fieldTypeType $ var "f",
-    "constrName">: Strings.cat (list [
+    "constrName">: Strings.concat (list [
       var "typeName", string "_",
       Formatting.capitalize @@ (unwrap _Name @@ var "ufn")])] $
     record C._Constructor [
@@ -694,14 +695,14 @@ encodeUnionElim = define "encodeUnionElim" $
       -- `| _ => hydra_unreachable` (replacing the old addPartialMatchCatchAll pass).
       -- If the match is exhaustive (or we lack the count), emit no default.
       (Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Equality.gte (var "caseCount") (var "n")))
+        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Ordering.gte (var "caseCount") (var "n")))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
         (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
       (lambda "defT" $ Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Equality.gte (var "caseCount") (var "n")))
+        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Ordering.gte (var "caseCount") (var "n")))
         (list ([] :: [TypedTerm C.Equation]))
         (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")])),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
@@ -749,7 +750,7 @@ encodeWrapElim = define "encodeWrapElim" $
 escapeCoqString :: TypedTermDefinition (String -> String)
 escapeCoqString = define "escapeCoqString" $
   doc "Escape a string for Coq string literals: double any embedded quotes" $
-  lambda "s" $ Strings.intercalate (string "\"\"") (Strings.splitOn (string "\"") (var "s"))
+  lambda "s" $ Strings.join (string "\"\"") (Strings.splitOn (string "\"") (var "s"))
 
 -- | Walk a Hydra term, collecting the leading lambda binders as Coq Binders.
 extractLambdaBinders :: TypedTermDefinition (CE.CoqEnvironment -> Term -> [C.Binder])
@@ -805,7 +806,7 @@ localTypeName = define "localTypeName" $
   doc "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "localPart">: Optionals.fromOptional (var "s") (Lists.maybeLast $ var "parts")] $
+    "localPart">: Optionals.withDefault (var "s") (Lists.last $ var "parts")] $
     sanitizeVar @@ var "localPart"
 
 -- | Combine a universe of type and term definitions into a single Coq Document.
@@ -869,7 +870,7 @@ resolveQualifiedName = define "resolveQualifiedName" $
   doc "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source" $
   lambdas ["env", "s"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "head1">: Optionals.fromOptional (var "s") (Lists.maybeHead (var "parts")),
+    "head1">: Optionals.withDefault (var "s") (Lists.head (var "parts")),
     "currentNs">: project CE._CoqEnvironment CE._CoqEnvironment_currentNamespace @@ var "env",
     "ambig">: project CE._CoqEnvironment CE._CoqEnvironment_ambiguousNames @@ var "env"] $
     -- Coq.<name> : synthetic marker (from `typeToTerm`) for a Coq-builtin
@@ -877,22 +878,22 @@ resolveQualifiedName = define "resolveQualifiedName" $
     -- raw, bypassing sanitizeVar — otherwise `Coq.list` would collide with a
     -- user-level lambda parameter named `list` and get escaped to `list_`.
     Logic.ifElse (Equality.equal (var "head1") (string "Coq"))
-      (Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))) $
+      (Optionals.withDefault (var "s") (Lists.last (var "parts"))) $
     -- Build_hydra.<ns>.<x> : strip to Build_<sanitized local>.
     Logic.ifElse (Equality.equal (var "head1") (string "Build_hydra"))
-      (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts"))))) $
+      (Strings.concat2 (string "Build_") (sanitizeStripped @@ (Optionals.withDefault (var "s") (Lists.last (var "parts"))))) $
     Logic.ifElse (Equality.equal (var "head1") (string "hydra"))
       (lets [
         "rest">: Lists.drop (int32 1) (var "parts"),
-        "head2">: Optionals.fromOptional (string "") (Lists.maybeHead (var "rest"))] $
+        "head2">: Optionals.withDefault (string "") (Lists.head (var "rest"))] $
         -- hydra.lib.<mod>.<func> : keep module.function, with keyword rewrites.
         Logic.ifElse (Equality.equal (var "head2") (string "lib"))
-          (renameLibKeyword @@ (Strings.intercalate (string ".") (Lists.drop (int32 1) (var "rest")))) $
+          (renameLibKeyword @@ (Strings.join (string ".") (Lists.drop (int32 1) (var "rest")))) $
           -- hydra.<ns>...<x> : compute local name + source namespace.
           lets [
-            "localRaw">: Optionals.fromOptional (var "s") (Lists.maybeLast (var "parts")),
+            "localRaw">: Optionals.withDefault (var "s") (Lists.last (var "parts")),
             "localN">: sanitizeStripped @@ var "localRaw",
-            "sourceNs">: Strings.intercalate (string ".") (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit (var "parts"))),
+            "sourceNs">: Strings.join (string ".") (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init (var "parts"))),
             "isCurrent">: Equality.equal (var "sourceNs") (var "currentNs"),
             -- Ambiguity check is against the raw (unsanitised) local name,
             -- since the ambiguous-names set in the environment is populated
@@ -907,9 +908,9 @@ resolveQualifiedName = define "resolveQualifiedName" $
                 (Equality.equal (var "head2") (string "parsers"))
                 (Logic.not (var "isCurrent")))] $
           Logic.ifElse (Logic.and (var "isAmbig") (Logic.not (var "isCurrent")))
-            (Strings.cat (list [var "sourceNs", string ".", var "localN"])) $
+            (Strings.concat (list [var "sourceNs", string ".", var "localN"])) $
           Logic.ifElse (var "isCollisionProne")
-            (Strings.cat (list [
+            (Strings.concat (list [
               sanitizeStripped @@ var "head2",
               string ".",
               sanitizeStripped @@ var "localRaw"]))
@@ -1007,13 +1008,13 @@ unionConstructorName = define "unionConstructorName" $
   doc "Combine a type name and field name into a constructor identifier, preserving the namespace prefix" $
   lambdas ["typeName", "fieldName"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "typeName"),
-    "localPart">: Optionals.fromOptional (var "typeName") (Lists.maybeLast $ var "parts"),
-    "prefixParts">: Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeInit $ var "parts"),
+    "localPart">: Optionals.withDefault (var "typeName") (Lists.last $ var "parts"),
+    "prefixParts">: Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init $ var "parts"),
     "prefix">: Logic.ifElse (Lists.null $ var "prefixParts")
       (string "")
-      (Strings.cat2 (Strings.intercalate (string ".") (var "prefixParts")) (string ".")),
+      (Strings.concat2 (Strings.join (string ".") (var "prefixParts")) (string ".")),
     "sanitized">: sanitizeVar @@ var "localPart"] $
-    Strings.cat (list [
+    Strings.concat (list [
       var "prefix",
       var "sanitized",
       string "_",

@@ -22,6 +22,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -269,14 +270,14 @@ avroHydraAdapter = define "avroHydraAdapter" $
                     "encodePair">: lambda "entry" $ lets [
                       "k">: Pairs.first (var "entry"),
                       "v">: Pairs.second (var "entry")] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
+                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
                           (Coders.coderEncode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "v")),
                     -- decodeField: decode a Hydra field back to a key-value pair
                     "decodeField">: lambda "fld" $ lets [
                       "k">: unwrap _Name @@ (project _Field _Field_name @@ var "fld"),
                       "v">: project _Field _Field_term @@ var "fld"] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
+                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ pair (var "k") (var "v'"))
                           (Coders.coderDecode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "v")),
                     -- lossy: any adapter is lossy?
@@ -317,7 +318,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_elements @@ var "env3"]] $
               right (pair (annotateAdapter @@ var "ann" @@ var "ad") (var "env4"))))
           -- Already defined: error
-          (lambda "_ad" $ err @@ var "cx" @@ Strings.cat2 (string "Avro named type defined more than once: ") (showQname @@ var "qname")),
+          (lambda "_ad" $ err @@ var "cx" @@ Strings.concat2 (string "Avro named type defined more than once: ") (showQname @@ var "qname")),
 
       -- SchemaPrimitive
       Avro._Schema_primitive>>: lambda "p" $
@@ -398,7 +399,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
       -- SchemaReference
       Avro._Schema_reference>>: lambda "name_" $ lets [
         "qname">: parseAvroName @@ (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0") @@ var "name_"] $
-        Optionals.cases (getAvroHydraAdapter @@ var "qname" @@ var "env0") (err @@ var "cx" @@ Strings.cat2 (string "Referenced Avro type has not been defined: ") (showQname @@ var "qname")) (lambda "ad" $ right (pair (var "ad") (var "env0"))),
+        Optionals.cases (getAvroHydraAdapter @@ var "qname" @@ var "env0") (err @@ var "cx" @@ Strings.concat2 (string "Referenced Avro type has not been defined: ") (showQname @@ var "qname")) (lambda "ad" $ right (pair (var "ad") (var "env0"))),
 
       -- SchemaUnion
       Avro._Schema_union>>: lambda "u" $ lets [
@@ -428,9 +429,9 @@ avroHydraAdapter = define "avroHydraAdapter" $
                       _Term_optional>>: lambda "ot" $
                         Optionals.cases (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "term'" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "term'")])))
               (var "env1")))] $
-        Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
+        Logic.ifElse (Ordering.gt (Lists.length (var "nonNulls")) (int32 1))
           (err @@ var "cx" @@ string "general-purpose unions are not yet supported")
-          (Optionals.cases (Lists.maybeHead (var "nonNulls")) (err @@ var "cx" @@ string "cannot generate the empty type") (lambda "nonNullHead" $
+          (Optionals.cases (Lists.head (var "nonNulls")) (err @@ var "cx" @@ string "cannot generate the empty type") (lambda "nonNullHead" $
               Logic.ifElse (var "hasNull")
                 (var "forOptional" @@ var "nonNullHead")
                 (Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "nonNullHead" @@ var "env0") (lambda "adEnv" $ lets [
@@ -541,12 +542,12 @@ findAvroPrimaryKeyField :: TypedTermDefinition (InferenceContext -> AvroEnv.Avro
 findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
   doc "Find the primary key field among a list of Avro fields" $
   lambda "cx" $ lambda "qname" $ lambda "avroFields" $ lets [
-    "keys">: Optionals.cat (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
+    "keys">: Optionals.givens (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
     Logic.ifElse (Lists.null (var "keys"))
       (right nothing)
       (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
-        (right (Lists.maybeHead (var "keys")))
-        (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
+        (right (Lists.head (var "keys")))
+        (err @@ var "cx" @@ Strings.concat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
 
 foreignKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Result (Maybe AvroEnv.AvroForeignKey))
 foreignKeyE = define "foreignKeyE" $
@@ -608,20 +609,20 @@ parseAvroName = define "parseAvroName" $
   doc "Parse a dotted Avro name into a qualified name" $
   lambda "mns" $ lambda "name_" $ lets [
     "parts">: Strings.splitOn (string ".") (var "name_"),
-    "local">: Optionals.fromOptional (var "name_") (Lists.maybeLast (var "parts"))] $
+    "local">: Optionals.withDefault (var "name_") (Lists.last (var "parts"))] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       (record AvroEnv._AvroQualifiedName [
         AvroEnv._AvroQualifiedName_namespace>>: var "mns",
         AvroEnv._AvroQualifiedName_name>>: var "local"])
       (record AvroEnv._AvroQualifiedName [
-        AvroEnv._AvroQualifiedName_namespace>>: Optionals.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")),
+        AvroEnv._AvroQualifiedName_namespace>>: Optionals.map (lambda "ps" $ Strings.join (string ".") (var "ps")) (Lists.init (var "parts")),
         AvroEnv._AvroQualifiedName_name>>: var "local"])
 
 patternToNameConstructor :: TypedTermDefinition (String -> String -> Name)
 patternToNameConstructor = define "patternToNameConstructor" $
   doc "Create a name constructor from a pattern string" $
   lambda "pat" $ lambda "s" $
-    Core.name (Strings.intercalate (var "s") (Strings.splitOn (string "${}") (var "pat")))
+    Core.name (Strings.join (var "s") (Strings.splitOn (string "${}") (var "pat")))
 
 prepareField :: TypedTermDefinition (InferenceContext -> AvroEnv.AvroEnvironment -> Avro.Field -> Result ((String, (Avro.Field, AvroHydraAdapter)), AvroEnv.AvroEnvironment))
 prepareField = define "prepareField" $
@@ -661,7 +662,7 @@ prepareField = define "prepareField" $
                 (var "env2"))] $
             -- Match on the deannotated target type for foreign key handling
             cases _Type (Strip.deannotateType @@ Coders.adapterTarget (var "ad0"))
-              (Just (err @@ var "cx" @@ Strings.cat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
+              (Just (err @@ var "cx" @@ Strings.concat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
               _Type_optional>>: lambda "innerTyp" $
                 cases _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
                   _Type_literal>>: lambda "_" $
@@ -741,7 +742,7 @@ requireStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map Strin
 requireStringE = define "requireStringE" $
   doc "Look up a required string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
 
 rewriteAvroSchemaM :: TypedTermDefinition (((Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema)
 rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
@@ -802,8 +803,8 @@ showQname = define "showQname" $
   lambda "qname" $ lets [
     "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
     "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
-    Strings.cat2
-      (Optionals.cases (var "mns") (string "") (lambda "ns" $ Strings.cat2 (var "ns") (string ".")))
+    Strings.concat2
+      (Optionals.cases (var "mns") (string "") (lambda "ns" $ Strings.concat2 (var "ns") (string ".")))
       (var "local")
 
 stringToTermE :: TypedTermDefinition (InferenceContext -> Type -> String -> Result Term)
@@ -819,7 +820,7 @@ stringToTermE = define "stringToTermE" $
         cases _LiteralType (var "lt")
           (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other literal type")) [
           _LiteralType_boolean>>: constant $
-            var "readAndWrap" @@ (lambda "x" $ Literals.readBoolean (var "x")) @@ (lambda "b" $ Core.literalBoolean (var "b")),
+            var "readAndWrap" @@ (lambda "x" $ Literals.parseBoolean (var "x")) @@ (lambda "b" $ Core.literalBoolean (var "b")),
           _LiteralType_integer>>: lambda "it" $
             cases _IntegerType (var "it") Nothing [
               _IntegerType_bigint>>: constant $
@@ -853,7 +854,7 @@ termToStringE = define "termToStringE" $
         cases _Literal (var "l")
           (Just (unexpectedE @@ var "cx" @@ string "boolean, integer, or string" @@ string "other literal")) [
           _Literal_boolean>>: lambda "b" $
-            right (Literals.showBoolean (var "b")),
+            right (Literals.printBoolean (var "b")),
           _Literal_integer>>: lambda "iv" $
             right (cases _IntegerValue (var "iv") Nothing [
               _IntegerValue_bigint>>: lambda "i" $ Literals.showBigint (var "i"),
@@ -874,7 +875,7 @@ unexpectedE :: TypedTermDefinition (InferenceContext -> String -> String -> Resu
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected values" $
   lambda "cx" $ lambda "expected" $ lambda "found" $
-    err @@ var "cx" @@ (Strings.cat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
+    err @@ var "cx" @@ (Strings.concat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
 
 -- | JSON extraction helpers
 
