@@ -1,14 +1,14 @@
 (in-package :cl-user)
 
-;; cat :: [String] -> String
+;; concat :: [String] -> String
 ;; Concatenate a list of strings into a single string.
-(defvar hydra_overlay_common_lisp_lib_strings_cat
+(defvar hydra_overlay_common_lisp_lib_strings_concat
   (lambda (strs)
     (apply #'concatenate 'string strs)))
 
-;; cat2 :: String -> String -> String
+;; concat2 :: String -> String -> String
 ;; Concatenate two strings.
-(defvar hydra_overlay_common_lisp_lib_strings_cat2
+(defvar hydra_overlay_common_lisp_lib_strings_concat2
   (lambda (a)
     (lambda (b)
       (concatenate 'string a b))))
@@ -41,9 +41,9 @@
   (lambda (s)
     (char-code (char s 0))))
 
-;; intercalate :: String -> [String] -> String
+;; join :: String -> [String] -> String
 ;; Join a list of strings with a separator between each element.
-(defvar hydra_overlay_common_lisp_lib_strings_intercalate
+(defvar hydra_overlay_common_lisp_lib_strings_join
   (lambda (sep)
     (lambda (strs)
       (if (null strs)
@@ -103,9 +103,9 @@
             (push (subseq s start len) acc))
           (nreverse acc)))))
 
-;; maybe_char_at :: Int -> String -> Maybe Int
+;; char_at :: Int -> String -> Maybe Int
 ;; Get the Unicode code point at a specific index, returning Nothing if out of bounds.
-(defvar hydra_overlay_common_lisp_lib_strings_maybe_char_at
+(defvar hydra_overlay_common_lisp_lib_strings_char_at
   (lambda (n)
     (lambda (s)
       (if (and (>= n 0) (< n (length s)))

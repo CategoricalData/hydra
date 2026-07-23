@@ -54,7 +54,7 @@ public class ToList extends PrimitiveFunction {
             // Term needs a custom comparator (compareTerms), so sort in an ArrayList scratch
             // buffer and convert the sorted result to a ConsList.
             ArrayList<Term> scratch = new ArrayList<>(terms);
-            scratch.sort(hydra.overlay.java.lib.equality.Compare::compareTerms);
+            scratch.sort(hydra.overlay.java.lib.ordering.Compare::compareTerms);
             return Terms.list(ConsList.fromList(scratch));
         }, hydra.extract.Core.set(graph, args.get(0)));
     }

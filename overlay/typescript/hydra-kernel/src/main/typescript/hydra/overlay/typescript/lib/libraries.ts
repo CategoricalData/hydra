@@ -37,11 +37,13 @@ import { defaultImplementations } from "../../../lib/defaults.js";
 
 import * as libChars from "./chars.js";
 import * as libEquality from "./equality.js";
+import * as libFunctions from "./functions.js";
 import * as libLists from "./lists.js";
 import * as libLiterals from "./literals.js";
 import * as libLogic from "./logic.js";
 import * as libMaps from "./maps.js";
 import * as libMath from "./math.js";
+import * as libOrdering from "./ordering.js";
 import * as libRegex from "./regex.js";
 import * as libSets from "./sets.js";
 import * as libStrings from "./strings.js";
@@ -392,19 +394,7 @@ const mathPrimitives = (): readonly Primitive[] => {
       (g, args) =>
         bind(need(args, 0, "odd"), (a0) =>
           bind(dAnyInt(g, a0), (x) => right(tBool(x % 2 !== 0))))),
-    prim("hydra.lib.math.max", scheme(tyFnCurried(tyInt32, tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "max"), (a0) =>
-          bind(need(args, 1, "max"), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) => right(tInt(Math.max(x, y)))))))),
-    prim("hydra.lib.math.min", scheme(tyFnCurried(tyInt32, tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "min"), (a0) =>
-          bind(need(args, 1, "min"), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) => right(tInt(Math.min(x, y)))))))),
-    prim("hydra.lib.math.maybeDiv", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
+    prim("hydra.lib.math.div", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
       (g, args) =>
         bind(need(args, 0, "maybeDiv"), (a0) =>
           bind(need(args, 1, "maybeDiv"), (a1) =>
@@ -412,7 +402,7 @@ const mathPrimitives = (): readonly Primitive[] => {
               bind(dAnyInt(g, a1), (y) =>
                 // Floor division (Haskell `div` semantics): rounds toward -∞.
                 right(y === 0 ? tOptionalNone : tOptionalGiven(tInt(Math.floor(x / y))))))))),
-    prim("hydra.lib.math.maybeMod", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
+    prim("hydra.lib.math.mod", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
       (g, args) =>
         bind(need(args, 0, "maybeMod"), (a0) =>
           bind(need(args, 1, "maybeMod"), (a1) =>
@@ -425,23 +415,13 @@ const mathPrimitives = (): readonly Primitive[] => {
                 return right(tOptionalGiven(tInt(r)));
               }))))),
 
-    prim("hydra.lib.math.maybeRem", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
+    prim("hydra.lib.math.rem", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
       (g, args) =>
         bind(need(args, 0, "maybeRem"), (a0) =>
           bind(need(args, 1, "maybeRem"), (a1) =>
             bind(dAnyInt(g, a0), (x) =>
               bind(dAnyInt(g, a1), (y) =>
                 right(y === 0 ? tOptionalNone : tOptionalGiven(tInt(x - Math.trunc(x / y) * y)))))))),
-    prim("hydra.lib.math.maybePred", scheme(tyFn(tyInt32, tyOptional(tyInt32))),
-      (g, args) =>
-        bind(need(args, 0, "maybePred"), (a0) =>
-          bind(dAnyInt(g, a0), (x) =>
-            right(x === -2147483648 ? tOptionalNone : tOptionalGiven(tInt(x - 1)))))),
-    prim("hydra.lib.math.maybeSucc", scheme(tyFn(tyInt32, tyOptional(tyInt32))),
-      (g, args) =>
-        bind(need(args, 0, "maybeSucc"), (a0) =>
-          bind(dAnyInt(g, a0), (x) =>
-            right(x === 2147483647 ? tOptionalNone : tOptionalGiven(tInt(x + 1)))))),
     prim("hydra.lib.math.range", scheme(tyFnCurried(tyInt32, tyInt32, tyList(tyInt32))),
       (g, args) =>
         bind(need(args, 0, "range"), (a0) =>
@@ -570,12 +550,12 @@ const mathPrimitives = (): readonly Primitive[] => {
 // helpers in lib/literals.ts.
 
 const literalsPrimitives = (): readonly Primitive[] => [
-  u1("hydra.lib.literals.showString", tyString, tyString, dString, libLiterals.showString, tString),
-  u1("hydra.lib.literals.showBoolean", tyBool, tyString, dBool, libLiterals.showBoolean, tString),
-  u1("hydra.lib.literals.readBoolean", tyString, tyOptional(tyBool), dString,
+  u1("hydra.lib.literals.printString", tyString, tyString, dString, libLiterals.printString, tString),
+  u1("hydra.lib.literals.printBoolean", tyBool, tyString, dBool, libLiterals.printBoolean, tString),
+  u1("hydra.lib.literals.parseBoolean", tyString, tyOptional(tyBool), dString,
     (s) => s === "true" ? { tag: "given" as const, value: true } : s === "false" ? { tag: "given" as const, value: false } : { tag: "none" as const },
     (m) => tOptional(m, tBool)),
-  u1("hydra.lib.literals.readString", tyString, tyOptional(tyString), dString,
+  u1("hydra.lib.literals.parseString", tyString, tyOptional(tyString), dString,
     (s) => { try { const v = JSON.parse(s); return typeof v === "string" ? { tag: "given" as const, value: v } : { tag: "none" as const }; } catch { return { tag: "none" as const }; } },
     (m) => tOptional(m, tString)),
   u1("hydra.lib.literals.readInt", tyString, tyOptional(tyInt32), dString,
@@ -848,36 +828,36 @@ const equalityPrimitives = (): readonly Primitive[] => {
             right(tBool(f(a0 as unknown, a1 as unknown))))));
   return [
     bin("hydra.lib.equality.equal", "equality", libEquality.equal),
-    bin("hydra.lib.equality.lt", "ordering", libEquality.lt),
-    bin("hydra.lib.equality.lte", "ordering", libEquality.lte),
-    bin("hydra.lib.equality.gt", "ordering", libEquality.gt),
-    bin("hydra.lib.equality.gte", "ordering", libEquality.gte),
-    prim("hydra.lib.equality.compare", schemeC(tyFn(a, tyFn(a, { tag: "variable", value: { value: "hydra.util.Comparison" } } as never as Type)), ["a"], [["a", ["ordering"]]]),
+    bin("hydra.lib.ordering.lt", "ordering", libOrdering.lt),
+    bin("hydra.lib.ordering.lte", "ordering", libOrdering.lte),
+    bin("hydra.lib.ordering.gt", "ordering", libOrdering.gt),
+    bin("hydra.lib.ordering.gte", "ordering", libOrdering.gte),
+    prim("hydra.lib.ordering.compare", schemeC(tyFn(a, tyFn(a, { tag: "variable", value: { value: "hydra.util.Comparison" } } as never as Type)), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "compare"), (a0) =>
           bind(need(args, 1, "compare"), (a1) => {
             // The kernel-level Comparison value is the **Term** encoding:
             // `inject(hydra.util.Comparison){<arm>=unit}`. Show.core.term
             // renders this via cases on Term_inject. (The native
-            // discriminated-union shape from libEquality.compare is for
+            // discriminated-union shape from libOrdering.compare is for
             // host-language code, not Term-level rendering.)
-            const c = libEquality.compare(a0 as unknown, a1 as unknown);
+            const c = libOrdering.compare(a0 as unknown, a1 as unknown);
             const arm = c.tag; // "lessThan" | "equalTo" | "greaterThan"
             return right(tInject("hydra.util.Comparison", arm, { tag: "unit" } as never));
           }))),
-    prim("hydra.lib.equality.identity", scheme(tyFn(a, a), ["a"]),
+    prim("hydra.lib.functions.identity", scheme(tyFn(a, a), ["a"]),
       (_g, args) =>
-        bind(need(args, 0, "identity"), (a0) => right(a0))),
-    prim("hydra.lib.equality.min", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
+        bind(need(args, 0, "identity"), (a0) => right(libFunctions.identity(a0)))),
+    prim("hydra.lib.ordering.min", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "min"), (a0) =>
           bind(need(args, 1, "min"), (a1) =>
-            right(libEquality.lt(a0, a1) ? a0 : a1)))),
-    prim("hydra.lib.equality.max", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
+            right(libOrdering.lt(a0, a1) ? a0 : a1)))),
+    prim("hydra.lib.ordering.max", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "max"), (a0) =>
           bind(need(args, 1, "max"), (a1) =>
-            right(libEquality.lt(a1, a0) ? a0 : a1)))),
+            right(libOrdering.lt(a1, a0) ? a0 : a1)))),
   ];
 };
 
@@ -946,7 +926,7 @@ const stringsPrimitives = (): readonly Primitive[] => [
     (g, args) =>
       bind(need(args, 0, "toLower"), (a0) =>
         bind(dString(g, a0), (s) => right(tString(libStrings.toLower(s)))))),
-  prim("hydra.lib.strings.cat", scheme(tyFn(tyList(tyString), tyString)),
+  prim("hydra.lib.strings.concat", scheme(tyFn(tyList(tyString), tyString)),
     (g, args) =>
       bind(need(args, 0, "cat"), (a0) => {
         const lst = a0 as { tag: string; value?: readonly Term[] };
@@ -959,9 +939,9 @@ const stringsPrimitives = (): readonly Primitive[] => [
         }
         return right(tString(parts.join("")));
       })),
-  u2("hydra.lib.strings.cat2", tyString, tyString, tyString,
-    dString, dString, libStrings.cat2, tString),
-  prim("hydra.lib.strings.maybeCharAt", scheme(tyFnCurried(tyInt32, tyString, tyOptional(tyInt32))),
+  u2("hydra.lib.strings.concat2", tyString, tyString, tyString,
+    dString, dString, libStrings.concat2, tString),
+  prim("hydra.lib.strings.charAt", scheme(tyFnCurried(tyInt32, tyString, tyOptional(tyInt32))),
     (g, args) =>
       bind(need(args, 0, "maybeCharAt"), (a0) =>
         bind(need(args, 1, "maybeCharAt"), (a1) =>
@@ -1027,7 +1007,7 @@ const stringsPrimitives = (): readonly Primitive[] => [
         }
         return right(tString(libStrings.unlines(parts)));
       })),
-  prim("hydra.lib.strings.intercalate", scheme(tyFnCurried(tyString, tyList(tyString), tyString)),
+  prim("hydra.lib.strings.join", scheme(tyFnCurried(tyString, tyList(tyString), tyString)),
     (g, args) =>
       bind(need(args, 0, "intercalate"), (a0) =>
         bind(need(args, 1, "intercalate"), (a1) =>
@@ -1246,7 +1226,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               return right(mkList(lst.slice(i)));
             })))),
     // Simple non-HOF list ops that we already have via the runtime.
-    prim("hydra.lib.lists.elem", schemeC(tyFnCurried(tyVar("a"), tyList(tyVar("a")), tyBool), ["a"], [["a", ["equality"]]]),
+    prim("hydra.lib.lists.member", schemeC(tyFnCurried(tyVar("a"), tyList(tyVar("a")), tyBool), ["a"], [["a", ["equality"]]]),
       (_g, args) =>
         bind(need(args, 0, "elem"), (x) =>
           bind(need(args, 1, "elem"), (xs) =>
@@ -1257,7 +1237,7 @@ const listsPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "concat2"), (ys) =>
             bind(asList(xs), (a) =>
               bind(asList(ys), (b) => right(mkList([...a, ...b]))))))),
-    prim("hydra.lib.lists.intercalate", scheme(tyFnCurried(tyList(tyVar("a")), tyList(tyList(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
+    prim("hydra.lib.lists.join", scheme(tyFnCurried(tyList(tyVar("a")), tyList(tyList(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "intercalate"), (sep) =>
           bind(need(args, 1, "intercalate"), (xss) =>
@@ -1294,26 +1274,26 @@ const listsPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "take"), (xs) =>
             bind(dAnyInt(g, a0), (n) =>
               bind(asList(xs), (lst) => right(mkList(n <= 0 ? [] : lst.slice(0, n)))))))),
-    prim("hydra.lib.lists.maybeAt", scheme(tyFnCurried(tyInt32, tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
+    prim("hydra.lib.lists.at", scheme(tyFnCurried(tyInt32, tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
       (g, args) =>
         bind(need(args, 0, "maybeAt"), (a0) =>
           bind(need(args, 1, "maybeAt"), (xs) =>
             bind(dAnyInt(g, a0), (i) =>
               bind(asList(xs), (lst) =>
                 right(i >= 0 && i < lst.length ? tOptionalGiven(lst[i]!) : tOptionalNone)))))),
-    prim("hydra.lib.lists.maybeHead", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
+    prim("hydra.lib.lists.head", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "maybeHead"), (xs) =>
           bind(asList(xs), (lst) => right(lst.length === 0 ? tOptionalNone : tOptionalGiven(lst[0]!))))),
-    prim("hydra.lib.lists.maybeLast", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
+    prim("hydra.lib.lists.last", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "maybeLast"), (xs) =>
           bind(asList(xs), (lst) => right(lst.length === 0 ? tOptionalNone : tOptionalGiven(lst[lst.length - 1]!))))),
-    prim("hydra.lib.lists.maybeTail", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyList(tyVar("a")))), ["a"]),
+    prim("hydra.lib.lists.tail", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyList(tyVar("a")))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "maybeTail"), (xs) =>
           bind(asList(xs), (lst) => right(lst.length === 0 ? tOptionalNone : tOptionalGiven(mkList(lst.slice(1))))))),
-    prim("hydra.lib.lists.maybeInit", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyList(tyVar("a")))), ["a"]),
+    prim("hydra.lib.lists.init", scheme(tyFn(tyList(tyVar("a")), tyOptional(tyList(tyVar("a")))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "maybeInit"), (xs) =>
           bind(asList(xs), (lst) => right(lst.length === 0 ? tOptionalNone : tOptionalGiven(mkList(lst.slice(0, -1))))))),
@@ -1337,7 +1317,7 @@ const listsPrimitives = (): readonly Primitive[] => {
         bind(need(args, 0, "replicate"), (a0) =>
           bind(need(args, 1, "replicate"), (x) =>
             bind(dAnyInt(g, a0), (n) => right(mkList(Array.from({ length: Math.max(n, 0) }, () => x))))))),
-    prim("hydra.lib.lists.nub", schemeC(tyFn(tyList(tyVar("a")), tyList(tyVar("a"))), ["a"], [["a", ["equality"]]]),
+    prim("hydra.lib.lists.distinct", schemeC(tyFn(tyList(tyVar("a")), tyList(tyVar("a"))), ["a"], [["a", ["equality"]]]),
       (_g, args) =>
         bind(need(args, 0, "nub"), (xs) =>
           bind(asList(xs), (lst) => {
@@ -1366,10 +1346,10 @@ const listsPrimitives = (): readonly Primitive[] => {
       (_g, args) =>
         bind(need(args, 0, "sort"), (xs) =>
           bind(asList(xs), (lst) => {
-            const sorted = [...lst].sort((a, b) => libEquality.lt(a as unknown, b as unknown) ? -1 : libEquality.lt(b as unknown, a as unknown) ? 1 : 0);
+            const sorted = [...lst].sort((a, b) => libOrdering.lt(a as unknown, b as unknown) ? -1 : libOrdering.lt(b as unknown, a as unknown) ? 1 : 0);
             return right(mkList(sorted));
           }))),
-    prim("hydra.lib.lists.sortOn", schemeC(tyFnCurried(tyFn(tyVar("a"), tyVar("b")), tyList(tyVar("a")), tyList(tyVar("a"))), ["a", "b"], [["b", ["ordering"]]]),
+    prim("hydra.lib.lists.sortBy", schemeC(tyFnCurried(tyFn(tyVar("a"), tyVar("b")), tyList(tyVar("a")), tyList(tyVar("a"))), ["a", "b"], [["b", ["ordering"]]]),
       (g, args) =>
         bind(need(args, 0, "sortOn"), (fn) =>
           bind(need(args, 1, "sortOn"), (xs) =>
@@ -1382,7 +1362,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 keyed.push([x, r.value]);
               }
-              keyed.sort((a, b) => libEquality.lt(a[1] as unknown, b[1] as unknown) ? -1 : libEquality.lt(b[1] as unknown, a[1] as unknown) ? 1 : 0);
+              keyed.sort((a, b) => libOrdering.lt(a[1] as unknown, b[1] as unknown) ? -1 : libOrdering.lt(b[1] as unknown, a[1] as unknown) ? 1 : 0);
               return right(mkList(keyed.map((p) => p[0])));
             })))),
     prim("hydra.lib.lists.partition", scheme(tyFnCurried(tyFn(tyVar("a"), tyBool), tyList(tyVar("a")), tyPair(tyList(tyVar("a")), tyList(tyVar("a")))), ["a"]),
@@ -1813,7 +1793,7 @@ const effectsPrimitives = (): readonly Primitive[] => {
     effectPrim("hydra.lib.effects.compose",
       scheme(tyFnCurried(tyFn(x, tyEffect(y)), tyFn(y, tyEffect(z)), x, tyEffect(z)), ["x", "y", "z"])),
     // foldl : forall x y. (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
-    effectPrim("hydra.lib.effects.foldl",
+    effectPrim("hydra.lib.effects.foldList",
       scheme(tyFnCurried(tyFnCurried(x, y, tyEffect(x)), x, tyList(y), tyEffect(x)), ["x", "y"])),
     // map : forall x y. (x -> y) -> effect<x> -> effect<y>
     effectPrim("hydra.lib.effects.map",
@@ -1923,7 +1903,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
     return null;
   };
   return [
-    prim("hydra.lib.optionals.fromOptional", scheme(tyFnCurried(tyVar("a"), tyOptional(tyVar("a")), tyVar("a")), ["a"]),
+    prim("hydra.lib.optionals.withDefault", scheme(tyFnCurried(tyVar("a"), tyOptional(tyVar("a")), tyVar("a")), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "fromOptional-default"), (def) =>
           bind(need(args, 1, "fromOptional-m"), (m) => {
@@ -1971,7 +1951,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
     prim("hydra.lib.optionals.pure", scheme(tyFn(tyVar("a"), tyOptional(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "pure"), (x) => right(tOptionalGiven(x)))),
-    prim("hydra.lib.optionals.cat", scheme(tyFn(tyList(tyOptional(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
+    prim("hydra.lib.optionals.givens", scheme(tyFn(tyList(tyOptional(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "cat"), (xs) => {
           const lst = xs as { tag: string; value?: readonly Term[] };
@@ -2171,24 +2151,6 @@ const eithersPrimitives = (): readonly Primitive[] => {
           if (!ev) return left({ tag: "other", value: "expected an either" } as never);
           return right(tBool(ev.tag === "right"));
         })),
-    prim("hydra.lib.eithers.fromLeft", scheme(tyFnCurried(tyVar("a"), tyEither(tyVar("a"), tyVar("b")), tyVar("a")), ["a", "b"]),
-      (_g, args) =>
-        bind(need(args, 0, "fromLeft-def"), (def) =>
-          bind(need(args, 1, "fromLeft-e"), (e) => {
-            const ev = asEither(e);
-            if (!ev) return left({ tag: "other", value: "expected an either" } as never);
-            return right(ev.tag === "left" ? ev.value : def);
-          })),
-      [0]),
-    prim("hydra.lib.eithers.fromRight", scheme(tyFnCurried(tyVar("b"), tyEither(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
-      (_g, args) =>
-        bind(need(args, 0, "fromRight-def"), (def) =>
-          bind(need(args, 1, "fromRight-e"), (e) => {
-            const ev = asEither(e);
-            if (!ev) return left({ tag: "other", value: "expected an either" } as never);
-            return right(ev.tag === "right" ? ev.value : def);
-          })),
-      [0]),
     prim("hydra.lib.eithers.lefts", scheme(tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))), tyList(tyVar("a"))), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "lefts"), (xs) => {
@@ -2213,7 +2175,7 @@ const eithersPrimitives = (): readonly Primitive[] => {
           }
           return right({ tag: "list", value: out } as never);
         })),
-    // bimap, foldl, mapList — used by Java/Python coders. Kernel kernel
+    // bimap, foldList, mapList — used by Java/Python coders. Kernel kernel
     // registers these in Libraries.hs; their type schemes (here transcribed)
     // are what `analyzeFunctionTerm` consults to type top-level uses.
     prim("hydra.lib.eithers.bimap", scheme(
@@ -2221,12 +2183,12 @@ const eithersPrimitives = (): readonly Primitive[] => {
         tyEither(tyVar("a"), tyVar("b")), tyEither(tyVar("c"), tyVar("d"))),
       ["a", "b", "c", "d"]),
       (_g, args) => left({ tag: "other", value: "bimap interpreter not implemented (kernel-only)" } as never)),
-    prim("hydra.lib.eithers.foldl", scheme(
+    prim("hydra.lib.eithers.foldList", scheme(
       tyFnCurried(
         tyFn(tyVar("a"), tyFn(tyVar("b"), tyEither(tyVar("c"), tyVar("a")))),
         tyVar("a"), tyList(tyVar("b")), tyEither(tyVar("c"), tyVar("a"))),
       ["a", "b", "c"]),
-      (_g, args) => left({ tag: "other", value: "foldl interpreter not implemented (kernel-only)" } as never)),
+      (_g, args) => left({ tag: "other", value: "foldList interpreter not implemented (kernel-only)" } as never)),
     prim("hydra.lib.eithers.mapList", scheme(
       tyFnCurried(tyFn(tyVar("a"), tyEither(tyVar("c"), tyVar("b"))),
         tyList(tyVar("a")), tyEither(tyVar("c"), tyList(tyVar("b")))),
@@ -2242,11 +2204,11 @@ const eithersPrimitives = (): readonly Primitive[] => {
         tySet(tyVar("a")), tyEither(tyVar("c"), tySet(tyVar("b")))),
       ["a", "b", "c"]),
       (_g, args) => left({ tag: "other", value: "mapSet interpreter not implemented (kernel-only)" } as never)),
-    prim("hydra.lib.eithers.partitionEithers", scheme(
+    prim("hydra.lib.eithers.partition", scheme(
       tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))),
         tyPair(tyList(tyVar("a")), tyList(tyVar("b")))),
       ["a", "b"]),
-      (_g, args) => left({ tag: "other", value: "partitionEithers interpreter not implemented (kernel-only)" } as never)),
+      (_g, args) => left({ tag: "other", value: "partition interpreter not implemented (kernel-only)" } as never)),
     // Unused: tLeft helper retained for symmetry.
     ...(function() { void tLeft; return []; })(),
   ];

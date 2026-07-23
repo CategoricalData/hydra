@@ -1,14 +1,14 @@
 package hydra.overlay.java.lib;
 
-import hydra.overlay.java.lib.equality.Compare;
 import hydra.overlay.java.lib.equality.Equal;
-import hydra.overlay.java.lib.equality.Gt;
-import hydra.overlay.java.lib.equality.Gte;
-import hydra.overlay.java.lib.equality.Identity;
-import hydra.overlay.java.lib.equality.Lt;
-import hydra.overlay.java.lib.equality.Lte;
-import hydra.overlay.java.lib.equality.Max;
-import hydra.overlay.java.lib.equality.Min;
+import hydra.overlay.java.lib.functions.Identity;
+import hydra.overlay.java.lib.ordering.Compare;
+import hydra.overlay.java.lib.ordering.Gt;
+import hydra.overlay.java.lib.ordering.Gte;
+import hydra.overlay.java.lib.ordering.Lt;
+import hydra.overlay.java.lib.ordering.Lte;
+import hydra.overlay.java.lib.ordering.Max;
+import hydra.overlay.java.lib.ordering.Min;
 import hydra.overlay.java.lib.chars.IsAlphaNum;
 import hydra.overlay.java.lib.chars.IsLower;
 import hydra.overlay.java.lib.chars.IsSpace;
@@ -43,6 +43,7 @@ public class Libraries {
                 eithersPrimitives(),
                 equalityPrimitives(),
                 filesPrimitives(),
+                functionsPrimitives(),
                 hashingPrimitives(),
                 listsPrimitives(),
                 literalsPrimitives(),
@@ -50,6 +51,7 @@ public class Libraries {
                 mapsPrimitives(),
                 mathPrimitives(),
                 optionalsPrimitives(),
+                orderingPrimitives(),
                 pairsPrimitives(),
                 regexPrimitives(),
                 setsPrimitives(),
@@ -78,7 +80,7 @@ public class Libraries {
                 new hydra.overlay.java.lib.effects.Apply(),
                 new hydra.overlay.java.lib.effects.Bind(),
                 new hydra.overlay.java.lib.effects.Compose(),
-                new hydra.overlay.java.lib.effects.Foldl(),
+                new hydra.overlay.java.lib.effects.FoldList(),
                 new hydra.overlay.java.lib.effects.Map(),
                 new hydra.overlay.java.lib.effects.MapList(),
                 new hydra.overlay.java.lib.effects.MapOptional(),
@@ -90,9 +92,7 @@ public class Libraries {
                 new hydra.overlay.java.lib.eithers.Bimap(),
                 new hydra.overlay.java.lib.eithers.Bind(),
                 new hydra.overlay.java.lib.eithers.Either(),
-                new hydra.overlay.java.lib.eithers.Foldl(),
-                new hydra.overlay.java.lib.eithers.FromLeft(),
-                new hydra.overlay.java.lib.eithers.FromRight(),
+                new hydra.overlay.java.lib.eithers.FoldList(),
                 new hydra.overlay.java.lib.eithers.IsLeft(),
                 new hydra.overlay.java.lib.eithers.IsRight(),
                 new hydra.overlay.java.lib.eithers.Lefts(),
@@ -100,21 +100,13 @@ public class Libraries {
                 new hydra.overlay.java.lib.eithers.MapList(),
                 new hydra.overlay.java.lib.eithers.MapOptional(),
                 new hydra.overlay.java.lib.eithers.MapSet(),
-                new hydra.overlay.java.lib.eithers.PartitionEithers(),
+                new hydra.overlay.java.lib.eithers.Partition(),
                 new hydra.overlay.java.lib.eithers.Rights());
     }
 
     private static List<PrimitiveFunction> equalityPrimitives() {
         return Arrays.asList(
-                new Compare(),
-                new Equal(),
-                new Gt(),
-                new Gte(),
-                new Identity(),
-                new Lt(),
-                new Lte(),
-                new Max(),
-                new Min());
+                new Equal());
     }
 
     private static List<PrimitiveFunction> filesPrimitives() {
@@ -132,6 +124,11 @@ public class Libraries {
                 new hydra.overlay.java.lib.files.WriteFile());
     }
 
+    private static List<PrimitiveFunction> functionsPrimitives() {
+        return Arrays.asList(
+                new Identity());
+    }
+
     private static List<PrimitiveFunction> hashingPrimitives() {
         return Arrays.asList(
                 new hydra.overlay.java.lib.hashing.Sha256(),
@@ -141,28 +138,27 @@ public class Libraries {
     private static List<PrimitiveFunction> listsPrimitives() {
         return Arrays.asList(
                 new hydra.overlay.java.lib.lists.Apply(),
+                new hydra.overlay.java.lib.lists.At(),
                 new hydra.overlay.java.lib.lists.Bind(),
                 new hydra.overlay.java.lib.lists.Concat(),
                 new hydra.overlay.java.lib.lists.Concat2(),
                 new hydra.overlay.java.lib.lists.Cons(),
+                new hydra.overlay.java.lib.lists.Distinct(),
                 new hydra.overlay.java.lib.lists.Drop(),
                 new hydra.overlay.java.lib.lists.DropWhile(),
-                new hydra.overlay.java.lib.lists.Elem(),
                 new hydra.overlay.java.lib.lists.Filter(),
                 new hydra.overlay.java.lib.lists.Find(),
                 new hydra.overlay.java.lib.lists.Foldl(),
                 new hydra.overlay.java.lib.lists.Foldr(),
                 new hydra.overlay.java.lib.lists.Group(),
-                new hydra.overlay.java.lib.lists.Intercalate(),
+                new hydra.overlay.java.lib.lists.Head(),
+                new hydra.overlay.java.lib.lists.Init(),
                 new hydra.overlay.java.lib.lists.Intersperse(),
+                new hydra.overlay.java.lib.lists.Join(),
+                new hydra.overlay.java.lib.lists.Last(),
                 new hydra.overlay.java.lib.lists.Length(),
                 new hydra.overlay.java.lib.lists.Map(),
-                new hydra.overlay.java.lib.lists.MaybeAt(),
-                new hydra.overlay.java.lib.lists.MaybeHead(),
-                new hydra.overlay.java.lib.lists.MaybeInit(),
-                new hydra.overlay.java.lib.lists.MaybeLast(),
-                new hydra.overlay.java.lib.lists.MaybeTail(),
-                new hydra.overlay.java.lib.lists.Nub(),
+                new hydra.overlay.java.lib.lists.Member(),
                 new hydra.overlay.java.lib.lists.Null(),
                 new hydra.overlay.java.lib.lists.Partition(),
                 new hydra.overlay.java.lib.lists.Pure(),
@@ -170,8 +166,9 @@ public class Libraries {
                 new hydra.overlay.java.lib.lists.Reverse(),
                 new hydra.overlay.java.lib.lists.Singleton(),
                 new hydra.overlay.java.lib.lists.Sort(),
-                new hydra.overlay.java.lib.lists.SortOn(),
+                new hydra.overlay.java.lib.lists.SortBy(),
                 new hydra.overlay.java.lib.lists.Span(),
+                new hydra.overlay.java.lib.lists.Tail(),
                 new hydra.overlay.java.lib.lists.Take(),
                 new hydra.overlay.java.lib.lists.Transpose(),
                 new hydra.overlay.java.lib.lists.Uncons(),
@@ -203,8 +200,11 @@ public class Libraries {
                 new hydra.overlay.java.lib.literals.Int32ToBigint(),
                 new hydra.overlay.java.lib.literals.Int64ToBigint(),
                 new hydra.overlay.java.lib.literals.Int8ToBigint(),
+                new hydra.overlay.java.lib.literals.ParseBoolean(),
+                new hydra.overlay.java.lib.literals.ParseString(),
+                new hydra.overlay.java.lib.literals.PrintBoolean(),
+                new hydra.overlay.java.lib.literals.PrintString(),
                 new hydra.overlay.java.lib.literals.ReadBigint(),
-                new hydra.overlay.java.lib.literals.ReadBoolean(),
                 new hydra.overlay.java.lib.literals.ReadDecimal(),
                 new hydra.overlay.java.lib.literals.ReadFloat32(),
                 new hydra.overlay.java.lib.literals.ReadFloat64(),
@@ -212,13 +212,11 @@ public class Libraries {
                 new hydra.overlay.java.lib.literals.ReadInt32(),
                 new hydra.overlay.java.lib.literals.ReadInt64(),
                 new hydra.overlay.java.lib.literals.ReadInt8(),
-                new hydra.overlay.java.lib.literals.ReadString(),
                 new hydra.overlay.java.lib.literals.ReadUint16(),
                 new hydra.overlay.java.lib.literals.ReadUint32(),
                 new hydra.overlay.java.lib.literals.ReadUint64(),
                 new hydra.overlay.java.lib.literals.ReadUint8(),
                 new hydra.overlay.java.lib.literals.ShowBigint(),
-                new hydra.overlay.java.lib.literals.ShowBoolean(),
                 new hydra.overlay.java.lib.literals.ShowDecimal(),
                 new hydra.overlay.java.lib.literals.ShowFloat32(),
                 new hydra.overlay.java.lib.literals.ShowFloat64(),
@@ -226,7 +224,6 @@ public class Libraries {
                 new hydra.overlay.java.lib.literals.ShowInt32(),
                 new hydra.overlay.java.lib.literals.ShowInt64(),
                 new hydra.overlay.java.lib.literals.ShowInt8(),
-                new hydra.overlay.java.lib.literals.ShowString(),
                 new hydra.overlay.java.lib.literals.ShowUint16(),
                 new hydra.overlay.java.lib.literals.ShowUint32(),
                 new hydra.overlay.java.lib.literals.ShowUint64(),
@@ -285,19 +282,14 @@ public class Libraries {
                 new hydra.overlay.java.lib.math.Ceiling(),
                 new hydra.overlay.java.lib.math.Cos(),
                 new hydra.overlay.java.lib.math.Cosh(),
+                new hydra.overlay.java.lib.math.Div(),
                 new hydra.overlay.java.lib.math.E(),
                 new hydra.overlay.java.lib.math.Even(),
                 new hydra.overlay.java.lib.math.Exp(),
                 new hydra.overlay.java.lib.math.Floor(),
                 new hydra.overlay.java.lib.math.Log(),
                 new hydra.overlay.java.lib.math.LogBase(),
-                new hydra.overlay.java.lib.math.Max(),
-                new hydra.overlay.java.lib.math.MaybeDiv(),
-                new hydra.overlay.java.lib.math.MaybeMod(),
-                new hydra.overlay.java.lib.math.MaybePred(),
-                new hydra.overlay.java.lib.math.MaybeRem(),
-                new hydra.overlay.java.lib.math.MaybeSucc(),
-                new hydra.overlay.java.lib.math.Min(),
+                new hydra.overlay.java.lib.math.Mod(),
                 new hydra.overlay.java.lib.math.Mul(),
                 new hydra.overlay.java.lib.math.MulFloat64(),
                 new hydra.overlay.java.lib.math.Negate(),
@@ -306,6 +298,7 @@ public class Libraries {
                 new hydra.overlay.java.lib.math.Pi(),
                 new hydra.overlay.java.lib.math.Pow(),
                 new hydra.overlay.java.lib.math.Range(),
+                new hydra.overlay.java.lib.math.Rem(),
                 new hydra.overlay.java.lib.math.Round(),
                 new hydra.overlay.java.lib.math.RoundFloat32(),
                 new hydra.overlay.java.lib.math.RoundFloat64(),
@@ -325,15 +318,26 @@ public class Libraries {
                 new hydra.overlay.java.lib.optionals.Apply(),
                 new hydra.overlay.java.lib.optionals.Bind(),
                 new hydra.overlay.java.lib.optionals.Cases(),
-                new hydra.overlay.java.lib.optionals.Cat(),
                 new hydra.overlay.java.lib.optionals.Compose(),
-                new hydra.overlay.java.lib.optionals.FromOptional(),
+                new hydra.overlay.java.lib.optionals.Givens(),
                 new hydra.overlay.java.lib.optionals.IsGiven(),
                 new hydra.overlay.java.lib.optionals.IsNone(),
                 new hydra.overlay.java.lib.optionals.Map(),
                 new hydra.overlay.java.lib.optionals.MapOptional(),
                 new hydra.overlay.java.lib.optionals.Pure(),
-                new hydra.overlay.java.lib.optionals.ToList());
+                new hydra.overlay.java.lib.optionals.ToList(),
+                new hydra.overlay.java.lib.optionals.WithDefault());
+    }
+
+    private static List<PrimitiveFunction> orderingPrimitives() {
+        return Arrays.asList(
+                new Compare(),
+                new Gt(),
+                new Gte(),
+                new Lt(),
+                new Lte(),
+                new Max(),
+                new Min());
     }
 
     private static List<PrimitiveFunction> pairsPrimitives() {
@@ -373,13 +377,13 @@ public class Libraries {
 
     private static List<PrimitiveFunction> stringsPrimitives() {
         return Arrays.asList(
-                new hydra.overlay.java.lib.strings.Cat(),
-                new hydra.overlay.java.lib.strings.Cat2(),
+                new hydra.overlay.java.lib.strings.CharAt(),
+                new hydra.overlay.java.lib.strings.Concat(),
+                new hydra.overlay.java.lib.strings.Concat2(),
                 new hydra.overlay.java.lib.strings.FromList(),
-                new hydra.overlay.java.lib.strings.Intercalate(),
+                new hydra.overlay.java.lib.strings.Join(),
                 new hydra.overlay.java.lib.strings.Length(),
                 new hydra.overlay.java.lib.strings.Lines(),
-                new hydra.overlay.java.lib.strings.MaybeCharAt(),
                 new hydra.overlay.java.lib.strings.Null(),
                 new hydra.overlay.java.lib.strings.SplitOn(),
                 new hydra.overlay.java.lib.strings.ToList(),

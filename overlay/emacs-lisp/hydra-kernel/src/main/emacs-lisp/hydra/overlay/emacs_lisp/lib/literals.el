@@ -368,8 +368,8 @@
   (lambda (x)
     (number-to-string x)))
 
-;; show_string :: String -> String  (Haskell-compatible quoted representation)
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_string
+;; print_string :: String -> String  (Haskell-compatible quoted representation)
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_string
   (lambda (s)
     (let* ((ms (if (multibyte-string-p s) s (decode-coding-string s 'utf-8-unix)))
            (acc (list ?\")))
@@ -433,8 +433,8 @@
   (lambda (bs)
     (mapcar (lambda (b) (logand b #xFF)) bs)))
 
-;; read_boolean :: String -> Maybe Bool
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_boolean
+;; parse_boolean :: String -> Maybe Bool
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_boolean
   (lambda (s)
     (cond
       ((string= s "true") (list :given t))
@@ -443,7 +443,7 @@
 
 ;; read_string :: String -> Maybe String
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_string
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_string
   (lambda (s)
     (if (and (>= (length s) 2)
              (= (aref s 0) ?\")
@@ -470,8 +470,8 @@
           (list :given (apply #'string (nreverse result))))
         (list :none))))
 
-;; show_boolean :: Bool -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_boolean
+;; print_boolean :: Bool -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_boolean
   (lambda (x)
     (if x "true" "false")))
 

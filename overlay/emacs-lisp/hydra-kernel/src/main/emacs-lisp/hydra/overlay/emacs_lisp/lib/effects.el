@@ -32,8 +32,8 @@
       (lambda (x)
         (funcall g (funcall f x))))))
 
-;; foldl :: (x -> y -> effect<x>) -> x -> [y] -> effect<x>
-(defvar hydra_overlay_emacs_lisp_lib_effects_foldl
+;; fold_list :: (x -> y -> effect<x>) -> x -> [y] -> effect<x>
+(defvar hydra_overlay_emacs_lisp_lib_effects_fold_list
   (lambda (f)
     (lambda (acc)
       (lambda (xs)

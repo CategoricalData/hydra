@@ -10,6 +10,7 @@
           (hydra overlay scheme lib eithers)
           (hydra overlay scheme lib equality)
           (hydra overlay scheme lib files)
+          (hydra overlay scheme lib functions)
           (hydra overlay scheme lib hashing)
           (hydra overlay scheme lib lists)
           (hydra overlay scheme lib literals)
@@ -17,6 +18,7 @@
           (hydra overlay scheme lib maps)
           (hydra overlay scheme lib math)
           (hydra overlay scheme lib optionals)
+          (hydra overlay scheme lib ordering)
           (hydra overlay scheme lib pairs)
           (hydra overlay scheme lib regex)
           (hydra overlay scheme lib sets)
@@ -31,6 +33,7 @@
           (prefix (hydra lib eithers) def:)
           (prefix (hydra lib equality) def:)
           (prefix (hydra lib files) def:)
+          (prefix (hydra lib functions) def:)
           (prefix (hydra lib hashing) def:)
           (prefix (hydra lib lists) def:)
           (prefix (hydra lib literals) def:)
@@ -38,6 +41,7 @@
           (prefix (hydra lib maps) def:)
           (prefix (hydra lib math) def:)
           (prefix (hydra lib optionals) def:)
+          (prefix (hydra lib ordering) def:)
           (prefix (hydra lib pairs) def:)
           (prefix (hydra lib regex) def:)
           (prefix (hydra lib sets) def:)
@@ -104,8 +108,8 @@
             (cons (prim-name def:hydra_lib_effects_compose) (prim3 (prim-name def:hydra_lib_effects_compose)
                                                hydra_lib_effects_compose
                                                #f (tc-function x (eff y)) (tc-function y (eff z)) x (eff z)))
-            (cons (prim-name def:hydra_lib_effects_foldl)   (prim3 (prim-name def:hydra_lib_effects_foldl)
-                                               hydra_lib_effects_foldl
+            (cons (prim-name def:hydra_lib_effects_fold_list)   (prim3 (prim-name def:hydra_lib_effects_fold_list)
+                                               hydra_lib_effects_fold_list
                                                #f (tc-function x (tc-function y (eff x))) x (tc-list y) (eff x)))
             (cons (prim-name def:hydra_lib_effects_map)     (prim2 (prim-name def:hydra_lib_effects_map)
                                                hydra_lib_effects_map
@@ -140,15 +144,9 @@
           (cons (prim-name def:hydra_lib_eithers_either)  (prim3 (prim-name def:hydra_lib_eithers_either)
                                              hydra_lib_eithers_either
                                              #f (fun x z) (fun y z) (tc-either x y) z))
-          (cons (prim-name def:hydra_lib_eithers_foldl)   (prim3 (prim-name def:hydra_lib_eithers_foldl)
-                                             hydra_lib_eithers_foldl
+          (cons (prim-name def:hydra_lib_eithers_fold_list)   (prim3 (prim-name def:hydra_lib_eithers_fold_list)
+                                             hydra_lib_eithers_fold_list
                                              #f (fun x (fun y (tc-either z x))) x (tc-list y) (tc-either z x)))
-          (cons (prim-name def:hydra_lib_eithers_from_left)  (lazy-args '(0) (prim2 (prim-name def:hydra_lib_eithers_from_left)
-                                               hydra_lib_eithers_from_left
-                                               #f x (tc-either x y) x)))
-          (cons (prim-name def:hydra_lib_eithers_from_right) (lazy-args '(0) (prim2 (prim-name def:hydra_lib_eithers_from_right)
-                                               hydra_lib_eithers_from_right
-                                               #f y (tc-either x y) y)))
           (cons (prim-name def:hydra_lib_eithers_is_left)  (prim1 (prim-name def:hydra_lib_eithers_is_left)  hydra_lib_eithers_is_left  #f (tc-either x y) (tc-boolean)))
           (cons (prim-name def:hydra_lib_eithers_is_right) (prim1 (prim-name def:hydra_lib_eithers_is_right) hydra_lib_eithers_is_right #f (tc-either x y) (tc-boolean)))
           (cons (prim-name def:hydra_lib_eithers_lefts)   (prim1 (prim-name def:hydra_lib_eithers_lefts)   hydra_lib_eithers_lefts   #f (tc-list (tc-either x y)) (tc-list x)))
@@ -164,8 +162,8 @@
           (cons (prim-name def:hydra_lib_eithers_map_set)  (prim2 (prim-name def:hydra_lib_eithers_map_set)
                                              hydra_lib_eithers_map_set
                                              #f (fun x (tc-either z y)) (tc-set x) (tc-either z (tc-set y))))
-          (cons (prim-name def:hydra_lib_eithers_partition_eithers) (prim1 (prim-name def:hydra_lib_eithers_partition_eithers)
-                                                      hydra_lib_eithers_partition_eithers
+          (cons (prim-name def:hydra_lib_eithers_partition) (prim1 (prim-name def:hydra_lib_eithers_partition)
+                                                      hydra_lib_eithers_partition
                                                       #f (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
           (cons (prim-name def:hydra_lib_eithers_rights)  (prim1 (prim-name def:hydra_lib_eithers_rights)  hydra_lib_eithers_rights  #f (tc-list (tc-either x y)) (tc-list y))))))
 
@@ -176,18 +174,29 @@
     (define (register-equality)
       (let (
             (x (tc-variable "x"))
-            (ord-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "ordering")))))
             (eq-x  (list (list "x" (make-hydra_core_type_variable_constraints (constraints "equality"))))))
         (list
-          (cons (prim-name def:hydra_lib_equality_compare)  (prim2 (prim-name def:hydra_lib_equality_compare)  hydra_lib_equality_compare  #f x x (tc-comparison) ord-x))
-          (cons (prim-name def:hydra_lib_equality_equal)    (prim2 (prim-name def:hydra_lib_equality_equal)    hydra_lib_equality_equal    #f x x (tc-boolean) eq-x))
-          (cons (prim-name def:hydra_lib_equality_gt)       (prim2 (prim-name def:hydra_lib_equality_gt)       hydra_lib_equality_gt       #f x x (tc-boolean) ord-x))
-          (cons (prim-name def:hydra_lib_equality_gte)      (prim2 (prim-name def:hydra_lib_equality_gte)      hydra_lib_equality_gte      #f x x (tc-boolean) ord-x))
-          (cons (prim-name def:hydra_lib_equality_identity) (prim1 (prim-name def:hydra_lib_equality_identity) (lambda (x) x)             #f x x))
-          (cons (prim-name def:hydra_lib_equality_lt)       (prim2 (prim-name def:hydra_lib_equality_lt)       hydra_lib_equality_lt       #f x x (tc-boolean) ord-x))
-          (cons (prim-name def:hydra_lib_equality_lte)      (prim2 (prim-name def:hydra_lib_equality_lte)      hydra_lib_equality_lte      #f x x (tc-boolean) ord-x))
-          (cons (prim-name def:hydra_lib_equality_max)      (prim2 (prim-name def:hydra_lib_equality_max)      hydra_lib_equality_max      #f x x x ord-x))
-          (cons (prim-name def:hydra_lib_equality_min)      (prim2 (prim-name def:hydra_lib_equality_min)      hydra_lib_equality_min      #f x x x ord-x)))))
+          (cons (prim-name def:hydra_lib_equality_equal)    (prim2 (prim-name def:hydra_lib_equality_equal)    hydra_lib_equality_equal    #f x x (tc-boolean) eq-x)))))
+
+    ;; #417: identity moved to the hydra.lib.functions namespace.
+    (define (register-functions)
+      (let ((x (tc-variable "x")))
+        (list
+          (cons (prim-name def:hydra_lib_functions_identity) (prim1 (prim-name def:hydra_lib_functions_identity) hydra_lib_functions_identity #f x x)))))
+
+    ;; #417: comparison primitives moved from hydra.lib.equality to hydra.lib.ordering.
+    (define (register-ordering)
+      (let (
+            (x (tc-variable "x"))
+            (ord-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "ordering"))))))
+        (list
+          (cons (prim-name def:hydra_lib_ordering_compare)  (prim2 (prim-name def:hydra_lib_ordering_compare)  hydra_lib_ordering_compare  #f x x (tc-comparison) ord-x))
+          (cons (prim-name def:hydra_lib_ordering_gt)       (prim2 (prim-name def:hydra_lib_ordering_gt)       hydra_lib_ordering_gt       #f x x (tc-boolean) ord-x))
+          (cons (prim-name def:hydra_lib_ordering_gte)      (prim2 (prim-name def:hydra_lib_ordering_gte)      hydra_lib_ordering_gte      #f x x (tc-boolean) ord-x))
+          (cons (prim-name def:hydra_lib_ordering_lt)       (prim2 (prim-name def:hydra_lib_ordering_lt)       hydra_lib_ordering_lt       #f x x (tc-boolean) ord-x))
+          (cons (prim-name def:hydra_lib_ordering_lte)      (prim2 (prim-name def:hydra_lib_ordering_lte)      hydra_lib_ordering_lte      #f x x (tc-boolean) ord-x))
+          (cons (prim-name def:hydra_lib_ordering_max)      (prim2 (prim-name def:hydra_lib_ordering_max)      hydra_lib_ordering_max      #f x x x ord-x))
+          (cons (prim-name def:hydra_lib_ordering_min)      (prim2 (prim-name def:hydra_lib_ordering_min)      hydra_lib_ordering_min      #f x x x ord-x)))))
 
     ;; ============================================================================
     ;; Files (#494)
@@ -320,8 +329,8 @@
           (cons (prim-name def:hydra_lib_lists_drop_while)  (prim2 (prim-name def:hydra_lib_lists_drop_while)
                                                  hydra_lib_lists_drop_while
                                                  #f (fun a (tc-boolean)) (tc-list a) (tc-list a)))
-          (cons (prim-name def:hydra_lib_lists_elem)       (prim2 (prim-name def:hydra_lib_lists_elem)
-                                                 hydra_lib_lists_elem
+          (cons (prim-name def:hydra_lib_lists_member)       (prim2 (prim-name def:hydra_lib_lists_member)
+                                                 hydra_lib_lists_member
                                                  #f a (tc-list a) (tc-boolean) eq-a))
           (cons (prim-name def:hydra_lib_lists_filter)     (prim2 (prim-name def:hydra_lib_lists_filter)
                                                  hydra_lib_lists_filter
@@ -346,8 +355,8 @@
                                                          init) xs))))
                                                  #f (fun a (fun b b)) b (tc-list a) b))
           (cons (prim-name def:hydra_lib_lists_group)      (prim1 (prim-name def:hydra_lib_lists_group)      hydra_lib_lists_group      #f (tc-list a) (tc-list (tc-list a)) eq-a))
-          (cons (prim-name def:hydra_lib_lists_intercalate) (prim2 (prim-name def:hydra_lib_lists_intercalate)
-                                                  hydra_lib_lists_intercalate
+          (cons (prim-name def:hydra_lib_lists_join) (prim2 (prim-name def:hydra_lib_lists_join)
+                                                  hydra_lib_lists_join
                                                   #f (tc-list a) (tc-list (tc-list a)) (tc-list a)))
           (cons (prim-name def:hydra_lib_lists_intersperse) (prim2 (prim-name def:hydra_lib_lists_intersperse)
                                                   hydra_lib_lists_intersperse
@@ -356,12 +365,12 @@
           (cons (prim-name def:hydra_lib_lists_map)        (prim2 (prim-name def:hydra_lib_lists_map)
                                                  hydra_lib_lists_map
                                                  #f (fun a b) (tc-list a) (tc-list b)))
-          (cons (prim-name def:hydra_lib_lists_maybe_at)    (prim2 (prim-name def:hydra_lib_lists_maybe_at)    hydra_lib_lists_maybe_at   #f (tc-int32) (tc-list a) (tc-optional a)))
-          (cons (prim-name def:hydra_lib_lists_maybe_head)  (prim1 (prim-name def:hydra_lib_lists_maybe_head)  hydra_lib_lists_maybe_head #f (tc-list a) (tc-optional a)))
-          (cons (prim-name def:hydra_lib_lists_maybe_init)  (prim1 (prim-name def:hydra_lib_lists_maybe_init)  hydra_lib_lists_maybe_init #f (tc-list a) (tc-optional (tc-list a))))
-          (cons (prim-name def:hydra_lib_lists_maybe_last)  (prim1 (prim-name def:hydra_lib_lists_maybe_last)  hydra_lib_lists_maybe_last #f (tc-list a) (tc-optional a)))
-          (cons (prim-name def:hydra_lib_lists_maybe_tail)  (prim1 (prim-name def:hydra_lib_lists_maybe_tail)  hydra_lib_lists_maybe_tail #f (tc-list a) (tc-optional (tc-list a))))
-          (cons (prim-name def:hydra_lib_lists_nub)        (prim1 (prim-name def:hydra_lib_lists_nub)        hydra_lib_lists_nub        #f (tc-list a) (tc-list a) eq-a))
+          (cons (prim-name def:hydra_lib_lists_at)    (prim2 (prim-name def:hydra_lib_lists_at)    hydra_lib_lists_at   #f (tc-int32) (tc-list a) (tc-optional a)))
+          (cons (prim-name def:hydra_lib_lists_head)  (prim1 (prim-name def:hydra_lib_lists_head)  hydra_lib_lists_head #f (tc-list a) (tc-optional a)))
+          (cons (prim-name def:hydra_lib_lists_init)  (prim1 (prim-name def:hydra_lib_lists_init)  hydra_lib_lists_init #f (tc-list a) (tc-optional (tc-list a))))
+          (cons (prim-name def:hydra_lib_lists_last)  (prim1 (prim-name def:hydra_lib_lists_last)  hydra_lib_lists_last #f (tc-list a) (tc-optional a)))
+          (cons (prim-name def:hydra_lib_lists_tail)  (prim1 (prim-name def:hydra_lib_lists_tail)  hydra_lib_lists_tail #f (tc-list a) (tc-optional (tc-list a))))
+          (cons (prim-name def:hydra_lib_lists_distinct)        (prim1 (prim-name def:hydra_lib_lists_distinct)        hydra_lib_lists_distinct        #f (tc-list a) (tc-list a) eq-a))
           (cons (prim-name def:hydra_lib_lists_null)       (prim1 (prim-name def:hydra_lib_lists_null)       hydra_lib_lists_null       #f (tc-list a) (tc-boolean)))
           (cons (prim-name def:hydra_lib_lists_partition)   (prim2 (prim-name def:hydra_lib_lists_partition)
                                                   hydra_lib_lists_partition
@@ -373,8 +382,8 @@
           (cons (prim-name def:hydra_lib_lists_reverse)    (prim1 (prim-name def:hydra_lib_lists_reverse)    hydra_lib_lists_reverse    #f (tc-list a) (tc-list a)))
           (cons (prim-name def:hydra_lib_lists_singleton)  (prim1 (prim-name def:hydra_lib_lists_singleton)  hydra_lib_lists_singleton  #f a (tc-list a)))
           (cons (prim-name def:hydra_lib_lists_sort)       (prim1 (prim-name def:hydra_lib_lists_sort)       hydra_lib_lists_sort       #f (tc-list a) (tc-list a) ord-a))
-          (cons (prim-name def:hydra_lib_lists_sort_on)     (prim2 (prim-name def:hydra_lib_lists_sort_on)
-                                                 hydra_lib_lists_sort_on
+          (cons (prim-name def:hydra_lib_lists_sort_by)     (prim2 (prim-name def:hydra_lib_lists_sort_by)
+                                                 hydra_lib_lists_sort_by
                                                  #f (fun a b) (tc-list a) (tc-list a)))
           (cons (prim-name def:hydra_lib_lists_span)       (prim2 (prim-name def:hydra_lib_lists_span)
                                                  hydra_lib_lists_span
@@ -501,13 +510,9 @@
             (cons (prim-name def:hydra_lib_math_range)  (prim2 (prim-name def:hydra_lib_math_range)  hydra_lib_math_range  #f i32 i32 (tc-list i32)))
             (cons (prim-name def:hydra_lib_math_signum) (prim1 (prim-name def:hydra_lib_math_signum) hydra_lib_math_signum #f i32 i32))
             (cons (prim-name def:hydra_lib_math_sub)    (prim2 (prim-name def:hydra_lib_math_sub)    hydra_lib_math_sub    #f i32 i32 i32))
-            (cons (prim-name def:hydra_lib_math_max)    (prim2 (prim-name def:hydra_lib_math_max)    hydra_lib_math_max    #f i32 i32 i32))
-            (cons (prim-name def:hydra_lib_math_maybe_div)  (prim2 (prim-name def:hydra_lib_math_maybe_div)  hydra_lib_math_maybe_div  #f i32 i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_maybe_mod)  (prim2 (prim-name def:hydra_lib_math_maybe_mod)  hydra_lib_math_maybe_mod  #f i32 i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_maybe_pred) (prim1 (prim-name def:hydra_lib_math_maybe_pred) hydra_lib_math_maybe_pred #f i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_maybe_rem)  (prim2 (prim-name def:hydra_lib_math_maybe_rem)  hydra_lib_math_maybe_rem  #f i32 i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_maybe_succ) (prim1 (prim-name def:hydra_lib_math_maybe_succ) hydra_lib_math_maybe_succ #f i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_min)    (prim2 (prim-name def:hydra_lib_math_min)    hydra_lib_math_min    #f i32 i32 i32)))
+            (cons (prim-name def:hydra_lib_math_div)  (prim2 (prim-name def:hydra_lib_math_div)  hydra_lib_math_div  #f i32 i32 (tc-optional i32)))
+            (cons (prim-name def:hydra_lib_math_mod)  (prim2 (prim-name def:hydra_lib_math_mod)  hydra_lib_math_mod  #f i32 i32 (tc-optional i32)))
+            (cons (prim-name def:hydra_lib_math_rem)  (prim2 (prim-name def:hydra_lib_math_rem)  hydra_lib_math_rem  #f i32 i32 (tc-optional i32))))
           (list
             (cons (prim-name def:hydra_lib_math_acos)     (prim1 (prim-name def:hydra_lib_math_acos)     hydra_lib_math_acos     #f f64 f64))
             (cons (prim-name def:hydra_lib_math_acosh)    (prim1 (prim-name def:hydra_lib_math_acosh)    hydra_lib_math_acosh    #f f64 f64))
@@ -559,12 +564,12 @@
           (cons (prim-name def:hydra_lib_optionals_cases)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_cases)
                                               hydra_lib_optionals_cases
                                               #f (tc-optional a) b (fun a b) b)))
-          (cons (prim-name def:hydra_lib_optionals_cat)      (prim1 (prim-name def:hydra_lib_optionals_cat)      hydra_lib_optionals_cat      #f (tc-list (tc-optional a)) (tc-list a)))
+          (cons (prim-name def:hydra_lib_optionals_givens)      (prim1 (prim-name def:hydra_lib_optionals_givens)      hydra_lib_optionals_givens      #f (tc-list (tc-optional a)) (tc-list a)))
           (cons (prim-name def:hydra_lib_optionals_compose)  (prim3 (prim-name def:hydra_lib_optionals_compose)
                                               hydra_lib_optionals_compose
                                               #f (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-          (cons (prim-name def:hydra_lib_optionals_from_optional) (lazy-args '(0) (prim2 (prim-name def:hydra_lib_optionals_from_optional)
-                                               hydra_lib_optionals_from_optional
+          (cons (prim-name def:hydra_lib_optionals_with_default) (lazy-args '(0) (prim2 (prim-name def:hydra_lib_optionals_with_default)
+                                               hydra_lib_optionals_with_default
                                                #f a (tc-optional a) a)))
           (cons (prim-name def:hydra_lib_optionals_is_given)    (prim1 (prim-name def:hydra_lib_optionals_is_given)    hydra_lib_optionals_is_given    #f (tc-optional a) (tc-boolean)))
           (cons (prim-name def:hydra_lib_optionals_is_none) (prim1 (prim-name def:hydra_lib_optionals_is_none) hydra_lib_optionals_is_none #f (tc-optional a) (tc-boolean)))
@@ -645,17 +650,17 @@
             (i (tc-int32))
             (b (tc-boolean)))
         (list
-          (cons (prim-name def:hydra_lib_strings_cat)         (prim1 (prim-name def:hydra_lib_strings_cat)         hydra_lib_strings_cat         #f (tc-list s) s))
-          (cons (prim-name def:hydra_lib_strings_cat2)        (prim2 (prim-name def:hydra_lib_strings_cat2)
-                                                  hydra_lib_strings_cat2
+          (cons (prim-name def:hydra_lib_strings_concat)         (prim1 (prim-name def:hydra_lib_strings_concat)         hydra_lib_strings_concat         #f (tc-list s) s))
+          (cons (prim-name def:hydra_lib_strings_concat2)        (prim2 (prim-name def:hydra_lib_strings_concat2)
+                                                  hydra_lib_strings_concat2
                                                   #f s s s))
           (cons (prim-name def:hydra_lib_strings_from_list)    (prim1 (prim-name def:hydra_lib_strings_from_list)    hydra_lib_strings_from_list    #f (tc-list i) s))
-          (cons (prim-name def:hydra_lib_strings_intercalate) (prim2 (prim-name def:hydra_lib_strings_intercalate)
-                                                  hydra_lib_strings_intercalate
+          (cons (prim-name def:hydra_lib_strings_join) (prim2 (prim-name def:hydra_lib_strings_join)
+                                                  hydra_lib_strings_join
                                                   #f s (tc-list s) s))
           (cons (prim-name def:hydra_lib_strings_length)      (prim1 (prim-name def:hydra_lib_strings_length)      hydra_lib_strings_length      #f s i))
           (cons (prim-name def:hydra_lib_strings_lines)       (prim1 (prim-name def:hydra_lib_strings_lines)       hydra_lib_strings_lines       #f s (tc-list s)))
-          (cons (prim-name def:hydra_lib_strings_maybe_char_at) (prim2 (prim-name def:hydra_lib_strings_maybe_char_at) hydra_lib_strings_maybe_char_at #f i s (tc-optional i)))
+          (cons (prim-name def:hydra_lib_strings_char_at) (prim2 (prim-name def:hydra_lib_strings_char_at) hydra_lib_strings_char_at #f i s (tc-optional i)))
           (cons (prim-name def:hydra_lib_strings_null)        (prim1 (prim-name def:hydra_lib_strings_null)        hydra_lib_strings_null        #f s b))
           (cons (prim-name def:hydra_lib_strings_split_on)     (prim2 (prim-name def:hydra_lib_strings_split_on)
                                                   hydra_lib_strings_split_on
@@ -748,7 +753,7 @@
             (cons (prim-name def:hydra_lib_literals_string_to_binary)     (prim1 (prim-name def:hydra_lib_literals_string_to_binary)     hydra_lib_literals_string_to_binary     #f s bin)))
           (list
             (cons (prim-name def:hydra_lib_literals_read_bigint)   (prim1 (prim-name def:hydra_lib_literals_read_bigint)   hydra_lib_literals_read_bigint   #f s (tc-optional bi)))
-            (cons (prim-name def:hydra_lib_literals_read_boolean)  (prim1 (prim-name def:hydra_lib_literals_read_boolean)  hydra_lib_literals_read_boolean  #f s (tc-optional b)))
+            (cons (prim-name def:hydra_lib_literals_parse_boolean)  (prim1 (prim-name def:hydra_lib_literals_parse_boolean)  hydra_lib_literals_parse_boolean  #f s (tc-optional b)))
             (cons (prim-name def:hydra_lib_literals_read_decimal)  (prim1 (prim-name def:hydra_lib_literals_read_decimal)  hydra_lib_literals_read_decimal  #f s (tc-optional dec)))
             (cons (prim-name def:hydra_lib_literals_read_float32)  (prim1 (prim-name def:hydra_lib_literals_read_float32)  hydra_lib_literals_read_float32  #f s (tc-optional f32)))
             (cons (prim-name def:hydra_lib_literals_read_float64)  (prim1 (prim-name def:hydra_lib_literals_read_float64)  hydra_lib_literals_read_float64  #f s (tc-optional f64)))
@@ -756,14 +761,14 @@
             (cons (prim-name def:hydra_lib_literals_read_int16)    (prim1 (prim-name def:hydra_lib_literals_read_int16)    hydra_lib_literals_read_int16    #f s (tc-optional i16)))
             (cons (prim-name def:hydra_lib_literals_read_int32)    (prim1 (prim-name def:hydra_lib_literals_read_int32)    hydra_lib_literals_read_int32    #f s (tc-optional i32)))
             (cons (prim-name def:hydra_lib_literals_read_int64)    (prim1 (prim-name def:hydra_lib_literals_read_int64)    hydra_lib_literals_read_int64    #f s (tc-optional i64)))
-            (cons (prim-name def:hydra_lib_literals_read_string)   (prim1 (prim-name def:hydra_lib_literals_read_string)   hydra_lib_literals_read_string   #f s (tc-optional s)))
+            (cons (prim-name def:hydra_lib_literals_parse_string)   (prim1 (prim-name def:hydra_lib_literals_parse_string)   hydra_lib_literals_parse_string   #f s (tc-optional s)))
             (cons (prim-name def:hydra_lib_literals_read_uint8)    (prim1 (prim-name def:hydra_lib_literals_read_uint8)    hydra_lib_literals_read_uint8    #f s (tc-optional u8)))
             (cons (prim-name def:hydra_lib_literals_read_uint16)   (prim1 (prim-name def:hydra_lib_literals_read_uint16)   hydra_lib_literals_read_uint16   #f s (tc-optional u16)))
             (cons (prim-name def:hydra_lib_literals_read_uint32)   (prim1 (prim-name def:hydra_lib_literals_read_uint32)   hydra_lib_literals_read_uint32   #f s (tc-optional u32)))
             (cons (prim-name def:hydra_lib_literals_read_uint64)   (prim1 (prim-name def:hydra_lib_literals_read_uint64)   hydra_lib_literals_read_uint64   #f s (tc-optional u64))))
           (list
             (cons (prim-name def:hydra_lib_literals_show_bigint)   (prim1 (prim-name def:hydra_lib_literals_show_bigint)   hydra_lib_literals_show_bigint   #f bi s))
-            (cons (prim-name def:hydra_lib_literals_show_boolean)  (prim1 (prim-name def:hydra_lib_literals_show_boolean)  hydra_lib_literals_show_boolean  #f b s))
+            (cons (prim-name def:hydra_lib_literals_print_boolean)  (prim1 (prim-name def:hydra_lib_literals_print_boolean)  hydra_lib_literals_print_boolean  #f b s))
             (cons (prim-name def:hydra_lib_literals_show_decimal)  (prim1 (prim-name def:hydra_lib_literals_show_decimal)  hydra_lib_literals_show_decimal  #f dec s))
             (cons (prim-name def:hydra_lib_literals_show_float32)  (prim1 (prim-name def:hydra_lib_literals_show_float32)  hydra_lib_literals_show_float32  #f f32 s))
             (cons (prim-name def:hydra_lib_literals_show_float64)  (prim1 (prim-name def:hydra_lib_literals_show_float64)  hydra_lib_literals_show_float64  #f f64 s))
@@ -775,7 +780,7 @@
             (cons (prim-name def:hydra_lib_literals_show_uint16)   (prim1 (prim-name def:hydra_lib_literals_show_uint16)   hydra_lib_literals_show_uint16   #f u16 s))
             (cons (prim-name def:hydra_lib_literals_show_uint32)   (prim1 (prim-name def:hydra_lib_literals_show_uint32)   hydra_lib_literals_show_uint32   #f u32 s))
             (cons (prim-name def:hydra_lib_literals_show_uint64)   (prim1 (prim-name def:hydra_lib_literals_show_uint64)   hydra_lib_literals_show_uint64   #f u64 s))
-            (cons (prim-name def:hydra_lib_literals_show_string)   (prim1 (prim-name def:hydra_lib_literals_show_string)   hydra_lib_literals_show_string   #f s s))))))
+            (cons (prim-name def:hydra_lib_literals_print_string)   (prim1 (prim-name def:hydra_lib_literals_print_string)   hydra_lib_literals_print_string   #f s s))))))
 
     ;; ============================================================================
     ;; Regex
@@ -816,6 +821,7 @@
         (register-eithers)
         (register-equality)
         (register-files)
+        (register-functions)
         (register-hashing)
         (register-lists)
         (register-literals)
@@ -823,6 +829,7 @@
         (register-maps)
         (register-math)
         (register-optionals)
+        (register-ordering)
         (register-pairs)
         (register-regex)
         (register-sets)

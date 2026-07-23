@@ -6,12 +6,12 @@ from collections.abc import Sequence
 from hydra.overlay.python.dsl.python import frozenlist, Optional, Given, None_
 
 
-def cat(xs: Sequence[str]) -> str:
+def concat(xs: Sequence[str]) -> str:
     """Concatenate a list of strings into a single string."""
     return "".join(xs)
 
 
-def cat2(s1: str, s2: str) -> str:
+def concat2(s1: str, s2: str) -> str:
     """Concatenate two strings."""
     return s1 + s2
 
@@ -21,7 +21,7 @@ def from_list(values: Sequence[int]) -> str:
     return "".join(chr(v) for v in values)
 
 
-def intercalate(separator: str, values: Sequence[str]) -> str:
+def join(separator: str, values: Sequence[str]) -> str:
     """Join a list of strings with a separator between each element."""
     return separator.join(values)
 
@@ -42,7 +42,7 @@ def lines(s: str) -> frozenlist[str]:
     return tuple(result)
 
 
-def maybe_char_at(i: int, s: str) -> Optional[int]:
+def char_at(i: int, s: str) -> Optional[int]:
     """Get the Unicode code point at a specific index, returning none if out of bounds."""
     return Given(ord(s[i])) if 0 <= i < len(s) else None_()
 

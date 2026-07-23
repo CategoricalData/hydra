@@ -39,17 +39,6 @@ export const mapList = <A, L, B>(f: (a: A) => Either<L, B>, xs: readonly A[]): E
 
 export const pure = <R, L = never>(x: R): Either<L, R> => Right(x);
 
-// `fromLeft` / `fromRight` are lazy in their default position — see
-// docs/recipes/new-implementation.md "Lazy evaluation and thunking".
-// The thunk-or-value branching is inlined to save one JS frame per
-// call (matches lib/logic.ts ifElse). See feature_126_typescript-plan.md.
-
-export const fromLeft = <L, R>(d: L | (() => L), e: Either<L, R>): L =>
-  e.tag === "left" ? e.value : (typeof d === "function" ? (d as () => L)() : d);
-
-export const fromRight = <L, R>(d: R | (() => R), e: Either<L, R>): R =>
-  e.tag === "right" ? e.value : (typeof d === "function" ? (d as () => R)() : d);
-
 export const lefts = <L, R>(es: readonly Either<L, R>[]): readonly L[] => {
   const out: L[] = [];
   for (const e of es) if (e.tag === "left") out.push(e.value);
@@ -79,7 +68,7 @@ export const mapSet = <A, L, B>(f: (a: A) => Either<L, B>, s: ReadonlySet<A>): E
   return Right(out);
 };
 
-export const partitionEithers = <L, R>(es: readonly Either<L, R>[]): readonly [readonly L[], readonly R[]] => {
+export const partition = <L, R>(es: readonly Either<L, R>[]): readonly [readonly L[], readonly R[]] => {
   const ls: L[] = [];
   const rs: R[] = [];
   for (const e of es) (e.tag === "left" ? ls : rs).push(e.value as never);
@@ -87,9 +76,9 @@ export const partitionEithers = <L, R>(es: readonly Either<L, R>[]): readonly [r
 };
 
 // Left-fold over a list with an Either-returning function, short-
-// circuiting on Left. Mirrors Python's `eithers.foldl` — flat
+// circuiting on Left. Mirrors Python's `eithers.foldList` — flat
 // (positional) signature `f(acc, x)`.
-export const foldl = (f: (acc: any, x: any) => any, acc: any, xs: readonly any[]): any => {
+export const foldList = (f: (acc: any, x: any) => any, acc: any, xs: readonly any[]): any => {
   let r = acc;
   for (const x of xs) {
     const e = f(r, x);

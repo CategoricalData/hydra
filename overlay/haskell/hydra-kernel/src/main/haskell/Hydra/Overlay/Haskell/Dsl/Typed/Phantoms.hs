@@ -57,7 +57,7 @@ f <.> g = compose (asTerm f) (asTerm g)
 fun @@ arg = apply (asTerm fun) (asTerm arg)
 
 (++) :: (AsTerm f String, AsTerm g String) => f -> g -> TypedTerm String
-f ++ g = primitive2 (Prims.primName DefStrings.cat2) (asTerm f) (asTerm g)
+f ++ g = primitive2 (Prims.primName DefStrings.concat2) (asTerm f) (asTerm g)
 
 -- | Field definition operator for records: name>: value
 -- Example: "name">: string "John"

@@ -141,7 +141,7 @@ object Phantoms:
 
   /** 2-arg string concat — Haskell's (++) operator on strings desugars to this. */
   def cat2(a: TypedTerm[String], b: TypedTerm[String]): TypedTerm[String] =
-    applyP("hydra.lib.strings.cat2", a, b)
+    applyP("hydra.lib.strings.concat2", a, b)
 
   // ---- Unit, optional, either, pair, lists ----
 

@@ -3,9 +3,9 @@
   (export hydra_lib_optionals_apply
           hydra_lib_optionals_bind
           hydra_lib_optionals_cases
-          hydra_lib_optionals_cat
+          hydra_lib_optionals_givens
           hydra_lib_optionals_compose
-          hydra_lib_optionals_from_optional
+          hydra_lib_optionals_with_default
           hydra_lib_optionals_is_given
           hydra_lib_optionals_is_none
           hydra_lib_optionals_map
@@ -58,7 +58,7 @@
                 (f (maybe-value m)))))))
 
     ;; cat :: [Maybe a] -> [a]
-    (define hydra_lib_optionals_cat
+    (define hydra_lib_optionals_givens
       (lambda (ms)
         (let loop ((rest ms) (acc '()))
           (if (null? rest)
@@ -79,7 +79,7 @@
 
     ;; from_optional :: a -> Maybe a -> a
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_lib_optionals_from_optional
+    (define hydra_lib_optionals_with_default
       (lambda (def)
         (lambda (m)
           (if (maybe-nothing? m)

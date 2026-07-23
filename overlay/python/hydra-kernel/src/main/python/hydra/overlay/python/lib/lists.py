@@ -71,7 +71,7 @@ def drop_while(predicate: Callable[[A], bool], values: Sequence[A]) -> Sequence[
     return cur
 
 
-def elem(value: A, values: Sequence[A]) -> bool:
+def member(value: A, values: Sequence[A]) -> bool:
     """Check if an element is in a list."""
     return value in values
 
@@ -119,7 +119,7 @@ def group(values: Sequence[A]) -> Sequence[Sequence[A]]:
     return ConsList.from_iterable(result)
 
 
-def intercalate(
+def join(
     separator: Sequence[A], values: Sequence[Sequence[A]]
 ) -> Sequence[A]:
     """Intercalate a list of lists with a separator list between each.
@@ -160,36 +160,36 @@ def map(f: Callable[[A], B], values: Sequence[A]) -> Sequence[B]:
     return ConsList.from_iterable(f(v) for v in values)
 
 
-def maybe_at(i: int, values: Sequence[A]) -> Optional[A]:
+def at(i: int, values: Sequence[A]) -> Optional[A]:
     """Get the element at a specified index, returning none if out of bounds."""
     return Given(values[i]) if 0 <= i < len(values) else None_()
 
 
-def maybe_head(values: Sequence[A]) -> Optional[A]:
+def head(values: Sequence[A]) -> Optional[A]:
     """Get the first element of a list, returning none if the list is empty."""
     return Given(values[0]) if len(values) > 0 else None_()
 
 
-def maybe_init(values: Sequence[A]) -> Optional[Sequence[A]]:
+def init(values: Sequence[A]) -> Optional[Sequence[A]]:
     """Return all elements except the last, returning none if empty."""
     if len(values) == 0:
         return None_()
     return Given(_to_cons(values).init())
 
 
-def maybe_last(values: Sequence[A]) -> Optional[A]:
+def last(values: Sequence[A]) -> Optional[A]:
     """Get the last element of a list, returning none if the list is empty."""
     return Given(values[-1]) if len(values) > 0 else None_()
 
 
-def maybe_tail(values: Sequence[A]) -> Optional[Sequence[A]]:
+def tail(values: Sequence[A]) -> Optional[Sequence[A]]:
     """Get all elements except the first, returning none if empty."""
     if len(values) == 0:
         return None_()
     return Given(_to_cons(values).tail)
 
 
-def nub(values: Sequence[A]) -> Sequence[A]:
+def distinct(values: Sequence[A]) -> Sequence[A]:
     """Remove duplicate elements from a list."""
     seen: set[A] = set()
     out: list[A] = []
@@ -246,7 +246,7 @@ def sort(values: Sequence[A]) -> Sequence[A]:
 
 
 # TODO: ensure that Hydra's native comparison primitives are used for sorting
-def sort_on(key: Callable[[A], B], values: Sequence[A]) -> Sequence[A]:
+def sort_by(key: Callable[[A], B], values: Sequence[A]) -> Sequence[A]:
     """Sort a list based on a key function."""
     return ConsList.from_iterable(sorted(values, key=key))  # type: ignore[arg-type, type-var]
 

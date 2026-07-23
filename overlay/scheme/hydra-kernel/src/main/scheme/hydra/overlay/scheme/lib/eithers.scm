@@ -5,8 +5,6 @@
   (export hydra_lib_eithers_bimap
           hydra_lib_eithers_bind
           hydra_lib_eithers_either
-          hydra_lib_eithers_from_left
-          hydra_lib_eithers_from_right
           hydra_lib_eithers_is_left
           hydra_lib_eithers_is_right
           hydra_lib_eithers_lefts
@@ -14,8 +12,8 @@
           hydra_lib_eithers_map_list
           hydra_lib_eithers_map_optional
           hydra_lib_eithers_map_set
-          hydra_lib_eithers_partition_eithers
-          hydra_lib_eithers_foldl
+          hydra_lib_eithers_partition
+          hydra_lib_eithers_fold_list
           hydra_lib_eithers_rights)
   (begin
 
@@ -49,24 +47,6 @@
             (if (eq? (either-tag e) 'left)
                 (f (either-val e))
                 (g (either-val e)))))))
-
-    ;; fromLeft :: a -> Either a b -> a
-    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Right
-    (define hydra_lib_eithers_from_left
-      (lambda (def)
-        (lambda (e)
-          (if (eq? (either-tag e) 'left)
-              (either-val e)
-              (if (procedure? def) (def) def)))))
-
-    ;; fromRight :: b -> Either a b -> b
-    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Left
-    (define hydra_lib_eithers_from_right
-      (lambda (def)
-        (lambda (e)
-          (if (eq? (either-tag e) 'right)
-              (either-val e)
-              (if (procedure? def) (def) def)))))
 
     ;; isLeft :: Either a b -> Bool
     (define hydra_lib_eithers_is_left
@@ -139,7 +119,7 @@
                       (loop (cdr rest) (cons (either-val result) acc)))))))))
 
     ;; partitionEithers :: [Either a b] -> Pair [a] [b]
-    (define hydra_lib_eithers_partition_eithers
+    (define hydra_lib_eithers_partition
       (lambda (es)
         (let loop ((rest es) (lefts '()) (rights '()))
           (if (null? rest)
@@ -150,7 +130,7 @@
                     (loop (cdr rest) lefts (cons (either-val e) rights))))))))
 
     ;; foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-    (define hydra_lib_eithers_foldl
+    (define hydra_lib_eithers_fold_list
       (lambda (f)
         (lambda (init)
           (lambda (xs)

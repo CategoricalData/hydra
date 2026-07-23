@@ -20,10 +20,6 @@ bind = (>>=)
 cases :: Y.Maybe a -> b -> (a -> b) -> b
 cases m n j = Y.maybe n j m
 
--- | Filter out absent values from a list.
-cat :: [Y.Maybe a] -> [a]
-cat = Y.catMaybes
-
 -- | Compose two optional-returning functions (Kleisli composition).
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
@@ -32,11 +28,7 @@ compose f g = \x -> f x >>= g
 foldList :: (a -> b -> Y.Maybe a) -> a -> [b] -> Y.Maybe a
 foldList = CM.foldM
 
--- | Get a value from an optional value, or return a default value.
-fromOptional :: a -> Y.Maybe a -> a
-fromOptional = Y.fromMaybe
-
--- | Filter out absent values from a list. (Alias of cat.)
+-- | Filter out absent values from a list.
 givens :: [Y.Maybe a] -> [a]
 givens = Y.catMaybes
 
@@ -72,6 +64,6 @@ pure = Just
 toList :: Y.Maybe a -> [a]
 toList = Y.maybeToList
 
--- | Get a value from an optional value, or return a default value. (Alias of fromOptional.)
+-- | Get a value from an optional value, or return a default value.
 withDefault :: a -> Y.Maybe a -> a
 withDefault = Y.fromMaybe

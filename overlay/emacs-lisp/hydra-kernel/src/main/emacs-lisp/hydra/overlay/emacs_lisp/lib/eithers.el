@@ -36,8 +36,8 @@
             (funcall f (either-val e))
             (funcall g (either-val e)))))))
 
-;; foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-(defvar hydra_overlay_emacs_lisp_lib_eithers_foldl
+;; fold_list :: (a -> b -> Either c a) -> a -> [b] -> Either c a
+(defvar hydra_overlay_emacs_lisp_lib_eithers_fold_list
   (lambda (f)
     "Left-fold over a list with an Either-returning function, short-circuiting on Left."
     (lambda (init)
@@ -48,26 +48,6 @@
               (if (eq (either-tag result) :left)
                   (cl-return result)
                   (setq acc (either-val result))))))))))
-
-;; from_left :: a -> Either a b -> a
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Right
-(defvar hydra_overlay_emacs_lisp_lib_eithers_from_left
-  (lambda (def)
-    "Extract the Left value, or return a default."
-    (lambda (e)
-      (if (eq (either-tag e) :left)
-          (either-val e)
-          (if (functionp def) (funcall def) def)))))
-
-;; from_right :: b -> Either a b -> b
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Left
-(defvar hydra_overlay_emacs_lisp_lib_eithers_from_right
-  (lambda (def)
-    "Extract the Right value, or return a default."
-    (lambda (e)
-      (if (eq (either-tag e) :right)
-          (either-val e)
-          (if (functionp def) (funcall def) def)))))
 
 ;; is_left :: Either a b -> Bool
 (defvar hydra_overlay_emacs_lisp_lib_eithers_is_left
@@ -145,8 +125,8 @@
         (or early-result
             (list :right (funcall hydra_overlay_emacs_lisp_lib_sets_from_list (nreverse acc))))))))
 
-;; partition_eithers :: [Either a b] -> Pair [a] [b]
-(defvar hydra_overlay_emacs_lisp_lib_eithers_partition_eithers
+;; partition :: [Either a b] -> Pair [a] [b]
+(defvar hydra_overlay_emacs_lisp_lib_eithers_partition
   (lambda (es)
     "Partition a list of Eithers into lefts and rights."
     (let ((lefts nil)

@@ -21,8 +21,8 @@
       (list :none)
       (f (maybe-value m))))))
 
-;; cat :: [Maybe a] -> [a]
-(def hydra_lib_optionals_cat
+;; givens :: [Maybe a] -> [a]
+(def hydra_lib_optionals_givens
   (fn [ms]
     (loop [rest_ ms acc ()]
       (if (empty? rest_)
@@ -32,9 +32,9 @@
             (recur (next rest_) (cons (maybe-value m) acc))
             (recur (next rest_) acc)))))))
 
-;; from_optional :: a -> Maybe a -> a
+;; with_default :: a -> Maybe a -> a
 ;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
-(def hydra_lib_optionals_from_optional
+(def hydra_lib_optionals_with_default
   (fn [def_] (fn [m]
     (if (maybe-nothing? m)
       (if (fn? def_) (def_) def_)

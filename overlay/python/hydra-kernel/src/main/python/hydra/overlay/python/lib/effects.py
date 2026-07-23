@@ -32,7 +32,7 @@ def compose(f: Callable[[A], B], g: Callable[[B], C], a: A) -> C:
     return g(f(a))
 
 
-def foldl(f: Callable[[A, B], A], acc: A, values: Sequence[B]) -> A:
+def fold_list(f: Callable[[A, B], A], acc: A, values: Sequence[B]) -> A:
     """Left-fold over a list with an effect-returning function."""
     result = acc
     for x in values:

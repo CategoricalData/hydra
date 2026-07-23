@@ -1,19 +1,19 @@
 (define-library (hydra overlay scheme lib strings)
   (import (scheme base)
           (scheme char))
-  (export hydra_lib_strings_cat
-          hydra_lib_strings_cat2
+  (export hydra_lib_strings_concat
+          hydra_lib_strings_concat2
           hydra_lib_strings_cons
           hydra_lib_strings_drop
           hydra_lib_strings_from_list
           hydra_lib_strings_head
-          hydra_lib_strings_intercalate
+          hydra_lib_strings_join
           hydra_lib_strings_is_infix_of
           hydra_lib_strings_is_prefix_of
           hydra_lib_strings_is_suffix_of
           hydra_lib_strings_length
           hydra_lib_strings_lines
-          hydra_lib_strings_maybe_char_at
+          hydra_lib_strings_char_at
           hydra_lib_strings_null
           hydra_lib_strings_replicate
           hydra_lib_strings_reverse
@@ -33,12 +33,12 @@
     (define (char->int c) (if (char? c) (char->integer c) c))
 
     ;; Concatenate a list of strings into a single string.
-    (define hydra_lib_strings_cat
+    (define hydra_lib_strings_concat
       (lambda (strs)
         (apply string-append strs)))
 
     ;; Concatenate two strings.
-    (define hydra_lib_strings_cat2
+    (define hydra_lib_strings_concat2
       (lambda (a)
         (lambda (b)
           (string-append a b))))
@@ -68,7 +68,7 @@
         (char->int (string-ref s 0))))
 
     ;; Join a list of strings with a separator between each element.
-    (define hydra_lib_strings_intercalate
+    (define hydra_lib_strings_join
       (lambda (sep)
         (lambda (strs)
           (if (null? strs)
@@ -135,7 +135,7 @@
                    (loop (+ i 1) start acc))))))))
 
     ;; maybe_char_at :: Int -> String -> Maybe Int
-    (define hydra_lib_strings_maybe_char_at
+    (define hydra_lib_strings_char_at
       (lambda (n)
         (lambda (s)
           (if (and (>= n 0) (< n (string-length s)))

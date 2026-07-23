@@ -41,7 +41,7 @@ def cases(m: Optional[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
             return j(val)
 
 
-def cat(xs: Sequence[Optional[A]]) -> frozenlist[A]:
+def givens(xs: Sequence[Optional[A]]) -> frozenlist[A]:
     """Filter out none values from a list."""
     result: list[A] = []
     for x in xs:
@@ -58,7 +58,7 @@ def compose(f: Callable[[A], Optional[B]], g: Callable[[B], Optional[C]], x: A) 
     return bind(f(x), g)
 
 
-def from_optional(default: A | Callable[[], A], x: Optional[A]) -> A:
+def with_default(default: A | Callable[[], A], x: Optional[A]) -> A:
     """Get a value from an optional value, or return a default value."""
     match x:
         case Given(val):

@@ -84,9 +84,9 @@
             while (funcall pred (car rest))
             finally (return rest)))))
 
-;; elem :: a -> [a] -> Bool
+;; member :: a -> [a] -> Bool
 ;; Check if an element is in a list.
-(defvar hydra_overlay_common_lisp_lib_lists_elem
+(defvar hydra_overlay_common_lisp_lib_lists_member
   (lambda (x)
     (lambda (xs)
       (if (member x xs :test #'equal) t nil))))
@@ -147,9 +147,9 @@
           (push (nreverse current-group) groups)
           (nreverse groups)))))
 
-;; intercalate :: [a] -> [[a]] -> [a]
+;; join :: [a] -> [[a]] -> [a]
 ;; Intercalate a list of lists with a separator list between each.
-(defvar hydra_overlay_common_lisp_lib_lists_intercalate
+(defvar hydra_overlay_common_lisp_lib_lists_join
   (lambda (sep)
     (lambda (xss)
       (if (null xss)
@@ -182,50 +182,50 @@
     (lambda (xs)
       (mapcar f xs))))
 
-;; maybe_at :: Int -> [a] -> Maybe a
+;; at :: Int -> [a] -> Maybe a
 ;; Get the element at a specified index, returning Nothing if the index is out of bounds.
-(defvar hydra_overlay_common_lisp_lib_lists_maybe_at
+(defvar hydra_overlay_common_lisp_lib_lists_at
   (lambda (n)
     (lambda (xs)
       (if (and (>= n 0) (< n (length xs)))
           (list :given (nth n xs))
           (list :none)))))
 
-;; maybe_head :: [a] -> Maybe a
+;; head :: [a] -> Maybe a
 ;; Get the first element of a list, returning Nothing if the list is empty.
-(defvar hydra_overlay_common_lisp_lib_lists_maybe_head
+(defvar hydra_overlay_common_lisp_lib_lists_head
   (lambda (xs)
     (if (null xs)
         (list :none)
         (list :given (car xs)))))
 
-;; maybe_init :: [a] -> Maybe [a]
+;; init :: [a] -> Maybe [a]
 ;; Return all elements except the last, returning Nothing if the list is empty.
-(defvar hydra_overlay_common_lisp_lib_lists_maybe_init
+(defvar hydra_overlay_common_lisp_lib_lists_init
   (lambda (xs)
     (if (null xs)
         (list :none)
         (list :given (butlast xs)))))
 
-;; maybe_last :: [a] -> Maybe a
+;; last :: [a] -> Maybe a
 ;; Get the last element of a list, returning Nothing if the list is empty.
-(defvar hydra_overlay_common_lisp_lib_lists_maybe_last
+(defvar hydra_overlay_common_lisp_lib_lists_last
   (lambda (xs)
     (if (null xs)
         (list :none)
         (list :given (car (last xs))))))
 
-;; maybe_tail :: [a] -> Maybe [a]
+;; tail :: [a] -> Maybe [a]
 ;; Get all elements except the first, returning Nothing if the list is empty.
-(defvar hydra_overlay_common_lisp_lib_lists_maybe_tail
+(defvar hydra_overlay_common_lisp_lib_lists_tail
   (lambda (xs)
     (if (null xs)
         (list :none)
         (list :given (cdr xs)))))
 
-;; nub :: [a] -> [a]
+;; distinct :: [a] -> [a]
 ;; Remove duplicate elements from a list.
-(defvar hydra_overlay_common_lisp_lib_lists_nub
+(defvar hydra_overlay_common_lisp_lib_lists_distinct
   (lambda (xs)
     (let ((seen nil)
           (acc nil))
@@ -282,9 +282,9 @@
   (lambda (xs)
     (merge-sort #'generic<? xs)))
 
-;; sort_on :: (a -> b) -> [a] -> [a]
+;; sort_by :: (a -> b) -> [a] -> [a]
 ;; Sort a list based on a key function.
-(defvar hydra_overlay_common_lisp_lib_lists_sort_on
+(defvar hydra_overlay_common_lisp_lib_lists_sort_by
   (lambda (f)
     (lambda (xs)
       (merge-sort (lambda (a b)

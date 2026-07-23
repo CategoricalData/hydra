@@ -1,12 +1,12 @@
 (ns hydra.overlay.clojure.lib.strings)
 
-;; cat :: [String] -> String
-(def hydra_lib_strings_cat
+;; concat :: [String] -> String
+(def hydra_lib_strings_concat
   "Concatenate a list of strings into a single string."
   (fn [ss] (apply str ss)))
 
-;; cat2 :: String -> String -> String
-(def hydra_lib_strings_cat2
+;; concat2 :: String -> String -> String
+(def hydra_lib_strings_concat2
   "Concatenate two strings."
   (fn [a] (fn [b] (str a b))))
 
@@ -19,8 +19,8 @@
         (.appendCodePoint sb (int cp)))
       (.toString sb))))
 
-;; intercalate :: String -> [String] -> String
-(def hydra_lib_strings_intercalate
+;; join :: String -> [String] -> String
+(def hydra_lib_strings_join
   "Join a list of strings with a separator between each element."
   (fn [sep] (fn [ss] (clojure.string/join sep ss))))
 
@@ -49,8 +49,8 @@
           (butlast parts)
           parts)))))
 
-;; maybe_char_at :: Int -> String -> Maybe Int
-(def hydra_lib_strings_maybe_char_at
+;; char_at :: Int -> String -> Maybe Int
+(def hydra_lib_strings_char_at
   "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
   (fn [n] (fn [s]
     (if (and (>= n 0) (< n (.codePointCount s 0 (.length s))))

@@ -6,7 +6,7 @@ import hydra.graph.Primitive
 // (the analog of Haskell's Hydra.Haskell.Lib.*), leaving hydra.lib free for the generated
 // PrimitiveDefinition def-modules. Import the impl objects so the bare references below
 // (chars.isAlphaNum, lists.cons, …) still resolve.
-import hydra.overlay.scala.lib.{chars, eithers, equality, lists, literals, logic, maps, math, optionals, pairs, regex, sets, strings, text}
+import hydra.overlay.scala.lib.{chars, eithers, equality, functions, lists, literals, logic, maps, math, optionals, ordering, pairs, regex, sets, strings, text}
 
 /** Registry of all primitive functions available in Hydra-Scala.
   * First-order primitives have real (native) implementations. Most higher-order
@@ -320,37 +320,51 @@ object Libraries:
 
   private def equalityPrimitives(): Map[String, Primitive] =
     val x = tVar("x")
-    val xOrd = Seq(("x", Seq("ordering")))
     val xEq = Seq(("x", Seq("equality")))
-    val xPlain = Seq(("x", Seq.empty))
     Map(
-      // Polymorphic: compare, equal, gt, gte, lt, lte, max, min, identity
+      // equal only here (moved: compare/gt/gte/lt/lte/max/min -> ordering; identity -> functions).
       // These work on Term values directly since they are polymorphic.
-      // Use compareTerms for proper structural comparison of literal values.
-      hydra.lib.equality.compare.name -> mkPrimImpl(hydra.lib.equality.compare.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tComparison))),
+      hydra.lib.equality.equal.name -> mkPrimImpl(hydra.lib.equality.equal.name, tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(a == b))),
+    )
+
+  // ===== Ordering primitives (moved from equality — R20) =====
+
+  private def orderingPrimitives(): Map[String, Primitive] =
+    val x = tVar("x")
+    val xOrd = Seq(("x", Seq("ordering")))
+    Map(
+      // compare, gt, gte, lt, lte, max, min. Use compareTerms for structural comparison of values.
+      hydra.lib.ordering.compare.name -> mkPrimImpl(hydra.lib.ordering.compare.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tComparison))),
         impl2 { (a, b) =>
-          val c = equality.compareTerms(a, b)
+          val c = ordering.compareTerms(a, b)
           val comp = if c < 0 then hydra.util.Comparison.lessThan
                      else if c > 0 then hydra.util.Comparison.greaterThan
                      else hydra.util.Comparison.equalTo
           mkComparison(comp)
         }),
-      hydra.lib.equality.equal.name -> mkPrimImpl(hydra.lib.equality.equal.name, tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(a == b))),
-      hydra.lib.equality.identity.name -> mkPrimImpl(hydra.lib.equality.identity.name, tSchemeConstrained(xPlain, tFun(x, x)),
+      hydra.lib.ordering.gt.name -> mkPrimImpl(hydra.lib.ordering.gt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(ordering.compareTerms(a, b) > 0))),
+      hydra.lib.ordering.gte.name -> mkPrimImpl(hydra.lib.ordering.gte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(ordering.compareTerms(a, b) >= 0))),
+      hydra.lib.ordering.lt.name -> mkPrimImpl(hydra.lib.ordering.lt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(ordering.compareTerms(a, b) < 0))),
+      hydra.lib.ordering.lte.name -> mkPrimImpl(hydra.lib.ordering.lte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
+        impl2((a, b) => mkBool(ordering.compareTerms(a, b) <= 0))),
+      hydra.lib.ordering.max.name -> mkPrimImpl(hydra.lib.ordering.max.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
+        impl2((a, b) => if ordering.compareTerms(a, b) >= 0 then a else b)),
+      hydra.lib.ordering.min.name -> mkPrimImpl(hydra.lib.ordering.min.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
+        impl2((a, b) => if ordering.compareTerms(a, b) <= 0 then a else b)),
+    )
+
+  // ===== Functions primitives (identity moved from equality — R21) =====
+
+  private def functionsPrimitives(): Map[String, Primitive] =
+    val x = tVar("x")
+    val xPlain = Seq(("x", Seq.empty))
+    Map(
+      hydra.lib.functions.identity.name -> mkPrimImpl(hydra.lib.functions.identity.name, tSchemeConstrained(xPlain, tFun(x, x)),
         impl1(a => a)),
-      hydra.lib.equality.gt.name -> mkPrimImpl(hydra.lib.equality.gt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) > 0))),
-      hydra.lib.equality.gte.name -> mkPrimImpl(hydra.lib.equality.gte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) >= 0))),
-      hydra.lib.equality.lt.name -> mkPrimImpl(hydra.lib.equality.lt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) < 0))),
-      hydra.lib.equality.lte.name -> mkPrimImpl(hydra.lib.equality.lte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(equality.compareTerms(a, b) <= 0))),
-      hydra.lib.equality.max.name -> mkPrimImpl(hydra.lib.equality.max.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if equality.compareTerms(a, b) >= 0 then a else b)),
-      hydra.lib.equality.min.name -> mkPrimImpl(hydra.lib.equality.min.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if equality.compareTerms(a, b) <= 0 then a else b)),
     )
 
   // ===== Eithers primitives =====
@@ -361,7 +375,7 @@ object Libraries:
     val z = tVar("z")
     val w = tVar("w")
     Map(
-      // Higher-order: bind, bimap, either, foldl, map, mapList, mapOptional, mapSet
+      // Higher-order: bind, bimap, either, foldList, map, mapList, mapOptional, mapSet
       hydra.lib.eithers.bind.name -> mkPrimImpl(hydra.lib.eithers.bind.name, tScheme(Seq("x", "y", "z"),
         tFun(tEither(x, y), tFun(tFun(y, tEither(x, z)), tEither(x, z)))),
         impl2 { (e, f) =>
@@ -383,7 +397,7 @@ object Libraries:
             case Left(a) => app(fl, a)
             case Right(b) => app(fr, b)
         }),
-      hydra.lib.eithers.foldl.name -> mkPrimImpl(hydra.lib.eithers.foldl.name, tScheme(Seq("x", "y", "z"),
+      hydra.lib.eithers.foldList.name -> mkPrimImpl(hydra.lib.eithers.foldList.name, tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tFun(y, tEither(z, x))), tFun(x, tFun(tList(y), tEither(z, x))))),
         g => args => {
           val f = args(0); val init = args(1); val xs = exList(args(2))
@@ -391,17 +405,7 @@ object Libraries:
             accE.flatMap(acc => apply2AndReduce(g, f, acc, elem))
           }
         }),
-      // First-order: fromLeft, fromRight, isLeft, isRight, lefts, rights, partitionEithers
-      hydra.lib.eithers.fromLeft.name -> withLazy(mkPrimImpl(hydra.lib.eithers.fromLeft.name, tScheme(Seq("x", "y"),
-        tFun(x, tFun(tEither(x, y), x))),
-        impl2((d, e) => exEither(e) match
-          case Left(a) => a
-          case Right(_) => d)), Seq(0)),
-      hydra.lib.eithers.fromRight.name -> withLazy(mkPrimImpl(hydra.lib.eithers.fromRight.name, tScheme(Seq("x", "y"),
-        tFun(y, tFun(tEither(x, y), y))),
-        impl2((d, e) => exEither(e) match
-          case Left(_) => d
-          case Right(b) => b)), Seq(0)),
+      // First-order: isLeft, isRight, lefts, rights, partition
       hydra.lib.eithers.isLeft.name -> mkPrimImpl(hydra.lib.eithers.isLeft.name, tScheme(Seq("x", "y"),
         tFun(tEither(x, y), tBool)),
         impl1(e => mkBool(exEither(e).isLeft))),
@@ -465,7 +469,7 @@ object Libraries:
             }
           }
         }),
-      hydra.lib.eithers.partitionEithers.name -> mkPrimImpl(hydra.lib.eithers.partitionEithers.name, tScheme(Seq("x", "y"),
+      hydra.lib.eithers.partition.name -> mkPrimImpl(hydra.lib.eithers.partition.name, tScheme(Seq("x", "y"),
         tFun(tList(tEither(x, y)), tPair(tList(x), tList(y)))),
         impl1 { es =>
           val items = exList(es).map(exEither)
@@ -558,7 +562,7 @@ object Libraries:
       hydra.lib.lists.partition.name -> mkPrimImpl(hydra.lib.lists.partition.name, tScheme(Seq("a"),
         tFun(tFun(a, tBool), tFun(tList(a), tPair(tList(a), tList(a))))),
         g => args => partitionList(g, args(0), exList(args(1)))),
-      hydra.lib.lists.sortOn.name -> mkPrimImpl(hydra.lib.lists.sortOn.name, tSchemeConstrained(Seq(("a", Seq.empty), ("b", Seq("ordering"))),
+      hydra.lib.lists.sortBy.name -> mkPrimImpl(hydra.lib.lists.sortBy.name, tSchemeConstrained(Seq(("a", Seq.empty), ("b", Seq("ordering"))),
         tFun(tFun(a, b), tFun(tList(a), tList(a)))),
         g => args => {
           val f = args(0); val xs = exList(args(1))
@@ -571,7 +575,7 @@ object Libraries:
             }
           }.map { paired =>
             val pairs = exList(paired).map(exPair)
-            mkList(pairs.sortWith((a, b) => equality.compareTerms(a._1, b._1) < 0).map(_._2))
+            mkList(pairs.sortWith((a, b) => ordering.compareTerms(a._1, b._1) < 0).map(_._2))
           }
         }),
       hydra.lib.lists.span.name -> mkPrimImpl(hydra.lib.lists.span.name, tScheme(Seq("a"),
@@ -608,7 +612,7 @@ object Libraries:
       hydra.lib.lists.drop.name -> mkPrimImpl(hydra.lib.lists.drop.name, tScheme(Seq("a"),
         tFun(tInt32, tFun(tList(a), tList(a)))),
         impl2((n, xs) => mkList(exList(xs).drop(exInt32(n))))),
-      hydra.lib.lists.elem.name -> mkPrimImpl(hydra.lib.lists.elem.name, tSchemeConstrained(aEq,
+      hydra.lib.lists.member.name -> mkPrimImpl(hydra.lib.lists.member.name, tSchemeConstrained(aEq,
         tFun(a, tFun(tList(a), tBool))),
         impl2((x, xs) => mkBool(exList(xs).contains(x)))),
       hydra.lib.lists.group.name -> mkPrimImpl(hydra.lib.lists.group.name, tSchemeConstrained(aEq,
@@ -622,7 +626,7 @@ object Libraries:
               same +: doGroup(rest)
           mkList(doGroup(items).map(mkList))
         }),
-      hydra.lib.lists.intercalate.name -> mkPrimImpl(hydra.lib.lists.intercalate.name, tScheme(Seq("a"),
+      hydra.lib.lists.join.name -> mkPrimImpl(hydra.lib.lists.join.name, tScheme(Seq("a"),
         tFun(tList(a), tFun(tList(tList(a)), tList(a)))),
         impl2 { (sep, xss) =>
           val sepItems = exList(sep)
@@ -638,22 +642,22 @@ object Libraries:
       hydra.lib.lists.length.name -> mkPrimImpl(hydra.lib.lists.length.name, tScheme(Seq("a"),
         tFun(tList(a), tInt32)),
         impl1(xs => mkInt32(exList(xs).length))),
-      hydra.lib.lists.maybeAt.name -> mkPrimImpl(hydra.lib.lists.maybeAt.name, tScheme(Seq("a"),
+      hydra.lib.lists.at.name -> mkPrimImpl(hydra.lib.lists.at.name, tScheme(Seq("a"),
         tFun(tInt32, tFun(tList(a), tOpt(a)))),
-        impl2((i, xs) => mkMaybe(lists.maybeAt(exInt32(i))(exList(xs))))),
-      hydra.lib.lists.maybeHead.name -> mkPrimImpl(hydra.lib.lists.maybeHead.name, tScheme(Seq("a"),
+        impl2((i, xs) => mkMaybe(lists.at(exInt32(i))(exList(xs))))),
+      hydra.lib.lists.head.name -> mkPrimImpl(hydra.lib.lists.head.name, tScheme(Seq("a"),
         tFun(tList(a), tOpt(a))),
         impl1(xs => mkMaybe(exList(xs).headOption))),
-      hydra.lib.lists.maybeInit.name -> mkPrimImpl(hydra.lib.lists.maybeInit.name, tScheme(Seq("a"),
+      hydra.lib.lists.init.name -> mkPrimImpl(hydra.lib.lists.init.name, tScheme(Seq("a"),
         tFun(tList(a), tOpt(tList(a)))),
-        impl1(xs => { val items = exList(xs); mkMaybe(lists.maybeInit(items).map(mkList)) })),
-      hydra.lib.lists.maybeLast.name -> mkPrimImpl(hydra.lib.lists.maybeLast.name, tScheme(Seq("a"),
+        impl1(xs => { val items = exList(xs); mkMaybe(lists.init(items).map(mkList)) })),
+      hydra.lib.lists.last.name -> mkPrimImpl(hydra.lib.lists.last.name, tScheme(Seq("a"),
         tFun(tList(a), tOpt(a))),
         impl1(xs => mkMaybe(exList(xs).lastOption))),
-      hydra.lib.lists.maybeTail.name -> mkPrimImpl(hydra.lib.lists.maybeTail.name, tScheme(Seq("a"),
+      hydra.lib.lists.tail.name -> mkPrimImpl(hydra.lib.lists.tail.name, tScheme(Seq("a"),
         tFun(tList(a), tOpt(tList(a)))),
-        impl1(xs => { val items = exList(xs); mkMaybe(lists.maybeTail(items).map(mkList)) })),
-      hydra.lib.lists.nub.name -> mkPrimImpl(hydra.lib.lists.nub.name, tSchemeConstrained(aEq,
+        impl1(xs => { val items = exList(xs); mkMaybe(lists.tail(items).map(mkList)) })),
+      hydra.lib.lists.distinct.name -> mkPrimImpl(hydra.lib.lists.distinct.name, tSchemeConstrained(aEq,
         tFun(tList(a), tList(a))),
         impl1(xs => mkList(exList(xs).distinct))),
       hydra.lib.lists.`null`.name -> mkPrimImpl(hydra.lib.lists.`null`.name, tScheme(Seq("a"),
@@ -673,7 +677,7 @@ object Libraries:
         impl1(x => mkList(Seq(x)))),
       hydra.lib.lists.sort.name -> mkPrimImpl(hydra.lib.lists.sort.name, tSchemeConstrained(aOrd,
         tFun(tList(a), tList(a))),
-        impl1(xs => mkList(exList(xs).sortWith((a, b) => equality.lt(a)(b))))),
+        impl1(xs => mkList(exList(xs).sortWith((a, b) => ordering.lt(a)(b))))),
       hydra.lib.lists.take.name -> mkPrimImpl(hydra.lib.lists.take.name, tScheme(Seq("a"),
         tFun(tInt32, tFun(tList(a), tList(a)))),
         impl2((n, xs) => mkList(exList(xs).take(exInt32(n))))),
@@ -841,20 +845,12 @@ object Libraries:
         impl1(a => mkInt32(math.signum(exInt32(a))))),
       hydra.lib.math.sub.name -> mkPrimImpl(hydra.lib.math.sub.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
         impl2((a, b) => mkInt32(math.sub(exInt32(a))(exInt32(b))))),
-      hydra.lib.math.max.name -> mkPrimImpl(hydra.lib.math.max.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.max(exInt32(a))(exInt32(b))))),
-      hydra.lib.math.maybeDiv.name -> mkPrimImpl(hydra.lib.math.maybeDiv.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.maybeDiv(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.maybeMod.name -> mkPrimImpl(hydra.lib.math.maybeMod.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.maybeMod(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.maybePred.name -> mkPrimImpl(hydra.lib.math.maybePred.name, tMono(tFun(tInt32, tOpt(tInt32))),
-        impl1(a => mkMaybe(math.maybePred(exInt32(a)).map(mkInt32)))),
-      hydra.lib.math.maybeRem.name -> mkPrimImpl(hydra.lib.math.maybeRem.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.maybeRem(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.maybeSucc.name -> mkPrimImpl(hydra.lib.math.maybeSucc.name, tMono(tFun(tInt32, tOpt(tInt32))),
-        impl1(a => mkMaybe(math.maybeSucc(exInt32(a)).map(mkInt32)))),
-      hydra.lib.math.min.name -> mkPrimImpl(hydra.lib.math.min.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.min(exInt32(a))(exInt32(b))))),
+      hydra.lib.math.div.name -> mkPrimImpl(hydra.lib.math.div.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
+        impl2((a, b) => mkMaybe(math.div(exInt32(a))(exInt32(b)).map(mkInt32)))),
+      hydra.lib.math.mod.name -> mkPrimImpl(hydra.lib.math.mod.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
+        impl2((a, b) => mkMaybe(math.mod(exInt32(a))(exInt32(b)).map(mkInt32)))),
+      hydra.lib.math.rem.name -> mkPrimImpl(hydra.lib.math.rem.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
+        impl2((a, b) => mkMaybe(math.rem(exInt32(a))(exInt32(b)).map(mkInt32)))),
       // Float64 primitives
       hydra.lib.math.addFloat64.name -> mkPrimImpl(hydra.lib.math.addFloat64.name, tMono(tFun(tFloat64, tFun(tFloat64, tFloat64))),
         impl2((a, b) => mkFloat64(math.addFloat64(exFloat64(a))(exFloat64(b))))),
@@ -979,10 +975,10 @@ object Libraries:
           }
         }),
       // First-order
-      hydra.lib.optionals.cat.name -> mkPrimImpl(hydra.lib.optionals.cat.name, tScheme(Seq("a"),
+      hydra.lib.optionals.givens.name -> mkPrimImpl(hydra.lib.optionals.givens.name, tScheme(Seq("a"),
         tFun(tList(tOpt(a)), tList(a))),
         impl1(xs => mkList(exList(xs).flatMap(exMaybe)))),
-      hydra.lib.optionals.fromOptional.name -> withLazy(mkPrimImpl(hydra.lib.optionals.fromOptional.name, tScheme(Seq("a"),
+      hydra.lib.optionals.withDefault.name -> withLazy(mkPrimImpl(hydra.lib.optionals.withDefault.name, tScheme(Seq("a"),
         tFun(a, tFun(tOpt(a), a))),
         impl2((d, ma) => exMaybe(ma).getOrElse(d))), Seq(0)),
       hydra.lib.optionals.isGiven.name -> mkPrimImpl(hydra.lib.optionals.isGiven.name, tScheme(Seq("a"),
@@ -1076,20 +1072,20 @@ object Libraries:
 
   private def stringsPrimitives(): Map[String, Primitive] =
     Map(
-      hydra.lib.strings.cat.name -> mkPrimImpl(hydra.lib.strings.cat.name, tMono(tFun(tList(tString), tString)),
-        impl1(ss => mkString(strings.cat(exList(ss).map(exString))))),
-      hydra.lib.strings.cat2.name -> mkPrimImpl(hydra.lib.strings.cat2.name, tMono(tFun(tString, tFun(tString, tString))),
-        impl2((a, b) => mkString(strings.cat2(exString(a))(exString(b))))),
+      hydra.lib.strings.concat.name -> mkPrimImpl(hydra.lib.strings.concat.name, tMono(tFun(tList(tString), tString)),
+        impl1(ss => mkString(strings.concat(exList(ss).map(exString))))),
+      hydra.lib.strings.concat2.name -> mkPrimImpl(hydra.lib.strings.concat2.name, tMono(tFun(tString, tFun(tString, tString))),
+        impl2((a, b) => mkString(strings.concat2(exString(a))(exString(b))))),
       hydra.lib.strings.fromList.name -> mkPrimImpl(hydra.lib.strings.fromList.name, tMono(tFun(tList(tInt32), tString)),
         impl1(cs => mkString(strings.fromList(exList(cs).map(exInt32))))),
-      hydra.lib.strings.intercalate.name -> mkPrimImpl(hydra.lib.strings.intercalate.name, tMono(tFun(tString, tFun(tList(tString), tString))),
-        impl2((sep, ss) => mkString(strings.intercalate(exString(sep))(exList(ss).map(exString))))),
+      hydra.lib.strings.join.name -> mkPrimImpl(hydra.lib.strings.join.name, tMono(tFun(tString, tFun(tList(tString), tString))),
+        impl2((sep, ss) => mkString(strings.join(exString(sep))(exList(ss).map(exString))))),
       hydra.lib.strings.length.name -> mkPrimImpl(hydra.lib.strings.length.name, tMono(tFun(tString, tInt32)),
         impl1(s => mkInt32(strings.length(exString(s))))),
       hydra.lib.strings.lines.name -> mkPrimImpl(hydra.lib.strings.lines.name, tMono(tFun(tString, tList(tString))),
         impl1(s => mkList(strings.lines(exString(s)).map(mkString)))),
-      hydra.lib.strings.maybeCharAt.name -> mkPrimImpl(hydra.lib.strings.maybeCharAt.name, tMono(tFun(tInt32, tFun(tString, tOpt(tInt32)))),
-        impl2((i, s) => mkMaybe(strings.maybeCharAt(exInt32(i))(exString(s)).map(mkInt32)))),
+      hydra.lib.strings.charAt.name -> mkPrimImpl(hydra.lib.strings.charAt.name, tMono(tFun(tInt32, tFun(tString, tOpt(tInt32)))),
+        impl2((i, s) => mkMaybe(strings.charAt(exInt32(i))(exString(s)).map(mkInt32)))),
       hydra.lib.strings.`null`.name -> mkPrimImpl(hydra.lib.strings.`null`.name, tMono(tFun(tString, tBool)),
         impl1(s => mkBool(strings.`null`(exString(s))))),
       hydra.lib.strings.splitOn.name -> mkPrimImpl(hydra.lib.strings.splitOn.name, tMono(tFun(tString, tFun(tString, tList(tString)))),
@@ -1156,8 +1152,8 @@ object Libraries:
       // Read primitives
       hydra.lib.literals.readBigint.name -> mkPrimImpl(hydra.lib.literals.readBigint.name, tMono(tFun(tString, tOpt(tBigint))),
         impl1(s => mkMaybe(literals.readBigint(exString(s)).map(mkBigint)))),
-      hydra.lib.literals.readBoolean.name -> mkPrimImpl(hydra.lib.literals.readBoolean.name, tMono(tFun(tString, tOpt(tBool))),
-        impl1(s => mkMaybe(literals.readBoolean(exString(s)).map(mkBool)))),
+      hydra.lib.literals.parseBoolean.name -> mkPrimImpl(hydra.lib.literals.parseBoolean.name, tMono(tFun(tString, tOpt(tBool))),
+        impl1(s => mkMaybe(literals.parseBoolean(exString(s)).map(mkBool)))),
       hydra.lib.literals.readDecimal.name -> mkPrimImpl(hydra.lib.literals.readDecimal.name, tMono(tFun(tString, tOpt(tDecimal))),
         impl1(s => mkMaybe(literals.readDecimal(exString(s)).map(mkDecimal)))),
       hydra.lib.literals.readFloat32.name -> mkPrimImpl(hydra.lib.literals.readFloat32.name, tMono(tFun(tString, tOpt(tFloat32))),
@@ -1172,8 +1168,8 @@ object Libraries:
         impl1(s => mkMaybe(literals.readInt32(exString(s)).map(mkInt32)))),
       hydra.lib.literals.readInt64.name -> mkPrimImpl(hydra.lib.literals.readInt64.name, tMono(tFun(tString, tOpt(tInt64))),
         impl1(s => mkMaybe(literals.readInt64(exString(s)).map(mkInt64)))),
-      hydra.lib.literals.readString.name -> mkPrimImpl(hydra.lib.literals.readString.name, tMono(tFun(tString, tOpt(tString))),
-        impl1(s => mkMaybe(literals.readString(exString(s)).map(mkString)))),
+      hydra.lib.literals.parseString.name -> mkPrimImpl(hydra.lib.literals.parseString.name, tMono(tFun(tString, tOpt(tString))),
+        impl1(s => mkMaybe(literals.parseString(exString(s)).map(mkString)))),
       hydra.lib.literals.readUint8.name -> mkPrimImpl(hydra.lib.literals.readUint8.name, tMono(tFun(tString, tOpt(tUint8))),
         impl1(s => mkMaybe(literals.readUint8(exString(s)).map(mkUint8)))),
       hydra.lib.literals.readUint16.name -> mkPrimImpl(hydra.lib.literals.readUint16.name, tMono(tFun(tString, tOpt(tUint16))),
@@ -1185,8 +1181,8 @@ object Libraries:
       // Show primitives
       hydra.lib.literals.showBigint.name -> mkPrimImpl(hydra.lib.literals.showBigint.name, tMono(tFun(tBigint, tString)),
         impl1(a => mkString(literals.showBigint(exBigint(a))))),
-      hydra.lib.literals.showBoolean.name -> mkPrimImpl(hydra.lib.literals.showBoolean.name, tMono(tFun(tBool, tString)),
-        impl1(a => mkString(literals.showBoolean(exBool(a))))),
+      hydra.lib.literals.printBoolean.name -> mkPrimImpl(hydra.lib.literals.printBoolean.name, tMono(tFun(tBool, tString)),
+        impl1(a => mkString(literals.printBoolean(exBool(a))))),
       hydra.lib.literals.showDecimal.name -> mkPrimImpl(hydra.lib.literals.showDecimal.name, tMono(tFun(tDecimal, tString)),
         impl1(a => mkString(literals.showDecimal(exDecimal(a))))),
       hydra.lib.literals.showFloat32.name -> mkPrimImpl(hydra.lib.literals.showFloat32.name, tMono(tFun(tFloat32, tString)),
@@ -1209,8 +1205,8 @@ object Libraries:
         impl1(a => mkString(literals.showUint32(exUint32(a))))),
       hydra.lib.literals.showUint64.name -> mkPrimImpl(hydra.lib.literals.showUint64.name, tMono(tFun(tUint64, tString)),
         impl1(a => mkString(literals.showUint64(exUint64(a))))),
-      hydra.lib.literals.showString.name -> mkPrimImpl(hydra.lib.literals.showString.name, tMono(tFun(tString, tString)),
-        impl1(a => mkString(literals.showString(exString(a))))),
+      hydra.lib.literals.printString.name -> mkPrimImpl(hydra.lib.literals.printString.name, tMono(tFun(tString, tString)),
+        impl1(a => mkString(literals.printString(exString(a))))),
       hydra.lib.literals.stringToBinary.name -> mkPrimImpl(hydra.lib.literals.stringToBinary.name, tMono(tFun(tString, tBinary)),
         impl1(a => mkBinary(literals.stringToBinary(exString(a))))),
       hydra.lib.literals.uint8ToBigint.name -> mkPrimImpl(hydra.lib.literals.uint8ToBigint.name, tMono(tFun(tUint8, tBigint)),
@@ -1270,8 +1266,8 @@ object Libraries:
       // compose: (x -> effect<y>) -> (y -> effect<z>) -> x -> effect<z>
       hydra.lib.effects.compose.name -> mkPrimEffect(hydra.lib.effects.compose.name, tScheme(Seq("x", "y", "z"),
         tFun(tFun(x, tEffect(y)), tFun(tFun(y, tEffect(z)), tFun(x, tEffect(z)))))),
-      // foldl: (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
-      hydra.lib.effects.foldl.name -> mkPrimEffect(hydra.lib.effects.foldl.name, tScheme(Seq("x", "y"),
+      // foldList: (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
+      hydra.lib.effects.foldList.name -> mkPrimEffect(hydra.lib.effects.foldList.name, tScheme(Seq("x", "y"),
         tFun(tFun(x, tFun(y, tEffect(x))), tFun(x, tFun(tList(y), tEffect(x)))))),
       // map: (x -> y) -> effect<x> -> effect<y>
       hydra.lib.effects.map.name -> mkPrimEffect(hydra.lib.effects.map.name, tScheme(Seq("x", "y"),
@@ -1399,6 +1395,7 @@ object Libraries:
     equalityPrimitives() ++
     eithersPrimitives() ++
     filesPrimitives() ++
+    functionsPrimitives() ++
     hashingPrimitives() ++
     listsPrimitives() ++
     literalsPrimitives() ++
@@ -1406,6 +1403,7 @@ object Libraries:
     mapsPrimitives() ++
     mathPrimitives() ++
     optionalsPrimitives() ++
+    orderingPrimitives() ++
     pairsPrimitives() ++
     regexPrimitives() ++
     setsPrimitives() ++

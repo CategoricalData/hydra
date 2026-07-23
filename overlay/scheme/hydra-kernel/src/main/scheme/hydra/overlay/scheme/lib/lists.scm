@@ -6,21 +6,21 @@
           hydra_lib_lists_cons
           hydra_lib_lists_drop
           hydra_lib_lists_drop_while
-          hydra_lib_lists_elem
+          hydra_lib_lists_member
           hydra_lib_lists_filter
           hydra_lib_lists_find
           hydra_lib_lists_foldl
           hydra_lib_lists_foldr
-          hydra_lib_lists_intercalate
+          hydra_lib_lists_join
           hydra_lib_lists_intersperse
           hydra_lib_lists_length
           hydra_lib_lists_map
-          hydra_lib_lists_maybe_at
-          hydra_lib_lists_maybe_head
-          hydra_lib_lists_maybe_init
-          hydra_lib_lists_maybe_last
-          hydra_lib_lists_maybe_tail
-          hydra_lib_lists_nub
+          hydra_lib_lists_at
+          hydra_lib_lists_head
+          hydra_lib_lists_init
+          hydra_lib_lists_last
+          hydra_lib_lists_tail
+          hydra_lib_lists_distinct
           hydra_lib_lists_null
           hydra_lib_lists_partition
           hydra_lib_lists_pure
@@ -28,7 +28,7 @@
           hydra_lib_lists_reverse
           hydra_lib_lists_singleton
           hydra_lib_lists_sort
-          hydra_lib_lists_sort_on
+          hydra_lib_lists_sort_by
           hydra_lib_lists_span
           hydra_lib_lists_take
           hydra_lib_lists_transpose
@@ -128,7 +128,7 @@
                 (loop (cdr rest)))))))
 
     ;; elem :: a -> [a] -> Bool
-    (define hydra_lib_lists_elem
+    (define hydra_lib_lists_member
       (lambda (x)
         (lambda (xs)
           (let loop ((rest xs))
@@ -179,7 +179,7 @@
                   (loop (cdr rest) ((f (car rest)) acc))))))))
 
     ;; intercalate :: [a] -> [[a]] -> [a]
-    (define hydra_lib_lists_intercalate
+    (define hydra_lib_lists_join
       (lambda (sep)
         (lambda (xss)
           (if (null? xss)
@@ -213,7 +213,7 @@
           (map f xs))))
 
     ;; maybe_at :: Int -> [a] -> Maybe a
-    (define hydra_lib_lists_maybe_at
+    (define hydra_lib_lists_at
       (lambda (n)
         (lambda (xs)
           (if (and (>= n 0) (< n (length xs)))
@@ -221,14 +221,14 @@
               (list 'none)))))
 
     ;; maybe_head :: [a] -> Maybe a
-    (define hydra_lib_lists_maybe_head
+    (define hydra_lib_lists_head
       (lambda (xs)
         (if (null? xs)
             (list 'none)
             (list 'given (car xs)))))
 
     ;; maybe_init :: [a] -> Maybe [a]
-    (define hydra_lib_lists_maybe_init
+    (define hydra_lib_lists_init
       (lambda (xs)
         (if (null? xs)
             (list 'none)
@@ -238,7 +238,7 @@
                               (cons (car rest) (loop (cdr rest)))))))))
 
     ;; maybe_last :: [a] -> Maybe a
-    (define hydra_lib_lists_maybe_last
+    (define hydra_lib_lists_last
       (lambda (xs)
         (if (null? xs)
             (list 'none)
@@ -248,14 +248,14 @@
                               (loop (cdr rest))))))))
 
     ;; maybe_tail :: [a] -> Maybe [a]
-    (define hydra_lib_lists_maybe_tail
+    (define hydra_lib_lists_tail
       (lambda (xs)
         (if (null? xs)
             (list 'none)
             (list 'given (cdr xs)))))
 
     ;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
-    (define hydra_lib_lists_nub
+    (define hydra_lib_lists_distinct
       (lambda (xs)
         (let loop ((rest xs) (seen '()) (acc '()))
           (if (null? rest)
@@ -310,7 +310,7 @@
         (merge-sort generic<? xs)))
 
     ;; sort_on :: (a -> b) -> [a] -> [a]
-    (define hydra_lib_lists_sort_on
+    (define hydra_lib_lists_sort_by
       (lambda (f)
         (lambda (xs)
           (merge-sort (lambda (a b) (generic<? (f a) (f b))) xs))))

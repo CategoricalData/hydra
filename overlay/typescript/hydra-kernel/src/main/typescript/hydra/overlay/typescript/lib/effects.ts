@@ -24,7 +24,7 @@ export const bind = (a: any, f: (a: any) => any): any => f(a);
 export const compose = (f: (a: any) => any, g: (b: any) => any, a: any): any => g(f(a));
 
 // Left-fold over a list with an effect-returning function.
-export const foldl = (f: (acc: any, x: any) => any, acc: any, values: readonly any[]): any => {
+export const foldList = (f: (acc: any, x: any) => any, acc: any, values: readonly any[]): any => {
   let result = acc;
   for (const x of values) result = f(result, x);
   return result;

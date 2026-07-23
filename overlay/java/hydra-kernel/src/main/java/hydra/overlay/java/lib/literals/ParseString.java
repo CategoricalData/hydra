@@ -1,0 +1,67 @@
+package hydra.overlay.java.lib.literals;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.overlay.java.dsl.Terms;
+import hydra.graph.Graph;
+import hydra.overlay.java.tools.PrimitiveFunction;
+import hydra.overlay.java.util.Optional;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.optional;
+import static hydra.overlay.java.dsl.Types.scheme;
+import static hydra.overlay.java.dsl.Types.string;
+import hydra.errors.Error_;
+import hydra.overlay.java.util.Either;
+
+
+/**
+ * Primitive function which parses a string literal representation into a string value.
+ * Expects the input to be surrounded by double quotes.
+ */
+public class ParseString extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.parseString"
+     */
+    public Name name() {
+        return hydra.lib.Literals.parseString().name;
+    }
+
+    /**
+     * Returns the type scheme for this function: string -&gt; optional string.
+     * @return the type scheme representing the function signature
+     */
+    @Override
+    public TypeScheme type() {
+        return scheme(function(string(), optional(string())));
+    }
+
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that parses string literal terms into optional string terms
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::string)), hydra.extract.Core.string(graph, args.get(0)));
+    }
+
+    /**
+     * Attempts to parse a quoted string literal into a string value.
+     * @param str the string to parse (must be surrounded by double quotes)
+     * @return an Opt containing the unquoted string, or empty if the input is not properly quoted
+     */
+    public static Optional<String> apply(String str) {
+        // In Haskell, readMaybe parses a string literal representation
+        // For simple string reading, we just return the string wrapped in Some
+        // A more sophisticated implementation might parse escaped strings
+        if (str.startsWith("\"") && str.endsWith("\"") && str.length() >= 2) {
+            return Optional.given(str.substring(1, str.length() - 1));
+        }
+        return Optional.none();
+    }
+}

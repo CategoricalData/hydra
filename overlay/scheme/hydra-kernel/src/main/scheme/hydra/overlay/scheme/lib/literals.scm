@@ -46,7 +46,7 @@
           hydra_lib_literals_show_int16
           hydra_lib_literals_show_int32
           hydra_lib_literals_show_int64
-          hydra_lib_literals_show_string
+          hydra_lib_literals_print_string
           hydra_lib_literals_show_uint
           hydra_lib_literals_show_uint8
           hydra_lib_literals_show_uint16
@@ -58,15 +58,15 @@
           hydra_lib_literals_uint16_to_bigint
           hydra_lib_literals_uint32_to_bigint
           hydra_lib_literals_binary_to_bytes
-          hydra_lib_literals_read_boolean
+          hydra_lib_literals_parse_boolean
           hydra_lib_literals_read_float64
           hydra_lib_literals_read_int8
           hydra_lib_literals_read_int16
           hydra_lib_literals_read_int32
-          hydra_lib_literals_read_string
+          hydra_lib_literals_parse_string
           hydra_lib_literals_read_uint8
           hydra_lib_literals_read_uint16
-          hydra_lib_literals_show_boolean
+          hydra_lib_literals_print_boolean
           hydra_lib_literals_uint64_to_bigint)
   (begin
 
@@ -468,7 +468,7 @@
         (number->string x)))
 
     ;; show_string :: String -> String  (Haskell-compatible quoted representation)
-    (define hydra_lib_literals_show_string
+    (define hydra_lib_literals_print_string
       (lambda (s)
         (let loop ((i 0) (acc "\""))
           (if (>= i (string-length s))
@@ -585,7 +585,7 @@
           (else (vector->list bs)))))
 
     ;; read_boolean :: String -> Maybe Bool
-    (define hydra_lib_literals_read_boolean
+    (define hydra_lib_literals_parse_boolean
       (lambda (s)
         (cond
           ((string=? s "true") (list 'given #t))
@@ -629,7 +629,7 @@
               (list 'none)))))
 
     ;; read_string :: String -> Maybe String
-    (define hydra_lib_literals_read_string
+    (define hydra_lib_literals_parse_string
       (lambda (s)
         (let ((len (string-length s)))
           (if (and (>= len 2)
@@ -669,7 +669,7 @@
               (list 'none)))))
 
     ;; show_boolean :: Bool -> String
-    (define hydra_lib_literals_show_boolean
+    (define hydra_lib_literals_print_boolean
       (lambda (x)
         (if x "true" "false")))
 

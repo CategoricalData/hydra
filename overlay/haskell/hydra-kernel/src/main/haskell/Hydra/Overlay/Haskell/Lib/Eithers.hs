@@ -29,21 +29,9 @@ compose f g x = bind (f x) g
 either :: (a -> c) -> (b -> c) -> Either a b -> c
 either = E.either
 
--- | Left-fold over a list with an Either-returning function, short-circuiting on Left. (Alias of foldl.)
+-- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
 foldList :: (a -> b -> Either c a) -> a -> [b] -> Either c a
 foldList = CM.foldM
-
--- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
-foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-foldl = CM.foldM
-
--- | Extract the Left value, or return a default.
-fromLeft :: a -> Either a b -> a
-fromLeft = E.fromLeft
-
--- | Extract the Right value, or return a default.
-fromRight :: b -> Either a b -> b
-fromRight = E.fromRight
 
 -- | Check if an Either is a Left value.
 isLeft :: Either a b -> Bool
@@ -73,13 +61,9 @@ mapOptional = CM.mapM
 mapSet :: Ord b => (a -> Either c b) -> S.Set a -> Either c (S.Set b)
 mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
 
--- | Partition a list of Eithers into lefts and rights. (Alias of partitionEithers.)
+-- | Partition a list of Eithers into lefts and rights.
 partition :: [Either a b] -> ([a], [b])
 partition = E.partitionEithers
-
--- | Partition a list of Eithers into lefts and rights.
-partitionEithers :: [Either a b] -> ([a], [b])
-partitionEithers = E.partitionEithers
 
 -- | Wrap a value as a Right.
 pure :: b -> Either a b

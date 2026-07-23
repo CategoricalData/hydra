@@ -150,8 +150,8 @@
 (def hydra_lib_literals_show_uint32 (fn [x] (str x)))
 (def hydra_lib_literals_show_uint64 (fn [x] (str x)))
 
-;; show_string :: String -> String  (Haskell-compatible quoted with escapes)
-(def hydra_lib_literals_show_string
+;; print_string :: String -> String  (Haskell-compatible quoted with escapes)
+(def hydra_lib_literals_print_string
   (fn [s]
     (let [sb (StringBuilder.)
           _ (.append sb "\"")
@@ -182,8 +182,8 @@
 (def hydra_lib_literals_binary_to_bytes
   (fn [bs] (map #(bit-and % 0xFF) bs)))
 
-;; read_boolean :: String -> Maybe Bool
-(def hydra_lib_literals_read_boolean
+;; parse_boolean :: String -> Maybe Bool
+(def hydra_lib_literals_parse_boolean
   (fn [s]
     (cond
       (= s "true") (list :given true)
@@ -236,9 +236,9 @@
   (fn [s] (try (list :given (Integer/parseInt s))
                (catch Exception _ (list :none)))))
 
-;; read_string :: String -> Maybe String
+;; parse_string :: String -> Maybe String
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted
-(def hydra_lib_literals_read_string
+(def hydra_lib_literals_parse_string
   (fn [s]
     (if (and (.startsWith s "\"") (.endsWith s "\"") (>= (count s) 2))
       (let [inner (subs s 1 (dec (count s)))]
@@ -272,8 +272,8 @@
                  (if (and (>= n 0) (<= n 65535)) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))
 
-;; show_boolean :: Bool -> String
-(def hydra_lib_literals_show_boolean (fn [x] (if x "true" "false")))
+;; print_boolean :: Bool -> String
+(def hydra_lib_literals_print_boolean (fn [x] (if x "true" "false")))
 
 ;; Precision functions (identity in Clojure)
 (def hydra_lib_literals_float (fn [_prec] (fn [x] (double x))))

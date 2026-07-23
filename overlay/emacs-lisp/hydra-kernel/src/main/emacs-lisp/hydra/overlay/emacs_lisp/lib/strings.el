@@ -8,14 +8,14 @@
   (if (multibyte-string-p s) s
     (decode-coding-string s 'utf-8-unix)))
 
-;; cat :: [String] -> String
-(defvar hydra_overlay_emacs_lisp_lib_strings_cat
+;; concat :: [String] -> String
+(defvar hydra_overlay_emacs_lisp_lib_strings_concat
   (lambda (strs)
     "Concatenate a list of strings into a single string."
     (apply #'concat strs)))
 
-;; cat2 :: String -> String -> String
-(defvar hydra_overlay_emacs_lisp_lib_strings_cat2
+;; concat2 :: String -> String -> String
+(defvar hydra_overlay_emacs_lisp_lib_strings_concat2
   (lambda (a)
     "Concatenate two strings."
     (lambda (b)
@@ -49,8 +49,8 @@
     "Get the first character of a string as a Unicode code point."
     (aref s 0)))
 
-;; intercalate :: String -> [String] -> String
-(defvar hydra_overlay_emacs_lisp_lib_strings_intercalate
+;; join :: String -> [String] -> String
+(defvar hydra_overlay_emacs_lisp_lib_strings_join
   (lambda (sep)
     "Join a list of strings with a separator between each element."
     (lambda (strs)
@@ -109,8 +109,8 @@
             (push (substring s start len) acc))
           (nreverse acc)))))
 
-;; maybe_char_at :: Int -> String -> Maybe Int
-(defvar hydra_overlay_emacs_lisp_lib_strings_maybe_char_at
+;; char_at :: Int -> String -> Maybe Int
+(defvar hydra_overlay_emacs_lisp_lib_strings_char_at
   (lambda (n)
     "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
     (lambda (s)

@@ -38,7 +38,7 @@ def either(f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:
             return g(val)
 
 
-def foldl(f: Callable[[A, B], Either[C, A]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
+def fold_list(f: Callable[[A, B], Either[C, A]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
     """Left-fold over a list with an Either-returning function, short-circuiting on Left."""
     result = acc
     for x in xs:
@@ -154,7 +154,7 @@ def map_set(f: Callable[[A], Either[C, B]], xs: frozenset[A]) -> Either[C, froze
     return Right(frozenset(results))
 
 
-def partition_eithers(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
+def partition(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
     """Partition a list of Eithers into lefts and rights."""
     left_vals: list[A] = []
     right_vals: list[B] = []

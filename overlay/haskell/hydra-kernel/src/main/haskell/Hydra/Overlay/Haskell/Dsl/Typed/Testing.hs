@@ -154,7 +154,7 @@ infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
     (retype $ Eithers.either
       (Phantoms.lambda "e" (Phantoms.string "FAIL"))
-      (Phantoms.lambda "result" (Strings.cat2 (Phantoms.string "unexpected: ")
+      (Phantoms.lambda "result" (Strings.concat2 (Phantoms.string "unexpected: ")
         (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
       (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
     (Phantoms.string "FAIL"))
@@ -168,7 +168,7 @@ infTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm TypeScheme -> TypedTer
 infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
     (retype $ Eithers.either
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "INFERENCE ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "e" (Strings.concat2 (Phantoms.string "INFERENCE ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result"
         (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result"))))
       (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
@@ -344,14 +344,14 @@ encodedTestGroupToBinding ns lname group = Binding name (unTypedTerm group)
 -- for module-level findings.
 showValidationResultModule :: TypedTerm (ValidationResult InvalidModuleError) -> TypedTerm String
 showValidationResultModule vr = retype $
-  Strings.cat2
-    (Strings.cat2 (Phantoms.string "errors=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "e" $ showInvalidModuleErrorRef @@ Phantoms.var "e")
           (Validation.validationResultErrors vr))
         (Phantoms.string "]"))
-    (Strings.cat2 (Phantoms.string " warnings=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "w" $ showInvalidModuleErrorRef @@ Phantoms.var "w")
           (Validation.validationResultWarnings vr))
         (Phantoms.string "]"))
@@ -363,14 +363,14 @@ showValidationResultModule vr = retype $
 -- counterpart of 'showValidationResultTerm'.
 showValidationResultPackage :: TypedTerm (ValidationResult InvalidPackageError) -> TypedTerm String
 showValidationResultPackage vr = retype $
-  Strings.cat2
-    (Strings.cat2 (Phantoms.string "errors=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "e" $ showInvalidPackageErrorRef @@ Phantoms.var "e")
           (Validation.validationResultErrors vr))
         (Phantoms.string "]"))
-    (Strings.cat2 (Phantoms.string " warnings=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "w" $ showInvalidPackageErrorRef @@ Phantoms.var "w")
           (Validation.validationResultWarnings vr))
         (Phantoms.string "]"))
@@ -420,14 +420,14 @@ validatePackagingPackageCaseWithProfile cname profile input expected = universal
 -- 'ValidationResult' values in profile-aware test cases.
 showValidationResultTerm :: TypedTerm (ValidationResult InvalidTermError) -> TypedTerm String
 showValidationResultTerm vr = retype $
-  Strings.cat2
-    (Strings.cat2 (Phantoms.string "errors=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "e" $ showInvalidTermErrorRef @@ Phantoms.var "e")
           (Validation.validationResultErrors vr))
         (Phantoms.string "]"))
-    (Strings.cat2 (Phantoms.string " warnings=[") $
-      Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
         Lists.map (Phantoms.lambda "w" $ showInvalidTermErrorRef @@ Phantoms.var "w")
           (Validation.validationResultWarnings vr))
         (Phantoms.string "]"))
@@ -530,7 +530,7 @@ effectfulTestCase actual expected = Phantoms.record _EffectfulTestCase [
 validateCoreTermCase :: String -> TypedTerm Bool -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata
 validateCoreTermCase cname typed input expected = universalCase cname
   (retype $ Optionals.cases
-    (Lists.maybeHead $ Validation.validationResultErrors $
+    (Lists.head $ Validation.validationResultErrors $
       validateCoreTermProfiledRef @@ kernelDefaultCoreProfileRef @@ typed @@ testGraphRef @@ input)
     (Phantoms.string "valid")
     (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e")))

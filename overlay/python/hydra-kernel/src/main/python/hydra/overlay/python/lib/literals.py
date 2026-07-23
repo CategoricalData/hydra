@@ -172,7 +172,7 @@ def read_bigint(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_boolean(s: str) -> Optional[bool]:
+def parse_boolean(s: str) -> Optional[bool]:
     """Parse a string to a boolean."""
     if s == "true":
         return Given(True)
@@ -264,7 +264,7 @@ def read_int64(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_string(s: str) -> Optional[str]:
+def parse_string(s: str) -> Optional[str]:
     """Parse a string literal."""
     try:
         import ast
@@ -327,7 +327,7 @@ def show_bigint(x: int) -> str:
     return str(x)
 
 
-def show_boolean(b: bool) -> str:
+def print_boolean(b: bool) -> str:
     """Convert a boolean to string."""
     return "true" if b else "false"
 
@@ -434,7 +434,7 @@ def show_int64(x: int) -> str:
     return str(x)
 
 
-def show_string(s: str) -> str:
+def print_string(s: str) -> str:
     """Convert a string to a quoted string representation."""
     # ASCII control character names matching Haskell's show for Char
     _ASCII_CONTROL_NAMES = [

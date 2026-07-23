@@ -1,10 +1,10 @@
 package hydra.overlay.scala.lib
 
 object strings:
-  def cat(ss: Seq[String]): String = ss.mkString
-  def cat2(a: String)(b: String): String = a + b
+  def concat(ss: Seq[String]): String = ss.mkString
+  def concat2(a: String)(b: String): String = a + b
   def fromList(cs: Seq[Int]): String = new String(cs.flatMap(Character.toChars(_)).toArray)
-  def intercalate(sep: String)(ss: Seq[String]): String = ss.mkString(sep)
+  def join(sep: String)(ss: Seq[String]): String = ss.mkString(sep)
   def isEmpty(s: String): Boolean = s.isEmpty
   def length(s: String): Int = s.codePointCount(0, s.length)
   def lines(s: String): Seq[String] =
@@ -13,7 +13,7 @@ object strings:
       val parts = s.split("\n", -1).toSeq
       // Haskell: lines "a\nb\n" = ["a","b"], lines "a\nb" = ["a","b"]
       if parts.last.isEmpty then parts.init else parts
-  def maybeCharAt(i: Int)(s: String): Option[Int] = if i >= 0 && i < s.length then Some(s.codePointAt(i)) else None
+  def charAt(i: Int)(s: String): Option[Int] = if i >= 0 && i < s.length then Some(s.codePointAt(i)) else None
   def `null`(s: String): Boolean = s.isEmpty
   def splitOn(sep: String)(s: String): Seq[String] =
     if sep.isEmpty then

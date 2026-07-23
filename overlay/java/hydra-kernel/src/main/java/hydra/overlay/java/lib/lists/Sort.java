@@ -38,7 +38,7 @@ public class Sort extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
                 ArrayList<Term> scratch = new ArrayList<>(lst);
-                scratch.sort(hydra.overlay.java.lib.equality.Compare::compareTerms);
+                scratch.sort(hydra.overlay.java.lib.ordering.Compare::compareTerms);
                 return Terms.list(ConsList.fromList(scratch));
             }, hydra.extract.Core.list(graph, args.get(0)));
     }

@@ -13,7 +13,7 @@ object sets:
   def singleton[A](x: A): Set[A] = Set(x)
   def size[A](s: Set[A]): Int = s.size
   // Haskell's Data.Set.toList returns elements in ascending order.
-  // We sort using the same comparator as equality.lt for consistency.
-  def toList[A](s: Set[A]): Seq[A] = s.toSeq.sortWith((a, b) => equality.lt(a)(b))
+  // We sort using the same comparator as ordering.lt for consistency.
+  def toList[A](s: Set[A]): Seq[A] = s.toSeq.sortWith((a, b) => ordering.lt(a)(b))
   def union[A](s1: Set[A])(s2: Set[A]): Set[A] = s1.union(s2)
   def unions[A](ss: Seq[Set[A]]): Set[A] = ss.foldLeft(Set.empty[A])(_ ++ _)

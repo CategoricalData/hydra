@@ -20,6 +20,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Math as Math
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Ordering as Ordering
 import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Regex as Regex
 import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
@@ -38,6 +39,7 @@ import qualified Hydra.Lib.Logic as DefLogic
 import qualified Hydra.Lib.Maps as DefMaps
 import qualified Hydra.Lib.Math as DefMath
 import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Ordering as DefOrdering
 import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Regex as DefRegex
 import qualified Hydra.Lib.Sets as DefSets
@@ -131,7 +133,6 @@ hydraLibEffects = standardLibrary [
     unsupportedEffectPrimitive DefEffects.bind,
     unsupportedEffectPrimitive DefEffects.compose,
     unsupportedEffectPrimitive DefEffects.foldList,
-    unsupportedEffectPrimitive DefEffects.foldl,
     unsupportedEffectPrimitive DefEffects.map,
     unsupportedEffectPrimitive DefEffects.mapList,
     unsupportedEffectPrimitive DefEffects.mapOptional,
@@ -160,9 +161,7 @@ hydraLibEithers = standardLibrary [
     prim3       DefEithers.compose          Eithers.compose          [_x, _y, _z, _w] (fun x_ (Prims.either_ w_ y_)) (fun y_ (Prims.either_ w_ z_)) x_ (Prims.either_ w_ z_),
     prim3       DefEithers.either           Eithers.either           [_x, _y, _z]     (funT x_ z_) (funT y_ z_) (Prims.either_ x_ y_) z_,
     prim3       DefEithers.foldList         Eithers.foldList         [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
-    prim3       DefEithers.foldl            Eithers.foldl            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
-    Prims.lazyArgs [0] $ prim2 DefEithers.fromLeft  Eithers.fromLeft  [_x, _y]         x_ (Prims.either_ x_ y_) x_,
-    Prims.lazyArgs [0] $ prim2 DefEithers.fromRight Eithers.fromRight [_x, _y]         y_ (Prims.either_ x_ y_) y_,
+    prim3       DefEithers.foldList            Eithers.foldList            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
     prim1       DefEithers.isLeft           Eithers.isLeft           [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       DefEithers.isRight          Eithers.isRight          [_x, _y]         (Prims.either_ x_ y_) boolean,
     prim1       DefEithers.lefts            Eithers.lefts            [_x, _y]         (list $ Prims.either_ x_ y_) (list x_),
@@ -171,22 +170,24 @@ hydraLibEithers = standardLibrary [
     prim2       DefEithers.mapOptional         Eithers.mapOptional         [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
     prim2       DefEithers.mapSet           Eithers.mapSet           [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
     prim1       DefEithers.partition        Eithers.partition        [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
-    prim1       DefEithers.partitionEithers Eithers.partitionEithers [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
+    prim1       DefEithers.partition Eithers.partition [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.pure             Eithers.pure             [_x, _y]         y_ (Prims.either_ x_ y_),
     prim1       DefEithers.rights           Eithers.rights           [_x, _y]         (list $ Prims.either_ x_ y_) (list y_)]
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary [
-    prim2 DefEquality.compare  Equality.compare  [_xOrd] x_ x_ comparison,
     prim2 DefEquality.equal    Equality.equal    [_xEq]  x_ x_ boolean,
-    prim2 DefEquality.gt       Equality.gt       [_xOrd] x_ x_ boolean,
-    prim2 DefEquality.gte      Equality.gte      [_xOrd] x_ x_ boolean,
-    prim1 DefEquality.identity Equality.identity [_x]    x_ x_,
-    prim2 DefEquality.lt       Equality.lt       [_xOrd] x_ x_ boolean,
-    prim2 DefEquality.lte      Equality.lte      [_xOrd] x_ x_ boolean,
-    prim2 DefEquality.max      Equality.max      [_xOrd] x_ x_ x_,
-    prim2 DefEquality.min      Equality.min      [_xOrd] x_ x_ x_,
     prim2 DefEquality.notEqual Equality.notEqual [_xEq]  x_ x_ boolean]
+
+hydraLibOrdering :: Library
+hydraLibOrdering = standardLibrary [
+    prim2 DefOrdering.compare  Ordering.compare  [_xOrd] x_ x_ comparison,
+    prim2 DefOrdering.gt       Ordering.gt       [_xOrd] x_ x_ boolean,
+    prim2 DefOrdering.gte      Ordering.gte      [_xOrd] x_ x_ boolean,
+    prim2 DefOrdering.lt       Ordering.lt       [_xOrd] x_ x_ boolean,
+    prim2 DefOrdering.lte      Ordering.lte      [_xOrd] x_ x_ boolean,
+    prim2 DefOrdering.max      Ordering.max      [_xOrd] x_ x_ x_,
+    prim2 DefOrdering.min      Ordering.min      [_xOrd] x_ x_ x_]
 
 hydraLibFunctions :: Library
 hydraLibFunctions = standardLibrary [
@@ -207,7 +208,7 @@ hydraLibLists = standardLibrary [
     prim1     DefLists.distinct    Lists.distinct      [_xEq]       (list x_) (list x_),
     prim2     DefLists.drop        Lists.drop          [_x]         int32 (list x_) (list x_),
     prim2     DefLists.dropWhile   Lists.dropWhile     [_x]         (fun x_ boolean) (list x_) (list x_),
-    prim2     DefLists.elem        Lists.elem          [_xEq]       x_ (list x_) boolean,
+    prim2     DefLists.member        Lists.member          [_xEq]       x_ (list x_) boolean,
     prim2     DefLists.filter      Lists.filter        [_x]         (fun x_ boolean) (list x_) (list x_),
     prim2     DefLists.find        Lists.find          [_x]         (fun x_ boolean) (list x_) (optional x_),
     prim3     DefLists.foldList    Lists.foldList      [_x, _y]     (fun x_ (fun y_ (list x_))) x_ (list y_) (list x_),
@@ -216,7 +217,7 @@ hydraLibLists = standardLibrary [
     prim1     DefLists.group       Lists.group         [_xEq]       (list x_) (list (list x_)),
     prim1     DefLists.head        Lists.head          [_x]         (list x_) (optional x_),
     prim1     DefLists.init        Lists.init          [_x]         (list x_) (optional (list x_)),
-    prim2     DefLists.intercalate Lists.intercalate   [_x]         (list x_) (list (list x_)) (list x_),
+    prim2     DefLists.join Lists.join   [_x]         (list x_) (list (list x_)) (list x_),
     prim2     DefLists.join        Lists.join          [_x]         (list x_) (list (list x_)) (list x_),
     prim2     DefLists.intersperse Lists.intersperse   [_x]         x_ (list x_) (list x_),
     prim1     DefLists.last        Lists.last          [_x]         (list x_) (optional x_),
@@ -226,12 +227,12 @@ hydraLibLists = standardLibrary [
     prim2     DefLists.mapOptional Lists.mapOptional   [_x, _y]     (fun x_ (list y_)) (optional x_) (list (optional y_)),
     prim2     DefLists.mapSet      Lists.mapSet        [_xOrd, _yOrd] (fun x_ (list y_)) (set x_) (list (set y_)),
     prim2     DefLists.member      Lists.member        [_xEq]       x_ (list x_) boolean,
-    prim2     DefLists.maybeAt     Lists.maybeAt       [_x]         int32 (list x_) (optional x_),
-    prim1     DefLists.maybeHead   Lists.maybeHead     [_x]         (list x_) (optional x_),
-    prim1     DefLists.maybeInit   Lists.maybeInit     [_x]         (list x_) (optional (list x_)),
-    prim1     DefLists.maybeLast   Lists.maybeLast     [_x]         (list x_) (optional x_),
-    prim1     DefLists.maybeTail   Lists.maybeTail     [_x]         (list x_) (optional (list x_)),
-    prim1     DefLists.nub         Lists.nub           [_xEq]       (list x_) (list x_),
+    prim2     DefLists.at     Lists.at       [_x]         int32 (list x_) (optional x_),
+    prim1     DefLists.head   Lists.head     [_x]         (list x_) (optional x_),
+    prim1     DefLists.init   Lists.init     [_x]         (list x_) (optional (list x_)),
+    prim1     DefLists.last   Lists.last     [_x]         (list x_) (optional x_),
+    prim1     DefLists.tail   Lists.tail     [_x]         (list x_) (optional (list x_)),
+    prim1     DefLists.distinct         Lists.distinct           [_xEq]       (list x_) (list x_),
     prim1     DefLists.null        Lists.null          [_x]         (list x_) boolean,
     prim2     DefLists.partition   Lists.partition     [_x]         (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
     prim1     DefLists.pure        Lists.pure          [_x]         x_ (list x_),
@@ -240,7 +241,7 @@ hydraLibLists = standardLibrary [
     prim1     DefLists.singleton   Lists.singleton     [_x]         x_ (list x_),
     prim1     DefLists.sort        Lists.sort          [_xOrd]      (list x_) (list x_),
     prim2     DefLists.sortBy      Lists.sortBy        [_x, _yOrd]  (fun x_ y_) (list x_) (list x_),
-    prim2     DefLists.sortOn      Lists.sortOn        [_x, _yOrd]  (fun x_ y_) (list x_) (list x_),
+    prim2     DefLists.sortBy      Lists.sortBy        [_x, _yOrd]  (fun x_ y_) (list x_) (list x_),
     prim2     DefLists.span        Lists.span          [_x]         (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
     prim1     DefLists.tail        Lists.tail          [_x]         (list x_) (optional (list x_)),
     prim2     DefLists.take        Lists.take          [_x]         int32 (list x_) (list x_),
@@ -275,7 +276,7 @@ hydraLibLiterals = standardLibrary [
   prim1 DefLiterals.int32ToBigint     Literals.int32ToBigint     [] int32 bigint,
   prim1 DefLiterals.int64ToBigint     Literals.int64ToBigint     [] int64 bigint,
   prim1 DefLiterals.readBigint        Literals.readBigint        [] string (optional bigint),
-  prim1 DefLiterals.readBoolean       Literals.readBoolean       [] string (optional boolean),
+  prim1 DefLiterals.parseBoolean       Literals.parseBoolean       [] string (optional boolean),
   prim1 DefLiterals.readDecimal       Literals.readDecimal       [] string (optional decimal),
   prim1 DefLiterals.readFloat32       Literals.readFloat32       [] string (optional float32),
   prim1 DefLiterals.readFloat64       Literals.readFloat64       [] string (optional float64),
@@ -283,13 +284,13 @@ hydraLibLiterals = standardLibrary [
   prim1 DefLiterals.readInt16         Literals.readInt16         [] string (optional int16),
   prim1 DefLiterals.readInt32         Literals.readInt32         [] string (optional int32),
   prim1 DefLiterals.readInt64         Literals.readInt64         [] string (optional int64),
-  prim1 DefLiterals.readString        Literals.readString        [] string (optional string),
+  prim1 DefLiterals.parseString        Literals.parseString        [] string (optional string),
   prim1 DefLiterals.readUint8         Literals.readUint8         [] string (optional uint8),
   prim1 DefLiterals.readUint16        Literals.readUint16        [] string (optional uint16),
   prim1 DefLiterals.readUint32        Literals.readUint32        [] string (optional uint32),
   prim1 DefLiterals.readUint64        Literals.readUint64        [] string (optional uint64),
   prim1 DefLiterals.showBigint        Literals.showBigint        [] bigint string,
-  prim1 DefLiterals.showBoolean       Literals.showBoolean       [] boolean string,
+  prim1 DefLiterals.printBoolean       Literals.printBoolean       [] boolean string,
   prim1 DefLiterals.showDecimal       Literals.showDecimal       [] decimal string,
   prim1 DefLiterals.showFloat32       Literals.showFloat32       [] float32 string,
   prim1 DefLiterals.showFloat64       Literals.showFloat64       [] float64 string,
@@ -297,7 +298,7 @@ hydraLibLiterals = standardLibrary [
   prim1 DefLiterals.showInt16         Literals.showInt16         [] int16 string,
   prim1 DefLiterals.showInt32         Literals.showInt32         [] int32 string,
   prim1 DefLiterals.showInt64         Literals.showInt64         [] int64 string,
-  prim1 DefLiterals.showString        Literals.showString        [] string string,
+  prim1 DefLiterals.printString        Literals.printString        [] string string,
   prim1 DefLiterals.showUint8         Literals.showUint8         [] uint8 string,
   prim1 DefLiterals.showUint16        Literals.showUint16        [] uint16 string,
   prim1 DefLiterals.showUint32        Literals.showUint32        [] uint32 string,
@@ -381,29 +382,25 @@ hydraLibMathInt32 = standardLibrary [
   prim1 DefMath.abs    Math.abs    [] int32 int32,
   prim2 DefMath.add    Math.add    [] int32 int32 int32,
   prim1 DefMath.even   Math.even   [] int32 boolean,
-  prim2 DefMath.max    Math.max    [] int32 int32 int32,
-  prim2 DefMath.maybeDiv Math.maybeDiv [] int32 int32 (optional int32),
-  prim2 DefMath.min    Math.min    [] int32 int32 int32,
-  prim2 DefMath.maybeMod Math.maybeMod [] int32 int32 (optional int32),
+  prim2 DefMath.div Math.div [] int32 int32 (optional int32),
+  prim2 DefMath.mod Math.mod [] int32 int32 (optional int32),
   prim2 DefMath.mul    Math.mul    [] int32 int32 int32,
   prim1 DefMath.negate Math.negate [] int32 int32,
   prim1 DefMath.odd    Math.odd    [] int32 boolean,
-  prim1 DefMath.maybePred Math.maybePred [] int32 (optional int32),
   prim2 DefMath.range  Math.range  [] int32 int32 (list int32),
-  prim2 DefMath.maybeRem Math.maybeRem [] int32 int32 (optional int32),
+  prim2 DefMath.rem Math.rem [] int32 int32 (optional int32),
   prim1 DefMath.signum Math.signum [] int32 int32,
-  prim2 DefMath.sub    Math.sub    [] int32 int32 int32,
-  prim1 DefMath.maybeSucc Math.maybeSucc [] int32 (optional int32)]
+  prim2 DefMath.sub    Math.sub    [] int32 int32 int32]
 
 hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary [
     prim2     DefOptionals.apply     Optionals.apply        [_x, _y]     (optional $ funT x_ y_) (optional x_) (optional y_),
     prim2     DefOptionals.bind      Optionals.bind         [_x, _y]     (optional x_) (fun x_ (optional y_)) (optional y_),
     Prims.lazyArgs [1] $ prim3 DefOptionals.cases     Optionals.cases        [_x, _y]     (optional x_) y_ (funT x_ y_) y_,
-    prim1     DefOptionals.cat       Optionals.cat          [_x]         (list $ optional x_) (list x_),
+    prim1     DefOptionals.givens       Optionals.givens          [_x]         (list $ optional x_) (list x_),
     prim3     DefOptionals.compose   Optionals.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
     prim3     DefOptionals.foldList  Optionals.foldList     [_x, _y]     (fun x_ (fun y_ (optional x_))) x_ (list y_) (optional x_),
-    Prims.lazyArgs [0] $ prim2 DefOptionals.fromOptional Optionals.fromOptional    [_x]         x_ (optional x_) x_,
+    Prims.lazyArgs [0] $ prim2 DefOptionals.withDefault Optionals.withDefault    [_x]         x_ (optional x_) x_,
     prim1     DefOptionals.givens    Optionals.givens       [_x]         (list $ optional x_) (list x_),
     prim1     DefOptionals.isGiven    Optionals.isGiven       [_x]         (optional x_) boolean,
     prim1     DefOptionals.isNone Optionals.isNone    [_x]         (optional x_) boolean,
@@ -450,17 +447,17 @@ hydraLibSets = standardLibrary [
 
 hydraLibStrings :: Library
 hydraLibStrings = standardLibrary [
-  prim1 DefStrings.cat         Strings.cat         [] (list string) string,
-  prim2 DefStrings.cat2        Strings.cat2        [] string string string,
+  prim1 DefStrings.concat         Strings.concat         [] (list string) string,
+  prim2 DefStrings.concat2        Strings.concat2        [] string string string,
   prim2 DefStrings.charAt      Strings.charAt      [] int32 string (optional int32),
   prim1 DefStrings.concat      Strings.concat      [] (list string) string,
   prim2 DefStrings.concat2     Strings.concat2     [] string string string,
   prim1 DefStrings.fromList    Strings.fromList    [] (list int32) string,
-  prim2 DefStrings.intercalate Strings.intercalate [] string (list string) string,
+  prim2 DefStrings.join Strings.join [] string (list string) string,
   prim2 DefStrings.join        Strings.join        [] string (list string) string,
   prim1 DefStrings.length      Strings.length      [] string int32,
   prim1 DefStrings.lines       Strings.lines       [] string (list string),
-  prim2 DefStrings.maybeCharAt Strings.maybeCharAt [] int32 string (optional int32),
+  prim2 DefStrings.charAt Strings.charAt [] int32 string (optional int32),
   prim1 DefStrings.null        Strings.null        [] string boolean,
   prim2 DefStrings.splitOn     Strings.splitOn     [] string string (list string),
   prim1 DefStrings.toList      Strings.toList      [] string (list int32),
@@ -506,6 +503,7 @@ standardLibraries = [
   hydraLibMathFloat64,
   hydraLibMathInt32,
   hydraLibOptionals,
+  hydraLibOrdering,
   hydraLibPairs,
   hydraLibRegex,
   hydraLibSets,

@@ -55,10 +55,6 @@ drop = L.drop
 dropWhile :: (a -> Bool) -> [a] -> [a]
 dropWhile = L.dropWhile
 
--- | Check if an element is in a list.
-elem :: Eq a => a -> [a] -> Bool
-elem = L.elem
-
 -- | Filter a list based on a predicate.
 filter :: (a -> Bool) -> [a] -> [a]
 filter = L.filter
@@ -98,10 +94,6 @@ init :: [a] -> Maybe [a]
 init [] = Nothing
 init xs = Just (L.init xs)
 
--- | Intercalate a list of lists with a separator list between each.
-intercalate :: [a] -> [[a]] -> [a]
-intercalate = L.intercalate
-
 -- | Intercalate a list of lists with a separator list between each. (Alias of intercalate.)
 join :: [a] -> [[a]] -> [a]
 join = L.intercalate
@@ -139,36 +131,6 @@ last xs = Just (L.last xs)
 member :: Eq a => a -> [a] -> Bool
 member = L.elem
 
--- | Get the element at a specified index in a list, returning Nothing if out of bounds.
-maybeAt :: Int -> [a] -> Maybe a
-maybeAt i l
-  | i < 0 || i >= L.length l = Nothing
-  | otherwise = Just (l !! i)
-
--- | Get the first element of a list, returning Nothing if the list is empty.
-maybeHead :: [a] -> Maybe a
-maybeHead [] = Nothing
-maybeHead (x:_) = Just x
-
--- | Return all elements except the last one, returning Nothing if the list is empty.
-maybeInit :: [a] -> Maybe [a]
-maybeInit [] = Nothing
-maybeInit xs = Just (L.init xs)
-
--- | Get the last element of a list, returning Nothing if the list is empty.
-maybeLast :: [a] -> Maybe a
-maybeLast [] = Nothing
-maybeLast xs = Just (L.last xs)
-
--- | Get all elements of a list except the first, returning Nothing if the list is empty.
-maybeTail :: [a] -> Maybe [a]
-maybeTail [] = Nothing
-maybeTail (_:xs) = Just xs
-
--- | Remove duplicate elements from a list.
-nub :: Eq a => [a] -> [a]
-nub = L.nub
-
 -- | Check if a list is empty.
 null :: [a] -> Bool
 null = L.null
@@ -200,10 +162,6 @@ sort = L.sort
 -- | Sort a list based on a key function. (Alias of sortOn.)
 sortBy :: Ord b => (a -> b) -> [a] -> [a]
 sortBy = L.sortOn
-
--- | Sort a list based on a key function.
-sortOn :: Ord b => (a -> b) -> [a] -> [a]
-sortOn = L.sortOn
 
 -- | Split a list at the first element where predicate fails.
 span :: (a -> Bool) -> [a] -> ([a], [a])

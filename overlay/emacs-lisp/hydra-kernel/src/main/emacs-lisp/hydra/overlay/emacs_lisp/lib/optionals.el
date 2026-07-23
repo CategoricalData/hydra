@@ -43,8 +43,8 @@
             (if (functionp def) (funcall def) def)
             (funcall f (maybe-value m)))))))
 
-;; cat :: [Maybe a] -> [a]
-(defvar hydra_overlay_emacs_lisp_lib_optionals_cat
+;; givens :: [Maybe a] -> [a]
+(defvar hydra_overlay_emacs_lisp_lib_optionals_givens
   (lambda (ms)
     (let ((acc nil))
       (dolist (m ms (nreverse acc))
@@ -61,9 +61,9 @@
               (list :none)
               (funcall g (maybe-value result))))))))
 
-;; from_optional :: a -> Maybe a -> a
+;; with_default :: a -> Maybe a -> a
 ;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_overlay_emacs_lisp_lib_optionals_from_optional
+(defvar hydra_overlay_emacs_lisp_lib_optionals_with_default
   (lambda (def)
     (lambda (m)
       (if (maybe-nothing-p m)

@@ -178,9 +178,9 @@
           (list :given n)
           (list :none)))))
 
-;; read_boolean :: String -> Maybe Bool
+;; parse_boolean :: String -> Maybe Bool
 ;; Parse a string to a boolean.
-(defvar hydra_overlay_common_lisp_lib_literals_read_boolean
+(defvar hydra_overlay_common_lisp_lib_literals_parse_boolean
   (lambda (s)
     (cond
       ((string= s "true") (list :given t))
@@ -264,10 +264,10 @@
           (list :given n)
           (list :none)))))
 
-;; read_string :: String -> Maybe String
+;; parse_string :: String -> Maybe String
 ;; Parse a string literal.
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted.
-(defvar hydra_overlay_common_lisp_lib_literals_read_string
+(defvar hydra_overlay_common_lisp_lib_literals_parse_string
   (lambda (s)
     (if (and (>= (length s) 2)
              (char= (char s 0) #\")
@@ -413,9 +413,9 @@
   (lambda (x)
     (write-to-string x)))
 
-;; show_boolean :: Bool -> String
+;; print_boolean :: Bool -> String
 ;; Convert a boolean to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_boolean
+(defvar hydra_overlay_common_lisp_lib_literals_print_boolean
   (lambda (x)
     (if x "true" "false")))
 
@@ -469,10 +469,10 @@
   (lambda (x)
     (write-to-string x)))
 
-;; show_string :: String -> String
+;; print_string :: String -> String
 ;; Convert a string to a quoted string representation.
 ;; Haskell-compatible quoted representation.
-(defvar hydra_overlay_common_lisp_lib_literals_show_string
+(defvar hydra_overlay_common_lisp_lib_literals_print_string
   (lambda (s)
     (let ((acc (make-array 0 :element-type 'character :adjustable t :fill-pointer 0)))
       (vector-push-extend #\" acc)

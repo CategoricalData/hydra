@@ -25,8 +25,8 @@
   "Kleisli composition for effects: run f, then g on its result."
   (fn [f] (fn [g] (fn [x] (g (f x))))))
 
-;; foldl :: (x -> y -> effect<x>) -> x -> [y] -> effect<x>
-(def hydra_lib_effects_foldl
+;; fold_list :: (x -> y -> effect<x>) -> x -> [y] -> effect<x>
+(def hydra_lib_effects_fold_list
   "Left-fold over a list with an effect-returning function."
   (fn [f] (fn [acc] (fn [xs]
     (reduce (fn [a x] ((f a) x)) acc xs)))))

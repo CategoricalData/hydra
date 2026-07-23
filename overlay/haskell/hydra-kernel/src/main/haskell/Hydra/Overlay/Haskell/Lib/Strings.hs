@@ -8,25 +8,17 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 
 
--- | Concatenate a list of strings into a single string.
-cat :: [String] -> String
-cat = L.concat
-
--- | Concatenate two strings.
-cat2 :: String -> String -> String
-cat2 s1 s2 = s1 ++ s2
-
--- | Get the Unicode code point of the character at a specific index. (Alias of maybeCharAt.)
+-- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
 charAt :: Int -> String -> Maybe Int
 charAt i s
   | i < 0 || i >= L.length s = Nothing
   | otherwise = Just (C.ord (s !! i))
 
--- | Concatenate a list of strings into a single string. (Alias of cat.)
+-- | Concatenate a list of strings into a single string.
 concat :: [String] -> String
 concat = L.concat
 
--- | Concatenate two strings. (Alias of cat2.)
+-- | Concatenate two strings.
 concat2 :: String -> String -> String
 concat2 s1 s2 = s1 ++ s2
 
@@ -35,22 +27,12 @@ fromList :: [Int] -> String
 fromList = fmap C.chr
 
 -- | Join a list of strings with a separator between each element.
-intercalate :: String -> [String] -> String
-intercalate = L.intercalate
-
--- | Join a list of strings with a separator between each element. (Alias of intercalate.)
 join :: String -> [String] -> String
 join = L.intercalate
 
 -- | Return the length of a string.
 length :: String -> Int
 length = L.length
-
--- | Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
-maybeCharAt :: Int -> String -> Maybe Int
-maybeCharAt i s
-  | i < 0 || i >= L.length s = Nothing
-  | otherwise = Just (C.ord (s !! i))
 
 -- | Split a string into lines.
 lines :: String -> [String]

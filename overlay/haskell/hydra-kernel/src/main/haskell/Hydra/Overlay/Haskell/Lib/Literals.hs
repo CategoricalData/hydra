@@ -116,8 +116,8 @@ readBigint :: String -> Maybe Integer
 readBigint s = readMaybe s :: Maybe Integer
 
 -- | Parse a string to a boolean.
-readBoolean :: String -> Maybe Bool
-readBoolean s = if s == "true" then Just True
+parseBoolean :: String -> Maybe Bool
+parseBoolean s = if s == "true" then Just True
   else if s == "false" then Just False
   else Nothing
 
@@ -154,8 +154,8 @@ readInt64 :: String -> Maybe Int64
 readInt64 s = readMaybe s :: Maybe Int64
 
 -- | Parse a string literal.
-readString :: String -> Maybe String
-readString s = readMaybe s :: Maybe String
+parseString :: String -> Maybe String
+parseString s = readMaybe s :: Maybe String
 
 -- Note: Hydra uses wider signed types to represent unsigned values without overflow
 -- Uint8 -> Int16, Uint16 -> Int, Uint32 -> Int64, Uint64 -> Integer
@@ -190,8 +190,8 @@ showBigint :: Integer -> String
 showBigint = show
 
 -- | Convert a boolean to string.
-showBoolean :: Bool -> String
-showBoolean b = case b of
+printBoolean :: Bool -> String
+printBoolean b = case b of
   True -> "true"
   False -> "false"
 
@@ -226,8 +226,8 @@ showInt64 :: Int64 -> String
 showInt64 = show
 
 -- | Convert a string to a quoted string representation.
-showString :: String -> String
-showString = show
+printString :: String -> String
+printString = show
 
 -- | Convert a uint8 to string.
 showUint8 :: Int16 -> String

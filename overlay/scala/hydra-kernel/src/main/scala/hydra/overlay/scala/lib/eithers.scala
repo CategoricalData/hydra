@@ -8,7 +8,7 @@ object eithers:
   def either[A, B, C](f: A => C)(g: B => C)(e: Either[A, B]): C = e match
     case Left(a) => f(a)
     case Right(b) => g(b)
-  def foldl[B, A, E](f: B => A => Either[E, B])(z: B)(xs: Seq[A]): Either[E, B] =
+  def foldList[B, A, E](f: B => A => Either[E, B])(z: B)(xs: Seq[A]): Either[E, B] =
     xs.foldLeft[Either[E, B]](Right(z)) { (acc, x) =>
       acc.flatMap(b => f(b)(x))
     }
@@ -33,6 +33,6 @@ object eithers:
     xs.foldLeft[Either[A, Set[C]]](Right(Set.empty)) { (acc, x) =>
       acc.flatMap(cs => f(x).map(c => cs + c))
     }
-  def partitionEithers[A, B](es: Seq[Either[A, B]]): (Seq[A], Seq[B]) =
+  def partition[A, B](es: Seq[Either[A, B]]): (Seq[A], Seq[B]) =
     (es.collect { case Left(a) => a }, es.collect { case Right(b) => b })
   def rights[A, B](es: Seq[Either[A, B]]): Seq[B] = es.collect { case Right(b) => b }

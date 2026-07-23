@@ -56,44 +56,71 @@ def register_equality_primitives() -> dict[Name, Primitive]:
     primitives: dict[Name, Primitive] = {}
 
     x = prims.variable("x")
-    _xOrd = prims.v_ord("x")
     _xEq = prims.v_eq("x")
-    _x = prims.v("x")
 
-    primitives[def_equality.compare.name] = prims.prim2(
-        def_equality.compare.name, equality.compare, [_xOrd],
-        x, x, prims.comparison()
-    )
     primitives[def_equality.equal.name] = prims.prim2(
         def_equality.equal.name, equality.equal, [_xEq],
         x, x, prims.boolean()
     )
-    primitives[def_equality.identity.name] = prims.prim1(
-        def_equality.identity.name, equality.identity, [_x],
+
+    return primitives
+
+
+def register_functions_primitives() -> dict[Name, Primitive]:
+    """Register all functions primitive functions. identity is provided natively;
+    compose/const/flip carry kernel default implementations and need no overlay. For #417."""
+    from hydra.overlay.python.lib import functions
+    from hydra.lib import functions as def_functions
+
+    primitives: dict[Name, Primitive] = {}
+
+    x = prims.variable("x")
+    _x = prims.v("x")
+
+    primitives[def_functions.identity.name] = prims.prim1(
+        def_functions.identity.name, functions.identity, [_x],
         x, x
     )
-    primitives[def_equality.gt.name] = prims.prim2(
-        def_equality.gt.name, equality.gt, [_xOrd],
+
+    return primitives
+
+
+def register_ordering_primitives() -> dict[Name, Primitive]:
+    """Register all ordering primitive functions. For #417."""
+    from hydra.overlay.python.lib import ordering
+    from hydra.lib import ordering as def_ordering
+
+    primitives: dict[Name, Primitive] = {}
+
+    x = prims.variable("x")
+    _xOrd = prims.v_ord("x")
+
+    primitives[def_ordering.compare.name] = prims.prim2(
+        def_ordering.compare.name, ordering.compare, [_xOrd],
+        x, x, prims.comparison()
+    )
+    primitives[def_ordering.gt.name] = prims.prim2(
+        def_ordering.gt.name, ordering.gt, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[def_equality.gte.name] = prims.prim2(
-        def_equality.gte.name, equality.gte, [_xOrd],
+    primitives[def_ordering.gte.name] = prims.prim2(
+        def_ordering.gte.name, ordering.gte, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[def_equality.lt.name] = prims.prim2(
-        def_equality.lt.name, equality.lt, [_xOrd],
+    primitives[def_ordering.lt.name] = prims.prim2(
+        def_ordering.lt.name, ordering.lt, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[def_equality.lte.name] = prims.prim2(
-        def_equality.lte.name, equality.lte, [_xOrd],
+    primitives[def_ordering.lte.name] = prims.prim2(
+        def_ordering.lte.name, ordering.lte, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[def_equality.max.name] = prims.prim2(
-        def_equality.max.name, equality.max, [_xOrd],
+    primitives[def_ordering.max.name] = prims.prim2(
+        def_ordering.max.name, ordering.max, [_xOrd],
         x, x, x
     )
-    primitives[def_equality.min.name] = prims.prim2(
-        def_equality.min.name, equality.min, [_xOrd],
+    primitives[def_ordering.min.name] = prims.prim2(
+        def_ordering.min.name, ordering.min, [_xOrd],
         x, x, x
     )
 
@@ -127,7 +154,7 @@ def register_effects_primitives() -> dict[Name, Primitive]:
     primitives[def_effects.apply.name] = unsupported_effect_primitive(def_effects.apply)
     primitives[def_effects.bind.name] = unsupported_effect_primitive(def_effects.bind)
     primitives[def_effects.compose.name] = unsupported_effect_primitive(def_effects.compose)
-    primitives[def_effects.foldl.name] = unsupported_effect_primitive(def_effects.foldl)
+    primitives[def_effects.fold_list.name] = unsupported_effect_primitive(def_effects.fold_list)
     primitives[def_effects.map.name] = unsupported_effect_primitive(def_effects.map)
     primitives[def_effects.map_list.name] = unsupported_effect_primitive(def_effects.map_list)
     primitives[def_effects.map_optional.name] = unsupported_effect_primitive(def_effects.map_optional)
@@ -227,20 +254,10 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         def_eithers.either.name, eithers.either, [_x, _y, _z],
         fun(x, z), fun(y, z), prims.either(x, y), z
     )
-    # foldl :: (x -> y -> Either z x) -> x -> [y] -> Either z x
-    primitives[def_eithers.foldl.name] = prims.prim3(
-        def_eithers.foldl.name, eithers.foldl, [_x, _y, _z],
+    # foldList :: (x -> y -> Either z x) -> x -> [y] -> Either z x
+    primitives[def_eithers.fold_list.name] = prims.prim3(
+        def_eithers.fold_list.name, eithers.fold_list, [_x, _y, _z],
         fun(x, fun(y, prims.either(z, x))), x, prims.list_(y), prims.either(z, x)
-    )
-    primitives[def_eithers.from_left.name] = prims.prim2(
-        def_eithers.from_left.name, eithers.from_left, [_x, _y],
-        x, prims.either(x, y), x,
-        lazy_args=[0]
-    )
-    primitives[def_eithers.from_right.name] = prims.prim2(
-        def_eithers.from_right.name, eithers.from_right, [_x, _y],
-        y, prims.either(x, y), y,
-        lazy_args=[0]
     )
     primitives[def_eithers.is_left.name] = prims.prim1(
         def_eithers.is_left.name, eithers.is_left, [_x, _y],
@@ -274,8 +291,8 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         def_eithers.map_set.name, eithers.map_set, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.set_(x), prims.either(z, prims.set_(y))
     )
-    primitives[def_eithers.partition_eithers.name] = prims.prim1(
-        def_eithers.partition_eithers.name, eithers.partition_eithers, [_x, _y],
+    primitives[def_eithers.partition.name] = prims.prim1(
+        def_eithers.partition.name, eithers.partition, [_x, _y],
         prims.list_(prims.either(x, y)), prims.pair(prims.list_(x), prims.list_(y))
     )
     primitives[def_eithers.rights.name] = prims.prim1(
@@ -338,9 +355,9 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.drop_while.name, lists.drop_while, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
-    # prim2: elem :: Eq a => a -> [a] -> Bool
-    primitives[def_lists.elem.name] = prims.prim2(
-        def_lists.elem.name, lists.elem, [_aEq],
+    # prim2: member :: Eq a => a -> [a] -> Bool
+    primitives[def_lists.member.name] = prims.prim2(
+        def_lists.member.name, lists.member, [_aEq],
         a, prims.list_(a), prims.boolean()
     )
     # prim2: filter :: (a -> Bool) -> [a] -> [a]
@@ -368,9 +385,9 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.group.name, lists.group, [_aEq],
         prims.list_(a), prims.list_(prims.list_(a))
     )
-    # prim2: intercalate :: [a] -> [[a]] -> [a]
-    primitives[def_lists.intercalate.name] = prims.prim2(
-        def_lists.intercalate.name, lists.intercalate, [_a],
+    # prim2: join :: [a] -> [[a]] -> [a]
+    primitives[def_lists.join.name] = prims.prim2(
+        def_lists.join.name, lists.join, [_a],
         prims.list_(a), prims.list_(prims.list_(a)), prims.list_(a)
     )
     # prim2: intersperse :: a -> [a] -> [a]
@@ -387,34 +404,34 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.map.name, lists.map, [_a, _b],
         fun(a, b), prims.list_(a), prims.list_(b)
     )
-    # prim2: maybeAt :: Int32 -> [a] -> optional a
-    primitives[def_lists.maybe_at.name] = prims.prim2(
-        def_lists.maybe_at.name, lists.maybe_at, [_a],
+    # prim2: at :: Int32 -> [a] -> optional a
+    primitives[def_lists.at.name] = prims.prim2(
+        def_lists.at.name, lists.at, [_a],
         prims.int32(), prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeHead :: [a] -> optional a
-    primitives[def_lists.maybe_head.name] = prims.prim1(
-        def_lists.maybe_head.name, lists.maybe_head, [_a],
+    # prim1: head :: [a] -> optional a
+    primitives[def_lists.head.name] = prims.prim1(
+        def_lists.head.name, lists.head, [_a],
         prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeInit :: [a] -> optional [a]
-    primitives[def_lists.maybe_init.name] = prims.prim1(
-        def_lists.maybe_init.name, lists.maybe_init, [_a],
+    # prim1: init :: [a] -> optional [a]
+    primitives[def_lists.init.name] = prims.prim1(
+        def_lists.init.name, lists.init, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
     )
-    # prim1: maybeLast :: [a] -> optional a
-    primitives[def_lists.maybe_last.name] = prims.prim1(
-        def_lists.maybe_last.name, lists.maybe_last, [_a],
+    # prim1: last :: [a] -> optional a
+    primitives[def_lists.last.name] = prims.prim1(
+        def_lists.last.name, lists.last, [_a],
         prims.list_(a), prims.optional(a)
     )
-    # prim1: maybeTail :: [a] -> optional [a]
-    primitives[def_lists.maybe_tail.name] = prims.prim1(
-        def_lists.maybe_tail.name, lists.maybe_tail, [_a],
+    # prim1: tail :: [a] -> optional [a]
+    primitives[def_lists.tail.name] = prims.prim1(
+        def_lists.tail.name, lists.tail, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
     )
-    # prim1: nub :: Eq a => [a] -> [a]
-    primitives[def_lists.nub.name] = prims.prim1(
-        def_lists.nub.name, lists.nub, [_aEq],
+    # prim1: distinct :: Eq a => [a] -> [a]
+    primitives[def_lists.distinct.name] = prims.prim1(
+        def_lists.distinct.name, lists.distinct, [_aEq],
         prims.list_(a), prims.list_(a)
     )
     # prim1: null :: [a] -> Bool
@@ -451,9 +468,9 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         def_lists.sort.name, lists.sort, [_aOrd],
         prims.list_(a), prims.list_(a)
     )
-    # prim2: sortOn :: Ord b => (a -> b) -> [a] -> [a]
-    primitives[def_lists.sort_on.name] = prims.prim2(
-        def_lists.sort_on.name, lists.sort_on, [_a, _bOrd],
+    # prim2: sortBy :: Ord b => (a -> b) -> [a] -> [a]
+    primitives[def_lists.sort_by.name] = prims.prim2(
+        def_lists.sort_by.name, lists.sort_by, [_a, _bOrd],
         fun(a, b), prims.list_(a), prims.list_(a)
     )
     # prim2: span :: (a -> Bool) -> [a] -> ([a], [a])
@@ -691,26 +708,14 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[def_math.sub_float64.name] = prims.prim2(
         def_math.sub_float64.name, math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[def_math.max.name] = prims.prim2(
-        def_math.max.name, math.max, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.div.name] = prims.prim2(
+        def_math.div.name, math.div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
-    primitives[def_math.maybe_div.name] = prims.prim2(
-        def_math.maybe_div.name, math.maybe_div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.mod.name] = prims.prim2(
+        def_math.mod.name, math.mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
-    primitives[def_math.maybe_mod.name] = prims.prim2(
-        def_math.maybe_mod.name, math.maybe_mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
-    )
-    primitives[def_math.maybe_pred.name] = prims.prim1(
-        def_math.maybe_pred.name, math.maybe_pred, [], prims.int32(), prims.optional(prims.int32())
-    )
-    primitives[def_math.maybe_rem.name] = prims.prim2(
-        def_math.maybe_rem.name, math.maybe_rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
-    )
-    primitives[def_math.maybe_succ.name] = prims.prim1(
-        def_math.maybe_succ.name, math.maybe_succ, [], prims.int32(), prims.optional(prims.int32())
-    )
-    primitives[def_math.min.name] = prims.prim2(
-        def_math.min.name, math.min, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.rem.name] = prims.prim2(
+        def_math.rem.name, math.rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
 
     # Float64 primitives
@@ -826,9 +831,9 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         prims.optional(a), b, fun(a, b), b,
         lazy_args=[1]
     )
-    # cat :: [optional a] -> [a]
-    primitives[def_optionals.cat.name] = prims.prim1(
-        def_optionals.cat.name, optionals.cat, [_a],
+    # givens :: [optional a] -> [a]
+    primitives[def_optionals.givens.name] = prims.prim1(
+        def_optionals.givens.name, optionals.givens, [_a],
         prims.list_(prims.optional(a)), prims.list_(a)
     )
     # compose :: (a -> optional b) -> (b -> optional c) -> a -> optional c
@@ -837,8 +842,8 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         fun(a, prims.optional(b)), fun(b, prims.optional(c)),
         a, prims.optional(c)
     )
-    primitives[def_optionals.from_optional.name] = prims.prim2(
-        def_optionals.from_optional.name, optionals.from_optional, [_a],
+    primitives[def_optionals.with_default.name] = prims.prim2(
+        def_optionals.with_default.name, optionals.with_default, [_a],
         a, prims.optional(a), a,
         lazy_args=[0]
     )
@@ -982,17 +987,17 @@ def register_strings_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    primitives[def_strings.cat.name] = prims.prim1(
-        def_strings.cat.name, strings.cat, [], prims.list_(prims.string()), prims.string()
+    primitives[def_strings.concat.name] = prims.prim1(
+        def_strings.concat.name, strings.concat, [], prims.list_(prims.string()), prims.string()
     )
-    primitives[def_strings.cat2.name] = prims.prim2(
-        def_strings.cat2.name, strings.cat2, [], prims.string(), prims.string(), prims.string()
+    primitives[def_strings.concat2.name] = prims.prim2(
+        def_strings.concat2.name, strings.concat2, [], prims.string(), prims.string(), prims.string()
     )
     primitives[def_strings.from_list.name] = prims.prim1(
         def_strings.from_list.name, strings.from_list, [], prims.list_(prims.int32()), prims.string()
     )
-    primitives[def_strings.intercalate.name] = prims.prim2(
-        def_strings.intercalate.name, strings.intercalate, [], prims.string(), prims.list_(prims.string()), prims.string()
+    primitives[def_strings.join.name] = prims.prim2(
+        def_strings.join.name, strings.join, [], prims.string(), prims.list_(prims.string()), prims.string()
     )
     primitives[def_strings.length.name] = prims.prim1(
         def_strings.length.name, strings.length, [], prims.string(), prims.int32()
@@ -1000,8 +1005,8 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     primitives[def_strings.lines.name] = prims.prim1(
         def_strings.lines.name, strings.lines, [], prims.string(), prims.list_(prims.string())
     )
-    primitives[def_strings.maybe_char_at.name] = prims.prim2(
-        def_strings.maybe_char_at.name, strings.maybe_char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
+    primitives[def_strings.char_at.name] = prims.prim2(
+        def_strings.char_at.name, strings.char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
     )
     primitives[def_strings.null.name] = prims.prim1(
         def_strings.null.name, strings.null, [], prims.string(), prims.boolean()
@@ -1149,8 +1154,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.read_bigint.name, literals.read_bigint, [],
         prims.string(), prims.optional(prims.bigint())
     )
-    primitives[def_literals.read_boolean.name] = prims.prim1(
-        def_literals.read_boolean.name, literals.read_boolean, [],
+    primitives[def_literals.parse_boolean.name] = prims.prim1(
+        def_literals.parse_boolean.name, literals.parse_boolean, [],
         prims.string(), prims.optional(prims.boolean())
     )
     primitives[def_literals.read_decimal.name] = prims.prim1(
@@ -1181,8 +1186,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.read_int64.name, literals.read_int64, [],
         prims.string(), prims.optional(prims.int64())
     )
-    primitives[def_literals.read_string.name] = prims.prim1(
-        def_literals.read_string.name, literals.read_string, [],
+    primitives[def_literals.parse_string.name] = prims.prim1(
+        def_literals.parse_string.name, literals.parse_string, [],
         prims.string(), prims.optional(prims.string())
     )
     primitives[def_literals.read_uint8.name] = prims.prim1(
@@ -1207,8 +1212,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.show_bigint.name, literals.show_bigint, [],
         prims.bigint(), prims.string()
     )
-    primitives[def_literals.show_boolean.name] = prims.prim1(
-        def_literals.show_boolean.name, literals.show_boolean, [],
+    primitives[def_literals.print_boolean.name] = prims.prim1(
+        def_literals.print_boolean.name, literals.print_boolean, [],
         prims.boolean(), prims.string()
     )
     primitives[def_literals.show_decimal.name] = prims.prim1(
@@ -1255,8 +1260,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.show_uint64.name, literals.show_uint64, [],
         prims.uint64(), prims.string()
     )
-    primitives[def_literals.show_string.name] = prims.prim1(
-        def_literals.show_string.name, literals.show_string, [],
+    primitives[def_literals.print_string.name] = prims.prim1(
+        def_literals.print_string.name, literals.print_string, [],
         prims.string(), prims.string()
     )
     primitives[def_literals.string_to_binary.name] = prims.prim1(
@@ -1324,6 +1329,7 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_eithers_primitives())
     primitives.update(register_equality_primitives())
     primitives.update(register_files_primitives())
+    primitives.update(register_functions_primitives())
     primitives.update(register_hashing_primitives())
     primitives.update(register_lists_primitives())
     primitives.update(register_literals_primitives())
@@ -1331,6 +1337,7 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_maps_primitives())
     primitives.update(register_math_primitives())
     primitives.update(register_optionals_primitives())
+    primitives.update(register_ordering_primitives())
     primitives.update(register_pairs_primitives())
     primitives.update(register_regex_primitives())
     primitives.update(register_sets_primitives())

@@ -31,24 +31,6 @@
             (funcall f (either-val e))
             (funcall g (either-val e)))))))
 
-;; from_left :: a -> Either a b -> a
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Right
-(defvar hydra_overlay_common_lisp_lib_eithers_from_left
-  (lambda (def)
-    (lambda (e)
-      (if (eq (either-tag e) :left)
-          (either-val e)
-          (if (functionp def) (funcall def) def)))))
-
-;; from_right :: b -> Either a b -> b
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Left
-(defvar hydra_overlay_common_lisp_lib_eithers_from_right
-  (lambda (def)
-    (lambda (e)
-      (if (eq (either-tag e) :right)
-          (either-val e)
-          (if (functionp def) (funcall def) def)))))
-
 ;; is_left :: Either a b -> Bool
 (defvar hydra_overlay_common_lisp_lib_eithers_is_left
   (lambda (e)
@@ -112,8 +94,8 @@
                    (push (either-val result) acc))
             finally (return (list :right (set-from-list (nreverse acc))))))))
 
-;; partition_eithers :: [Either a b] -> Pair [a] [b]
-(defvar hydra_overlay_common_lisp_lib_eithers_partition_eithers
+;; partition :: [Either a b] -> Pair [a] [b]
+(defvar hydra_overlay_common_lisp_lib_eithers_partition
   (lambda (es)
     (loop with lefts = nil
           with rights = nil
@@ -123,8 +105,8 @@
                  (push (either-val e) rights))
           finally (return (list (nreverse lefts) (nreverse rights))))))
 
-;; foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-(defvar hydra_overlay_common_lisp_lib_eithers_foldl
+;; foldList :: (a -> b -> Either c a) -> a -> [b] -> Either c a
+(defvar hydra_overlay_common_lisp_lib_eithers_fold_list
   (lambda (f)
     (lambda (init)
       (lambda (xs)

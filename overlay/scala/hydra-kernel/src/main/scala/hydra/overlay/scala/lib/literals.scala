@@ -41,7 +41,7 @@ object literals:
     case b: BigInt => b
     case _ => BigInt(0)
   def readBigint(s: String): Option[BigInt] = try Some(BigInt(s)) catch { case _: Exception => None }
-  def readBoolean(s: String): Option[Boolean] = s.toBooleanOption
+  def parseBoolean(s: String): Option[Boolean] = s.toBooleanOption
   def readDecimal(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readFloat(s: String)(ft: Any): Option[Any] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readFloat32(s: String): Option[Float] = s.toFloatOption
@@ -51,7 +51,7 @@ object literals:
   def readInt16(s: String): Option[Short] = s.toShortOption
   def readInt32(s: String): Option[Int] = s.toIntOption
   def readInt64(s: String): Option[Long] = s.toLongOption
-  def readString(s: String): Option[String] =
+  def parseString(s: String): Option[String] =
     // Haskell read expects a quoted string: read "\"hello\"" = "hello"
     if s.startsWith("\"") && s.endsWith("\"") && s.length >= 2 then
       Some(s.substring(1, s.length - 1)
@@ -121,7 +121,7 @@ object literals:
           sb.toString
 
   def showBigint(x: BigInt): String = x.toString
-  def showBoolean(x: Boolean): String = if x then "true" else "false"
+  def printBoolean(x: Boolean): String = if x then "true" else "false"
   def showDecimal(x: BigDecimal): String = {
     // Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
     val stripped = x.underlying.stripTrailingZeros
@@ -150,7 +150,7 @@ object literals:
   def showInt64(x: Long): String = x.toString
 
   // Haskell show for strings: escapes special chars and non-ASCII
-  def showString(s: String): String =
+  def printString(s: String): String =
     val sb = new StringBuilder("\"")
     s.codePoints().forEach { cp =>
       cp match

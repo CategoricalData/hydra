@@ -16,8 +16,8 @@ object maps:
   def fromList[K, V](pairs: Seq[(K, V)]): Map[K, V] = pairs.toMap
   def insert[K, V](k: K)(v: V)(m: Map[K, V]): Map[K, V] = m.updated(k, v)
   // Haskell's Data.Map.keys returns keys in sorted order.
-  // We sort using the same comparator as equality.lt for consistency.
-  def keys[K, V](m: Map[K, V]): Seq[K] = m.keys.toSeq.sortWith((a, b) => equality.lt(a)(b))
+  // We sort using the same comparator as ordering.lt for consistency.
+  def keys[K, V](m: Map[K, V]): Seq[K] = m.keys.toSeq.sortWith((a, b) => ordering.lt(a)(b))
   def lookup[K, V](k: K)(m: Map[K, V]): Option[V] = m.get(k)
   def map[V1, V2, K](f: V1 => V2)(m: Map[K, V1]): Map[K, V2] = m.map((k, v) => (k, f(v)))
   def mapKeys[K1, K2, V](f: K1 => K2)(m: Map[K1, V]): Map[K2, V] = m.map((k, v) => (f(k), v))
@@ -26,6 +26,6 @@ object maps:
   def singleton[K, V](k: K)(v: V): Map[K, V] = Map(k -> v)
   def size[K, V](m: Map[K, V]): Int = m.size
   // Haskell's Data.Map.toList returns entries in ascending key order.
-  // We sort using the same comparator as equality.lt for consistency.
-  def toList[K, V](m: Map[K, V]): Seq[(K, V)] = m.toSeq.sortWith((a, b) => equality.lt(a._1)(b._1))
+  // We sort using the same comparator as ordering.lt for consistency.
+  def toList[K, V](m: Map[K, V]): Seq[(K, V)] = m.toSeq.sortWith((a, b) => ordering.lt(a._1)(b._1))
   def union[K, V](m1: Map[K, V])(m2: Map[K, V]): Map[K, V] = m2 ++ m1

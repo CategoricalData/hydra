@@ -1,5 +1,5 @@
 (ns hydra.overlay.clojure.lib.lists
-  (:require [hydra.overlay.clojure.lib.equality :refer [generic-compare]]))
+  (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]))
 
 ;; concat :: [[a]] -> [a]
 (def hydra_lib_lists_concat
@@ -21,8 +21,8 @@
 (def hydra_lib_lists_drop_while
   (fn [pred_] (fn [xs] (drop-while pred_ xs))))
 
-;; elem :: a -> [a] -> Bool
-(def hydra_lib_lists_elem
+;; member :: a -> [a] -> Bool
+(def hydra_lib_lists_member
   (fn [x] (fn [xs]
     (loop [rest_ (seq xs)]
       (cond
@@ -56,8 +56,8 @@
   (fn [f] (fn [init_] (fn [xs]
     (reduce (fn [acc el] ((f el) acc)) init_ (reverse xs))))))
 
-;; intercalate :: [a] -> [[a]] -> [a]
-(def hydra_lib_lists_intercalate
+;; join :: [a] -> [[a]] -> [a]
+(def hydra_lib_lists_join
   (fn [sep] (fn [xss]
     (if (empty? xss)
       ()
@@ -84,43 +84,43 @@
 (def hydra_lib_lists_map
   (fn [f] (fn [xs] (map f xs))))
 
-;; maybe_at :: Int -> [a] -> Maybe a
-(def hydra_lib_lists_maybe_at
+;; at :: Int -> [a] -> Maybe a
+(def hydra_lib_lists_at
   (fn [n] (fn [xs]
     (if (and (>= n 0) (< n (count xs)))
       (list :given (nth xs n))
       (list :none)))))
 
-;; maybe_head :: [a] -> Maybe a
-(def hydra_lib_lists_maybe_head
+;; head :: [a] -> Maybe a
+(def hydra_lib_lists_head
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (first xs)))))
 
-;; maybe_init :: [a] -> Maybe [a]
-(def hydra_lib_lists_maybe_init
+;; init :: [a] -> Maybe [a]
+(def hydra_lib_lists_init
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (or (butlast xs) ())))))
 
-;; maybe_last :: [a] -> Maybe a
-(def hydra_lib_lists_maybe_last
+;; last :: [a] -> Maybe a
+(def hydra_lib_lists_last
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (last xs)))))
 
-;; maybe_tail :: [a] -> Maybe [a]
-(def hydra_lib_lists_maybe_tail
+;; tail :: [a] -> Maybe [a]
+(def hydra_lib_lists_tail
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (rest xs)))))
 
-;; nub :: [a] -> [a]  (remove duplicates, preserve order)
-(def hydra_lib_lists_nub
+;; distinct :: [a] -> [a]  (remove duplicates, preserve order)
+(def hydra_lib_lists_distinct
   (fn [xs]
     (loop [rest_ (seq xs) seen #{} acc ()]
       (if (nil? rest_)
@@ -164,8 +164,8 @@
 (def hydra_lib_lists_sort
   (fn [xs] (sort-by identity generic-compare xs)))
 
-;; sort_on :: (a -> b) -> [a] -> [a]
-(def hydra_lib_lists_sort_on
+;; sort_by :: (a -> b) -> [a] -> [a]
+(def hydra_lib_lists_sort_by
   (fn [f] (fn [xs] (sort-by f generic-compare xs))))
 
 ;; span :: (a -> Bool) -> [a] -> Pair [a] [a]

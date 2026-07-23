@@ -138,12 +138,12 @@ def log_base(base: float, x: float) -> float:
         return float('nan')
 
 
-def maybe_div(x: int, y: int) -> Optional[int]:
+def div(x: int, y: int) -> Optional[int]:
     """Divide two integers, returning none if the divisor is zero."""
     return None_() if y == 0 else Given(x // y)
 
 
-def maybe_mod(x: int, y: int) -> Optional[int]:
+def mod(x: int, y: int) -> Optional[int]:
     """Mathematical modulo, returning none if the divisor is zero."""
     return None_() if y == 0 else Given(x % y)
 
@@ -153,7 +153,7 @@ def maybe_pred(x: int) -> Optional[int]:
     return None_() if x == -2147483648 else Given(x - 1)
 
 
-def maybe_rem(x: int, y: int) -> Optional[int]:
+def rem(x: int, y: int) -> Optional[int]:
     """Integer remainder, returning none if the divisor is zero."""
     if y == 0:
         return None_()

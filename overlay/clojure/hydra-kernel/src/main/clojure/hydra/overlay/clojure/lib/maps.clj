@@ -1,5 +1,5 @@
 (ns hydra.overlay.clojure.lib.maps
-  (:require [hydra.overlay.clojure.lib.equality :refer [generic-compare]]
+  (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]
             [hydra.overlay.clojure.lib.optionals :refer [maybe-nothing?]]))
 
 ;; Maps are Clojure hash maps for O(1) amortized lookup/insert/delete.

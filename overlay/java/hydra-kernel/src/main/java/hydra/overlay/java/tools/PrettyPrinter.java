@@ -8,7 +8,7 @@ import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.WrappedTerm;
-import hydra.overlay.java.lib.literals.ShowString;
+import hydra.overlay.java.lib.literals.PrintString;
 import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
@@ -171,7 +171,7 @@ public class PrettyPrinter {
 
             @Override
             public Consumer<StringBuilder> visit(Literal.String_ instance) {
-                return sb -> sb.append(ShowString.apply(instance.value));
+                return sb -> sb.append(PrintString.apply(instance.value));
             }
         });
     }

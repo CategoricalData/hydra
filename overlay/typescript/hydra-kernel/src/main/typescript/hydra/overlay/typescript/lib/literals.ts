@@ -29,7 +29,7 @@ const HASKELL_CTRL_ESCAPES: Record<number, string> = {
   30: "\\RS", 31: "\\US", 127: "\\DEL",
 };
 
-export const showString = (s: string): string => {
+export const printString = (s: string): string => {
   let out = '"';
   for (const ch of s) {
     const cp = ch.codePointAt(0)!;
@@ -42,7 +42,7 @@ export const showString = (s: string): string => {
   out += '"';
   return out;
 };
-export const showBoolean = (b: boolean): string => (b ? "true" : "false");
+export const printBoolean = (b: boolean): string => (b ? "true" : "false");
 
 // Generic show for an IntegerValue: `<n>:<typeTag>`.
 type IntegerValue = { tag: string; value: number | bigint };
@@ -128,7 +128,7 @@ export const readFloat = (s: string): Optional<number> => {
 
 export const readDecimal = readFloat;
 
-export const readBoolean = (s: string): Optional<boolean> =>
+export const parseBoolean = (s: string): Optional<boolean> =>
   s === "true" ? Given(true) : s === "false" ? Given(false) : None;
 
 // === conversions ===

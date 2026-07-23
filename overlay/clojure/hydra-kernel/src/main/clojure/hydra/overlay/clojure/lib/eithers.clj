@@ -1,5 +1,5 @@
 (ns hydra.overlay.clojure.lib.eithers
-  (:require [hydra.overlay.clojure.lib.equality :refer [generic-compare]]))
+  (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]))
 
 ;; Either representation: (list :left val) or (list :right val)
 
@@ -71,8 +71,8 @@
           result
           (list :right (second result))))))))
 
-;; foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-(def hydra_lib_eithers_foldl
+;; fold_list :: (a -> b -> Either c a) -> a -> [b] -> Either c a
+(def hydra_lib_eithers_fold_list
   (fn [f] (fn [init] (fn [xs]
     (loop [rest_ (seq xs) acc init]
       (if (nil? rest_)
@@ -81,22 +81,6 @@
           (if (= (clojure.core/first result) :left)
             result
             (recur (next rest_) (second result))))))))))
-
-;; from_left :: a -> Either a b -> a
-;; Thunk-aware: if def_ is a zero-arg fn, only called when Either is Right
-(def hydra_lib_eithers_from_left
-  (fn [def_] (fn [e]
-    (if (= (first e) :left)
-      (second e)
-      (if (fn? def_) (def_) def_)))))
-
-;; from_right :: b -> Either a b -> b
-;; Thunk-aware: if def_ is a zero-arg fn, only called when Either is Left
-(def hydra_lib_eithers_from_right
-  (fn [def_] (fn [e]
-    (if (= (first e) :right)
-      (second e)
-      (if (fn? def_) (def_) def_)))))
 
 ;; is_left :: Either a b -> Bool
 (def hydra_lib_eithers_is_left
@@ -110,8 +94,8 @@
 (def hydra_lib_eithers_lefts
   (fn [es] (map second (filter #(= (first %) :left) es))))
 
-;; partition_eithers :: [Either a b] -> ([a], [b])
-(def hydra_lib_eithers_partition_eithers
+;; partition :: [Either a b] -> ([a], [b])
+(def hydra_lib_eithers_partition
   (fn [es]
     (let [lefts_  (vec (map second (filter #(= (first %) :left) es)))
           rights_ (vec (map second (filter #(= (first %) :right) es)))]

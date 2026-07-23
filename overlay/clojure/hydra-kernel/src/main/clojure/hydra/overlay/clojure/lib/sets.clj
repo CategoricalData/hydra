@@ -1,5 +1,5 @@
 (ns hydra.overlay.clojure.lib.sets
-  (:require [hydra.overlay.clojure.lib.equality :refer [generic-compare]]))
+  (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]))
 
 ;; Sets are Clojure hash sets for O(1) amortized insert/lookup/delete.
 ;; toList produces a sorted output (via generic-compare) for determinism.

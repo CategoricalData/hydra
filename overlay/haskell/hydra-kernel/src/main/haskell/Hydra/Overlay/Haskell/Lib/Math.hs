@@ -96,23 +96,15 @@ log = Prelude.log
 logBase :: Double -> Double -> Double
 logBase = Prelude.logBase
 
--- | Return the maximum of two values.
-max :: Ord a => a -> a -> a
-max = Prelude.max
-
 -- | Divide two integers using integer division, returning Nothing on division by zero.
-maybeDiv :: Int -> Int -> Maybe Int
-maybeDiv _ 0 = Nothing
-maybeDiv x y = Just (Prelude.div x y)
-
--- | Return the minimum of two values.
-min :: Ord a => a -> a -> a
-min = Prelude.min
+div :: Int -> Int -> Maybe Int
+div _ 0 = Nothing
+div x y = Just (Prelude.div x y)
 
 -- | Mathematical modulo, returning Nothing on division by zero.
-maybeMod :: Int -> Int -> Maybe Int
-maybeMod _ 0 = Nothing
-maybeMod x y = Just (Prelude.mod x y)
+mod :: Int -> Int -> Maybe Int
+mod _ 0 = Nothing
+mod x y = Just (Prelude.mod x y)
 
 -- | Multiply two numbers.
 mul :: Num a => a -> a -> a
@@ -142,20 +134,14 @@ pi = Prelude.pi
 pow :: Double -> Double -> Double
 pow = (Prelude.**)
 
--- | Return the predecessor (x - 1), returning Nothing on int32 minBound.
-maybePred :: Int -> Maybe Int
-maybePred x
-  | x == (-2147483648) = Nothing
-  | Prelude.otherwise = Just (x - 1)
-
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => a -> a -> [a]
 range start end = [start .. end]
 
 -- | Integer remainder, returning Nothing on division by zero.
-maybeRem :: Int -> Int -> Maybe Int
-maybeRem _ 0 = Nothing
-maybeRem x y = Just (Prelude.rem x y)
+rem :: Int -> Int -> Maybe Int
+rem _ 0 = Nothing
+rem x y = Just (Prelude.rem x y)
 
 -- | Return x rounded to the nearest integer, as a float.
 --
@@ -210,11 +196,6 @@ sub x y = x - y
 subFloat64 :: Double -> Double -> Double
 subFloat64 = sub
 
--- | Return the successor (x + 1), returning Nothing on int32 maxBound.
-maybeSucc :: Int -> Maybe Int
-maybeSucc x
-  | x == 2147483647 = Nothing
-  | Prelude.otherwise = Just (x + 1)
 
 -- | Return the tangent of x radians.
 tan :: Double -> Double

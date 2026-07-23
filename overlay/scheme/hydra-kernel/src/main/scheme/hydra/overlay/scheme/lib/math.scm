@@ -22,13 +22,9 @@
           hydra_lib_math_log
           hydra_lib_math_logBase
           hydra_lib_math_log_base
-          hydra_lib_math_max
-          hydra_lib_math_maybe_div
-          hydra_lib_math_maybe_mod
-          hydra_lib_math_maybe_pred
-          hydra_lib_math_maybe_rem
-          hydra_lib_math_maybe_succ
-          hydra_lib_math_min
+          hydra_lib_math_div
+          hydra_lib_math_mod
+          hydra_lib_math_rem
           hydra_lib_math_mul
           hydra_lib_math_mul_float64
           hydra_lib_math_negate
@@ -188,14 +184,8 @@
 
     (define hydra_lib_math_log_base hydra_lib_math_logBase)
 
-    ;; max :: Int -> Int -> Int
-    (define hydra_lib_math_max
-      (lambda (a)
-        (lambda (b)
-          (max a b))))
-
     ;; maybe_div :: Int -> Int -> Maybe Int
-    (define hydra_lib_math_maybe_div
+    (define hydra_lib_math_div
       (lambda (a)
         (lambda (b)
           (if (= b 0)
@@ -203,40 +193,20 @@
               (list 'given (floor-quotient a b))))))
 
     ;; maybe_mod :: Int -> Int -> Maybe Int
-    (define hydra_lib_math_maybe_mod
+    (define hydra_lib_math_mod
       (lambda (a)
         (lambda (b)
           (if (= b 0)
               (list 'none)
               (list 'given (floor-remainder a b))))))
 
-    ;; maybe_pred :: Int -> Maybe Int
-    (define hydra_lib_math_maybe_pred
-      (lambda (n)
-        (if (= n -2147483648)
-            (list 'none)
-            (list 'given (- n 1)))))
-
     ;; maybe_rem :: Int -> Int -> Maybe Int
-    (define hydra_lib_math_maybe_rem
+    (define hydra_lib_math_rem
       (lambda (a)
         (lambda (b)
           (if (= b 0)
               (list 'none)
               (list 'given (truncate-remainder a b))))))
-
-    ;; maybe_succ :: Int -> Maybe Int
-    (define hydra_lib_math_maybe_succ
-      (lambda (n)
-        (if (= n 2147483647)
-            (list 'none)
-            (list 'given (+ n 1)))))
-
-    ;; min :: Int -> Int -> Int
-    (define hydra_lib_math_min
-      (lambda (a)
-        (lambda (b)
-          (min a b))))
 
     ;; mul :: Int -> Int -> Int
     (define hydra_lib_math_mul

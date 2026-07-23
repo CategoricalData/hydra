@@ -153,55 +153,29 @@
 ;; log_base alias
 (defvar hydra_overlay_common_lisp_lib_math_log_base hydra_overlay_common_lisp_lib_math_logBase)
 
-;; max :: Int -> Int -> Int
-(defvar hydra_overlay_common_lisp_lib_math_max
-  (lambda (a)
-    (lambda (b)
-      (max a b))))
-
-;; maybe_div :: Int -> Int -> Maybe Int
-(defvar hydra_overlay_common_lisp_lib_math_maybe_div
+;; div :: Int -> Int -> Maybe Int
+(defvar hydra_overlay_common_lisp_lib_math_div
   (lambda (a)
     (lambda (b)
       (if (= b 0)
           (list :none)
           (list :given (floor a b))))))
 
-;; maybe_mod :: Int -> Int -> Maybe Int
-(defvar hydra_overlay_common_lisp_lib_math_maybe_mod
+;; mod :: Int -> Int -> Maybe Int
+(defvar hydra_overlay_common_lisp_lib_math_mod
   (lambda (a)
     (lambda (b)
       (if (= b 0)
           (list :none)
           (list :given (mod a b))))))
 
-;; maybe_pred :: Int -> Maybe Int
-(defvar hydra_overlay_common_lisp_lib_math_maybe_pred
-  (lambda (n)
-    (if (= n -2147483648)
-        (list :none)
-        (list :given (1- n)))))
-
-;; maybe_rem :: Int -> Int -> Maybe Int
-(defvar hydra_overlay_common_lisp_lib_math_maybe_rem
+;; rem :: Int -> Int -> Maybe Int
+(defvar hydra_overlay_common_lisp_lib_math_rem
   (lambda (a)
     (lambda (b)
       (if (= b 0)
           (list :none)
           (list :given (rem a b))))))
-
-;; maybe_succ :: Int -> Maybe Int
-(defvar hydra_overlay_common_lisp_lib_math_maybe_succ
-  (lambda (n)
-    (if (= n 2147483647)
-        (list :none)
-        (list :given (1+ n)))))
-
-;; min :: Int -> Int -> Int
-(defvar hydra_overlay_common_lisp_lib_math_min
-  (lambda (a)
-    (lambda (b)
-      (min a b))))
 
 ;; mul :: Int -> Int -> Int
 (defvar hydra_overlay_common_lisp_lib_math_mul

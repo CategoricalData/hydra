@@ -78,8 +78,8 @@
           (setq rest (cdr rest)))
         rest))))
 
-;; elem :: a -> [a] -> Bool
-(defvar hydra_overlay_emacs_lisp_lib_lists_elem
+;; member :: a -> [a] -> Bool
+(defvar hydra_overlay_emacs_lisp_lib_lists_member
   (lambda (x)
     "Check if an element is in a list."
     (lambda (xs)
@@ -141,8 +141,8 @@
           (push (nreverse current-group) groups)
           (nreverse groups)))))
 
-;; intercalate :: [a] -> [[a]] -> [a]
-(defvar hydra_overlay_emacs_lisp_lib_lists_intercalate
+;; join :: [a] -> [[a]] -> [a]
+(defvar hydra_overlay_emacs_lisp_lib_lists_join
   (lambda (sep)
     "Intercalate a list of lists with a separator list between each."
     (lambda (xss)
@@ -178,8 +178,8 @@
     (lambda (xs)
       (mapcar f xs))))
 
-;; maybe_at :: Int -> [a] -> Maybe a
-(defvar hydra_overlay_emacs_lisp_lib_lists_maybe_at
+;; at :: Int -> [a] -> Maybe a
+(defvar hydra_overlay_emacs_lisp_lib_lists_at
   (lambda (n)
     "Get the element at a specified index, returning Nothing if the index is out of bounds."
     (lambda (xs)
@@ -187,40 +187,40 @@
           (list :given (nth n xs))
           (list :none)))))
 
-;; maybe_head :: [a] -> Maybe a
-(defvar hydra_overlay_emacs_lisp_lib_lists_maybe_head
+;; head :: [a] -> Maybe a
+(defvar hydra_overlay_emacs_lisp_lib_lists_head
   (lambda (xs)
     "Get the first element of a list, returning Nothing if the list is empty."
     (if (null xs)
         (list :none)
         (list :given (car xs)))))
 
-;; maybe_init :: [a] -> Maybe [a]
-(defvar hydra_overlay_emacs_lisp_lib_lists_maybe_init
+;; init :: [a] -> Maybe [a]
+(defvar hydra_overlay_emacs_lisp_lib_lists_init
   (lambda (xs)
     "Return all elements except the last, returning Nothing if the list is empty."
     (if (null xs)
         (list :none)
         (list :given (butlast xs)))))
 
-;; maybe_last :: [a] -> Maybe a
-(defvar hydra_overlay_emacs_lisp_lib_lists_maybe_last
+;; last :: [a] -> Maybe a
+(defvar hydra_overlay_emacs_lisp_lib_lists_last
   (lambda (xs)
     "Get the last element of a list, returning Nothing if the list is empty."
     (if (null xs)
         (list :none)
         (list :given (car (last xs))))))
 
-;; maybe_tail :: [a] -> Maybe [a]
-(defvar hydra_overlay_emacs_lisp_lib_lists_maybe_tail
+;; tail :: [a] -> Maybe [a]
+(defvar hydra_overlay_emacs_lisp_lib_lists_tail
   (lambda (xs)
     "Get all elements except the first, returning Nothing if the list is empty."
     (if (null xs)
         (list :none)
         (list :given (cdr xs)))))
 
-;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
-(defvar hydra_overlay_emacs_lisp_lib_lists_nub
+;; distinct :: [a] -> [a]  (remove duplicates, keeping first occurrence)
+(defvar hydra_overlay_emacs_lisp_lib_lists_distinct
   (lambda (xs)
     "Remove duplicate elements from a list."
     (let ((seen nil)
@@ -280,8 +280,8 @@
     "Sort a list."
     (merge-sort #'generic<? xs)))
 
-;; sort_on :: (a -> b) -> [a] -> [a]
-(defvar hydra_overlay_emacs_lisp_lib_lists_sort_on
+;; sort_by :: (a -> b) -> [a] -> [a]
+(defvar hydra_overlay_emacs_lisp_lib_lists_sort_by
   (lambda (f)
     "Sort a list based on a key function."
     (lambda (xs)

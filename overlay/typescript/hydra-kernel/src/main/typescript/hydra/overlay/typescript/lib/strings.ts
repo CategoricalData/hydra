@@ -3,10 +3,10 @@
 // Operates on JavaScript strings. Code points are represented as `number`,
 // matching Hydra's `Int` for characters.
 
-export const cat = (xs: readonly string[]): string => xs.join("");
-export const cat2 = (a: string, b: string): string => a + b;
+export const concat = (xs: readonly string[]): string => xs.join("");
+export const concat2 = (a: string, b: string): string => a + b;
 
-export const intercalate = (sep: string, xs: readonly string[]): string => xs.join(sep);
+export const join = (sep: string, xs: readonly string[]): string => xs.join(sep);
 
 // Counts Unicode code points (not UTF-16 code units), matching the
 // kernel test fixtures' "length of string" expectation.
@@ -52,7 +52,7 @@ export const lines = (s: string): readonly string[] => {
 // matching Haskell's `Data.List.unlines`.
 export const unlines = (xs: readonly string[]): string => xs.map((x) => x + "\n").join("");
 
-export const maybeCharAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
+export const charAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
   const cp = s.codePointAt(i);
   return cp === undefined ? { tag: "none" } : { tag: "given", value: cp };
 };

@@ -7,9 +7,10 @@
 (def ^:private lib-ns-names
   "Library namespaces whose public vars should be globalized."
   ["hydra.overlay.clojure.lib.chars" "hydra.overlay.clojure.lib.effects" "hydra.overlay.clojure.lib.eithers"
-   "hydra.overlay.clojure.lib.equality" "hydra.overlay.clojure.lib.files"
+   "hydra.overlay.clojure.lib.equality" "hydra.overlay.clojure.lib.files" "hydra.overlay.clojure.lib.functions"
    "hydra.overlay.clojure.lib.lists" "hydra.overlay.clojure.lib.literals" "hydra.overlay.clojure.lib.logic"
    "hydra.overlay.clojure.lib.maps" "hydra.overlay.clojure.lib.math" "hydra.overlay.clojure.lib.optionals"
+   "hydra.overlay.clojure.lib.ordering"
    "hydra.overlay.clojure.lib.pairs" "hydra.overlay.clojure.lib.sets" "hydra.overlay.clojure.lib.strings" "hydra.overlay.clojure.lib.system"
    "hydra.overlay.clojure.lib.text"])
 

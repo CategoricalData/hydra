@@ -6,9 +6,9 @@ object optionals:
   def cases[A, B](ma: Option[A])(ifNone: => B)(ifSome: A => B): B = ma match
     case None => ifNone
     case Some(a) => ifSome(a)
-  def cat[A](xs: Seq[Option[A]]): Seq[A] = xs.flatten
+  def givens[A](xs: Seq[Option[A]]): Seq[A] = xs.flatten
   def compose[A, B, C](f: A => Option[B])(g: B => Option[C])(a: A): Option[C] = f(a).flatMap(g)
-  def fromOptional[A](d: => A)(ma: Option[A]): A = ma.getOrElse(d)
+  def withDefault[A](d: => A)(ma: Option[A]): A = ma.getOrElse(d)
   def isGiven[A](ma: Option[A]): Boolean = ma.isDefined
   def isNone[A](ma: Option[A]): Boolean = ma.isEmpty
   def map[A, B](f: A => B)(ma: Option[A]): Option[B] = ma.map(f)

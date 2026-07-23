@@ -27,7 +27,7 @@ export const bind = (m: any, f: (a: any) => any): Optional<any> =>
 export const cases = (m: any, n: any, j: (a: any) => any): any =>
   m.tag === "given" ? j(m.value) : (typeof n === "function" ? n() : n);
 
-export const cat = (ms: any): readonly any[] => {
+export const givens = (ms: any): readonly any[] => {
   const out: any[] = [];
   for (const m of (ms as readonly Optional<any>[])) if (m.tag === "given") out.push(m.value);
   return out;
@@ -38,7 +38,7 @@ export const compose = (f: (a: any) => any, g: (b: any) => any, x: any): Optiona
   return r.tag === "given" ? g(r.value) : None;
 };
 
-export const fromOptional = (d: any, m: any): any =>
+export const withDefault = (d: any, m: any): any =>
   m.tag === "given" ? m.value : (typeof d === "function" ? d() : d);
 
 export const isGiven = (m: any): boolean => m.tag === "given";

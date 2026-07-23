@@ -25,7 +25,7 @@ object effects:
   def compose[A, B, C](f: A => B)(g: B => C)(x: A): C = g(f(x))
 
   /** Left-fold over a list with an effect-returning (curried) function, left to right. */
-  def foldl[A, B](f: A => B => A)(acc: A)(xs: Seq[B]): A =
+  def foldList[A, B](f: A => B => A)(acc: A)(xs: Seq[B]): A =
     xs.foldLeft(acc)((a, x) => f(a)(x))
 
   /** Map an effect-returning function over a list, collecting the results. */

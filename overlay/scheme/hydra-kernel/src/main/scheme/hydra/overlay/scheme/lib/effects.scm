@@ -3,7 +3,7 @@
   (export hydra_lib_effects_apply
           hydra_lib_effects_bind
           hydra_lib_effects_compose
-          hydra_lib_effects_foldl
+          hydra_lib_effects_fold_list
           hydra_lib_effects_map
           hydra_lib_effects_map_list
           hydra_lib_effects_map_optional
@@ -44,7 +44,7 @@
 
     ;; foldl :: (x -> y -> effect<x>) -> x -> [y] -> effect<x>
     ;; Left-fold over a list with an effect-returning function.
-    (define hydra_lib_effects_foldl
+    (define hydra_lib_effects_fold_list
       (lambda (f)
         (lambda (acc)
           (lambda (xs)

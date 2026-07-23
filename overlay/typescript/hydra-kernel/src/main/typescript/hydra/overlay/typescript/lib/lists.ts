@@ -45,7 +45,7 @@ export const dropWhile = (p: (a: any) => boolean, xs: any): readonly any[] => {
   return xs.slice(i);
 };
 
-export const elem = <A>(x: A, xs: any): boolean => xs.includes(x);
+export const member = <A>(x: A, xs: any): boolean => xs.includes(x);
 
 export const filter = (p: (a: any) => boolean, xs: any): readonly any[] => xs.filter(p);
 
@@ -72,12 +72,10 @@ export const group = <A>(xs: any): readonly (readonly A[])[] => {
   return out;
 };
 
-export const head = <A>(xs: any): A => {
-  if (xs.length === 0) throw new Error("head: empty list");
-  return xs[0]!;
-};
+export const head = <A>(xs: any): Optional<A> =>
+  xs.length === 0 ? None : Given(xs[0]!);
 
-export const intercalate = <A>(sep: readonly A[], xss: readonly (readonly A[])[]): readonly A[] => {
+export const join = <A>(sep: readonly A[], xss: readonly (readonly A[])[]): readonly A[] => {
   const out: A[] = [];
   xss.forEach((xs, i) => {
     if (i > 0) out.push(...sep);
@@ -97,19 +95,16 @@ export const length = <A>(xs: any): number => xs.length;
 
 export const map = (f: (a: any) => any, xs: any): readonly any[] => xs.map(f);
 
-export const maybeAt = (i: number, xs: any): Optional<any> =>
+export const at = (i: number, xs: any): Optional<any> =>
   (i >= 0 && i < xs.length) ? Given(xs[i]!) : None;
 
-export const maybeHead = (xs: any): Optional<any> =>
-  xs.length === 0 ? None : Given(xs[0]!);
-
-export const maybeInit = (xs: any): Optional<readonly any[]> =>
+export const init = (xs: any): Optional<readonly any[]> =>
   xs.length === 0 ? None : Given(xs.slice(0, -1));
 
-export const maybeLast = (xs: any): Optional<any> =>
+export const last = (xs: any): Optional<any> =>
   xs.length === 0 ? None : Given(xs[xs.length - 1]!);
 
-export const maybeTail = (xs: any): Optional<readonly any[]> =>
+export const tail = (xs: any): Optional<readonly any[]> =>
   xs.length === 0 ? None : Given(xs.slice(1));
 
 // Structural deduplication. JS `Set` keys by SameValueZero (object
@@ -119,7 +114,7 @@ export const maybeTail = (xs: any): Optional<readonly any[]> =>
 // the set membership matches Python's `set` behavior on hashable
 // dataclasses (which is the reference). Matches the same canonicalization
 // strategy maps.ts uses for value-keyed Map<Name,_> lookups.
-export const nub = (xs: any): readonly any[] => {
+export const distinct = (xs: any): readonly any[] => {
   const seen = new Set<string>();
   const out: any[] = [];
   for (const x of xs) {
@@ -156,7 +151,7 @@ const defaultCompare = (a: unknown, b: unknown): number => {
 export const sort = (xs: any): readonly any[] =>
   [...xs].sort(defaultCompare);
 
-export const sortOn = <A, B>(key: (a: A) => B, xs: any): readonly A[] =>
+export const sortBy = <A, B>(key: (a: A) => B, xs: any): readonly A[] =>
   [...xs].sort((x, y) => defaultCompare(key(x), key(y)));
 
 export const span = <A>(p: (a: A) => boolean, xs: any): readonly [readonly A[], readonly A[]] => {
