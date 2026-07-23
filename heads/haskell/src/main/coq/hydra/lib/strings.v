@@ -122,22 +122,22 @@ Fixpoint string_length_nat (s : string) : nat :=
   | String _ rest => S (string_length_nat rest)
   end.
 
-Definition cat (ss : list string) : string :=
+Definition charAt (i : Z) (s : string) : option Z :=
+  match string_nth (Z.to_nat i) s with
+  | Some c => Some (ascii_to_Z c)
+  | None => None
+  end.
+
+Definition concat (ss : list string) : string :=
   List.fold_left String.append ss EmptyString.
 
-Definition cat2 (s1 s2 : string) : string :=
+Definition concat2 (s1 s2 : string) : string :=
   String.append s1 s2.
-
-Definition charAt (i : Z) (s : string) : Z :=
-  match string_nth (Z.to_nat i) s with
-  | Some c => ascii_to_Z c
-  | None => hydra_unreachable
-  end.
 
 Definition fromList (cps : list Z) : string :=
   List.fold_right (fun z acc => String (Z_to_ascii z) acc) EmptyString cps.
 
-Definition intercalate (sep : string) (ss : list string) : string :=
+Definition join (sep : string) (ss : list string) : string :=
   match ss with
   | [] => EmptyString
   | h :: t => List.fold_left (fun acc s => String.append (String.append acc sep) s) t h
@@ -148,12 +148,6 @@ Definition length (s : string) : Z :=
 
 Definition lines (s : string) : list string :=
   split_on_char "010"%char s.
-
-Definition maybeCharAt (i : Z) (s : string) : option Z :=
-  match string_nth (Z.to_nat i) s with
-  | Some c => Some (ascii_to_Z c)
-  | None => None
-  end.
 
 Definition null (s : string) : bool :=
   string_is_empty s.
@@ -171,4 +165,4 @@ Definition toUpper (s : string) : string :=
   string_map ascii_toUpper s.
 
 Definition unlines (ss : list string) : string :=
-  cat (List.map (fun s => String.append s (String "010"%char EmptyString)) ss).
+  concat (List.map (fun s => String.append s (String "010"%char EmptyString)) ss).

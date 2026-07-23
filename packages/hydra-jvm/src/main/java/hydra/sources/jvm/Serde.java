@@ -4,6 +4,7 @@ import hydra.dsl.lib.Lists;
 import hydra.dsl.lib.Logic;
 import hydra.dsl.lib.Math_;
 import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Ordering;
 import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
@@ -63,15 +64,15 @@ public class Serde {
                                             string("\\f"),
                                             Logic.ifElse(
                                                 Logic.and(
-                                                    Equality.gte(var("c"), int32(32)),
-                                                    Equality.lt(var("c"), int32(127))),
+                                                    Ordering.gte(var("c"), int32(32)),
+                                                    Ordering.lt(var("c"), int32(127))),
                                                 Strings.fromList(list(var("c"))),
                                                 apply(ref(Serde.javaUnicodeEscape), var("c"))))))))))));
 
     public static final Def escapeJavaString = def(
         "escapeJavaString",
         () -> lambda("s",
-                Strings.cat(
+                Strings.concat(
                     Lists.map(
                         lambda("c", apply(ref(Serde.escapeJavaChar), var("c"))),
                         Strings.toList(var("s"))))));
@@ -80,7 +81,7 @@ public class Serde {
         "hexDigit",
         () -> lambda("n",
                 Logic.ifElse(
-                    Equality.lt(var("n"), int32(10)),
+                    Ordering.lt(var("n"), int32(10)),
                     Math_.add(var("n"), int32(48)),
                     Math_.add(Math_.sub(var("n"), int32(10)), int32(65)))));
 
@@ -88,39 +89,39 @@ public class Serde {
         "javaUnicodeEscape",
         () -> lambda("n",
                 Logic.ifElse(
-                    Equality.gt(var("n"), int32(65535)),
+                    Ordering.gt(var("n"), int32(65535)),
                     let(
                         field("n'",
                             Math_.sub(var("n"), int32(65536))),
                         field("hi",
                             Math_.add(
                                 int32(55296),
-                                Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n'"), int32(1024))))),
+                                Optionals.withDefault(int32(0), Math_.div(var("n'"), int32(1024))))),
                         field("lo",
                             Math_.add(
                                 int32(56320),
-                                Optionals.fromOptional(int32(0), Math_.maybeMod(var("n'"), int32(1024))))),
-                        Strings.cat2(
-                            Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("hi"))),
-                            Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("lo"))))),
-                    Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("n"))))));
+                                Optionals.withDefault(int32(0), Math_.mod(var("n'"), int32(1024))))),
+                        Strings.concat2(
+                            Strings.concat2(string("\\u"), apply(ref(Serde.padHex4), var("hi"))),
+                            Strings.concat2(string("\\u"), apply(ref(Serde.padHex4), var("lo"))))),
+                    Strings.concat2(string("\\u"), apply(ref(Serde.padHex4), var("n"))))));
 
     public static final Def padHex4 = def(
         "padHex4",
         () -> lambda("n",
                 let(
                     field("d3",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n"), int32(4096)))),
+                        Optionals.withDefault(int32(0), Math_.div(var("n"), int32(4096)))),
                     field("r3",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("n"), int32(4096)))),
+                        Optionals.withDefault(int32(0), Math_.mod(var("n"), int32(4096)))),
                     field("d2",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r3"), int32(256)))),
+                        Optionals.withDefault(int32(0), Math_.div(var("r3"), int32(256)))),
                     field("r2",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r3"), int32(256)))),
+                        Optionals.withDefault(int32(0), Math_.mod(var("r3"), int32(256)))),
                     field("d1",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r2"), int32(16)))),
+                        Optionals.withDefault(int32(0), Math_.div(var("r2"), int32(16)))),
                     field("d0",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r2"), int32(16)))),
+                        Optionals.withDefault(int32(0), Math_.mod(var("r2"), int32(16)))),
                     Strings.fromList(
                         list(
                             apply(ref(Serde.hexDigit), var("d3")),

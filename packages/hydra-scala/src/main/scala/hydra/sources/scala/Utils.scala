@@ -77,10 +77,10 @@ object Utils:
           field("typeStrings",
             applyP("hydra.lib.lists.map", v("typeToStr"), v("typeArgs"))),
           field("typeArgStr",
-            applyP("hydra.lib.strings.cat",
+            applyP("hydra.lib.strings.concat",
               list(
                 string("["),
-                applyP("hydra.lib.strings.intercalate", string(", "), v("typeStrings")),
+                applyP("hydra.lib.strings.join", string(", "), v("typeStrings")),
                 string("]"))))),
           casesWithDefault("hydra.scala.syntax.Data",
             v("fun"), v("fun"),
@@ -146,11 +146,11 @@ object Utils:
         string("toString_"),
         v("sanitized2"))
 
-    // lastChar = optionals.fromOptional 0 (maybeCharAt (length s3 - 1) s3)
+    // lastChar = optionals.withDefault 0 (charAt (length s3 - 1) s3)
     val lastChar: TypedTerm[Int] =
-      applyP("hydra.lib.optionals.fromOptional",
+      applyP("hydra.lib.optionals.withDefault",
         int32(0),
-        applyP("hydra.lib.strings.maybeCharAt",
+        applyP("hydra.lib.strings.charAt",
           applyP("hydra.lib.math.sub",
             applyP("hydra.lib.strings.length", v("sanitized3")),
             int32(1)),
@@ -158,7 +158,7 @@ object Utils:
 
     val endsWithUnderscore: TypedTerm[Boolean] =
       applyP("hydra.lib.logic.and",
-        applyP("hydra.lib.equality.gt",
+        applyP("hydra.lib.ordering.gt",
           applyP("hydra.lib.strings.length", v("sanitized3")),
           int32(0)),
         applyP("hydra.lib.equality.equal", lastChar, int32(95)))
@@ -177,7 +177,7 @@ object Utils:
           field("needsBackticks", needsBackticks)),
           applyP("hydra.lib.logic.ifElse",
             v("needsBackticks"),
-            applyP("hydra.lib.strings.cat",
+            applyP("hydra.lib.strings.concat",
               list(string("`"), v("sanitized3"), string("`"))),
             v("sanitized3"))))
 
@@ -221,7 +221,7 @@ object Utils:
           field("qname", applyP("hydra.names.qualifyName", v("name"))),
           field("prefix",
             PackagingDsl.unModuleName(
-              applyP("hydra.lib.optionals.fromOptional",
+              applyP("hydra.lib.optionals.withDefault",
                 wrap("hydra.packaging.ModuleName", string("")),
                 UtilDsl.qualifiedNameModuleName(v("qname"))))),
           field("local",
@@ -297,10 +297,10 @@ object Utils:
               field("res",
                 applyP(local("typeToString"),
                   ScalaSyntax.functionTypeRes(v("fn"))))),
-              applyP("hydra.lib.strings.cat",
+              applyP("hydra.lib.strings.concat",
                 list(
                   string("("),
-                  applyP("hydra.lib.strings.intercalate", string(", "), v("params")),
+                  applyP("hydra.lib.strings.join", string(", "), v("params")),
                   string(") => "),
                   v("res")))))),
           field("apply", lambda("ta",
@@ -312,11 +312,11 @@ object Utils:
                 applyP("hydra.lib.lists.map",
                   v(local("typeToString")),
                   ScalaSyntax.applyTypeArgs(v("ta"))))),
-              applyP("hydra.lib.strings.cat",
+              applyP("hydra.lib.strings.concat",
                 list(
                   v("base"),
                   string("["),
-                  applyP("hydra.lib.strings.intercalate", string(", "), v("argStrs")),
+                  applyP("hydra.lib.strings.join", string(", "), v("argStrs")),
                   string("]"))))))))
 
   // ===== Module assembly =====

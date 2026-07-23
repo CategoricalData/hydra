@@ -28,9 +28,9 @@ Definition cases (x y : Type) (mx : option x) (def : y) (f : x -> y) : y :=
   end.
 Arguments cases {x y}.
 
-Definition cat (x : Type) (opts : list (option x)) : list x :=
+Definition givens (x : Type) (opts : list (option x)) : list x :=
   List.flat_map (fun o => match o with Some v => [v] | None => [] end) opts.
-Arguments cat {x}.
+Arguments givens {x}.
 
 Definition compose (x y z : Type) (f : x -> option y) (g : y -> option z) (v : x) : option z :=
   match f v with
@@ -46,12 +46,12 @@ Definition fromJust (x : Type) (mx : option x) : x :=
   end.
 Arguments fromJust {x}.
 
-Definition fromOptional (x : Type) (def : x) (mx : option x) : x :=
+Definition withDefault (x : Type) (def : x) (mx : option x) : x :=
   match mx with
   | Some v => v
   | None => def
   end.
-Arguments fromOptional {x}.
+Arguments withDefault {x}.
 
 Definition isGiven (x : Type) (mx : option x) : bool :=
   match mx with

@@ -18,6 +18,7 @@ import hydra.dsl.lib.Logic;
 import hydra.dsl.lib.Maps;
 import hydra.dsl.lib.Math_;
 import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Ordering;
 import hydra.dsl.lib.Pairs;
 import hydra.dsl.lib.Sets;
 import hydra.dsl.lib.Strings;
@@ -1085,7 +1086,7 @@ public class Coder {
                                         Logic.ifElse(
                                             Equality.equal(Lists.length(var("names")), int32(1)),
                                             Optionals.cases(
-                                                Lists.maybeHead(var("names")),
+                                                Lists.head(var("names")),
                                                 list(),
                                                 lambda("singleName",
                                                     Optionals.cases(
@@ -1191,7 +1192,7 @@ public class Coder {
                                                 lambda("decls",
                                                     right(
                                                         Lists.concat2(
-                                                            Optionals.cat(var("inits")),
+                                                            Optionals.givens(var("inits")),
                                                             var("decls")))))))),
                                 var("sorted")),
                             lambda("groups",
@@ -1880,7 +1881,7 @@ public class Coder {
                                         inject(Error_.TYPE_,
                                             Error_.OTHER,
                                             wrap(OtherError.TYPE_,
-                                                Strings.cat2(
+                                                Strings.concat2(
                                                     string("no type scheme for element "),
                                                     apply(
                                                         unwrap(Name.TYPE_),
@@ -1900,7 +1901,7 @@ public class Coder {
                     let("n",
                         apply(ref(Coder.classifyDataTerm_countLambdaParams), var("term")),
                         Logic.ifElse(
-                            Equality.gt(var("n"), int32(1)),
+                            Ordering.gt(var("n"), int32(1)),
                             inject(JavaSymbolClass.TYPE_,
                                 JavaSymbolClass.HOISTED_LAMBDA,
                                 var("n")),
@@ -1918,7 +1919,7 @@ public class Coder {
                                     ref(Coder.classifyDataTerm_countLambdaParams),
                                     apply(ref(Coder.classifyDataTerm_stripTypeLambdas), var("term"))),
                                 Logic.ifElse(
-                                    Equality.gt(var("n2"), int32(0)),
+                                    Ordering.gt(var("n2"), int32(0)),
                                     inject(JavaSymbolClass.TYPE_,
                                         JavaSymbolClass.HOISTED_LAMBDA,
                                         var("n2")),
@@ -2282,7 +2283,7 @@ public class Coder {
                                     apply(
                                         ref(Utils.javaIntExpression),
                                         bigint(java.math.BigInteger.valueOf(0L))))))),
-                    Optionals.fromOptional(
+                    Optionals.withDefault(
                         var("zeroStmts"),
                         Optionals.map(
                             lambda("p",
@@ -2315,9 +2316,9 @@ public class Coder {
                                                                 var("f"))),
                                                         Lists.cons(
                                                             var("firstField"),
-                                                            Optionals.fromOptional(
+                                                            Optionals.withDefault(
                                                                 list(),
-                                                                Lists.maybeInit(var("restFields")))))),
+                                                                Lists.init(var("restFields")))))),
                                                 list(
                                                     inject(BlockStatement.TYPE_,
                                                         BlockStatement.STATEMENT,
@@ -2327,9 +2328,9 @@ public class Coder {
                                                                 apply(
                                                                     ref(Coder.compareFieldExpr),
                                                                     var("otherVar"),
-                                                                    Optionals.fromOptional(
+                                                                    Optionals.withDefault(
                                                                         var("firstField"),
-                                                                        Lists.maybeLast(
+                                                                        Lists.last(
                                                                             var("restFields"))))))))))))),
                             Lists.uncons(var("fields"))))));
 
@@ -2489,7 +2490,7 @@ public class Coder {
                                     unit()),
                                 apply(unwrap(Name.TYPE_), var("name"))))),
                     field("comment",
-                        Strings.cat(
+                        Strings.concat(
                             list(
                                 string("Name of the {@code "),
                                 apply(unwrap(Name.TYPE_), var("parentName")),
@@ -2509,7 +2510,7 @@ public class Coder {
         .lam("aliases").lam("name").lam("cx").lam("g")
         .to(() ->
                 let("comment",
-                    Strings.cat(
+                    Strings.concat(
                         list(
                             string("Name of the {@code "),
                             apply(unwrap(Name.TYPE_), var("name")),
@@ -2618,14 +2619,14 @@ public class Coder {
                                         record(PairType.TYPE_,
                                             field(
                                                 PairType.FIRST,
-                                                Optionals.fromOptional(
+                                                Optionals.withDefault(
                                                     var("fallback"),
-                                                    Lists.maybeAt(int32(0), var("typeArgs")))),
+                                                    Lists.at(int32(0), var("typeArgs")))),
                                             field(
                                                 PairType.SECOND,
-                                                Optionals.fromOptional(
+                                                Optionals.withDefault(
                                                     var("fallback"),
-                                                    Lists.maybeAt(int32(1), var("typeArgs"))))))),
+                                                    Lists.at(int32(1), var("typeArgs"))))))),
                                 right(var("fallback")))))));
 
     public static final Def correctTypeApps = def("correctTypeApps")
@@ -2888,8 +2889,8 @@ public class Coder {
                                             var("parentName"),
                                             var("elNameStr"),
                                             lambda("pn",
-                                                Strings.cat2(
-                                                    Strings.cat2(
+                                                Strings.concat2(
+                                                    Strings.concat2(
                                                         apply(
                                                             unwrap(Identifier.TYPE_),
                                                             apply(
@@ -2903,7 +2904,7 @@ public class Coder {
                                                             hydra.dsl.Names.qualifyName( var("elName"))))))))),
                                     Eithers.bind(
                                         Logic.ifElse(
-                                            Equality.gt(Lists.length(var("fields")), int32(1)),
+                                            Ordering.gt(Lists.length(var("fields")), int32(1)),
                                             Eithers.mapList(
                                                 lambda("f",
                                                     Eithers.bind(
@@ -2922,7 +2923,7 @@ public class Coder {
                                                                         unwrap(Name.TYPE_),
                                                                         proj(FieldType.TYPE_, FieldType.NAME, "f"))),
                                                                 field("comment",
-                                                                    Strings.cat(
+                                                                    Strings.concat(
                                                                         list(
                                                                             string("Returns a copy of this {@link "),
                                                                             var("linkTargetStr"),
@@ -2963,7 +2964,7 @@ public class Coder {
                                                                         lambda("mDoc",
                                                                             right(
                                                                                 Optionals.cases(var("mDoc"), string(""), lambda("d",
-                                                                                        Strings.cat(
+                                                                                        Strings.concat(
                                                                                             list(
                                                                                                 string("@param "),
                                                                                                 var("fname"),
@@ -2981,7 +2982,7 @@ public class Coder {
                                                                                     string("")))),
                                                                         var("paramLines"))),
                                                                 field("consBaseComment",
-                                                                    Strings.cat(
+                                                                    Strings.concat(
                                                                         list(
                                                                             string("Constructs an immutable {@link "),
                                                                             var("linkTargetStr"),
@@ -2991,11 +2992,11 @@ public class Coder {
                                                                         Lists.null_(
                                                                             var("nonEmptyParamLines")),
                                                                         var("consBaseComment"),
-                                                                        Strings.cat(
+                                                                        Strings.concat(
                                                                             list(
                                                                                 var("consBaseComment"),
                                                                                 string("\n\n"),
-                                                                                Strings.intercalate(
+                                                                                Strings.join(
                                                                                     string("\n"),
                                                                                     var("nonEmptyParamLines")))))),
                                                                 field("consWithComment",
@@ -3265,8 +3266,8 @@ public class Coder {
                                                                 proj(QualifiedName.TYPE_, QualifiedName.LOCAL,
                                                                     hydra.dsl.Names.qualifyName( var("varName"))))),
     field("linkVarNameStr",
-                                                            Strings.cat2(
-                                                                Strings.cat2(
+                                                            Strings.concat2(
+                                                                Strings.concat2(
                                                                     var("elNameStr"),
                                                                     string(".")),
                                                                 var("varLocalStr"))),
@@ -3293,7 +3294,7 @@ public class Coder {
                                                                     hydra.java.syntax.Type.REFERENCE,
                                                                     ref(Utils.visitorTypeVariable)))),
     field("comment",
-                                                            Strings.cat(
+                                                            Strings.concat(
                                                                 list(
                                                                     string("Visit the {@link "),
                                                                     var("linkVarNameStr"),
@@ -3451,8 +3452,8 @@ public class Coder {
                                                                 proj(QualifiedName.TYPE_, QualifiedName.LOCAL,
                                                                     hydra.dsl.Names.qualifyName( var("varName"))))),
     field("linkVarNameStr",
-                                                            Strings.cat2(
-                                                                Strings.cat2(
+                                                            Strings.concat2(
+                                                                Strings.concat2(
                                                                     var("elNameStr"),
                                                                     string(".")),
                                                                 var("varLocalStr"))),
@@ -3498,7 +3499,7 @@ public class Coder {
                                                                                 ref(Utils.javaMethodInvocationToJavaPrimary),
                                                                                 var("mi"))))))),
     field("comment",
-                                                            Strings.cat(
+                                                            Strings.concat(
                                                                 list(
                                                                     string("Visit the {@link "),
                                                                     var("linkVarNameStr"),
@@ -3586,7 +3587,7 @@ public class Coder {
                                                                     list(var("tn0")),
                                                                     var("tn1"))),
     field("privateConstComment",
-                                                                Strings.cat(
+                                                                Strings.concat(
                                                                     list(
                                                                         string("Constructs an immutable {@link "),
                                                                         var("elNameStr"),
@@ -3594,13 +3595,13 @@ public class Coder {
     field("acceptComment",
                                                                 string("Dispatch to {@code visitor}.")),
     field("visitorIfaceComment",
-                                                                Strings.cat(
+                                                                Strings.concat(
                                                                     list(
                                                                         string("Visitor over {@link "),
                                                                         var("elNameStr"),
                                                                         string("}.")))),
     field("partialVisitorIfaceComment",
-                                                                Strings.cat(
+                                                                Strings.concat(
                                                                     list(
                                                                         string("Partial visitor over {@link "),
                                                                         var("elNameStr"),
@@ -3714,7 +3715,7 @@ public class Coder {
                                                     Term.RECORD,
                                                     lambda("rec",
                                                         Optionals.bind(
-                                                            Lists.maybeHead(
+                                                            Lists.head(
                                                                 Lists.filter(
                                                                     lambda("f",
                                                                         Equality.equal(
@@ -3736,7 +3737,7 @@ public class Coder {
                                                         Term.RECORD,
                                                         lambda("rec",
                                                             Optionals.bind(
-                                                                Lists.maybeHead(
+                                                                Lists.head(
                                                                     Lists.filter(
                                                                         lambda("f",
                                                                             Equality.equal(
@@ -3752,7 +3753,7 @@ public class Coder {
                                                                             proj(Field.TYPE_, Field.TERM, "funcField")),
                                                                         lambda("func",
                                                                             Optionals.bind(
-                                                                                Lists.maybeHead(
+                                                                                Lists.head(
                                                                                     Lists.filter(
                                                                                         lambda("f",
                                                                                             Equality.equal(
@@ -3788,7 +3789,7 @@ public class Coder {
                                                             Term.RECORD,
                                                             lambda("rec",
                                                                 Optionals.bind(
-                                                                    Lists.maybeHead(
+                                                                    Lists.head(
                                                                         Lists.filter(
                                                                             lambda("f",
                                                                                 Equality.equal(
@@ -3804,7 +3805,7 @@ public class Coder {
                                                                                 proj(Field.TYPE_, Field.TERM, "domField")),
                                                                             lambda("dom",
                                                                                 Optionals.bind(
-                                                                                    Lists.maybeHead(
+                                                                                    Lists.head(
                                                                                         Lists.filter(
                                                                                             lambda(
                                                                                                 "f",
@@ -3866,7 +3867,7 @@ public class Coder {
     public static final Def dedupBindings = def("dedupBindings")
         .lam("inScope").lam("bs")
         .to(() ->
-                Optionals.fromOptional(
+                Optionals.withDefault(
                     list(),
                     Optionals.map(
                         lambda("p",
@@ -4039,7 +4040,7 @@ public class Coder {
                             var("nonSelfVars"))),
                     Logic.ifElse(
                         Logic.and(
-                            Equality.gte(var("selfRefCount"), int32(2)),
+                            Ordering.gte(var("selfRefCount"), int32(2)),
                             Logic.not(Lists.null_(var("safeNonSelfVars")))),
                         Lists.foldl(
                             lambda("s", lambda("v", Maps.insert(var("v"), var("inVar"), var("s")))),
@@ -4095,8 +4096,8 @@ public class Coder {
                     Logic.ifElse(
                         var("isPrim"),
                         wrap(Identifier.TYPE_,
-                            Strings.cat2(
-                                Strings.cat2(
+                            Strings.concat2(
+                                Strings.concat2(
                                     apply(
                                         ref(Coder.elementJavaIdentifier_qualify),
                                         var("aliases"),
@@ -4110,8 +4111,8 @@ public class Coder {
                                 apply(ref(Utils.sanitizeJavaName), var("local"))),
                             lambda("n",
                                 wrap(Identifier.TYPE_,
-                                    Strings.cat2(
-                                        Strings.cat2(
+                                    Strings.concat2(
+                                        Strings.concat2(
                                             apply(
                                                 ref(Coder.elementJavaIdentifier_qualify),
                                                 var("aliases"),
@@ -4146,7 +4147,7 @@ public class Coder {
                     hydra.dsl.Formatting.sanitizeWithUnderscores(
                         Language.reservedWords(),
                         hydra.dsl.Formatting.capitalize(
-                            Optionals.fromOptional(var("nsStr"), Lists.maybeLast(var("parts")))))));
+                            Optionals.withDefault(var("nsStr"), Lists.last(var("parts")))))));
 
     public static final Def elementsQualifiedName = def("elementsQualifiedName")
         .lam("ns")
@@ -4265,7 +4266,7 @@ public class Coder {
                                                                             var("cx"),
                                                                             var("g")),
                                                                         lambda("initialCall",
-                                                                            Eithers.foldl(
+                                                                            Eithers.foldList(
                                                                                 lambda(
                                                                                     "acc",
                                                                                     "h",
@@ -4406,7 +4407,7 @@ public class Coder {
                                                                                                         var("g")),
                                                                                                     lambda(
                                                                                                         "initialCall",
-                                                                                                        Eithers.foldl(
+                                                                                                        Eithers.foldList(
                                                                                                             lambda(
                                                                                                                 "acc",
                                                                                                                 "h",
@@ -4688,11 +4689,11 @@ public class Coder {
                             inject(Error_.TYPE_,
                                 Error_.OTHER,
                                 wrap(OtherError.TYPE_,
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("unexpected "),
-                                        Strings.cat2(
+                                        Strings.concat2(
                                             string("elimination case"),
-                                            Strings.cat2(
+                                            Strings.concat2(
                                                 string(" in "),
                                                 string("encodeElimination"))))))),
                         field(
@@ -5107,7 +5108,7 @@ public class Coder {
                                 ref(Coder.encodeLiteral),
                                 inject(Literal.TYPE_,
                                     Literal.STRING,
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("Unimplemented function variant: "),
                                         apply(tterm(printRef(Core.termTerm())), var("funTerm")))))),
                         field(
@@ -5177,7 +5178,7 @@ public class Coder {
                                                                     Error_.OTHER,
                                                                     wrap(
                                                                         OtherError.TYPE_,
-                                                                        Strings.cat2(
+                                                                        Strings.concat2(
                                                                             string("expected function type for lambda body, but got: "),
                                                                             apply(
                                                                                 tterm(printRef(Core.typeType())),
@@ -5294,7 +5295,7 @@ public class Coder {
                                 var("aliases"),
                                 var("name")))),
                     field("suffix",
-                        Strings.cat2(string("."), ref(Names.applyMethodName))),
+                        Strings.concat2(string("."), ref(Names.applyMethodName))),
                     field("className",
                         Strings.fromList(
                             Lists.take(
@@ -5310,12 +5311,12 @@ public class Coder {
                                     field(FunctionType.DOMAIN, var("dom")),
                                     field(FunctionType.CODOMAIN, var("cod")))))),
                     Logic.ifElse(
-                        Equality.lte(var("arity"), int32(1)),
+                        Ordering.lte(var("arity"), int32(1)),
                         right(
                             apply(
                                 ref(Utils.javaIdentifierToJavaExpression),
                                 wrap(Identifier.TYPE_,
-                                    Strings.cat(
+                                    Strings.concat(
                                         list(
                                             var("className"),
                                             string("::"),
@@ -5325,7 +5326,7 @@ public class Coder {
                                 Lists.map(
                                     lambda("i",
                                         wrap(Name.TYPE_,
-                                            Strings.cat2(string("p"), Literals.showInt32(var("i"))))),
+                                            Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
                                     Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
                             field("paramExprs",
                                 Lists.map(
@@ -5406,7 +5407,7 @@ public class Coder {
                                                                 IntegerLiteral.TYPE_,
                                                                 Literals.int32ToBigint(
                                                                     Logic.ifElse(
-                                                                        Equality.gt(var("w"), int32(127)),
+                                                                        Ordering.gt(var("w"), int32(127)),
                                                                         Math_.sub(var("w"), int32(256)),
                                                                         var("w"))))))),
                                                 var("byteValues")))))))),
@@ -5910,11 +5911,11 @@ public class Coder {
                     inject(Error_.TYPE_,
                         Error_.OTHER,
                         wrap(OtherError.TYPE_,
-                            Strings.cat2(
+                            Strings.concat2(
                                 string("unexpected "),
-                                Strings.cat2(
+                                Strings.concat2(
                                     string("nullary function"),
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string(" in "),
                                         apply(tterm(printRef(Core.termTerm())), var("funTerm")))))))));
 
@@ -6086,16 +6087,16 @@ public class Coder {
                                         Strings.splitOn(string("."), var("fullName"))),
                                     field("className",
                                         wrap(Identifier.TYPE_,
-                                            Strings.intercalate(
+                                            Strings.join(
                                                 string("."),
-                                                Optionals.fromOptional(
+                                                Optionals.withDefault(
                                                     list(),
-                                                    Lists.maybeInit(var("parts")))))),
+                                                    Lists.init(var("parts")))))),
                                     field("methodName",
                                         wrap(Identifier.TYPE_,
-                                            Optionals.fromOptional(
+                                            Optionals.withDefault(
                                                 var("fullName"),
-                                                Lists.maybeLast(var("parts"))))),
+                                                Lists.last(var("parts"))))),
                                     right(
                                         apply(
                                             ref(Utils.javaMethodInvocationToJavaExpression),
@@ -6222,7 +6223,7 @@ public class Coder {
                                                                 var("tparams"))),
     field("overgenVarSubst",
                                                             Maps.fromList(
-                                                                Optionals.cat(
+                                                                Optionals.givens(
                                                                     Lists.map(
                                                                         lambda("entry",
                                                                             let(
@@ -6276,7 +6277,7 @@ public class Coder {
                                                                                 var("overgenSubst")))),
                                                                     var("tparams")))),
     field("constraints",
-                                                            Optionals.fromOptional(
+                                                            Optionals.withDefault(
                                                                 hydra.dsl.lib.Maps.empty(),
                                                                 proj(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS, "ts"))),
     field("jparams",
@@ -6466,7 +6467,7 @@ public class Coder {
                                                                                                                             "p",
                                                                                                                             wrap(
                                                                                                                                 Name.TYPE_,
-                                                                                                                                Strings.cat2(
+                                                                                                                                Strings.concat2(
                                                                                                                                     apply(
                                                                                                                                         unwrap(Name.TYPE_),
                                                                                                                                         var("p")),
@@ -7674,7 +7675,7 @@ public class Coder {
                                                 var("injTypeName")))),
                                     field("consId",
                                         wrap(Identifier.TYPE_,
-                                            Strings.cat(
+                                            Strings.concat(
                                                 list(
                                                     var("typeId"),
                                                     string("."),
@@ -7943,14 +7944,14 @@ public class Coder {
                                                                                                 let(
                                                                                                     "eitherBranchTypes",
                                                                                                     pair(
-                                                                                                        Optionals.fromOptional(
+                                                                                                        Optionals.withDefault(
                                                                                                             var("correctedTyp"),
-                                                                                                            Lists.maybeAt(
+                                                                                                            Lists.at(
                                                                                                                 int32(0),
                                                                                                                 var("allTypeArgs"))),
-                                                                                                        Optionals.fromOptional(
+                                                                                                        Optionals.withDefault(
                                                                                                             var("correctedTyp"),
-                                                                                                            Lists.maybeAt(
+                                                                                                            Lists.at(
                                                                                                                 int32(1),
                                                                                                                 var("allTypeArgs")))),
                                                                                                     Eithers.bind(
@@ -8192,11 +8193,11 @@ public class Coder {
                                 Logic.ifElse(
                                     Equality.equal(Lists.length(var("args2")), int32(1)),
                                     let("arg",
-                                        Optionals.fromOptional(
+                                        Optionals.withDefault(
                                             inject(Term.TYPE_,
                                                 Term.UNIT,
                                                 unit()),
-                                            Lists.maybeHead(var("args2"))),
+                                            Lists.head(var("args2"))),
                                         casesWithDefault(Term.TYPE_,
                                             hydra.dsl.Strip.deannotateAndDetypeTerm(
                                                 var("body2")),
@@ -8258,7 +8259,7 @@ public class Coder {
                                                                             field("matchVarId",
                                                                                 apply(
                                                                                     ref(Utils.javaIdentifier),
-                                                                                    Strings.cat(
+                                                                                    Strings.concat(
                                                                                         list(
                                                                                             string("_tco_match_"),
                                                                                             hydra.dsl.Formatting.decapitalize(
@@ -8588,7 +8589,7 @@ public class Coder {
                             inject(Error_.TYPE_,
                                 Error_.OTHER,
                                 wrap(OtherError.TYPE_,
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("can't encode unsupported type in Java: "),
                                         apply(tterm(printRef(Core.typeType())), var("t")))))),
                         field(
@@ -8930,7 +8931,7 @@ public class Coder {
                             Type.VARIABLE,
                             lambda("name0",
                                 let("name",
-                                    Optionals.fromOptional(
+                                    Optionals.withDefault(
                                         var("name0"),
                                         Maps.lookup(var("name0"), var("typeVarSubst"))),
                                     Eithers.bind(
@@ -9162,7 +9163,7 @@ public class Coder {
                                 Equality.equal(
                                     var("name"),
                                     wrap(Name.TYPE_,
-                                        Strings.cat(
+                                        Strings.concat(
                                             list(
                                                 ref(Names.instanceName),
                                                 string("_"),
@@ -9358,7 +9359,7 @@ public class Coder {
     public static final Def encodeVariable_buildCurried = def("encodeVariable_buildCurried")
         .lam("params").lam("inner")
         .to(() ->
-                Optionals.fromOptional(
+                Optionals.withDefault(
                     var("inner"),
                     Optionals.map(
                         lambda("p",
@@ -9379,7 +9380,7 @@ public class Coder {
                         Lists.map(
                             lambda("i",
                                 wrap(Name.TYPE_,
-                                    Strings.cat2(string("p"), Literals.showInt32(var("i"))))),
+                                    Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
                             Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
                     field("paramExprs",
                         Lists.map(
@@ -9806,7 +9807,7 @@ public class Coder {
                     var("name"),
                     Logic.ifElse(
                         apply(ref(Coder.isLambdaBoundIn_isQualified), var("name")),
-                        Optionals.fromOptional(
+                        Optionals.withDefault(
                             var("name"),
                             Lists.find(
                                 lambda("lv",
@@ -9846,11 +9847,11 @@ public class Coder {
                 let("selfRefs",
                     Lists.filter(
                         lambda("entry",
-                            Lists.elem(Pairs.first(var("entry")), Pairs.second(var("entry")))),
+                            Lists.member(Pairs.first(var("entry")), Pairs.second(var("entry")))),
                         Maps.toList(var("grouped"))),
                     Optionals.map(
                         lambda("entry", Pairs.first(var("entry"))),
-                        Lists.maybeHead(var("selfRefs")))));
+                        Lists.head(var("selfRefs")))));
 
     public static final Def first20Primes = def("first20Primes")
         .to(() ->
@@ -9931,7 +9932,7 @@ public class Coder {
         .to(() ->
                 let("candidate",
                     wrap(Name.TYPE_,
-                        Strings.cat2(
+                        Strings.concat2(
                             apply(unwrap(Name.TYPE_), var("base")),
                             Literals.showInt32(var("i")))),
                     Logic.ifElse(
@@ -10006,7 +10007,7 @@ public class Coder {
                                                             unwrap(Identifier.TYPE_),
                                                             var("jid")),
                                                         wrap(Identifier.TYPE_,
-                                                            Strings.cat2(
+                                                            Strings.concat2(
                                                                 Strings.fromList(
                                                                     Lists.take(
                                                                         Math_.sub(
@@ -10091,7 +10092,7 @@ public class Coder {
                                                                         var("overrideMethodName"),
                                                                         wrap(
                                                                             Identifier.TYPE_,
-                                                                            Strings.cat2(
+                                                                            Strings.concat2(
                                                                                 apply(
                                                                                     unwrap(Identifier.TYPE_),
                                                                                     apply(
@@ -10108,7 +10109,7 @@ public class Coder {
                                                                                                     QualifiedName.LOCAL,
                                                                                                     hydra.dsl.Formatting.capitalize(
                                                                                                         var("localName"))))))),
-                                                                                Strings.cat2(
+                                                                                Strings.concat2(
                                                                                     string("."),
                                                                                     ref(Names.applyMethodName))))),
                                                                     wrap(
@@ -10186,7 +10187,7 @@ public class Coder {
                                         inject(Error_.TYPE_,
                                             Error_.OTHER,
                                             wrap(OtherError.TYPE_,
-                                                Strings.cat2(
+                                                Strings.concat2(
                                                     string("expected function type, got: "),
                                                     apply(tterm(printRef(Core.typeType())), var("t")))))),
                                     field(Type.FUNCTION, lambda("ft", right(var("ft"))))))))));
@@ -10376,7 +10377,7 @@ public class Coder {
                             var("aliases"),
                             var("name"))),
                     wrap(Identifier.TYPE_,
-                        Strings.cat2(Strings.cat2(var("id"), string(".")), var("local")))));
+                        Strings.concat2(Strings.concat2(var("id"), string(".")), var("local")))));
 
     public static final Def insertBranchVar = def("insertBranchVar")
         .lam("name").lam("env")
@@ -10557,7 +10558,7 @@ public class Coder {
         .to(() ->
                 let("v",
                     apply(unwrap(Name.TYPE_), var("name")),
-                    Equality.lte(Strings.length(var("v")), int32(4))));
+                    Ordering.lte(Strings.length(var("v")), int32(4))));
 
     public static final Def isLocalVariable = def("isLocalVariable")
         .lam("name")
@@ -10617,7 +10618,7 @@ public class Coder {
         .to(() ->
                 let("chars",
                     Strings.toList(apply(unwrap(Name.TYPE_), var("name"))),
-                    Optionals.fromOptional(
+                    Optionals.withDefault(
                         bool(false),
                         Optionals.map(
                             lambda("p",
@@ -10644,7 +10645,7 @@ public class Coder {
     public static final Def isUnresolvedInferenceVar_isDigit = def("isUnresolvedInferenceVar_isDigit")
         .lam("c")
         .to(() ->
-                Logic.and(Equality.gte(var("c"), int32(48)), Equality.lte(var("c"), int32(57))));
+                Logic.and(Ordering.gte(var("c"), int32(48)), Ordering.lte(var("c"), int32(57))));
 
     public static final Def java11Features = def("java11Features")
         .to(() ->
@@ -10739,7 +10740,7 @@ public class Coder {
                             Sets.toList(
                                 hydra.dsl.Variables.freeVariablesInType( var("typ"))))),
                     field("vars",
-                        Lists.nub(Lists.concat2(var("boundVars"), var("freeVars")))),
+                        Lists.distinct(Lists.concat2(var("boundVars"), var("freeVars")))),
                     Lists.map(var("toParam"), var("vars"))));
 
     public static final Def javaTypeParametersForType_bvars = def("javaTypeParametersForType_bvars")
@@ -10802,13 +10803,13 @@ public class Coder {
                             string("."),
                             apply(unwrap(ModuleName.TYPE_), var("ns")))),
                     field("initParts",
-                        Optionals.fromOptional(list(), Lists.maybeInit(var("parts")))),
+                        Optionals.withDefault(list(), Lists.init(var("parts")))),
                     Logic.ifElse(
                         Lists.null_(var("initParts")),
                         nothing(),
                         just(
                             wrap(ModuleName.TYPE_,
-                                Strings.intercalate(string("."), var("initParts")))))));
+                                Strings.join(string("."), var("initParts")))))));
 
     public static final Def noComment = def("noComment")
         .lam("decl")
@@ -10929,7 +10930,7 @@ public class Coder {
         .lam("n").lam("t")
         .to(() ->
                 Logic.ifElse(
-                    Equality.lte(var("n"), int32(0)),
+                    Ordering.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
                     casesWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
@@ -10952,7 +10953,7 @@ public class Coder {
         .lam("n").lam("t")
         .to(() ->
                 Logic.ifElse(
-                    Equality.lte(var("n"), int32(0)),
+                    Ordering.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
                     casesWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
@@ -11191,8 +11192,8 @@ public class Coder {
                         Lists.length(var("lambdaDoms"))),
                     Logic.ifElse(
                         Logic.and(
-                            Equality.gt(var("nLambdaDoms"), int32(0)),
-                            Equality.gt(var("nArgs"), int32(0))),
+                            Ordering.gt(var("nLambdaDoms"), int32(0)),
+                            Ordering.gt(var("nArgs"), int32(0))),
                         let(
                             field("bodyRetType",
                                 Pairs.second(
@@ -11304,7 +11305,7 @@ public class Coder {
                         field(
                             Type.FUNCTION,
                             lambda("ft",
-                                Optionals.fromOptional(
+                                Optionals.withDefault(
                                     var("f"),
                                     Optionals.map(
                                         lambda("p",
@@ -11356,7 +11357,7 @@ public class Coder {
                         Logic.or(
                             Equality.equal(var("base"), string("build")),
                             Equality.equal(var("base"), string("builder"))),
-                        Strings.cat2(var("base"), string("_")),
+                        Strings.concat2(var("base"), string("_")),
                         var("base"))));
 
     // Emits the per-record fluent builder: a static generic builder() factory plus a nested
@@ -11532,9 +11533,9 @@ public class Coder {
                                         field("buildMethod",
                                             apply(
                                                 ref(Coder.withCommentString),
-                                                Strings.cat2(
+                                                Strings.concat2(
                                                     string("Builds an immutable {@link "),
-                                                    Strings.cat2(
+                                                    Strings.concat2(
                                                         var("recordLocalName"),
                                                         string("}."))),
                                                 apply(
@@ -11567,9 +11568,9 @@ public class Coder {
                                         field("builderClassMember",
                                             apply(
                                                 ref(Coder.withCommentString),
-                                                Strings.cat2(
+                                                Strings.concat2(
                                                     string("A fluent builder for {@link "),
-                                                    Strings.cat2(
+                                                    Strings.concat2(
                                                         var("recordLocalName"),
                                                         string("}."))),
                                                 inject(ClassBodyDeclaration.TYPE_,
@@ -11599,9 +11600,9 @@ public class Coder {
                                         field("factoryMethod",
                                             apply(
                                                 ref(Coder.withCommentString),
-                                                Strings.cat2(
+                                                Strings.concat2(
                                                     string("Creates a new fluent builder for {@link "),
-                                                    Strings.cat2(
+                                                    Strings.concat2(
                                                         var("recordLocalName"),
                                                         string("}."))),
                                                 apply(
@@ -11914,7 +11915,7 @@ public class Coder {
                     field("anns",
                         list()),
                     field("methodName",
-                        Strings.cat2(
+                        Strings.concat2(
                             string("with"),
                             hydra.dsl.Formatting.nonAlnumToUnderscores(
                                 hydra.dsl.Formatting.capitalize(
@@ -12023,7 +12024,7 @@ public class Coder {
         .lam("subst").lam("inVar").lam("outVars")
         .to(() ->
                 Logic.ifElse(
-                    Lists.elem(var("inVar"), var("outVars")),
+                    Lists.member(var("inVar"), var("outVars")),
                     Lists.foldl(
                         lambda(
                             "s",
@@ -12118,7 +12119,7 @@ public class Coder {
                                                     ref(Coder.javaIdentifierToString),
                                                     proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER, "vid"))),
                                             field("helperName",
-                                                Strings.cat2(string("_init_"), var("varName"))),
+                                                Strings.concat2(string("_init_"), var("varName"))),
                                             field("callExpr",
                                                 apply(
                                                     ref(Utils.javaMethodInvocationToJavaExpression),
@@ -12623,12 +12624,12 @@ public class Coder {
         .lam("label").lam("n").lam("tyapps").lam("cx").lam("g")
         .to(() ->
                 Logic.ifElse(
-                    Equality.lt(Lists.length(var("tyapps")), var("n")),
+                    Ordering.lt(Lists.length(var("tyapps")), var("n")),
                     left(
                         inject(Error_.TYPE_,
                             Error_.OTHER,
                             wrap(OtherError.TYPE_,
-                                Strings.cat(
+                                Strings.concat(
                                     list(
                                         string("needed type arguments for "),
                                         var("label"),
@@ -12747,14 +12748,14 @@ public class Coder {
                     Sets.member(var("name"), var("recursiveVars")),
                     let(
                         field("binding",
-                            Optionals.fromOptional(
+                            Optionals.withDefault(
                                 record(Binding.TYPE_,
                                     field(Binding.NAME, var("name")),
                                     field(
                                         Binding.TERM,
                                         inject(Term.TYPE_, Term.UNIT, unit())),
                                     field(Binding.TYPE_SCHEME, nothing())),
-                                Lists.maybeHead(
+                                Lists.head(
                                     Lists.filter(
                                         lambda("b",
                                             Equality.equal(
@@ -12859,14 +12860,14 @@ public class Coder {
                 params("envExt", "aliasesExt", "gExt", "recursiveVars", "thunkedVars", "flatBindings", "name", "cx", "g"),
                 let(
                     field("binding",
-                        Optionals.fromOptional(
+                        Optionals.withDefault(
                             record(Binding.TYPE_,
                                 field(Binding.NAME, var("name")),
                                 field(
                                     Binding.TERM,
                                     inject(Term.TYPE_, Term.UNIT, unit())),
                                 field(Binding.TYPE_SCHEME, nothing())),
-                            Lists.maybeHead(
+                            Lists.head(
                                 Lists.filter(
                                     lambda("b",
                                         Equality.equal(
@@ -13264,7 +13265,7 @@ public class Coder {
                                                                         lambda("i",
                                                                             wrap(
                                                                                 Name.TYPE_,
-                                                                                Strings.cat2(
+                                                                                Strings.concat2(
                                                                                     string("p"),
                                                                                     Literals.showInt32(
                                                                                         var("i"))))),
@@ -13515,7 +13516,7 @@ public class Coder {
                             inject(Error_.TYPE_,
                                 Error_.OTHER,
                                 wrap(OtherError.TYPE_,
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
                                             tterm(printRef(Core.termTerm())),

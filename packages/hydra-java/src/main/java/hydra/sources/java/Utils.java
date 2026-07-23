@@ -225,7 +225,7 @@ public class Utils {
                                         var("me"))))),
                         inject(AdditiveExpression.TYPE_,
                             AdditiveExpression.UNARY,
-                            Optionals.fromOptional(var("dummyMult"), Lists.maybeHead(var("exprs")))),
+                            Optionals.withDefault(var("dummyMult"), Lists.head(var("exprs")))),
                         Lists.drop(int32(1), var("exprs")))));
 
     public static final Def addInScopeVar = def("addInScopeVar")
@@ -470,6 +470,7 @@ public class Utils {
             overlayLibPair("eithers"),
             overlayLibPair("equality"),
             overlayLibPair("files"),
+            overlayLibPair("functions"),
             overlayLibPair("hashing"),
             overlayLibPair("lists"),
             overlayLibPair("literals"),
@@ -477,6 +478,7 @@ public class Utils {
             overlayLibPair("maps"),
             overlayLibPair("math"),
             overlayLibPair("optionals"),
+            overlayLibPair("ordering"),
             overlayLibPair("pairs"),
             overlayLibPair("regex"),
             overlayLibPair("sets"),
@@ -539,7 +541,7 @@ public class Utils {
         .lam("s")
         .to(() ->
                 Equality.equal(
-                    Optionals.fromOptional(int32(0), Strings.maybeCharAt(int32(0), var("s"))),
+                    Optionals.withDefault(int32(0), Strings.charAt(int32(0), var("s"))),
                     int32(36)));
 
     public static final Def javaAdditiveExpressionToJavaExpression = def("javaAdditiveExpressionToJavaExpression")
@@ -1081,10 +1083,10 @@ public class Utils {
                                                                 apply(
                                                                     unwrap(ConditionalOrExpression.TYPE_),
                                                                     var("cor")),
-                                                                Optionals.fromOptional(
+                                                                Optionals.withDefault(
                                                                     var("fallback"),
                                                                     Optionals.bind(
-                                                                        Lists.maybeHead(
+                                                                        Lists.head(
                                                                             var("cands")),
                                                                         lambda("candHead",
                                                                             let("iors",
@@ -1092,7 +1094,7 @@ public class Utils {
                                                                                     unwrap(ConditionalAndExpression.TYPE_),
                                                                                     var("candHead")),
                                                                                 Optionals.bind(
-                                                                                    Lists.maybeHead(
+                                                                                    Lists.head(
                                                                                         var("iors")),
                                                                                     lambda(
                                                                                         "iorHead",
@@ -1101,7 +1103,7 @@ public class Utils {
                                                                                                 unwrap(InclusiveOrExpression.TYPE_),
                                                                                                 var("iorHead")),
                                                                                             Optionals.bind(
-                                                                                                Lists.maybeHead(
+                                                                                                Lists.head(
                                                                                                     var("xors")),
                                                                                                 lambda(
                                                                                                     "xorHead",
@@ -1111,7 +1113,7 @@ public class Utils {
                                                                                                             unwrap(ExclusiveOrExpression.TYPE_),
                                                                                                             var("xorHead")),
                                                                                                         Optionals.bind(
-                                                                                                            Lists.maybeHead(
+                                                                                                            Lists.head(
                                                                                                                 var("ands")),
                                                                                                             lambda(
                                                                                                                 "andHead",
@@ -1121,7 +1123,7 @@ public class Utils {
                                                                                                                         unwrap(AndExpression.TYPE_),
                                                                                                                         var("andHead")),
                                                                                                                     Optionals.bind(
-                                                                                                                        Lists.maybeHead(
+                                                                                                                        Lists.head(
                                                                                                                             var("eqs")),
                                                                                                                         lambda(
                                                                                                                             "eqHead",
@@ -2587,7 +2589,7 @@ public class Utils {
                                             var("parts"),
                                             list(apply(ref(Utils.sanitizeJavaName), var("local"))))),
                                     wrap(Identifier.TYPE_,
-                                        Strings.intercalate(string("."), var("allParts")))))))));
+                                        Strings.join(string("."), var("allParts")))))))));
 
     public static final Def nameToJavaReferenceType = def("nameToJavaReferenceType")
         .lam("aliases").lam("qualify").lam("args").lam("name").lam("mlocal")
@@ -2665,8 +2667,8 @@ public class Utils {
                                 var("mlocal"),
                                 apply(ref(Utils.sanitizeJavaName), var("local")),
                                 lambda("l",
-                                    Strings.cat2(
-                                        Strings.cat2(
+                                    Strings.concat2(
+                                        Strings.concat2(
                                             apply(ref(Utils.sanitizeJavaName), var("local")),
                                             string(".")),
                                         apply(ref(Utils.sanitizeJavaName), var("l"))))))),
@@ -2979,7 +2981,7 @@ public class Utils {
         .to(() ->
                 let("candidate",
                     wrap(Name.TYPE_,
-                        Strings.cat2(var("base"), Literals.showInt32(var("n")))),
+                        Strings.concat2(var("base"), Literals.showInt32(var("n")))),
                     Logic.ifElse(
                         Sets.member(
                             var("candidate"),
@@ -3066,10 +3068,10 @@ public class Utils {
                     field("local1",
                         Logic.ifElse(
                             var("qualify"),
-                            Strings.cat2(Strings.cat2(var("local"), string(".")), var("flocal")),
+                            Strings.concat2(Strings.concat2(var("local"), string(".")), var("flocal")),
                             Logic.ifElse(
                                 Equality.equal(var("flocal"), var("local")),
-                                Strings.cat2(var("flocal"), string("_")),
+                                Strings.concat2(var("flocal"), string("_")),
                                 var("flocal")))),
                     hydra.dsl.Names.unqualifyName(
                         record(QualifiedName.TYPE_,

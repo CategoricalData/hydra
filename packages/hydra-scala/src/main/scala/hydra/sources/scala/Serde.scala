@@ -138,13 +138,13 @@ object Serde:
     applyP("hydra.lib.lists.length", xs)
 
   private def listMaybeHead(xs: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.lists.maybeHead", xs)
+    applyP("hydra.lib.lists.head", xs)
 
   private def optPure(x: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.optionals.pure", x)
 
   private def optCat(xs: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.cat", xs)
+    applyP("hydra.lib.optionals.givens", xs)
 
   private def optMap(fn: TypedTerm[Any], xo: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.optionals.map", fn, xo)
@@ -153,7 +153,7 @@ object Serde:
     applyP("hydra.lib.optionals.cases", xo, dflt, fn)
 
   private def optFromOptional(dflt: TypedTerm[Any], xo: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.fromOptional", dflt, xo)
+    applyP("hydra.lib.optionals.withDefault", dflt, xo)
 
   private def ifElse(cond: TypedTerm[Boolean], thn: TypedTerm[Any], els: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.logic.ifElse", cond, thn, els)
@@ -162,7 +162,7 @@ object Serde:
     applyP("hydra.lib.equality.equal", a, b)
 
   private def gt(a: TypedTerm[Int], b: TypedTerm[Int]): TypedTerm[Boolean] =
-    applyP("hydra.lib.equality.gt", a, b)
+    applyP("hydra.lib.ordering.gt", a, b)
 
   // ===== Definitions (alphabetical, matching Haskell source ordering) =====
 
@@ -581,7 +581,7 @@ object Serde:
       field("bytes", lambda("bs",
         cst(cat2(string("Array[Byte]("),
           cat2(
-            applyP("hydra.lib.strings.intercalate",
+            applyP("hydra.lib.strings.join",
               string(", "),
               map(
                 lambda("b", cat2(applyP("hydra.lib.literals.showInt32", v("b")), string(".toByte"))),

@@ -11,18 +11,17 @@ Definition apply {x y : Type} (fs : list (x -> y)) (xs : list x) : list y :=
   List.flat_map (fun f => List.map f xs) fs.
 Arguments apply {x y}.
 
-(* Helper: nat-indexed nth with unreachable default. *)
-Fixpoint nthUnreachable {x : Type} (n : nat) (xs : list x) : x :=
+Fixpoint atNat {x : Type} (n : nat) (xs : list x) : option x :=
   match xs with
-  | [] => hydra_unreachable
+  | [] => None
   | h :: t => match n with
-              | O => h
-              | S n' => nthUnreachable n' t
+              | O => Some h
+              | S n' => atNat n' t
               end
   end.
 
-Definition at_ {x : Type} (i : Z) (xs : list x) : x :=
-  nthUnreachable (Z.to_nat i) xs.
+Definition at_ {x : Type} (i : Z) (xs : list x) : option x :=
+  if Z.ltb i 0 then None else atNat (Z.to_nat i) xs.
 Arguments at_ {x}.
 
 Definition bind {x y : Type} (xs : list x) (f : x -> list y) : list y :=
@@ -78,10 +77,10 @@ Definition foldr {x y : Type} (f : x -> y -> y) (init : y) (xs : list x) : y :=
   List.fold_right f init xs.
 Arguments foldr {x y}.
 
-Definition head {x : Type} (xs : list x) : x :=
+Definition head {x : Type} (xs : list x) : option x :=
   match xs with
-  | [] => hydra_unreachable
-  | h :: _ => h
+  | [] => None
+  | h :: _ => Some h
   end.
 Arguments head {x}.
 
@@ -91,10 +90,10 @@ Fixpoint initAux {x : Type} (h : x) (t : list x) : list x :=
   | h' :: t' => h :: initAux h' t'
   end.
 
-Definition init {x : Type} (xs : list x) : list x :=
+Definition init {x : Type} (xs : list x) : option (list x) :=
   match xs with
-  | [] => hydra_unreachable
-  | h :: t => initAux h t
+  | [] => None
+  | h :: t => Some (initAux h t)
   end.
 Arguments init {x}.
 
@@ -106,9 +105,9 @@ Fixpoint intersperse {x : Type} (sep : x) (xs : list x) : list x :=
   end.
 Arguments intersperse {x}.
 
-Definition intercalate {x : Type} (sep : list x) (xss : list (list x)) : list x :=
+Definition join {x : Type} (sep : list x) (xss : list (list x)) : list x :=
   List.concat (intersperse sep xss).
-Arguments intercalate {x}.
+Arguments join {x}.
 
 Fixpoint lastAux {x : Type} (h : x) (t : list x) : x :=
   match t with
@@ -116,10 +115,10 @@ Fixpoint lastAux {x : Type} (h : x) (t : list x) : x :=
   | h' :: t' => lastAux h' t'
   end.
 
-Definition last {x : Type} (xs : list x) : x :=
+Definition last {x : Type} (xs : list x) : option x :=
   match xs with
-  | [] => hydra_unreachable
-  | h :: t => lastAux h t
+  | [] => None
+  | h :: t => Some (lastAux h t)
   end.
 Arguments last {x}.
 
@@ -130,47 +129,6 @@ Arguments length {x}.
 Definition map {x y : Type} (f : x -> y) (xs : list x) : list y :=
   List.map f xs.
 Arguments map {x y}.
-
-Fixpoint maybeAtNat {x : Type} (n : nat) (xs : list x) : option x :=
-  match xs with
-  | [] => None
-  | h :: t => match n with
-              | O => Some h
-              | S n' => maybeAtNat n' t
-              end
-  end.
-
-Definition maybeAt {x : Type} (i : Z) (xs : list x) : option x :=
-  if Z.ltb i 0 then None else maybeAtNat (Z.to_nat i) xs.
-Arguments maybeAt {x}.
-
-Definition maybeHead {x : Type} (xs : list x) : option x :=
-  match xs with
-  | [] => None
-  | h :: _ => Some h
-  end.
-Arguments maybeHead {x}.
-
-Definition maybeInit {x : Type} (xs : list x) : option (list x) :=
-  match xs with
-  | [] => None
-  | h :: t => Some (initAux h t)
-  end.
-Arguments maybeInit {x}.
-
-Definition maybeLast {x : Type} (xs : list x) : option x :=
-  match xs with
-  | [] => None
-  | h :: t => Some (lastAux h t)
-  end.
-Arguments maybeLast {x}.
-
-Definition maybeTail {x : Type} (xs : list x) : option (list x) :=
-  match xs with
-  | [] => None
-  | _ :: t => Some t
-  end.
-Arguments maybeTail {x}.
 
 Definition null {x : Type} (xs : list x) : bool :=
   match xs with [] => true | _ => false end.
@@ -198,7 +156,7 @@ Definition reverse {x : Type} (xs : list x) : list x :=
 Arguments reverse {x}.
 
 Definition safeHead {x : Type} (xs : list x) : option x :=
-  maybeHead xs.
+  head xs.
 Arguments safeHead {x}.
 
 Definition singleton {x : Type} (v : x) : list x := [v].
@@ -217,10 +175,10 @@ Definition span {x : Type} (p : x -> bool) (xs : list x) : (list x * list x) :=
   spanAux p xs.
 Arguments span {x}.
 
-Definition tail {x : Type} (xs : list x) : list x :=
+Definition tail {x : Type} (xs : list x) : option (list x) :=
   match xs with
-  | [] => hydra_unreachable
-  | _ :: t => t
+  | [] => None
+  | _ :: t => Some t
   end.
 Arguments tail {x}.
 
@@ -258,8 +216,8 @@ Arguments zipWith {x y z}.
 
 (* ----- Equality-/order-dependent definitions -----
 
-   Hydra's type system has no Eq/Ord classes; primitives like `elem`, `nub`,
-   `sort`, `group`, and `sortOn` take values of unconstrained type `x`.
+   Hydra's type system has no Eq/Ord classes; primitives like `member`, `distinct`,
+   `sort`, `group`, and `sortBy` take values of unconstrained type `x`.
    Coq cannot provide decidable equality for arbitrary types, so these
    primitives defer to two runtime axioms declared in `hydra.lib.base`:
 
@@ -272,9 +230,9 @@ Arguments zipWith {x y z}.
    decidable-equality function, or by redefining the primitive for the
    specific test fixture. *)
 
-Definition elem {x : Type} (v : x) (xs : list x) : bool :=
+Definition member {x : Type} (v : x) (xs : list x) : bool :=
   List.existsb (fun y => hydra_eq v y) xs.
-Arguments elem {x}.
+Arguments member {x}.
 
 Fixpoint groupAux {x : Type} (curHead : x) (curAcc : list x) (xs : list x) : list (list x) :=
   match xs with
@@ -301,8 +259,8 @@ Fixpoint nubAux {x : Type} (seen : list x) (xs : list x) : list x :=
       else h :: nubAux (h :: seen) t
   end.
 
-Definition nub {x : Type} (xs : list x) : list x := nubAux [] xs.
-Arguments nub {x}.
+Definition distinct {x : Type} (xs : list x) : list x := nubAux [] xs.
+Arguments distinct {x}.
 
 (* Insertion sort using hydra_compare. Structural on the input list. *)
 Fixpoint insertBy {x : Type} (cmp : x -> x -> comparison) (v : x) (xs : list x) : list x :=
@@ -314,19 +272,19 @@ Fixpoint insertBy {x : Type} (cmp : x -> x -> comparison) (v : x) (xs : list x) 
               end
   end.
 
-Fixpoint sortBy {x : Type} (cmp : x -> x -> comparison) (xs : list x) : list x :=
+Fixpoint sortByCmp {x : Type} (cmp : x -> x -> comparison) (xs : list x) : list x :=
   match xs with
   | [] => []
-  | h :: t => insertBy cmp h (sortBy cmp t)
+  | h :: t => insertBy cmp h (sortByCmp cmp t)
   end.
 
 Definition sort {x : Type} (xs : list x) : list x :=
-  sortBy (@hydra_compare x) xs.
+  sortByCmp (@hydra_compare x) xs.
 Arguments sort {x}.
 
-Definition sortOn {x y : Type} (f : x -> y) (xs : list x) : list x :=
-  sortBy (fun a b => hydra_compare (f a) (f b)) xs.
-Arguments sortOn {x y}.
+Definition sortBy {x y : Type} (f : x -> y) (xs : list x) : list x :=
+  sortByCmp (fun a b => hydra_compare (f a) (f b)) xs.
+Arguments sortBy {x y}.
 
 (* ----- transpose ----- *)
 

@@ -19,6 +19,8 @@ import Hydra.Test.TestGraph (testGraph, testTypes, testTerms)
 
 import qualified Hydra.Lib.Eithers  as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Ordering as DefOrdering
+import qualified Hydra.Lib.Functions as DefFunctions
 import qualified Hydra.Lib.Lists    as DefLists
 import qualified Hydra.Lib.Logic    as DefLogic
 import qualified Hydra.Lib.Maps     as DefMaps
@@ -159,17 +161,17 @@ spec = do
     -- -------------------------------------------------------------------------
     H.describe "hydra.lib.equality" $ do
       H.describe "identity" $ do
-        H.it "identity 42"    $ checkDefaultMatchesNative (applyPrim DefEquality.identity [int32_ 42])
-        H.it "identity true"  $ checkDefaultMatchesNative (applyPrim DefEquality.identity [bool_ True])
-        H.it "identity false" $ checkDefaultMatchesNative (applyPrim DefEquality.identity [bool_ False])
+        H.it "identity 42"    $ checkDefaultMatchesNative (applyPrim DefFunctions.identity [int32_ 42])
+        H.it "identity true"  $ checkDefaultMatchesNative (applyPrim DefFunctions.identity [bool_ True])
+        H.it "identity false" $ checkDefaultMatchesNative (applyPrim DefFunctions.identity [bool_ False])
       H.describe "max" $ do
-        H.it "max 3 5"   $ checkDefaultMatchesNative (applyPrim DefEquality.max [int32_ 3, int32_ 5])
-        H.it "max 7 2"   $ checkDefaultMatchesNative (applyPrim DefEquality.max [int32_ 7, int32_ 2])
-        H.it "max 4 4"   $ checkDefaultMatchesNative (applyPrim DefEquality.max [int32_ 4, int32_ 4])
+        H.it "max 3 5"   $ checkDefaultMatchesNative (applyPrim DefOrdering.max [int32_ 3, int32_ 5])
+        H.it "max 7 2"   $ checkDefaultMatchesNative (applyPrim DefOrdering.max [int32_ 7, int32_ 2])
+        H.it "max 4 4"   $ checkDefaultMatchesNative (applyPrim DefOrdering.max [int32_ 4, int32_ 4])
       H.describe "min" $ do
-        H.it "min 3 5"   $ checkDefaultMatchesNative (applyPrim DefEquality.min [int32_ 3, int32_ 5])
-        H.it "min 7 2"   $ checkDefaultMatchesNative (applyPrim DefEquality.min [int32_ 7, int32_ 2])
-        H.it "min 4 4"   $ checkDefaultMatchesNative (applyPrim DefEquality.min [int32_ 4, int32_ 4])
+        H.it "min 3 5"   $ checkDefaultMatchesNative (applyPrim DefOrdering.min [int32_ 3, int32_ 5])
+        H.it "min 7 2"   $ checkDefaultMatchesNative (applyPrim DefOrdering.min [int32_ 7, int32_ 2])
+        H.it "min 4 4"   $ checkDefaultMatchesNative (applyPrim DefOrdering.min [int32_ 4, int32_ 4])
 
     -- -------------------------------------------------------------------------
     H.describe "hydra.lib.optionals" $ do
@@ -180,8 +182,8 @@ spec = do
         H.it "isNone Nothing"   $ checkDefaultMatchesNative (applyPrim DefOptionals.isNone [nothing_])
         H.it "isNone (Just 1)"  $ checkDefaultMatchesNative (applyPrim DefOptionals.isNone [just_ (int32_ 1)])
       H.describe "fromOptional" $ do
-        H.it "fromOptional 0 (Just 42)" $ checkDefaultMatchesNative (applyPrim DefOptionals.fromOptional [int32_ 0, just_ (int32_ 42)])
-        H.it "fromOptional 0 Nothing"   $ checkDefaultMatchesNative (applyPrim DefOptionals.fromOptional [int32_ 0, nothing_])
+        H.it "fromOptional 0 (Just 42)" $ checkDefaultMatchesNative (applyPrim DefOptionals.withDefault [int32_ 0, just_ (int32_ 42)])
+        H.it "fromOptional 0 Nothing"   $ checkDefaultMatchesNative (applyPrim DefOptionals.withDefault [int32_ 0, nothing_])
       H.describe "pure" $ do
         H.it "pure 42"   $ checkDefaultMatchesNative (applyPrim DefOptionals.pure [int32_ 42])
         H.it "pure true" $ checkDefaultMatchesNative (applyPrim DefOptionals.pure [bool_ True])
@@ -213,11 +215,11 @@ spec = do
             , nothing_])
       H.describe "cat" $ do
         H.it "cat [Just 1, Nothing, Just 3]" $ checkDefaultMatchesNative
-          (applyPrim DefOptionals.cat [list_ [just_ (int32_ 1), nothing_, just_ (int32_ 3)]])
+          (applyPrim DefOptionals.givens [list_ [just_ (int32_ 1), nothing_, just_ (int32_ 3)]])
         H.it "cat []" $ checkDefaultMatchesNative
-          (applyPrim DefOptionals.cat [list_ []])
+          (applyPrim DefOptionals.givens [list_ []])
         H.it "cat [Nothing, Nothing]" $ checkDefaultMatchesNative
-          (applyPrim DefOptionals.cat [list_ [nothing_, nothing_]])
+          (applyPrim DefOptionals.givens [list_ [nothing_, nothing_]])
       H.describe "compose" $ do
         -- compose f g x = bind (f x) g
         H.it "compose (Just . negate) (Just . even) 4" $ checkDefaultMatchesNative
@@ -287,22 +289,16 @@ spec = do
           (applyPrim DefEithers.bind
             [ left_ (int32_ 5)
             , lam1 "x" (\x -> right_ (applyN2 DefMath.add x (int32_ 1)))])
-      H.describe "fromLeft" $ do
-        H.it "fromLeft 0 (Left 7)"  $ checkDefaultMatchesNative (applyPrim DefEithers.fromLeft [int32_ 0, left_  (int32_ 7)])
-        H.it "fromLeft 0 (Right 3)" $ checkDefaultMatchesNative (applyPrim DefEithers.fromLeft [int32_ 0, right_ (int32_ 3)])
-      H.describe "fromRight" $ do
-        H.it "fromRight 0 (Right 7)" $ checkDefaultMatchesNative (applyPrim DefEithers.fromRight [int32_ 0, right_ (int32_ 7)])
-        H.it "fromRight 0 (Left 3)"  $ checkDefaultMatchesNative (applyPrim DefEithers.fromRight [int32_ 0, left_  (int32_ 3)])
       H.describe "foldl" $ do
         -- foldl :: (acc -> el -> Either err acc) -> acc -> [el] -> Either err acc
         -- Use (\acc el -> Right (acc + el)) as accumulator
         H.it "foldl (+) 0 [1,2,3]" $ checkDefaultMatchesNative
-          (applyPrim DefEithers.foldl
+          (applyPrim DefEithers.foldList
             [ lam2 "acc" "el" (\acc el -> right_ (applyN2 DefMath.add acc el))
             , int32_ 0
             , list_ [int32_ 1, int32_ 2, int32_ 3]])
         H.it "foldl (+) 0 []" $ checkDefaultMatchesNative
-          (applyPrim DefEithers.foldl
+          (applyPrim DefEithers.foldList
             [ lam2 "acc" "el" (\acc el -> right_ (applyN2 DefMath.add acc el))
             , int32_ 0
             , list_ []])
@@ -327,10 +323,10 @@ spec = do
           (withFn1 DefEithers.mapSet (\x -> right_ x) [set_ []])
       H.describe "partitionEithers" $ do
         H.it "partitionEithers [L 1, R 2, L 3, R 4]" $ checkDefaultMatchesNative
-          (applyPrim DefEithers.partitionEithers
+          (applyPrim DefEithers.partition
             [list_ [left_ (int32_ 1), right_ (int32_ 2), left_ (int32_ 3), right_ (int32_ 4)]])
         H.it "partitionEithers []" $ checkDefaultMatchesNative
-          (applyPrim DefEithers.partitionEithers [list_ []])
+          (applyPrim DefEithers.partition [list_ []])
 
     -- -------------------------------------------------------------------------
     H.describe "hydra.lib.lists" $ do

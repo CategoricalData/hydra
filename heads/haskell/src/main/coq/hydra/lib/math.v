@@ -38,30 +38,19 @@ Definition abs (n : Z) : Z := Z.abs n.
 
 Definition add (x y : Z) : Z := Z.add x y.
 
-Definition div (x y : Z) : Z := Z.div x y.
+Definition div (x y : Z) : option Z :=
+  if Z.eqb y 0 then None else Some (Z.div x y).
 
 Definition even (n : Z) : bool := Z.even n.
 
-Definition max (x y : Z) : Z := Z.max x y.
-
-Definition maybeDiv (x y : Z) : option Z :=
-  if Z.eqb y 0 then None else Some (Z.div x y).
-
-Definition min (x y : Z) : Z := Z.min x y.
-
-Definition maybeMod (x y : Z) : option Z :=
+Definition mod_ (x y : Z) : option Z :=
   if Z.eqb y 0 then None else Some (Z.modulo x y).
-
-Definition mod_ (x y : Z) : Z := Z.modulo x y.
 
 Definition mul (x y : Z) : Z := Z.mul x y.
 
 Definition negate (n : Z) : Z := Z.opp n.
 
 Definition odd (n : Z) : bool := Z.odd n.
-
-Definition maybePred (n : Z) : option Z :=
-  if Z.eqb n (-2147483648) then None else Some (Z.pred n).
 
 Definition pred (n : Z) : Z := Z.pred n.
 
@@ -76,17 +65,12 @@ Definition range (start stop : Z) : list Z :=
   if Z.leb len 0 then []
   else range_aux (Z.to_nat len) start.
 
-Definition maybeRem (x y : Z) : option Z :=
+Definition rem (x y : Z) : option Z :=
   if Z.eqb y 0 then None else Some (Z.rem x y).
-
-Definition rem (x y : Z) : Z := Z.rem x y.
 
 Definition signum (n : Z) : Z := Z.sgn n.
 
 Definition sub (x y : Z) : Z := Z.sub x y.
-
-Definition maybeSucc (n : Z) : option Z :=
-  if Z.eqb n 2147483647 then None else Some (Z.succ n).
 
 Definition succ (n : Z) : Z := Z.succ n.
 

@@ -24,30 +24,16 @@ Definition either (x y z : Type) (f : x -> z) (g : y -> z) (e : x + y) : z :=
   end.
 Arguments either {x y z}.
 
-Fixpoint foldl (x y z : Type) (f : x -> y -> z + x) (acc : x) (xs : list y) : z + x :=
+Fixpoint foldList (x y z : Type) (f : x -> y -> z + x) (acc : x) (xs : list y) : z + x :=
   match xs with
   | [] => inr acc
   | h :: t =>
     match f acc h with
     | inl err => inl err
-    | inr acc' => foldl x y z f acc' t
+    | inr acc' => foldList x y z f acc' t
     end
   end.
-Arguments foldl {x y z}.
-
-Definition fromLeft (x y : Type) (def : x) (e : x + y) : x :=
-  match e with
-  | inl a => a
-  | inr _ => def
-  end.
-Arguments fromLeft {x y}.
-
-Definition fromRight (x y : Type) (def : y) (e : x + y) : y :=
-  match e with
-  | inl _ => def
-  | inr b => b
-  end.
-Arguments fromRight {x y}.
+Arguments foldList {x y z}.
 
 Definition isLeft (x y : Type) (e : x + y) : bool :=
   match e with
@@ -104,17 +90,17 @@ Definition mapSet (x y z : Type) (f : x -> z + y) (xs : list x) : z + list y :=
   mapList f xs.
 Arguments mapSet {x y z}.
 
-Fixpoint partitionEithers (x y : Type) (es : list (x + y)) : list x * list y :=
+Fixpoint partition (x y : Type) (es : list (x + y)) : list x * list y :=
   match es with
   | [] => ([], [])
   | h :: t =>
-    let '(ls, rs) := partitionEithers x y t in
+    let '(ls, rs) := partition x y t in
     match h with
     | inl a => (a :: ls, rs)
     | inr b => (ls, b :: rs)
     end
   end.
-Arguments partitionEithers {x y}.
+Arguments partition {x y}.
 
 Definition rights (x y : Type) (es : list (x + y)) : list y :=
   List.flat_map (fun e => match e with inl _ => [] | inr b => [b] end) es.

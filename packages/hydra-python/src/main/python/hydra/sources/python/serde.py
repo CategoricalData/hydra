@@ -285,7 +285,7 @@ def _bitwise_op_body(local_name, type_name, lhs_local, rhs_local, op_str):
             field("lhs", _proj(type_name, "lhs", lhs_local)),
             field("rhs", _proj(type_name, "rhs", lhs_local)),
         ],
-        hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.space_sep(Optionals.givens(list_([
             Optionals.map(
                 lam("l", _space_sep(list_([
                     _local(local_name)(var("l")),
@@ -375,7 +375,7 @@ def _case_block_to_expr():
         ],
         _newline_sep(list_([
             _no_sep(list_([
-                hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+                hydra.dsl.serialization.space_sep(Optionals.givens(list_([
                     just(_cst("case")),
                     just(_local("patternsToExpr")(var("patterns"))),
                     Optionals.map(_local("guardToExpr"), var("guard")),
@@ -409,9 +409,9 @@ def _class_definition_to_expr():
                 ),
             ),
         ],
-        hydra.dsl.serialization.newline_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.newline_sep(Optionals.givens(list_([
             Optionals.map(_local("decoratorsToExpr"), var("decs")),
-            just(hydra.dsl.serialization.no_sep(Optionals.cat(list_([
+            just(hydra.dsl.serialization.no_sep(Optionals.givens(list_([
                 just(_space_sep(list_([
                     _cst("class"),
                     _local("nameToExpr")(var("name")),
@@ -435,7 +435,7 @@ def _class_pattern_to_expr():
             field("pos", _proj("ClassPattern", "positionalPatterns", "cp")),
             field("kw", _proj("ClassPattern", "keywordPatterns", "cp")),
         ],
-        hydra.dsl.serialization.no_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.no_sep(Optionals.givens(list_([
             just(_local("nameOrAttributeToExpr")(var("noa"))),
             just(_cst("(")),
             Optionals.map(_local("positionalPatternsToExpr"), var("pos")),
@@ -613,7 +613,7 @@ def _dotted_as_name_to_expr():
             field("name", _proj("DottedAsName", "name", "dan")),
             field("alias", _proj("DottedAsName", "as", "dan")),
         ],
-        hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.space_sep(Optionals.givens(list_([
             just(_local("dottedNameToExpr")(var("name"))),
             Optionals.map(
                 lam("a", _space_sep(list_([
@@ -631,7 +631,7 @@ def _dotted_as_name_to_expr():
 
 
 def _dotted_name_to_expr():
-    body = hydra.dsl.serialization.cst(Strings.intercalate(
+    body = hydra.dsl.serialization.cst(Strings.join(
             string("."),
             Lists.map(
                 lam("n", unwrap(_ty("Name"))(var("n"))),
@@ -745,10 +745,10 @@ def _function_def_raw_to_expr():
         ],
         _newline_sep(list_([
             _no_sep(list_([
-                hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+                hydra.dsl.serialization.space_sep(Optionals.givens(list_([
                     var("asyncKw"),
                     just(_cst("def")),
-                    just(hydra.dsl.serialization.no_sep(Optionals.cat(list_([
+                    just(hydra.dsl.serialization.no_sep(Optionals.givens(list_([
                         just(_local("nameToExpr")(var("name"))),
                         var("tparamPart"),
                         just(_cst("(")),
@@ -774,7 +774,7 @@ def _function_definition_to_expr():
             field("decs", _proj("FunctionDefinition", "decorators", "fd")),
             field("raw", _proj("FunctionDefinition", "raw", "fd")),
         ],
-        hydra.dsl.serialization.newline_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.newline_sep(Optionals.givens(list_([
             Optionals.map(_local("decoratorsToExpr"), var("decs")),
             just(_local("functionDefRawToExpr")(var("raw"))),
         ]))),
@@ -817,7 +817,7 @@ def _import_from_to_expr():
             field("name", _proj("ImportFrom", "dottedName", "if_")),
             field("targets", _proj("ImportFrom", "targets", "if_")),
             field("lhs",
-                hydra.dsl.serialization.no_sep(Optionals.cat(Lists.concat(list_([
+                hydra.dsl.serialization.no_sep(Optionals.givens(Lists.concat(list_([
                     Lists.map(
                         lam("p", just(_local("relativeImportPrefixToExpr")(var("p")))),
                         var("prefixes"),
@@ -1185,7 +1185,7 @@ def _number_to_expr():
                 lam("f", hydra.dsl.serialization.cst(_local("pythonFloatLiteralText")(hydra.dsl.lib.literals.show_float64(var("f"))))),
             ),
             field("imaginary",
-                lam("f", hydra.dsl.serialization.cst(Strings.cat2(
+                lam("f", hydra.dsl.serialization.cst(Strings.concat2(
                     _local("pythonFloatLiteralText")(hydra.dsl.lib.literals.show_float64(var("f"))),
                     string("j"),
                 ))),
@@ -1215,7 +1215,7 @@ def _param_to_expr():
             field("name", _proj("Param", "name", "p")),
             field("ann", _proj("Param", "annotation", "p")),
         ],
-        hydra.dsl.serialization.no_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.no_sep(Optionals.givens(list_([
             just(_local("nameToExpr")(var("name"))),
             Optionals.map(_local("annotationToExpr"), var("ann")),
         ]))),
@@ -1327,7 +1327,7 @@ def _power_to_expr():
             field("lhs", _proj("Power", "lhs", "p")),
             field("rhs", _proj("Power", "rhs", "p")),
         ],
-        hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.space_sep(Optionals.givens(list_([
             just(_local("awaitPrimaryToExpr")(var("lhs"))),
             Optionals.map(
                 lam("r", _space_sep(list_([
@@ -1414,7 +1414,7 @@ def _raise_expression_to_expr():
             field("expr", _proj("RaiseExpression", "expression", "re")),
             field("from_", _proj("RaiseExpression", "from", "re")),
         ],
-        hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.space_sep(Optionals.givens(list_([
             just(_local("expressionToExpr")(var("expr"))),
             Optionals.map(
                 lam("f", _space_sep(list_([
@@ -1432,7 +1432,7 @@ def _raise_expression_to_expr():
 
 
 def _raise_statement_to_expr():
-    body = hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+    body = hydra.dsl.serialization.space_sep(Optionals.givens(list_([
         just(_cst("raise")),
         Optionals.map(_local("raiseExpressionToExpr"), _unwrap("RaiseStatement", "rs")),
     ])))
@@ -1706,21 +1706,21 @@ def _string_to_expr():
             _ty("QuoteStyle"), var("style"), None_(),
             [
                 field("single",
-                    constant(hydra.dsl.serialization.cst(Strings.cat2(var("prefix"), _local("escapePythonString")(false(), var("content"))))),
+                    constant(hydra.dsl.serialization.cst(Strings.concat2(var("prefix"), _local("escapePythonString")(false(), var("content"))))),
                 ),
                 field("double",
-                    constant(hydra.dsl.serialization.cst(Strings.cat2(var("prefix"), _local("escapePythonString")(true(), var("content"))))),
+                    constant(hydra.dsl.serialization.cst(Strings.concat2(var("prefix"), _local("escapePythonString")(true(), var("content"))))),
                 ),
                 field("tripleSingle",
                     constant(_no_sep(list_([
-                        hydra.dsl.serialization.cst(Strings.cat2(var("prefix"), string("'''"))),
+                        hydra.dsl.serialization.cst(Strings.concat2(var("prefix"), string("'''"))),
                         hydra.dsl.serialization.cst(var("content")),
                         hydra.dsl.serialization.cst(string("'''")),
                     ]))),
                 ),
                 field("tripleDouble",
                     constant(_no_sep(list_([
-                        hydra.dsl.serialization.cst(Strings.cat2(var("prefix"), string('"""'))),
+                        hydra.dsl.serialization.cst(Strings.concat2(var("prefix"), string('"""'))),
                         hydra.dsl.serialization.cst(var("content")),
                         hydra.dsl.serialization.cst(string('"""')),
                     ]))),
@@ -1819,7 +1819,7 @@ def _tuple_to_expr():
         [
             field("es", _unwrap("Tuple", "t")),
         ],
-        Optionals.from_optional(
+        Optionals.with_default(
             hydra.dsl.serialization.paren_list_adaptive(Lists.map(_local("starNamedExpressionToExpr"), var("es"))),
             Optionals.map(
                 lam(
@@ -1833,7 +1833,7 @@ def _tuple_to_expr():
                         hydra.dsl.serialization.paren_list_adaptive(Lists.map(_local("starNamedExpressionToExpr"), var("es"))),
                     ),
                 ),
-                Lists.maybe_head(var("es")),
+                Lists.head(var("es")),
             ),
         ),
     )
@@ -1850,7 +1850,7 @@ def _type_alias_to_expr():
             field("tparams", _proj("TypeAlias", "typeParams", "ta")),
             field("expr", _proj("TypeAlias", "expression", "ta")),
             field("alias",
-                hydra.dsl.serialization.no_sep(Optionals.cat(list_([
+                hydra.dsl.serialization.no_sep(Optionals.givens(list_([
                     just(_local("nameToExpr")(var("name"))),
                     Logic.if_else(
                         Lists.null(var("tparams")),
@@ -1895,7 +1895,7 @@ def _typed_assignment_to_expr():
             field("typ", _proj("TypedAssignment", "type", "ta")),
             field("rhs", _proj("TypedAssignment", "rhs", "ta")),
         ],
-        hydra.dsl.serialization.space_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.space_sep(Optionals.givens(list_([
             just(_no_sep(list_([
                 _local("singleTargetToExpr")(var("lhs")),
                 _cst(":"),
@@ -1942,7 +1942,7 @@ def _while_statement_to_expr():
             field("body", _proj("WhileStatement", "body", "ws")),
             field("else_", _proj("WhileStatement", "else", "ws")),
         ],
-        hydra.dsl.serialization.newline_sep(Optionals.cat(list_([
+        hydra.dsl.serialization.newline_sep(Optionals.givens(list_([
             just(_newline_sep(list_([
                 _space_sep(list_([
                     _cst("while"),
@@ -1974,7 +1974,7 @@ def _escape_python_string():
             field("replace",
                 lambdas(
                     ["old", "new", "str"],
-                    Strings.intercalate(var("new"),
+                    Strings.join(var("new"),
                         Strings.split_on(var("old"), var("str"))),
                 ),
             ),
@@ -2008,8 +2008,8 @@ def _escape_python_string():
                 ),
             ),
         ],
-        Strings.cat2(var("quote"),
-            Strings.cat2(var("escaped"), var("quote"))),
+        Strings.concat2(var("quote"),
+            Strings.concat2(var("escaped"), var("quote"))),
     )
     return (_def("escapePythonString")
         .doc("Escape special characters in a Python string and wrap in quotes")
@@ -2045,15 +2045,15 @@ def _python_doc_entity_ref():
                     cases(
                         Name("hydra.packaging.DefinitionReference"), var("d"), None_(),
                         [
-                            field("primitive", lam("n", Strings.cat2(string(":func:`"), Strings.cat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
-                            field("term",      lam("n", Strings.cat2(string(":func:`"), Strings.cat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
-                            field("type",      lam("n", Strings.cat2(string(":class:`"), Strings.cat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
+                            field("primitive", lam("n", Strings.concat2(string(":func:`"), Strings.concat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
+                            field("term",      lam("n", Strings.concat2(string(":func:`"), Strings.concat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
+                            field("type",      lam("n", Strings.concat2(string(":class:`"), Strings.concat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),
                         ],
                     ))),
-            field("module",    lam("m", Strings.cat2(string(""), unwrap(Name("hydra.packaging.ModuleName"))(var("m"))))),
-            field("package",   lam("p", Strings.cat2(string(""), unwrap(Name("hydra.packaging.PackageName"))(var("p"))))),
-            field("termExpr", lam("s", Strings.cat2(string("``"), Strings.cat2(var("s"), string("``"))))),
-            field("typeExpr", lam("s", Strings.cat2(string("``"), Strings.cat2(var("s"), string("``"))))),
+            field("module",    lam("m", Strings.concat2(string(""), unwrap(Name("hydra.packaging.ModuleName"))(var("m"))))),
+            field("package",   lam("p", Strings.concat2(string(""), unwrap(Name("hydra.packaging.PackageName"))(var("p"))))),
+            field("termExpr", lam("s", Strings.concat2(string("``"), Strings.concat2(var("s"), string("``"))))),
+            field("typeExpr", lam("s", Strings.concat2(string("``"), Strings.concat2(var("s"), string("``"))))),
         ],
     )
     return (_def("pythonDocEntityRef")
@@ -2065,7 +2065,7 @@ def _to_python_comments():
     body = Logic.if_else(
         Equality.equal(var("doc_"), string("")),
         string(""),
-        Strings.intercalate(
+        Strings.join(
             string("\n"),
             Lists.map(
                 lam(
@@ -2073,7 +2073,7 @@ def _to_python_comments():
                     Logic.if_else(
                         Equality.equal(var("line"), string("")),
                         string("#"),
-                        Strings.cat2(string("# "), var("line")),
+                        Strings.concat2(string("# "), var("line")),
                     ),
                 ),
                 Strings.lines(var("hydra.print.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),

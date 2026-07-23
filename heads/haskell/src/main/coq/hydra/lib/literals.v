@@ -21,7 +21,7 @@ Definition showBigint : Z -> string := showInt32.
 
 (* --- Boolean / string shows --------------------------------------------- *)
 
-Definition showBoolean (b : bool) : string :=
+Definition printBoolean (b : bool) : string :=
   if b then "true"%string else "false"%string.
 
 (* Haskell `show :: String -> String` double-quotes and escapes. A faithful
@@ -29,7 +29,7 @@ Definition showBoolean (b : bool) : string :=
    the Hydra kernel's showString tests use already-safe ASCII payloads, so
    we emit `"<payload>"` verbatim. If a test fails because of an un-escaped
    character we'll revisit. *)
-Definition showString (s : string) : string :=
+Definition printString (s : string) : string :=
   let quote := Ascii.Ascii false true false false false true false false in
   String quote (s ++ String quote "")%string.
 
@@ -56,7 +56,7 @@ Axiom int16ToBigint : Z -> Z.
 Axiom int32ToBigint : Z -> Z.
 Axiom int64ToBigint : Z -> Z.
 Axiom readBigint : string -> option Z.
-Axiom readBoolean : string -> option bool.
+Axiom parseBoolean : string -> option bool.
 Axiom readDecimal : string -> option Q.
 Axiom readFloat32 : string -> option Q.
 Axiom readFloat64 : string -> option Q.
@@ -64,7 +64,7 @@ Axiom readInt8 : string -> option Z.
 Axiom readInt16 : string -> option Z.
 Axiom readInt32 : string -> option Z.
 Axiom readInt64 : string -> option Z.
-Axiom readString : string -> option string.
+Axiom parseString : string -> option string.
 Axiom readUint8 : string -> option Z.
 Axiom readUint16 : string -> option Z.
 Axiom readUint32 : string -> option Z.

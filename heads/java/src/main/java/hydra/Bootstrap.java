@@ -485,8 +485,8 @@ public class Bootstrap {
     // correct-by-construction for any future hydra.lib.<sub> whether or not it has a relocated
     // overlay impl (see hydra.lib.defaults, #549/#565/#568) and needs no by-name maintenance.
     private static final List<String> LIB_SUBS_FALLBACK = Arrays.asList(
-            "chars", "effects", "eithers", "equality", "files", "hashing", "lists", "literals",
-            "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text");
+            "chars", "effects", "eithers", "equality", "files", "functions", "hashing", "lists", "literals",
+            "logic", "maps", "math", "optionals", "ordering", "pairs", "regex", "sets", "strings", "system", "text");
 
     // Per-target overlay-lib-directory relative path segment, keyed by the flat-namespace
     // convention each dialect's overlay tree uses (dashes/camelCase collapse to lower_snake

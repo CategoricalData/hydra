@@ -736,7 +736,7 @@ main = do
   -- its hydra.lib.* def-module names). Every hydra.lib.<sub> occurrence in generated source
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
-  let libSubs = ["chars","eithers","equality","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
+  let libSubs = ["chars","eithers","equality","functions","hashing","lists","literals","logic","maps","math","optionals","ordering","pairs","regex","sets","strings"]
   -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
   -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
   -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.

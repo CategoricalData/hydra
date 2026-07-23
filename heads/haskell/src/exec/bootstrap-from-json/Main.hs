@@ -701,7 +701,7 @@ main = do
   -- its hydra.lib.* def-module names). Every hydra.lib.<sub> occurrence in generated source
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
-  let libSubs = ["chars","eithers","equality","hashing","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
+  let libSubs = ["chars","eithers","equality","functions","hashing","lists","literals","logic","maps","math","optionals","ordering","pairs","regex","sets","strings"]
   -- This list (and every libSubs* variant below) is an ALLOW-list, not a hydra.lib.* prefix
   -- match, and that is intentional: each entry names a sub-namespace that actually has a
   -- hydra.overlay.<lang>.lib.<sub> implementation to redirect to. A kernel-emitted, overlay-less

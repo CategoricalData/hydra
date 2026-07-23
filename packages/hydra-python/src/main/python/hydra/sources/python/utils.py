@@ -220,7 +220,7 @@ def _decode_py_conjunction_to_py_primary():
         Logic.if_else(
             Equality.equal(Lists.length(var("inversions")), int32(1)),
             Optionals.bind(
-                Lists.maybe_head(var("inversions")),
+                Lists.head(var("inversions")),
                 lam("i", _local("decodePyInversionToPyPrimary")(var("i"))),
             ),
             nothing(),
@@ -252,7 +252,7 @@ def _decode_py_expression_to_py_primary():
                                     int32(1),
                                 ),
                                 Optionals.bind(
-                                    Lists.maybe_head(var("conjunctions")),
+                                    Lists.head(var("conjunctions")),
                                     lam(
                                         "c2",
                                         _local("decodePyConjunctionToPyPrimary")(var("c2")),
@@ -505,7 +505,7 @@ def _primary_and_params():
 
 
 def _primary_with_expression_slices():
-    body = Optionals.from_optional(
+    body = Optionals.with_default(
         var("prim"),
         Optionals.map(
             lam(
@@ -1083,8 +1083,8 @@ def _py_name_concat3(prefix_str, var_name, suffix_str):
 
     Haskell ++ is left-associative: (("_" ++ nameStr) ++ "Meta").
     """
-    return PySyn.name(Strings.cat2(
-        Strings.cat2(string(prefix_str), var(var_name)),
+    return PySyn.name(Strings.concat2(
+        Strings.concat2(string(prefix_str), var(var_name)),
         string(suffix_str),
     ))
 

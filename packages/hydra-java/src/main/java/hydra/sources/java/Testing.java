@@ -59,13 +59,13 @@ public class Testing {
     private static TypedTerm<?> prim(String fqName) { return var(fqName); }
 
     private static TypedTerm<?> stringsCat2(TypedTerm<?> a, TypedTerm<?> b) {
-        return apply(prim("hydra.lib.strings.cat2"), a, b);
+        return apply(prim("hydra.lib.strings.concat2"), a, b);
     }
     private static TypedTerm<?> stringsCat(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.strings.cat"), list);
+        return apply(prim("hydra.lib.strings.concat"), list);
     }
     private static TypedTerm<?> stringsIntercalate(TypedTerm<?> sep, TypedTerm<?> list) {
-        return apply(prim("hydra.lib.strings.intercalate"), sep, list);
+        return apply(prim("hydra.lib.strings.join"), sep, list);
     }
     private static TypedTerm<?> stringsSplitOn(TypedTerm<?> sep, TypedTerm<?> s) {
         return apply(prim("hydra.lib.strings.splitOn"), sep, s);
@@ -86,13 +86,13 @@ public class Testing {
         return apply(prim("hydra.lib.lists.null"), list);
     }
     private static TypedTerm<?> listsMaybeLast(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.maybeLast"), list);
+        return apply(prim("hydra.lib.lists.last"), list);
     }
     private static TypedTerm<?> listsMaybeInit(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.maybeInit"), list);
+        return apply(prim("hydra.lib.lists.init"), list);
     }
     private static TypedTerm<?> optionalsFromOptional(TypedTerm<?> dflt, TypedTerm<?> m) {
-        return apply(prim("hydra.lib.optionals.fromOptional"), dflt, m);
+        return apply(prim("hydra.lib.optionals.withDefault"), dflt, m);
     }
     private static TypedTerm<?> eithersBind(TypedTerm<?> e, TypedTerm<?> f) {
         return apply(prim("hydra.lib.eithers.bind"), e, f);
@@ -140,7 +140,7 @@ public class Testing {
     }
 
     // ---- Right-side helpers ----
-    /** {@code replaceChar old new s = Strings.intercalate new (Strings.splitOn old s)} */
+    /** {@code replaceChar old new s = Strings.join new (Strings.splitOn old s)} */
     private static TypedTerm<?> replaceChar(TypedTerm<?> oldChar, TypedTerm<?> newChar, TypedTerm<?> s) {
         return stringsIntercalate(newChar, stringsSplitOn(oldChar, s));
     }

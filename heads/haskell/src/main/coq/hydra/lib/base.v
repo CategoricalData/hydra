@@ -23,7 +23,7 @@ Axiom hydra_eq : forall (X : Type), X -> X -> bool.
 Arguments hydra_eq {X}.
 
 (* Universal comparison. Same story as `hydra_eq`, used by `sort` and
-   `sortOn`. Returns a Coq `comparison` (`Lt`/`Eq`/`Gt`). *)
+   `sortBy`. Returns a Coq `comparison` (`Lt`/`Eq`/`Gt`). *)
 Axiom hydra_compare : forall (X : Type), X -> X -> comparison.
 Arguments hydra_compare {X}.
 

@@ -84,15 +84,15 @@ def _build_python_test_module():
                 project(_TEST_GROUP, Name("name"))(var("testGroup")),
             ),
             field("header",
-                Strings.cat(list_([
-                    Strings.cat2(string("# "), hydra.dsl.constants.warning_auto_generated_file),
+                Strings.concat(list_([
+                    Strings.concat2(string("# "), hydra.dsl.constants.warning_auto_generated_file),
                     string("\n"),
-                    Strings.cat2(string("# "), var("groupName_")),
+                    Strings.concat2(string("# "), var("groupName_")),
                     string("\n\n"),
                 ])),
             ),
         ],
-        Strings.cat(list_([
+        Strings.concat(list_([
             var("header"),
             var("testBody"),
             string("\n"),
@@ -106,7 +106,7 @@ def _build_python_test_module():
 
 def _format_python_test_name():
     """Format a test name for Python (snake_case with test_ prefix)."""
-    body = Strings.cat2(
+    body = Strings.concat2(
         string("test_"),
         Strings.from_list(Lists.map(
             lam(
@@ -140,7 +140,7 @@ def _generate_python_test_case():
                 Logic.if_else(
                     Lists.null(var("groupPath")),
                     var("name_"),
-                    Strings.intercalate(
+                    Strings.join(
                         string("__"),
                         Lists.concat2(
                             var("groupPath"),
@@ -154,12 +154,12 @@ def _generate_python_test_case():
             ),
         ],
         right(list_([
-            Strings.cat(list_([
+            Strings.concat(list_([
                 string("def "),
                 var("formattedName"),
                 string("():"),
             ])),
-            Strings.cat(list_([
+            Strings.concat(list_([
                 string("    assert ("),
                 var("actual_"),
                 string(") == ("),
@@ -208,16 +208,16 @@ def _generate_python_test_group_hierarchy():
     inner_body = lets(
         [
             field("testCasesStr",
-                Strings.intercalate(
+                Strings.join(
                     string("\n\n"),
                     Lists.concat(var("testCaseLines")),
                 ),
             ),
             field("subgroupsStr",
-                Strings.intercalate(string("\n\n"), var("subgroupBlocks")),
+                Strings.join(string("\n\n"), var("subgroupBlocks")),
             ),
         ],
-        right(Strings.cat(list_([
+        right(Strings.concat(list_([
             var("testCasesStr"),
             Logic.if_else(
                 Logic.or_(
@@ -242,13 +242,13 @@ def _generate_python_test_group_hierarchy():
                             project(_TEST_GROUP, Name("name"))(var("subgroup")),
                         ),
                         field("header",
-                            Strings.cat2(string("# "), var("groupName")),
+                            Strings.concat2(string("# "), var("groupName")),
                         ),
                     ],
                     Eithers.map(
                         lam(
                             "content",
-                            Strings.cat(list_([
+                            Strings.concat(list_([
                                 var("header"),
                                 string("\n\n"),
                                 var("content"),
@@ -310,24 +310,24 @@ def _generate_test_file_with_python_codec():
                 ),
             ),
             field("dirParts",
-                Optionals.from_optional(
+                Optionals.with_default(
                     list_([]),
-                    Lists.maybe_init(var("parts")),
+                    Lists.init(var("parts")),
                 ),
             ),
             field("fileName",
-                Strings.cat(list_([
+                Strings.concat(list_([
                     string("test_"),
-                    Optionals.from_optional(
+                    Optionals.with_default(
                         string(""),
-                        Lists.maybe_last(var("parts")),
+                        Lists.last(var("parts")),
                     ),
                     string(".py"),
                 ])),
             ),
             field("filePath",
-                Strings.cat(list_([
-                    Strings.intercalate(string("/"), var("dirParts")),
+                Strings.concat(list_([
+                    Strings.join(string("/"), var("dirParts")),
                     string("/"),
                     var("fileName"),
                 ])),

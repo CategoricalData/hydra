@@ -47,6 +47,7 @@ import hydra.dsl.graph as Graph_dsl
 import hydra.overlay.python.dsl.meta.core as MetaCore
 import hydra.dsl.lib.literals as Literals
 import hydra.dsl.lib.math as Math
+import hydra.dsl.lib.ordering as Ordering
 import hydra.dsl.packaging as Pkg
 import hydra.dsl.util as Util
 
@@ -474,7 +475,7 @@ def _deconflict_variant_name():
                 (
                     "candidateHydraName",
                     wrap("hydra.core.Name",
-                        Strings.cat2(
+                        Strings.concat2(
                             Core.un_name(var("unionName")),
                             hydra.dsl.formatting.capitalize(Core.un_name(var("fname"))),
                         ),
@@ -504,7 +505,7 @@ def _deconflict_variant_name():
             Logic.if_else(
                 var("collision"),
                 _py_name(
-                    Strings.cat2(
+                    Strings.concat2(
                         unwrap("hydra.python.syntax.Name")(_kref.names_variant_name(var("isQualified"), var("env"), var("unionName"), var("fname"))),
                         string("_"),
                     )
@@ -540,7 +541,7 @@ def _deduplicate_case_variables():
                         (
                             "v2",
                             Core.name(
-                                Strings.cat2(
+                                Strings.concat2(
                                     Core.un_name(var("v")),
                                     Literals.show_int32(var("count2")),
                                 )
@@ -977,7 +978,7 @@ def _encode_application():
                 ("fun", Pairs.first(var("gathered"))),
                 ("args", Pairs.second(var("gathered"))),
                 ("knownArity", _local("termArityWithPrimitives")(var("g"), var("fun"))),
-                ("arity", Math.max(var("knownArity"), Lists.length(var("args")))),
+                ("arity", Ordering.max(var("knownArity"), Lists.length(var("args")))),
             ],
             Eithers.bind(
                 Eithers.map_list(
@@ -1112,7 +1113,7 @@ def _encode_application_inner():
                 ),
                 (
                     "consumeCount",
-                    Math.min(
+                    Ordering.min(
                         var("elArity"), Lists.length(var("allArgs"))
                     ),
                 ),
@@ -1229,9 +1230,9 @@ def _encode_application_inner():
             [
                 (
                     "firstArg",
-                    Optionals.from_optional(
+                    Optionals.with_default(
                         _kref.utils_py_name_to_py_expression(_py_name("")),
-                        Lists.maybe_head(var("hargs")),
+                        Lists.head(var("hargs")),
                     ),
                 ),
                 (
@@ -1514,7 +1515,7 @@ def _encode_binding_as():
         _local("encodeTermMultiline")(var("cx"), var("env"), var("term1")),
         lam(
             "stmts",
-            Optionals.cases(Lists.maybe_head(var("stmts")), left(
+            Optionals.cases(Lists.head(var("stmts")), left(
                     Errors_dsl.error_other(
                         Errors_dsl.other_error(
                             string(
@@ -1563,18 +1564,18 @@ def _encode_binding_as():
                                 ),
                                 (
                                     "capturedVarNames",
-                                    Optionals.from_optional(
+                                    Optionals.with_default(
                                         list_([]),
-                                        Lists.maybe_init(var("lambdaParams")),
+                                        Lists.init(var("lambdaParams")),
                                     ),
                                 ),
                                 (
                                     "matchLambdaParam",
-                                    Optionals.from_optional(
+                                    Optionals.with_default(
                                         wrap("hydra.core.Name",
                                             string(""),
                                         ),
-                                        Lists.maybe_last(var("lambdaParams")),
+                                        Lists.last(var("lambdaParams")),
                                     ),
                                 ),
                                 (
@@ -1967,7 +1968,7 @@ def _encode_default_case_block():
                     Logic.if_else(
                         var("isFull"),
                         _kref.utils_raise_assertion_error(string("Unreachable: all variants handled")),
-                        _kref.utils_raise_type_error(Strings.cat2(
+                        _kref.utils_raise_type_error(Strings.concat2(
                                 string("Unsupported "),
                                 hydra.dsl.names.local_name_of(var("tname")),
                             )),
@@ -2597,7 +2598,7 @@ def _builder_setter_name():
                         Equality.equal(var("base"), string("self")),
                     ),
                 ),
-                Strings.cat2(var("base"), string("_")),
+                Strings.concat2(var("base"), string("_")),
                 var("base"),
             ),
         ),
@@ -2699,7 +2700,7 @@ def _builder_field_name(env, field_type):
     # colliding with the same-named fluent setter METHOD (Python shares one class
     # namespace for both, unlike Java). It is not user-facing; users only call the
     # setters and build().
-    return Strings.cat2(
+    return Strings.concat2(
         string("_"),
         _field_snake(env, Core.field_type_name(field_type)),
     )
@@ -2754,7 +2755,7 @@ def _record_with_method():
             [
                 ("fname", Core.field_type_name(var("fieldType"))),
                 ("snake", _field_snake(var("env"), var("fname"))),
-                ("methodName", Strings.cat2(string("with_"), var("snake"))),
+                ("methodName", Strings.concat2(string("with_"), var("snake"))),
                 ("kwargKey", _py_name(var("snake"))),
                 (
                     "paramSnake",
@@ -2925,7 +2926,7 @@ def _record_builder_class():
                         # name (a bare `Builder` is not in scope inside the staticmethod).
                         (
                             "qualifiedBuilderName",
-                            _py_name(Strings.cat2(
+                            _py_name(Strings.concat2(
                                 unwrap("hydra.python.syntax.Name")(var("pyName")),
                                 string(".Builder"),
                             )),
@@ -4140,9 +4141,9 @@ def _encode_term_multiline():
                     [
                         (
                             "arg",
-                            Optionals.from_optional(
+                            Optionals.with_default(
                                 Core.term_unit,
-                                Lists.maybe_head(var("args")),
+                                Lists.head(var("args")),
                             ),
                         ),
                     ],
@@ -4277,9 +4278,9 @@ def _encode_term_multiline_tco():
                 [
                     (
                         "arg",
-                        Optionals.from_optional(
+                        Optionals.with_default(
                             Core.term_unit,
-                            Lists.maybe_head(var("args2")),
+                            Lists.head(var("args2")),
                         ),
                     ),
                 ],
@@ -4636,7 +4637,7 @@ def _encode_type():
                 (
                     "dflt",
                     right(
-                        _kref.utils_double_quoted_string(Strings.cat2(
+                        _kref.utils_double_quoted_string(Strings.concat2(
                                 string("type = "),
                                 _kref.show_core_type(hydra.dsl.strip.deannotate_type(var("typ"))),
                             ))
@@ -5793,7 +5794,7 @@ def _encode_variable():
     not_in_graphBoundTypes_no_prim = Optionals.cases(hydra.dsl.lexical.lookup_binding(var("g"), var("name")), Optionals.cases(Maps.lookup(var("name"), var("tcMetadata")), left(
                 Errors_dsl.error_other(
                     Errors_dsl.other_error(
-                        Strings.cat2(
+                        Strings.concat2(
                             string("Unknown variable: "),
                             Core.un_name(var("name")),
                         )
@@ -5884,7 +5885,7 @@ def _encode_variable():
                                 lam(
                                     "i",
                                     _py_name(
-                                        Strings.cat2(
+                                        Strings.concat2(
                                             string("x"),
                                             Literals.show_int32(var("i")),
                                         )
@@ -6922,9 +6923,9 @@ def _is_case_statement_application():
                     [
                         (
                             "arg",
-                            Optionals.from_optional(
+                            Optionals.with_default(
                                 Core.term_unit,
-                                Lists.maybe_head(var("args")),
+                                Lists.head(var("args")),
                             ),
                         ),
                     ],
@@ -6959,7 +6960,7 @@ def _is_cases_full():
                 ("numCases", Lists.length(var("cases_"))),
                 ("numFields", Lists.length(var("rowType"))),
             ],
-            Logic.not_(Equality.lt(var("numCases"), var("numFields"))),
+            Logic.not_(Ordering.lt(var("numCases"), var("numFields"))),
         ),
     )
     return (_def("isCasesFull")
@@ -7024,7 +7025,7 @@ def _is_variant_unit_type():
                     ),
                 ),
             ],
-            Optionals.from_optional(
+            Optionals.with_default(
                 false(),
                 Optionals.map(
                     lam(
@@ -7118,7 +7119,7 @@ def _make_simple_lambda():
                         lam(
                             "i",
                             _py_name(
-                                Strings.cat2(
+                                Strings.concat2(
                                     string("x"),
                                     Literals.show_int32(var("i")),
                                 )
@@ -7318,7 +7319,7 @@ def _module_standard_imports():
                 ("pairs", list_(pairs)),
                 (
                     "simplified",
-                    Optionals.cat(
+                    Optionals.givens(
                         Lists.map(
                             lam(
                                 "p",
@@ -7327,7 +7328,7 @@ def _module_standard_imports():
                                         ("modName", Pairs.first(var("p"))),
                                         (
                                             "symbols",
-                                            Optionals.cat(Pairs.second(var("p"))),
+                                            Optionals.givens(Pairs.second(var("p"))),
                                         ),
                                     ],
                                     Logic.if_else(
@@ -7721,7 +7722,7 @@ def _term_arity_with_primitives():
             field("application",
                     lam(
                         "app",
-                        Math.max(
+                        Ordering.max(
                             int_(0),
                             Math.sub(
                                 _local("termArityWithPrimitives")(var("graph"), Core.application_function(var("app"))),
@@ -7829,7 +7830,7 @@ def _unsupported_expression():
 def _variant_args():
     body = lambdas(
         ["ptype", "tparams"],
-        _kref.utils_py_expressions_to_py_args(Optionals.cat(
+        _kref.utils_py_expressions_to_py_args(Optionals.givens(
                 list_(
                     [
                         just(
@@ -7892,7 +7893,7 @@ def _with_definitions():
             [
                 (
                     "bindings",
-                    Optionals.cat(
+                    Optionals.givens(
                         Lists.map(
                             lam(
                                 "def_",

@@ -164,9 +164,9 @@ def _encode_name():
                             "nsVal",
                             wrap(
                                 _PY_NAME,
-                                Strings.cat2(
+                                Strings.concat2(
                                     apply(var("pyNs"), var("nsVal")),
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("."),
                                         var("pyLocal"),
                                     ),
@@ -239,9 +239,9 @@ def _encode_name_qualified():
                         "nsVal",
                         wrap(
                             _PY_NAME,
-                            Strings.cat2(
+                            Strings.concat2(
                                 apply(var("pyNs"), var("nsVal")),
-                                Strings.cat2(
+                                Strings.concat2(
                                     string("."),
                                     _local("sanitizePythonName")(var("local")),
                                 ),
@@ -285,7 +285,7 @@ def _encode_namespace():
 
 def _encode_namespace_string_with_overrides():
     """Convert a ModuleName to its Python dotted import string, with overlay overrides."""
-    default_encoding = Strings.intercalate(
+    default_encoding = Strings.join(
         string("."),
         Lists.map(
             formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
@@ -297,7 +297,7 @@ def _encode_namespace_string_with_overrides():
         .to(
             lam(
                 "nsVal",
-                Optionals.from_optional(
+                Optionals.with_default(
                     default_encoding,
                     Maps.lookup(var("nsVal"), _local("overlayPythonModuleAliases")),
                 ),
@@ -387,7 +387,7 @@ def _encode_constant_for_field_name():
                     hydra.dsl.formatting.convert_case(
                         util_case_convention_camel,
                         util_case_convention_upper_snake,
-                        Strings.intercalate(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
+                        Strings.join(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
                     ),
                 )))
 
@@ -453,7 +453,7 @@ def _variant_name():
         .lam("isQualified").lam("env").lam("tname").lam("fname")
         .to(
             _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
-                        Strings.cat2(
+                        Strings.concat2(
                             Core.un_name(var("tname")),
                             hydra.dsl.formatting.capitalize(Core.un_name(var("fname"))),
                         ),

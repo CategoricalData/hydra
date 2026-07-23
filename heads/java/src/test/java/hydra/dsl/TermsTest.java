@@ -47,7 +47,7 @@ public class TermsTest {
 
     private final Term cat3 =
             lambda("s1", lambda("s2",
-                    lambda("s3", apply(primitive("hydra.lib.strings.cat"), list(variable("s1"), variable("s2"), variable("s3"))))));
+                    lambda("s3", apply(primitive("hydra.lib.strings.concat"), list(variable("s1"), variable("s2"), variable("s3"))))));
 
     private final Term longitude = project("LatLon", "lon");
 

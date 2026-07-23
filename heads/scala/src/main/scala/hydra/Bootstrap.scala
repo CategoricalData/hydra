@@ -268,8 +268,8 @@ object BootstrapHelpers:
 
   /** Fallback hydra.lib.* sub-namespaces, used only if libSubsForTarget()'s overlay-directory
    *  existence check can't reach the source tree (e.g. a relocated/packaged invocation). */
-  private val libSubsFallback = Seq("chars", "effects", "eithers", "equality", "files", "hashing", "lists",
-    "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text")
+  private val libSubsFallback = Seq("chars", "effects", "eithers", "equality", "files", "functions", "hashing", "lists",
+    "literals", "logic", "maps", "math", "optionals", "ordering", "pairs", "regex", "sets", "strings", "system", "text")
 
   private def overlayDirSegment(target: String): String = target match
     case "common-lisp" => "common_lisp"

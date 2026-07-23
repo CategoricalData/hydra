@@ -15,6 +15,7 @@ import hydra.dsl.lib.Logic;
 import hydra.dsl.lib.Maps;
 import hydra.dsl.lib.Math_;
 import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Ordering;
 import hydra.dsl.lib.Pairs;
 import hydra.dsl.lib.Sets;
 import hydra.dsl.lib.Strings;
@@ -358,7 +359,7 @@ public class Serde {
         .to(() ->
                 let("groups",
                     apply(unwrap(ArrayInitializer.TYPE_), var("ai")),
-                    Optionals.fromOptional(
+                    Optionals.withDefault(
                         hydra.dsl.Serialization.cst( string("{}")),
                         Optionals.map(
                             lambda("firstGroup",
@@ -374,7 +375,7 @@ public class Serde {
                                                     var("firstGroup"))),
                                             hydra.dsl.Serialization.cst( string("}")))),
                                     hydra.dsl.Serialization.cst( string("{}")))),
-                            Lists.maybeHead(var("groups"))))));
+                            Lists.head(var("groups"))))));
 
     public static final Def arrayTypeToExpr = def("arrayTypeToExpr")
         .lam("at")
@@ -506,7 +507,7 @@ public class Serde {
                     apply(unwrap(BreakStatement.TYPE_), var("bs")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     just(hydra.dsl.Serialization.cst( string("break"))),
                                     Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
@@ -556,7 +557,7 @@ public class Serde {
                         bool(false),
                         list(
                             hydra.dsl.Serialization.spaceSep(
-                                Optionals.cat(
+                                Optionals.givens(
                                     list(
                                         just(apply(ref(Serde.referenceTypeToExpr), var("rt"))),
                                         Logic.ifElse(
@@ -743,7 +744,7 @@ public class Serde {
                     field("margs",
                         proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS, "coitti")),
                     hydra.dsl.Serialization.noSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 just(
                                     hydra.dsl.Serialization.dotSep(
@@ -783,11 +784,11 @@ public class Serde {
                                             apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
                                             apply(ref(Serde.typeIdentifierToExpr), var("id")))))))),
                     hydra.dsl.Serialization.noSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 just(
                                     hydra.dsl.Serialization.spaceSep(
-                                        Optionals.cat(
+                                        Optionals.givens(
                                             list(
                                                 Logic.ifElse(
                                                     Lists.null_(var("anns")),
@@ -848,7 +849,7 @@ public class Serde {
                                                     ref(Serde.typeDeclarationWithCommentsToExpr),
                                                     var("types")))))),
                                 hydra.dsl.Serialization.doubleNewlineSep(
-                                    Optionals.cat(
+                                    Optionals.givens(
                                         list(
                                             var("warning"),
                                             var("pkgSec"),
@@ -914,7 +915,7 @@ public class Serde {
                         proj(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES, "cd")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -947,7 +948,7 @@ public class Serde {
                     hydra.dsl.Serialization.curlyBlock(
                         hydra.dsl.Serialization.fullBlockStyle(),
                         hydra.dsl.Serialization.doubleNewlineSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     Optionals.map(
                                         ref(Serde.explicitConstructorInvocationToExpr),
@@ -969,7 +970,7 @@ public class Serde {
                     field("body",
                         proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.BODY, "cd")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -994,7 +995,7 @@ public class Serde {
                     field("fparams",
                         proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.FORMAL_PARAMETERS, "cd")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("tparams")),
@@ -1035,7 +1036,7 @@ public class Serde {
                     apply(unwrap(ContinueStatement.TYPE_), var("cs")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     just(hydra.dsl.Serialization.cst( string("continue"))),
                                     Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
@@ -1145,7 +1146,7 @@ public class Serde {
                     field("id",
                         proj(ExpressionName.TYPE_, ExpressionName.IDENTIFIER, "en")),
                     hydra.dsl.Serialization.dotSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Optionals.map(ref(Serde.ambiguousNameToExpr), var("mqual")),
                                 just(apply(ref(Serde.identifierToExpr), var("id"))))))));
@@ -1215,7 +1216,7 @@ public class Serde {
                         proj(FieldDeclaration.TYPE_, FieldDeclaration.VARIABLE_DECLARATORS, "fd")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -1299,7 +1300,7 @@ public class Serde {
                     field("id",
                         proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.ID, "fps")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1407,16 +1408,16 @@ public class Serde {
                     field("suffix",
                         Logic.ifElse(
                             Logic.or(
-                                Equality.gt(
+                                Ordering.gt(
                                     var("i"),
                                     bigint(java.math.BigInteger.valueOf(2147483647L))),
-                                Equality.lt(
+                                Ordering.lt(
                                     var("i"),
                                     bigint(java.math.BigInteger.valueOf(-2147483648L)))),
                             string("L"),
                             string(""))),
                     hydra.dsl.Serialization.cst(
-                        Strings.cat2(Literals.showBigint(var("i")), var("suffix")))));
+                        Strings.concat2(Literals.showBigint(var("i")), var("suffix")))));
 
     public static final Def integralTypeToExpr = def("integralTypeToExpr")
         .lam("t")
@@ -1503,7 +1504,7 @@ public class Serde {
                     field("body",
                         proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.BODY, "imd")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1675,9 +1676,9 @@ public class Serde {
                             let("ci",
                                 Literals.bigintToInt32(Literals.uint16ToBigint(var("c"))),
                                 hydra.dsl.Serialization.cst(
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         string("'"),
-                                        Strings.cat2(
+                                        Strings.concat2(
                                             Logic.ifElse(
                                                 Equality.equal(var("ci"), int32(39)),
                                                 string("\\'"),
@@ -1695,10 +1696,10 @@ public class Serde {
                                                                 string("\\t"),
                                                                 Logic.ifElse(
                                                                     Logic.and(
-                                                                        Equality.gte(
+                                                                        Ordering.gte(
                                                                             var("ci"),
                                                                             int32(32)),
-                                                                        Equality.lt(
+                                                                        Ordering.lt(
                                                                             var("ci"),
                                                                             int32(127))),
                                                                     Strings.fromList(
@@ -1743,7 +1744,7 @@ public class Serde {
                     field("decls",
                         proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.DECLARATORS, "lvd")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -1794,7 +1795,7 @@ public class Serde {
                         proj(MethodDeclaration.TYPE_, MethodDeclaration.BODY, "md")),
                     field("headerAndBody",
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -1807,7 +1808,7 @@ public class Serde {
                                     just(apply(ref(Serde.methodHeaderToExpr), var("header"))),
                                     just(apply(ref(Serde.methodBodyToExpr), var("body"))))))),
                     hydra.dsl.Serialization.newlineSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -1844,7 +1845,7 @@ public class Serde {
                     field("mthrows",
                         proj(MethodHeader.TYPE_, MethodHeader.THROWS, "mh")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("params")),
@@ -1886,7 +1887,7 @@ public class Serde {
                                             proj(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.IDENTIFIER, "cx")),
                                         field("idSec",
                                             hydra.dsl.Serialization.noSep(
-                                                Optionals.cat(
+                                                Optionals.givens(
                                                     list(
                                                         Logic.ifElse(
                                                             Lists.null_(var("targs")),
@@ -2074,7 +2075,7 @@ public class Serde {
                     field("body",
                         proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY, "ncd")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -2085,7 +2086,7 @@ public class Serde {
                                 just(hydra.dsl.Serialization.cst( string("class"))),
                                 just(
                                     hydra.dsl.Serialization.noSep(
-                                        Optionals.cat(
+                                        Optionals.givens(
                                             list(
                                                 just(
                                                     apply(
@@ -2138,7 +2139,7 @@ public class Serde {
                     field("body",
                         proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.BODY, "nid")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -2151,7 +2152,7 @@ public class Serde {
                                 just(hydra.dsl.Serialization.cst( string("interface"))),
                                 just(
                                     hydra.dsl.Serialization.noSep(
-                                        Optionals.cat(
+                                        Optionals.givens(
                                             list(
                                                 just(
                                                     apply(
@@ -2203,7 +2204,7 @@ public class Serde {
                         proj(PackageDeclaration.TYPE_, PackageDeclaration.IDENTIFIERS, "pd")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.null_(var("mods")),
@@ -2219,7 +2220,7 @@ public class Serde {
                                                 hydra.dsl.Serialization.cst(
                                                     string("package")),
                                                 hydra.dsl.Serialization.cst(
-                                                    Strings.intercalate(
+                                                    Strings.join(
                                                         string("."),
                                                         Lists.map(
                                                             lambda("id",
@@ -2363,7 +2364,7 @@ public class Serde {
                     field("anns",
                         proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.ANNOTATIONS, "ptwa")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -2507,7 +2508,7 @@ public class Serde {
                     apply(unwrap(ReturnStatement.TYPE_), var("rs")),
                     hydra.dsl.Serialization.withSemi(
                         hydra.dsl.Serialization.spaceSep(
-                            Optionals.cat(
+                            Optionals.givens(
                                 list(
                                     just(hydra.dsl.Serialization.cst( string("return"))),
                                     Optionals.map(ref(Serde.expressionToExpr), var("mex"))))))));
@@ -2516,15 +2517,15 @@ public class Serde {
         .doc("Sanitize a string for use in a Java comment")
         .lam("s")
         .to(() ->
-                Strings.intercalate(
+                Strings.join(
                         string("&gt;"),
                         Strings.splitOn(
                             string(">"),
-                            Strings.intercalate(
+                            Strings.join(
                                 string("&lt;"),
                                 Strings.splitOn(
                                     string("<"),
-                                    Strings.intercalate(
+                                    Strings.join(
                                         string("&amp;"),
                                         Strings.splitOn(string("&"), var("s"))))))));
 
@@ -2535,18 +2536,18 @@ public class Serde {
                 cases("hydra.packaging.EntityReference", var("ref"),
                         field("definition",
                             lambda("d",
-                                Strings.cat2(
+                                Strings.concat2(
                                     string("{@code "),
-                                    Strings.cat2(
+                                    Strings.concat2(
                                         cases("hydra.packaging.DefinitionReference", var("d"),
                                             field("primitive", lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
                                             field("term",      lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
                                             field("type",      lambda("n", hydra.dsl.Names.localNameOf( var("n"))))),
                                         string("}"))))),
-                        field("module",    lambda("m", Strings.cat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
-                        field("package",   lambda("p", Strings.cat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
-                        field("termExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}"))))),
-                        field("typeExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}")))))));
+                        field("module",    lambda("m", Strings.concat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
+                        field("package",   lambda("p", Strings.concat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
+                        field("termExpr", lambda("s", Strings.concat2(string("{@code "), Strings.concat2(var("s"), string("}"))))),
+                        field("typeExpr", lambda("s", Strings.concat2(string("{@code "), Strings.concat2(var("s"), string("}")))))));
 
     public static final Def shiftExpressionToExpr = def("shiftExpressionToExpr")
         .lam("e")
@@ -2627,7 +2628,7 @@ public class Serde {
                             Logic.ifElse(
                                 Equality.equal(var("sanitized"), string("")),
                                 string("//"),
-                                Strings.cat2(string("// "), var("sanitized"))))));
+                                Strings.concat2(string("// "), var("sanitized"))))));
 
     public static final Def statementExpressionToExpr = def("statementExpressionToExpr")
         .lam("e")
@@ -2735,9 +2736,9 @@ public class Serde {
                 let("s",
                         apply(unwrap(StringLiteral.TYPE_), var("sl")),
                         hydra.dsl.Serialization.cst(
-                            Strings.cat2(
+                            Strings.concat2(
                                 string("\""),
-                                Strings.cat2(
+                                Strings.concat2(
                                     hydra.dsl.jvm.Serde.escapeJavaString(var("s")),
                                     string("\""))))));
 
@@ -2865,7 +2866,7 @@ public class Serde {
                     field("mqual",
                         proj(TypeName.TYPE_, TypeName.QUALIFIER, "tn")),
                     hydra.dsl.Serialization.dotSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Optionals.map(ref(Serde.packageOrTypeNameToExpr), var("mqual")),
                                 just(apply(ref(Serde.typeIdentifierToExpr), var("id"))))))));
@@ -2888,7 +2889,7 @@ public class Serde {
                     field("bound",
                         proj(TypeParameter.TYPE_, TypeParameter.BOUND, "tp")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("mods")),
@@ -2930,7 +2931,7 @@ public class Serde {
                     field("id",
                         proj(TypeVariable.TYPE_, TypeVariable.IDENTIFIER, "tv")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -3015,7 +3016,7 @@ public class Serde {
                     field("mbody",
                         proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.BODY, "ucice")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 just(hydra.dsl.Serialization.cst( string("new"))),
                                 Logic.ifElse(
@@ -3049,7 +3050,7 @@ public class Serde {
                     field("mdims",
                         proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.DIMS, "vdi")),
                     hydra.dsl.Serialization.noSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 just(apply(ref(Serde.identifierToExpr), var("id"))),
                                 Optionals.map(ref(Serde.dimsToExpr), var("mdims")))))));
@@ -3143,7 +3144,7 @@ public class Serde {
                     field("mbounds",
                         proj(Wildcard.TYPE_, Wildcard.WILDCARD, "w")),
                     hydra.dsl.Serialization.spaceSep(
-                        Optionals.cat(
+                        Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.null_(var("anns")),
@@ -3163,17 +3164,17 @@ public class Serde {
                             hydra.dsl.Serialization.newlineSep(
                                 list(
                                     hydra.dsl.Serialization.cst(
-                                        Strings.cat2(
+                                        Strings.concat2(
                                             string("/**\n"),
-                                            Strings.cat2(
-                                                Strings.intercalate(
+                                            Strings.concat2(
+                                                Strings.join(
                                                     string("\n"),
                                                     Lists.map(
                                                         lambda("l",
                                                             Logic.ifElse(
                                                                 Equality.equal(var("l"), string("")),
                                                                 string(" *"),
-                                                                Strings.cat2(
+                                                                Strings.concat2(
                                                                     string(" * "),
                                                                     var("l")))),
                                                         Strings.lines(
