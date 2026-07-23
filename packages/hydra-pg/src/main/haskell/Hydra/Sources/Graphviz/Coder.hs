@@ -184,18 +184,18 @@ termLabel = define "termLabel" $
       _Term_application>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "$") (string "apply")),
       _Term_lambda>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "\x03BB") (string "lambda")),
       _Term_project>>: "proj" ~>
-        var "simpleLabel" @@ Strings.cat (list [
+        var "simpleLabel" @@ Strings.concat (list [
           string "{",
           Names.compactName @@ var "namespaces" @@ (project _Projection _Projection_typeName @@ var "proj"),
           string "}.",
           Core.unName (project _Projection _Projection_fieldName @@ var "proj")]),
       _Term_cases>>: "cs" ~>
-        var "simpleLabel" @@ Strings.cat (list [
+        var "simpleLabel" @@ Strings.concat (list [
           string "cases_{",
           Names.compactName @@ var "namespaces" @@ (project _CaseStatement _CaseStatement_typeName @@ var "cs"),
           string "}"]),
       _Term_unwrap>>: "name" ~>
-        var "simpleLabel" @@ Strings.cat (list [
+        var "simpleLabel" @@ Strings.concat (list [
           string "unwrap_{",
           Names.compactName @@ var "namespaces" @@ var "name",
           string "}"]),
@@ -204,7 +204,7 @@ termLabel = define "termLabel" $
       _Term_literal>>: "l" ~>
         var "simpleLabel" @@ (match _Literal (Just $ string "?") [
           _Literal_binary>>: "s" ~> Literals.binaryToString (var "s"),
-          _Literal_boolean>>: "b" ~> Literals.showBoolean (var "b"),
+          _Literal_boolean>>: "b" ~> Literals.printBoolean (var "b"),
           _Literal_integer>>: "i" ~>
             match _IntegerValue (Just $ string "?") [
               _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v"),
@@ -227,15 +227,15 @@ termLabel = define "termLabel" $
       _Term_map>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "<,>") (string "map")),
       _Term_optional>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "opt") (string "optional")),
       _Term_record>>: "rec" ~>
-        var "simpleLabel" @@ Strings.cat2 (string "\x2227") (Names.compactName @@ var "namespaces" @@ (project _Record _Record_typeName @@ var "rec")),
+        var "simpleLabel" @@ Strings.concat2 (string "\x2227") (Names.compactName @@ var "namespaces" @@ (project _Record _Record_typeName @@ var "rec")),
       _Term_typeLambda>>: constant $ var "simpleLabel" @@ string "tyabs",
       _Term_typeApplication>>: constant $ var "simpleLabel" @@ string "tyapp",
       _Term_inject>>: "inj" ~>
-        var "simpleLabel" @@ Strings.cat2 (string "\x22BB") (Names.compactName @@ var "namespaces" @@ (project _Injection _Injection_typeName @@ var "inj")),
+        var "simpleLabel" @@ Strings.concat2 (string "\x22BB") (Names.compactName @@ var "namespaces" @@ (project _Injection _Injection_typeName @@ var "inj")),
       _Term_variable>>: "name" ~>
         var "simpleLabel" @@ (Names.compactName @@ var "namespaces" @@ var "name"),
       _Term_wrap>>: "wt" ~>
-        var "simpleLabel" @@ Strings.cat (list [
+        var "simpleLabel" @@ Strings.concat (list [
           string "(",
           Names.compactName @@ var "namespaces" @@ (project _WrappedTerm _WrappedTerm_typeName @@ var "wt"),
           string ")"])]
@@ -340,7 +340,7 @@ termToDotStmts = define "termToDotStmts" $
             "addBindingTerm">: lambdas ["stVis", "binding"] $ lets [
               "bname">: Core.bindingName $ var "binding",
               "bterm">: Core.bindingTerm $ var "binding",
-              "blab">: unwrap Dot._Id @@ (Optionals.fromOptional (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1" :: TypedTerm (M.Map Name Dot.Id))))]
+              "blab">: unwrap Dot._Id @@ (Optionals.withDefault (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1" :: TypedTerm (M.Map Name Dot.Id))))]
               $ var "encode"
                   @@ just (pair (var "blab") nodeStyleElement) @@ true @@ var "ids1" @@ just (var "selfId")
                   @@ var "stVis"
@@ -352,7 +352,7 @@ termToDotStmts = define "termToDotStmts" $
                 @@ pair Paths.subtermStepLetBody (var "env"),
           _Term_variable>>: "name" ~>
             Optionals.cases (Maps.lookup (var "name") (var "ids" :: TypedTerm (M.Map Name Dot.Id))) (var "dflt") ("i" ~> pair
-                (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Optionals.fromOptional (var "selfId") (var "mparent")) @@ var "i"]))
+                (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Optionals.withDefault (var "selfId") (var "mparent")) @@ var "i"]))
                 (var "visited"))]
         @@ var "currentTerm"]
     $ Pairs.first $ var "encode"
@@ -387,7 +387,7 @@ termToSubtermDotStmts = define "termToSubtermDotStmts" $
       "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
       "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
       "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
-      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map (asTerm PrintPaths.subtermStep) (var "pathAccessors")))]
+      "showPath">: Strings.join (string "/") (Optionals.givens (Lists.map (asTerm PrintPaths.subtermStep) (var "pathAccessors")))]
       $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
           (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))

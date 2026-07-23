@@ -17,7 +17,7 @@ import Hydra.Demos.Genpg.ExampleGraphSchema
 
 labeledIntId :: String -> TypedTerm (r -> Maybe Int) -> TypedTerm (r -> String)
 labeledIntId itype iid = lambda "r" $ Optionals.map
-  (lambda "i" $ Strings.cat (list [
+  (lambda "i" $ Strings.concat (list [
     string $ decapitalize itype,
     string "_",
     Literals.showInt32 $ var "i"]))

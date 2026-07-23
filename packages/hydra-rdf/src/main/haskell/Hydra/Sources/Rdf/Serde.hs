@@ -21,6 +21,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -130,7 +131,7 @@ escapeIriChar = define "escapeIriChar" $
   doc "Escape a single IRI character code to a string" $
   lambda "c" $
     Logic.ifElse
-      (Logic.or (Equality.lte (var "c") (int32 32)) $
+      (Logic.or (Ordering.lte (var "c") (int32 32)) $
           Logic.or (Equality.equal (var "c") (int32 60))   -- '<'
           $ Logic.or (Equality.equal (var "c") (int32 62))   -- '>'
           $ Logic.or (Equality.equal (var "c") (int32 34))   -- '"'
@@ -147,7 +148,7 @@ escapeIriStr :: TypedTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
   doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes." $
   lambda "s" $
-    Strings.cat (Lists.map (asTerm escapeIriChar) (Strings.toList (var "s")))
+    Strings.concat (Lists.map (asTerm escapeIriChar) (Strings.toList (var "s")))
 
 -- | Escape a single literal character. Handles \", \\, \n, \r;
 --   non-ASCII code points pass through (N-Triples allows any Unicode code point in literals).
@@ -169,7 +170,7 @@ escapeLiteralString :: TypedTermDefinition (String -> String)
 escapeLiteralString = define "escapeLiteralString" $
   doc "Escape a string for use in an N-Triples literal" $
   lambda "s" $
-    Strings.cat (Lists.map (asTerm escapeLiteralChar) (Strings.toList (var "s")))
+    Strings.concat (Lists.map (asTerm escapeLiteralChar) (Strings.toList (var "s")))
 
 graphToExpr :: TypedTermDefinition (Rdf.Graph -> Expr)
 graphToExpr = define "graphToExpr" $
@@ -182,7 +183,7 @@ hexDigit :: TypedTermDefinition (Int -> Int)
 hexDigit = define "hexDigit" $
   doc "Convert a value 0-15 to an uppercase hex digit code point" $
   lambda "n" $
-    Logic.ifElse (Equality.lt (var "n") (int32 10))
+    Logic.ifElse (Ordering.lt (var "n") (int32 10))
       (Math.add (var "n") (int32 48))                        -- '0'
       (Math.add (Math.sub (var "n") (int32 10)) (int32 65))  -- 'A'
 
@@ -211,7 +212,7 @@ literalToExpr = define "literalToExpr" $
     "dt">: project Rdf._Literal Rdf._Literal_datatypeIri @@ var "lit",
     "lang">: project Rdf._Literal Rdf._Literal_languageTag @@ var "lit",
     "lexExpr">: Serialization.cst @@
-      (Strings.cat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
+      (Strings.concat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
     "suffix">: Optionals.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) (asTerm languageTagToExpr)] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
@@ -259,12 +260,12 @@ uchar4 :: TypedTermDefinition (Int -> String)
 uchar4 = define "uchar4" $
   doc "Format a code point as a 4-digit UCHAR escape sequence" $
   lambda "c" $
-    "d3" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
-    "r3" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
-    "d2" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
-    "r2" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
-    "d1" <~ Optionals.fromOptional (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
-    "d0" <~ Optionals.fromOptional (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
-    Strings.cat2 (string "\\u")
+    "d3" <~ Optionals.withDefault (int32 0) (Math.div (var "c") (int32 4096)) $    -- c / 16^3
+    "r3" <~ Optionals.withDefault (int32 0) (Math.mod (var "c") (int32 4096)) $
+    "d2" <~ Optionals.withDefault (int32 0) (Math.div (var "r3") (int32 256)) $    -- r3 / 16^2
+    "r2" <~ Optionals.withDefault (int32 0) (Math.mod (var "r3") (int32 256)) $
+    "d1" <~ Optionals.withDefault (int32 0) (Math.div (var "r2") (int32 16)) $     -- r2 / 16
+    "d0" <~ Optionals.withDefault (int32 0) (Math.mod (var "r2") (int32 16)) $
+    Strings.concat2 (string "\\u")
       (Strings.fromList $ list [hexDigit @@ var "d3", hexDigit @@ var "d2",
                                 hexDigit @@ var "d1", hexDigit @@ var "d0"])

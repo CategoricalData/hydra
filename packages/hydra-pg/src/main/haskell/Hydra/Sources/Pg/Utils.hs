@@ -177,7 +177,7 @@ pgElementToJson = define "pgElementToJson" $
             "labelJson">: Json.valueString (unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"))] $
             Eithers.map
               ("propsJson" ~>
-                Json.valueObject (Optionals.cat $ list [
+                Json.valueObject (Optionals.givens $ list [
                   just (pair (string "label") (var "labelJson")),
                   just (pair (string "id") (Json.valueString $ PrintCore.term @@ var "term")),
                   var "propsJson"]))
@@ -190,7 +190,7 @@ pgElementToJson = define "pgElementToJson" $
                 "labelJson">: Json.valueString (unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"))] $
                 Eithers.map
                   ("propsJson" ~>
-                    Json.valueObject (Optionals.cat $ list [
+                    Json.valueObject (Optionals.givens $ list [
                       just (pair (string "label") (var "labelJson")),
                       just (pair (string "id") (Json.valueString $ PrintCore.term @@ var "term")),
                       just (pair (string "out") (Json.valueString $ PrintCore.term @@ var "termOut")),

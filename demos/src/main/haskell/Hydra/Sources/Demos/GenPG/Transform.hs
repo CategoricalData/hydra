@@ -151,7 +151,7 @@ evaluateProperties = define "evaluateProperties" $
           right $ Optionals.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
       @@ var "term") $
     Eithers.map
-      ("pairs" ~> ((Maps.fromList $ Optionals.cat $ var "pairs") :: TypedTerm (M.Map PG.PropertyKey Term)))
+      ("pairs" ~> ((Maps.fromList $ Optionals.givens $ var "pairs") :: TypedTerm (M.Map PG.PropertyKey Term)))
       (Eithers.mapList
         ("pair" ~>
           "k" <~ Pairs.first (var "pair") $
@@ -284,10 +284,10 @@ tableForEdge = define "tableForEdge" $
       (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
     Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
       (Optionals.cases
-        (Lists.maybeHead $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
+        (Lists.head $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
-      (left $ Strings.cat $ list [
+      (left $ Strings.concat $ list [
         string "Specification for ",
         unwrap PG._EdgeLabel @@ var "label",
         string " edges has wrong number of tables"])
@@ -303,10 +303,10 @@ tableForVertex = define "tableForVertex" $
     "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
     Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
       (Optionals.cases
-        (Lists.maybeHead $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
+        (Lists.head $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
-      (left $ Strings.cat $ list [
+      (left $ Strings.concat $ list [
         string "Specification for ",
         unwrap PG._VertexLabel @@ var "label",
         string " vertices has wrong number of tables"])
@@ -335,7 +335,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "v" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term]))) $
-              "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Optionals.withDefault (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Lists.cons (var "v") (Pairs.first $ var "current"))
@@ -345,7 +345,7 @@ elementSpecsByTable = define "elementSpecsByTable" $
               "table" <~ Pairs.first (var "p") $
               "e" <~ Pairs.second (var "p") $
               "existing" <~ Maps.lookup (var "table") (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term]))) $
-              "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
+              "current" <~ Optionals.withDefault (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Pairs.first $ var "current")
@@ -381,7 +381,7 @@ transformRecord = define "transformRecord" $
         Eithers.bind
           (Eithers.mapList ("spec" ~> evaluateEdge @@ var "cx" @@ var "g" @@ var "spec" @@ var "record") (var "especs"))
           ("mEdges" ~>
-            right $ pair (Optionals.cat $ var "mVertices") (Optionals.cat $ var "mEdges")))
+            right $ pair (Optionals.givens $ var "mVertices") (Optionals.givens $ var "mEdges")))
 
 --------------------------------------------------------------------------------
 -- CSV Parsing (pure functions)
@@ -425,13 +425,13 @@ parseCsvChar = define "parseCsvChar" $
             Logic.ifElse (Strings.null $ var "field")
               (pair (pair (var "acc") (var "field")) (boolean True))
               (-- Quote inside non-empty unquoted field - just add it (simplified behavior)
-                pair (pair (var "acc") (Strings.cat2 (var "field") (string "\""))) (var "inQuotes"))))
+                pair (pair (var "acc") (Strings.concat2 (var "field") (string "\""))) (var "inQuotes"))))
       (-- Not a quote
         Logic.ifElse (Logic.and (Equality.equal (var "c") (int32 44)) (Logic.not $ var "inQuotes"))  -- ',' = 44
           (-- Comma outside quotes - end of field
             pair (pair (Lists.cons (normalizeField @@ var "field") (var "acc")) (string "")) (boolean False))
           (-- Regular character - append to field
-            pair (pair (var "acc") (Strings.cat2 (var "field") (Strings.fromList $ list [var "c"]))) (var "inQuotes")))
+            pair (pair (var "acc") (Strings.concat2 (var "field") (Strings.fromList $ list [var "c"]))) (var "inQuotes")))
 
 -- | Normalize a CSV field - empty string becomes Nothing, otherwise Just
 normalizeField :: TypedTermDefinition (String -> Maybe String)
@@ -501,7 +501,7 @@ parseTableLines = define "parseTableLines" $
       (Eithers.mapList ("ln" ~> parseSingleLine @@ var "ln") (var "rawLines"))
       ("parsedRows" ~>
         -- Filter out empty lines (Nothing values) to get [[Maybe String]]
-        "rows" <~ Optionals.cat (var "parsedRows") $
+        "rows" <~ Optionals.givens (var "parsedRows") $
         -- Build the table based on hasHeader flag
         Logic.ifElse (var "hasHeader")
           (-- With header: first row is header, rest are data
@@ -515,7 +515,7 @@ parseTableLines = define "parseTableLines" $
                 Logic.ifElse (listAny @@ ("m" ~> Optionals.isNone (var "m")) @@ var "headerRow")
                   (left $ string "null header column(s)")
                   (right $ record Tab._Table [
-                    Tab._Table_header>>: just (wrap Tab._HeaderRow $ Optionals.cat $ var "headerRow"),
+                    Tab._Table_header>>: just (wrap Tab._HeaderRow $ Optionals.givens $ var "headerRow"),
                     Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")])))
           (-- No header: all rows are data
             right $ record Tab._Table [
@@ -588,25 +588,25 @@ decodeCell = define "decodeCell" $
     -- Lift the decoder function to a let binding before Optionals.cases
     -- This avoids Python issues with match statements inside inline lambdas
     "decodeValue" <~ ("value" ~>
-      "parseError" <~ (Strings.cat $ list [
+      "parseError" <~ (Strings.concat $ list [
         string "Invalid value for column ",
         var "cname",
         string ": ",
         var "value"]) $
-      match _Type (Just $ left $ Strings.cat $ list [
+      match _Type (Just $ left $ Strings.concat $ list [
         string "Unsupported type for column ",
         var "cname"]) [
         _Type_literal>>: "lt" ~>
-          match _LiteralType (Just $ left $ Strings.cat $ list [
+          match _LiteralType (Just $ left $ Strings.concat $ list [
             string "Unsupported literal type for column ",
             var "cname"]) [
             _LiteralType_boolean>>: constant $
               Optionals.cases
-                (Literals.readBoolean $ var "value")
+                (Literals.parseBoolean $ var "value")
                 (left $ var "parseError")
                 ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed"),
             _LiteralType_float>>: "ft" ~>
-              match _FloatType (Just $ left $ Strings.cat $ list [
+              match _FloatType (Just $ left $ Strings.concat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
                 _FloatType_float32>>: constant $
@@ -621,7 +621,7 @@ decodeCell = define "decodeCell" $
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
               @@ var "ft",
             _LiteralType_integer>>: "it" ~>
-              match _IntegerType (Just $ left $ Strings.cat $ list [
+              match _IntegerType (Just $ left $ Strings.concat $ list [
                 string "Unsupported integer type for column ",
                 var "cname"]) [
                 _IntegerType_int32>>: constant $

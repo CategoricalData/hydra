@@ -136,7 +136,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
     "supportsMaps">: project TF._DataTypeFeatures TF._DataTypeFeatures_supportsMapValues @@ var "vpFeatures",
 
 
-    "literalVariants">: (Sets.fromList (Optionals.cat $ list [
+    "literalVariants">: (Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Variants.literalVariantBinary
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsByteArrayValues @@ var "vpFeatures"),
       var "cond" @@ Variants.literalVariantBoolean
@@ -150,28 +150,28 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
       var "cond" @@ Variants.literalVariantString
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsStringValues @@ var "vpFeatures")]) :: TypedTerm (S.Set LiteralVariant)),
 
-    "floatTypes">: (Sets.fromList (Optionals.cat $ list [
+    "floatTypes">: (Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Core.floatTypeFloat32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsFloatValues @@ var "vpFeatures"),
       var "cond" @@ Core.floatTypeFloat64
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleValues @@ var "vpFeatures")]) :: TypedTerm (S.Set FloatType)),
 
 
-    "integerTypes">: (Sets.fromList (Optionals.cat $ list [
+    "integerTypes">: (Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Core.integerTypeInt32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsIntegerValues @@ var "vpFeatures"),
       var "cond" @@ Core.integerTypeInt64
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsLongValues @@ var "vpFeatures")]) :: TypedTerm (S.Set IntegerType)),
 
     -- Only lists and literal values may be explicitly supported via Graph.Features.
-    "termVariants">: Sets.fromList (Optionals.cat $ list [
+    "termVariants">: Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Variants.termVariantList @@ var "supportsLists",
       var "cond" @@ Variants.termVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.termVariantMap @@ var "supportsMaps",
       -- An optional value translates to an absent vertex property
       Optionals.pure Variants.termVariantOptional]),
 
-    "typeVariants">: Sets.fromList (Optionals.cat $ list [
+    "typeVariants">: Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Variants.typeVariantList @@ var "supportsLists",
       var "cond" @@ Variants.typeVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.typeVariantMap @@ var "supportsMaps",

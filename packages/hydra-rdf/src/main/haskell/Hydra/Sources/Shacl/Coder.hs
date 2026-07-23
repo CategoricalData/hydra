@@ -194,7 +194,7 @@ encodeFieldType = define "encodeFieldType" $
             Shacl._Definition_target>>:
               record Shacl._PropertyShape [
                 Shacl._PropertyShape_common>>: var "__cp",
-                Shacl._PropertyShape_constraints>>: (Sets.fromList (Optionals.cat $ list [var "minC", var "maxC"]) :: TypedTerm (S.Set Shacl.PropertyShapeConstraint)),
+                Shacl._PropertyShape_constraints>>: (Sets.fromList (Optionals.givens $ list [var "minC", var "maxC"]) :: TypedTerm (S.Set Shacl.PropertyShapeConstraint)),
                 Shacl._PropertyShape_defaultValue>>: nothing,
                 Shacl._PropertyShape_description>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
                 Shacl._PropertyShape_name>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
@@ -321,7 +321,7 @@ encodeTerm = define "encodeTerm" $
             "descs">: Pairs.first (var "__dr"),
             "cx1">: Pairs.second (var "__dr")] $
             pair
-              (Optionals.fromOptional (var "descs") (Optionals.map
+              (Optionals.withDefault (var "descs") (Optionals.map
                 (lambda "p" $ Lists.cons
                   (withType @@ (Core.wrappedTermTypeName (var "wt")) @@ Pairs.first (var "p"))
                   (Pairs.second (var "p")))
@@ -487,7 +487,7 @@ shaclCoder :: TypedTermDefinition (Module -> I.Int32 -> Graph -> Either Error (S
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
-    "typeEls">: Optionals.cat (Lists.map
+    "typeEls">: Optionals.givens (Lists.map
       ("d" ~> cases _Definition (var "d") (Just nothing) [
         _Definition_type>>: "td" ~>
           just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -523,7 +523,7 @@ unexpectedE :: TypedTermDefinition (String -> String -> Either Error a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected input, given expected and found descriptions" $
   lambda "expected" $ lambda "found" $
-    err @@ (Strings.cat $ list [
+    err @@ (Strings.concat $ list [
       string "Expected ",
       var "expected",
       string ", found: ",

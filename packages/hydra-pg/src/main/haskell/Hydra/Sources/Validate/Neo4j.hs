@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
@@ -161,13 +162,13 @@ appendFindingNode = validationDefinition "appendFindingNode" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -191,13 +192,13 @@ appendFindingRelationship = validationDefinition "appendFindingRelationship" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -375,7 +376,7 @@ validateNode = validationDefinition "validateNode" $
   $ Lists.foldl
     ("acc" ~> "guarded" ~>
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")
@@ -450,7 +451,7 @@ validateRelationship = validationDefinition "validateRelationship" $
   $ Lists.foldl
     ("acc" ~> "guarded" ~>
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")

@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -188,12 +189,12 @@ allDigits = define "allDigits" $
   doc "True iff every codepoint is an ASCII digit 0-9, and the list is non-empty" $
   lambda "cps" $
     Logic.and
-      (Equality.gt (Lists.length (var "cps")) (int32 0))
+      (Ordering.gt (Lists.length (var "cps")) (int32 0))
       (Lists.foldl (lambda "acc" $ lambda "c" $
         Logic.and (var "acc")
           (Logic.and
-            (Equality.gte (var "c") (int32 48))
-            (Equality.lte (var "c") (int32 57))))
+            (Ordering.gte (var "c") (int32 48))
+            (Ordering.lte (var "c") (int32 57))))
         (boolean True)
         (var "cps"))
 
@@ -497,22 +498,22 @@ documentationTagToLine = define "documentationTagToLine" $
     "mtype">: project TS._DocumentationTag TS._DocumentationTag_type @@ var "tag",
     "mparamName">: project TS._DocumentationTag TS._DocumentationTag_paramName @@ var "tag",
     "description">: project TS._DocumentationTag TS._DocumentationTag_description @@ var "tag",
-    "typePart">: Optionals.cases (var "mtype") (string "") (lambda "t" $ Strings.cat $ list [string "{", typeExpressionToString @@ var "t", string "}"]),
+    "typePart">: Optionals.cases (var "mtype") (string "") (lambda "t" $ Strings.concat $ list [string "{", typeExpressionToString @@ var "t", string "}"]),
     "paramPart">: Optionals.cases (var "mparamName") (string "") (lambda "p" $ unwrap TS._Identifier @@ var "p"),
     "parts">: list [
-      Strings.cat2 (string "@") (var "name"),
+      Strings.concat2 (string "@") (var "name"),
       var "typePart",
       var "paramPart",
       var "description"],
     "nonEmpty">: Lists.filter (lambda "p" $ Logic.not $ Equality.equal (var "p") (string "")) (var "parts")] $
-    Strings.cat2 (string " * ") (Strings.intercalate (string " ") (var "nonEmpty"))
+    Strings.concat2 (string " * ") (Strings.join (string " ") (var "nonEmpty"))
 
 escapeString :: TypedTermDefinition (String -> Bool -> String)
 escapeString = define "escapeString" $
   doc "Escape special characters in a string for TypeScript" $
   lambda "s" $ lambda "singleQuote" $ lets [
     "replace">: lambda "old" $ lambda "new_" $ lambda "str" $
-      Strings.intercalate (var "new_") (Strings.splitOn (var "old") (var "str")),
+      Strings.join (var "new_") (Strings.splitOn (var "old") (var "str")),
     "s1">: var "replace" @@ string "\\" @@ string "\\\\" @@ var "s",
     "s2">: var "replace" @@ string "\n" @@ string "\\n" @@ var "s1",
     "s3">: var "replace" @@ string "\r" @@ string "\\r" @@ var "s2",
@@ -814,12 +815,12 @@ isKernelTypeVarName = define "isKernelTypeVarName" $
   lambda "s" $ lets [
     "cps">: Strings.toList (var "s"),
     "len">: Lists.length (var "cps"),
-    "first">: Optionals.fromOptional (int32 0) (Lists.maybeHead (var "cps")),
-    "rest">: Logic.ifElse (Equality.gt (var "len") (int32 0))
+    "first">: Optionals.withDefault (int32 0) (Lists.head (var "cps")),
+    "rest">: Logic.ifElse (Ordering.gt (var "len") (int32 0))
       (Lists.drop (int32 1) (var "cps"))
       (list ([] :: [TypedTerm Int]))] $
     Logic.and
-      (Equality.gt (var "len") (int32 1))
+      (Ordering.gt (var "len") (int32 1))
       (Logic.and
         (Equality.equal (var "first") (int32 84))     -- 'T' = 84
         (allDigits @@ (var "rest")))
@@ -851,7 +852,7 @@ literalToExpr = define "literalToExpr" $
       TS._Literal_null>>: constant $ Serialization.cst @@ string "null",
       TS._Literal_undefined>>: constant $ Serialization.cst @@ string "undefined",
       TS._Literal_bigInt>>: lambda "n" $
-        Serialization.cst @@ (Strings.cat2 (Literals.showBigint $ var "n") (string "n")),
+        Serialization.cst @@ (Strings.concat2 (Literals.showBigint $ var "n") (string "n")),
       TS._Literal_template>>: lambda "t" $ templateLiteralToExpr @@ var "t"]
 
 memberExpressionToExpr :: TypedTermDefinition (TS.MemberExpression -> Expr)
@@ -1013,9 +1014,9 @@ patternToString = define "patternToString" $
     cases TS._Pattern (var "pat") (Just $ string "_") [
       TS._Pattern_identifier>>: lambda "id" $ unwrap TS._Identifier @@ var "id",
       TS._Pattern_rest>>: lambda "rest" $
-        Strings.cat2 (string "...") (patternToString @@ (unwrap TS._RestElement @@ var "rest")),
+        Strings.concat2 (string "...") (patternToString @@ (unwrap TS._RestElement @@ var "rest")),
       TS._Pattern_typed>>: lambda "tp2" $
-        Strings.cat (list [
+        Strings.concat (list [
           patternToString @@ (project TS._TypedPattern TS._TypedPattern_pattern @@ var "tp2"),
           string ": ",
           tsTypeExpressionToString @@ (project TS._TypedPattern TS._TypedPattern_type @@ var "tp2")])]
@@ -1088,7 +1089,7 @@ stringLiteralToExpr = define "stringLiteralToExpr" $
     "singleQuote">: project TS._StringLiteral TS._StringLiteral_singleQuote @@ var "s",
     "quote">: Logic.ifElse (var "singleQuote") (string "'") (string "\""),
     "escaped">: escapeString @@ var "value" @@ var "singleQuote"] $
-    Serialization.cst @@ (Strings.cat $ list [var "quote", var "escaped", var "quote"])
+    Serialization.cst @@ (Strings.concat $ list [var "quote", var "escaped", var "quote"])
 
 switchCaseToExpr :: TypedTermDefinition (TS.SwitchCase -> Expr)
 switchCaseToExpr = define "switchCaseToExpr" $
@@ -1122,9 +1123,9 @@ templateLiteralToExpr = define "templateLiteralToExpr" $
     "exprs">: project TS._TemplateLiteral TS._TemplateLiteral_expressions @@ var "t"] $
     -- For now, just output the first quasi if no expressions
     -- Full implementation would interleave quasis and expressions
-    Serialization.cst @@ (Strings.cat $ list [
+    Serialization.cst @@ (Strings.concat $ list [
       string "`",
-      Strings.intercalate (string "") (Lists.map (lambda "q" $
+      Strings.join (string "") (Lists.map (lambda "q" $
         project TS._TemplateElement TS._TemplateElement_value @@ var "q") (var "quasis")),
       string "`"])
 
@@ -1141,10 +1142,10 @@ toLineComment :: TypedTermDefinition (String -> String)
 toLineComment = define "toLineComment" $
   doc ("Convert a string to a TypeScript line comment. Empty source lines"
     <> " emit `//` (no trailing space).") $
-  lambda "s" $ Strings.intercalate (string "\n") $ Lists.map
+  lambda "s" $ Strings.join (string "\n") $ Lists.map
     (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
       (string "//")
-      (Strings.cat2 (string "// ") (var "line")))
+      (Strings.concat2 (string "// ") (var "line")))
     (Strings.lines $ var "s")
 
 
@@ -1161,13 +1162,13 @@ toTypeScriptComments = define "toTypeScriptComments" $
       (list ([] :: [TypedTerm String]))
       (Lists.map (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
           (string " *")
-          (Strings.cat2 (string " * ") (var "line")))
+          (Strings.concat2 (string " * ") (var "line")))
         (Strings.lines $ var "desc")),
     "tagLines">: Lists.map (asTerm documentationTagToLine) (var "tags"),
     "allLines">: Lists.concat $ list [var "descLines", var "tagLines"]] $
     Logic.ifElse (Lists.null $ var "allLines")
       (string "")
-      (Strings.intercalate (string "\n") $
+      (Strings.join (string "\n") $
         Lists.concat $ list [
           list [string "/**"],
           var "allLines",
@@ -1211,35 +1212,35 @@ tsTypeExpressionToString = define "tsTypeExpressionToString" $
     TS._TypeExpression_void>>: constant $ string "void",
     TS._TypeExpression_never>>: constant $ string "never",
     TS._TypeExpression_array>>: lambda "inner" $
-      Strings.cat (list [
+      Strings.concat (list [
         string "ReadonlyArray<",
         tsTypeExpressionToString @@ (unwrap TS._ArrayTypeExpression @@ var "inner"),
         string ">"]),
     TS._TypeExpression_tuple>>: lambda "ts" $
-      Strings.cat (list [
+      Strings.concat (list [
         string "readonly [",
-        Strings.intercalate (string ", ") (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
+        Strings.join (string ", ") (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
         string "]"]),
     TS._TypeExpression_union>>: lambda "ts" $
-      Strings.intercalate (string " | ")
+      Strings.join (string " | ")
         (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
     TS._TypeExpression_intersection>>: lambda "ts" $
-      Strings.intercalate (string " & ")
+      Strings.join (string " & ")
         (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
     TS._TypeExpression_parameterized>>: lambda "p" $
-      Strings.cat (list [
+      Strings.concat (list [
         tsTypeExpressionToString @@ (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p"),
         string "<",
-        Strings.intercalate (string ", ")
+        Strings.join (string ", ")
           (Lists.map (asTerm tsTypeExpressionToString)
             (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")),
         string ">"]),
     TS._TypeExpression_optional>>: lambda "inner" $
-      Strings.cat (list [
+      Strings.concat (list [
         tsTypeExpressionToString @@ var "inner",
         string " | undefined"]),
     TS._TypeExpression_readonly>>: lambda "inner" $
-      Strings.cat2 (string "readonly ") (tsTypeExpressionToString @@ var "inner"),
+      Strings.concat2 (string "readonly ") (tsTypeExpressionToString @@ var "inner"),
     TS._TypeExpression_unknown>>: constant $ string "unknown",
     -- Render a function type as `(...args: any[]) => any`. Why variadic
     -- with `any`?  Hydra encodes function types as curried (`A → B → C`),
@@ -1265,7 +1266,7 @@ typeExpressionToString = define "typeExpressionToString" $
       TS._TypeExpression_never>>: constant $ string "never",
       -- Simplified handling for other cases
       TS._TypeExpression_literal>>: lambda "l" $ string "literal",
-      TS._TypeExpression_array>>: lambda "a" $ Strings.cat2 (typeExpressionToString @@ (unwrap TS._ArrayTypeExpression @@ var "a")) (string "[]"),
+      TS._TypeExpression_array>>: lambda "a" $ Strings.concat2 (typeExpressionToString @@ (unwrap TS._ArrayTypeExpression @@ var "a")) (string "[]"),
       -- Render a function type as `(_a0: T0, _a1: T1, ...) => R`. Names
       -- are synthetic (TS requires *some* name in a function-type signature)
       -- — they bind nothing; only the types matter. Previously this arm
@@ -1281,7 +1282,7 @@ typeExpressionToString = define "typeExpressionToString" $
             (lambda "acc" $ lambda "p" $ lets [
               "i">: Pairs.first $ var "acc",
               "soFar">: Pairs.second $ var "acc",
-              "this">: Strings.cat $ list [
+              "this">: Strings.concat $ list [
                 string "_a", Literals.showInt32 (var "i"),
                 string ": ",
                 typeExpressionToString @@ var "p"]] $
@@ -1290,22 +1291,22 @@ typeExpressionToString = define "typeExpressionToString" $
                 (Lists.concat2 (var "soFar") (Lists.pure (var "this"))))
             (pair (int32 0) (list ([] :: [TypedTerm String])))
             (var "params")] $
-        Strings.cat $ list [
+        Strings.concat $ list [
           string "(",
-          Strings.intercalate (string ", ") (var "rendered"),
+          Strings.join (string ", ") (var "rendered"),
           string ") => ",
           typeExpressionToString @@ var "rt"],
       TS._TypeExpression_object>>: constant $ string "Object",
-      TS._TypeExpression_union>>: lambda "u" $ Strings.intercalate (string "|") (Lists.map (asTerm typeExpressionToString) (var "u")),
+      TS._TypeExpression_union>>: lambda "u" $ Strings.join (string "|") (Lists.map (asTerm typeExpressionToString) (var "u")),
       TS._TypeExpression_parameterized>>: lambda "p" $ lets [
         "base">: project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p",
         "args">: project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p"] $
-        Strings.cat $ list [
+        Strings.concat $ list [
           typeExpressionToString @@ var "base",
           string "<",
-          Strings.intercalate (string ", ") (Lists.map (asTerm typeExpressionToString) (var "args")),
+          Strings.join (string ", ") (Lists.map (asTerm typeExpressionToString) (var "args")),
           string ">"],
-      TS._TypeExpression_optional>>: lambda "o" $ Strings.cat2 (string "?") (typeExpressionToString @@ var "o")]
+      TS._TypeExpression_optional>>: lambda "o" $ Strings.concat2 (string "?") (typeExpressionToString @@ var "o")]
 
 typedPatternToExpr :: TypedTermDefinition (TS.TypedPattern -> Expr)
 typedPatternToExpr = define "typedPatternToExpr" $
@@ -1315,7 +1316,7 @@ typedPatternToExpr = define "typedPatternToExpr" $
     "typ">: project TS._TypedPattern TS._TypedPattern_type @@ var "tp",
     "innerStr">: patternToString @@ var "innerPat",
     "typeStr">: tsTypeExpressionToString @@ var "typ"] $
-    Serialization.cst @@ (Strings.cat (list [var "innerStr", string ": ", var "typeStr"]))
+    Serialization.cst @@ (Strings.concat (list [var "innerStr", string ": ", var "typeStr"]))
 
 unaryExpressionToExpr :: TypedTermDefinition (TS.UnaryExpression -> Expr)
 unaryExpressionToExpr = define "unaryExpressionToExpr" $

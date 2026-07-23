@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Math                   as Math
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -146,7 +147,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
               (var "fts"))) $
           just (pair (var "tname") (var "namedOffsets")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    "entries" <~ (Optionals.givens (Lists.map (var "entryFor") (var "schemaTypesList"))) $
     (Maps.fromList (var "entries") :: TypedTerm (M.Map Name [(Name, Int)]))
 
 -- | Build a universe-wide map from snake-cased function names to Wasm signatures.
@@ -176,15 +177,15 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
         (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
         (var "sigEither")) $
     -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
-    "primEntries" <~ Optionals.cat (Lists.map
+    "primEntries" <~ Optionals.givens (Lists.map
       (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ DslGraph.primitiveDefinition (Pairs.second (var "kv")))))
       (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
     -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
-    "boundEntries" <~ Optionals.cat (Lists.map
+    "boundEntries" <~ Optionals.givens (Lists.map
       (lambda "kv" $ var "toSigEntry" @@ var "kv")
       (Maps.toList (DslGraph.graphBoundTypes (var "g")))) $
     -- Current module's own term defs: use their optional TypeScheme field directly.
-    "localEntries" <~ Optionals.cat (Lists.map
+    "localEntries" <~ Optionals.givens (Lists.map
       (lambda "td" $
         Optionals.bind (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "td"))
           (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
@@ -213,7 +214,7 @@ buildStringOffsets = def "buildStringOffsets" $
       (var "strs")) $
     "rawEnd" <~ Pairs.second (var "final") $
     -- Round up to the next 16-byte boundary so the bump pointer starts aligned.
-    "aligned" <~ Math.mul (Optionals.fromOptional (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
+    "aligned" <~ Math.mul (Optionals.withDefault (int32 0) (Math.div (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
     pair (Pairs.first (var "final")) (var "aligned")
 
 -- | Build a universe-wide variant-tag table from a Graph. For each union type defined
@@ -259,7 +260,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
               (var "fts"))) $
           just (pair (var "tname") (var "namedIndexes")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
-    "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
+    "entries" <~ (Optionals.givens (Lists.map (var "entryFor") (var "schemaTypesList"))) $
     (Maps.fromList (var "entries") :: TypedTerm (M.Map Name [(Name, Int)]))
 
 -- | Clamp a list of Wasm value types to all-i32. The coder's function bodies still
@@ -381,7 +382,7 @@ encodeApplication = def "encodeApplication" $
     [_Term_variable>>: lambda "name" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
-       Logic.ifElse (Lists.null (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.null (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
          -- Local variable head: the local holds a closure value — a pointer into
          -- linear memory to an 8-byte record {table_idx:i32 at 0, env:i32 at 4}.
          -- Dispatch by loading env + table_idx, pushing env + (first) real arg,
@@ -394,13 +395,13 @@ encodeApplication = def "encodeApplication" $
          -- Table index 0 is reserved for unlifted / placeholder closures; calling
          -- through it will trap at runtime, which is distinguishable from a
          -- correctly-constructed closure dispatch.
-         ("mFirstArg" <~ Lists.maybeHead (var "args") $
+         ("mFirstArg" <~ Lists.head (var "args") $
           "firstArgInstrs" <~ Optionals.cases (var "mFirstArg")
             -- Zero-arg closure call: push placeholder. Real zero-arg closures
             -- need a separate signature (to come).
             (list [inject W._Instruction W._Instruction_const $
               inject W._ConstValue W._ConstValue_i32 (int32 0)])
-            (lambda "_a" $ Optionals.fromOptional (list ([] :: [TypedTerm W.Instruction])) (Lists.maybeHead (var "realArgInstrs"))) $
+            (lambda "_a" $ Optionals.withDefault (list ([] :: [TypedTerm W.Instruction])) (Lists.head (var "realArgInstrs"))) $
           -- Drop extra args beyond the first (M4b: single-arg closures only).
           "extraArgDropInstrs" <~ Lists.concat (Lists.map
             (lambda "ai" $ Lists.concat2 (var "ai")
@@ -442,7 +443,7 @@ encodeApplication = def "encodeApplication" $
           "calleeParamCount" <~ Optionals.cases (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
           "padCount" <~ Math.sub (var "calleeParamCount") (var "callerArgCount") $
           "padInstrs" <~ Lists.concat (Lists.replicate
-            (Logic.ifElse (Equality.gt (var "padCount") (int32 0)) (var "padCount") (int32 0))
+            (Logic.ifElse (Ordering.gt (var "padCount") (int32 0)) (var "padCount") (int32 0))
             (list [inject W._Instruction W._Instruction_const $
               inject W._ConstValue W._ConstValue_i32 (int32 0)])) $
           right (Lists.concat (list [
@@ -456,7 +457,7 @@ encodeApplication = def "encodeApplication" $
      -- side effect. Projection takes only one "real" arg, so extra args would be a
      -- type error at the Hydra level anyway.
      _Term_project>>: lambda "proj" $
-       Optionals.cases (Lists.maybeHead (var "args"))
+       Optionals.cases (Lists.head (var "args"))
          -- No args: treat as a bare projection function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -466,7 +467,7 @@ encodeApplication = def "encodeApplication" $
      -- Case statement applied to args: the first arg is the union value being dispatched
      -- on. Encode just that first arg as the scrutinee, same pattern as _Term_project.
      _Term_cases>>: lambda "cs" $
-       Optionals.cases (Lists.maybeHead (var "args"))
+       Optionals.cases (Lists.head (var "args"))
          -- No args: treat as a bare cases function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -578,7 +579,7 @@ encodeCases = def "encodeCases" $
     -- type isn't found (e.g. dispatching on a locally-defined union not visible
     -- to the coder), every tag routes to the default.
     "explicitLabelForName" <~ (lambda "fname" $
-      Optionals.fromOptional (var "defaultArmLabel")
+      Optionals.withDefault (var "defaultArmLabel")
         (Optionals.map
           (reify Pairs.first)
           (Lists.find
@@ -593,7 +594,7 @@ encodeCases = def "encodeCases" $
       (Lists.map (reify Pairs.first) (var "explicitArms"))
       (lambda "variantPairs" $
         -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
-        "sorted" <~ Lists.sortOn (reify Pairs.second) (var "variantPairs") $
+        "sorted" <~ Lists.sortBy (reify Pairs.second) (var "variantPairs") $
         Lists.map
           (lambda "np" $
             "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
@@ -601,7 +602,7 @@ encodeCases = def "encodeCases" $
           (var "sorted")) $
     -- Block-based union dispatch: nested empty dispatch blocks, innermost holds the
     -- prologue + br_table, outer blocks wrap each arm body (explicit + default).
-    "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
+    "endLabel" <~ (Strings.concat2 (string "end_") (var "tname")) $
     "innerDispatch" <~ Lists.concat2
       (var "prologue")
       (list [inject W._Instruction W._Instruction_brTable $
@@ -751,7 +752,7 @@ encodeProjection = def "encodeProjection" $
         "matching" <~ Lists.filter
           (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
           (var "pairs") $
-        Optionals.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
+        Optionals.map (reify Pairs.second) (Lists.head (var "matching")))) $
     Optionals.cases (var "mOffset")
       -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
       (right (Lists.concat (list [
@@ -867,7 +868,7 @@ encodeTerm = def "encodeTerm" $
            "matching" <~ Lists.filter
              (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
              (var "pairs") $
-           Optionals.cases (Lists.maybeHead (var "matching"))
+           Optionals.cases (Lists.head (var "matching"))
              (int32 0)
              (lambda "p" $ Pairs.second (var "p"))) $
        -- Compute payload instructions: `i32.const 0` for unit, else encode the term.
@@ -1255,7 +1256,7 @@ encodeTerm = def "encodeTerm" $
        -- Qualified names are cross-module function *references* (not calls): we push
        -- an i32 placeholder representing the function index. Actual calls are emitted
        -- from encodeApplication when the function is in head position.
-       Logic.ifElse (Lists.null (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.null (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
          (right (list [inject W._Instruction W._Instruction_localGet (var "lname")]))
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)])),
@@ -1301,15 +1302,15 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typeParams" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "typ") $
     "typeParamCount" <~ Lists.length (var "typeParams") $
     "lambdaParamCount" <~ Lists.length (var "lambdaParamNameStrs") $
-    "syntheticCount" <~ Logic.ifElse (Equality.gt (var "typeParamCount") (var "lambdaParamCount"))
+    "syntheticCount" <~ Logic.ifElse (Ordering.gt (var "typeParamCount") (var "lambdaParamCount"))
       (Math.sub (var "typeParamCount") (var "lambdaParamCount"))
       (int32 0) $
     -- Note: Math.range is INCLUSIVE of its upper bound (range 0 n = [0..n]),
     -- so we map over [0 .. n-1] only when n > 0. When n == 0 we want the
     -- empty list, not [0].
-    "syntheticParamNames" <~ Logic.ifElse (Equality.gt (var "syntheticCount") (int32 0))
+    "syntheticParamNames" <~ Logic.ifElse (Ordering.gt (var "syntheticCount") (int32 0))
       (Lists.map
-        (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
+        (lambda "i" $ Strings.concat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
         (Math.range (int32 0) (Math.sub (var "syntheticCount") (int32 1))))
       (list ([] :: [TypedTerm String])) $
     "paramNameStrs" <~ Lists.concat2 (var "lambdaParamNameStrs") (var "syntheticParamNames") $
@@ -1331,7 +1332,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Encode body: for bare eliminations (detected by extractLambdaParams producing synthetic
     -- param "arg_0"), pass local.get of the first Hydra param as the scrutinee.
     "dBody" <~ (Strip.deannotateTerm @@ var "innerBody") $
-    "scrutineeInstrs" <~ Optionals.cases (Lists.maybeHead (var "paramNameStrs"))
+    "scrutineeInstrs" <~ Optionals.cases (Lists.head (var "paramNameStrs"))
       (list ([] :: [TypedTerm W.Instruction]))
       (lambda "p0" $ list [inject W._Instruction W._Instruction_localGet (var "p0")]) $
     "rawBodyInstrs" <<~ (cases _Term (var "dBody") (Just $
@@ -1523,17 +1524,17 @@ hexEscapeString :: TypedTermDefinition (Int -> String)
 hexEscapeString = def "hexEscapeString" $
   doc "Emit a single byte as a two-character lowercase hex escape prefixed with a backslash" $
   lambda "b" $
-    "byte" <~ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "b") (int32 256))) $
+    "byte" <~ (Optionals.withDefault (int32 0) (Math.mod (var "b") (int32 256))) $
     "digitToHex" <~ (lambda "d" $
-      Logic.ifElse (Equality.lt (var "d") (int32 10))
+      Logic.ifElse (Ordering.lt (var "d") (int32 10))
         -- '0' = 48
         (Strings.fromList (list [Math.add (var "d") (int32 48)]))
         -- 'a' - 10 = 87
         (Strings.fromList (list [Math.add (var "d") (int32 87)]))) $
-    Strings.cat (list [
+    Strings.concat (list [
       string "\\",
-      var "digitToHex" @@ (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "byte") (int32 16))),
-      var "digitToHex" @@ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "byte") (int32 16)))])
+      var "digitToHex" @@ (Optionals.withDefault (int32 0) (Math.div (var "byte") (int32 16))),
+      var "digitToHex" @@ (Optionals.withDefault (int32 0) (Math.mod (var "byte") (int32 16)))])
 
 -- | Convert a Hydra module to a map of file paths to WAT source code strings.
 moduleToWasm :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
@@ -1675,8 +1676,8 @@ moduleToWasm = def "moduleToWasm" $
     "importFields" <~ Lists.map
       (lambda "fname" $
         "parts" <~ (Strings.splitOn (string ".") (var "fname")) $
-        "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Lists.reverse (var "parts"))))) $
-        "sig" <~ Optionals.fromOptional (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs" :: TypedTerm (M.Map String ([W.ValType], [W.ValType])))) $
+        "modName" <~ Strings.join (string ".") (Lists.reverse (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Lists.reverse (var "parts"))))) $
+        "sig" <~ Optionals.withDefault (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs" :: TypedTerm (M.Map String ([W.ValType], [W.ValType])))) $
         "sigParams" <~ Pairs.first (var "sig") $
         "sigResults" <~ Pairs.second (var "sig") $
         "wasmImportParams" <~ Lists.map
@@ -1725,7 +1726,7 @@ peelLambdaApp = def "peelLambdaApp" $
          _Term_lambda>>: lambda "lam" $
            "paramName" <~ Core.lambdaParameter (var "lam") $
            "body" <~ Core.lambdaBody (var "lam") $
-           "restArgs" <~ Optionals.fromOptional (list ([] :: [TypedTerm Term])) (Lists.maybeTail (var "args")) $
+           "restArgs" <~ Optionals.withDefault (list ([] :: [TypedTerm Term])) (Lists.tail (var "args")) $
            "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
              pair
                (Lists.cons (var "paramName") (Pairs.first (var "inner")))
@@ -1744,21 +1745,21 @@ stringDataSegment = def "stringDataSegment" $
   doc "Build the WASM data segment module field for a string-offset map" $
   lambda "offsets" $
     -- Sort (string, offset) pairs by offset so the data segment packs contiguously
-    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets" :: TypedTerm (M.Map String Int))) $
+    "entries" <~ Lists.sortBy (reify Pairs.second) (Maps.toList (var "offsets" :: TypedTerm (M.Map String Int))) $
     -- For each string: emit 4 length-prefix bytes (little-endian) followed by content bytes,
     -- every byte as a hex escape.
     "bytesForEntry" <~ (lambda "entry" $
       "s" <~ Pairs.first (var "entry") $
       "len" <~ Strings.length (var "s") $
       "lenBytes" <~ list [
-        Optionals.fromOptional (int32 0) (Math.maybeMod (var "len") (int32 256)),
-        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
-        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
-        Optionals.fromOptional (int32 0) (Math.maybeMod (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
+        Optionals.withDefault (int32 0) (Math.mod (var "len") (int32 256)),
+        Optionals.withDefault (int32 0) (Math.mod (Optionals.withDefault (int32 0) (Math.div (var "len") (int32 256))) (int32 256)),
+        Optionals.withDefault (int32 0) (Math.mod (Optionals.withDefault (int32 0) (Math.div (var "len") (int32 65536))) (int32 256)),
+        Optionals.withDefault (int32 0) (Math.mod (Optionals.withDefault (int32 0) (Math.div (var "len") (int32 16777216))) (int32 256))] $
       "contentBytes" <~ Strings.toList (var "s") $
       "allBytes" <~ Lists.concat2 (var "lenBytes") (var "contentBytes") $
-        Strings.cat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $
-    "allHex" <~ Strings.cat (Lists.map (var "bytesForEntry") (var "entries")) $
+        Strings.concat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $
+    "allHex" <~ Strings.concat (Lists.map (var "bytesForEntry") (var "entries")) $
     inject W._ModuleField W._ModuleField_data $
       record W._DataSegment [
         W._DataSegment_name>>: nothing,

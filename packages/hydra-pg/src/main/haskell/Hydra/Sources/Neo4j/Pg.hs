@@ -8,6 +8,7 @@ import Hydra.Kernel hiding (
 import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
@@ -78,12 +79,12 @@ edgeLabelForRelationship = mappingDefinition "edgeLabelForRelationship" $
     "startStr">: unwrap _NodeLabel @@ var "startLabel",
     "endStr">: unwrap _NodeLabel @@ var "endLabel",
     -- Overloaded: disambiguate with the endpoint labels (out ++ Type ++ In).
-    "expanded">: Strings.cat (list [
+    "expanded">: Strings.concat (list [
       Formatting.decapitalize @@ (Formatting.convertCase @@ Util.caseConventionPascal @@ Util.caseConventionCamel @@ var "startStr"),
       Formatting.capitalize @@ var "camelType",
       Formatting.capitalize @@ (Formatting.convertCase @@ Util.caseConventionPascal @@ Util.caseConventionCamel @@ var "endStr")])]
   $ wrap PG._EdgeLabel (Logic.ifElse
-      (Equality.gt (Lists.length (var "matching")) (int32 1))
+      (Ordering.gt (Lists.length (var "matching")) (int32 1))
       (var "expanded")
       (var "camelType"))
 
@@ -117,7 +118,7 @@ nodeToVertex = mappingDefinition "nodeToVertex" $
   "mapping" ~> "node" ~>
   lets [
     "labels">: Sets.toList (project _Node _Node_labels @@ var "node" :: TypedTerm (S.Set NodeLabel)),
-    "soleLabel">: Optionals.fromOptional (wrap _NodeLabel (string "")) (Lists.maybeHead (var "labels"))]
+    "soleLabel">: Optionals.withDefault (wrap _NodeLabel (string "")) (Lists.head (var "labels"))]
   $ Logic.ifElse
       (Equality.equal (Lists.length (var "labels")) (int32 1))
       (Eithers.bind ((project _Neo4jMapping _Neo4jMapping_decodeId @@ var "mapping") @@ (project _Node _Node_id @@ var "node"))
@@ -128,7 +129,7 @@ nodeToVertex = mappingDefinition "nodeToVertex" $
           PG._Vertex_label>>: wrap PG._VertexLabel (unwrap _NodeLabel @@ var "soleLabel"),
           PG._Vertex_id>>: var "vid",
           PG._Vertex_properties>>: var "props"]))))
-      (left (Strings.cat (list [
+      (left (Strings.concat (list [
         string "cannot map a multi-label Neo4j node to a single-label property-graph vertex: ",
         unwrap _ElementId @@ (project _Node _Node_id @@ var "node")])))
 
@@ -246,11 +247,11 @@ soleLabelForId =
       (var "nodes")) :: TypedTerm (M.Map String [NodeLabel]))]
   $ "eid" ~>
     Optionals.cases (Maps.lookup (unwrap _ElementId @@ var "eid" :: TypedTerm String) (var "m"))
-      (left (Strings.cat (list [string "no node with id ", unwrap _ElementId @@ var "eid"])))
+      (left (Strings.concat (list [string "no node with id ", unwrap _ElementId @@ var "eid"])))
       ("labels" ~> Logic.ifElse
         (Equality.equal (Lists.length (var "labels")) (int32 1))
-        (right (Optionals.fromOptional (wrap _NodeLabel (string "")) (Lists.maybeHead (var "labels"))))
-        (left (Strings.cat (list [string "endpoint node is not single-labeled: ", unwrap _ElementId @@ var "eid"]))))
+        (right (Optionals.withDefault (wrap _NodeLabel (string "")) (Lists.head (var "labels"))))
+        (left (Strings.concat (list [string "endpoint node is not single-labeled: ", unwrap _ElementId @@ var "eid"]))))
 
 -- ============================================================================
 -- Property maps (host helpers)

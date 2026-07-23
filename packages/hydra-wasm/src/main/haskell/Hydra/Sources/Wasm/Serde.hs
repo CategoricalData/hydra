@@ -141,15 +141,15 @@ blockInstructionToExpr = define "blockInstructionToExpr" $
     "label">: project W._BlockInstruction W._BlockInstruction_label @@ var "b",
     "bt">: project W._BlockInstruction W._BlockInstruction_blockType @@ var "b",
     "body">: project W._BlockInstruction W._BlockInstruction_body @@ var "b",
-    "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
+    "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.concat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
     "bodyParts">: Lists.map (asTerm instructionToExpr) (var "body"),
-    "header">: Serialization.spaceSep @@ Optionals.cat (list [
-      just (Serialization.cst @@ Strings.cat (list [string "(", var "keyword", var "labelStr"])),
+    "header">: Serialization.spaceSep @@ Optionals.givens (list [
+      just (Serialization.cst @@ Strings.concat (list [string "(", var "keyword", var "labelStr"])),
       var "btPart"])] $
     Serialization.newlineSep @@ Lists.concat (list [
       list [var "header"],
-      Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "bodyParts"),
+      Lists.map (lambda "p" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "bodyParts"),
       list [Serialization.cst @@ string ")"]])
 
 blockTypeToExpr :: TypedTermDefinition (W.BlockType -> Maybe Expr)
@@ -159,7 +159,7 @@ blockTypeToExpr = define "blockTypeToExpr" $
     cases W._BlockType (var "bt") Nothing [
       W._BlockType_empty>>: constant nothing,
       W._BlockType_value>>: lambda "vt" $
-        just (Serialization.cst @@ Strings.cat (list [string "(result ", valTypeToStr @@ var "vt", string ")"])),
+        just (Serialization.cst @@ Strings.concat (list [string "(result ", valTypeToStr @@ var "vt", string ")"])),
       W._BlockType_typeUse>>: lambda "tu" $
         just (typeUseToExpr @@ var "tu")]
 
@@ -169,13 +169,13 @@ constValueToExpr = define "constValueToExpr" $
   lambda "c" $
     cases W._ConstValue (var "c") Nothing [
       W._ConstValue_i32>>: lambda "v" $
-        Serialization.cst @@ Strings.cat2 (string "i32.const ") (Literals.showInt32 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "i32.const ") (Literals.showInt32 (var "v")),
       W._ConstValue_i64>>: lambda "v" $
-        Serialization.cst @@ Strings.cat2 (string "i64.const ") (Literals.showInt64 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "i64.const ") (Literals.showInt64 (var "v")),
       W._ConstValue_f32>>: lambda "v" $
-        Serialization.cst @@ Strings.cat2 (string "f32.const ") (Literals.showFloat32 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "f32.const ") (Literals.showFloat32 (var "v")),
       W._ConstValue_f64>>: lambda "v" $
-        Serialization.cst @@ Strings.cat2 (string "f64.const ") (Literals.showFloat64 (var "v"))]
+        Serialization.cst @@ Strings.concat2 (string "f64.const ") (Literals.showFloat64 (var "v"))]
 
 
 -- =============================================================================
@@ -189,20 +189,20 @@ dataSegmentToExpr = define "dataSegmentToExpr" $
     "name">: project W._DataSegment W._DataSegment_name @@ var "d",
     "mode">: project W._DataSegment W._DataSegment_mode @@ var "d",
     "bytes">: project W._DataSegment W._DataSegment_bytes @@ var "d",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
     cases W._DataMode (var "mode") Nothing [
       W._DataMode_active>>: lambda "offset" $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(data") (var "nameStr"),
+          Serialization.cst @@ Strings.concat2 (string "(data") (var "nameStr"),
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "(offset",
             Serialization.spaceSep @@ Lists.map (asTerm instructionToExpr) (var "offset"),
             Serialization.cst @@ string ")"],
-          Serialization.cst @@ Strings.cat (list [string "\"", var "bytes", string "\")"]) ],
+          Serialization.cst @@ Strings.concat (list [string "\"", var "bytes", string "\")"]) ],
       W._DataMode_passive>>: constant $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(data") (var "nameStr"),
-          Serialization.cst @@ Strings.cat (list [string "\"", var "bytes", string "\")"])]]
+          Serialization.cst @@ Strings.concat2 (string "(data") (var "nameStr"),
+          Serialization.cst @@ Strings.concat (list [string "\"", var "bytes", string "\")"])]]
 
 exportDefToExpr :: TypedTermDefinition (W.ExportDef -> Expr)
 exportDefToExpr = define "exportDefToExpr" $
@@ -212,7 +212,7 @@ exportDefToExpr = define "exportDefToExpr" $
     "desc">: project W._ExportDef W._ExportDef_desc @@ var "e"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "(export",
-      Serialization.cst @@ Strings.cat (list [string "\"", var "name", string "\""]),
+      Serialization.cst @@ Strings.concat (list [string "\"", var "name", string "\""]),
       exportDescToExpr @@ var "desc",
       Serialization.cst @@ string ")"]
 
@@ -222,13 +222,13 @@ exportDescToExpr = define "exportDescToExpr" $
   lambda "desc" $
     cases W._ExportDesc (var "desc") Nothing [
       W._ExportDesc_func>>: lambda "f" $
-        Serialization.cst @@ Strings.cat (list [string "(func $", var "f", string ")"]),
+        Serialization.cst @@ Strings.concat (list [string "(func $", var "f", string ")"]),
       W._ExportDesc_memory>>: lambda "m" $
-        Serialization.cst @@ Strings.cat (list [string "(memory $", var "m", string ")"]),
+        Serialization.cst @@ Strings.concat (list [string "(memory $", var "m", string ")"]),
       W._ExportDesc_table>>: lambda "t" $
-        Serialization.cst @@ Strings.cat (list [string "(table $", var "t", string ")"]),
+        Serialization.cst @@ Strings.concat (list [string "(table $", var "t", string ")"]),
       W._ExportDesc_global>>: lambda "g" $
-        Serialization.cst @@ Strings.cat (list [string "(global $", var "g", string ")"])]
+        Serialization.cst @@ Strings.concat (list [string "(global $", var "g", string ")"])]
 
 
 -- =============================================================================
@@ -241,8 +241,8 @@ funcLocalToExpr = define "funcLocalToExpr" $
   lambda "l" $ lets [
     "name">: project W._FuncLocal W._FuncLocal_name @@ var "l",
     "typ">: project W._FuncLocal W._FuncLocal_type @@ var "l",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
-    Serialization.cst @@ Strings.cat (list [
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
+    Serialization.cst @@ Strings.concat (list [
       string "(local", var "nameStr", string " ", valTypeToStr @@ var "typ", string ")"])
 
 
@@ -258,8 +258,8 @@ funcToExpr = define "funcToExpr" $
     "typeUse">: project W._Func W._Func_typeUse @@ var "f",
     "locals">: project W._Func W._Func_locals @@ var "f",
     "body">: project W._Func W._Func_body @@ var "f",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
-    "headerStr">: Strings.cat2 (string "(func") (var "nameStr"),
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n")),
+    "headerStr">: Strings.concat2 (string "(func") (var "nameStr"),
     "typeUsePart">: typeUseToExpr @@ var "typeUse",
     "localParts">: Lists.map (asTerm funcLocalToExpr) (var "locals"),
     "bodyParts">: Lists.map (asTerm instructionToExpr) (var "body"),
@@ -271,7 +271,7 @@ funcToExpr = define "funcToExpr" $
         Serialization.cst @@ string ")"])
       (Serialization.newlineSep @@ Lists.concat (list [
         list [Serialization.spaceSep @@ list [Serialization.cst @@ var "headerStr", var "typeUsePart"]],
-        Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "innerParts"),
+        Lists.map (lambda "p" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "innerParts"),
         list [Serialization.cst @@ string ")"]]))
 
 funcTypeToExpr :: TypedTermDefinition (W.FuncType -> Expr)
@@ -281,12 +281,12 @@ funcTypeToExpr = define "funcTypeToExpr" $
     "params">: project W._FuncType W._FuncType_params @@ var "ft",
     "results">: project W._FuncType W._FuncType_results @@ var "ft",
     "paramParts">: Lists.map
-      (lambda "p" $ Serialization.cst @@ Strings.cat (list [string "(param ", valTypeToStr @@ var "p", string ")"]))
+      (lambda "p" $ Serialization.cst @@ Strings.concat (list [string "(param ", valTypeToStr @@ var "p", string ")"]))
       (var "params"),
     "resultParts">: Lists.map
-      (lambda "r" $ Serialization.cst @@ Strings.cat (list [string "(result ", valTypeToStr @@ var "r", string ")"]))
+      (lambda "r" $ Serialization.cst @@ Strings.concat (list [string "(result ", valTypeToStr @@ var "r", string ")"]))
       (var "results")] $
-    Serialization.spaceSep @@ Optionals.cat (list [
+    Serialization.spaceSep @@ Optionals.givens (list [
       just (Serialization.cst @@ string "(func"),
       Logic.ifElse (Lists.null (var "paramParts")) nothing (just (Serialization.spaceSep @@ var "paramParts")),
       Logic.ifElse (Lists.null (var "resultParts")) nothing (just (Serialization.spaceSep @@ var "resultParts")),
@@ -299,9 +299,9 @@ globalDefToExpr = define "globalDefToExpr" $
     "name">: project W._GlobalDef W._GlobalDef_name @@ var "g",
     "gt">: project W._GlobalDef W._GlobalDef_type @@ var "g",
     "init">: project W._GlobalDef W._GlobalDef_init @@ var "g",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ Strings.cat2 (string "(global") (var "nameStr"),
+      Serialization.cst @@ Strings.concat2 (string "(global") (var "nameStr"),
       globalTypeToExpr @@ var "gt",
       Serialization.spaceSep @@ Lists.map (asTerm instructionToExpr) (var "init"),
       Serialization.cst @@ string ")"]
@@ -313,7 +313,7 @@ globalTypeToExpr = define "globalTypeToExpr" $
     "vt">: project W._GlobalType W._GlobalType_valType @@ var "gt",
     "mut">: project W._GlobalType W._GlobalType_mutable @@ var "gt"] $
     Logic.ifElse (var "mut")
-      (Serialization.cst @@ Strings.cat (list [string "(mut ", valTypeToStr @@ var "vt", string ")"]))
+      (Serialization.cst @@ Strings.concat (list [string "(mut ", valTypeToStr @@ var "vt", string ")"]))
       (Serialization.cst @@ (valTypeToStr @@ var "vt"))
 
 
@@ -329,20 +329,20 @@ ifInstructionToExpr = define "ifInstructionToExpr" $
     "bt">: project W._IfInstruction W._IfInstruction_blockType @@ var "i",
     "thenBranch">: project W._IfInstruction W._IfInstruction_then @@ var "i",
     "elseBranch">: project W._IfInstruction W._IfInstruction_else @@ var "i",
-    "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
+    "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.concat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
     "thenParts">: Lists.map (asTerm instructionToExpr) (var "thenBranch"),
     "elseParts">: Lists.map (asTerm instructionToExpr) (var "elseBranch"),
-    "header">: Serialization.spaceSep @@ Optionals.cat (list [
-      just (Serialization.cst @@ Strings.cat (list [string "(if", var "labelStr"])),
+    "header">: Serialization.spaceSep @@ Optionals.givens (list [
+      just (Serialization.cst @@ Strings.concat (list [string "(if", var "labelStr"])),
       var "btPart"]),
     "thenBlock">: Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.cst @@ string "(then"],
-      Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "thenParts"),
+      Lists.map (lambda "p" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "thenParts"),
       list [Serialization.cst @@ string ")"]]),
     "elseBlock">: Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.cst @@ string "(else"],
-      Lists.map (lambda "p" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "elseParts"),
+      Lists.map (lambda "p" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "elseParts"),
       list [Serialization.cst @@ string ")"]])] $
     Logic.ifElse (Lists.null (var "elseParts"))
       (Serialization.newlineSep @@ list [var "header", var "thenBlock", Serialization.cst @@ string ")"])
@@ -362,8 +362,8 @@ importDefToExpr = define "importDefToExpr" $
     "desc">: project W._ImportDef W._ImportDef_desc @@ var "i"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "(import",
-      Serialization.cst @@ Strings.cat (list [string "\"", var "modName", string "\""]),
-      Serialization.cst @@ Strings.cat (list [string "\"", var "name", string "\""]),
+      Serialization.cst @@ Strings.concat (list [string "\"", var "modName", string "\""]),
+      Serialization.cst @@ Strings.concat (list [string "\"", var "name", string "\""]),
       importDescToExpr @@ var "desc",
       Serialization.cst @@ string ")"]
 
@@ -375,35 +375,35 @@ importDescToExpr = define "importDescToExpr" $
       W._ImportDesc_func>>: lambda "f" $ lets [
         "name">: project W._ImportFunc W._ImportFunc_name @@ var "f",
         "tu">: project W._ImportFunc W._ImportFunc_typeUse @@ var "f",
-        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(func") (var "nameStr"),
+          Serialization.cst @@ Strings.concat2 (string "(func") (var "nameStr"),
           typeUseToExpr @@ var "tu",
           Serialization.cst @@ string ")"],
       W._ImportDesc_memory>>: lambda "m" $ lets [
         "name">: project W._ImportMemory W._ImportMemory_name @@ var "m",
         "lim">: project W._ImportMemory W._ImportMemory_limits @@ var "m",
-        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(memory") (var "nameStr"),
+          Serialization.cst @@ Strings.concat2 (string "(memory") (var "nameStr"),
           limitsToExpr @@ var "lim",
           Serialization.cst @@ string ")"],
       W._ImportDesc_table>>: lambda "t" $ lets [
         "name">: project W._ImportTable W._ImportTable_name @@ var "t",
         "rt">: project W._ImportTable W._ImportTable_refType @@ var "t",
         "lim">: project W._ImportTable W._ImportTable_limits @@ var "t",
-        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(table") (var "nameStr"),
+          Serialization.cst @@ Strings.concat2 (string "(table") (var "nameStr"),
           limitsToExpr @@ var "lim",
           Serialization.cst @@ (refTypeToStr @@ var "rt"),
           Serialization.cst @@ string ")"],
       W._ImportDesc_global>>: lambda "g" $ lets [
         "name">: project W._ImportGlobal W._ImportGlobal_name @@ var "g",
         "gt">: project W._ImportGlobal W._ImportGlobal_type @@ var "g",
-        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+        "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ Strings.cat2 (string "(global") (var "nameStr"),
+          Serialization.cst @@ Strings.concat2 (string "(global") (var "nameStr"),
           globalTypeToExpr @@ var "gt",
           Serialization.cst @@ string ")"]]
 
@@ -414,23 +414,23 @@ instructionToExpr = define "instructionToExpr" $
     cases W._Instruction (var "instr") Nothing [
       W._Instruction_const>>: lambda "c" $ constValueToExpr @@ var "c",
       W._Instruction_localGet>>: lambda "v" $
-        Serialization.cst @@ Strings.cat (list [string "local.get $", var "v"]),
+        Serialization.cst @@ Strings.concat (list [string "local.get $", var "v"]),
       W._Instruction_localSet>>: lambda "v" $
-        Serialization.cst @@ Strings.cat (list [string "local.set $", var "v"]),
+        Serialization.cst @@ Strings.concat (list [string "local.set $", var "v"]),
       W._Instruction_localTee>>: lambda "v" $
-        Serialization.cst @@ Strings.cat (list [string "local.tee $", var "v"]),
+        Serialization.cst @@ Strings.concat (list [string "local.tee $", var "v"]),
       W._Instruction_globalGet>>: lambda "v" $
-        Serialization.cst @@ Strings.cat (list [string "global.get $", var "v"]),
+        Serialization.cst @@ Strings.concat (list [string "global.get $", var "v"]),
       W._Instruction_globalSet>>: lambda "v" $
-        Serialization.cst @@ Strings.cat (list [string "global.set $", var "v"]),
+        Serialization.cst @@ Strings.concat (list [string "global.set $", var "v"]),
       W._Instruction_load>>: lambda "ld" $ lets [
         "vt">: project W._MemoryInstruction W._MemoryInstruction_type @@ var "ld",
         "ma">: project W._MemoryInstruction W._MemoryInstruction_memArg @@ var "ld",
         "off">: project W._MemArg W._MemArg_offset @@ var "ma",
         "offStr">: Logic.ifElse (Equality.equal (var "off") (int32 0))
           (string "")
-          (Strings.cat2 (string " offset=") (Literals.showInt32 (var "off")))] $
-        Serialization.cst @@ Strings.cat (list [
+          (Strings.concat2 (string " offset=") (Literals.showInt32 (var "off")))] $
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".load", var "offStr"]),
       W._Instruction_store>>: lambda "st" $ lets [
         "vt">: project W._MemoryInstruction W._MemoryInstruction_type @@ var "st",
@@ -438,33 +438,33 @@ instructionToExpr = define "instructionToExpr" $
         "off">: project W._MemArg W._MemArg_offset @@ var "ma",
         "offStr">: Logic.ifElse (Equality.equal (var "off") (int32 0))
           (string "")
-          (Strings.cat2 (string " offset=") (Literals.showInt32 (var "off")))] $
-        Serialization.cst @@ Strings.cat (list [
+          (Strings.concat2 (string " offset=") (Literals.showInt32 (var "off")))] $
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".store", var "offStr"]),
       W._Instruction_unop>>: lambda "op" $ lets [
         "vt">: project W._NumericOp W._NumericOp_type @@ var "op",
         "nm">: project W._NumericOp W._NumericOp_name @@ var "op"] $
-        Serialization.cst @@ Strings.cat (list [
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".", var "nm"]),
       W._Instruction_binop>>: lambda "op" $ lets [
         "vt">: project W._NumericOp W._NumericOp_type @@ var "op",
         "nm">: project W._NumericOp W._NumericOp_name @@ var "op"] $
-        Serialization.cst @@ Strings.cat (list [
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".", var "nm"]),
       W._Instruction_testop>>: lambda "op" $ lets [
         "vt">: project W._NumericOp W._NumericOp_type @@ var "op",
         "nm">: project W._NumericOp W._NumericOp_name @@ var "op"] $
-        Serialization.cst @@ Strings.cat (list [
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".", var "nm"]),
       W._Instruction_relop>>: lambda "op" $ lets [
         "vt">: project W._NumericOp W._NumericOp_type @@ var "op",
         "nm">: project W._NumericOp W._NumericOp_name @@ var "op"] $
-        Serialization.cst @@ Strings.cat (list [
+        Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".", var "nm"]),
       W._Instruction_convert>>: lambda "c" $
         Serialization.cst @@ var "c",
       W._Instruction_call>>: lambda "f" $
-        Serialization.cst @@ Strings.cat (list [string "call $", var "f"]),
+        Serialization.cst @@ Strings.concat (list [string "call $", var "f"]),
       W._Instruction_callIndirect>>: lambda "tu" $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "call_indirect",
@@ -476,15 +476,15 @@ instructionToExpr = define "instructionToExpr" $
       W._Instruction_if>>: lambda "i" $
         ifInstructionToExpr @@ var "i",
       W._Instruction_br>>: lambda "l" $
-        Serialization.cst @@ Strings.cat (list [string "br $", var "l"]),
+        Serialization.cst @@ Strings.concat (list [string "br $", var "l"]),
       W._Instruction_brIf>>: lambda "l" $
-        Serialization.cst @@ Strings.cat (list [string "br_if $", var "l"]),
+        Serialization.cst @@ Strings.concat (list [string "br_if $", var "l"]),
       W._Instruction_brTable>>: lambda "bt" $ lets [
         "labels">: project W._BrTableArgs W._BrTableArgs_labels @@ var "bt",
         "def">: project W._BrTableArgs W._BrTableArgs_default @@ var "bt"] $
-        Serialization.cst @@ Strings.cat (list [
+        Serialization.cst @@ Strings.concat (list [
           string "br_table ",
-          Strings.intercalate (string " ") (Lists.map (lambda "l" $ Strings.cat2 (string "$") (var "l")) (var "labels")),
+          Strings.join (string " ") (Lists.map (lambda "l" $ Strings.concat2 (string "$") (var "l")) (var "labels")),
           string " $", var "def"]),
       W._Instruction_return>>: constant $ Serialization.cst @@ string "return",
       W._Instruction_drop>>: constant $ Serialization.cst @@ string "drop",
@@ -494,7 +494,7 @@ instructionToExpr = define "instructionToExpr" $
       W._Instruction_memorySize>>: constant $ Serialization.cst @@ string "memory.size",
       W._Instruction_memoryGrow>>: constant $ Serialization.cst @@ string "memory.grow",
       W._Instruction_refNull>>: lambda "rt" $
-        Serialization.cst @@ Strings.cat (list [string "ref.null ", refTypeToStr @@ var "rt"]),
+        Serialization.cst @@ Strings.concat (list [string "ref.null ", refTypeToStr @@ var "rt"]),
       W._Instruction_refIsNull>>: constant $ Serialization.cst @@ string "ref.is_null",
       W._Instruction_raw>>: lambda "s" $
         Serialization.cst @@ var "s"]
@@ -505,7 +505,7 @@ limitsToExpr = define "limitsToExpr" $
   lambda "l" $ lets [
     "mn">: project W._Limits W._Limits_min @@ var "l",
     "mx">: project W._Limits W._Limits_max @@ var "l"] $
-    Serialization.spaceSep @@ Optionals.cat (list [
+    Serialization.spaceSep @@ Optionals.givens (list [
       just (Serialization.cst @@ Literals.showInt32 (var "mn")),
       Optionals.map (lambda "m" $ Serialization.cst @@ Literals.showInt32 (var "m")) (var "mx")])
 
@@ -520,9 +520,9 @@ memoryDefToExpr = define "memoryDefToExpr" $
   lambda "m" $ lets [
     "name">: project W._MemoryDef W._MemoryDef_name @@ var "m",
     "lim">: project W._MemoryDef W._MemoryDef_limits @@ var "m",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ Strings.cat2 (string "(memory") (var "nameStr"),
+      Serialization.cst @@ Strings.concat2 (string "(memory") (var "nameStr"),
       limitsToExpr @@ var "lim",
       Serialization.cst @@ string ")"]
 
@@ -541,7 +541,7 @@ moduleFieldToExpr = define "moduleFieldToExpr" $
       W._ModuleField_data>>: lambda "d" $ dataSegmentToExpr @@ var "d",
       W._ModuleField_elem>>: lambda "_" $ Serialization.cst @@ string ";; elem segment (not yet supported)",
       W._ModuleField_start>>: lambda "s" $
-        Serialization.cst @@ Strings.cat (list [string "(start $", var "s", string ")"])]
+        Serialization.cst @@ Strings.concat (list [string "(start $", var "s", string ")"])]
 
 
 -- =============================================================================
@@ -554,11 +554,11 @@ moduleToExpr = define "moduleToExpr" $
   lambda "mod" $ lets [
     "name">: project W._Module W._Module_name @@ var "mod",
     "fields">: project W._Module W._Module_fields @@ var "mod",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n")),
     "fieldExprs">: Lists.map (asTerm moduleFieldToExpr) (var "fields")] $
     Serialization.newlineSep @@ Lists.concat (list [
-      list [Serialization.cst @@ Strings.cat2 (string "(module") (var "nameStr")],
-      Lists.map (lambda "fe" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "fe")) (var "fieldExprs"),
+      list [Serialization.cst @@ Strings.concat2 (string "(module") (var "nameStr")],
+      Lists.map (lambda "fe" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "fe")) (var "fieldExprs"),
       list [Serialization.cst @@ string ")"]])
 
 paramToExpr :: TypedTermDefinition (W.Param -> Expr)
@@ -567,8 +567,8 @@ paramToExpr = define "paramToExpr" $
   lambda "p" $ lets [
     "name">: project W._Param W._Param_name @@ var "p",
     "typ">: project W._Param W._Param_type @@ var "p",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
-    Serialization.cst @@ Strings.cat (list [string "(param", var "nameStr", string " ", valTypeToStr @@ var "typ", string ")"])
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
+    Serialization.cst @@ Strings.concat (list [string "(param", var "nameStr", string " ", valTypeToStr @@ var "typ", string ")"])
 
 
 -- =============================================================================
@@ -590,9 +590,9 @@ tableDefToExpr = define "tableDefToExpr" $
     "name">: project W._TableDef W._TableDef_name @@ var "t",
     "rt">: project W._TableDef W._TableDef_refType @@ var "t",
     "lim">: project W._TableDef W._TableDef_limits @@ var "t",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ Strings.cat2 (string "(table") (var "nameStr"),
+      Serialization.cst @@ Strings.concat2 (string "(table") (var "nameStr"),
       limitsToExpr @@ var "lim",
       Serialization.cst @@ (refTypeToStr @@ var "rt"),
       Serialization.cst @@ string ")"]
@@ -606,7 +606,7 @@ toWatComment :: TypedTermDefinition (String -> String)
 toWatComment = define "toWatComment" $
   doc "Convert a string to a WAT comment" $
   lambda "s" $
-    Strings.cat (list [string ";; ", var "s"])
+    Strings.concat (list [string ";; ", var "s"])
 
 typeDefToExpr :: TypedTermDefinition (W.TypeDef -> Expr)
 typeDefToExpr = define "typeDefToExpr" $
@@ -614,9 +614,9 @@ typeDefToExpr = define "typeDefToExpr" $
   lambda "td" $ lets [
     "name">: project W._TypeDef W._TypeDef_name @@ var "td",
     "ft">: project W._TypeDef W._TypeDef_type @@ var "td",
-    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n"))] $
+    "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.concat2 (string " $") (var "n"))] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ Strings.cat2 (string "(type") (var "nameStr"),
+      Serialization.cst @@ Strings.concat2 (string "(type") (var "nameStr"),
       funcTypeToExpr @@ var "ft",
       Serialization.cst @@ string ")"]
 
@@ -628,13 +628,13 @@ typeUseToExpr = define "typeUseToExpr" $
     "params">: project W._TypeUse W._TypeUse_params @@ var "tu",
     "results">: project W._TypeUse W._TypeUse_results @@ var "tu",
     "idxPart">: Optionals.map
-      (lambda "i" $ Serialization.cst @@ Strings.cat (list [string "(type $", var "i", string ")"]))
+      (lambda "i" $ Serialization.cst @@ Strings.concat (list [string "(type $", var "i", string ")"]))
       (var "idx"),
     "paramParts">: Lists.map (asTerm paramToExpr) (var "params"),
     "resultParts">: Lists.map
-      (lambda "r" $ Serialization.cst @@ Strings.cat (list [string "(result ", valTypeToStr @@ var "r", string ")"]))
+      (lambda "r" $ Serialization.cst @@ Strings.concat (list [string "(result ", valTypeToStr @@ var "r", string ")"]))
       (var "results")] $
-    Serialization.spaceSep @@ Optionals.cat (Lists.concat (list [
+    Serialization.spaceSep @@ Optionals.givens (Lists.concat (list [
       list [var "idxPart"],
       Lists.map (lambda "p" $ just (var "p")) (var "paramParts"),
       Lists.map (lambda "r" $ just (var "r")) (var "resultParts")]))

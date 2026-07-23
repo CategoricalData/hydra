@@ -240,7 +240,7 @@ iri :: TypedTermDefinition (String -> String -> Rdf.Iri)
 iri = define "iri" $
   doc "Construct an IRI from a namespace and local name" $
   lambda "ns" $ lambda "local" $
-    wrap Rdf._Iri (Strings.cat2 (var "ns") (var "local"))
+    wrap Rdf._Iri (Strings.concat2 (var "ns") (var "local"))
 
 -- | Construct a key IRI from a local name
 keyIri :: TypedTermDefinition (String -> Rdf.Iri)
@@ -262,7 +262,7 @@ nameToIri :: TypedTermDefinition (Name -> Rdf.Iri)
 nameToIri = define "nameToIri" $
   doc "Convert a Hydra name to an RDF IRI" $
   lambda "name" $
-    wrap Rdf._Iri (Strings.cat2 (string "urn:") (Core.unName $ var "name"))
+    wrap Rdf._Iri (Strings.concat2 (string "urn:") (Core.unName $ var "name"))
 
 -- | Generate the next blank node and an updated counter
 nextBlankNode :: TypedTermDefinition (I.Int32 -> (Rdf.Resource, I.Int32))
@@ -271,7 +271,7 @@ nextBlankNode = define "nextBlankNode" $
   lambda "counter" $
     pair
       (inject Rdf._Resource Rdf._Resource_bnode
-        (wrap Rdf._BlankNode (Strings.cat2 (string "b") (Literals.showInt32 (var "counter")))))
+        (wrap Rdf._BlankNode (Strings.concat2 (string "b") (Literals.showInt32 (var "counter")))))
       (Math.add (var "counter") (int32 1))
 
 -- | Construct a property IRI from a record name and field name
@@ -283,7 +283,7 @@ propertyIri = define "propertyIri" $
     "gname">: Util.qualifiedNameModuleName (var "qualName"),
     "local_">: Util.qualifiedNameLocal (var "qualName")] $
     wrap Rdf._Iri
-      (Strings.cat $ list [
+      (Strings.concat $ list [
         string "urn:",
         Optionals.cases (var "gname") (string "") (unwrap _ModuleName),
         string "#",

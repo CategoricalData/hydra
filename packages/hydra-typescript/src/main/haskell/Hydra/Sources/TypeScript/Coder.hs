@@ -605,8 +605,8 @@ encodeTerm = def "encodeTerm" $
                ("nsSegs" <~ (Lists.drop (int32 1)
                   (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
                 -- Must match the prefix used in importsToText.
-                "alias" <~ Strings.cat2 (string "$mod_")
-                  (Strings.intercalate (string "_") (var "nsSegs")) $
+                "alias" <~ Strings.concat2 (string "$mod_")
+                  (Strings.join (string "_") (var "nsSegs")) $
                 tsMember @@ (tsExprIdent @@ var "alias") @@ var "local")) $
        -- Zero-arity effectful primitives (e.g. getEnvironment, getTime) are
        -- IO-action values in Haskell but must be eagerly called in TypeScript
@@ -674,7 +674,7 @@ encodeTerm = def "encodeTerm" $
            "pats" <~ Pairs.second (var "acc") $
            "raw" <~ (Names.localNameOf @@ var "pn") $
            "uniq" <~ Logic.ifElse (Equality.equal (var "raw") (string "_"))
-             (Strings.cat2 (string "_") (Literals.showInt32 (var "idx")))
+             (Strings.concat2 (string "_") (Literals.showInt32 (var "idx")))
              (var "raw") $
            "pat" <~ (tsTypedIdent
              @@ (Formatting.sanitizeWithUnderscores
@@ -747,7 +747,7 @@ encodeTerm = def "encodeTerm" $
                 ("fname" <~ (Formatting.sanitizeWithUnderscores
                    @@ TypeScriptLanguageSource.typeScriptReservedWords
                    @@ Core.unName (Core.projectionFieldName (var "proj"))) $
-                 "firstA" <~ Optionals.fromOptional (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
+                 "firstA" <~ Optionals.withDefault (tsExprIdent @@ string "undefined") (Lists.head (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "fieldExpr" <~ (tsMember @@ var "firstA" @@ var "fname") $
                  Logic.ifElse (Lists.null (var "restA"))
@@ -757,7 +757,7 @@ encodeTerm = def "encodeTerm" $
               Logic.ifElse (Lists.null (var "encArgs"))
                 ("headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
                  var "headExpr")
-                ("firstA" <~ Optionals.fromOptional (tsExprIdent @@ string "undefined") (Lists.maybeHead (var "encArgs")) $
+                ("firstA" <~ Optionals.withDefault (tsExprIdent @@ string "undefined") (Lists.head (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "valueExpr" <~ (tsMember @@ var "firstA" @@ string "value") $
                  Logic.ifElse (Lists.null (var "restA"))
@@ -1172,9 +1172,9 @@ encodeType = def "encodeType" $
               (right (tsNamedType @@ var "lname"))
               ("nsSegs" <~ (Lists.drop (int32 1)
                  (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
-               "typeAlias" <~ Strings.cat2 (string "$type_")
-                 (Strings.intercalate (string "_") (var "nsSegs")) $
-               right (tsNamedType @@ Strings.cat (list [var "typeAlias", string ".", var "lname"])))),
+               "typeAlias" <~ Strings.concat2 (string "$type_")
+                 (Strings.join (string "_") (var "nsSegs")) $
+               right (tsNamedType @@ Strings.concat (list [var "typeAlias", string ".", var "lname"])))),
       _Type_wrap>>: lambda "wt" $
         encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "wt",
       -- Anonymous records: emit as inline object types `{ readonly f: T, ... }`.
@@ -1347,7 +1347,7 @@ filterNonLocalNames :: TypedTermDefinition (ModuleName -> S.Set Name -> S.Set Na
 filterNonLocalNames = def "filterNonLocalNames" $
   doc "Keep only names whose module differs from the current module's" $
   lambda "currentNs" $ lambda "names" $
-    ((Sets.fromList $ Optionals.cat $ Lists.map
+    ((Sets.fromList $ Optionals.givens $ Lists.map
       (lambda "n" $
         Optionals.cases (Names.moduleNameOf @@ var "n")
           nothing
@@ -1451,7 +1451,7 @@ importsToText = def "importsToText" $
   lambda "kind" $ lambda "currentNs" $ lambda "names" $
     -- Pair each Name with its optional ModuleName; drop ones with no namespace
     -- or whose namespace matches the current module.
-    "pairs" <~ (Optionals.cat $ Lists.map
+    "pairs" <~ (Optionals.givens $ Lists.map
       (lambda "n" $
         Optionals.cases (Names.moduleNameOf @@ var "n")
           nothing
@@ -1480,7 +1480,7 @@ importsToText = def "importsToText" $
         "ns" <~ Pairs.first (var "p") $
         "n" <~ Pairs.second (var "p") $
         "local" <~ (var "transformLocal" @@ (Names.localNameOf @@ var "n")) $
-        "existing" <~ (Optionals.fromOptional (list ([] :: [TypedTerm String]))
+        "existing" <~ (Optionals.withDefault (list ([] :: [TypedTerm String]))
           (Maps.lookup (var "ns") (var "acc" :: TypedTerm (M.Map ModuleName [String])))) $
         Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc" :: TypedTerm (M.Map ModuleName [String])))
       (Maps.empty :: TypedTerm (M.Map ModuleName [String]))
@@ -1502,11 +1502,11 @@ importsToText = def "importsToText" $
     "currentDepth" <~ (Lists.length (var "currentSegs")) $
     "currentIsTest" <~ Logic.and
       (Logic.not (Lists.null (var "currentSegs")))
-      (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "currentSegs"))) (string "test")) $
+      (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "currentSegs"))) (string "test")) $
     "baseUpPrefix" <~ Logic.ifElse
       (Equality.equal (var "currentDepth") (int32 1))
       (string "./")
-      (Strings.cat $ Lists.replicate (Math.sub (var "currentDepth") (int32 1)) (string "../")) $
+      (Strings.concat $ Lists.replicate (Math.sub (var "currentDepth") (int32 1)) (string "../")) $
     "lines" <~ (Lists.map
       (lambda "entry" $
         "ns" <~ Pairs.first (var "entry") $
@@ -1515,7 +1515,7 @@ importsToText = def "importsToText" $
           (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
         "targetIsTest" <~ Logic.and
           (Logic.not (Lists.null (var "targetSegs")))
-          (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
+          (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "test")) $
         -- #501/#507: the TS lib runtime impls (hydra.lib.*) ship under the renamed
         -- overlay namespace at hydra/overlay/typescript/lib/, not hydra/lib/ (which holds
         -- only the generated PrimitiveDefinition def-modules). A generated reference to
@@ -1526,11 +1526,11 @@ importsToText = def "importsToText" $
         -- counterpart -- see #565/#549) pass through unchanged.
         "targetPathSegs" <~ Logic.ifElse
           (Logic.and
-            (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "lib"))
+            (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
             (Logic.not (Equality.equal (unwrap _ModuleName @@ var "ns") (string "hydra.lib.defaults"))))
           (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
           (var "targetSegs") $
-        "targetPath" <~ Strings.intercalate (string "/") (var "targetPathSegs") $
+        "targetPath" <~ Strings.join (string "/") (var "targetPathSegs") $
         -- Cross-tree paths: test → main needs extra "../../main/typescript/".
         -- main → test would need the inverse, but currently no main module
         -- imports test, so that branch is omitted.
@@ -1543,7 +1543,7 @@ importsToText = def "importsToText" $
         -- then "main/typescript/hydra/" enters the main tree.
         "upPrefix" <~ Logic.ifElse
           (Logic.and (var "currentIsTest") (Logic.not (var "targetIsTest")))
-          (Strings.cat2 (var "baseUpPrefix") (string "../../../main/typescript/hydra/"))
+          (Strings.concat2 (var "baseUpPrefix") (string "../../../main/typescript/hydra/"))
           (var "baseUpPrefix") $
         -- Both type and value imports use namespace-style `import [type] * as <alias>`
         -- to prevent duplicate-identifier errors when two modules export the same
@@ -1558,11 +1558,11 @@ importsToText = def "importsToText" $
         -- local `const arity = ...` then shadows (TDZ in JS even though
         -- legal in Haskell). Prefix with `$` to keep aliases out of the
         -- local-name space.
-        "nsSlug" <~ (Strings.intercalate (string "_") (var "targetSegs")) $
+        "nsSlug" <~ (Strings.join (string "_") (var "targetSegs")) $
         "moduleAlias" <~ Logic.ifElse (Equality.equal (var "kind") (string "type"))
-          (Strings.cat2 (string "$type_") (var "nsSlug"))
-          (Strings.cat2 (string "$mod_") (var "nsSlug")) $
-        Strings.cat (list [
+          (Strings.concat2 (string "$type_") (var "nsSlug"))
+          (Strings.concat2 (string "$mod_") (var "nsSlug")) $
+        Strings.concat (list [
           var "importKeyword",
           string " * as ",
           var "moduleAlias",
@@ -1571,7 +1571,7 @@ importsToText = def "importsToText" $
           var "targetPath",
           string ".js\";\n"]))
       (Maps.toList (var "grouped" :: TypedTerm (M.Map ModuleName [String])))) $
-    Strings.cat (var "lines")
+    Strings.concat (var "lines")
 
 -- =============================================================================
 -- Forall extraction helpers
@@ -1627,8 +1627,8 @@ tsDocEntityRef = def "tsDocEntityRef" $
   doc "Render a {@type hydra.packaging.EntityReference} as TSDoc link syntax" $
   match _EntityReference_ts Nothing [
     _EntityReference_definition_ts>>: lambda "d" $
-      Strings.cat2 (string "{@link ")
-        (Strings.cat2
+      Strings.concat2 (string "{@link ")
+        (Strings.concat2
           (match _DefinitionReference_ts Nothing [
             _DefinitionReference_primitive_ts>>: lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_term_ts>>:      lambda "n" $ Names.localNameOf @@ var "n",
@@ -1637,8 +1637,8 @@ tsDocEntityRef = def "tsDocEntityRef" $
           (string "}")),
     _EntityReference_module_ts>>:    lambda "m" $ unwrap _ModuleName @@ var "m",
     _EntityReference_package_ts>>:   lambda "p" $ unwrap _PackageName @@ var "p",
-    _EntityReference_term_expr_ts>>: lambda "s" $ Strings.cat2 (string "`") (Strings.cat2 (var "s") (string "`")),
-    _EntityReference_type_expr_ts>>: lambda "s" $ Strings.cat2 (string "`") (Strings.cat2 (var "s") (string "`"))]
+    _EntityReference_term_expr_ts>>: lambda "s" $ Strings.concat2 (string "`") (Strings.concat2 (var "s") (string "`")),
+    _EntityReference_type_expr_ts>>: lambda "s" $ Strings.concat2 (string "`") (Strings.concat2 (var "s") (string "`"))]
 
 -- | Build a `DocumentationComment` from an optional description string.
 -- Returns Nothing when the description is missing or empty so callers can
@@ -1719,7 +1719,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       (var "termDefs")) $
     "typeImportsBlock" <~ (importsToText @@ string "type" @@ var "currentNs" @@ var "typeImports") $
     "termImportsBlock" <~ (importsToText @@ string "value" @@ var "currentNs" @@ var "termImports") $
-    "importsBlock" <~ Strings.cat2 (var "typeImportsBlock") (var "termImportsBlock") $
+    "importsBlock" <~ Strings.concat2 (var "typeImportsBlock") (var "termImportsBlock") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "typeDefs")) $
     "termItems" <~ (Lists.map (encodeTermDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
@@ -1728,10 +1728,10 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "mModuleDoc" <~ (Optionals.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))) $
     "moduleDocText" <~ Optionals.cases (var "mModuleDoc")
       (string "")
-      (lambda "d" $ Strings.cat2
+      (lambda "d" $ Strings.concat2
         (TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])))
         (string "\n\n")) $
-    "header" <~ Strings.cat2
+    "header" <~ Strings.concat2
       (string "// Note: this is an automatically generated file. Do not edit.\n\n")
       (var "moduleDocText") $
     -- Each item carries an optional doc string sidecar; render the item
@@ -1743,18 +1743,18 @@ moduleToTypeScript = def "moduleToTypeScript" $
       "itemText" <~ (printModuleItem @@ var "item") $
       Optionals.cases (var "mdoc")
         (var "itemText")
-        (lambda "d" $ Strings.cat (list [
+        (lambda "d" $ Strings.concat (list [
           TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])),
           string "\n",
           var "itemText"]))) $
-    "body" <~ (Strings.intercalate (string "\n\n")
+    "body" <~ (Strings.join (string "\n\n")
       (Lists.map (var "renderItem") (var "allItems"))) $
     "filePath" <~ (Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "ts")
       @@ (Packaging.moduleName (var "mod"))) $
     right (Maps.singleton (var "filePath")
-      (Strings.cat (list [
+      (Strings.concat (list [
         var "header",
         var "importsBlock",
         Logic.ifElse (Equality.equal (var "importsBlock") (string "")) (string "") (string "\n"),
@@ -1775,21 +1775,21 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
     "exts" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_extends @@ var "decl") $
     "extClause" <~ Logic.ifElse (Lists.null (var "exts"))
       (string "")
-      (Strings.cat2 (string " extends ")
-        (Strings.intercalate (string ", ")
+      (Strings.concat2 (string " extends ")
+        (Strings.join (string ", ")
           (Lists.map (asTerm printTypeExpression) (var "exts")))) $
     "members" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_members @@ var "decl") $
     "renderMember" <~ ("ps" ~>
-      Strings.intercalate (string "\n  ")
+      Strings.join (string "\n  ")
         (Strings.lines (asTerm printPropertySignature @@ var "ps"))) $
     "body" <~ Logic.ifElse (Lists.null (var "members"))
       (string "")
-      (Strings.cat (list [
+      (Strings.concat (list [
         string "\n  ",
-        Strings.intercalate (string ";\n  ")
+        Strings.join (string ";\n  ")
           (Lists.map (var "renderMember") (var "members")),
         string ";\n"])) $
-    Strings.cat (list [
+    Strings.concat (list [
       string "export interface ",
       var "name",
       var "params",
@@ -1847,7 +1847,7 @@ printPropertySignature = def "printPropertySignature" $
   doc "Render a property signature, with an optional JSDoc comment prepended" $
   lambda "ps" $
     "mcomments" <~ (project TS._PropertySignature TS._PropertySignature_comments @@ var "ps") $
-    "line" <~ Strings.cat (list [
+    "line" <~ Strings.concat (list [
       Logic.ifElse (project TS._PropertySignature TS._PropertySignature_readonly @@ var "ps")
         (string "readonly ") (string ""),
       unwrap TS._Identifier @@ (project TS._PropertySignature TS._PropertySignature_name @@ var "ps"),
@@ -1857,7 +1857,7 @@ printPropertySignature = def "printPropertySignature" $
       printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
     Optionals.cases (var "mcomments")
       (var "line")
-      (lambda "dc" $ Strings.cat (list [
+      (lambda "dc" $ Strings.concat (list [
         TypeScriptSerdeSource.toTypeScriptComments
           @@ (project TS._DocumentationComment TS._DocumentationComment_description @@ var "dc")
           @@ (project TS._DocumentationComment TS._DocumentationComment_tags @@ var "dc"),
@@ -1874,7 +1874,7 @@ printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_name @@ var "decl")) $
     "params" <~ (printTypeParameterList @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_typeParameters @@ var "decl")) $
     "rhs" <~ (printTypeExpression @@ (project TS._TypeAliasDeclaration TS._TypeAliasDeclaration_type @@ var "decl")) $
-    Strings.cat (list [
+    Strings.concat (list [
       string "export type ",
       var "name",
       var "params",
@@ -1892,39 +1892,39 @@ printTypeExpression = def "printTypeExpression" $
     TS._TypeExpression_literal>>: lambda "l" $
       printLiteral @@ var "l",
     TS._TypeExpression_array>>: lambda "inner" $
-      Strings.cat (list [
+      Strings.concat (list [
         string "ReadonlyArray<",
         printTypeExpression @@ (unwrap TS._ArrayTypeExpression @@ var "inner"),
         string ">"]),
     TS._TypeExpression_tuple>>: lambda "ts" $
-      Strings.cat (list [
+      Strings.concat (list [
         string "readonly [",
-        Strings.intercalate (string ", ") (Lists.map (asTerm printTypeExpression) (var "ts")),
+        Strings.join (string ", ") (Lists.map (asTerm printTypeExpression) (var "ts")),
         string "]"]),
     TS._TypeExpression_union>>: lambda "ts" $
-      Strings.intercalate (string " | ")
+      Strings.join (string " | ")
         (Lists.map (asTerm printTypeExpression) (var "ts")),
     TS._TypeExpression_intersection>>: lambda "ts" $
-      Strings.intercalate (string " & ")
+      Strings.join (string " & ")
         (Lists.map (asTerm printTypeExpression) (var "ts")),
     TS._TypeExpression_parameterized>>: lambda "p" $
-      Strings.cat (list [
+      Strings.concat (list [
         printTypeExpression @@ (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p"),
         string "<",
-        Strings.intercalate (string ", ")
+        Strings.join (string ", ")
           (Lists.map (asTerm printTypeExpression)
             (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")),
         string ">"]),
     TS._TypeExpression_optional>>: lambda "inner" $
-      Strings.cat (list [
+      Strings.concat (list [
         printTypeExpression @@ var "inner",
         string " | undefined"]),
     TS._TypeExpression_readonly>>: lambda "inner" $
-      Strings.cat2 (string "readonly ") (printTypeExpression @@ var "inner"),
+      Strings.concat2 (string "readonly ") (printTypeExpression @@ var "inner"),
     TS._TypeExpression_object>>: lambda "ms" $
-      Strings.cat (list [
+      Strings.concat (list [
         string "{ ",
-        Strings.intercalate (string "; ")
+        Strings.join (string "; ")
           (Lists.map (asTerm printPropertySignature) (var "ms")),
         string " }"]),
     -- Function types rendered as `(...args: any[]) => any`. The kernel's
@@ -1947,7 +1947,7 @@ printTypeParameter = def "printTypeParameter" $
     "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
     Optionals.cases (var "constraint")
       (var "name")
-      (lambda "c" $ Strings.cat (list [
+      (lambda "c" $ Strings.concat (list [
         var "name",
         string " extends ",
         printTypeExpression @@ var "c"]))
@@ -1959,9 +1959,9 @@ printTypeParameterList = def "printTypeParameterList" $
   lambda "tps" $
     Logic.ifElse (Lists.null (var "tps"))
       (string "")
-      (Strings.cat (list [
+      (Strings.concat (list [
         string "<",
-        Strings.intercalate (string ", ")
+        Strings.join (string ", ")
           (Lists.map (asTerm printTypeParameter) (var "tps")),
         string ">"]))
 
@@ -1996,7 +1996,7 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
         pair (var "bname") (var "deps"))
       (var "bindings") :: TypedTerm [(Name, [Name])]) $
     "sccs" <~ (Sorting.topologicalSortComponents @@ (var "adjacency" :: TypedTerm [(Name, [Name])])) $
-    Optionals.cat $ Lists.map
+    Optionals.givens $ Lists.map
       (lambda "n" $ Maps.lookup (var "n") (var "byName" :: TypedTerm (M.Map Name Binding)))
       (Lists.concat (var "sccs"))
 
@@ -2077,7 +2077,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
     -- through eager references, and must already be broken with a runtime
     -- thunk in the DSL source; their order within is the input order) and
     -- map names back to TermDefinitions.
-    Optionals.cat $ Lists.map
+    Optionals.givens $ Lists.map
       (lambda "n" $ Maps.lookup (var "n") (var "byName" :: TypedTerm (M.Map Name TermDefinition)))
       (Lists.concat (var "sccs"))
 
@@ -2219,9 +2219,9 @@ tsEscapeString = def "tsEscapeString" $
       Logic.ifElse (Equality.equal (var "c") (int32 8))     (string "\\b")   $
       Logic.ifElse (Equality.equal (var "c") (int32 12))    (string "\\f")   $
         Strings.fromList $ Lists.pure (var "c")) $
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "\"",
-      Strings.cat $ Lists.map (var "escapeChar") (Strings.toList (var "s")),
+      Strings.concat $ Lists.map (var "escapeChar") (Strings.toList (var "s")),
       string "\""]
 
 -- | A bare identifier expression like `x`.

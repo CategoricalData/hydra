@@ -198,7 +198,7 @@ toJsonObject :: TypedTermDefinition ([(String, Maybe JM.Value)] -> JM.Value)
 toJsonObject = define "toJsonObject" $
   doc "Create a JSON object from a list of key-value pairs, filtering out Nothing values" $
   "pairs" ~>
-    Json.valueObject $ Optionals.cat $ Lists.map
+    Json.valueObject $ Optionals.givens $ Lists.map
       ("p" ~> Optionals.map
         ("v" ~> pair (Pairs.first $ var "p") (var "v"))
         (Pairs.second $ var "p"))

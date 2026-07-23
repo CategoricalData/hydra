@@ -30,6 +30,7 @@ import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
@@ -191,7 +192,7 @@ constructEdgeCoder = define "constructEdgeCoder" $
                   Eithers.bind (Optionals.cases (var "mOutSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
                     ("outVertexAdapter" ~> Eithers.bind (Optionals.cases (var "mInSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
                       ("inVertexAdapter" ~> lets [
-                        "vertexAdapters">: Optionals.cat (list [var "outVertexAdapter", var "inVertexAdapter"])] $
+                        "vertexAdapters">: Optionals.givens (list [var "outVertexAdapter", var "inVertexAdapter"])] $
                         -- Compute out/in vertex labels from spec aliases or fall back to parentLabel
                         Eithers.bind (Optionals.cases (var "mOutSpec") (right $ var "parentLabel") ("spec" ~> Optionals.cases (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no out-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
                           ("outLabel" ~> Eithers.bind (Optionals.cases (var "mInSpec") (right $ var "parentLabel") ("spec" ~> Optionals.cases (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no in-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
@@ -242,7 +243,7 @@ edgeCoder = define "edgeCoder" $
         ("term" ~>
           lets ["deannot">: Strip.deannotateTerm @@ var "term",
                 "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
-                  _Term_optional>>: "mt" ~> Optionals.fromOptional (var "deannot") (var "mt")],
+                  _Term_optional>>: "mt" ~> Optionals.withDefault (var "deannot") (var "mt")],
                 "rec">: cases _Term (var "unwrapped") Nothing [
                   _Term_record>>: lambda "r" $ var "r"]] $
           Eithers.bind (checkRecordName @@ var "cx" @@ var "tname" @@ (Core.recordTypeName $ var "rec"))
@@ -259,7 +260,7 @@ edgeCoder = define "edgeCoder" $
                       ("outId" ~> Eithers.bind (var "getVertexId" @@ (inject PG._Direction PG._Direction_in unit) @@ var "inAdapter")
                         ("inId" ~>
                           -- Find dependencies from vertex adapters
-                          Eithers.bind (Eithers.map (lambda "xs" $ Optionals.cat (var "xs"))
+                          Eithers.bind (Eithers.map (lambda "xs" $ Optionals.givens (var "xs"))
                             (Eithers.mapList
                               ("va" ~> lets [
                                 "fname">: Pairs.first $ var "va",
@@ -370,7 +371,7 @@ encodeProperties = define "encodeProperties" $
       ("props" ~> ((Maps.fromList (Lists.map
         ("prop" ~> pair (project PG._Property PG._Property_key @@ var "prop") (project PG._Property PG._Property_value @@ var "prop"))
         (var "props"))) :: TypedTerm (M.Map PG.PropertyKey v)))
-      (Eithers.map (lambda "xs" $ Optionals.cat (var "xs")) (Eithers.mapList (encodeProperty @@ var "cx" @@ var "fields") (var "adapters")))
+      (Eithers.map (lambda "xs" $ Optionals.givens (var "xs")) (Eithers.mapList (encodeProperty @@ var "cx" @@ var "fields") (var "adapters")))
 
 -- | Encode a single property from a field map using a property adapter
 encodeProperty :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> Adapter FieldType (PG.PropertyType t) Field (PG.Property v) e
@@ -417,7 +418,7 @@ findAdjacenEdgeAdapters :: TypedTermDefinition (InferenceContext -> Graph -> PGM
 findAdjacenEdgeAdapters = define "findAdjacenEdgeAdapters" $
   doc "Find adjacent edge adapters for a given direction" $
   "cx" ~> "g" ~> "schema" ~> "vidType" ~> "eidType" ~> "parentLabel" ~> "dir" ~> "fields" ~>
-    Eithers.map (lambda "xs" $ Optionals.cat (var "xs")) (Eithers.mapList
+    Eithers.map (lambda "xs" $ Optionals.givens (var "xs")) (Eithers.mapList
       ("field" ~> lets [
         "key">: Core.name $ match PG._Direction Nothing [
           PG._Direction_out>>: constant $ project PGM._AnnotationSchema PGM._AnnotationSchema_outEdgeLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
@@ -521,9 +522,9 @@ findSingleFieldWithAnnotationKey = define "findSingleFieldWithAnnotationKey" $
     "matches">: Lists.filter
       ("f" ~> Optionals.isGiven (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "f")))
       (var "fields")] $
-    Logic.ifElse (Equality.gt (Lists.length $ var "matches") (int32 1))
+    Logic.ifElse (Ordering.gt (Lists.length $ var "matches") (int32 1))
       (err (var "cx") (string "Multiple fields marked as '" ++ (Core.unName $ var "key") ++ string "' in record type " ++ (Core.unName $ var "tname")))
-      (right (Lists.maybeHead $ var "matches"))
+      (right (Lists.head $ var "matches"))
 
 -- | Determine whether the spec has vertex adapters based on direction and out/in specs
 hasVertexAdapters :: TypedTermDefinition (PG.Direction -> Y.Maybe a -> Y.Maybe b -> Bool)
@@ -563,7 +564,7 @@ propertyAdapter = define "propertyAdapter" $
     "tfield">: Pairs.first $ var "spec",
     "values">: Pairs.first $ Pairs.second $ var "spec",
     "alias">: Pairs.second $ Pairs.second $ var "spec",
-    "key">: wrap PG._PropertyKey $ (Optionals.fromOptional (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias"))] $
+    "key">: wrap PG._PropertyKey $ (Optionals.withDefault (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias"))] $
     Eithers.bind (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ (Core.fieldTypeType $ var "tfield"))
       ("pt" ~> Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
         ("traversal" ~> right
@@ -621,7 +622,7 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
         Logic.ifElse (Lists.null $ var "terms")
           (err (var "cx") (var "desc" ++ string " did not resolve to a term"))
           (Logic.ifElse (Equality.equal (Lists.length $ var "terms") (int32 1))
-            (Optionals.cases (Lists.maybeHead $ var "terms") (err (var "cx") (var "desc" ++ string " resolved to multiple terms")) (reify right))
+            (Optionals.cases (Lists.head $ var "terms") (err (var "cx") (var "desc" ++ string " resolved to multiple terms")) (reify right))
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
 
 unexpectedE :: TypedTerm InferenceContext -> TypedTerm String -> TypedTerm String -> TypedTerm (Either Error a)
@@ -651,7 +652,7 @@ vertexCoder = define "vertexCoder" $
           lets ["deannot">: Strip.deannotateTerm @@ var "term",
                 -- Unwrap TermOptional if present
                 "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
-                  _Term_optional>>: "mt" ~> Optionals.fromOptional (var "deannot") (var "mt")],
+                  _Term_optional>>: "mt" ~> Optionals.withDefault (var "deannot") (var "mt")],
                 "rec">: cases _Term (var "unwrapped") Nothing [
                   _Term_record>>: lambda "r" $ var "r"],
                 "fmap">: Resolution.fieldMap @@ (Core.recordFields $ var "rec")] $

@@ -201,7 +201,7 @@ idToExpr :: TypedTermDefinition (Dot.Id -> Expr)
 idToExpr = define "idToExpr" $
   doc "Convert an identifier to an expression" $
   lambda "i" $ Serialization.cst @@
-    (Strings.cat $ list [string "\"", unwrap Dot._Id @@ var "i", string "\""])
+    (Strings.concat $ list [string "\"", unwrap Dot._Id @@ var "i", string "\""])
 
 nodeIdToExpr :: TypedTermDefinition (Dot.NodeId -> Expr)
 nodeIdToExpr = define "nodeIdToExpr" $
@@ -209,7 +209,7 @@ nodeIdToExpr = define "nodeIdToExpr" $
   lambda "nid" $ lets [
     "i">: project Dot._NodeId Dot._NodeId_id @@ var "nid",
     "mp">: project Dot._NodeId Dot._NodeId_port @@ var "nid"] $
-    Serialization.noSep @@ (Optionals.cat $ list [
+    Serialization.noSep @@ (Optionals.givens $ list [
       Optionals.pure (idToExpr @@ var "i"),
       Optionals.map (asTerm portToExpr) (var "mp")])
 
@@ -227,7 +227,7 @@ nodeStmtToExpr = define "nodeStmtToExpr" $
   lambda "ns" $ lets [
     "i">: project Dot._NodeStmt Dot._NodeStmt_id @@ var "ns",
     "attr">: project Dot._NodeStmt Dot._NodeStmt_attributes @@ var "ns"] $
-    Serialization.spaceSep @@ (Optionals.cat $ list [
+    Serialization.spaceSep @@ (Optionals.givens $ list [
       Optionals.pure (nodeIdToExpr @@ var "i"),
       Optionals.map (asTerm attrListToExpr) (var "attr")])
 
@@ -256,7 +256,7 @@ subgraphIdToExpr :: TypedTermDefinition (Dot.SubgraphId -> Expr)
 subgraphIdToExpr = define "subgraphIdToExpr" $
   doc "Convert a subgraph identifier to an expression" $
   lambda "sid" $
-    Serialization.spaceSep @@ (Optionals.cat $ list [
+    Serialization.spaceSep @@ (Optionals.givens $ list [
       Optionals.pure (Serialization.cst @@ string "subgraph"),
       Optionals.map (asTerm idToExpr) (unwrap Dot._SubgraphId @@ var "sid")])
 
@@ -268,6 +268,6 @@ subgraphToExpr = define "subgraphToExpr" $
     "stmts">: project Dot._Subgraph Dot._Subgraph_statements @@ var "sg",
     "body">: Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.inlineStyle @@
       (Serialization.spaceSep @@ (Lists.map (stmtToExpr @@ var "directed") (var "stmts")))] $
-    Serialization.spaceSep @@ (Optionals.cat $ list [
+    Serialization.spaceSep @@ (Optionals.givens $ list [
       Optionals.map (asTerm subgraphIdToExpr) (var "mid"),
       Optionals.pure (var "body")])

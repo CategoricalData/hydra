@@ -110,10 +110,10 @@ printEdge = define "printEdge" $
     "id">: var "printValue" @@ (project PG._Edge PG._Edge_id @@ var "edge"),
     "outId">: var "printValue" @@ (project PG._Edge PG._Edge_out @@ var "edge"),
     "inId">: var "printValue" @@ (project PG._Edge PG._Edge_in @@ var "edge"),
-    "props">: Strings.intercalate (string ", ") (Lists.map
+    "props">: Strings.join (string ", ") (Lists.map
       ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
       (Maps.toList ((project PG._Edge PG._Edge_properties @@ var "edge") :: TypedTerm (M.Map PG.PropertyKey v))))] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       var "id", string ": ",
       string "(", var "outId", string ")-[:",
       var "label", string " {",
@@ -143,18 +143,18 @@ printLazyGraph = define "printLazyGraph" $
   "printValue" ~> "lg" ~> lets [
     "vertices">: project PG._LazyGraph PG._LazyGraph_vertices @@ var "lg",
     "edges">: project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "vertices:",
-      Strings.cat (Lists.map ("v" ~> Strings.cat (list [string "\n\t", printVertex @@ var "printValue" @@ var "v"])) (var "vertices")),
+      Strings.concat (Lists.map ("v" ~> Strings.concat (list [string "\n\t", printVertex @@ var "printValue" @@ var "v"])) (var "vertices")),
       string "\nedges:",
-      Strings.cat (Lists.map ("e" ~> Strings.cat (list [string "\n\t", printEdge @@ var "printValue" @@ var "e"])) (var "edges"))]
+      Strings.concat (Lists.map ("e" ~> Strings.concat (list [string "\n\t", printEdge @@ var "printValue" @@ var "e"])) (var "edges"))]
 
 -- | Print a property using the provided printer functions
 printProperty :: TypedTermDefinition ((v -> String) -> PG.PropertyKey -> v -> String)
 printProperty = define "printProperty" $
   doc "Print a property using the provided value printer" $
   "printValue" ~> "key" ~> "value" ~>
-    Strings.cat $ list [
+    Strings.concat $ list [
       unwrap PG._PropertyKey @@ var "key",
       string ": ",
       var "printValue" @@ var "value"]
@@ -166,10 +166,10 @@ printVertex = define "printVertex" $
   "printValue" ~> "vertex" ~> lets [
     "label">: unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"),
     "id">: var "printValue" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"),
-    "props">: Strings.intercalate (string ", ") (Lists.map
+    "props">: Strings.join (string ", ") (Lists.map
       ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
       (Maps.toList ((project PG._Vertex PG._Vertex_properties @@ var "vertex") :: TypedTerm (M.Map PG.PropertyKey v))))] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       var "id", string ": (", var "label", string ": {",
       var "props",
       string "})"]

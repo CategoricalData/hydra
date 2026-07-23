@@ -378,14 +378,14 @@ parsePattern = define "parsePattern" $
     -- Split on "${" to get segments. First segment is a literal prefix.
     -- Remaining segments each start with a path (up to "}") followed by a literal.
     "segments">: Strings.splitOn (string "${") (var "pat"),
-    "firstLit">: Optionals.fromOptional (var "pat") (Lists.maybeHead $ var "segments"),
+    "firstLit">: Optionals.withDefault (var "pat") (Lists.head $ var "segments"),
     "rest">: Lists.drop (int32 1) (var "segments"),
     -- Parse each remaining segment into (pathSteps, trailingLiteral) pairs
     "parsed">: Lists.map
       ("seg" ~> lets [
         "parts">: Strings.splitOn (string "}") (var "seg"),
-        "pathStr">: Optionals.fromOptional (string "") (Lists.maybeHead $ var "parts"),
-        "litPart">: Strings.intercalate (string "}") (Lists.drop (int32 1) (var "parts")),
+        "pathStr">: Optionals.withDefault (string "") (Lists.head $ var "parts"),
+        "litPart">: Strings.join (string "}") (Lists.drop (int32 1) (var "parts")),
         "pathSteps">: Strings.splitOn (string "/") (var "pathStr")] $
         pair (var "pathSteps") (var "litPart"))
       (var "rest")] $
@@ -465,11 +465,11 @@ readInjection = define "readInjection" $
     Eithers.bind ((ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "encoded") :: TypedTerm (Either Error (M.Map Name Term)))
       ("mp" ~> lets [
         "entries">: Maps.toList ((var "mp") :: TypedTerm (M.Map Name Term))] $
-        Optionals.cases (Lists.maybeHead $ var "entries") (left $ Error.errorOther $ Error.otherError $ string "empty injection") (lambda "f" $ lets [
+        Optionals.cases (Lists.head $ var "entries") (left $ Error.errorOther $ Error.otherError $ string "empty injection") (lambda "f" $ lets [
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
             "matching">: Lists.filter ("c" ~> Equality.equal (Pairs.first $ var "c") (var "key")) (var "cases")] $
-            Optionals.cases (Lists.maybeHead $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ lets ["handler">: Pairs.second $ var "m"] $ var "handler" @@ var "val")))
+            Optionals.cases (Lists.head $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ lets ["handler">: Pairs.second $ var "m"] $ var "handler" @@ var "val")))
 
 -- | Read a record from a term as a map of field names to values
 readRecord :: TypedTermDefinition (InferenceContext -> Graph -> (M.Map Name Term -> Either Error x) -> Term -> Either Error x)
@@ -489,7 +489,7 @@ requireUnique = define "requireUnique" $
         Logic.ifElse (Lists.null $ var "results")
           (left $ Error.errorOther $ Error.otherError $ string "No value found: " ++ var "context")
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
-            (Optionals.cases (Lists.maybeHead $ var "results") (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (reify right))
+            (Optionals.cases (Lists.head $ var "results") (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (reify right))
             (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
@@ -506,7 +506,7 @@ termToElementsAdapter = define "termToElementsAdapter" $
         Eithers.bind (expectList @@ var "cx" @@ var "g" @@ decodeElementSpec @@ var "term")
           ("specTerms" ~> Eithers.bind (Eithers.mapList (parseElementSpec @@ var "cx" @@ var "g" @@ var "schema") (var "specTerms"))
             ("specs" ~> lets [
-              "labels">: (Lists.nub :: TypedTerm [PG.Label] -> TypedTerm [PG.Label]) (Lists.map ("_p" ~> Pairs.first (var "_p")) (var "specs")),
+              "labels">: (Lists.distinct :: TypedTerm [PG.Label] -> TypedTerm [PG.Label]) (Lists.map ("_p" ~> Pairs.first (var "_p")) (var "specs")),
               "encoders">: Lists.map ("_p" ~> Pairs.second (var "_p")) (var "specs")] $
               right (Coders.adapter false (var "typ") (var "labels")
                 (Coders.coder
