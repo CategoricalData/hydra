@@ -1,0 +1,97 @@
+// #459 prototype: published-host Java JSON->target driver (standalone build).
+//
+// Proves that hydra.Bootstrap / hydra.GenerationTargets — today compiled only
+// against the full local dist/java rollup (see json-driver/build.gradle's own
+// comment on why GenerationTargets is excluded there) — can instead compile
+// against PUBLISHED target-coder artifacts from Maven Central, the same way
+// json-driver/ already does for the narrower DSL->JSON path. No local Java
+// head build is required.
+//
+// GenerationTargets.java compiles all six target writers as one unit, so every
+// target-coder artifact must be on the classpath even though this prototype's
+// concrete proof point exercises Java -> Python only (--target python). All
+// five (python/scala/typescript/lisp/haskell) are confirmed published at the
+// same hostVersion as hydra-java, so no --local-host fallback is needed for
+// any of them. Mirrors json-driver/build.gradle's structure; the two projects
+// differ in which published artifacts are on the classpath and which driver
+// classes are compiled (here: Generation + Bootstrap + GenerationTargets, vs.
+// json-driver's Generation + UpdateJavaJson).
+plugins {
+    id 'java-library'
+}
+
+// hydraRoot = .../worktree (this project sits at heads/java/target-driver/).
+def hydraRoot = file("$projectDir/../../..")
+
+// Single source of truth for the published host version: hydra.json
+// (hostOverrides["java"] -> hostVersion), read via bin/lib/hydra-packages.py
+// so Gradle and the shell scripts always agree. Mirrors json-driver/build.gradle.
+def hostVersion = providers.exec {
+    workingDir = hydraRoot
+    commandLine 'python3', 'bin/lib/hydra-packages.py', 'host-version', 'hydra-java'
+}.standardOutput.asText.get().trim()
+
+repositories {
+    mavenCentral()
+    mavenLocal() // so a locally-published interim host (the #370 bootstrap shim) is visible
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+sourceSets {
+    main {
+        java {
+            // hydra-build's generated hydra.build.Routing (#560) PLUS the
+            // overlay-copied hydra.overlay.java.build.Generation (#459: moved
+            // from heads/java into the hydra-build overlay, so copy-overlay.sh
+            // merges it onto this same dist tree on every assemble). Sourcing
+            // both from the assembled dist/java/hydra-build — rather than
+            // adding overlay/java/hydra-build as a SECOND srcDir — avoids
+            // compiling Generation.java twice ("duplicate class"): dist/java
+            // already carries the merged copy. hydra-build itself is not
+            // published (no Maven artifact), so it's compiled here from its
+            // generated dist/java source, mirroring json-driver/build.gradle.
+            srcDir file("$hydraRoot/dist/java/hydra-build/src/main/java")
+            // The two remaining cross-target driver files from heads/java.
+            // Everything else under heads/java either needs the local dist
+            // (other GenerationTargets callers) or isn't needed for this path.
+            srcDir file("$hydraRoot/heads/java/src/main/java")
+            include 'hydra/build/**'
+            include 'hydra/overlay/java/build/**'
+            include 'hydra/Bootstrap.java'
+            include 'hydra/GenerationTargets.java'
+            include 'hydra/TransformJsonToTarget.java'
+        }
+    }
+}
+
+dependencies {
+    // Pulls net.fortytwo.hydra.java:hydra-kernel transitively (per the hydra-java
+    // POM): kernel runtime + hydra.Codegen + hydra.dsl.java.* coder.
+    api "net.fortytwo.hydra.java:hydra-java:${hostVersion}"
+    // GenerationTargets.java references EVERY target coder unconditionally as one
+    // compilation unit (it has a writer method per target), so all must be on the
+    // classpath to compile the file even when only one writer (writePython) is
+    // exercised at runtime. Each of these is a Java JAR implementing that target's
+    // EMITTER in Java (distinct from e.g. the Python-authored hydra-python DSL
+    // sources, which are a separate PyPI artifact) — confirmed published at the
+    // same hostVersion as hydra-java.
+    api "net.fortytwo.hydra.java:hydra-python:${hostVersion}"
+    api "net.fortytwo.hydra.java:hydra-scala:${hostVersion}"
+    api "net.fortytwo.hydra.java:hydra-typescript:${hostVersion}"
+    api "net.fortytwo.hydra.java:hydra-lisp:${hostVersion}"
+    api "net.fortytwo.hydra.java:hydra-haskell:${hostVersion}"
+}
+
+// Print the runtime classpath (compiled driver classes + the published hosts and
+// their transitive deps) on a single line, mirroring json-driver's
+// printRuntimeClasspath. Depends on compileJava so the driver classes exist.
+tasks.register('printRuntimeClasspath') {
+    dependsOn 'classes'
+    doLast {
+        println sourceSets.main.runtimeClasspath.asPath
+    }
+}

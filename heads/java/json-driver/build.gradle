@@ -2,7 +2,7 @@
 //
 // Compiles ONLY the hand-written hydra-java DSL authoring sources
 // (hydra.sources.java.*, hydra.overlay.java.dsl.meta.*, hydra.overlay.java.dsl.Helpers, ...) plus the
-// two driver files (hydra.Generation, hydra.UpdateJavaJson) against the PUBLISHED
+// driver file hydra.UpdateJavaJson, against the PUBLISHED
 // Java host net.fortytwo.hydra.java:hydra-java:<hostVersion> resolved from Maven
 // Central — NOT against any local dist/java build. This is the default path the
 // regular sync uses to regenerate dist/json/hydra-java: edits to the DSL sources
@@ -11,10 +11,16 @@
 // headsExtras source set) is retained only as the bootstrap shim for
 // backward-incompatible kernel changes.
 //
+// hydra.overlay.java.build.Generation (#459: moved from heads/java into the
+// hydra-build overlay, so it travels with dist/java/hydra-build/ via
+// copy-overlay.sh on every build — no publish cycle needed to pick up edits)
+// depends only on hydra-kernel + hydra-build; it deliberately does NOT reference
+// any other target-coder package, so it stays safe to compile here.
+//
 // hydra.GenerationTargets is deliberately NOT compiled here: it references every
 // target language's coder and so only compiles against the full local dist. The
 // JSON driver never calls it (UpdateJavaJson uses only the kernel/Java-coder
-// methods on hydra.Generation).
+// methods on hydra.overlay.java.build.Generation).
 plugins {
     id 'java-library'
 }
@@ -51,30 +57,33 @@ sourceSets {
             // hydra-java host JAR, so they are resolved from the classpath, not
             // recompiled (recompiling would split-package conflict with the JAR).
             srcDir file("$hydraRoot/overlay/java/hydra-kernel/src/main/java")
-            // hydra-build's generated hydra.build.Routing (#560): manifest-derived
-            // module-to-package routing, consumed by Generation.java in place of its
-            // former hand-coded PACKAGE_PREFIXES table. hydra-build is not published
-            // (no Maven artifact), so — like hydra-jvm/hydra-java below — it is
-            // compiled here from its generated dist/java source rather than resolved
-            // as a dependency. References only kernel types (from the published
-            // hydra-java host JAR + the overlay srcDir above), so no ordering
-            // dependency on the hydra-jvm/hydra-java srcDirs that follow.
+            // hydra-build's generated hydra.build.Routing (#560) PLUS the
+            // overlay-copied hydra.overlay.java.build.Generation (#459: moved
+            // into the hydra-build overlay so it travels with dist/java/
+            // hydra-build/ via copy-overlay.sh on every assemble). Sourcing
+            // both from the assembled dist/java/hydra-build — rather than ALSO
+            // adding overlay/java/hydra-build as a second srcDir — avoids
+            // compiling Generation.java twice ("duplicate class"): dist/java
+            // already carries the merged copy. hydra-build itself is not
+            // published (no Maven artifact), so — like hydra-jvm/hydra-java
+            // below — it is compiled here from its generated dist/java source
+            // rather than resolved as a dependency.
             srcDir file("$hydraRoot/dist/java/hydra-build/src/main/java")
             // hydra-jvm DSL authoring sources (shared JVM helpers; #505).
             // Must precede hydra-java (dependency order).
             srcDir file("$hydraRoot/packages/hydra-jvm/src/main/java")
             // All hand-written hydra-java DSL authoring sources + DSL modules.
             srcDir file("$hydraRoot/packages/hydra-java/src/main/java")
-            // Just the two driver files from heads/java (everything else there
-            // needs the local dist or the cross-target coders).
+            // Just the one remaining driver file from heads/java (everything else
+            // there needs the local dist or the cross-target coders).
             srcDir file("$hydraRoot/heads/java/src/main/java")
             include 'hydra/overlay/java/dsl/meta/**'
             include 'hydra/overlay/java/dsl/Helpers.java'
             include 'hydra/build/**'
+            include 'hydra/overlay/java/build/**'
             include 'hydra/sources/jvm/**'
             include 'hydra/sources/java/**'
             include 'hydra/dsl/**'
-            include 'hydra/Generation.java'
             include 'hydra/UpdateJavaJson.java'
         }
     }

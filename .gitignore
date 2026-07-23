@@ -29,6 +29,7 @@ stack.yaml.lock
 gradle.properties
 /packages/hydra-java/build/
 /heads/java/json-driver/build/
+/heads/java/target-driver/build/
 
 # IDEs
 .bsp/
