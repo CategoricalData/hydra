@@ -3,6 +3,7 @@ package hydra;
 import hydra.coders.Language;
 import hydra.errors.Error_;
 import hydra.graph.Graph;
+import hydra.overlay.java.build.Generation;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.overlay.java.util.Either;
@@ -58,7 +59,12 @@ public class GenerationTargets {
         List<Pair<String, String>> files;
         if (result.isLeft()) {
             Error_ err = ((Either.Left<Error_, List<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.print.Errors.error(err));
+            // Mirrors the dual-compile-context note in Generation.decodeModuleFromJson:
+            // this file compiles against BOTH the published host (pre-#497 hydra.show.*)
+            // and a local build (post-#497 hydra.print.*). Neither package name works in
+            // both, so fall back to Object#toString rather than hard-depending on either
+            // printer package here.
+            throw new RuntimeException("Code generation failed: " + err);
         }
         files = ((Either.Right<Error_, List<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {

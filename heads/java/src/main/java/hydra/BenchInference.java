@@ -10,6 +10,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleDependency;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
+import hydra.overlay.java.build.Generation;
 import hydra.overlay.java.util.Either;
 import hydra.overlay.java.util.Optional;
 

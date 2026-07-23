@@ -2,6 +2,7 @@ package hydra;
 
 import hydra.core.Name;
 import hydra.core.Type;
+import hydra.overlay.java.build.Generation;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 

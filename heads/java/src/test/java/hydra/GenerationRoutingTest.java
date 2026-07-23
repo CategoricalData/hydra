@@ -9,6 +9,7 @@ package hydra;
 // groupByPackage) actually propagates that fail-loud behavior rather than
 // swallowing it.
 
+import hydra.overlay.java.build.Generation;
 import hydra.overlay.java.util.Optional;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;

@@ -1,6 +1,6 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.Generation;
+import hydra.overlay.java.build.Generation;
 import hydra.error.neo4j.InvalidGraphError;
 import hydra.json.model.Value;
 import hydra.neo4j.model.GraphType;

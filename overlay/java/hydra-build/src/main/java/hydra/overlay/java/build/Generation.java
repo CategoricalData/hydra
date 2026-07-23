@@ -1,9 +1,10 @@
-package hydra;
+package hydra.overlay.java.build;
 
 import hydra.Annotations;
 import hydra.Codegen;
 import hydra.Dsls;
 import hydra.Sorting;
+import hydra.Strip;
 import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -41,6 +42,11 @@ import java.util.function.Function;
 /**
  * I/O wrapper for Hydra code generation in Java.
  * Provides file I/O around the pure Either-based functions in Codegen.
+ *
+ * <p>Lives under the hydra-build overlay (rather than heads/java, its pre-#459 home) so it
+ * travels with dist/java/hydra-build/ via copy-overlay.sh on every build, local or
+ * published-host — no Maven publish cycle is required to pick up changes here. See
+ * docs/build-system.md's overlay/ vs packages/ split.</p>
  */
 public class Generation {
 

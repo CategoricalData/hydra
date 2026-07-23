@@ -1,6 +1,6 @@
 package hydra.demos.validatepg;
 
-import hydra.Generation;
+import hydra.overlay.java.build.Generation;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.json.model.Value;

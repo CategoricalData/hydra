@@ -1,6 +1,6 @@
 package hydra.demos.genpg;
 
-import hydra.Generation;
+import hydra.overlay.java.build.Generation;
 import hydra.typing.InferenceContext;
 import hydra.core.Term;
 import hydra.errors.Error_;

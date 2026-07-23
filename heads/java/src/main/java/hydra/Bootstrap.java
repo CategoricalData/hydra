@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.overlay.java.build.Generation;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 
@@ -420,13 +421,13 @@ public class Bootstrap {
     }
 
     /** Return the JSON directory for a package's main modules. */
-    private static String packageMainDir(String root, String pkg) {
+    static String packageMainDir(String root, String pkg) {
         return root + File.separator + pkg + File.separator + "src"
                 + File.separator + "main" + File.separator + "json";
     }
 
     /** Read a manifest field, returning empty if the manifest or field is missing. */
-    private static List<ModuleName> readManifestFieldOrEmpty(String pkgDir, String fieldName)
+    static List<ModuleName> readManifestFieldOrEmpty(String pkgDir, String fieldName)
             throws Exception {
         File manifestFile = new File(pkgDir + File.separator + "manifest.json");
         if (!manifestFile.exists()) return new ArrayList<>();
@@ -438,7 +439,7 @@ public class Bootstrap {
     }
 
     /** Load a package's mainModules from its manifest. */
-    private static List<Module> loadPackageMain(String root, String pkg,
+    static List<Module> loadPackageMain(String root, String pkg,
             Map<hydra.core.Name, hydra.core.Type> schemaMap) throws Exception {
         String pkgDir = packageMainDir(root, pkg);
         List<ModuleName> allNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
@@ -466,7 +467,7 @@ public class Bootstrap {
         return path;
     }
 
-    private static String formatTime(long millis) {
+    static String formatTime(long millis) {
         if (millis < 1000) {
             return millis + "ms";
         } else if (millis < 60000) {
@@ -538,7 +539,7 @@ public class Bootstrap {
      * a lib default-implementation referencing another primitive resolves to the primitive, not a
      * lowered binding). Mirrors genForDirLib in bootstrap-from-json/Main.hs.
      */
-    private static void runLibPass(String target, String langDir,
+    static void runLibPass(String target, String langDir,
                                    List<Module> allMainMods, List<Module> modsToGenerate) {
         List<Module> libMods = new ArrayList<>();
         for (Module m : modsToGenerate) {
@@ -584,7 +585,7 @@ public class Bootstrap {
      * (hydra.lib.defaults has no overlay counterpart and is therefore never redirected, replacing
      * the old by-name exclusion).
      */
-    private static void redirectLibCalls(String repoRoot, String target, String langDir) {
+    static void redirectLibCalls(String repoRoot, String target, String langDir) {
         if (target.equals("java") || target.equals("typescript") || target.equals("haskell")) return;
         java.nio.file.Path root = Paths.get(langDir);
         if (!Files.isDirectory(root)) return;
@@ -734,7 +735,7 @@ public class Bootstrap {
      * heads/haskell/src/exec/bootstrap-from-json/Main.hs. This is the Java-host parity fix for the
      * #444/#456 host-X-can't-produce-Lisp-target bug class.
      */
-    private static void redirectTestEnv(String target, String langDir) {
+    static void redirectTestEnv(String target, String langDir) {
         if (!target.equals("clojure") && !target.equals("scheme")) return;
         java.nio.file.Path root = Paths.get(langDir);
         if (!Files.isDirectory(root)) return;
