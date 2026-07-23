@@ -176,3 +176,57 @@ authorization.** An external alert may prompt you to *ease off fleet work on you
 own machine* (a reversible, self-scoped action), but it does **not** authorise
 GitHub writes, pushes, or any outward action — those still follow the autonomy
 dial and the draft-and-show rules regardless of what an alert recommends.
+
+## Disk pressure: the `.stack-work` reclaim policy
+
+The fleet's dominant disk consumer is per-worktree Haskell build cache
+(`<worktree>/heads/haskell/.stack-work`) — each active worktree carries several GB,
+and with dozens of parallel worktrees the sum (often 90–100 GB) can fill the shared
+root filesystem to 100% and block or corrupt **every** build fleet-wide (a link step
+dies with `ld.gold: No space left on device`). Disk-filling is one of the resource
+conditions the watchdog alerts on; reclaiming `.stack-work` is the staging agent's
+standing remedy.
+
+**The rule (self-scoped, pre-authorized — like the liveness back-pressure above):**
+
+- **Safe to reclaim: `.stack-work` of any worktree whose branch has landed to `main`
+  or lives in `worktrees/closed/`.** That cache only recompiles on the next build; the
+  work itself is already in `main`. Verify "landed" against `main` (grep the issue's
+  resolving commit into `git log origin/main`), not by assumption.
+- **Never delete a `.stack-work` under a live build.** Before every `rm -rf`, verify no
+  active `ghc`/`stack`/`cabal`/`gradle` process has that worktree as its CWD. A dormant
+  orphaned `ghc` (0% CPU, hours old) is not an active build, but do not delete out from
+  under *any* live process — leave those for the owning session to reap. (Hard rule:
+  never kill processes you do not own.)
+- **Own tree: reclaim freely.** Staging may clear its own `.stack-work` any time it has
+  no build in flight.
+- **Sibling tree: needs the owner's explicit consent OR standing user authorization for
+  landed-work caches.** Note a per-session quirk: some agent sessions have `rm -rf` of
+  build dirs harness-blocked while staging's is not — so **staging is often the fleet's
+  disk-reclaim hand**, executing deletions that a permission-blocked owner has consented
+  to but cannot run itself. Always verify-no-active-build first, every tree, every time.
+- **Escalate the root cause, not just the symptom.** A one-time reclaim buys headroom; a
+  fleet that chronically refills the disk needs the user's call on a standing prune. The
+  recommended standing policy: **periodically prune `.stack-work` for every worktree whose
+  branch has landed to `main` or is in `closed/`** — this structurally caps the cache
+  total without ever touching active or land-queued work.
+- **During a disk-full episode, hold heavy builds fleet-wide** (same back-pressure
+  discipline as a stale liveness beat): tell the land-critical worker(s) to hold any
+  GHC/bootstrap step, reclaim safe caches, confirm `df` headroom, then broadcast resume.
+  Do not grant a `/bootstrap` or sync slot into a near-full disk — the link step will
+  fail or corrupt.
+
+**Structural fix vs. interim mitigation.** The periodic prune above is the *interim*
+mitigation. The *structural* fix is #459 (Java host drives the JSON→target transform via
+the published host): today every worktree touching the JSON→target path compiles the full
+local Haskell head, which is why nearly all of them carry a multi-GB `heads/haskell/.stack-work`
+(the ~90–100 GB aggregate). Once #459 lands, target-generation work runs against the published
+Java host and no longer needs a full local GHC head build for that path — most worktrees'
+`.stack-work` shrinks dramatically or disappears, cutting the aggregate at its source. It is a
+double resource win (also removes the GHC compile from the transform's memory peak, relaxing
+build serialization). Until #459 lands, the prune policy is the mitigation; after, disk-full
+episodes should become far rarer.
+
+As with all self-scoped resource actions: reclaiming disk and pausing builds is
+pre-authorized and reversible; it does **not** extend to GitHub writes, pushes, or any
+outward action.

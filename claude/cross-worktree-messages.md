@@ -155,10 +155,24 @@ existing files in the recipient's inbox — only create new ones.
 
 ## Waking the recipient: tmux pings
 
-An inbox message is only *surfaced* when the recipient's inbox hook runs — on its next
-prompt. An idle sibling won't see your message until someone prompts it. When timely
-pickup matters and the recipient has a live tmux session (named after its worktree),
-follow the delivery with a ping typed into that session. Rules:
+**The sending rule and the receiving expectation are separate — don't conflate them (as of
+2026-07-23):**
+
+- **SENDING: always ping, every recipient, no exceptions.** The tmux-ping is the delivery step.
+  A file copied into a `claude-hydra-messages/inbox/` is staged, not delivered — you ping to
+  deliver it, regardless of who the recipient is (worker, coordinator, or staging). Every
+  recipient of a broadcast gets its own ping. Do not decide per-recipient whether to ping.
+- **RECEIVING (a property of the recipient, never the sender's concern): who *also* checks their
+  inbox absent a ping.** Polling agents — staging (sweeps its inbox each loop tick alongside
+  fleet-condition polling) and coordinators (tracking their children's status) — do check their
+  inbox as a safety net, so they'll eventually catch even an unpinged message. Non-coordinator
+  workers (issue/task/feature) do NOT — they rely entirely on being pinged. But this asymmetry
+  only affects the recipient's own resilience; it **never** relaxes the sender's obligation to
+  ping every time.
+
+**Bottom line: ping on every send, to every recipient — no exceptions.** The message is not
+delivered until you ping. (The inbox file is still the durable payload the recipient reads —
+never put substantive content only in the ping.) Rules:
 
 1. **Deliver the message file first** (copy → verify → archive, above). The ping is a
    doorbell, not the payload — never put substantive content only in the ping.
