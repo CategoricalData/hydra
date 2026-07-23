@@ -349,6 +349,34 @@ assemble_refresh_digest() {
         --output-digest "$output_digest")
 }
 
+# #459: dispatch a single-package Layer 1 JSON->target transform to either the Haskell or
+# Java generator host, selected by $GENERATOR_HOST (default: haskell). Both generator
+# scripts share the identical CLI contract (transform-json-to-target.sh's convention:
+# <target> <pkg> [main|test] [OPTIONS]), so this is a pure dispatch — no target-specific
+# branching lives here. Call sites replace their hardcoded
+# "$HASKELL_BIN/transform-json-to-<lang>.sh" invocation with this function.
+#
+# GENERATOR_HOST is a per-invocation choice, not a persistent config: it is read fresh on
+# each call, so a caller may run one package via Java and another via Haskell in the same
+# sync.sh pass (e.g. to fall back for a target the Java host does not yet emit correctly).
+#
+# Usage: run_layer1_transform <target> <pkg> [main|test] [OPTIONS...]
+run_layer1_transform() {
+    local target="$1"
+    case "${GENERATOR_HOST:-haskell}" in
+        java)
+            "$HYDRA_ROOT_DIR/heads/java/bin/transform-json-to-target.sh" "$@"
+            ;;
+        haskell)
+            "$HYDRA_ROOT_DIR/heads/haskell/bin/transform-json-to-target.sh" "$@"
+            ;;
+        *)
+            echo "run_layer1_transform: unknown GENERATOR_HOST '$GENERATOR_HOST' (expected java|haskell)" >&2
+            return 1
+            ;;
+    esac
+}
+
 # Print the package list emitted by a Layer 2 batch assembler — i.e.
 # the set of packages that `bootstrap-from-json --all-packages
 # --include-coders` produces output for, regardless of target language.

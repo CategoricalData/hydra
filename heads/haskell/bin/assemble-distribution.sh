@@ -77,7 +77,7 @@ if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; 
 else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Haskell modules..."
-    "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \
+    run_layer1_transform haskell "$PACKAGE" main \
         --output "$DIST_ROOT" --include-dsls \
         --prune-stale
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
@@ -96,7 +96,7 @@ else
     else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Haskell modules..."
-        "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" test \
+        run_layer1_transform haskell "$PACKAGE" test \
             --output "$DIST_ROOT" \
             --prune-stale
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"

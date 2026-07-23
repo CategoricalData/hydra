@@ -55,8 +55,6 @@ echo "=== Assembling Python distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
-HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
-
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
@@ -87,7 +85,7 @@ if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN" "
 else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Python modules..."
-    "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" main \
+    run_layer1_transform python "$PACKAGE" main \
         --output "$DIST_ROOT" --include-dsls \
         --prune-stale --keep-paths-from "$KEEP_MANIFEST"
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
@@ -106,7 +104,7 @@ else
     else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Python modules..."
-        "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" test \
+        run_layer1_transform python "$PACKAGE" test \
             --output "$DIST_ROOT" \
             --prune-stale --keep-paths-from "$KEEP_MANIFEST"
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"

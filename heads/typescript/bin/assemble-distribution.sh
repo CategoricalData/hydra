@@ -22,6 +22,11 @@ PKG="$1"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_TS_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_TS_HEAD/../.." && pwd )"
+HYDRA_ROOT_DIR="$HYDRA_ROOT"
+
+# run_layer1_transform dispatches to the Haskell or Java generator host per
+# $GENERATOR_HOST (#459); see bin/lib/assemble-common.sh.
+source "$HYDRA_ROOT/bin/lib/assemble-common.sh"
 
 # Generate the npm package.json + tsconfig.build.json for any package that has
 # a packages/<pkg>/package.json entry (i.e. all non-skipped packages).
@@ -56,11 +61,9 @@ symlink_hydra_tree() {
 case "$PKG" in
     hydra-kernel)
         echo "  Generating $PKG -> typescript (main + test)"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" main \
+        run_layer1_transform typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" test \
+        run_layer1_transform typescript "$PKG" test \
             --output "$HYDRA_ROOT/dist/typescript"
         "$HYDRA_TS_HEAD/bin/copy-kernel-runtime.sh" \
             --dist-root "$HYDRA_ROOT/dist/typescript"
@@ -68,8 +71,7 @@ case "$PKG" in
         ;;
     hydra-rdf)
         echo "  Generating $PKG -> typescript (main)"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" main \
+        run_layer1_transform typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
         # Symlink kernel files so relative imports resolve at compile time.
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
@@ -79,8 +81,7 @@ case "$PKG" in
         ;;
     hydra-pg)
         echo "  Generating $PKG -> typescript (main)"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" main \
+        run_layer1_transform typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
         # Symlink kernel and hydra-rdf files so all relative imports resolve.
         # hydra-rdf must be assembled before hydra-pg (sync.sh ensures this order).
@@ -93,11 +94,9 @@ case "$PKG" in
         ;;
     hydra-build)
         echo "  Generating $PKG -> typescript (main + test)"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" main \
+        run_layer1_transform typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" test \
+        run_layer1_transform typescript "$PKG" test \
             --output "$HYDRA_ROOT/dist/typescript"
         # Cross-package self-containment: symlink kernel files into this package.
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
@@ -127,8 +126,7 @@ case "$PKG" in
         ;;
     *)
         echo "  Generating $PKG -> typescript (main)"
-        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
-            typescript "$PKG" main \
+        run_layer1_transform typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
         # Cross-package self-containment: symlink kernel files into this package.
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"

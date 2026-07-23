@@ -73,8 +73,6 @@ lisp_assemble_main() {
     echo "  Output: $OUT_DIR"
     echo ""
 
-    local haskell_bin="$HYDRA_ROOT_DIR/heads/haskell/bin"
-
     # Per-target generator stamp; see bin/lib/assemble-common.sh and #347.
     # All four Lisp dialects share dist/json/hydra-lisp/ (the dialect is a
     # runtime parameter, not a separate coder package), so the stamp scope
@@ -97,7 +95,7 @@ lisp_assemble_main() {
     else
         rm -f "$output_digest_main"
         echo "Step 1: Generating main $LISP_PRETTY_NAME modules..."
-        "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" main \
+        run_layer1_transform "$LISP_DIALECT" "$PACKAGE" main \
             --output "$DIST_ROOT" \
             --prune-stale $keep_paths_flag
         assemble_refresh_digest "$input_digest_main" "$out_main" "$output_digest_main"
@@ -116,7 +114,7 @@ lisp_assemble_main() {
         else
             rm -f "$output_digest_test"
             echo "Step 2: Generating test $LISP_PRETTY_NAME modules..."
-            "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" test \
+            run_layer1_transform "$LISP_DIALECT" "$PACKAGE" test \
                 --output "$DIST_ROOT" \
                 --prune-stale $keep_paths_flag
             assemble_refresh_digest "$input_digest_test" "$out_test" "$output_digest_test"

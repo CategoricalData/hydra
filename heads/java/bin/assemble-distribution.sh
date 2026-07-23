@@ -53,8 +53,6 @@ echo "=== Assembling Java distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
-HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
-
 # Per-source-set freshness check via digest-check. The per-source-set
 # digest pair (input at dist/json/<pkg>/src/<set>/digest.json, output at
 # dist/<lang>/<pkg>/src/<set>/digest.json) is the single source of
@@ -90,7 +88,7 @@ if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAI
 else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Java modules..."
-    "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" main \
+    run_layer1_transform java "$PACKAGE" main \
         --output "$DIST_ROOT" --include-dsls \
         --prune-stale --keep-paths-from "$KEEP_MANIFEST"
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"
@@ -109,7 +107,7 @@ else
     else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Java modules..."
-        "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" test \
+        run_layer1_transform java "$PACKAGE" test \
             --output "$DIST_ROOT" \
             --prune-stale --keep-paths-from "$KEEP_MANIFEST"
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST_DIR" "$OUTPUT_DIGEST_TEST"
