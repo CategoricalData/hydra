@@ -101,6 +101,16 @@ The canonical version lives in `hydra.json` at the repository root as the
   #524/#467 java/python pins) should be reverted as part of the release, after the
   published artifacts are confirmed visible in their registries.
 
+  **Retire the #417 published-host-breaking shim at the 0.17.2 release.** #417 (the R20/R21
+  primitive finalization) landed with `hostOverrides: {"java":"local","python":"local"}` because
+  its new `hydra.dsl.lib.Ordering`/`functions` wrappers are absent from published 0.17.1 (see the
+  worked example in [build-system.md](build-system.md#refinement-oil-and-water-is-a-runtime-rule-dsl-authoring-sources-depend-on-the-published-host)).
+  This shim is **not** self-removing: once **0.17.2 is published** (it contains #417), the
+  release must, after confirming the artifacts are visible in Maven Central / PyPI,
+  (1) bump `hostVersion` `0.17.1 → 0.17.2` (`bin/bump-host-version.sh`) and (2) remove the
+  `java`/`python` entries from `hostOverrides`. Leaving the shim in place silently keeps the
+  java/python coder builds on the (slower) local-host path and defeats the published-host cache.
+
 ### Bumping the version
 
 ```bash

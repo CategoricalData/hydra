@@ -755,6 +755,44 @@ surfacing, and the fix is always to compile the authoring sources against the lo
 never the published one. A regression guard (no published `hydra-*` extra-dep alongside a source-dir of the
 matching local `packages/<pkg>`) keeps this invariant executable rather than prose-only.
 
+#### Refinement: oil-and-water is a *runtime* rule; DSL authoring sources depend on the *published* host
+
+The principle above is precise about the *runtime* dependency graph, but two build-time facts about the
+**DSL authoring sources** (`packages/<pkg>/src/main/.../sources/...`) deserve to be named explicitly, because
+they look like violations and are not:
+
+1. **Oil-and-water governs runtime, not build-time.** The rule forbids linking published *runtime* code into
+   a HEAD build. It does **not** forbid the DSL authoring sources from *depending on the published host as a
+   toolchain*. The authoring sources are neither shipped runtime code nor host-native overlay — they are the
+   **generator's input**, and to compile them the driver needs a host. By the `#370` consume-published-host
+   default, that host is the **last-published (version N−1)** host, resolved from Maven/PyPI/Hackage. A
+   version-(N−1) *build-time* dependency in the authoring layer is **inherent to self-hosting** — it is not an
+   oil-and-water violation. The violation is specifically the *runtime* category error (linking a published
+   coder into HEAD); the authoring→published-host build dependency is the sanctioned mechanism.
+
+2. **Companion principle: DSL authoring sources should depend *only* on the last published packages — never on
+   `dist/`.** The generator's inputs are compiled against a frozen, released toolchain, not against the current
+   revision's own generated output. If an authoring source genuinely needs a feature absent from the last
+   release *and cannot wait for the next one*, that is the **exception** and it requires a shim — but note this
+   may be a *different* shim from `--local-host`. When the "new" feature is only a **rename or relocation** of
+   something the published host already provides, prefer a lighter fix: keep the authoring call-sites on the
+   old published name (or add an authoring-layer compatibility wrapper delegating the new name to the old) so
+   the sources still compile against the published host, and switch to the new name only once a host containing
+   it is published. Reserve the heavier local-host shim (`hostOverrides: {"<host>": "local"}`) for genuinely
+   *new capability* the published host cannot express at all.
+
+   *Worked example (#417).* The R20/R21 primitive finalization split `hydra.lib.equality`'s comparison ops
+   into a new `hydra.lib.ordering` module, and the Java/Python authoring sources switched from `Equality.gt`
+   to `Ordering.gt`. Because published 0.17.1's host JAR has no `hydra.dsl.lib.Ordering` class, the published
+   consume path failed with `cannot find symbol class Ordering` — even though `Ordering.gt/gte/lte` are a
+   *pure rename* of `Equality.gt/gte/lte` (13 call-sites) with **nothing** semantically new. It was landed
+   with a local-host shim (`hostOverrides: {"java":"local","python":"local"}`), which is *correct* but was
+   *avoidable*: the module split (necessary) was coupled with switching the authoring call-sites to the
+   not-yet-published name (which forced the shim and could have waited for the republish, or used a
+   delegate-to-`Equality` compatibility wrapper). The general lesson: **do not couple a kernel rename/move
+   with switching authoring call-sites to the new name in the same wave** unless the new capability is truly
+   unavailable from the last published host.
+
 ### Bootstrapping `dist/haskell/` from the published host
 
 `dist/haskell/` is **not** tracked in source control — it is a local build artifact that never enters the
