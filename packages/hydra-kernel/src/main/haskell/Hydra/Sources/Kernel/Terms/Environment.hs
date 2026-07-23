@@ -140,8 +140,8 @@ partitionDefinitions = define "partitionDefinitions" $
     _Definition_term>>: "td" ~> just (var "td"),
     _Definition_primitive>>: "_" ~> nothing]) $
   pair
-    (Optionals.cat $ Lists.map (var "getType") (var "defs"))
-    (Optionals.cat $ Lists.map (var "getTerm") (var "defs"))
+    (Optionals.givens $ Lists.map (var "getType") (var "defs"))
+    (Optionals.givens $ Lists.map (var "getTerm") (var "defs"))
 
 reorderDefs :: TypedTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
@@ -218,7 +218,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (Strip.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     right $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
-  Eithers.map ("mpairs" ~> (Maps.fromList (Optionals.cat (var "mpairs")) :: TypedTerm (M.Map Name TypeScheme)))
+  Eithers.map ("mpairs" ~> (Maps.fromList (Optionals.givens (var "mpairs")) :: TypedTerm (M.Map Name TypeScheme)))
     (Eithers.mapList (var "toPair") (Lexical.graphToBindings @@ var "g"))
 
 -- Note: this is lossy, as it throws away the term body

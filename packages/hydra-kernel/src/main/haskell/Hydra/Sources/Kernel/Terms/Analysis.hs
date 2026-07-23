@@ -120,7 +120,7 @@ addNamesToModuleNames = define "addNamesToModuleNames" $
   doc "Add names to existing module names mapping" $
   "encodeModuleName" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
-  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (asTerm Names.moduleNameOf) $ Sets.toList $ var "names") $
+  "nss" <~ Sets.fromList (Optionals.givens $ Lists.map (asTerm Names.moduleNameOf) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
   Util.moduleNamesWithMapping (var "ns0") $ Maps.union
     (Util.moduleNamesMapping $ var "ns0")
@@ -261,7 +261,7 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
     _Definition_primitive>>: "primDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs") :: TypedTerm [S.Set Name]) $
-  Sets.fromList (Optionals.cat (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
+  Sets.fromList (Optionals.givens (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
 dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyModuleNames = define "dependencyModuleNames" $
@@ -289,7 +289,7 @@ dependencyModuleNames = define "dependencyModuleNames" $
           (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term")))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"] :: TypedTerm [S.Set Name]))))) $
-  Eithers.map ("namesList" ~> Sets.fromList (Optionals.cat (Lists.map (asTerm Names.moduleNameOf) (
+  Eithers.map ("namesList" ~> Sets.fromList (Optionals.givens (Lists.map (asTerm Names.moduleNameOf) (
       Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
@@ -465,7 +465,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
           _Literal_binary>>: constant true]]) $
   "termContainsBinary" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
-  "defTerms" <~ Optionals.cat (Lists.map
+  "defTerms" <~ Optionals.givens (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
@@ -485,7 +485,7 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
           _Literal_decimal>>: constant true]]) $
   "termContainsDecimal" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
-  "defTerms" <~ Optionals.cat (Lists.map
+  "defTerms" <~ Optionals.givens (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
@@ -498,7 +498,7 @@ moduleDependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph ->
 moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
   doc "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
-  "allBindings" <~ Optionals.cat (Lists.map
+  "allBindings" <~ Optionals.givens (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),

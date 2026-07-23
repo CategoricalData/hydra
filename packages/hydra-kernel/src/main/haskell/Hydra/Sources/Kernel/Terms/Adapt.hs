@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Functions as Functions
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -336,7 +337,7 @@ adaptLiteralTypesMap = define "adaptLiteralTypesMap" $
   "tryType" <~ ("lt" ~> optCases (adaptLiteralType @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
-  (Maps.fromList (Optionals.cat $ Lists.map (var "tryType") (asTerm Reflect.literalTypes)) :: TypedTerm (M.Map LiteralType LiteralType))
+  (Maps.fromList (Optionals.givens $ Lists.map (var "tryType") (asTerm Reflect.literalTypes)) :: TypedTerm (M.Map LiteralType LiteralType))
 
 adaptLiteralValue :: TypedTermDefinition (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
 adaptLiteralValue = define "adaptLiteralValue" $
@@ -595,20 +596,20 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "qualifyUntyped" <~ ("b" ~>
     "nm" <~ Core.unName (Core.bindingName $ var "b") $
     optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
-      (Strings.cat2 (string "(no module) ") (var "nm"))
-      ("ns" ~> Strings.cat (list [Packaging.unModuleName (var "ns"), string " :: ", var "nm"]))) $
+      (Strings.concat2 (string "(no module) ") (var "nm"))
+      ("ns" ~> Strings.concat (list [Packaging.unModuleName (var "ns"), string " :: ", var "nm"]))) $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map (var "qualifyUntyped")
       (Lists.filter ("b" ~> Logic.not $ Optionals.isGiven (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
-      (left $ Error.errorOther $ Error.otherError $ Strings.cat (list [
+      (left $ Error.errorOther $ Error.otherError $ Strings.concat (list [
         string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),
         string " untyped binding(s) (", var "debugLabel",
         string "); each must carry a type scheme at this stage. ",
         string "This usually means stale dist/json field shapes after a kernel record rename ",
         string "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
-        Strings.intercalate (string ", ") (var "untypedBindings")]))) $
+        Strings.join (string ", ") (var "untypedBindings")]))) $
 
   -- Normalize: push type applications inward past applications and lambdas.
   -- This corrects structures where TypeApp wraps App/Lambda after adaptation and eta expansion.
@@ -688,7 +689,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
         ("a" ~> just $ var "a"))
       ("a" ~> just $ var "a")) $
   "originalAnnotations" <~ (Maps.fromList
-    (Optionals.cat (Lists.map
+    (Optionals.givens (Lists.map
       ("b" ~> optCases (var "findAnn" @@ (Core.bindingTerm $ var "b"))
         nothing
         ("ann" ~> just $ pair (Core.bindingName $ var "b") (var "ann")))
@@ -734,15 +735,15 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
+          "existing" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
           Maps.insert (var "ns" :: TypedTerm ModuleName) (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
     (Maps.empty :: TypedTerm (M.Map ModuleName [Binding]))
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
-      Optionals.cat (Lists.map (var "toDef") (var "elsForNs")))
+      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
+      Optionals.givens (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 
   "g" <~ (Lexical.buildGraph @@ var "bins5" @@ Maps.empty @@ Graph.graphPrimitives (var "adapted")) $

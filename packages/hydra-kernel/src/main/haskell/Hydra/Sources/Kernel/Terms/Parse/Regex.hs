@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -235,8 +236,8 @@ unsignedInt = define "unsignedInt" $
           (int32 0)
           (var "digits"))
     @@ (Parsers.some @@ (Parsers.satisfy @@ ("c" ~> Logic.and
-          (Equality.gte (var "c") (cp '0'))
-          (Equality.lte (var "c") (cp '9')))))
+          (Ordering.gte (var "c") (cp '0'))
+          (Ordering.lte (var "c") (cp '9')))))
 
 -- | Parse a quantifier: * + ? or a brace form {n} {n,} {n,m}. Returns the Quantifier (default 'one').
 quantifier :: TypedTermDefinition (Parser Term)
@@ -318,7 +319,7 @@ alternation = define "alternation" $
         ("acc" ~> "b" ~> Logic.or (var "acc") (Lists.null (var "b")))
         false
         (var "branches"),
-      "multi">: Equality.gt (Lists.length (var "branches")) (int32 1)] $
+      "multi">: Ordering.gt (Lists.length (var "branches")) (int32 1)] $
     Logic.ifElse (Logic.and (var "hasEmpty") (var "multi"))
       (Parsers.fail @@ string "empty alternation branch")
       (Parsers.pure @@ var "branches"))

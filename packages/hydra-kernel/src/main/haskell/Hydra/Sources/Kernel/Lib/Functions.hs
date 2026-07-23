@@ -37,7 +37,9 @@ t3 = Types.var "t3"
 
 compose :: PrimitiveDefinition
 compose = defineWithDefault "compose" "Compose two functions."
-  (sig $ TypeScheme [Name "t1", Name "t2", Name "t3"]
+  (sigWithParams [("g", "the outer function, applied to the result of f"),
+                  ("f", "the inner function, applied to x first"),
+                  ("x", "the argument to which f is applied")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
     ((t2 Types.~> t3) Types.~> (t1 Types.~> t2) Types.~> t1 Types.~> t3) Nothing)
   ["compose(g, f, x) = g(f(x)); this defining equation is the specification.",
    "The outer function comes first: f is applied to x, and g is applied to the result.",
@@ -48,7 +50,8 @@ compose = defineWithDefault "compose" "Compose two functions."
 
 const :: PrimitiveDefinition
 const = defineWithDefault "const" "Return the first argument, ignoring the second."
-  (sig $ TypeScheme [Name "t1", Name "t2"]
+  (sigWithParams [("x", "the value to return"),
+                  ("y", "the ignored second argument")] $ TypeScheme [Name "t1", Name "t2"]
     (t1 Types.~> t2 Types.~> t1) Nothing)
   ["const(x, y) = x; this defining equation is the specification.",
    "Partially applied, const(x) is the constant function which returns x on every input.",
@@ -57,7 +60,9 @@ const = defineWithDefault "const" "Return the first argument, ignoring the secon
 
 flip :: PrimitiveDefinition
 flip = defineWithDefault "flip" "Swap the argument order of a binary function."
-  (sig $ TypeScheme [Name "t1", Name "t2", Name "t3"]
+  (sigWithParams [("f", "the binary function whose argument order is swapped"),
+                  ("x", "the argument passed as f's second argument"),
+                  ("y", "the argument passed as f's first argument")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
     ((t1 Types.~> t2 Types.~> t3) Types.~> t2 Types.~> t1 Types.~> t3) Nothing)
   ["flip(f, x, y) = f(y, x); this defining equation is the specification.",
    "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."]
@@ -65,7 +70,7 @@ flip = defineWithDefault "flip" "Swap the argument order of a binary function."
 
 identity :: PrimitiveDefinition
 identity = defineWithDefault "identity" "Return the argument unchanged."
-  (sig $ TypeScheme [Name "t1"] (t1 Types.~> t1) Nothing)
+  (sigWithParams [("x", "the value to return unchanged")] $ TypeScheme [Name "t1"] (t1 Types.~> t1) Nothing)
   ["identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
    "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
    "Total. Corresponds to Haskell's id :: a -> a."]

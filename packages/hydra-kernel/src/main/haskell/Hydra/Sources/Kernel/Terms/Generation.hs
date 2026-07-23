@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -162,15 +163,15 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
   doc "Escape unescaped control characters inside JSON string literals" $
   "input" ~>
   "hexDigit" <~ ("n" ~>
-    Logic.ifElse (Equality.lt (var "n") (int32 10))
+    Logic.ifElse (Ordering.lt (var "n") (int32 10))
       (Math.add (int32 0x30) (var "n"))       -- '0' + n
       (Math.add (int32 0x61) (Math.sub (var "n") (int32 10)))) $ -- 'a' + (n - 10)
   -- Divisor is a literal 16 (non-zero), so maybeDiv/maybeMod always succeed;
   -- the 0 fallback is unreachable.
   "escapeToUnicode" <~ ("b" ~>
     list [int32 0x5C, int32 0x75, int32 0x30, int32 0x30,
-          var "hexDigit" @@ (Optionals.fromOptional (int32 0) (Math.maybeDiv (var "b") (int32 16))),
-          var "hexDigit" @@ (Optionals.fromOptional (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
+          var "hexDigit" @@ (Optionals.withDefault (int32 0) (Math.div (var "b") (int32 16))),
+          var "hexDigit" @@ (Optionals.withDefault (int32 0) (Math.mod (var "b") (int32 16)))]) $
   -- go :: Bool -> Bool -> [Int32] -> [Int32]
   "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
     Optionals.cases (Lists.uncons $ var "bytes") (TypedTerm (Terms.list []) :: TypedTerm [Int]) ("uc" ~>
@@ -185,7 +186,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
            (Logic.ifElse (Equality.equal (var "b") (int32 0x22))
              -- quote toggles string mode
              (Lists.cons (var "b") (var "go" @@ (Logic.not $ var "inStr") @@ boolean False @@ var "bs"))
-             (Logic.ifElse (Logic.and (var "inStr") (Equality.lt (var "b") (int32 0x20)))
+             (Logic.ifElse (Logic.and (var "inStr") (Ordering.lt (var "b") (int32 0x20)))
                -- control char: replace with \uXXXX
                (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
                -- normal byte
@@ -253,7 +254,7 @@ generateCoderModules = define "generateCoderModules" $
     (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
   "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
   "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
-  Eithers.map ("results" ~> Optionals.cat (var "results")) $
+  Eithers.map ("results" ~> Optionals.givens (var "results")) $
     Eithers.mapList ("m" ~> var "codec" @@ var "cx" @@ var "graph" @@ var "m") (var "typeModules")
 
 -- | Perform type inference on a graph and generate its lexicon.
@@ -269,9 +270,9 @@ generateLexicon = define "generateLexicon" $
   "partitioned" <~ Lists.partition ("b" ~> Annotations.isNativeType @@ var "b") (var "bindings") $ -- TODO: refactor lexicon to use Definition directly
   "typeBindings" <~ Pairs.first (var "partitioned") $
   "termBindings" <~ Pairs.second (var "partitioned") $
-  "sortedPrimitives" <~ Lists.sortOn ("p" ~> Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "primitives") $
-  "sortedTypes" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
-  "sortedTerms" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
+  "sortedPrimitives" <~ Lists.sortBy ("p" ~> Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "primitives") $
+  "sortedTypes" <~ Lists.sortBy ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
+  "sortedTerms" <~ Lists.sortBy ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
   "typeLines" <<~ Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
   "termLines" <~ Lists.map ("b" ~> formatTermBinding @@ var "b") (var "sortedTerms") $
   "primitiveLines" <~ Lists.map ("p" ~> formatPrimitive @@ var "p") (var "sortedPrimitives") $
@@ -359,7 +360,7 @@ generateSourceFiles = define "generateSourceFiles" $
           (Packaging.moduleName $ var "m")
           (Packaging.moduleMetadata $ var "m")
           (Packaging.moduleDependencies $ var "m")
-          (Optionals.cat $ Lists.map
+          (Optionals.givens $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
               _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
               _Definition_term>>: "td" ~> Optionals.map
@@ -380,7 +381,7 @@ generateSourceFiles = define "generateSourceFiles" $
       -- per-host orderings for the generated declarations. CLAUDE.md mandates alphabetical
       -- definition order; sorting here enforces it uniformly for every coder × host. (#489)
       "dedupDefs" <~ ("defs" ~>
-        Lists.sortOn ("d" ~> Packaging.termDefinitionName (var "d"))
+        Lists.sortBy ("d" ~> Packaging.termDefinitionName (var "d"))
           (Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Packaging.termDefinitionName (var "d")) (var "d")) (var "defs")) :: TypedTerm (M.Map Name TermDefinition)))) $
       "dedupedDefLists" <~ Lists.map (var "dedupDefs") (var "defLists") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
@@ -421,7 +422,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   -- the same underlying problem.
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m")) (var "kernelModules")) $
   "typeBoundTerms" <~ (Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "schemaElements")) :: TypedTerm (M.Map Name Term)) $
-  "typeBoundTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~> Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts")) (Core.bindingTypeScheme (var "b"))) (var "schemaElements"))) :: TypedTerm (M.Map Name TypeScheme)) $
+  "typeBoundTypes" <~ (Maps.fromList (Optionals.givens (Lists.map ("b" ~> Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts")) (Core.bindingTypeScheme (var "b"))) (var "schemaElements"))) :: TypedTerm (M.Map Name TypeScheme)) $
   "g2" <~ Graph.graphWithBoundTerms (var "g1") (Maps.union (var "typeBoundTerms") (Graph.graphBoundTerms (var "g1"))) $
   "g3" <~ Graph.graphWithBoundTypes (var "g2") (Maps.union (var "typeBoundTypes") (Graph.graphBoundTypes (var "g2"))) $
   generateLexicon @@ var "g3"
@@ -623,7 +624,7 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
   "closure" <~ Sets.union
     (transitiveDeps @@ ("m" ~> Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "m"))) @@ var "nsMap" @@ var "modules")
     (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleName (var "m")) (var "modules")) $
-  Optionals.cat $ Lists.map
+  Optionals.givens $ Lists.map
     ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "nsMap" :: TypedTerm (M.Map Name Module)))
     (Sets.toList (var "closure" :: TypedTerm (S.Set Name)))
 
@@ -637,7 +638,7 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
 -- (where they'd be treated as ordinary term definitions); they only feed
 -- the inference pass.
 modulePrimitiveDefaultBindings :: TypedTerm Module -> TypedTerm [Binding]
-modulePrimitiveDefaultBindings m = Optionals.cat $ Lists.map
+modulePrimitiveDefaultBindings m = Optionals.givens $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_primitive>>: "pd" ~>
       Optionals.map
@@ -650,7 +651,7 @@ modulePrimitiveDefaultBindings m = Optionals.cat $ Lists.map
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
 moduleTermBindings :: TypedTerm Module -> TypedTerm [Binding]
-moduleTermBindings m = Optionals.cat $ Lists.map
+moduleTermBindings m = Optionals.givens $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_term>>: "td" ~>
       just (Core.binding
@@ -686,7 +687,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
   "m" ~>
   -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
   "sourceNs" <~ wrap _ModuleName (
-    (string "hydra.sources.") ++ Strings.intercalate (string ".")
+    (string "hydra.sources.") ++ Strings.join (string ".")
       (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unModuleName $ Packaging.moduleName $ var "m")))) $
   -- The module type namespace
   "modTypeNs" <~ (wrap _ModuleName (string "hydra.packaging") :: TypedTerm ModuleName) $
@@ -720,7 +721,7 @@ generateCoderModules
 -- | Extract type definitions from a module as Bindings (for elementsToGraph compatibility).
 -- Each TypeDefinition is converted to a Binding by encoding the type as a term.
 moduleTypeBindings :: TypedTerm Module -> TypedTerm [Binding]
-moduleTypeBindings m = Optionals.cat $ Lists.map
+moduleTypeBindings m = Optionals.givens $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
       just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -728,7 +729,7 @@ moduleTypeBindings m = Optionals.cat $ Lists.map
 
 -- | Extract type definition names from a module.
 moduleTypeNames :: TypedTerm Module -> TypedTerm [Name]
-moduleTypeNames m = Optionals.cat $ Lists.map
+moduleTypeNames m = Optionals.givens $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
   (Packaging.moduleDefinitions m)
@@ -762,7 +763,7 @@ modulesToGraph = define "modulesToGraph" $
   -- read-only lookup that lets incremental inference skip re-solving known definitions.
   "universeDataElements" <~ Lists.concat (Lists.map
       ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
-  "universeBoundTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+  "universeBoundTypes" <~ (Maps.fromList (Optionals.givens (Lists.map ("b" ~>
     Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingTypeScheme (var "b"))) (var "universeDataElements"))) :: TypedTerm (M.Map Name TypeScheme)) $
   Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
@@ -775,7 +776,7 @@ moduleNameToPath :: TypedTermDefinition (ModuleName -> String)
 moduleNameToPath = define "moduleNameToPath" $
   doc "Convert a module name to a file path (e.g., hydra.core -> hydra/core)" $
   "ns" ~>
-  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))
+  Strings.join (string "/") (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))
 
 -- | Compute transitive closure of dependencies.
 -- Given a function that extracts dependency namespaces from a module,
@@ -794,7 +795,7 @@ refreshModule = define "refreshModule" $
       (Packaging.moduleName $ var "m")
       (Packaging.moduleMetadata $ var "m")
       (Packaging.moduleDependencies $ var "m")
-      (Optionals.cat $ Lists.map
+      (Optionals.givens $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [
           _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
           _Definition_term>>: "td" ~> Optionals.map

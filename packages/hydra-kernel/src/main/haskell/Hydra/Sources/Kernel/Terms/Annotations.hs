@@ -205,7 +205,7 @@ isNativeType = define "isNativeType" $
   doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
     <> " or as a Hydra type expression.") $
   "el" ~>
-  "isFlaggedAsFirstClassType" <~ Optionals.fromOptional false (
+  "isFlaggedAsFirstClassType" <~ Optionals.withDefault false (
     Optionals.map
       (constant true)
       (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
@@ -358,7 +358,7 @@ getAnnotationMap = define "getAnnotationMap" $
     cases _Term (var "t")
       (Just (Maps.empty :: TypedTerm (M.Map Name Term))) [
       _Term_map>>: "m" ~> (Maps.fromList
-        (Optionals.cat (Lists.map (var "fromEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))) :: TypedTerm (M.Map Name Term))]
+        (Optionals.givens (Lists.map (var "fromEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))) :: TypedTerm (M.Map Name Term))]
 
 -- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
 -- TermVariable. Inverse of getAnnotationMap on map-shaped inputs.

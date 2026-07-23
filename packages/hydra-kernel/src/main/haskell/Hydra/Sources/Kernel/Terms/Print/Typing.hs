@@ -76,7 +76,7 @@ typeConstraint = define "typeConstraint" $
   lambda "tc" $ lets [
     "ltyp">: Typing.typeConstraintLeft $ var "tc",
     "rtyp">: Typing.typeConstraintRight $ var "tc"] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       PrintCore.type_ @@ var "ltyp",
       string "≡",
       PrintCore.type_ @@ var "rtyp"]
@@ -90,12 +90,12 @@ typeSubst = define "typeSubst" $
     "showPair">: lambda "pair" $ lets [
       "name">: unwrap _Name @@ (Pairs.first $ var "pair"),
       "typ">: Pairs.second $ var "pair"] $
-      Strings.cat $ list [
+      Strings.concat $ list [
         var "name",
         string "↦",
         PrintCore.type_ @@ var "typ"],
     "pairStrs">: Lists.map (var "showPair") (var "pairs")] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "{",
-      Strings.intercalate (string ",") (var "pairStrs"),
+      Strings.join (string ",") (var "pairStrs"),
       string "}"]

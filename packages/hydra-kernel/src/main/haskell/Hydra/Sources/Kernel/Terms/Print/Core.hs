@@ -100,8 +100,8 @@ binding = define "binding" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.cat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
-  Strings.cat $ list [
+  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
+  Strings.concat $ list [
     var "name",
     var "typeStr",
     string " = ",
@@ -119,7 +119,7 @@ caseStatement = define "caseStatement" $
     (var "csCases") $
   "defaultField" <~ Optionals.cases (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")]) $
   "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "case(",
     var "tname",
     string ")",
@@ -130,8 +130,8 @@ either_ = define "either" $
   doc "Show an Either value using given functions for left and right" $
   "showA" ~> "showB" ~> "e" ~>
   Eithers.either
-    ("a" ~> Strings.cat2 (string "left(") (Strings.cat2 (var "showA" @@ var "a") (string ")")))
-    ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
+    ("a" ~> Strings.concat2 (string "left(") (Strings.concat2 (var "showA" @@ var "a") (string ")")))
+    ("b" ~> Strings.concat2 (string "right(") (Strings.concat2 (var "showB" @@ var "b") (string ")")))
     (var "e")
 
 field :: TypedTermDefinition (Field -> String)
@@ -140,7 +140,7 @@ field = define "field" $
   "field" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  Strings.cat $ list [var "fname", string "=", term @@ var "fterm"]
+  Strings.concat $ list [var "fname", string "=", term @@ var "fterm"]
 
 fieldType :: TypedTermDefinition (FieldType -> String)
 fieldType = define "fieldType" $
@@ -148,7 +148,7 @@ fieldType = define "fieldType" $
   "ft" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
   "ftyp" <~ Core.fieldTypeType (var "ft") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     var "fname",
     string ":",
     type_ @@ var "ftyp"]
@@ -158,9 +158,9 @@ fields = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
   "fieldStrs" <~ Lists.map (asTerm field) (var "flds") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "{",
-    Strings.intercalate (string ", ") (var "fieldStrs"),
+    Strings.join (string ", ") (var "fieldStrs"),
     string "}"]
 
 floatValue :: TypedTermDefinition (FloatValue -> String)
@@ -183,7 +183,7 @@ injection = define "injection" $
   "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
   "f" <~ Core.injectionField (var "inj") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "inject(",
     unwrap _Name @@ var "tname",
     string ")",
@@ -224,8 +224,8 @@ lambda = define "lambda" $
   "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
   "mt" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Optionals.cases (var "mt") (string "") ("t" ~> Strings.cat2 (string ":") (type_ @@ var "t")) $
-  Strings.cat $ list [
+  "typeStr" <~ Optionals.cases (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (type_ @@ var "t")) $
+  Strings.concat $ list [
     string "λ",
     var "v",
     var "typeStr",
@@ -239,9 +239,9 @@ let_ = define "let" $
   "bindings" <~ Core.letBindings (var "l") $
   "env" <~ Core.letBody (var "l") $
   "bindingStrs" <~ Lists.map (asTerm binding) (var "bindings") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "let ",
-    Strings.intercalate (string ", ") (var "bindingStrs"),
+    Strings.join (string ", ") (var "bindingStrs"),
     string " in ",
     term @@ var "env"]
 
@@ -250,9 +250,9 @@ list_ = define "list" $
   doc "Show a list using a given function to show each element" $
   "f" ~> "xs" ~>
   "elementStrs" <~ Lists.map (var "f") (var "xs") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "[",
-    Strings.intercalate (string ", ") (var "elementStrs"),
+    Strings.join (string ", ") (var "elementStrs"),
     string "]"]
 
 literal :: TypedTermDefinition (Literal -> String)
@@ -264,7 +264,7 @@ literal = define "literal" $
     _Literal_decimal>>: "d" ~> Literals.showDecimal $ var "d",
     _Literal_float>>: "fv" ~> floatValue @@ var "fv",
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
-    _Literal_string>>: "s" ~> Literals.showString $ var "s"]
+    _Literal_string>>: "s" ~> Literals.printString $ var "s"]
 
 literalType :: TypedTermDefinition (LiteralType -> String)
 literalType = define "literalType" $
@@ -284,26 +284,26 @@ map_ :: forall k v. Ord k => TypedTermDefinition ((k -> String) -> (v -> String)
 map_ = define "map" $
   doc "Show a map using given functions to show keys and values" $
   "showK" ~> "showV" ~> "m" ~>
-  "pairStrs" <~ Lists.map ("p" ~> Strings.cat $ list [
+  "pairStrs" <~ Lists.map ("p" ~> Strings.concat $ list [
     var "showK" @@ (Pairs.first $ var "p"),
     string ": ",
     var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList (var "m" :: TypedTerm (M.Map k v))) $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "{",
-    Strings.intercalate (string ", ") (var "pairStrs"),
+    Strings.join (string ", ") (var "pairStrs"),
     string "}"]
 
 optional_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
 optional_ = define "optional" $
   doc "Show an optional value using a given function to show the element" $
   "f" ~> "mx" ~>
-  Optionals.cases (var "mx") (string "none") ("x" ~> Strings.cat2 (string "given(") (Strings.cat2 (var "f" @@ var "x") (string ")")))
+  Optionals.cases (var "mx") (string "none") ("x" ~> Strings.concat2 (string "given(") (Strings.concat2 (var "f" @@ var "x") (string ")")))
 
 pair_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
   doc "Show a pair using given functions to show each element" $
   "showA" ~> "showB" ~> "p" ~>
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "(",
     var "showA" @@ (Pairs.first $ var "p"),
     string ", ",
@@ -316,7 +316,7 @@ projection = define "projection" $
   "proj" ~>
   "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
   "fname" <~ unwrap _Name @@ (Core.projectionFieldName $ var "proj") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "project(",
     var "tname",
     string "){",
@@ -333,9 +333,9 @@ set_ = define "set" $
   doc "Show a set using a given function to show each element" $
   "f" ~> "xs" ~>
   "elementStrs" <~ Lists.map (var "f") (Sets.toList (var "xs" :: TypedTerm (S.Set a))) $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "{",
-    Strings.intercalate (string ", ") (var "elementStrs"),
+    Strings.join (string ", ") (var "elementStrs"),
     string "}"]
 
 term :: TypedTermDefinition (Term -> String)
@@ -353,17 +353,17 @@ term = define "term" $
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
       "termStrs" <~ Lists.map (asTerm term) (var "terms") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "(",
-        Strings.intercalate (string " @ ") (var "termStrs"),
+        Strings.join (string " @ ") (var "termStrs"),
         string ")"],
     _Term_cases>>: caseStatement,
     _Term_either>>: "e" ~> Eithers.either
-      ("l" ~> Strings.cat $ list [
+      ("l" ~> Strings.concat $ list [
         string "left(",
         term @@ var "l",
         string ")"])
-      ("r" ~> Strings.cat $ list [
+      ("r" ~> Strings.concat $ list [
         string "right(",
         term @@ var "r",
         string ")"])
@@ -372,25 +372,25 @@ term = define "term" $
     _Term_let>>: "l" ~> let_ @@ var "l",
     _Term_list>>: "els" ~>
       "termStrs" <~ Lists.map (asTerm term) (var "els") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "[",
-        Strings.intercalate (string ", ") (var "termStrs"),
+        Strings.join (string ", ") (var "termStrs"),
         string "]"],
     _Term_literal>>: "lit" ~> literal @@ var "lit",
     _Term_map>>: "m" ~>
-      "entry" <~ ("p" ~> Strings.cat $ list [
+      "entry" <~ ("p" ~> Strings.concat $ list [
         term @@ (Pairs.first $ var "p"),
         string "=",
         term @@ (Pairs.second $ var "p")]) $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "{",
-        Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
+        Strings.join (string ", ") $ Lists.map (var "entry") $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
         string "}"],
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "none") ("t" ~> Strings.cat $ list [
+    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "none") ("t" ~> Strings.concat $ list [
         string "given(",
         term @@ var "t",
         string ")"]),
-    _Term_pair>>: "p" ~> Strings.cat $ list [
+    _Term_pair>>: "p" ~> Strings.concat $ list [
       string "(",
       term @@ (Pairs.first $ var "p"),
       string ", ",
@@ -400,20 +400,20 @@ term = define "term" $
     _Term_record>>: "rec" ~>
       "tname" <~ unwrap _Name @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "record(",
         var "tname",
         string ")",
         fields @@ var "flds"],
     _Term_set>>: "s" ~>
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "{",
-        Strings.intercalate (string ", ") (Lists.map (asTerm term) $ Sets.toList $ var "s"),
+        Strings.join (string ", ") (Lists.map (asTerm term) $ Sets.toList $ var "s"),
         string "}"],
     _Term_typeLambda>>: "ta" ~>
       "param" <~ unwrap _Name @@ (Core.typeLambdaParameter $ var "ta") $
       "body" <~ Core.typeLambdaBody (var "ta") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "Λ",
         var "param",
         string ".",
@@ -421,14 +421,14 @@ term = define "term" $
     _Term_typeApplication>>: "tt" ~>
       "t2" <~ Core.typeApplicationTermBody (var "tt") $
       "typ" <~ Core.typeApplicationTermType (var "tt") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         term @@ var "t2",
         string "⟨",
         type_ @@ var "typ",
         string "⟩"],
     _Term_inject>>: injection,
     _Term_unit>>: constant $ string "unit",
-    _Term_unwrap>>: "tname" ~> Strings.cat $ list [
+    _Term_unwrap>>: "tname" ~> Strings.concat $ list [
       string "unwrap(",
       unwrap _Name @@ var "tname",
       string ")"],
@@ -436,7 +436,7 @@ term = define "term" $
     _Term_wrap>>: "wt" ~>
       "tname" <~ unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt") $
       "term1" <~ Core.wrappedTermBody (var "wt") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "wrap(",
         var "tname",
         string "){",
@@ -452,11 +452,11 @@ typeScheme = define "typeScheme" $
   "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
   "fa" <~ Logic.ifElse (Lists.null $ var "vars")
     (string "")
-    (Strings.cat $ list [
+    (Strings.concat $ list [
       string "forall ",
-      Strings.intercalate (string ",") (var "varNames"),
+      Strings.join (string ",") (var "varNames"),
       string ". "]) $
-  "toConstraintPair" <~ ("v" ~> "c" ~> Strings.cat $ list [
+  "toConstraintPair" <~ ("v" ~> "c" ~> Strings.concat $ list [
     match _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c"),
     string " ",
@@ -467,14 +467,14 @@ typeScheme = define "typeScheme" $
   "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
     (list ([] :: [TypedTerm String]))
     ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList (var "m" :: TypedTerm (M.Map Name TypeVariableConstraints))) $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "(",
     var "fa",
     Logic.ifElse (Lists.null $ var "tc")
       (string "")
-      (Strings.cat $ list [
+      (Strings.concat $ list [
         string "(",
-        Strings.intercalate (string ", ") (var "tc"),
+        Strings.join (string ", ") (var "tc"),
         string ") => "]),
     type_ @@ var "body",
     string ")"]
@@ -485,9 +485,9 @@ type_ = define "type" $
   "typ" ~>
   "showRowType" <~ ("flds" ~>
     "fieldStrs" <~ Lists.map (asTerm fieldType) (var "flds") $
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "{",
-      Strings.intercalate (string ", ") (var "fieldStrs"),
+      Strings.join (string ", ") (var "fieldStrs"),
       string "}"]) $
   "gatherTypes" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
@@ -507,18 +507,18 @@ type_ = define "type" $
     _Type_application>>: "app" ~>
       "types" <~ var "gatherTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "app" $
       "typeStrs" <~ Lists.map (asTerm type_) (var "types") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "(",
-        Strings.intercalate (string " @ ") (var "typeStrs"),
+        Strings.join (string " @ ") (var "typeStrs"),
         string ")"],
-    _Type_effect>>: "etyp" ~> Strings.cat $ list [
+    _Type_effect>>: "etyp" ~> Strings.concat $ list [
       string "effect<",
       type_ @@ var "etyp",
       string ">"],
     _Type_either>>: "et" ~>
       "leftTyp" <~ Core.eitherTypeLeft (var "et") $
       "rightTyp" <~ Core.eitherTypeRight (var "et") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "either<",
         type_ @@ var "leftTyp",
         string ", ",
@@ -527,7 +527,7 @@ type_ = define "type" $
     _Type_forall>>: "ft" ~>
       "var" <~ unwrap _Name @@ (Core.forallTypeParameter $ var "ft") $
       "body" <~ Core.forallTypeBody (var "ft") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "(∀",
         var "var",
         string ".",
@@ -536,11 +536,11 @@ type_ = define "type" $
     _Type_function>>: "ft" ~>
       "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "typ" $
       "typeStrs" <~ Lists.map (asTerm type_) (var "types") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "(",
-        Strings.intercalate (string " → ") (var "typeStrs"),
+        Strings.join (string " → ") (var "typeStrs"),
         string ")"],
-    _Type_list>>: "etyp" ~> Strings.cat $ list [
+    _Type_list>>: "etyp" ~> Strings.concat $ list [
       string "list<",
       type_ @@ var "etyp",
       string ">"],
@@ -548,33 +548,33 @@ type_ = define "type" $
     _Type_map>>: "mt" ~>
       "keyTyp" <~ Core.mapTypeKeys (var "mt") $
       "valTyp" <~ Core.mapTypeValues (var "mt") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "map<",
         type_ @@ var "keyTyp",
         string ", ",
         type_ @@ var "valTyp",
         string ">"],
-    _Type_optional>>: "etyp" ~> Strings.cat $ list [
+    _Type_optional>>: "etyp" ~> Strings.concat $ list [
       string "optional<",
       type_ @@ var "etyp",
       string ">"],
     _Type_pair>>: "pt" ~>
       "firstTyp" <~ Core.pairTypeFirst (var "pt") $
       "secondTyp" <~ Core.pairTypeSecond (var "pt") $
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "(",
         type_ @@ var "firstTyp",
         string ", ",
         type_ @@ var "secondTyp",
         string ")"],
-    _Type_record>>: "rt" ~> Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
-    _Type_set>>: "etyp" ~> Strings.cat $ list [
+    _Type_record>>: "rt" ~> Strings.concat2 (string "record") (var "showRowType" @@ var "rt"),
+    _Type_set>>: "etyp" ~> Strings.concat $ list [
       string "set<",
       type_ @@ var "etyp",
       string ">"],
-    _Type_union>>: "rt" ~> Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
+    _Type_union>>: "rt" ~> Strings.concat2 (string "union") (var "showRowType" @@ var "rt"),
     _Type_unit>>: constant $ string "unit",
     _Type_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Type_void>>: constant $ string "void",
     _Type_wrap>>: "wt" ~>
-      Strings.cat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
+      Strings.concat $ list [string "wrap(", type_ @@ var "wt", string ")"]]

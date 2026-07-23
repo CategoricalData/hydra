@@ -13,8 +13,8 @@ import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), abs, acos, acosh, asin, asinh, atan, atan2, atanh,
-                               ceiling, cos, cosh, even, exp, floor, log, logBase,
-                               max, min, negate, odd, pi, round, signum, sin, sinh,
+                               ceiling, cos, cosh, div, even, exp, floor, log, logBase,
+                               max, min, mod, negate, odd, pi, rem, round, signum, sin, sinh,
                                sqrt, tan, tanh, truncate)
 import qualified Data.Int                    as I
 
@@ -30,9 +30,9 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.math module.")}
   where
     definitions = [abs, acos, acosh, add, addFloat64, asin, asinh, atan, atan2, atanh,
-                   ceiling, cos, cosh, e, even, exp, floor, log, logBase, max, maybeDiv,
-                   maybeMod, maybePred, maybeRem, maybeSucc, min, mul, mulFloat64, negate,
-                   negateFloat64, odd, pi, pow, range, round, roundFloat32, roundFloat64,
+                   ceiling, cos, cosh, div, e, even, exp, floor, log, logBase, mod,
+                   mul, mulFloat64, negate,
+                   negateFloat64, odd, pi, pow, range, rem, round, roundFloat32, roundFloat64,
                    signum, sin, sinh, sqrt, sub, subFloat64, tan, tanh, truncate]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -41,44 +41,45 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
--- Shared monomorphic signatures.
+-- Shared monomorphic signatures. Each non-nullary helper takes an authored
+-- (name, description) parameter list and threads it through sigWithParams.
 f64Const :: TermSignature
 f64Const = sig $ TypeScheme [] Types.float64 Nothing
 
-f64To :: TermSignature
-f64To = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64) Nothing
+f64To :: [(String, String)] -> TermSignature
+f64To params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64) Nothing
 
-f64To2 :: TermSignature
-f64To2 = sig $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) Nothing
+f64To2 :: [(String, String)] -> TermSignature
+f64To2 params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) Nothing
 
-int32F32ToF32 :: TermSignature
-int32F32ToF32 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) Nothing
+int32F32ToF32 :: [(String, String)] -> TermSignature
+int32F32ToF32 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) Nothing
 
-int32F64ToF64 :: TermSignature
-int32F64ToF64 = sig $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) Nothing
+int32F64ToF64 :: [(String, String)] -> TermSignature
+int32F64ToF64 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) Nothing
 
-int32To :: TermSignature
-int32To = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
+int32To :: [(String, String)] -> TermSignature
+int32To params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
 
-int32To2 :: TermSignature
-int32To2 = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32 Types.~> Types.int32) Nothing
+int32To2 :: [(String, String)] -> TermSignature
+int32To2 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32 Types.~> Types.int32) Nothing
 
-int32To2List :: TermSignature
-int32To2List = sig $ TypeScheme []
+int32To2List :: [(String, String)] -> TermSignature
+int32To2List params = sigWithParams params $ TypeScheme []
   (Types.int32 Types.~> Types.int32 Types.~> Types.list Types.int32) Nothing
 
-int32To2Maybe :: TermSignature
-int32To2Maybe = sig $ TypeScheme []
+int32To2Maybe :: [(String, String)] -> TermSignature
+int32To2Maybe params = sigWithParams params $ TypeScheme []
   (Types.int32 Types.~> Types.int32 Types.~> Types.optional Types.int32) Nothing
 
-int32ToBool :: TermSignature
-int32ToBool = sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
+int32ToBool :: [(String, String)] -> TermSignature
+int32ToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
 
-int32ToMaybe :: TermSignature
-int32ToMaybe = sig $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) Nothing
+int32ToMaybe :: [(String, String)] -> TermSignature
+int32ToMaybe params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) Nothing
 
 abs :: PrimitiveDefinition
-abs = define "abs" "The absolute value of an integer." int32To
+abs = define "abs" "The absolute value of an integer." (int32To [("x", "the integer whose absolute value is taken")])
   ["Absolute value of a signed 32-bit two's-complement integer. For non-negative inputs the result\
   \ equals the input; for negative inputs the result is the arithmetic negation.",
    "The function is total but not injective at the boundary: abs(minBound) = minBound (i.e.\
@@ -86,27 +87,27 @@ abs = define "abs" "The absolute value of an integer." int32To
    "Corresponds to Haskell's abs :: Int32 -> Int32."]
 
 acos :: PrimitiveDefinition
-acos = define "acos" "The arc cosine of a floating-point number." f64To
+acos = define "acos" "The arc cosine of a floating-point number." (f64To [("x", "the cosine value whose arc cosine is computed")])
   ["Principal value of the inverse cosine, in radians. The result is in [0, \x03C0].",
    "For arguments outside the domain [-1, +1] (including \xB1\x221E), the result is NaN. acos(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 acos operation and to Haskell's acos :: Double -> Double."]
 
 acosh :: PrimitiveDefinition
-acosh = define "acosh" "The hyperbolic arc cosine of a floating-point number." f64To
+acosh = define "acosh" "The hyperbolic arc cosine of a floating-point number." (f64To [("x", "the value whose inverse hyperbolic cosine is computed")])
   ["Principal value of the inverse hyperbolic cosine. The result is in [0, +\x221E).",
    "For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+\x221E) = +\x221E; acosh(NaN) is\
   \ NaN.",
    "Corresponds to the IEEE 754 \xA79.2 acosh operation and to Haskell's acosh :: Double -> Double."]
 
 add :: PrimitiveDefinition
-add = define "add" "Integer addition." int32To2
+add = define "add" "Integer addition." (int32To2 [("x", "the first addend"), ("y", "the second addend")])
   ["Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and\
   \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
   \ raised).",
    "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."]
 
 addFloat64 :: PrimitiveDefinition
-addFloat64 = define "addFloat64" "Floating-point addition." f64To2
+addFloat64 = define "addFloat64" "Floating-point addition." (f64To2 [("x", "the first addend"), ("y", "the second addend")])
   ["IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable\
   \ float64 under the roundTiesToEven rounding-direction attribute.",
    "Adding infinities of opposite sign (+\x221E + -\x221E or -\x221E + +\x221E) produces a NaN; adding\
@@ -115,26 +116,26 @@ addFloat64 = define "addFloat64" "Floating-point addition." f64To2
   \ \xA75.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."]
 
 asin :: PrimitiveDefinition
-asin = define "asin" "The arc sine of a floating-point number." f64To
+asin = define "asin" "The arc sine of a floating-point number." (f64To [("x", "the sine value whose arc sine is computed")])
   ["Principal value of the inverse sine, in radians. The result is in [-\x03C0/2, +\x03C0/2].",
    "For arguments outside the domain [-1, +1] (including \xB1\x221E), the result is NaN; asin(\xB10) =\
   \ \xB10; asin(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 asin operation and to Haskell's asin :: Double -> Double."]
 
 asinh :: PrimitiveDefinition
-asinh = define "asinh" "The hyperbolic arc sine of a floating-point number." f64To
+asinh = define "asinh" "The hyperbolic arc sine of a floating-point number." (f64To [("x", "the value whose inverse hyperbolic sine is computed")])
   ["Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(\xB10) = \xB10;\
   \ asinh(\xB1\x221E) = \xB1\x221E; asinh(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 asinh operation and to Haskell's asinh :: Double -> Double."]
 
 atan :: PrimitiveDefinition
-atan = define "atan" "The arc tangent of a floating-point number." f64To
+atan = define "atan" "The arc tangent of a floating-point number." (f64To [("x", "the tangent value whose arc tangent is computed")])
   ["Principal value of the inverse tangent, in radians. The result is in (-\x03C0/2, +\x03C0/2);\
   \ atan(\xB10) = \xB10; atan(\xB1\x221E) = \xB1\x03C0/2; atan(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 atan operation and to Haskell's atan :: Double -> Double."]
 
 atan2 :: PrimitiveDefinition
-atan2 = define "atan2" "The two-argument arc tangent (atan2)." f64To2
+atan2 = define "atan2" "The two-argument arc tangent (atan2)." (f64To2 [("y", "the ordinate (y-coordinate)"), ("x", "the abscissa (x-coordinate)")])
   ["atan2(y, x) returns the angle in radians, in (-\x03C0, +\x03C0], from the positive x-axis to the\
   \ point (x, y), using the signs of both arguments to determine the quadrant.",
    "Special cases follow IEEE 754 \xA79.2: atan2(\xB10, +x>0) = \xB10; atan2(\xB10, -x<0) = \xB1\x03C0;\
@@ -144,14 +145,14 @@ atan2 = define "atan2" "The two-argument arc tangent (atan2)." f64To2
    "Corresponds to Haskell's atan2 :: Double -> Double -> Double."]
 
 atanh :: PrimitiveDefinition
-atanh = define "atanh" "The hyperbolic arc tangent of a floating-point number." f64To
+atanh = define "atanh" "The hyperbolic arc tangent of a floating-point number." (f64To [("x", "the value whose inverse hyperbolic tangent is computed")])
   ["Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(\xB11) =\
   \ \xB1\x221E (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN;\
   \ atanh(\xB10) = \xB10; atanh(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 atanh operation and to Haskell's atanh :: Double -> Double."]
 
 ceiling :: PrimitiveDefinition
-ceiling = define "ceiling" "The smallest integer greater than or equal to the argument, as a float." f64To
+ceiling = define "ceiling" "The smallest integer greater than or equal to the argument, as a float." (f64To [("x", "the value to round up toward positive infinity")])
   ["The smallest integer value not less than the argument, returned as a float64. Equivalent to IEEE 754\
   \ \xA75.3.1 roundToIntegralTowardPositive: ceiling(\xB10) = \xB10; ceiling(\xB1\x221E) = \xB1\x221E;\
   \ ceiling(NaN) is NaN; the sign of a negative result is preserved when rounding to zero (e.g.\
@@ -161,14 +162,14 @@ ceiling = define "ceiling" "The smallest integer greater than or equal to the ar
    "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."]
 
 cos :: PrimitiveDefinition
-cos = define "cos" "The cosine of a floating-point number." f64To
+cos = define "cos" "The cosine of a floating-point number." (f64To [("x", "the angle in radians")])
   ["Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1];\
   \ cos(\xB10) = 1; cos(\xB1\x221E) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is\
   \ NaN.",
    "Corresponds to the IEEE 754 \xA79.2 cos operation and to Haskell's cos :: Double -> Double."]
 
 cosh :: PrimitiveDefinition
-cosh = define "cosh" "The hyperbolic cosine of a floating-point number." f64To
+cosh = define "cosh" "The hyperbolic cosine of a floating-point number." (f64To [("x", "the value whose hyperbolic cosine is computed")])
   ["Hyperbolic cosine. The result is in [1, +\x221E]; cosh(\xB10) = 1; cosh(\xB1\x221E) = +\x221E;\
   \ cosh(NaN) is NaN. Large-magnitude arguments overflow to +\x221E.",
    "Corresponds to the IEEE 754 \xA79.2 cosh operation and to Haskell's cosh :: Double -> Double."]
@@ -180,23 +181,23 @@ e = define "e" "Euler's constant (the base of the natural logarithm)." f64Const
    "Corresponds to Haskell's exp 1 :: Double."]
 
 even :: PrimitiveDefinition
-even = defineWithDefault "even" "Test whether an integer is even." int32ToBool
+even = defineWithDefault "even" "Test whether an integer is even." (int32ToBool [("x", "the integer to test for evenness")])
   ["True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
    "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's\
   \ even :: Int32 -> Bool."]
   (("x" ~> Equality.equal
-    (Optionals.fromOptional (int32 0) (Math.maybeMod (var "x") (int32 2)))
+    (Optionals.withDefault (int32 0) (Math.mod (var "x") (int32 2)))
     (int32 0)) :: TypedTerm (I.Int32 -> Bool))
 
 exp :: PrimitiveDefinition
-exp = define "exp" "The exponential function." f64To
+exp = define "exp" "The exponential function." (f64To [("x", "the exponent")])
   ["The exponential function: exp(x) = e^x. exp(\xB10) = 1; exp(-\x221E) = +0; exp(+\x221E) = +\x221E;\
   \ exp(NaN) is NaN. Large positive arguments overflow to +\x221E; large negative arguments underflow\
   \ to +0.",
    "Corresponds to the IEEE 754 \xA79.2 exp operation and to Haskell's exp :: Double -> Double."]
 
 floor :: PrimitiveDefinition
-floor = define "floor" "The largest integer less than or equal to the argument, as a float." f64To
+floor = define "floor" "The largest integer less than or equal to the argument, as a float." (f64To [("x", "the value to round down toward negative infinity")])
   ["The largest integer value not greater than the argument, returned as a float64. Equivalent to IEEE\
   \ 754 \xA75.3.1 roundToIntegralTowardNegative: floor(\xB10) = \xB10; floor(\xB1\x221E) = \xB1\x221E;\
   \ floor(NaN) is NaN.",
@@ -205,84 +206,60 @@ floor = define "floor" "The largest integer less than or equal to the argument, 
    "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."]
 
 log :: PrimitiveDefinition
-log = define "log" "The natural logarithm." f64To
+log = define "log" "The natural logarithm." (f64To [("x", "the value whose natural logarithm is computed")])
   ["The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -\x221E (with division-by-zero\
   \ exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+\x221E) =\
   \ +\x221E; log(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 log operation and to Haskell's log :: Double -> Double."]
 
 logBase :: PrimitiveDefinition
-logBase = define "logBase" "Logarithm of the second argument in the base of the first." f64To2
+logBase = define "logBase" "Logarithm of the second argument in the base of the first." (f64To2 [("b", "the logarithm base"), ("x", "the value whose logarithm is computed")])
   ["logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).",
    "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros,\
   \ division by zero on log of a zero, NaN on negative arguments).",
    "Corresponds to Haskell's logBase :: Double -> Double -> Double."]
 
-max :: PrimitiveDefinition
-max = define "max" "The maximum of two integers." int32To2
-  ["Return the larger of two int32 values under the usual signed-integer total order.",
-   "Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."]
-
-maybeDiv :: PrimitiveDefinition
-maybeDiv = define "maybeDiv" "Integer division, or Nothing if dividing by zero." int32To2Maybe
-  ["Total integer division: maybeDiv(x, y) returns Just(x divided by y, rounded toward negative\
+div :: PrimitiveDefinition
+div = define "div" "Integer division, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Total integer division: div(x, y) returns Just(x divided by y, rounded toward negative\
   \ infinity) when y is non-zero, and Nothing when y = 0.",
-   "The division rounds toward negative infinity (floor), so for example maybeDiv(-7, 2) = Just(-4).",
-   "The boundary case maybeDiv(minBound, -1), whose mathematical result +2147483648 is not representable\
+   "The division rounds toward negative infinity (floor), so for example div(-7, 2) = Just(-4).",
+   "The boundary case div(minBound, -1), whose mathematical result +2147483648 is not representable\
   \ in int32, wraps to minBound (the two's-complement overflow).",
    "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
   \ case total."]
 
-maybeMod :: PrimitiveDefinition
-maybeMod = define "maybeMod" "Integer modulus, or Nothing if dividing by zero." int32To2Maybe
-  ["Total integer modulus: maybeMod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y =\
+mod :: PrimitiveDefinition
+mod = define "mod" "Integer modulus, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Total integer modulus: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y =\
   \ 0.",
-   "The result satisfies the identity x = (maybeDiv(x, y) result) * y + (maybeMod(x, y) result), so the\
-  \ sign of the result matches the sign of y (Knuth-style floor division). For example maybeMod(-7, 2)\
+   "The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the\
+  \ sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2)\
   \ = Just(1).",
    "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
   \ case total."]
 
-maybePred :: PrimitiveDefinition
-maybePred = define "maybePred" "The predecessor of an integer, or Nothing on underflow." int32ToMaybe
-  ["maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e.\
-  \ -2147483648). The function is total and does not wrap.",
-   "Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total\
-  \ (Haskell's pred is a partial function that raises an error on minBound)."]
-
-maybeRem :: PrimitiveDefinition
-maybeRem = define "maybeRem" "Integer remainder, or Nothing if dividing by zero." int32To2Maybe
-  ["Total integer remainder: maybeRem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y\
+rem :: PrimitiveDefinition
+rem = define "rem" "Integer remainder, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Total integer remainder: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y\
   \ = 0.",
-   "The result satisfies x = (truncate(x / y)) * y + (maybeRem(x, y) result), so the sign of the result\
-  \ matches the sign of x (truncated division, C-style remainder). For example maybeRem(-7, 2) =\
+   "The result satisfies x = (truncate(x / y)) * y + (rem(x, y) result), so the sign of the result\
+  \ matches the sign of x (truncated division, C-style remainder). For example rem(-7, 2) =\
   \ Just(-1).",
-   "The boundary case maybeRem(minBound, -1) is 0 (no overflow, since the quotient overflow is\
+   "The boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is\
   \ absorbed).",
    "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
   \ case total."]
 
-maybeSucc :: PrimitiveDefinition
-maybeSucc = define "maybeSucc" "The successor of an integer, or Nothing on overflow." int32ToMaybe
-  ["maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647).\
-  \ The function is total and does not wrap.",
-   "Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total\
-  \ (Haskell's succ is a partial function that raises an error on maxBound)."]
-
-min :: PrimitiveDefinition
-min = define "min" "The minimum of two integers." int32To2
-  ["Return the smaller of two int32 values under the usual signed-integer total order.",
-   "Total on all inputs. Corresponds to Haskell's min :: Int32 -> Int32 -> Int32."]
-
 mul :: PrimitiveDefinition
-mul = define "mul" "Integer multiplication." int32To2
+mul = define "mul" "Integer multiplication." (int32To2 [("x", "the first factor"), ("y", "the second factor")])
   ["Two's-complement 32-bit signed integer multiplication. The result is x * y reduced modulo 2^32 and\
   \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
   \ raised).",
    "The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."]
 
 mulFloat64 :: PrimitiveDefinition
-mulFloat64 = define "mulFloat64" "Floating-point multiplication." f64To2
+mulFloat64 = define "mulFloat64" "Floating-point multiplication." (f64To2 [("x", "the first factor"), ("y", "the second factor")])
   ["IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest\
   \ representable float64 under the roundTiesToEven rounding-direction attribute.",
    "Multiplying 0 by \xB1\x221E (in either order) produces a NaN (with invalid-operation exception in\
@@ -292,7 +269,7 @@ mulFloat64 = define "mulFloat64" "Floating-point multiplication." f64To2
   \ IEEE 754 \xA75.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."]
 
 negate :: PrimitiveDefinition
-negate = define "negate" "Negate an integer." int32To
+negate = define "negate" "Negate an integer." (int32To [("x", "the integer to negate")])
   ["Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and\
   \ reinterpreted as a signed int32.",
    "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e.\
@@ -300,7 +277,7 @@ negate = define "negate" "Negate an integer." int32To
    "Corresponds to Haskell's negate :: Int32 -> Int32."]
 
 negateFloat64 :: PrimitiveDefinition
-negateFloat64 = define "negateFloat64" "Negate a floating-point number." f64To
+negateFloat64 = define "negateFloat64" "Negate a floating-point number." (f64To [("x", "the value to negate")])
   ["Sign reversal of a float64. Equivalent to IEEE 754 \xA75.5.1 negate: flips the sign bit, so\
   \ negate(\xB10) = \xB10 (sign flips), negate(\xB1\x221E) = \xB1\x221E (sign flips), and negate(NaN) is\
   \ a NaN (sign may flip; payload preserved).",
@@ -308,7 +285,7 @@ negateFloat64 = define "negateFloat64" "Negate a floating-point number." f64To
   \ Haskell's negate :: Double -> Double."]
 
 odd :: PrimitiveDefinition
-odd = defineWithDefault "odd" "Test whether an integer is odd." int32ToBool
+odd = defineWithDefault "odd" "Test whether an integer is odd." (int32ToBool [("x", "the integer to test for oddness")])
   ["True if the argument is not divisible by 2 (i.e. x mod 2 \x2260 0), false otherwise.",
    "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's\
   \ odd :: Int32 -> Bool."]
@@ -321,7 +298,7 @@ pi = define "pi" "The mathematical constant pi." f64Const
    "Corresponds to Haskell's pi :: Double."]
 
 pow :: PrimitiveDefinition
-pow = define "pow" "Raise the first argument to the power of the second." f64To2
+pow = define "pow" "Raise the first argument to the power of the second." (f64To2 [("x", "the base"), ("y", "the exponent")])
   ["pow(x, y) = x^y.",
    "Follows the IEEE 754 \xA79.2 pow operation: pow(\xB10, y) for y < 0 is \xB1\x221E (with\
   \ division-by-zero exception); pow(\xB10, y) for y > 0 is \xB10 if y is an odd integer, else +0;\
@@ -332,7 +309,7 @@ pow = define "pow" "Raise the first argument to the power of the second." f64To2
    "Corresponds to Haskell's (**) :: Double -> Double -> Double."]
 
 range :: PrimitiveDefinition
-range = define "range" "Construct the inclusive integer range from the first to the second argument." int32To2List
+range = define "range" "Construct the inclusive integer range from the first to the second argument." (int32To2List [("a", "the inclusive lower bound of the range"), ("b", "the inclusive upper bound of the range")])
   ["range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the\
   \ result is the empty list (i.e. the range does not count downward). For a = b the result is the\
   \ singleton [a]. The length of the result is max(0, b - a + 1).",
@@ -340,7 +317,7 @@ range = define "range" "Construct the inclusive integer range from the first to 
   \ list-comprehension form [a..b]."]
 
 round :: PrimitiveDefinition
-round = define "round" "Round a floating-point number to the nearest integer-valued float." f64To
+round = define "round" "Round a floating-point number to the nearest integer-valued float." (f64To [("x", "the value to round to the nearest integer")])
   ["Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even\
   \ integer (banker's rounding). Equivalent to IEEE 754 \xA75.3.1 roundToIntegralTiesToEven:\
   \ round(\xB10) = \xB10; round(\xB1\x221E) = \xB1\x221E; round(NaN) is NaN.",
@@ -349,7 +326,7 @@ round = define "round" "Round a floating-point number to the nearest integer-val
    "Corresponds to Haskell's fromIntegral . round :: Double -> Double."]
 
 roundFloat32 :: PrimitiveDefinition
-roundFloat32 = define "roundFloat32" "Round a float32 to the given number of decimal places." int32F32ToF32
+roundFloat32 = define "roundFloat32" "Round a float32 to the given number of decimal places." (int32F32ToF32 [("n", "the number of decimal places to round to"), ("x", "the float32 value to round")])
   ["roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The\
   \ result is the nearest float32 representation of x rounded to that decimal precision; if the exact\
   \ decimal-rounded value is not representable in float32 (the usual case), the closest float32 is\
@@ -360,7 +337,7 @@ roundFloat32 = define "roundFloat32" "Round a float32 to the given number of dec
   \ differ on out-of-range n."]
 
 roundFloat64 :: PrimitiveDefinition
-roundFloat64 = define "roundFloat64" "Round a float64 to the given number of decimal places." int32F64ToF64
+roundFloat64 = define "roundFloat64" "Round a float64 to the given number of decimal places." (int32F64ToF64 [("n", "the number of decimal places to round to"), ("x", "the float64 value to round")])
   ["roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even. The\
   \ result is the nearest float64 representation of x rounded to that decimal precision; if the exact\
   \ decimal-rounded value is not representable in float64 (the usual case), the closest float64 is\
@@ -371,7 +348,7 @@ roundFloat64 = define "roundFloat64" "Round a float64 to the given number of dec
   \ differ on out-of-range n."]
 
 signum :: PrimitiveDefinition
-signum = define "signum" "Return the sign of an integer as -1, 0, or 1." int32To
+signum = define "signum" "Return the sign of an integer as -1, 0, or 1." (int32To [("x", "the integer whose sign is returned")])
   ["signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0.",
    "The function is total and satisfies the identity abs(x) * signum(x) = x for all int32 except\
   \ minBound (where abs(minBound) * (-1) wraps to minBound rather than equalling -minBound, since\
@@ -379,20 +356,20 @@ signum = define "signum" "Return the sign of an integer as -1, 0, or 1." int32To
    "Corresponds to Haskell's signum :: Int32 -> Int32."]
 
 sin :: PrimitiveDefinition
-sin = define "sin" "The sine of a floating-point number." f64To
+sin = define "sin" "The sine of a floating-point number." (f64To [("x", "the angle in radians")])
   ["Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1];\
   \ sin(\xB10) = \xB10; sin(\xB1\x221E) is NaN (with invalid-operation exception in IEEE 754); sin(NaN)\
   \ is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 sin operation and to Haskell's sin :: Double -> Double."]
 
 sinh :: PrimitiveDefinition
-sinh = define "sinh" "The hyperbolic sine of a floating-point number." f64To
+sinh = define "sinh" "The hyperbolic sine of a floating-point number." (f64To [("x", "the value whose hyperbolic sine is computed")])
   ["Hyperbolic sine. sinh(\xB10) = \xB10; sinh(\xB1\x221E) = \xB1\x221E; sinh(NaN) is NaN.\
   \ Large-magnitude arguments overflow to \xB1\x221E.",
    "Corresponds to the IEEE 754 \xA79.2 sinh operation and to Haskell's sinh :: Double -> Double."]
 
 sqrt :: PrimitiveDefinition
-sqrt = define "sqrt" "The non-negative square root of a floating-point number." f64To
+sqrt = define "sqrt" "The non-negative square root of a floating-point number." (f64To [("x", "the value whose square root is computed")])
   ["IEEE 754 binary64 square root. The result is the value of \x221A\&x correctly rounded to the nearest\
   \ representable float64 under roundTiesToEven.",
    "sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -\x221E) is NaN (with\
@@ -401,14 +378,14 @@ sqrt = define "sqrt" "The non-negative square root of a floating-point number." 
   \ Double."]
 
 sub :: PrimitiveDefinition
-sub = define "sub" "Integer subtraction." int32To2
+sub = define "sub" "Integer subtraction." (int32To2 [("x", "the minuend"), ("y", "the subtrahend")])
   ["Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and\
   \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
   \ raised).",
    "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."]
 
 subFloat64 :: PrimitiveDefinition
-subFloat64 = define "subFloat64" "Floating-point subtraction." f64To2
+subFloat64 = define "subFloat64" "Floating-point subtraction." (f64To2 [("x", "the minuend"), ("y", "the subtrahend")])
   ["IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest\
   \ representable float64 under roundTiesToEven.",
    "Subtracting infinities of the same sign (+\x221E - +\x221E or -\x221E - -\x221E) produces a NaN;\
@@ -418,20 +395,20 @@ subFloat64 = define "subFloat64" "Floating-point subtraction." f64To2
   \ \xA75.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."]
 
 tan :: PrimitiveDefinition
-tan = define "tan" "The tangent of a floating-point number." f64To
+tan = define "tan" "The tangent of a floating-point number." (f64To [("x", "the angle in radians")])
   ["Tangent of an angle in radians, correctly rounded for finite arguments. tan(\xB10) = \xB10; near odd\
   \ multiples of \x03C0/2 the result has large magnitude but remains finite (no exception is raised);\
   \ tan(\xB1\x221E) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 tan operation and to Haskell's tan :: Double -> Double."]
 
 tanh :: PrimitiveDefinition
-tanh = define "tanh" "The hyperbolic tangent of a floating-point number." f64To
+tanh = define "tanh" "The hyperbolic tangent of a floating-point number." (f64To [("x", "the value whose hyperbolic tangent is computed")])
   ["Hyperbolic tangent. The result is in [-1, +1]; tanh(\xB10) = \xB10; tanh(\xB1\x221E) = \xB11;\
   \ tanh(NaN) is NaN.",
    "Corresponds to the IEEE 754 \xA79.2 tanh operation and to Haskell's tanh :: Double -> Double."]
 
 truncate :: PrimitiveDefinition
-truncate = define "truncate" "Truncate a floating-point number toward zero, as a float." f64To
+truncate = define "truncate" "Truncate a floating-point number toward zero, as a float." (f64To [("x", "the value to truncate toward zero")])
   ["Round toward zero (truncate the fractional part), returned as a float64. Equivalent to IEEE 754\
   \ \xA75.3.1 roundToIntegralTowardZero: truncate(\xB10) = \xB10; truncate(\xB1\x221E) = \xB1\x221E;\
   \ truncate(NaN) is NaN; sign of the result matches the sign of the argument (so truncate(-0.7) = -0,\

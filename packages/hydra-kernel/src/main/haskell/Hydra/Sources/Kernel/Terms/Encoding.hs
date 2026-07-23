@@ -136,7 +136,7 @@ encodeBinding = define "encodeBinding" $
     Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
       "rawBody" <~ (encodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ")) $
-      "description" <~ (Strings.cat $ list [
+      "description" <~ (Strings.concat $ list [
         string "Encoder for ",
         Core.unName (Core.bindingName (var "b"))]) $
       right (Core.binding
@@ -365,7 +365,7 @@ encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Optionals.cat $ Lists.map
+      (Optionals.givens $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -381,11 +381,11 @@ encodeModule = define "encodeModule" $
         right (just (Packaging.module_
           (encodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Packaging.entityMetadata
-            (just (Strings.cat $ list [
+            (just (Strings.concat $ list [
               string "Term encoders for ",
               Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
             (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
-          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.distinct (Lists.concat2
             (primitive DefLists.map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
@@ -886,7 +886,7 @@ encoderTypeScheme = define "encoderTypeScheme" $
     "allOrdVars">: encoderCollectOrdVars @@ var "typ",
     -- Filter to only actual forall-bound variables
     "ordVars">: Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
+      ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars"),
 
     -- Build constraints map: {varName -> TypeVariableConstraints {classes = {ordering}}}
@@ -914,7 +914,7 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
     "encoderFunType">: encoderTypeNamed @@ var "ename" @@ var "typ",
     "allOrdVars">: encoderCollectOrdVars @@ var "typ",
     "ordVars">: Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
+      ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars"),
     "constraints">:
       Logic.ifElse (Lists.null (var "ordVars"))
@@ -930,7 +930,7 @@ filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
     -- First filter to native types, then check serializability for each
-    Eithers.map (primitive DefOptionals.cat) $
+    Eithers.map (primitive DefOptionals.givens) $
       Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
         primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 

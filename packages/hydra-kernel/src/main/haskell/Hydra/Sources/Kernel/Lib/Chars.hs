@@ -37,15 +37,16 @@ define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
 
 -- Int32 -> Boolean
-intToBool :: TermSignature
-intToBool = sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
+intToBool :: [(String, String)] -> TermSignature
+intToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
 
 -- Int32 -> Int32
-intToInt :: TermSignature
-intToInt = sig $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
+intToInt :: [(String, String)] -> TermSignature
+intToInt params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
 
 isAlpha :: PrimitiveDefinition
-isAlpha = define "isAlpha" "Check whether a character is alphabetic." intToBool
+isAlpha = define "isAlpha" "Check whether a character is alphabetic."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode letter — any of the general categories L* (Lu, Ll, Lt, Lm, Lo) —\
    \ and false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range\
@@ -55,7 +56,8 @@ isAlpha = define "isAlpha" "Check whether a character is alphabetic." intToBool
    "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."]
 
 isAlphaNum :: PrimitiveDefinition
-isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric." intToBool
+isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode letter or digit, false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range\
    \ [0, 0x10FFFF] yield an implementation-defined result (typically false).",
@@ -63,7 +65,8 @@ isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric." in
    "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."]
 
 isDigit :: PrimitiveDefinition
-isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit." intToBool
+isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is one of the ten code points '0' through '9' (U+0030 to U+0039), and false\
    \ otherwise.",
    "Unlike the other predicates in this module, this one is deliberately ASCII-only: decimal digits\
@@ -71,7 +74,8 @@ isDigit = define "isDigit" "Check whether a character is an ASCII decimal digit.
    "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."]
 
 isLower :: PrimitiveDefinition
-isLower = define "isLower" "Check whether a character is lowercase." intToBool
+isLower = define "isLower" "Check whether a character is lowercase."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode lowercase letter (general category Ll), false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
    \ implementation-defined result (typically false).",
@@ -80,7 +84,8 @@ isLower = define "isLower" "Check whether a character is lowercase." intToBool
    "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."]
 
 isSpace :: PrimitiveDefinition
-isSpace = define "isSpace" "Check whether a character is a whitespace character." intToBool
+isSpace = define "isSpace" "Check whether a character is a whitespace character."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode whitespace character, false otherwise.",
    "The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009\
    \ (tab), U+000A (line feed), U+000B (vertical tab), U+000C (form feed), U+000D (carriage return),\
@@ -88,7 +93,8 @@ isSpace = define "isSpace" "Check whether a character is a whitespace character.
    "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."]
 
 isUpper :: PrimitiveDefinition
-isUpper = define "isUpper" "Check whether a character is uppercase." intToBool
+isUpper = define "isUpper" "Check whether a character is uppercase."
+  (intToBool [("char", "the character to test, as a Unicode code point")])
   ["True if the argument is a Unicode uppercase letter (general category Lu), false otherwise.",
    "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an\
    \ implementation-defined result (typically false).",
@@ -96,7 +102,8 @@ isUpper = define "isUpper" "Check whether a character is uppercase." intToBool
    "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."]
 
 toLower :: PrimitiveDefinition
-toLower = define "toLower" "Convert a character to lowercase." intToInt
+toLower = define "toLower" "Convert a character to lowercase."
+  (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if\
   \ it has no lowercase mapping.",
    "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full\
@@ -105,7 +112,8 @@ toLower = define "toLower" "Convert a character to lowercase." intToInt
    "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."]
 
 toUpper :: PrimitiveDefinition
-toUpper = define "toUpper" "Convert a character to uppercase." intToInt
+toUpper = define "toUpper" "Convert a character to uppercase."
+  (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if\
   \ it has no uppercase mapping.",
    "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full\

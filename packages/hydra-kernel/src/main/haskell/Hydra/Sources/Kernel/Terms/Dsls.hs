@@ -215,7 +215,7 @@ dslModule = define "dslModule" $
   "cx" ~> "graph" ~> "mod" ~>
     -- Type path (unchanged): collect eligible type bindings, then generate helpers.
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Optionals.cat $ Lists.map
+      (Optionals.givens $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -236,7 +236,7 @@ dslModule = define "dslModule" $
       (right (just (Packaging.module_
         (dslModuleName @@ (Packaging.moduleName (var "mod")))
         (just (Packaging.entityMetadata
-          (just (Strings.cat $ list [
+          (just (Strings.concat $ list [
             string "DSL functions for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
           (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
@@ -245,7 +245,7 @@ dslModule = define "dslModule" $
         -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions), and
         -- (3) the original module's own encode/decode modules (referenced by
         --     generateParametricRefBuilders's composition builders)
-        (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+        (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.distinct (Lists.concat2
           (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed"),
             Names.derivedModuleName @@ list [string "hydra", string "encode"] @@ boolean True @@ (Packaging.moduleName (var "mod")),
             Names.derivedModuleName @@ list [string "hydra", string "decode"] @@ boolean True @@ (Packaging.moduleName (var "mod"))])
@@ -334,7 +334,7 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-    Eithers.map (primitive DefOptionals.cat) $
+    Eithers.map (primitive DefOptionals.givens) $
       Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
         primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 
@@ -391,9 +391,9 @@ generateRecordAccessor = define "generateRecordAccessor" $
   doc "Generate a record field accessor function" $
   "origType" ~> "typeName" ~> "ft" ~>
   "fieldName" <~ (Core.fieldTypeName (var "ft")) $
-  "accessorLocalName" <~ (Strings.cat $ list [
+  "accessorLocalName" <~ (Strings.concat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
-    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
+    Strings.join (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
   "accessorName" <~ (dslDefinitionName @@ var "typeName" @@ var "accessorLocalName") $
   -- Body: projection as a simple elimination
   "paramDomain" <~ (wrapInTypedTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
@@ -401,7 +401,7 @@ generateRecordAccessor = define "generateRecordAccessor" $
       wrapTermInTypedTerm (deepApplication
         (deepProjection (var "typeName") (var "fieldName"))
         (unwrapTypedTerm (Core.termVariable (Core.name (string "x")))))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL accessor for the ",
     Core.unName (var "fieldName"),
     string " field of ",
@@ -443,7 +443,7 @@ generateRecordConstructor = define "generateRecordConstructor" $
       Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
     (var "recordTerm")
     (Lists.reverse (var "paramPairs"))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL constructor for ",
     Core.unName (var "typeName")]) $
   "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
@@ -472,10 +472,10 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
   "origType" ~> "typeName" ~> "allFields" ~> "targetField" ~>
   "targetFieldName" <~ (Core.fieldTypeName (var "targetField")) $
   -- Build the updater name: e.g., "bindingWithName"
-  "updaterLocalName" <~ (Strings.cat $ list [
+  "updaterLocalName" <~ (Strings.concat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     string "With",
-    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "targetFieldName"))))]) $
+    Strings.join (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "targetFieldName"))))]) $
   "updaterName" <~ (dslDefinitionName @@ var "typeName" @@ var "updaterLocalName") $
   -- Build deep fields: project from unwrapped original, except target uses unwrapped newVal
   "dFields" <~ (Lists.map
@@ -494,7 +494,7 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     Core.termLambda $ Core.lambda (Core.name (string "original")) (just (var "recDomain")) $
     Core.termLambda $ Core.lambda (Core.name (string "newVal")) (just (var "fieldDomain")) $
     wrapTermInTypedTerm (deepRecord (var "typeName") (var "dFields"))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL updater for the ",
     Core.unName (var "targetFieldName"),
     string " field of ",
@@ -543,7 +543,7 @@ generateSignatureRef = define "generateSignatureRef" $
       Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
     (var "refTerm")
     (Lists.reverse (var "paramPairs"))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL reference to ",
     Core.unName (var "refName")]) $
   "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
@@ -595,7 +595,7 @@ generateParametricCoderBuilder :: [String] -> (TypedTerm Type -> TypedTerm Type)
 generateParametricCoderBuilder categoryPrefix varCoderType resultCoderType categoryLocalPrefix origType typeName =
   "vars" <~ (collectForallVars @@ origType) $
   "localName" <~ (Names.localNameOf @@ typeName) $
-  "builderLocalName" <~ (Strings.cat $ list [string categoryLocalPrefix, var "localName"]) $
+  "builderLocalName" <~ (Strings.concat $ list [string categoryLocalPrefix, var "localName"]) $
   "builderName" <~ (dslDefinitionName @@ typeName @@ var "builderLocalName") $
   "refName" <~ (Names.derivedBindingName @@ list (string <$> categoryPrefix) @@ boolean True @@ typeName) $
   -- Parameter (var, TypedTerm<varCoderType>) pairs for the lambda chain, one per forall var.
@@ -614,7 +614,7 @@ generateParametricCoderBuilder categoryPrefix varCoderType resultCoderType categ
       Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
     (var "builderTerm")
     (Lists.reverse (var "paramPairs"))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL composition builder for the ",
     string categoryLocalPrefix,
     string "r of ",
@@ -639,11 +639,11 @@ generateTypeNameToken = define "generateTypeNameToken" $
   doc "Generate a TypedName token constant for a type definition" $
   "origType" ~> "typeName" ~>
   "localName" <~ (Names.localNameOf @@ var "typeName") $
-  "tokenLocalName" <~ (Strings.cat $ list [
+  "tokenLocalName" <~ (Strings.concat $ list [
     Formatting.decapitalize @@ var "localName",
     var "localName"]) $
   "tokenName" <~ (dslDefinitionName @@ var "typeName" @@ var "tokenLocalName") $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL name token for ",
     Core.unName (var "typeName")]) $
   "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ (wrapNameInTypedName (var "typeName"))) $
@@ -677,9 +677,9 @@ generateUnionInjector = define "generateUnionInjector" $
   "fieldName" <~ (Core.fieldTypeName (var "ft")) $
   "fieldType" <~ (Core.fieldTypeType (var "ft")) $
   -- Build the injector name: e.g., "functionLambda" or "comparisonLessThan"
-  "injectorLocalName" <~ (Strings.cat $ list [
+  "injectorLocalName" <~ (Strings.concat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
-    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
+    Strings.join (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
   "injectorName" <~ (dslDefinitionName @@ var "typeName" @@ var "injectorLocalName") $
   -- Check if field type is unit (for unit variants like enum members)
   "isUnit" <~ (isUnitType_ @@ var "fieldType") $
@@ -694,7 +694,7 @@ generateUnionInjector = define "generateUnionInjector" $
   "rawBody" <~ (Logic.ifElse (var "isUnit")
     (var "injectionTerm")
     (Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "variantDomain")) (var "injectionTerm"))) $
-  "description" <~ (Strings.cat $ list [
+  "description" <~ (Strings.concat $ list [
     string "DSL injection for the ",
     Core.unName (var "fieldName"),
     string " variant of ",
@@ -724,7 +724,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   -- Wrap function: decapitalized type name
   "wrapName" <~ (dslDefinitionName @@ var "typeName" @@ (Formatting.decapitalize @@ var "localName")) $
   -- Unwrap function: "un" + type local name
-  "unwrapLocalName" <~ (Strings.cat $ list [string "un", var "localName"]) $
+  "unwrapLocalName" <~ (Strings.concat $ list [string "un", var "localName"]) $
   "unwrapName" <~ (dslDefinitionName @@ var "typeName" @@ var "unwrapLocalName") $
   "wrapperType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   -- Wrap: \(x :: TypedTerm<InnerType>) -> WrappedTerm typeName x
@@ -733,7 +733,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
     Core.termLambda $ Core.lambda (Core.name (string "x")) (just (var "wrapDomain")) $
         wrapTermInTypedTerm (deepWrap (var "typeName")
           (unwrapTypedTerm (Core.termVariable (Core.name (string "x")))))) $
-  "wrapDescription" <~ (Strings.cat $ list [
+  "wrapDescription" <~ (Strings.concat $ list [
     string "DSL constructor for the ",
     Core.unName (var "typeName"),
     string " wrapper"]) $
@@ -745,7 +745,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
         wrapTermInTypedTerm (deepApplication
           (deepUnwrap (var "typeName"))
           (unwrapTypedTerm (Core.termVariable (Core.name (string "x")))))) $
-  "unwrapDescription" <~ (Strings.cat $ list [
+  "unwrapDescription" <~ (Strings.concat $ list [
     string "DSL accessor for the body of ",
     Core.unName (var "typeName")]) $
   "unwrapBody" <~ (Annotations.setTermDescription @@ (just (var "unwrapDescription")) @@ var "rawUnwrapBody") $

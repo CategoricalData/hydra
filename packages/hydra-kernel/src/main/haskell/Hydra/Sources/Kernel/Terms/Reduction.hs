@@ -18,6 +18,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -237,7 +238,7 @@ etaExpandTerm = define "etaExpandTerm" $
   -- domainTypes: extract domain types from a function type, returning a list of Maybe Type
   -- For a type A -> B -> C with n=2, returns [Just A, Just B]
   "domainTypes" <~ ("n" ~> "mt" ~>
-    Logic.ifElse (Equality.lte (var "n") (int32 0))
+    Logic.ifElse (Ordering.lte (var "n") (int32 0))
       (list ([] :: [TypedTerm (Maybe Type)]))
       (optCases (var "mt")
         -- No type available: return n copies of Nothing
@@ -262,7 +263,7 @@ etaExpandTerm = define "etaExpandTerm" $
   -- Returns the remaining type after stripping n arrow domains.
   -- For Just (A -> B -> C) with n=1, returns Just (B -> C).
   "peelFunctionDomains" <~ ("mtyp" ~> "n" ~>
-    Logic.ifElse (Equality.lte (var "n") (int32 0))
+    Logic.ifElse (Ordering.lte (var "n") (int32 0))
       (var "mtyp")
       (optCases (var "mtyp")
         nothing
@@ -289,8 +290,8 @@ etaExpandTerm = define "etaExpandTerm" $
     "numArgs" <~ Lists.length (var "args") $
     "needed" <~ Math.sub (var "arity") (var "numArgs") $
     -- Pad if: (needed > 0) AND (alwaysPad OR numArgs > 0)
-    Logic.ifElse (Logic.and (Equality.gt (var "needed") (int32 0))
-                            (Logic.or (var "alwaysPad") (Equality.gt (var "numArgs") (int32 0))))
+    Logic.ifElse (Logic.and (Ordering.gt (var "needed") (int32 0))
+                            (Logic.or (var "alwaysPad") (Ordering.gt (var "numArgs") (int32 0))))
       -- Pad with lambdas: first build fully applied term, then wrap with lambdas
       ("indices" <~ Math.range (int32 1) (var "needed") $
        -- Compute domain types for the wrapper lambdas from the head's type after applying numArgs
@@ -301,7 +302,7 @@ etaExpandTerm = define "etaExpandTerm" $
        "codomainType" <~ var "peelFunctionDomains" @@ var "remainingType" @@ var "needed" $
        "fullyAppliedRaw" <~ Lists.foldl
          ("body" ~> "i" ~>
-           "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
            Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
          (var "applied") (var "indices") $
        -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
@@ -315,7 +316,7 @@ etaExpandTerm = define "etaExpandTerm" $
          ("body" ~> "idPair" ~>
            "i" <~ Pairs.first (var "idPair") $
            "dom" <~ Pairs.second (var "idPair") $
-           "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
            Core.termLambda $ Core.lambda (var "vn") (var "dom") (var "body"))
          (var "fullyApplied") (Lists.reverse (var "indexedDomains")))
       (var "applied")) $
@@ -600,7 +601,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
           ("t" ~> right $ Arity.typeArity @@ var "t")]) $
 
 
-    "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+    "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
       Math.range (int32 1) (var "n")) $
     "pad" <~ ("vars" ~> "body" ~>
       Optionals.cases (Lists.uncons $ var "vars") (var "body") ("uc" ~>
@@ -661,7 +662,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         "lhsarity" <<~ var "arityOf" @@ var "tx" @@ var "lhs" $
         "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
         "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
-        right $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
+        right $ Logic.ifElse (Ordering.gt (var "lhsarity") (int32 1))
           (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
           (var "a2"),
       _Term_cases>>: "cs" ~> var "forCases" @@ var "cs",
@@ -862,7 +863,7 @@ reduceTerm = define "reduceTerm" $
              -- Found primitive: apply with arity-based argument collection
              ("prim" ~>
                "arity" <~ Arity.primitiveArity @@ var "prim" $
-               Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
+               Logic.ifElse (Ordering.gt (var "arity") (Lists.length $ var "args"))
                  (right $ var "applyToArguments" @@ var "original" @@ var "args")
                  (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")))
           -- Found: reduce the element's term with the accumulated args

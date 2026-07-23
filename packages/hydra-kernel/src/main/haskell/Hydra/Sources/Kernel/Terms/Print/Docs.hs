@@ -142,26 +142,26 @@ docSegmentWith = define "docSegmentWith" $
 docSegments :: TypedTermDefinition ([Term] -> String)
 docSegments = define "docSegments" $
   doc "Render a list of DocSegments back to a plain documentation string" $
-  lambda "segs" $ Strings.cat (Lists.map (asTerm docSegment) (var "segs"))
+  lambda "segs" $ Strings.concat (Lists.map (asTerm docSegment) (var "segs"))
 
 docSegmentsWith :: TypedTermDefinition ((Term -> String) -> [Term] -> String)
 docSegmentsWith = define "docSegmentsWith" $
   doc "Render a list of DocSegments using a custom {@type hydra.packaging.EntityReference} renderer" $
   lambda "render" $ lambda "segs" $
-  Strings.cat (Lists.map (docSegmentWith @@ var "render") (var "segs"))
+  Strings.concat (Lists.map (docSegmentWith @@ var "render") (var "segs"))
 
 entityReference :: TypedTermDefinition (Term -> String)
 entityReference = define "entityReference" $
   doc "Render a {@type hydra.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)" $
   match _EntityReference Nothing [
-    _EntityReference_definition>>: lambda "d" $ Strings.cat2
+    _EntityReference_definition>>: lambda "d" $ Strings.concat2
       (match _DefinitionReference Nothing [
         _DefinitionReference_primitive>>: constant (string "primitive"),
         _DefinitionReference_term>>:      constant (string "term"),
         _DefinitionReference_type>>:      constant (string "type")]
         @@ var "d")
-      (Strings.cat2 (string " ") (definitionReference @@ var "d")),
-    _EntityReference_module>>:    lambda "m" $ Strings.cat2 (string "module ")    (unwrap _ModuleName @@ var "m"),
-    _EntityReference_package>>:   lambda "p" $ Strings.cat2 (string "package ")   (unwrap _PackageName @@ var "p"),
-    _EntityReference_term_expr>>: lambda "s" $ Strings.cat2 (string "term-expr ") (var "s"),
-    _EntityReference_type_expr>>: lambda "s" $ Strings.cat2 (string "type-expr ") (var "s")]
+      (Strings.concat2 (string " ") (definitionReference @@ var "d")),
+    _EntityReference_module>>:    lambda "m" $ Strings.concat2 (string "module ")    (unwrap _ModuleName @@ var "m"),
+    _EntityReference_package>>:   lambda "p" $ Strings.concat2 (string "package ")   (unwrap _PackageName @@ var "p"),
+    _EntityReference_term_expr>>: lambda "s" $ Strings.concat2 (string "term-expr ") (var "s"),
+    _EntityReference_type_expr>>: lambda "s" $ Strings.concat2 (string "type-expr ") (var "s")]

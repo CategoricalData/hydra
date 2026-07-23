@@ -32,7 +32,8 @@ defineWithDefault = primitiveWithDefaultInModule module_
 
 and :: PrimitiveDefinition
 and = defineWithDefault "and" "Compute the logical AND of two boolean values."
-  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+  (sigWithParams [("p", "the first boolean operand"),
+                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
   ["and(p, q) returns true iff both p and q are true.",
    "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
    \ ifElse.",
@@ -43,7 +44,9 @@ and = defineWithDefault "and" "Compute the logical AND of two boolean values."
 -- selected branch is evaluated. The condition (position 0) is strict.
 ifElse :: PrimitiveDefinition
 ifElse = define "ifElse" "Compute a conditional expression."
-  (lazySig [1, 2] $ TypeScheme [Name "x"]
+  (markLazyParams [1, 2] $ sigWithParams [("p", "the boolean condition"),
+                                          ("t", "the value returned when p is true"),
+                                          ("f", "the value returned when p is false")] $ TypeScheme [Name "x"]
     (Types.boolean Types.~> Types.var "x" Types.~> Types.var "x" Types.~> Types.var "x")
     Nothing)
   ["ifElse(p, t, f) returns t if p is true, or f if p is false.",
@@ -53,14 +56,15 @@ ifElse = define "ifElse" "Compute a conditional expression."
 
 not_ :: PrimitiveDefinition
 not_ = defineWithDefault "not" "Compute the logical NOT of a boolean value."
-  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean) Nothing)
+  (sigWithParams [("p", "the boolean value to negate")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean) Nothing)
   ["not(p) returns false if p is true, or true if p is false.",
    "Total. Corresponds to Haskell's not :: Bool -> Bool."]
   ("a" ~> Logic.ifElse (var "a") false true)
 
 or_ :: PrimitiveDefinition
 or_ = defineWithDefault "or" "Compute the logical OR of two boolean values."
-  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+  (sigWithParams [("p", "the first boolean operand"),
+                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
   ["or(p, q) returns true iff at least one of p and q is true.",
    "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
    \ ifElse.",

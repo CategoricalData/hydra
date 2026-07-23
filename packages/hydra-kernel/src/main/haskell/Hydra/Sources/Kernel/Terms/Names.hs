@@ -113,7 +113,7 @@ compactName = define "compactName" $
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"]
     $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
-          Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
+          Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.concat $ list [var "pre", string ":", var "local"]))
 
 -- | Generate a fully qualified binding name for a derived function (encoder, decoder,
 -- DSL helper, etc.) from a type/term name, given the category's namespace segments
@@ -141,13 +141,13 @@ derivedDefinitionName = define "derivedDefinitionName" $
   doc "Generate a derived element name from a source name's namespace and an explicit local name" $
   "categoryPrefix" ~> "alwaysDropFirst" ~> "prefixWhenNoNamespace" ~> "n" ~> "localName" ~>
   "localResult" <~ (Core.name (var "localName")) $
-  "prefixedResult" <~ (Core.name (Strings.intercalate (string ".")
+  "prefixedResult" <~ (Core.name (Strings.join (string ".")
     (Lists.concat2 (var "categoryPrefix") (list [var "localName"])))) $
   "noNamespaceResult" <~ (Logic.ifElse (var "prefixWhenNoNamespace") (var "prefixedResult") (var "localResult")) $
   -- nsParts = parts minus the last element (the namespace components).
   -- Nothing means parts was empty (unreachable for a valid name);
   -- Just [] means the name has no namespace (local type).
-  Optionals.cases (Lists.maybeInit (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
+  Optionals.cases (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
       Optionals.cases
         (Lists.uncons (var "nsParts"))
         -- single-element parts: local type, no namespace
@@ -159,7 +159,7 @@ derivedDefinitionName = define "derivedDefinitionName" $
             (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "nsHeadTail")))
             -- keep the full original namespace (non-"hydra", DSL category convention)
             (Lists.concat2 (var "categoryPrefix") (var "nsParts"))) $
-          Core.name (Strings.intercalate (string ".")
+          Core.name (Strings.join (string ".")
             (Lists.concat2 (var "categoryPrefixResolved") (list [var "localName"])))))
 
 -- | Generate a derived module name (encoder, decoder, DSL, etc.) from a source module
@@ -171,12 +171,12 @@ derivedModuleName = define "derivedModuleName" $
   doc "Generate a derived module name from a source module name, given the category's namespace segments" $
   "categoryPrefix" ~> "alwaysDropFirst" ~> "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
-  "fallback" <~ (Packaging.moduleName2 (Strings.intercalate (string ".")
+  "fallback" <~ (Packaging.moduleName2 (Strings.join (string ".")
     (Lists.concat2 (var "categoryPrefix") (var "parts")))) $
   Optionals.cases (Lists.uncons (var "parts")) (var "fallback") ("ht" ~>
       Logic.ifElse
         (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "ht")) (string "hydra")))
-        (Packaging.moduleName2 (Strings.intercalate (string ".")
+        (Packaging.moduleName2 (Strings.join (string ".")
           (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "ht")))))
         (var "fallback"))
 
@@ -220,7 +220,7 @@ moduleNameToFilePath = define "moduleNameToFilePath" $
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
       (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
-    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (DslFile.unFileExtension $ var "ext")
+    $ (Strings.join (string "/") $ var "parts") ++ string "." ++ (DslFile.unFileExtension $ var "ext")
 
 nameToFilePath :: TypedTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
@@ -230,17 +230,17 @@ nameToFilePath = define "nameToFilePath" $
   "ns" <~ Util.qualifiedNameModuleName (var "qualName") $
   "local" <~ Util.qualifiedNameLocal (var "qualName") $
   "nsToFilePath" <~ ("nsArg" ~>
-    Strings.intercalate (string "/") (Lists.map
+    Strings.join (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
       (Strings.splitOn (string ".") (Packaging.unModuleName (var "nsArg"))))) $
-  "prefix" <~ Optionals.cases (var "ns") (string "") ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/")) $
+  "prefix" <~ Optionals.cases (var "ns") (string "") ("n" ~> Strings.concat2 (var "nsToFilePath" @@ var "n") (string "/")) $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
-  Strings.cat (list [var "prefix", var "suffix", string ".", DslFile.unFileExtension (var "ext")])
+  Strings.concat (list [var "prefix", var "suffix", string ".", DslFile.unFileExtension (var "ext")])
 
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
-  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+  "i" ~> Core.name (Strings.concat2 (string "t") (Literals.showInt32 $ var "i"))
 
 pushSubtermStep :: TypedTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
 pushSubtermStep = define "pushSubtermStep" $
@@ -253,7 +253,7 @@ qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     wrap _Name $
-      Strings.cat $
+      Strings.concat $
         list [apply (unwrap _ModuleName) (var "ns"), string ".", var "name"]
 
 qualifyName :: TypedTermDefinition (Name -> QualifiedName)
@@ -271,7 +271,7 @@ qualifyName = define "qualifyName" $
           (Lists.null $ var "restReversed")
           (Util.qualifiedName nothing (Core.unName $ var "name"))
           (Util.qualifiedName
-            (just $ wrap _ModuleName (Strings.intercalate (string ".") (Lists.reverse (var "restReversed"))))
+            (just $ wrap _ModuleName (Strings.join (string ".") (Lists.reverse (var "restReversed"))))
             (var "localName")))
 
 restoreTrace :: TypedTermDefinition (InferenceContext -> InferenceContext -> InferenceContext)

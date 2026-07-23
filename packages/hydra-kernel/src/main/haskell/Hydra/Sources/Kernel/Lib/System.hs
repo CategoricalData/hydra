@@ -42,7 +42,8 @@ result t = effect (Types.either_ systemError t)
 
 execute :: PrimitiveDefinition
 execute = define "execute" "Run a program to completion and capture its result."
-  (sig $ TypeScheme [] (command Types.~> effect (Types.either_ systemError processResult)) Nothing)
+  (sigWithParams [("command", "the program and arguments to run")] $
+    TypeScheme [] (command Types.~> effect (Types.either_ systemError processResult)) Nothing)
   ["execute(command) describes an effectful computation which runs the program described by command\
   \ to completion and returns its result. This is the POSIX \"execute a command\" operation at the\
   \ posix_spawn / system() altitude\
@@ -59,7 +60,8 @@ execute = define "execute" "Run a program to completion and capture its result."
 
 exit :: PrimitiveDefinition
 exit = define "exit" "Terminate the current process with a status code."
-  (sig $ TypeScheme [] (statusCode Types.~> effect Types.unit) Nothing)
+  (sigWithParams [("code", "the status code to terminate the process with")] $
+    TypeScheme [] (statusCode Types.~> effect Types.unit) Nothing)
   ["exit(code) describes an effectful computation which terminates the current process immediately\
   \ with the given status, exactly as the POSIX exit() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/exit.html). The status is reported\
@@ -79,7 +81,8 @@ getEnvironment = define "getEnvironment" "Get the full set of environment variab
 
 getEnvironmentVariable :: PrimitiveDefinition
 getEnvironmentVariable = define "getEnvironmentVariable" "Look up a single environment variable by name."
-  (sig $ TypeScheme [] (environmentVariable Types.~> effect (Types.optional Types.string)) Nothing)
+  (sigWithParams [("name", "the name of the environment variable to look up")] $
+    TypeScheme [] (environmentVariable Types.~> effect (Types.optional Types.string)) Nothing)
   ["getEnvironmentVariable(name) describes an effectful computation which returns the value of the\
   \ environment variable name, or none if it is not present -- the POSIX getenv() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/getenv.html). A variable that is\
@@ -119,7 +122,8 @@ readStdin = define "readStdin" "Read the complete contents of standard input as 
 
 writeStderr :: PrimitiveDefinition
 writeStderr = define "writeStderr" "Write raw bytes to standard error."
-  (sig $ TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
+  (sigWithParams [("bytes", "the raw bytes to write to standard error")] $
+    TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
   ["writeStderr(bytes) describes an effectful computation which writes bytes to standard error\
   \ (POSIX file descriptor 2), with no character encoding or newline translation -- the POSIX\
   \ write() function (XSH,\
@@ -130,7 +134,8 @@ writeStderr = define "writeStderr" "Write raw bytes to standard error."
 
 writeStdout :: PrimitiveDefinition
 writeStdout = define "writeStdout" "Write raw bytes to standard output."
-  (sig $ TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
+  (sigWithParams [("bytes", "the raw bytes to write to standard output")] $
+    TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
   ["writeStdout(bytes) describes an effectful computation which writes bytes to standard output\
   \ (POSIX file descriptor 1), with no character encoding or newline translation -- the POSIX\
   \ write() function (XSH,\

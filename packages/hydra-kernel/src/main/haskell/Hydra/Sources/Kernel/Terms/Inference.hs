@@ -35,6 +35,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -185,7 +186,7 @@ atOrFail :: TypedTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
 atOrFail = define "atOrFail" $
   doc "Return the element at the given index, or Left(Other) with the given description if out of range" $
   "i" ~> "desc" ~> "xs" ~>
-  Optionals.cases (Lists.maybeAt (var "i") (var "xs")) (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc") (reify right)
+  Optionals.cases (Lists.at (var "i") (var "xs")) (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc") (reify right)
 
 bindConstraints :: TypedTermDefinition (InferenceContext -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
 bindConstraints = define "bindConstraints" $
@@ -309,12 +310,12 @@ generalize = define "generalize" $
   -- We must filter these out to avoid quantifying over type names.
   "isTypeVarName" <~ ("name" ~>
     "parts" <~ Strings.splitOn (string ".") (Core.unName $ var "name") $
-    Equality.lte (Lists.length $ var "parts") (int32 1)) $
-  "vars" <~ Lists.nub (Lists.filter ("v" ~> Logic.and (isUnbound @@ var "cx" @@ var "v") (var "isTypeVarName" @@ var "v")) $
+    Ordering.lte (Lists.length $ var "parts") (int32 1)) $
+  "vars" <~ Lists.distinct (Lists.filter ("v" ~> Logic.and (isUnbound @@ var "cx" @@ var "v") (var "isTypeVarName" @@ var "v")) $
      Variables.freeVariablesInTypeOrdered @@ var "typ") $
   -- Extract constraints for the generalized variables from the context
   "allConstraints" <~ Graph.graphClassConstraints (var "cx") $
-  "relevantConstraints" <~ (Maps.fromList (Optionals.cat $ Lists.map
+  "relevantConstraints" <~ (Maps.fromList (Optionals.givens $ Lists.map
     ("v" ~> Optionals.map ("meta" ~> pair (var "v") (var "meta")) $ Maps.lookup (var "v" :: TypedTerm Name) (var "allConstraints"))
     (var "vars")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   -- Only include constraints if there are any
@@ -332,7 +333,7 @@ headOrFail :: TypedTermDefinition (String -> [a] -> Prelude.Either Error a)
 headOrFail = define "headOrFail" $
   doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
   "desc" ~> "xs" ~>
-  Optionals.cases (Lists.maybeHead $ var "xs") (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc") (reify right)
+  Optionals.cases (Lists.head $ var "xs") (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc") (reify right)
 inferGraphTypes :: TypedTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
@@ -420,7 +421,7 @@ inferTypeOf = define "inferTypeOf" $
          (string "Expected a type scheme"))) ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2")))
     (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
       (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
-      (Strings.cat $ list [
+      (Strings.concat $ list [
         (string "Expected a single binding with a type scheme, but got: "),
         Literals.showInt32 $ Lists.length $ var "bindings",
         (string " bindings")])))
@@ -517,15 +518,15 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   -- Descend into the default branch (if present) with unionCasesDefault step on the trace
   "fcxDflt" <~ Names.pushSubtermStep @@ Paths.subtermStepUnionCasesDefault @@ var "fcx2" $
   "dfltRp" <<~ Eithers.mapOptional ("t" ~> inferTypeOfTerm @@ var "fcxDflt" @@ var "cx" @@ var "t" @@
-    (Strings.cat $ list [(string "case "), Core.unName $ var "tname", (string ".<default>")])) (var "dflt") $
+    (Strings.concat $ list [(string "case "), Core.unName $ var "tname", (string ".<default>")])) (var "dflt") $
   -- dfltRp :: Maybe InferenceResult (context is inside the result)
   "dfltResult" <~ var "dfltRp" $
   -- Restore the trace to the pre-default level so sibling case-branch inference
   -- doesn't include the default's path. Counter is preserved from the descent result if any.
-  "fcx3" <~ Optionals.fromOptional (var "fcx2") (Optionals.map ("_r" ~> Names.restoreTrace @@ var "fcx2" @@ Typing.inferenceResultContext (var "_r")) (var "dfltRp")) $
+  "fcx3" <~ Optionals.withDefault (var "fcx2") (Optionals.map ("_r" ~> Names.restoreTrace @@ var "fcx2" @@ Typing.inferenceResultContext (var "_r")) (var "dfltRp")) $
   "caseRp" <<~ inferMany @@ var "fcx3" @@ var "cx" @@ Lists.map
     ("f" ~> pair (Core.caseAlternativeHandler $ var "f")
-      (Strings.cat $ list [(string "case "), Core.unName $ var "tname", (string "."), Core.unName $ Core.caseAlternativeName $ var "f"]))
+      (Strings.concat $ list [(string "case "), Core.unName $ var "tname", (string "."), Core.unName $ Core.caseAlternativeName $ var "f"]))
     (var "cases") $
   "caseResults" <~ Pairs.first (var "caseRp") $
   "fcx4" <~ Pairs.second (var "caseRp") $
@@ -545,7 +546,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
       (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
       (string "match default"))
     (var "dfltResult")) $
-  "caseConstraints" <~ Optionals.cat (Lists.zipWith
+  "caseConstraints" <~ Optionals.givens (Lists.zipWith
     ("fname" ~> "itype" ~> Optionals.map
       ("ftype" ~> Typing.typeConstraint
         (var "itype")
@@ -553,7 +554,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
         (string "case type"))
       (Maps.lookup (var "fname" :: TypedTerm Name) (var "caseMap")))
     (var "fnames") (var "itypes")) $
-  "dfltClassConstraints" <~ Optionals.fromOptional Maps.empty (Optionals.map (reify Typing.inferenceResultClassConstraints) (var "dfltResult")) $
+  "dfltClassConstraints" <~ Optionals.withDefault Maps.empty (Optionals.map (reify Typing.inferenceResultClassConstraints) (var "dfltResult")) $
   "allElemConstraints" <~ mergeClassConstraints @@ var "caseElemConstraints" @@ var "dfltClassConstraints" $
   "mcResult" <<~ mapConstraints @@ var "fcx5" @@ var "cx"
     @@ ("subst" ~> yieldWithConstraints
@@ -592,7 +593,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
       @@ (Substitution.idTypeSubst)
       @@ var "classConstraints"))
     ("resultsRp" <<~ inferMany @@ var "fcx2" @@ var "cx" @@
-      (Lists.zip (var "els") $ Lists.map ("i" ~> Strings.cat $ list [(string "#"), Literals.showInt32 $ var "i"]) $
+      (Lists.zip (var "els") $ Lists.map ("i" ~> Strings.concat $ list [(string "#"), Literals.showInt32 $ var "i"]) $
         Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1))) $
     "results" <~ Pairs.first (var "resultsRp") $
     "fcx3" <~ Pairs.second (var "resultsRp") $
@@ -732,7 +733,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
   "groups" <~ (Sorting.topologicalSortComponents :: TypedTermDefinition ([(Name, [Name])] -> [[Name]])) @@ var "adjList" $
   "bindingMap" <~ (Maps.fromList (Lists.zip (var "names") (var "bindings0")) :: TypedTerm (M.Map Name Binding)) $
   "createLet" <~ ("e" ~> "group" ~> Core.termLet $ Core.let_
-    (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")) (var "group"))
+    (Optionals.givens $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")) (var "group"))
     (var "e")) $
   "rewrittenLet" <~ Lists.foldl (var "createLet") (var "body0") (Lists.reverse $ var "groups") $
   "restoreLet" <~ ("iterm" ~>
@@ -753,7 +754,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
     "e" <~ Pairs.second (var "result") $
     "bindingMap2" <~ (Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) :: TypedTerm (M.Map Name Binding)) $
     Core.termLet $ Core.let_
-      (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap2")) (var "names"))
+      (Optionals.givens $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap2")) (var "names"))
       (var "e")) $
   "rewriteResult" <~ ("iresult" ~>
     "fcxR" <~ Typing.inferenceResultContext (var "iresult") $
@@ -964,7 +965,7 @@ inferTypeOfOptional :: TypedTermDefinition (InferenceContext -> Graph -> Maybe T
 inferTypeOfOptional = define "inferTypeOfOptional" $
   doc "Infer the type of a Maybe value. Paper: inference.tex, rules Opt_0 and Opt_1." $
   "fcx" ~> "cx" ~> "m" ~>
-  "trmCons" <~ ("terms" ~> Core.termOptional (Lists.maybeHead $ var "terms")) $
+  "trmCons" <~ ("terms" ~> Core.termOptional (Lists.head $ var "terms")) $
   inferTypeOfCollection
     @@ var "fcx"
     @@ var "cx"
@@ -1038,7 +1039,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
   "rp" <<~ inferMany @@ var "fcx2" @@ var "cx" @@ Lists.map
     ("f" ~> pair
       (Core.fieldTerm $ var "f")
-      (Strings.cat2 (string "field ") (Core.unName $ Core.fieldName $ var "f")))
+      (Strings.concat2 (string "field ") (Core.unName $ Core.fieldName $ var "f")))
     (var "fields") $
   "results" <~ Pairs.first (var "rp") $
   "fcx3" <~ Pairs.second (var "rp") $
@@ -1179,7 +1180,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
         "ts" <~ Pairs.first (var "tsResult") $
         "fcx2" <~ Pairs.second (var "tsResult") $
-        "constraints" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+        "constraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
         right (yieldCheckedWithConstraints
           @@ var "fcx2"
           @@ (buildTypeApplicationTerm
@@ -1193,7 +1194,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $
       "fcx2" <~ Pairs.second (var "tsResult") $
-      "constraints" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+      "constraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
       right (Typing.inferenceResult
         (buildTypeApplicationTerm
           @@ Core.typeSchemeVariables (var "ts")
@@ -1245,7 +1246,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     -- Descend into this binding with letBinding step (carrying the binding name) on the trace
     "fcxBind" <~ Names.pushSubtermStep @@ (Paths.subtermStepLetBinding (var "k")) @@ var "fcx" $
     "result1" <<~ inferTypeOfTerm @@ var "fcxBind" @@ var "cx" @@ var "v" @@
-      (Strings.cat $ list [
+      (Strings.concat $ list [
         (string "temporary let binding '"),
         Core.unName $ var "k",
         (string "'")]) $
@@ -1260,7 +1261,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "originalBindingConstraints" <<~ Optionals.cases (Core.bindingTypeScheme $ var "binding") (right (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) ("ts" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
-        "freshConstraints" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
+        "freshConstraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
         -- Unify the instantiated type with the inferred type to map fresh variables
         "unifySubst" <<~ Eithers.bimap
           ("_e" ~> wrapUnifError (var "fcx2") (var "_e"))
@@ -1321,7 +1322,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
       "k" <~ Pairs.first (var "pair") $
       "v" <~ Pairs.second (var "pair") $
       Optionals.cases (Maps.lookup (var "k" :: TypedTerm Name) (var "acc")) (Maps.insert (var "k") (var "v") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))) ("existing" ~>
-          "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
+          "merged" <~ Core.typeVariableConstraints (Lists.distinct $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
           Maps.insert (var "k") (var "merged") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     (var "m1")
     (Maps.toList $ (var "m2" :: TypedTerm (M.Map Name TypeVariableConstraints)))
@@ -1333,7 +1334,7 @@ showInferenceResult = define "showInferenceResult" $
   "term" <~ Typing.inferenceResultTerm (var "result") $
   "typ" <~ Typing.inferenceResultType (var "result") $
   "subst" <~ Typing.inferenceResultSubst (var "result") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     (string "{term="),
     PrintCore.term @@ var "term",
     (string ", type="),

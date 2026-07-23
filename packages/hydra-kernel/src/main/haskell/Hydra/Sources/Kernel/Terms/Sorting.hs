@@ -19,6 +19,8 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Functions as Functions
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -109,7 +111,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     ("mp" ~> "p" ~>
       "k" <~ Pairs.first (var "p") $
       "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Optionals.cases (Maps.lookup (var "k" :: TypedTerm a) (var "mp")) (list ([] :: [TypedTerm a])) (reify Equality.identity) $
+      "existing" <~ Optionals.cases (Maps.lookup (var "k" :: TypedTerm a) (var "mp")) (list ([] :: [TypedTerm a])) (reify Functions.identity) $
       Maps.insert (var "k" :: TypedTerm a) (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
     (Maps.empty :: TypedTerm (M.Map a [b]))
     (var "pairs")
@@ -120,7 +122,7 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
     <> " construct a graph along with a function mapping each vertex (an Int)"
     <> " back to its original key (Nothing for unknown vertices).") $
   "edges0" ~>
-  "sortedEdges" <~ Lists.sortOn (reify Pairs.first) (var "edges0") $
+  "sortedEdges" <~ Lists.sortBy (reify Pairs.first) (var "edges0") $
   "indexedEdges" <~ Lists.zip (Math.range (int32 0) (Lists.length (var "sortedEdges"))) (var "sortedEdges") $
   "keyToVertex" <~ (Maps.fromList (Lists.map
     ("vkNeighbors" ~>
@@ -152,10 +154,10 @@ createOrderingIsomorphism = define "createOrderingIsomorphism" $
   "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
     "mp" <~ (Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) :: TypedTerm (M.Map a b)) $
-    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm a) (var "mp")) (var "targetOrd")) $
+    Optionals.givens $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm a) (var "mp")) (var "targetOrd")) $
   "targetToSourceMapping" <~ ("els" ~>
     "mp" <~ (Maps.fromList (Lists.zip (var "targetOrd") (var "els")) :: TypedTerm (M.Map a b)) $
-    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm a) (var "mp")) (var "sourceOrd")) $
+    Optionals.givens $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm a) (var "mp")) (var "sourceOrd")) $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 findReachableNodes :: forall a. Ord a => TypedTermDefinition ((a -> S.Set a) -> a -> S.Set a)
@@ -213,10 +215,10 @@ propagateTags = define "propagateTags" $
   -- For each node, find all reachable nodes and collect their tags
   "getTagsForNode" <~ ("node" ~>
     "reachable" <~ ((findReachableNodes :: TypedTermDefinition ((a -> S.Set a) -> a -> S.Set a))
-      @@ ("n" ~> Sets.fromList $ Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Equality.identity))
+      @@ ("n" ~> Sets.fromList $ Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Functions.identity))
       @@ var "node" :: TypedTerm (S.Set a)) $
     Sets.unions (Lists.map
-      ("n" ~> Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "tagMap")) (Sets.empty :: TypedTerm (S.Set t)) (reify Equality.identity))
+      ("n" ~> Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "tagMap")) (Sets.empty :: TypedTerm (S.Set t)) (reify Functions.identity))
       (Sets.toList (var "reachable" :: TypedTerm (S.Set a))) :: TypedTerm [S.Set t])) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 
@@ -238,13 +240,13 @@ strongConnect = define "strongConnect" $
       "lowV1" <~ Maps.findWithDefault (asTerm Constants.maxInt32) (var "v") (Topology.tarjanStateLowLinks (var "s")) $
       "idx_w" <~ Maps.findWithDefault (asTerm Constants.maxInt32) (var "w") (Topology.tarjanStateIndices (var "s")) $
       Topology.tarjanStateWithLowLinks (var "s")
-        (Maps.insert (var "v") (Equality.min (var "lowV1") (var "idx_w")) (Topology.tarjanStateLowLinks (var "s")))) $
+        (Maps.insert (var "v") (Ordering.min (var "lowV1") (var "idx_w")) (Topology.tarjanStateLowLinks (var "s")))) $
     Logic.ifElse (Logic.not (Maps.member (var "w") (Topology.tarjanStateIndices (var "st_"))))
       ("stAfter" <~ strongConnect @@ var "graph" @@ var "w" @@ var "st_" $
        "lowV2" <~ Maps.findWithDefault (asTerm Constants.maxInt32) (var "v") (Topology.tarjanStateLowLinks (var "stAfter")) $
        "low_w" <~ Maps.findWithDefault (asTerm Constants.maxInt32) (var "w") (Topology.tarjanStateLowLinks (var "stAfter")) $
        Topology.tarjanStateWithLowLinks (var "stAfter")
-         (Maps.insert (var "v") (Equality.min (var "lowV2") (var "low_w")) (Topology.tarjanStateLowLinks (var "stAfter"))))
+         (Maps.insert (var "v") (Ordering.min (var "lowV2") (var "low_w")) (Topology.tarjanStateLowLinks (var "stAfter"))))
       (Logic.ifElse (Sets.member (var "w") (Topology.tarjanStateOnStack (var "st_")))
         (var "lowLink" @@ var "st_")
         (var "st_"))) $
@@ -278,7 +280,7 @@ topologicalSort = define "topologicalSort" $
   "pairs" ~>
   "sccs" <~ (topologicalSortComponents @@ var "pairs" :: TypedTerm [[a]]) $
   -- A component is a cycle iff it has more than one element.
-  "isCycle" <~ ("scc" ~> Equality.gt (Lists.length $ var "scc") (int32 1)) $
+  "isCycle" <~ ("scc" ~> Ordering.gt (Lists.length $ var "scc") (int32 1)) $
   "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
   Logic.ifElse (Lists.null $ var "withCycles")
     (right $ Lists.concat $ var "sccs")
@@ -305,4 +307,4 @@ topologicalSortNodes = define "topologicalSortNodes" $
   "nodesByKey" <~ (Maps.fromList (Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "n")) (var "nodes")) :: TypedTerm (M.Map a x)) $
   "pairs" <~ Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
   "comps" <~ (topologicalSortComponents @@ var "pairs" :: TypedTerm [[a]]) $
-  Lists.map ("c" ~> Optionals.cat $ Lists.map ("k" ~> Maps.lookup (var "k" :: TypedTerm a) (var "nodesByKey")) (var "c")) (var "comps")
+  Lists.map ("c" ~> Optionals.givens $ Lists.map ("k" ~> Maps.lookup (var "k" :: TypedTerm a) (var "nodesByKey")) (var "c")) (var "comps")

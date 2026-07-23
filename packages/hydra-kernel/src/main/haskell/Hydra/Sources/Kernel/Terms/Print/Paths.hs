@@ -79,7 +79,7 @@ subtermStep = define "subtermStep" $
   "step" ~>
   "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
   "idxSuff" <~ ("suffix" ~> "i" ~>
-    Optionals.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
+    Optionals.map ("s" ~> Strings.concat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
   cases _SubtermStep (var "step")
     Nothing [
     _SubtermStep_annotatedBody>>: constant nothing,
@@ -87,15 +87,15 @@ subtermStep = define "subtermStep" $
     _SubtermStep_applicationArgument>>: constant (just (string "arg")),
     _SubtermStep_lambdaBody>>: constant (just (string "body")),
     _SubtermStep_unionCasesDefault>>: constant (just (string "default")),
-    _SubtermStep_unionCasesBranch>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
+    _SubtermStep_unionCasesBranch>>: "name" ~> just (Strings.concat2 (string ".") (Core.unName (var "name"))),
     _SubtermStep_letBody>>: constant (just (string "in")),
-    _SubtermStep_letBinding>>: "name" ~> just (Strings.cat2 (Core.unName (var "name")) (string "=")),
+    _SubtermStep_letBinding>>: "name" ~> just (Strings.concat2 (Core.unName (var "name")) (string "=")),
     _SubtermStep_listElement>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_mapKey>>: "i" ~> var "idxSuff" @@ (string ".key") @@ var "i",
     _SubtermStep_mapValue>>: "i" ~> var "idxSuff" @@ (string ".value") @@ var "i",
     _SubtermStep_optionalTerm>>: constant (just (string "given")),
     _SubtermStep_productTerm>>: "i" ~> var "idx" @@ var "i",
-    _SubtermStep_recordField>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
+    _SubtermStep_recordField>>: "name" ~> just (Strings.concat2 (string ".") (Core.unName (var "name"))),
     _SubtermStep_setElement>>: "i" ~> var "idx" @@ var "i",
     _SubtermStep_sumTerm>>: constant nothing,
     _SubtermStep_typeLambdaBody>>: constant nothing,

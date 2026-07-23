@@ -354,7 +354,7 @@ decodeBinding = define "decodeBinding" $
       -- coders emit parameterized (not raw) nominal types. (#476)
       "rtype" <~ (decoderFullResultTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ")) $
       "rawBody" <~ (decodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ") @@ var "rtype") $
-      "description" <~ (Strings.cat $ list [
+      "description" <~ (Strings.concat $ list [
         string "Decoder for ",
         Core.unName (Core.bindingName (var "b"))]) $
       right (Core.binding
@@ -482,9 +482,9 @@ decodeLiteralType = define "decodeLiteralType" $
     -- Helper to decode a specific float variant. The \f value lambda's domain is the float literal type. (#476)
     decodeFloatVariant resultType floatVariant floatName =
       decodeLiteral resultType $ DeepCore.match _Literal
-      (just $ leftError resultType (Strings.cat $ list [string "expected ", floatName, string " literal"])) [
+      (just $ leftError resultType (Strings.concat $ list [string "expected ", floatName, string " literal"])) [
       DeepCore.caseAlternative _Literal_float $ DeepCore.match _FloatValue
-        (just $ leftError resultType (Strings.cat $ list [string "expected ", floatName, string " value"])) [
+        (just $ leftError resultType (Strings.concat $ list [string "expected ", floatName, string " value"])) [
         DeepCore.caseAlternative floatVariant $ MetaTerms.lambdaTyped "f" resultType $ rightT resultType $ DeepCore.var "f"]]
 
     -- Decode integer: Term -> Either DecodingError <specific integer type>.
@@ -503,9 +503,9 @@ decodeLiteralType = define "decodeLiteralType" $
 
     -- Helper to decode a specific integer variant
     decodeIntegerVariant resultType intVariant intName = decodeLiteral resultType $ DeepCore.match _Literal
-      (just $ leftError resultType (Strings.cat $ list [string "expected ", intName, string " literal"])) [
+      (just $ leftError resultType (Strings.concat $ list [string "expected ", intName, string " literal"])) [
       DeepCore.caseAlternative _Literal_integer $ DeepCore.match _IntegerValue
-        (just $ leftError resultType (Strings.cat $ list [string "expected ", intName, string " value"])) [
+        (just $ leftError resultType (Strings.concat $ list [string "expected ", intName, string " value"])) [
         DeepCore.caseAlternative intVariant $ MetaTerms.lambdaTyped "i" resultType $ rightT resultType $ DeepCore.var "i"]]
 
     -- Decode string: Term -> Either DecodingError String
@@ -549,7 +549,7 @@ decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Optionals.cat $ Lists.map
+      (Optionals.givens $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
@@ -566,11 +566,11 @@ decodeModule = define "decodeModule" $
         -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
-        "allDecodedDeps" <~ (primitive DefLists.nub @@ (Lists.map (asTerm decodeModuleName) (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
+        "allDecodedDeps" <~ (primitive DefLists.distinct @@ (Lists.map (asTerm decodeModuleName) (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Packaging.entityMetadata
-            (just (Strings.cat $ list [
+            (just (Strings.concat $ list [
               string "Term decoders for ",
               Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
             (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
@@ -642,7 +642,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   -- Using foldl on reversed list to build from inside out
   -- The lambda for each field uses the field name with a prefix to avoid shadowing decoder functions.
   -- Its domain is the field's decoded type. (#476)
-  "localVarName" <~ ("ft" ~> Core.name $ Strings.cat $ list [string "field_", Core.unName $ Core.fieldTypeName $ var "ft"]) $
+  "localVarName" <~ ("ft" ~> Core.name $ Strings.concat $ list [string "field_", Core.unName $ Core.fieldTypeName $ var "ft"]) $
   "toFieldLambda" <~ ("ft" ~> "body" ~>
     Core.termLambda $ Core.lambda (var "localVarName" @@ var "ft")
       (just (decoderFullResultType @@ (Core.fieldTypeType $ var "ft"))) $ var "body") $
@@ -668,7 +668,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
     -- decoded against the wrong type after a kernel record rename) fails loud at
     -- the decode site naming what was expected, rather than degrading silently
     -- and surfacing far downstream as untyped bindings (#414).
-    (just $ leftError (var "recType") (Strings.cat $ list [
+    (just $ leftError (var "recType") (Strings.concat $ list [
       string "expected a record of type ", Core.unName $ var "tname"])) [
     -- The \record lambda binds the matched Record value. (#476)
     DeepCore.caseAlternative _Term_record $ MetaTerms.lambdaTyped "record" (Core.typeVariable (Core.nameLift _Record)) $
@@ -826,7 +826,7 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
         @@@ (MetaTerms.tyapps (DeepCore.primitive DefMaps.lookup) [var "nameType", var "variantFnType"]
           @@@ DeepCore.var "fname"
           @@@ DeepCore.var "variantMap")
-        @@@ (leftT (var "unionType") $ DeepCore.wrap _DecodingError $ DeepCore.primitive DefStrings.cat
+        @@@ (leftT (var "unionType") $ DeepCore.wrap _DecodingError $ DeepCore.primitive DefStrings.concat
           @@@ (DeepCore.list $ list [
             DeepCore.string $ string "no such field ",
             DeepCore.unwrap _Name @@@ DeepCore.var "fname",
@@ -1062,7 +1062,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
     -- Filter to only include actual forall-bound type variables
     -- (collectOrdConstrainedVariables may return nominal type references like "hydra.relational.ColumnName")
     "ordVars" <~ Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
+      ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $
     -- Build constraints: for each ordVar, add Ord constraint (uses original var names, normalization renames them)
     "constraints" <~ (
@@ -1085,7 +1085,7 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
     "typeVars" <~ collectTypeVariables @@ var "typ" $
     "allOrdVars" <~ collectOrdConstrainedVariables @@ var "typ" $
     "ordVars" <~ Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
+      ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $
     "constraints" <~ (
       Logic.ifElse (Lists.null (var "ordVars"))
@@ -1104,7 +1104,7 @@ filterTypeBindings :: TypedTermDefinition (InferenceContext -> Graph -> [Binding
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
-  Eithers.map (primitive DefOptionals.cat) $
+  Eithers.map (primitive DefOptionals.givens) $
     Eithers.mapList (isDecodableBinding @@ var "cx" @@ var "graph") $
       primitive DefLists.filter @@ Annotations.isNativeType @@ var "bindings"
 

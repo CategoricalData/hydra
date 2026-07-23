@@ -242,7 +242,7 @@ satisfy = define "satisfy" $
   "pred" ~>
   "parse" <~ ("input" ~>
     "codes" <~ Strings.toList (var "input") $
-    Optionals.cases (Lists.maybeHead $ var "codes") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("c" ~>
+    Optionals.cases (Lists.head $ var "codes") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("c" ~>
        "rest" <~ Strings.fromList (Lists.drop (int32 1) (var "codes")) $
        Logic.ifElse (var "pred" @@ var "c")
          (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))

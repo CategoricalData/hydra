@@ -40,6 +40,7 @@ import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
 import qualified Hydra.Sources.Kernel.Lib.Maps              as LibMaps
 import qualified Hydra.Sources.Kernel.Lib.Math              as LibMath
 import qualified Hydra.Sources.Kernel.Lib.Optionals            as LibOptionals
+import qualified Hydra.Sources.Kernel.Lib.Ordering          as LibOrdering
 import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
 import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
 import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets
@@ -122,6 +123,7 @@ kernelPrimaryTermsModules = [
   LibMaps.module_,
   LibMath.module_,
   LibOptionals.module_,
+  LibOrdering.module_,
   LibPairs.module_,
   LibRegex.module_,
   LibSets.module_,
@@ -181,6 +183,7 @@ kernelLibModules = [
   LibMaps.module_,
   LibMath.module_,
   LibOptionals.module_,
+  LibOrdering.module_,
   LibPairs.module_,
   LibRegex.module_,
   LibSets.module_,

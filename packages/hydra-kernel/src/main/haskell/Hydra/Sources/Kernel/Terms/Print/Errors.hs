@@ -108,7 +108,7 @@ checkingError = define "checkingError" $
 decodingError :: TypedTermDefinition (DecodingError -> String)
 decodingError = define "decodingError" $
   doc "Show a decoding error as a string" $
-  "de" ~> Strings.cat2 (string "decoding error: ") (unwrap _DecodingError @@ var "de")
+  "de" ~> Strings.concat2 (string "decoding error: ") (unwrap _DecodingError @@ var "de")
 
 error_ :: TypedTermDefinition (Error -> String)
 error_ = define "error" $
@@ -134,7 +134,7 @@ incorrectUnificationError = define "incorrectUnificationError" $
   doc "Show an incorrect unification error as a string" $
   "e" ~>
   "subst" <~ project _IncorrectUnificationError _IncorrectUnificationError_substitution @@ var "e" $
-  Strings.cat2 (string "incorrect unification: ") (PrintTyping.typeSubst @@ var "subst")
+  Strings.concat2 (string "incorrect unification: ") (PrintTyping.typeSubst @@ var "subst")
 
 notAForallTypeError :: TypedTermDefinition (NotAForallTypeError -> String)
 notAForallTypeError = define "notAForallTypeError" $
@@ -142,7 +142,7 @@ notAForallTypeError = define "notAForallTypeError" $
   "e" ~>
   "typ" <~ project _NotAForallTypeError _NotAForallTypeError_type @@ var "e" $
   "args" <~ project _NotAForallTypeError _NotAForallTypeError_typeArguments @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "not a forall type: ",
     PrintCore.type_ @@ var "typ",
     string ". Trying to apply ",
@@ -155,7 +155,7 @@ notAFunctionTypeError = define "notAFunctionTypeError" $
   doc "Show a not-a-function-type error as a string" $
   "e" ~>
   "typ" <~ project _NotAFunctionTypeError _NotAFunctionTypeError_type @@ var "e" $
-  Strings.cat2 (string "not a function type: ") (PrintCore.type_ @@ var "typ")
+  Strings.concat2 (string "not a function type: ") (PrintCore.type_ @@ var "typ")
 
 otherError :: TypedTermDefinition (OtherError -> String)
 otherError = define "otherError" $
@@ -167,18 +167,18 @@ resolutionError = define "resolutionError" $
   doc "Show a resolution error as a string, including the offending name or shape" $
   "re" ~> cases _ResolutionError (var "re") Nothing [
     _ResolutionError_noSuchBinding>>: "e" ~>
-      Strings.cat2 (string "no such binding: ")
+      Strings.concat2 (string "no such binding: ")
         (Core.unName $ project _NoSuchBindingError _NoSuchBindingError_name @@ var "e"),
     _ResolutionError_noSuchPrimitive>>: "e" ~>
-      Strings.cat2 (string "no such primitive: ")
+      Strings.concat2 (string "no such primitive: ")
         (Core.unName $ project _NoSuchPrimitiveError _NoSuchPrimitiveError_name @@ var "e"),
     _ResolutionError_noMatchingField>>: "e" ~>
-      Strings.cat2 (string "no matching field: ")
+      Strings.concat2 (string "no matching field: ")
         (Core.unName $ project _NoMatchingFieldError _NoMatchingFieldError_fieldName @@ var "e"),
     _ResolutionError_other>>: "e" ~>
-      Strings.cat2 (string "resolution error: ") (unwrap _OtherResolutionError @@ var "e"),
+      Strings.concat2 (string "resolution error: ") (unwrap _OtherResolutionError @@ var "e"),
     _ResolutionError_unexpectedShape>>: "e" ~>
-      Strings.cat $ list [
+      Strings.concat $ list [
         string "unexpected shape: expected ",
         project _UnexpectedShapeError _UnexpectedShapeError_expected @@ var "e",
         string " but got ",
@@ -192,7 +192,7 @@ typeArityMismatchError = define "typeArityMismatchError" $
   "expected" <~ project _TypeArityMismatchError _TypeArityMismatchError_expectedArity @@ var "e" $
   "actual" <~ project _TypeArityMismatchError _TypeArityMismatchError_actualArity @@ var "e" $
   "args" <~ project _TypeArityMismatchError _TypeArityMismatchError_typeArguments @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "type ",
     PrintCore.type_ @@ var "typ",
     string " applied to the wrong number of type arguments (expected ",
@@ -208,7 +208,7 @@ typeMismatchError = define "typeMismatchError" $
   "e" ~>
   "expected" <~ project _TypeMismatchError _TypeMismatchError_expectedType @@ var "e" $
   "actual" <~ project _TypeMismatchError _TypeMismatchError_actualType @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "type mismatch: expected ",
     PrintCore.type_ @@ var "expected",
     string " but found ",
@@ -220,9 +220,9 @@ unboundTypeVariablesError = define "unboundTypeVariablesError" $
   "e" ~>
   "vars" <~ project _UnboundTypeVariablesError _UnboundTypeVariablesError_variables @@ var "e" $
   "typ" <~ project _UnboundTypeVariablesError _UnboundTypeVariablesError_type @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "unbound type variables: {",
-    Strings.intercalate (string ", ") (Lists.map (reify Core.unName) $ Sets.toList $ var "vars"),
+    Strings.join (string ", ") (Lists.map (reify Core.unName) $ Sets.toList $ var "vars"),
     string "} in type ",
     PrintCore.type_ @@ var "typ"]
 
@@ -232,7 +232,7 @@ unequalTypesError = define "unequalTypesError" $
   "e" ~>
   "types" <~ project _UnequalTypesError _UnequalTypesError_types @@ var "e" $
   "desc" <~ project _UnequalTypesError _UnequalTypesError_description @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "unequal types ",
     Formatting.showList @@ PrintCore.type_ @@ var "types",
     string " in ",
@@ -245,7 +245,7 @@ unificationError = define "unificationError" $
   "lt" <~ project _UnificationError _UnificationError_leftType @@ var "e" $
   "rt" <~ project _UnificationError _UnificationError_rightType @@ var "e" $
   "msg" <~ project _UnificationError _UnificationError_message @@ var "e" $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "unification error: cannot unify ",
     PrintCore.type_ @@ var "lt",
     string " with ",
@@ -257,7 +257,7 @@ unsupportedTermVariantError :: TypedTermDefinition (UnsupportedTermVariantError 
 unsupportedTermVariantError = define "unsupportedTermVariantError" $
   doc "Show an unsupported term variant error as a string" $
   "e" ~>
-  Strings.cat2
+  Strings.concat2
     (string "unsupported term variant: ")
     (PrintVariants.termVariant @@ (project _UnsupportedTermVariantError _UnsupportedTermVariantError_termVariant @@ var "e"))
 
@@ -271,4 +271,4 @@ untypedLetBindingError = define "untypedLetBindingError" $
   doc "Show an untyped let binding error as a string" $
   "e" ~>
   "b" <~ project _UntypedLetBindingError _UntypedLetBindingError_binding @@ var "e" $
-  Strings.cat2 (string "untyped let binding: ") (PrintCore.binding @@ var "b")
+  Strings.concat2 (string "untyped let binding: ") (PrintCore.binding @@ var "b")

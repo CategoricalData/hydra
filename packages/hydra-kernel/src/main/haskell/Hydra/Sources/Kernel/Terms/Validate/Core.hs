@@ -33,6 +33,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -142,13 +143,13 @@ appendFinding = define "appendFinding" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -172,13 +173,13 @@ appendFindingType = define "appendFindingType" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -529,7 +530,7 @@ checkTerm = define "checkTerm" $
             ("fields" ~>
               "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
               "unknown" <~ (Sets.difference (var "altNames") (var "variantNames") :: TypedTerm (S.Set Name)) $
-              Optionals.cases (Lists.maybeHead $ Sets.toList (var "unknown" :: TypedTerm (S.Set Name)))
+              Optionals.cases (Lists.head $ Sets.toList (var "unknown" :: TypedTerm (S.Set Name)))
                 noError
                 ("firstUnknown" ~> mkJust $ inject _InvalidTermError _InvalidTermError_unknownCaseAlternative $
                   record _UnknownCaseAlternativeError [
@@ -620,7 +621,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
     (Graph.graphTypeVariables $ var "cx")
     (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
   "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
-  Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  Optionals.cases (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
@@ -635,7 +636,7 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
     (Graph.graphTypeVariables $ var "cx")
     (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
   "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
-  Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  Optionals.cases (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================
 -- Type validation
@@ -934,7 +935,7 @@ term = define "term" $
       -- Hard stop: if we have already collected maxErrors, leave the
       -- accumulator unchanged and skip the per-node check and the recursion.
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")
@@ -944,7 +945,7 @@ term = define "term" $
           -- After classifying the per-node finding, re-check the cap before
           -- recursing — appending an error may have just hit maxErrors.
           Logic.ifElse
-            (Equality.gte
+            (Ordering.gte
               (Lists.length $ Validation.validationResultErrors $ var "acc1")
               (Validation.validationProfileMaxErrors $ var "p"))
             (var "acc1")
@@ -975,7 +976,7 @@ type_ = define "type" $
   "p" ~> "acc" ~> "boundVars" ~> "typ" ~>
   -- Hard stop: if maxErrors already reached, leave accumulator unchanged.
   Logic.ifElse
-    (Equality.gte
+    (Ordering.gte
       (Lists.length $ Validation.validationResultErrors $ var "acc")
       (Validation.validationProfileMaxErrors $ var "p"))
     (var "acc")
@@ -984,7 +985,7 @@ type_ = define "type" $
     ("acc1" <~ appendFindingType @@ var "p" @@ var "acc"
         @@ (validateTypeNode @@ var "p" @@ var "boundVars" @@ var "typ") $
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc1")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc1")
@@ -1187,7 +1188,7 @@ validateTypeNode = define "validateTypeNode" $
         -- adding a second variant is a non-breaking change).
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_singleVariantUnion
           (Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
-            (Optionals.cases (Lists.maybeHead $ var "fields") noTypeError ("singleField" ~>
+            (Optionals.cases (Lists.head $ var "fields") noTypeError ("singleField" ~>
                 mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
                   record _SingleVariantUnionError [
                     _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),

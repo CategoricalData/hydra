@@ -32,7 +32,9 @@ defineWithDefault = primitiveWithDefaultInModule module_
 
 bimap :: PrimitiveDefinition
 bimap = defineWithDefault "bimap" "Map over both elements of a pair."
-  (sig $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
+  (sigWithParams [("f", "the function applied to the first element"),
+                  ("g", "the function applied to the second element"),
+                  ("p", "the pair to map over")] $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
     ((Types.var "a" Types.~> Types.var "c") Types.~>
      (Types.var "b" Types.~> Types.var "d") Types.~>
      Types.pair (Types.var "a") (Types.var "b") Types.~>
@@ -46,7 +48,7 @@ bimap = defineWithDefault "bimap" "Map over both elements of a pair."
 
 first :: PrimitiveDefinition
 first = define "first" "Get the first element of a pair."
-  (sig $ TypeScheme [Name "a", Name "b"]
+  (sigWithParams [("p", "the pair whose first element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "a")
     Nothing)
   ["first(p) returns the first component of the pair p.",
@@ -54,7 +56,7 @@ first = define "first" "Get the first element of a pair."
 
 second :: PrimitiveDefinition
 second = define "second" "Get the second element of a pair."
-  (sig $ TypeScheme [Name "a", Name "b"]
+  (sigWithParams [("p", "the pair whose second element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "b")
     Nothing)
   ["second(p) returns the second component of the pair p.",

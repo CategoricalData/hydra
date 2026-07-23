@@ -33,6 +33,8 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Functions as Functions
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -122,7 +124,7 @@ isComplexBinding = define "isComplexBinding" $
       -- Check if polymorphic
       "isPolymorphic" <~ Logic.not (Lists.null (Core.typeSchemeVariables $ var "ts")) $
       -- Check if non-nullary
-      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) (int32 0) $
+      "isNonNullary" <~ Ordering.gt (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) (int32 0) $
       -- Check if complex term
       "isComplex" <~ isComplexTerm @@ var "tc" @@ var "term" $
       Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex")
@@ -167,13 +169,13 @@ isComplexVariable = define "isComplexVariable" $
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
             -- If a primitive, non-nullary iff type arity > 0
-            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))) (int32 0)))
+            ("prim" ~> Ordering.gt (Arity.typeSchemeArity @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))) (int32 0)))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).
          -- Nullary bindings are assumed non-complex from this check;
          -- their actual complexity will be determined by isComplexBinding
          -- at the reference site.
-         ("ts" ~> Equality.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))))
+         ("ts" ~> Ordering.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))))
 
 isEncodedTerm :: TypedTermDefinition (Term -> Bool)
 isEncodedTerm = define "isEncodedTerm" $
@@ -235,7 +237,7 @@ isSerializable = define "isSerializable" $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
         (Sets.member Variants.typeVariantFunction (var "allVariants"))))
-    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ Core.bindingName (var "el"))
+    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Functions.identity) @@ Core.bindingName (var "el"))
 
 isSerializableByName :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Bool)
 isSerializableByName = define "isSerializableByName" $
@@ -250,7 +252,7 @@ isSerializableByName = define "isSerializableByName" $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
         (Sets.member Variants.typeVariantFunction (var "allVariants"))))
-    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ var "name")
+    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Functions.identity) @@ var "name")
 
 isSerializableType :: TypedTermDefinition (Type -> Bool)
 isSerializableType = define "isSerializableType" $

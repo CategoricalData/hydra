@@ -24,6 +24,7 @@ import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core             as Core
 import qualified Hydra.Dsl.Lib.Equality     as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists        as Lists
 import qualified Hydra.Dsl.Lib.Logic        as Logic
 import qualified Hydra.Dsl.Lib.Maps         as Maps
@@ -116,13 +117,13 @@ appendFindingModule = define "appendFindingModule" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -146,13 +147,13 @@ appendFindingPackage = define "appendFindingPackage" $
       "errs" <~ Validation.validationResultErrors (var "acc") $
       "wrns" <~ Validation.validationResultWarnings (var "acc") $
       Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
-        (Logic.ifElse (Equality.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
+        (Logic.ifElse (Ordering.lt (Lists.length $ var "errs") (Validation.validationProfileMaxErrors $ var "p"))
           (Validation.validationResult
             (Lists.concat2 (var "errs") (Lists.singleton $ var "payload"))
             (var "wrns"))
           (var "acc"))
         (Logic.ifElse (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
-          (Logic.ifElse (Equality.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
+          (Logic.ifElse (Ordering.lt (Lists.length $ var "wrns") (Validation.validationProfileMaxWarnings $ var "p"))
             (Validation.validationResult
               (var "errs")
               (Lists.concat2 (var "wrns") (Lists.singleton $ var "payload")))
@@ -223,7 +224,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                     Optionals.cases (var "innerAcc")
                       ("fieldName" <~ Core.fieldTypeName (var "field") $
                         "localFieldName" <~ (Names.localNameOf @@ var "fieldName") $
-                        "constructorName" <~ Strings.cat2
+                        "constructorName" <~ Strings.concat2
                           (Formatting.capitalize @@ var "localTypeName")
                           (Formatting.capitalize @@ var "localFieldName") $
                         Logic.ifElse (Sets.member (var "constructorName") (var "defNames" :: TypedTerm (S.Set String)))
@@ -269,7 +270,7 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
               Optionals.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
-                  (Optionals.fromOptional (string "") (Packaging.entityMetadataDescription $ var "em"))
+                  (Optionals.withDefault (string "") (Packaging.entityMetadataDescription $ var "em"))
                   (string "")))] $
           Logic.ifElse (var "documented")
             nothing
@@ -287,7 +288,7 @@ checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
   doc "Check that all definition names in a module have the module's name as a prefix" $
   "mod" ~>
   "ns" <~ Packaging.moduleName (var "mod") $
-  "prefix" <~ (Strings.cat2 (Packaging.unModuleName $ var "ns") (string ".")) $
+  "prefix" <~ (Strings.concat2 (Packaging.unModuleName $ var "ns") (string ".")) $
   "prefixLen" <~ Strings.length (var "prefix") $
   Lists.foldl
     ("acc" ~> "def" ~>
@@ -365,7 +366,7 @@ checkDefinitionOrdering = define "checkDefinitionOrdering" $
             -- Subsequent entries: compare local names
             ("prevName" ~>
               "prevLocal" <~ (Names.localNameOf @@ var "prevName") $
-              Logic.ifElse (Equality.lt (var "prevLocal") (var "currLocal"))
+              Logic.ifElse (Ordering.lt (var "prevLocal") (var "currLocal"))
                 (pair (just $ var "currName") nothing)
                 (pair (just $ var "currName") (just $
                   ErrorPackaging.invalidModuleErrorDefinitionsOutOfOrder $
@@ -618,7 +619,7 @@ kernelModule :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 kernelModule = define "kernelModule" $
   doc "Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'." $
   "mod" ~>
-  Lists.maybeHead $ Validation.validationResultErrors $
+  Lists.head $ Validation.validationResultErrors $
     module' @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "mod"
 
 -- | Validate a package against the kernel-default packaging profile.
@@ -627,7 +628,7 @@ kernelPackage :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
 kernelPackage = define "kernelPackage" $
   doc "Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'." $
   "pkg" ~>
-  Lists.maybeHead $ Validation.validationResultErrors $
+  Lists.head $ Validation.validationResultErrors $
     package @@ kernelDefaultPackagingProfile @@ emptyResult @@ var "pkg"
 
 -- | The subset of 'kernelPackagingRuleNames' downgraded from error to
@@ -752,7 +753,7 @@ module' = define "module" $
   Lists.foldl
     ("acc" ~> "guarded" ~>
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")
@@ -791,7 +792,7 @@ package = define "package" $
   "accPkg" <~ Lists.foldl
     ("acc" ~> "guarded" ~>
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")
@@ -812,7 +813,7 @@ package = define "package" $
   Lists.foldl
     ("acc" ~> "mod" ~>
       Logic.ifElse
-        (Equality.gte
+        (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc")
           (Validation.validationProfileMaxErrors $ var "p"))
         (var "acc")

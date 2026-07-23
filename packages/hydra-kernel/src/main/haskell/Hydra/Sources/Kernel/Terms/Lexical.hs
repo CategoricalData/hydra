@@ -16,6 +16,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Literals     as MetaLiterals
@@ -129,7 +130,7 @@ buildGraph = define "buildGraph" $
   "filteredTerms" <~ (Maps.filterWithKey ("k" ~> "_v" ~>
     Logic.not (Maps.member (var "k" :: TypedTerm Name) (var "primitives"))) (var "mergedTerms") :: TypedTerm (M.Map Name Term)) $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
-  "elementTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+  "elementTypes" <~ (Maps.fromList (Optionals.givens (Lists.map ("b" ~>
     Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingTypeScheme (var "b"))) (var "elements"))) :: TypedTerm (M.Map Name TypeScheme)) $
   "filteredTypes" <~ (Maps.filterWithKey ("k" ~> "_v" ~>
@@ -296,7 +297,7 @@ matchUnion = define "matchUnion" $
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name (Term -> Either Error b))) $
   cases _Term (var "stripped")
-    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "stripped")))) [
+    (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.concat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "stripped")))) [
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
       matchUnion @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
@@ -307,7 +308,7 @@ matchUnion = define "matchUnion" $
         Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
-        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "term")))]
+        (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.concat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "term")))]
 
 matchUnitField :: TypedTermDefinition (Name -> y -> (Name, x -> Either Error y))
 matchUnitField = define "matchUnitField" $
@@ -320,13 +321,13 @@ requireBinding = define "requireBinding" $
   "graph" ~> "name" ~>
   "showAll" <~ false $
   "ellipsis" <~ ("strings" ~>
-    Logic.ifElse (Logic.and (Equality.gt (Lists.length (var "strings")) (int32 3)) (Logic.not (var "showAll")))
+    Logic.ifElse (Logic.and (Ordering.gt (Lists.length (var "strings")) (int32 3)) (Logic.not (var "showAll")))
       (Lists.concat2 (Lists.take (int32 3) (var "strings")) (list [string "..."]))
       (var "strings")) $
   "errMsg" <~ (
     (string "no such element: ") ++ (Core.unName (var "name")) ++
     (string ". Available elements: {") ++
-    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (reify Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
+    (Strings.join (string ", ") (var "ellipsis" @@ (Lists.map (reify Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
     (string "}")) $
   Optionals.cases (lookupBinding @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg"))) (reify right)
 

@@ -178,7 +178,7 @@ findFieldType = define "findFieldType" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
-      (Optionals.cases (Lists.maybeHead $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))
+      (Optionals.cases (Lists.head $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname"))))
 
 fullyStripAndNormalizeType :: TypedTermDefinition (Type -> Type)
@@ -190,7 +190,7 @@ fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
       (Just $ pair (var "subst") (var "t")) [
       _Type_forall>>: "ft" ~>
         "oldVar" <~ Core.forallTypeParameter (var "ft") $
-        "newVar" <~ Core.name (Strings.cat2 (string "_") (Literals.showInt32 $ var "depth")) $
+        "newVar" <~ Core.name (Strings.concat2 (string "_") (Literals.showInt32 $ var "depth")) $
         var "go"
           @@ (Math.add (var "depth") (int32 1))
           @@ (Maps.insert (var "oldVar" :: TypedTerm Name) (var "newVar") (var "subst"))
@@ -231,7 +231,7 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
   "renamedConstraints" <~ Optionals.map
     ("oldConstraints" ~> (Maps.fromList (Lists.map
       ("kv" ~> pair
-        (Optionals.fromOptional (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv" :: TypedTerm Name) (var "nameSubst")))
+        (Optionals.withDefault (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv" :: TypedTerm Name) (var "nameSubst")))
         (Pairs.second $ var "kv"))
       (Maps.toList (var "oldConstraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))) :: TypedTerm (M.Map Name TypeVariableConstraints)))
     (Core.typeSchemeConstraints (var "scheme")) $
@@ -268,8 +268,8 @@ requireRowType = define "requireRowType" $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
     Optionals.cases (var "getter" @@ (var "rawType" @@ var "t")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
-        (Strings.cat2 (var "label") (string " type"))
-        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (PrintCore.type_ @@ var "t"))))) (reify right))
+        (Strings.concat2 (var "label") (string " type"))
+        (Strings.concat2 (Core.unName (var "name")) (Strings.concat2 (string ": ") (PrintCore.type_ @@ var "t"))))) (reify right))
 
 requireSchemaType :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, InferenceContext))
 requireSchemaType = define "requireSchemaType" $

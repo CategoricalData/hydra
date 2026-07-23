@@ -32,6 +32,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -112,7 +113,7 @@ definitionsWithDependencies = define "definitionsWithDependencies" $
   doc "Get definitions with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
   "depNames" <~ ("el" ~> Sets.toList (termDependencyNames @@ true @@ false @@ false @@ (Core.bindingTerm (var "el")))) $
-  "allDepNames" <~ Lists.nub (Lists.concat2
+  "allDepNames" <~ Lists.distinct (Lists.concat2
     (Lists.map (reify Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
@@ -140,8 +141,8 @@ flattenLetTerms = define "flattenLetTerms" $
       _Term_let>>: "innerLet" ~>
         "bindings1" <~ Core.letBindings (var "innerLet") $
         "body1" <~ Core.letBody (var "innerLet") $
-        "prefix" <~ Strings.cat2 (unwrap _Name @@ var "key0") (string "_") $
-        "qualify" <~ ("n" ~> Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n")) $
+        "prefix" <~ Strings.concat2 (unwrap _Name @@ var "key0") (string "_") $
+        "qualify" <~ ("n" ~> Core.name $ Strings.concat2 (var "prefix") (unwrap _Name @@ var "n")) $
         "toSubstPair" <~ ("b" ~> pair (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
         "subst" <~ (Maps.fromList (Lists.map (var "toSubstPair") (var "bindings1")) :: TypedTerm (M.Map Name Name)) $
         "replaceVars" <~ Variables.substituteVariables @@ var "subst" $
@@ -189,7 +190,7 @@ inlineType = define "inlineType" $
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
-        Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
+        Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.concat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
     "tr" <<~ var "recurse" @@ var "typ" $
     var "afterRecurse" @@ var "tr") $
   Rewriting.rewriteTypeM @@ var "f" @@ var "typ"
@@ -248,7 +249,7 @@ pruneLet = define "pruneLet" $
   "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
       (Variables.freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
         (Core.letBody $ var "l")
-        (Optionals.fromOptional Core.termUnit (Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")))))) $
+        (Optionals.withDefault Core.termUnit (Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")))))) $
   "reachable" <~ (Sorting.findReachableNodes @@ var "adj" @@ (var "rootName" :: TypedTerm Name)) $
   "prunedBindings" <~ Lists.filter
     ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
@@ -349,7 +350,7 @@ toShortNames = define "toShortNames" $
   "original" ~>
   "addName" <~ ("acc" ~> "name" ~>
     "local" <~ Names.localNameOf @@ var "name" $
-    "group" <~ Optionals.fromOptional (Sets.empty :: TypedTerm (S.Set Name)) (Maps.lookup (var "local" :: TypedTerm Name) (var "acc")) $
+    "group" <~ Optionals.withDefault (Sets.empty :: TypedTerm (S.Set Name)) (Maps.lookup (var "local" :: TypedTerm Name) (var "acc")) $
     Maps.insert (var "local" :: TypedTerm Name) (Sets.insert (var "name" :: TypedTerm Name) (var "group")) (var "acc")) $
   "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) (var "names")) $
   "groups" <~ var "groupNamesByLocal" @@ var "original" $
@@ -358,8 +359,8 @@ toShortNames = define "toShortNames" $
     "names" <~ Pairs.second (var "localNames") $
     "rangeFrom" <~ ("start" ~> Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1)))) $
     "rename" <~ ("name" ~> "i" ~> pair (var "name") $ Core.name $
-      Logic.ifElse (Equality.gt (var "i") (int32 1))
-        (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
+      Logic.ifElse (Ordering.gt (var "i") (int32 1))
+        (Strings.concat2 (var "local") (Literals.showInt32 $ var "i"))
         (var "local")) $
     Lists.zipWith (var "rename") (Sets.toList (var "names" :: TypedTerm (S.Set Name))) (var "rangeFrom" @@ int32 1)) $
   ((Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList (var "groups" :: TypedTerm (M.Map Name (S.Set Name)))) :: TypedTerm (M.Map Name Name))
@@ -382,7 +383,7 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
     pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
       (list ([] :: [TypedTerm Name]))
       (Sets.toList $ Sets.intersection (var "keys") $ Variables.freeVariablesInTerm @@ var "term")) $
-  "toPair" <~ ("name" ~> pair (var "name") $ Optionals.fromOptional
+  "toPair" <~ ("name" ~> pair (var "name") $ Optionals.withDefault
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name" :: TypedTerm Name) (var "bindingMap"))) $
   Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ (Lists.map (var "depsOf") (var "bindings") :: TypedTerm [(Name, [Name])]))
@@ -414,7 +415,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) :: TypedTerm (M.Map Name TypeDefinition)) $
   "sorted" <~ Sorting.topologicalSortComponents @@ (Lists.map (var "toPair") (var "defs") :: TypedTerm [(Name, [Name])]) $
-  Lists.map ("names" ~> Optionals.cat (Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "nameToDef")) (var "names"))) (
+  Lists.map ("names" ~> Optionals.givens (Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "nameToDef")) (var "names"))) (
     var "sorted")
 
 typeDependencyNames :: TypedTermDefinition (Bool -> Type -> S.Set Name)

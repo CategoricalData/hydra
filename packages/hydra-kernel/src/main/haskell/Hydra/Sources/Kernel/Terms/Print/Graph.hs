@@ -73,7 +73,7 @@ graph = define "graph" $
   doc "Show a list of bindings as a string" $
   lambda "elements" $ lets [
     "elementStrs">: Lists.map (asTerm PrintCore.binding) (var "elements")] $
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "{",
-      Strings.intercalate (string ", ") (var "elementStrs"),
+      Strings.join (string ", ") (var "elementStrs"),
       string "}"]

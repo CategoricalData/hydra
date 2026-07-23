@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -189,7 +190,7 @@ chooseLayout = define "chooseLayout" $
     <> " surrounding indentation may push content beyond the threshold at print time."
     <> " Callers that know they are nested can pass a smaller threshold to compensate.") $
   "threshold" ~> "inlineExpr" ~> "blockExpr" ~>
-    Logic.ifElse (Equality.gt (expressionLength @@ var "inlineExpr") (var "threshold"))
+    Logic.ifElse (Ordering.gt (expressionLength @@ var "inlineExpr") (var "threshold"))
       (var "blockExpr")
       (var "inlineExpr")
 
@@ -229,14 +230,14 @@ curlyBracesList = define "curlyBracesList" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "{}")
       (brackets @@ curlyBraces @@ var "style" @@
-        (symbolSep @@ (Optionals.fromOptional (string ",") (var "msymb")) @@ var "style" @@ var "els"))
+        (symbolSep @@ (Optionals.withDefault (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
 customIndent :: TypedTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $
   doc ("Indent every non-empty line of `s` by `idt`. Empty lines stay empty"
     <> " (no trailing whitespace) so downstream byte-identity checks don't"
     <> " care about indent depth.") $
-  "idt" ~> "s" ~> Strings.cat $
+  "idt" ~> "s" ~> Strings.concat $
     Lists.intersperse (string "\n") $
       Lists.map ("line" ~>
         Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
@@ -251,7 +252,7 @@ customIndentBlock = define "customIndentBlock" $
       (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Optionals.cases (Lists.maybeHead $ var "els") (cst @@ string "") ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
+    Optionals.cases (Lists.head $ var "els") (cst @@ string "") ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
 
@@ -326,7 +327,7 @@ expressionLength = define "expressionLength" $
     "elementLens" <~ Lists.map (asTerm expressionLength) (Ast.seqExprElements $ var "se") $
     "totalElLen" <~ Lists.foldl (reify2 Math.add) (int32 0) (var "elementLens") $
     "numSeps" <~ Math.sub (Lists.length $ Ast.seqExprElements $ var "se") (int32 1) $
-    Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Equality.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
+    Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Ordering.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
   cases _Expr (var "e") Nothing [
     _Expr_const>>: "s" ~> var "symbolLength" @@ var "s",
     _Expr_indent>>: "ie" ~> var "indentedExpressionLength" @@ var "ie",
@@ -448,13 +449,13 @@ orSep = define "orSep" $
   doc "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content" $
   "style" ~> "l" ~>
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
-    Optionals.cases (Lists.maybeHead $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+    Optionals.cases (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 parenList :: TypedTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
   doc "Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty." $
   "newlines" ~> "els" ~>
-    "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
+    "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Ordering.gt (Lists.length $ var "els") (int32 1)))
       (asTerm halfBlockStyle)
       (asTerm inlineStyle)) $
     Logic.ifElse (Lists.null $ var "els")
@@ -518,7 +519,7 @@ parenthesize = define "parenthesize" $
             "lop" <~ Ast.opExprOp (var "lopExpr") $
             "lprec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "lop") $
             "lassoc" <~ Ast.opAssociativity (var "lop") $
-            "comparison" <~ Equality.compare (var "prec") (var "lprec") $
+            "comparison" <~ Ordering.compare (var "prec") (var "lprec") $
             cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "lhs'",
               _Comparison_greaterThan>>: constant (parens @@ var "lhs'"),
@@ -531,7 +532,7 @@ parenthesize = define "parenthesize" $
             "rop" <~ Ast.opExprOp (var "ropExpr") $
             "rprec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "rop") $
             "rassoc" <~ Ast.opAssociativity (var "rop") $
-            "comparison" <~ Equality.compare (var "prec") (var "rprec") $
+            "comparison" <~ Ordering.compare (var "prec") (var "rprec") $
             cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "rhs'",
               _Comparison_greaterThan>>: constant (parens @@ var "rhs'"),
@@ -581,12 +582,12 @@ printExpr = define "printExpr" $
         _IndentStyle_subsequentLines>>: "pre" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
-            (Optionals.fromOptional (var "lns") $
+            (Optionals.withDefault (var "lns") $
               Optionals.map
                 ("uc" ~> Lists.cons (Pairs.first $ var "uc") $
                   Lists.map (var "indentLine" @@ var "pre") (Pairs.second $ var "uc"))
                 (Lists.uncons $ var "lns"))] $
-      Strings.intercalate (string "\n") (var "ilns"),
+      Strings.join (string "\n") (var "ilns"),
     _Expr_seq>>: "seqExpr" ~>
       "sop" <~ Ast.seqExprOp (var "seqExpr") $
       "ssym" <~ Ast.unSymbol (Ast.opSymbol $ var "sop") $
@@ -610,7 +611,7 @@ printExpr = define "printExpr" $
       "spadlIsNewline" <~ var "isNewlineWs" @@ var "spadl" $
       "spadrIsNewline" <~ var "isNewlineWs" @@ var "spadr" $
       "joinElements" <~ ("acc" ~> "el" ~>
-        "elStartsWithNewline" <~ Optionals.cases (Strings.maybeCharAt (int32 0) (var "el")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
+        "elStartsWithNewline" <~ Optionals.cases (Strings.charAt (int32 0) (var "el")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
         "elIsEmpty" <~ Equality.equal (var "el") (string "") $
         -- Suppress whitespace padding when the next element either
         -- starts with `\n` (whitespace would dangle on previous line)
@@ -628,8 +629,8 @@ printExpr = define "printExpr" $
             (Logic.and (var "elIsEmpty") (Equality.equal (var "ssym") (string ""))))
           (string "")
           (var "pad" @@ var "spadr") $
-        Strings.cat $ list [var "acc", var "padlEff", var "ssym", var "padrEff", var "el"]) $
-      Optionals.cases (Lists.maybeHead $ var "printedElements") (string "") ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements"))),
+        Strings.concat $ list [var "acc", var "padlEff", var "ssym", var "padrEff", var "el"]) $
+      Optionals.cases (Lists.head $ var "printedElements") (string "") ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements"))),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
@@ -682,7 +683,7 @@ printExpr = define "printExpr" $
         (string "")
         (var "pad" @@ var "padl") $
       "padrPad" <~ (var "pad" @@ var "padr") $
-      "rhsStartsWithNewline" <~ Optionals.cases (Strings.maybeCharAt (int32 0) (var "rhs")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
+      "rhsStartsWithNewline" <~ Optionals.cases (Strings.charAt (int32 0) (var "rhs")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
       "padrEffective" <~ Logic.ifElse
         (Logic.and (var "rhsStartsWithNewline")
                    (Logic.not $ var "padrIsNewline"))
@@ -713,7 +714,7 @@ sep :: TypedTermDefinition (Op -> [Expr] -> Expr)
 sep = define "sep" $
   doc "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list." $
   "op" ~> "els" ~>
-    Optionals.cases (Lists.maybeHead $ var "els") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
+    Optionals.cases (Lists.head $ var "els") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
 
 spaceSep :: TypedTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
@@ -744,7 +745,7 @@ structuralSep = define "structuralSep" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
-        (Optionals.fromOptional (cst @@ string "") (Lists.maybeHead $ var "els"))
+        (Optionals.withDefault (cst @@ string "") (Lists.head $ var "els"))
         (Ast.exprSeq $ Ast.seqExpr (var "op") (var "els")))
 
 structuralSpaceSep :: TypedTermDefinition ([Expr] -> Expr)
@@ -789,7 +790,7 @@ symbolSep = define "symbolSep" $
       (Ast.padding Ast.wsNone (var "break"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Optionals.cases (Lists.maybeHead $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+    Optionals.cases (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 tabIndent :: TypedTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $
@@ -817,7 +818,7 @@ unsupportedVariant :: TypedTermDefinition (String -> a -> Expr)
 unsupportedVariant = define "unsupportedVariant" $
   doc "Render a placeholder for an unsupported variant, including a string representation of the offending value" $
   "label" ~> "obj" ~>
-    cst @@ (string "[unsupported " ++ var "label" ++ string ": " ++ (Literals.showString $ var "obj") ++ string "]")
+    cst @@ (string "[unsupported " ++ var "label" ++ string ": " ++ (Literals.printString $ var "obj") ++ string "]")
 
 withComma :: TypedTermDefinition (Expr -> Expr)
 withComma = define "withComma" $

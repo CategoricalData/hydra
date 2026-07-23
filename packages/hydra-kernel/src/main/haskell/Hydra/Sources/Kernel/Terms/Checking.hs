@@ -183,14 +183,14 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
       "ah" <~ Pairs.first (var "uc") $
       "at" <~ Pairs.second (var "uc") $
       cases _Type (var "t")
-        (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
+        (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.concat $ list [
           PrintCore.type_ @@ var "t",
           string ". Trying to apply ",
           Literals.showInt32 (Lists.length $ var "typeArgs"),
           string " type args: ",
           Formatting.showList @@ PrintCore.type_ @@ var "typeArgs",
           string ". Context has vars: {",
-          Strings.intercalate (string ", ") (Lists.map (reify $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
+          Strings.join (string ", ") (Lists.map (reify $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
           string "}"]))) [
         _Type_forall>>: "ft" ~>
           "v" <~ Core.forallTypeParameter (var "ft") $
@@ -213,7 +213,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
         _Type_variable>>: "tname" ~>
           Eithers.either
             -- Unresolvable nominal name: preserve the original behaviour by failing.
-            ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
+            ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.concat $ list [
               PrintCore.type_ @@ var "t",
               string ". Trying to apply ",
               Literals.showInt32 (Lists.length $ var "typeArgs"),
@@ -278,7 +278,7 @@ checkSameType = define "checkSameType" $
   "cx" ~> "tx" ~> "desc" ~> "types" ~>
   "unequalErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorUnequalTypes $ ErrorsChecking.unequalTypesError (var "types") (var "desc"))) $
   Logic.ifElse (typesAllEffectivelyEqual @@ var "tx" @@ var "types")
-    (Optionals.cases (Lists.maybeHead $ var "types") (var "unequalErr") ("t" ~> right $ var "t"))
+    (Optionals.cases (Lists.head $ var "types") (var "unequalErr") ("t" ~> right $ var "t"))
     (var "unequalErr")
 
 checkTypeSubst :: TypedTermDefinition (InferenceContext -> Graph -> TypeSubst -> Prelude.Either Error TypeSubst)
@@ -329,7 +329,7 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
       _Type_variable>>: "v" ~>
         Logic.ifElse (Maps.member (var "v") (var "acc" :: TypedTerm (M.Map Name Name)))
           (var "acc")
-          (Maps.insert (var "v") (Core.name $ Strings.cat2 (string "_tv") (Literals.showInt32 $ Maps.size (var "acc" :: TypedTerm (M.Map Name Name)))) (var "acc" :: TypedTerm (M.Map Name Name)))]) $
+          (Maps.insert (var "v") (Core.name $ Strings.concat2 (string "_tv") (Literals.showInt32 $ Maps.size (var "acc" :: TypedTerm (M.Map Name Name)))) (var "acc" :: TypedTerm (M.Map Name Name)))]) $
   "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ (Maps.empty :: TypedTerm (M.Map Name Name)) @@ var "typ" $
   Variables.substituteTypeVariables @@ var "subst" @@ var "typ"
 
@@ -456,7 +456,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
     (var "tcterms") $
   "fcodsR" <<~ var "fcodsResult" $
   "fcods" <~ Pairs.first (var "fcodsR") $
-  "cods" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (reify Optionals.pure) (var "fcods")) $
+  "cods" <~ Optionals.givens (Lists.cons (var "tdflt") $ Lists.map (reify Optionals.pure) (var "fcods")) $
   "cod" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
   right $ pair (Core.typeFunction $ Core.functionType
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
@@ -562,7 +562,7 @@ typeOfList = define "typeOfList" $
   "listArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeList Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
   Logic.ifElse (Lists.null $ var "els")
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
-      (Optionals.cases (Lists.maybeHead $ var "typeArgs") (var "listArityErr") ("ta0" ~> right $ pair (Core.typeList $ var "ta0") (var "cx")))
+      (Optionals.cases (Lists.head $ var "typeArgs") (var "listArityErr") ("ta0" ~> right $ pair (Core.typeList $ var "ta0") (var "cx")))
       (var "listArityErr"))
     -- Nonempty list: type all elements, threading context
     ("foldResult" <~ Lists.foldl
@@ -649,7 +649,7 @@ typeOfMaybe = define "typeOfMaybe" $
     "n" <~ Lists.length (var "typeArgs") $
     "maybeArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeOptional Core.typeUnit) (int32 1) (var "n") (var "typeArgs"))) $
     Logic.ifElse (Equality.equal (var "n") (int32 1))
-      (Optionals.cases (Lists.maybeHead $ var "typeArgs") (var "maybeArityErr") ("ta0" ~> right $ pair (Core.typeOptional $ var "ta0") (var "cx")))
+      (Optionals.cases (Lists.head $ var "typeArgs") (var "maybeArityErr") ("ta0" ~> right $ pair (Core.typeOptional $ var "ta0") (var "cx")))
       (var "maybeArityErr")) $
   "forJust" <~ ("term" ~>
     "tResult" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term" $
@@ -741,7 +741,7 @@ typeOfSet = define "typeOfSet" $
   "setArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
   Logic.ifElse (Sets.null (var "els" :: TypedTerm (S.Set Term)))
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
-      (Optionals.cases (Lists.maybeHead $ var "typeArgs") (var "setArityErr") ("ta0" ~> right $ pair (Core.typeSet $ var "ta0") (var "cx")))
+      (Optionals.cases (Lists.head $ var "typeArgs") (var "setArityErr") ("ta0" ~> right $ pair (Core.typeSet $ var "ta0") (var "cx")))
       (var "setArityErr"))
     -- Nonempty set: type all elements, threading context
     ("foldResult" <~ Lists.foldl
@@ -830,7 +830,7 @@ typeOfVariable = define "typeOfVariable" $
   -- primitive's function type via graphPrimitives. This takes precedence over any
   -- same-named graphBoundTypes entry: when the hydra.lib.* primitive-definition
   -- modules are lowered to PrimitiveDefinition data (Generation.lowerPrimitiveDefinitions),
-  -- each such binding (e.g. hydra.lib.strings.cat2 :: PrimitiveDefinition) would
+  -- each such binding (e.g. hydra.lib.strings.concat2 :: PrimitiveDefinition) would
   -- otherwise shadow the callable primitive of the same name, breaking the ~28 kernel
   -- modules that call those primitives. Primitive names are fully qualified, so they
   -- never collide with local (unqualified) let/lambda bindings; graphPrimitives wins

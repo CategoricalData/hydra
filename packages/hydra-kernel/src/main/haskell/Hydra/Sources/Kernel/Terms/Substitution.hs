@@ -137,7 +137,7 @@ substInClassConstraints = define "substInClassConstraints" $
   -- Helper to insert a constraint, merging with existing if present
   "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
     Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "acc")) (Maps.insert (var "varName" :: TypedTerm Name) (var "metadata") (var "acc")) ("existing" ~>
-        "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
+        "merged" <~ Core.typeVariableConstraints (Lists.distinct $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
         Maps.insert (var "varName" :: TypedTerm Name) (var "merged") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution

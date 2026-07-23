@@ -105,8 +105,8 @@ parseDocAnnotation = define "parseDocAnnotation" $
   lambda "inner" $
   lets [
     "parts">: Strings.splitOn (string " ") (var "inner"),
-    "tag">:   Optionals.fromOptional (string "") (Lists.maybeHead (var "parts")),
-    "rhs">:   Strings.intercalate (string " ") (Lists.drop (int32 1) (var "parts"))] $
+    "tag">:   Optionals.withDefault (string "") (Lists.head (var "parts")),
+    "rhs">:   Strings.join (string " ") (Lists.drop (int32 1) (var "parts"))] $
   Logic.ifElse (Equality.equal (var "tag") (string "primitive"))
     (just $ inject _EntityReference _EntityReference_definition
       (inject _DefinitionReference _DefinitionReference_primitive (Core.name (var "rhs"))))
@@ -136,17 +136,17 @@ parseDocString = define "parseDocString" $
   lambda "s" $
   lets [
     "parts">: Strings.splitOn (string "{@") (var "s"),
-    "head_">: Optionals.fromOptional (string "") (Lists.maybeHead (var "parts")),
+    "head_">: Optionals.withDefault (string "") (Lists.head (var "parts")),
     "tail_">: Lists.drop (int32 1) (var "parts"),
     "toSeg">: lambda "part" $
       lets [
         "subparts">: Strings.splitOn (string "}") (var "part"),
-        "inner">:    Optionals.fromOptional (string "") (Lists.maybeHead (var "subparts")),
-        "after">:    Strings.intercalate (string "}") (Lists.drop (int32 1) (var "subparts")),
+        "inner">:    Optionals.withDefault (string "") (Lists.head (var "subparts")),
+        "after">:    Strings.join (string "}") (Lists.drop (int32 1) (var "subparts")),
         "mref">:     parseDocAnnotation @@ var "inner"] $
       Optionals.cases (var "mref")
-        (list [inject _DocSegment _DocSegment_text (Strings.cat2 (string "{@") (var "part"))])
-        (lambda "ref" $ Optionals.cat $ list [
+        (list [inject _DocSegment _DocSegment_text (Strings.concat2 (string "{@") (var "part"))])
+        (lambda "ref" $ Optionals.givens $ list [
           just (inject _DocSegment _DocSegment_ref (var "ref")),
           Logic.ifElse (Equality.equal (var "after") (string ""))
             nothing

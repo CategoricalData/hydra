@@ -23,6 +23,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -124,7 +125,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "augment" <~ ("b" ~>
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))) (var "freeVars") $
-    "varTypes" <~ Optionals.cat (Lists.map (reify Pairs.second) (var "varTypePairs")) $
+    "varTypes" <~ Optionals.givens (Lists.map (reify Pairs.second) (var "varTypePairs")) $
     Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
                            (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
       (pair (var "b") nothing)
@@ -148,7 +149,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "results" <~ Lists.map (var "augment") (var "bindings") $
   pair
     (Lists.map (reify Pairs.first) (var "results"))
-    (Typing.termSubst $ Maps.fromList $ Optionals.cat $ Lists.map (reify Pairs.second) (var "results"))
+    (Typing.termSubst $ Maps.fromList $ Optionals.givens $ Lists.map (reify Pairs.second) (var "results"))
 
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: TypedTermDefinition (Binding -> Bool)
@@ -269,7 +270,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       (var "capturedTermVars") $
     -- We can only construct a new type scheme if all of the captured term variables have types
     -- If there are any captured term variables, we create a function type
-    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Optionals.cat (Lists.map (reify Pairs.second) (var "capturedTermVarTypePairs"))) $
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Optionals.givens (Lists.map (reify Pairs.second) (var "capturedTermVarTypePairs"))) $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
@@ -282,13 +283,13 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       (Sets.union (var "freeInBindingType") (var "freeInCapturedVarTypes"))) $
     "globalBindingName" <~ Lexical.chooseUniqueName
       @@ var "alreadyUsedNames"
-      @@ (Core.name (Strings.cat2 (var "prefix") (Core.unName $ Core.bindingName $ var "b"))) $
+      @@ (Core.name (Strings.concat2 (var "prefix") (Core.unName $ Core.bindingName $ var "b"))) $
     "newUsedNames" <~ Sets.insert (var "globalBindingName" :: TypedTerm Name) (var "alreadyUsedNames") $
     "newTypeScheme" <~ Logic.ifElse
       (Equality.equal (Lists.length $ var "capturedTermVarTypes") (Lists.length $ var "capturedTermVarTypePairs"))
       (Optionals.map
         ("ts" ~> Core.typeScheme
-          (Lists.nub $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
+          (Lists.distinct $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
           (Lists.foldl
             ("t" ~> "a" ~> Core.typeFunction $ Core.functionType (var "a") (var "t"))
             (Core.typeSchemeBody $ var "ts")
@@ -423,7 +424,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- Polymorphic bindings (with non-empty typeSchemeVariables) can't be local Java variables.
         -- Non-polymorphic bindings (hoisted only because they use context type vars) are safe to cache.
         "isCacheable" <~ ("name" ~>
-          "multiRef" <~ Equality.gte (countVarOccurrences @@ var "name" @@ var "body") (int32 2) $
+          "multiRef" <~ Ordering.gte (countVarOccurrences @@ var "name" @@ var "body") (int32 2) $
           "isPoly" <~ optCases (Maps.lookup (var "name" :: TypedTerm Name) (var "hoistBindingMap"))
             false
             ("b" ~> bindingIsPolymorphic @@ var "b") $
@@ -493,7 +494,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
   "forActiveBinding" <~ ("b" ~>
     -- Note: no possibility of name collisions between groups of hoisted bindings, because the names of the parent
     -- bindings are unique.
-    "prefix" <~ (Strings.cat2 (Core.unName (Core.bindingName $ var "b")) (string "_")) $
+    "prefix" <~ (Strings.concat2 (Core.unName (Core.bindingName $ var "b")) (string "_")) $
     "init" <~ pair (list ([] :: [TypedTerm Binding])) (Sets.singleton $ Core.bindingName $ var "b") $
     "resultPair" <~ Rewriting.rewriteAndFoldTermWithGraph
       @@ (var "rewrite" @@ var "prefix") @@ var "cx1" @@ var "init" @@ (Core.bindingTerm $ var "b") $
@@ -581,7 +582,7 @@ hoistSubterms = define "hoistSubterms" $
             -- Hoist: add to collected bindings, return reference
             -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
             -- Use chooseUniqueName to avoid collisions with names in the enclosing scope
-            ("proposedName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
+            ("proposedName" <~ Core.name (Strings.concat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
              "existingNames" <~ (Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) :: TypedTerm (S.Set Name)) $
              "freeVarsInSubterm" <~ Variables.freeVariablesInTerm @@ var "subterm" $
              "allReserved" <~ Sets.union (var "existingNames" :: TypedTerm (S.Set Name)) (var "freeVarsInSubterm") $
@@ -654,7 +655,7 @@ hoistSubterms = define "hoistSubterms" $
     "processBinding" <~ ("acc" ~> "binding" ~>
       -- Use the binding name as the prefix for hoisted binding names
       -- Replace dots with underscores to avoid creating module-like names
-      "namePrefix" <~ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "binding")))) $
+      "namePrefix" <~ Strings.join (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "binding")))) $
       -- Build the pathPrefix for this binding: outer path + letBinding accessor
       "bindingPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBinding (Core.bindingName $ var "binding")]) $
       -- Each sibling starts fresh with counter 1 - prefix makes names unique
@@ -669,8 +670,8 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Optionals.cases (Lists.maybeHead (var "bindings")) (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
-    "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
+    "firstBindingName" <~ Optionals.cases (Lists.head (var "bindings")) (string "body") (lambda "b" $ Strings.join (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
+    "bodyPrefix" <~ Strings.concat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
     -- Return the original counter (siblings are independent, so counter doesn't propagate)

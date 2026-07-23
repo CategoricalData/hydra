@@ -169,7 +169,7 @@ anyClass :: TypedTermDefinition String
 anyClass = define "anyClass" $
   doc ("The POSIX ERE rendering of Hydra's . (any character incl. newline): an explicit character-class"
     <> " range spanning the whole Unicode scalar range, which POSIX ERE engines match literally.") $
-  Strings.cat $ list [
+  Strings.concat $ list [
     string "[",
     showCodePoint @@ int32 0,
     string "-",
@@ -188,7 +188,7 @@ escapeLiteral = define "escapeLiteral" $
           cp '.', cp '^', cp '$', cp '*', cp '+', cp '?',
           cp '(', cp ')', cp '[', cp ']', cp '{', cp '}', cp '|', cp '\\'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.cat2 (string "\\") (showCodePoint @@ var "c"))
+      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
       (showCodePoint @@ var "c")
 
 escapeClassChar :: TypedTermDefinition (Int -> String)
@@ -201,7 +201,7 @@ escapeClassChar = define "escapeClassChar" $
         false
         (list [cp '\\', cp ']', cp '^', cp '-'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.cat2 (string "\\") (showCodePoint @@ var "c"))
+      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
       (showCodePoint @@ var "c")
 
 classItem :: TypedTermDefinition (Term -> String)
@@ -210,7 +210,7 @@ classItem = define "classItem" $
   "item" ~>
     cases _ClassItem (var "item") Nothing [
       _ClassItem_character>>: "c" ~> escapeClassChar @@ var "c",
-      _ClassItem_range>>: "r" ~> Strings.cat $ list [
+      _ClassItem_range>>: "r" ~> Strings.concat $ list [
         escapeClassChar @@ (project _CharacterRange _CharacterRange_from @@ var "r"),
         string "-",
         escapeClassChar @@ (project _CharacterRange _CharacterRange_to @@ var "r")]]
@@ -219,10 +219,10 @@ characterClass :: TypedTermDefinition (Term -> String)
 characterClass = define "characterClass" $
   doc "Render a character class, including the leading ^ for a negated class." $
   "cc" ~>
-    Strings.cat $ list [
+    Strings.concat $ list [
       string "[",
       Logic.ifElse (project _CharacterClass _CharacterClass_negated @@ var "cc") (string "^") (string ""),
-      Strings.cat (Lists.map (asTerm classItem) (project _CharacterClass _CharacterClass_items @@ var "cc")),
+      Strings.concat (Lists.map (asTerm classItem) (project _CharacterClass _CharacterClass_items @@ var "cc")),
       string "]"]
 
 -- The dialect divergence: Hydra's . (any incl. newline) renders as the explicit full-range class
@@ -236,7 +236,7 @@ atom = define "atom" $
       _Atom_any>>: constant (asTerm anyClass),
       _Atom_anchorStart>>: constant (string "^"),
       _Atom_anchorEnd>>: constant (string "$"),
-      _Atom_group>>: "g" ~> Strings.cat $ list [
+      _Atom_group>>: "g" ~> Strings.concat $ list [
         string "(",
         alternation @@ var "g",
         string ")"],
@@ -251,11 +251,11 @@ quantifier = define "quantifier" $
       _Quantifier_zeroOrOne>>: constant (string "?"),
       _Quantifier_zeroOrMore>>: constant (string "*"),
       _Quantifier_oneOrMore>>: constant (string "+"),
-      _Quantifier_exactly>>: "n" ~> Strings.cat $ list [
+      _Quantifier_exactly>>: "n" ~> Strings.concat $ list [
         string "{", Literals.showInt32 (var "n"), string "}"],
-      _Quantifier_atLeast>>: "n" ~> Strings.cat $ list [
+      _Quantifier_atLeast>>: "n" ~> Strings.concat $ list [
         string "{", Literals.showInt32 (var "n"), string ",}"],
-      _Quantifier_range>>: "r" ~> Strings.cat $ list [
+      _Quantifier_range>>: "r" ~> Strings.concat $ list [
         string "{",
         Literals.showInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
         string ",",
@@ -266,19 +266,19 @@ quantified :: TypedTermDefinition (Term -> String)
 quantified = define "quantified" $
   doc "Render an atom followed by its quantifier suffix." $
   "qa" ~>
-    Strings.cat2
+    Strings.concat2
       (atom @@ (project _Quantified _Quantified_atom @@ var "qa"))
       (quantifier @@ (project _Quantified _Quantified_quantifier @@ var "qa"))
 
 sequence' :: TypedTermDefinition ([Term] -> String)
 sequence' = define "regexSequence" $
   doc "Render a sequence of quantified atoms by concatenation." $
-  "s" ~> Strings.cat (Lists.map (asTerm quantified) (var "s"))
+  "s" ~> Strings.concat (Lists.map (asTerm quantified) (var "s"))
 
 alternation :: TypedTermDefinition ([Term] -> String)
 alternation = define "alternation" $
   doc "Render an alternation, joining its branches with the | operator." $
-  "alt" ~> Strings.intercalate (string "|") (Lists.map (asTerm sequence') (var "alt"))
+  "alt" ~> Strings.join (string "|") (Lists.map (asTerm sequence') (var "alt"))
 
 printRegex :: TypedTermDefinition ([Term] -> String)
 printRegex = define "printRegex" $

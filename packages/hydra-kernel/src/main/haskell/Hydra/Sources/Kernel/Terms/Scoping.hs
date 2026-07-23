@@ -118,7 +118,7 @@ extendGraphForLet = define "extendGraphForLet" $
       (Graph.graphBoundTerms $ var "g"))
     -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
     (Maps.union
-      (Maps.fromList $ Optionals.cat $ Lists.map
+      (Maps.fromList $ Optionals.givens $ Lists.map
         ("b" ~> Optionals.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
           (Core.bindingTypeScheme $ var "b"))
         (var "bindings"))
@@ -172,7 +172,7 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
   -- Merge new binding terms/types into existing graph
   "newTerms" <~ (Maps.fromList (Lists.map ("b" ~>
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) :: TypedTerm (M.Map Name Term)) $
-  "newTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+  "newTypes" <~ (Maps.fromList (Optionals.givens (Lists.map ("b" ~>
     Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingTypeScheme (var "b"))) (var "bindings"))) :: TypedTerm (M.Map Name TypeScheme)) $
   Graph.graph
@@ -245,7 +245,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   "ts" ~>
   "variables" <~ Core.typeSchemeVariables (var "ts") $
   "body" <~ Core.typeSchemeBody (var "ts") $
-  "constraintsMap" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+  "constraintsMap" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
   -- Build TypeParameters, looking up each variable's class constraints in the constraints map.
   "typeParams" <~ Lists.map
     ("v" ~> Typing.typeParameter (var "v") $ optCases
@@ -272,7 +272,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
       pair
         (Lists.cons
           (Typing.parameter
-            (Core.name $ Strings.cat (list [string "arg", Literals.showInt32 (var "i")]))
+            (Core.name $ Strings.concat (list [string "arg", Literals.showInt32 (var "i")]))
             Phantoms.nothing
             (var "ty")
             false)

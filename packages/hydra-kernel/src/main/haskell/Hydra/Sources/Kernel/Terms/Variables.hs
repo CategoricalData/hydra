@@ -198,7 +198,7 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
         var "collectVars" @@
           (Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars")) @@
           (Core.forallTypeBody $ var "ft")]) $
-  (Lists.nub :: TypedTerm [Name] -> TypedTerm [Name]) $ var "collectVars" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
+  (Lists.distinct :: TypedTerm [Name] -> TypedTerm [Name]) $ var "collectVars" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
 
 freeVariablesInTypeScheme :: TypedTermDefinition (TypeScheme -> S.Set Name)
 freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
@@ -235,7 +235,7 @@ normalizeTypeVariablesInTerm :: TypedTermDefinition (Term -> Term)
 normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   "term" ~>
-  "replaceName" <~ ("subst" ~> "v" ~> Optionals.fromOptional (var "v") $ Maps.lookup (var "v" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))) $
+  "replaceName" <~ ("subst" ~> "v" ~> Optionals.withDefault (var "v") $ Maps.lookup (var "v" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))) $
   "substType" <~ ("subst" ~> "typ" ~>
     "rewrite" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
       (Just $ var "recurse" @@ var "typ") [
@@ -275,7 +275,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
             "k"    <~ Lists.length (var "vars") $
             -- Build exactly k fresh names t{next}, t{next+1}, ...
             "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
-              "ti" <~ Core.name (Strings.cat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
+              "ti" <~ Core.name (Strings.concat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
               Logic.ifElse (Equality.equal (var "rem") (int32 0))
                 (Lists.reverse (var "acc2"))
                 (var "gen"
@@ -293,7 +293,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                 ("p" ~>
                   "oldName" <~ Pairs.first (var "p") $
                   "meta" <~ Pairs.second (var "p") $
-                  "newName" <~ Optionals.fromOptional (var "oldName") (Maps.lookup (var "oldName" :: TypedTerm Name) (var "newSubst")) $
+                  "newName" <~ Optionals.withDefault (var "oldName") (Maps.lookup (var "oldName" :: TypedTerm Name) (var "newSubst")) $
                   pair (var "newName") (var "meta"))
                 (Maps.toList $ (var "constraintMap" :: TypedTerm (M.Map Name TypeVariableConstraints))) :: TypedTerm (M.Map Name TypeVariableConstraints))) $
             "oldConstraints" <~ Core.typeSchemeConstraints (var "ts") $
@@ -371,7 +371,7 @@ substituteTypeVariables = define "substituteTypeVariables" $
   "replace" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
     (Just $ var "recurse" @@ var "typ") [
     _Type_variable>>: "n" ~>
-      Core.typeVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))]) $
+      Core.typeVariable $ Optionals.withDefault (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))]) $
   Rewriting.rewriteType @@ var "replace" @@ var "typ"
 
 substituteVariable :: TypedTermDefinition (Name -> Name -> Term -> Term)
@@ -397,7 +397,7 @@ substituteVariables = define "substituteVariables" $
     cases _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "n" ~>
-        Core.termVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name)),
+        Core.termVariable $ Optionals.withDefault (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name)),
       _Term_lambda>>: "l" ~>
         Optionals.cases (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst" :: TypedTerm (M.Map Name Name))) (var "recurse" @@ var "term") (constant $ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
@@ -409,7 +409,7 @@ unshadowVariables = define "unshadowVariables" $
   "term0" ~>
   -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
   "freshName" <~ ("base" ~> "i" ~> "m" ~>
-    "candidate" <~ Core.name (Strings.cat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
+    "candidate" <~ Core.name (Strings.concat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
     Logic.ifElse (Maps.member (var "candidate") (var "m" :: TypedTerm (M.Map Name Name)))
       (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
       (var "candidate")) $

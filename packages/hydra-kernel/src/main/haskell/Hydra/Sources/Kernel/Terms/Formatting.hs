@@ -18,6 +18,7 @@ import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic    as Logic
@@ -101,7 +102,7 @@ convertCase = define "convertCase" $
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
           (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TypedTerm [Char]])))
-          (Optionals.fromOptional (var "acc") $
+          (Optionals.withDefault (var "acc") $
             Optionals.map ("uc" ~>
               Lists.cons (Lists.cons (var "c") (Pairs.first $ var "uc"))
                 (Pairs.second $ var "uc"))
@@ -115,10 +116,10 @@ convertCase = define "convertCase" $
         _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
         _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
     $ (match _CaseConvention Nothing [
-      _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.cat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts")),
-      _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts"),
-      _CaseConvention_lowerSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive DefStrings.toLower) $ var "parts"),
-      _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive DefStrings.toUpper) $ var "parts")
+      _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts")),
+      _CaseConvention_pascal>>: constant $ Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts"),
+      _CaseConvention_lowerSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toLower) $ var "parts"),
+      _CaseConvention_upperSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toUpper) $ var "parts")
       ]) @@ var "to"
   where
     emptyParts = list [list ([] :: [TypedTerm Char])]
@@ -129,7 +130,7 @@ convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreT
   lambda "s" $
     "parts" <~ Strings.splitOn (string "_") (var "s") $
     "snakeParts" <~ Lists.map (lambda "p" $ convertCaseCamelToLowerSnake @@ var "p") (var "parts") $
-    Strings.intercalate (string "_") (var "snakeParts")
+    Strings.join (string "_") (var "snakeParts")
 
 convertCaseCamelToLowerSnake :: TypedTermDefinition (String -> String)
 convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
@@ -180,10 +181,10 @@ mapFirstLetter = define "mapFirstLetter" $
     (Strings.null $ var "s")
     (var "s")
     ("list" <~ Strings.toList (var "s") $
-     Optionals.fromOptional (var "s") $
+     Optionals.withDefault (var "s") $
        Optionals.map ("uc" ~>
          "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.pure (Pairs.first $ var "uc"))) $
-         Strings.cat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
+         Strings.concat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
          (Lists.uncons $ var "list"))
 
 nonAlnumToUnderscores :: TypedTermDefinition (String -> String)
@@ -191,10 +192,10 @@ nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
   doc "Replace sequences of non-alphanumeric characters with single underscores" $
   "input" ~>
   "isAlnum" <~ ("c" ~> Logic.or
-    (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
+    (Logic.and (Ordering.gte (var "c") (char 'A')) (Ordering.lte (var "c") (char 'Z')))
     (Logic.or
-      (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
-      (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9'))))) $
+      (Logic.and (Ordering.gte (var "c") (char 'a')) (Ordering.lte (var "c") (char 'z')))
+      (Logic.and (Ordering.gte (var "c") (char '0')) (Ordering.lte (var "c") (char '9'))))) $
   "replace" <~ ("p" ~> "c" ~>
     "s" <~ Pairs.first (var "p") $
     "b" <~ Pairs.second (var "p") $
@@ -218,8 +219,8 @@ normalizeComment = define "normalizeComment" $
     -- Code point 46 is '.'. Nothing is unreachable here: stripped is non-empty
     -- by the null check above, so lastIdx is a valid index.
     ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
-     "appended" <~ Strings.cat2 (var "stripped") (string ".") $
-     Optionals.cases (Strings.maybeCharAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
+     "appended" <~ Strings.concat2 (var "stripped") (string ".") $
+     Optionals.cases (Strings.charAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
          (Equality.equal (var "lastChar") (int32 46))
          (var "stripped")
          (var "appended")))
@@ -232,9 +233,9 @@ sanitizeWithUnderscores = define "sanitizeWithUnderscores" $
 showList :: TypedTermDefinition ((a -> String) -> [a] -> String)
 showList = define "showList" $
   doc "Format a list of elements as a bracketed, comma-separated string" $
-  "f" ~> "els" ~> Strings.cat $ list [
+  "f" ~> "els" ~> Strings.concat $ list [
     string "[",
-    Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
+    Strings.join (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
 stripLeadingAndTrailingWhitespace :: TypedTermDefinition (String -> String)
@@ -282,7 +283,7 @@ withCharacterAliases = define "withCharacterAliases" $
       pair (int32 124) (string "verbar"),
       pair (int32 125) (string "rcub"),
       pair (int32 126) (string "tilde")],
-    "alias">: lambda "c" $ Optionals.fromOptional
+    "alias">: lambda "c" $ Optionals.withDefault
       (Lists.pure $ var "c")
       (Optionals.map (reify Strings.toList) $ Maps.lookup (var "c" :: TypedTerm Int) (var "aliases"))]
     $ Strings.fromList $ Lists.filter (reify Chars.isAlphaNum) $ Lists.concat $
@@ -299,14 +300,14 @@ wrapLine = define "wrapLine" $
         (Lists.reverse $ var "trunc"),
       "prefix">: Lists.reverse $ Pairs.second $ var "spanResult",
       "suffix">: Lists.reverse $ Pairs.first $ var "spanResult"]
-      $ Logic.ifElse (Equality.lte (Lists.length $ var "rem") (var "maxlen"))
+      $ Logic.ifElse (Ordering.lte (Lists.length $ var "rem") (var "maxlen"))
         (Lists.reverse $ Lists.cons (var "rem") (var "prev"))
         (Logic.ifElse (Lists.null $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
           -- prefix is non-empty here (guarded above), so maybeInit is always Just.
-          (Optionals.fromOptional
+          (Optionals.withDefault
             (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
             (Optionals.map
               ("pfxInit" ~> var "helper" @@ (Lists.cons (var "pfxInit") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem")))))
-              (Lists.maybeInit $ var "prefix"))))]
-    $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TypedTerm Char])) @@ (Strings.toList $ var "input")
+              (Lists.init $ var "prefix"))))]
+    $ Strings.fromList $ Lists.join (list [char '\n']) $ var "helper" @@ (list ([] :: [TypedTerm Char])) @@ (Strings.toList $ var "input")
