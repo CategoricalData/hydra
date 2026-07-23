@@ -309,17 +309,17 @@ monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
     (primitive DefMath.mul @@ int32 100 @@ int32 0)
     (int32 0),
   test "divide integers"
-    (primitive DefMath.maybeDiv @@ int32 20 @@ int32 4)
+    (primitive DefMath.div @@ int32 20 @@ int32 4)
     (Core.termOptional $ just (int32 5)),
   test "modulo"
-    (primitive DefMath.maybeMod @@ int32 17 @@ int32 5)
+    (primitive DefMath.mod @@ int32 17 @@ int32 5)
     (Core.termOptional $ just (int32 2)),
   -- Binary string functions
   test "splitOn basic"
     (primitive DefStrings.splitOn @@ string "," @@ string "a,b,c")
     (list [string "a", string "b", string "c"]),
   test "cat2 strings"
-    (primitive DefStrings.cat2 @@ string "hello" @@ string "world")
+    (primitive DefStrings.concat2 @@ string "hello" @@ string "world")
     (string "helloworld")]
   -- Note: "extra arguments are tolerated" test removed; it produces non-well-typed output
   where
@@ -372,14 +372,14 @@ polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
     (int32 1),
   -- List maybeHead
   test "maybeHead of integer list"
-    (primitive DefLists.maybeHead @@ list [int32 10, int32 20, int32 30])
+    (primitive DefLists.head @@ list [int32 10, int32 20, int32 30])
     (Core.termOptional $ just (int32 10)),
   test "maybeHead of string list"
-    (primitive DefLists.maybeHead @@ list [string "first", string "second"])
+    (primitive DefLists.head @@ list [string "first", string "second"])
     (Core.termOptional $ just (string "first")),
   -- List maybeLast
   test "maybeLast of integer list"
-    (primitive DefLists.maybeLast @@ list [int32 10, int32 20, int32 30])
+    (primitive DefLists.last @@ list [int32 10, int32 20, int32 30])
     (Core.termOptional $ just (int32 30)),
   -- List concat
   test "concat two integer lists"

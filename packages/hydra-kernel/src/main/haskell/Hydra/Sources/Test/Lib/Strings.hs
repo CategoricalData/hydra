@@ -44,13 +44,13 @@ allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [
-      stringsCat,
-      stringsCat2,
+      stringsConcat,
+      stringsConcat2,
       stringsFromList,
-      stringsIntercalate,
+      stringsJoin,
       stringsLength,
       stringsLines,
-      stringsMaybeCharAt,
+      stringsCharAt,
       stringsNull,
       stringsSplitOn,
       stringsToList,
@@ -62,13 +62,13 @@ allTests = define "allTests" $
       showInt32 :: TypedTerm (Int -> String)
       showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
       showBool :: TypedTerm (Bool -> String)
-      showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+      showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
       showStringList :: TypedTerm ([String] -> String)
-      showStringList = Phantoms.lambda "xs" $ Literals.showString (Strings.intercalate (Phantoms.string ", ") (Phantoms.var "xs"))
+      showStringList = Phantoms.lambda "xs" $ Literals.printString (Strings.join (Phantoms.string ", ") (Phantoms.var "xs"))
       showIntList :: TypedTerm ([Int] -> String)
-      showIntList = Phantoms.lambda "xs" $ Strings.intercalate (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
+      showIntList = Phantoms.lambda "xs" $ Strings.join (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
 
-      stringsCat = subgroup "cat" [
+      stringsConcat = subgroup "concat" [
         -- Basic functionality
         test "basic concatenation" ["one", "two", "three"] "onetwothree",
         test "single string" ["hello"] "hello",
@@ -87,10 +87,10 @@ allTests = define "allTests" $
         test "null character" ["hello", "\0", "world"] "hello\0world"]
         where
           test name ls result = stringEvalPair name
-            (Strings.cat (Phantoms.list (Phantoms.string <$> ls)))
+            (Strings.concat (Phantoms.list (Phantoms.string <$> ls)))
             (Phantoms.string result)
   
-      stringsCat2 = subgroup "cat2" [
+      stringsConcat2 = subgroup "concat2" [
         test "basic concatenation" "hello" "world" "helloworld",
         test "empty first string" "" "world" "world",
         test "empty second string" "hello" "" "hello",
@@ -100,7 +100,7 @@ allTests = define "allTests" $
         test "null characters" "hello\0" "world" "hello\0world"]
         where
           test name s1 s2 result = stringEvalPair name
-            (Strings.cat2 (Phantoms.string s1) (Phantoms.string s2))
+            (Strings.concat2 (Phantoms.string s1) (Phantoms.string s2))
             (Phantoms.string result)
   
       stringsFromList = subgroup "fromList" [
@@ -116,7 +116,7 @@ allTests = define "allTests" $
             (Strings.fromList (Phantoms.list (Phantoms.int32 <$> codePoints)))
             (Phantoms.string result)
   
-      stringsIntercalate = subgroup "intercalate" [
+      stringsJoin = subgroup "join" [
         -- Basic functionality
         test "comma separator" "," ["one", "two", "three"] "one,two,three",
         test "empty separator" "" ["a", "b", "c"] "abc",
@@ -132,7 +132,7 @@ allTests = define "allTests" $
         test "newline separator" "\n" ["line1", "line2"] "line1\nline2"]
         where
           test name sep strs result = stringEvalPair name
-            (Strings.intercalate (Phantoms.string sep) (Phantoms.list (Phantoms.string <$> strs)))
+            (Strings.join (Phantoms.string sep) (Phantoms.list (Phantoms.string <$> strs)))
             (Phantoms.string result)
   
       stringsLength = subgroup "length" [
@@ -170,7 +170,7 @@ allTests = define "allTests" $
             (Strings.lines (Phantoms.string s))
             (Phantoms.list (Phantoms.string <$> result))
   
-      stringsMaybeCharAt = subgroup "maybeCharAt" [
+      stringsCharAt = subgroup "charAt" [
         test "first character" 0 "hello" (Just 104),
         test "middle character" 2 "hello" (Just 108),
         test "last character" 4 "hello" (Just 111),
@@ -182,7 +182,7 @@ allTests = define "allTests" $
         test "negative index" (-1) "hello" Nothing,
         test "empty string" 0 "" Nothing]
         where
-          test name idx s result = primCase name DefStrings.maybeCharAt [int32 idx, string s] (optionalInt32 result)
+          test name idx s result = primCase name DefStrings.charAt [int32 idx, string s] (optionalInt32 result)
           optionalInt32 Nothing = Core.termOptional nothing
           optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 

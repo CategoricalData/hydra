@@ -169,15 +169,15 @@ primitivesGroup = subgroup "primitives" [
 -- Uses Phantoms.cases to pattern-match the ParseResult union.
 showParseResult :: TypedTerm (ParseResult Value) -> TypedTerm String
 showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
-    _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
+    _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.concat2
       (Phantoms.string "success(")
-      (Strings.cat2
+      (Strings.concat2
         (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
-        (Strings.cat2 (Phantoms.string ", ")
-          (Strings.cat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
-    _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.cat2
+        (Strings.concat2 (Phantoms.string ", ")
+          (Strings.concat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
+    _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.concat2
       (Phantoms.string "failure(")
-      (Strings.cat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
+      (Strings.concat2 (Phantoms.string "parse error") (Phantoms.string ")")))]
 
 stringsGroup :: TypedTerm TestGroup
 stringsGroup = subgroup "strings" [

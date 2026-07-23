@@ -70,8 +70,8 @@ sccs cs = list [list (int32 <$> c) | c <- cs]
 -- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
 showEitherResult :: TypedTerm (Either [[Int]] [Int]) -> TypedTerm String
 showEitherResult = Eithers.either
-  (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
-  (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
+  (lambda "cs" (Strings.concat2 (string "left(") (Strings.concat2 (showIntListList (var "cs")) (string ")"))))
+  (lambda "xs" (Strings.concat2 (string "right(") (Strings.concat2 (showIntList (var "xs")) (string ")"))))
 
 -- | Show a list of Int32 as a string like "[1, 2, 3]"
 showIntList :: TypedTerm [Int] -> TypedTerm String

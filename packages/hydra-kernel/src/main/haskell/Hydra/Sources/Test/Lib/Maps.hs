@@ -21,6 +21,7 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Math as Math
@@ -51,7 +52,7 @@ pPairList :: [(Int, String)] -> TypedTerm [(Int, String)]
 pPairList pairs = Phantoms.list $ fmap (\(k, v) -> Phantoms.pair (Phantoms.int32 k) (Phantoms.string v)) pairs
 
 showBool :: TypedTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
@@ -69,7 +70,7 @@ showPairList :: TypedTerm ([(Int, String)] -> String)
 showPairList = Phantoms.lambda "xs" $ PrintCore.list_ @@ (Phantoms.lambda "p" $ PrintCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
 
 showString' :: TypedTerm (String -> String)
-showString' = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
+showString' = Phantoms.lambda "s" $ Literals.printString (Phantoms.var "s")
 
 showStringList :: TypedTerm ([String] -> String)
 showStringList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showString' @@ Phantoms.var "xs"
@@ -156,9 +157,9 @@ mapsFilter = subgroup "filter" [
     test name m result = evalPair name showIntStringMap
       (Maps.filter
         (Phantoms.lambda "v" $ Equality.equal
-          (Optionals.fromOptional (Phantoms.int32 0)
+          (Optionals.withDefault (Phantoms.int32 0)
             (Optionals.map (Phantoms.lambda "c" $ Chars.toLower (Phantoms.var "c"))
-              (Strings.maybeCharAt (Phantoms.int32 0) (Phantoms.var "v"))))
+              (Strings.charAt (Phantoms.int32 0) (Phantoms.var "v"))))
           (Phantoms.int32 97))
         (pMap m))
       (pMap result)
@@ -170,7 +171,7 @@ mapsFilterWithKey = subgroup "filterWithKey" [
   test "empty map" [] []]
   where
     test name m result = evalPair name showIntStringMap
-      (Maps.filterWithKey (Phantoms.lambda "k" $ Phantoms.lambda "v" $ Equality.gt (Phantoms.var "k") (Phantoms.int32 1)) (pMap m))
+      (Maps.filterWithKey (Phantoms.lambda "k" $ Phantoms.lambda "v" $ Ordering.gt (Phantoms.var "k") (Phantoms.int32 1)) (pMap m))
       (pMap result)
 
 mapsFindWithDefault :: TypedTerm TestGroup

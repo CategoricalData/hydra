@@ -44,7 +44,7 @@ pIntSet :: [Int] -> TypedTerm (S.Set Int)
 pIntSet xs = Phantoms.set (Phantoms.int32 <$> xs)
 
 showBool :: TypedTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")

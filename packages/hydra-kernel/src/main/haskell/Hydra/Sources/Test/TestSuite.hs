@@ -22,6 +22,7 @@ import qualified Hydra.Sources.Test.Lib.Effects as Effects
 import qualified Hydra.Sources.Test.Lib.Eithers as Eithers
 import qualified Hydra.Sources.Test.Lib.Equality as Equality
 import qualified Hydra.Sources.Test.Lib.Files as Files
+import qualified Hydra.Sources.Test.Lib.Functions as Functions
 import qualified Hydra.Sources.Test.Lib.Hashing as Hashing
 import qualified Hydra.Sources.Test.Lib.Lists as Lists
 import qualified Hydra.Sources.Test.Lib.Literals as Literals
@@ -29,6 +30,7 @@ import qualified Hydra.Sources.Test.Lib.Logic as Logic
 import qualified Hydra.Sources.Test.Lib.Maps as Maps
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Optionals as Optionals
+import qualified Hydra.Sources.Test.Lib.Ordering as LibOrdering
 import qualified Hydra.Sources.Test.Annotations as Annotations
 -- TODO(#547): move to per-package test aggregation so the kernel no longer
 -- references hydra-build's test modules. These three (hydra.test.build.*) live
@@ -114,6 +116,7 @@ libPairs = [
   (Eithers.ns, Eithers.allTests),
   (Equality.ns, Equality.allTests),
   (Files.ns, Files.allTests),
+  (Functions.ns, Functions.allTests),
   (Hashing.ns, Hashing.allTests),
   (Lists.ns, Lists.allTests),
   (Literals.ns, Literals.allTests),
@@ -121,6 +124,7 @@ libPairs = [
   (Maps.ns, Maps.allTests),
   (Math.ns, Math.allTests),
   (Optionals.ns, Optionals.allTests),
+  (LibOrdering.ns, LibOrdering.allTests),
   (Pairs.ns, Pairs.allTests),
   (Regex.ns, Regex.allTests),
   (Sets.ns, Sets.allTests),
@@ -165,9 +169,9 @@ testSuiteModules :: [Module]
 testSuiteModules =
   -- Lib tests
   [Chars.module_, Effects.module_, Eithers.module_, Equality.module_, Files.module_,
-   Hashing.module_,
+   Functions.module_, Hashing.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
-   Math.module_, Optionals.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
+   Math.module_, Optionals.module_, LibOrdering.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
    System.module_, Text.module_,
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,

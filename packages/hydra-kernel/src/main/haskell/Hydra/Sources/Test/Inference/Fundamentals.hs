@@ -660,7 +660,7 @@ testGroupForPrimitives = define "testGroupForPrimitives" $
           @@ string "hello")
         (Core.typeEffect T.int32),
       expectMono 5 []
-        (primitive DefEffects.foldl
+        (primitive DefEffects.foldList
           @@ (lambda "acc" $ lambda "s" $
             primitive DefEffects.pure @@ (primitive DefMath.add @@ var "acc" @@ (primitive DefStrings.length @@ var "s")))
           @@ int32 0

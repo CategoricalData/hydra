@@ -17,6 +17,7 @@ import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
 import Hydra.Testing
@@ -67,7 +68,7 @@ effectsBind = subgroup "bind" [
   effectfulCase "bind threads a pure value into the next effect"
     (primitive DefEffects.bind
       @@ (primitive DefEffects.pure @@ string "abc")
-      @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "s" @@ string "!")))
+      @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "s" @@ string "!")))
     (string "abc!")]
 
 -- map : (a -> b) -> effect<a> -> effect<b>
@@ -75,7 +76,7 @@ effectsMap :: TypedTerm TestGroup
 effectsMap = subgroup "map" [
   effectfulCase "map applies a pure function to an effect result"
     (primitive DefEffects.map
-      @@ (lambda "s" $ primitive DefStrings.cat2 @@ var "s" @@ string "-mapped")
+      @@ (lambda "s" $ primitive DefStrings.concat2 @@ var "s" @@ string "-mapped")
       @@ (primitive DefEffects.pure @@ string "x"))
     (string "x-mapped")]
 
@@ -84,7 +85,7 @@ effectsApply :: TypedTerm TestGroup
 effectsApply = subgroup "apply" [
   effectfulCase "apply applies an effectful function to an effectful argument"
     (primitive DefEffects.apply
-      @@ (primitive DefEffects.pure @@ (lambda "s" $ primitive DefStrings.cat2 @@ string ">" @@ var "s"))
+      @@ (primitive DefEffects.pure @@ (lambda "s" $ primitive DefStrings.concat2 @@ string ">" @@ var "s"))
       @@ (primitive DefEffects.pure @@ string "y"))
     (string ">y")]
 
@@ -93,8 +94,8 @@ effectsCompose :: TypedTerm TestGroup
 effectsCompose = subgroup "compose" [
   effectfulCase "compose runs two Kleisli arrows in sequence"
     (primitive DefEffects.compose
-      @@ (lambda "a" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "a" @@ string "1"))
-      @@ (lambda "b" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "b" @@ string "2"))
+      @@ (lambda "a" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "a" @@ string "1"))
+      @@ (lambda "b" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "b" @@ string "2"))
       @@ string "n")
     (string "n12")]
 
@@ -102,8 +103,8 @@ effectsCompose = subgroup "compose" [
 effectsFoldl :: TypedTerm TestGroup
 effectsFoldl = subgroup "foldl" [
   effectfulCase "foldl sequences an effect-returning step over a list"
-    (primitive DefEffects.foldl
-      @@ (lambda "acc" $ lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "acc" @@ var "x"))
+    (primitive DefEffects.foldList
+      @@ (lambda "acc" $ lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "acc" @@ var "x"))
       @@ string ""
       @@ list [string "a", string "b", string "c"])
     (string "abc")]
@@ -114,9 +115,9 @@ effectsMapList :: TypedTerm TestGroup
 effectsMapList = subgroup "mapList" [
   effectfulCase "mapList applies an effect-returning function across a list and collects results"
     (primitive DefEffects.map
-      @@ (lambda "xs" $ primitive DefStrings.cat @@ var "xs")
+      @@ (lambda "xs" $ primitive DefStrings.concat @@ var "xs")
       @@ (primitive DefEffects.mapList
-        @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "x" @@ string "."))
+        @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "x" @@ string "."))
         @@ list [string "a", string "b"]))
     (string "a.b.")]
 
@@ -126,14 +127,14 @@ effectsMapOptional :: TypedTerm TestGroup
 effectsMapOptional = subgroup "mapOptional" [
   effectfulCase "mapOptional over a present value applies the function"
     (primitive DefEffects.map
-      @@ (lambda "m" $ primitive DefOptionals.fromOptional @@ string "<none>" @@ var "m")
+      @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "<none>" @@ var "m")
       @@ (primitive DefEffects.mapOptional
-        @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.cat2 @@ var "x" @@ string "!"))
+        @@ (lambda "x" $ primitive DefEffects.pure @@ (primitive DefStrings.concat2 @@ var "x" @@ string "!"))
         @@ (just $ string "present")))
     (string "present!"),
   effectfulCase "mapOptional over none yields none"
     (primitive DefEffects.map
-      @@ (lambda "m" $ primitive DefOptionals.fromOptional @@ string "<none>" @@ var "m")
+      @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "<none>" @@ var "m")
       @@ (primitive DefEffects.mapOptional
         @@ (lambda "x" $ primitive DefEffects.pure @@ var "x")
         @@ nothing))

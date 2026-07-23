@@ -85,7 +85,8 @@ foldEither showRight eff = retype $
 -- Decode a binary value to a string (assuming valid UTF-8 here), folding the decode either via fromRight.
 decodeBytes :: TypedTerm a -> TypedTerm b
 decodeBytes b = retype $
-  primitive DefEithers.fromRight @@ string "<decode error>" @@ (primitive DefText.decodeUtf8 @@ retype b)
+  primitive DefEithers.either @@ (lambda "_e" $ string "<decode error>") @@ (lambda "s" $ var "s")
+    @@ (primitive DefText.decodeUtf8 @@ retype b)
   where
     retype :: TypedTerm x -> TypedTerm y
     retype (TypedTerm t) = TypedTerm t
@@ -119,14 +120,14 @@ filesExists :: TypedTerm TestGroup
 filesExists = subgroup "exists" [
   effectfulCase "exists is false for a missing path"
     (foldEither
-      (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+      (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
       (primitive DefFiles.exists @@ path "nope.txt"))
     (string "false"),
   effectfulCase "exists is true after writeFile"
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "there.txt" @@ bytes "x")
       @@ (lambda "_w" $ foldEither
-            (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+            (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
             (primitive DefFiles.exists @@ path "there.txt")))
     (string "true")]
 
@@ -181,7 +182,7 @@ filesCreateDirectory = subgroup "createDirectory" [
     (primitive DefEffects.bind
       @@ (primitive DefFiles.createDirectory @@ false @@ path "sub")
       @@ (lambda "_c" $ foldEither
-            (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+            (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
             (primitive DefFiles.exists @@ path "sub")))
     (string "true")]
 
@@ -205,7 +206,7 @@ filesRemoveDirectory = subgroup "removeDirectory" [
       @@ (lambda "_d" $ primitive DefEffects.bind
             @@ (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-empty")
             @@ (lambda "_r" $ foldEither
-                  (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+                  (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
                   (primitive DefFiles.exists @@ path "rmdir-empty"))))
     (string "false"),
   effectfulCase "removeDirectory with recursive=false on a non-empty directory yields an error"
@@ -225,7 +226,7 @@ filesRemoveDirectory = subgroup "removeDirectory" [
             @@ (lambda "_w" $ primitive DefEffects.bind
                   @@ (primitive DefFiles.removeDirectory @@ true @@ path "rmdir-full")
                   @@ (lambda "_r" $ foldEither
-                        (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+                        (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
                         (primitive DefFiles.exists @@ path "rmdir-full")))))
     (string "false")]
 
@@ -238,7 +239,7 @@ filesRemoveFile = subgroup "removeFile" [
       @@ (lambda "_w" $ primitive DefEffects.bind
             @@ (primitive DefFiles.removeFile @@ path "rm.txt")
             @@ (lambda "_r" $ foldEither
-                  (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+                  (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
                   (primitive DefFiles.exists @@ path "rm.txt"))))
     (string "false")]
 

@@ -428,7 +428,7 @@ noChange name term = noChangeWithTags name [] term
 noChangeWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 noChangeWithTags name tags term = testCaseWithTags name tags term term
 
-cat = primitive $ DefStrings.cat
+cat = primitive $ DefStrings.concat
 foldl = primitive $ DefLists.foldl
 splitOn = primitive $ DefStrings.splitOn
 toLower = primitive $ DefStrings.toLower
@@ -440,7 +440,7 @@ testCase name = testCaseWithTags name []
 testCaseWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 testCaseWithTags name tags input output = universalCaseWithTags name tags
     (retype $ Eithers.either
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "e" (Strings.concat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
       (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))
     (retype $ showTermRef Phantoms.@@ output)

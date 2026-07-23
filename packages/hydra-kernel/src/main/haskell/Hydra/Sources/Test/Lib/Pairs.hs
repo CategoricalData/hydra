@@ -42,7 +42,7 @@ showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 -- Show a (Int, Int) pair as "(<int>, <int>)"
 showIntIntPair :: TypedTerm ((Int, Int) -> String)
-showIntIntPair = Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
+showIntIntPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
   Phantoms.string "(",
   Literals.showInt32 (Pairs.first (Phantoms.var "p")),
   Phantoms.string ", ",

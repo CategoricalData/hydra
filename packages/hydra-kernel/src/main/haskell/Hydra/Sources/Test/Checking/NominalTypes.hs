@@ -18,6 +18,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Ordering as DefOrdering
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Literals as DefLiterals
 import qualified Hydra.Lib.Maps as DefMaps
@@ -336,7 +337,7 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
   checkTest "filter using projection" []
     (primitive DefLists.filter @@
      (lambda "person" $
-      primitive DefEquality.gt @@
+      primitive DefOrdering.gt @@
       (project (TestTypes.testTypePersonName) (name "age") @@ var "person") @@
       int32 30) @@
      list [record (TestTypes.testTypePersonName) [
@@ -349,7 +350,7 @@ higherOrderRecordProjectionsTests = define "higherOrderRecordProjectionsTests" $
              "age">: (int32 25)]])
     (tyapp (primitive DefLists.filter) (Core.typeVariable $ TestTypes.testTypePersonName) @@
      (lambdaTyped "person" (Core.typeVariable $ TestTypes.testTypePersonName) $
-      tyapp (primitive DefEquality.gt) T.int32 @@
+      tyapp (primitive DefOrdering.gt) T.int32 @@
       (project (TestTypes.testTypePersonName) (name "age") @@ var "person") @@
       int32 30) @@
      list [record (TestTypes.testTypePersonName) [
@@ -979,14 +980,14 @@ recursiveUnionEliminationsTests = define "recursiveUnionEliminationsTests" $
     (match (TestTypes.testTypeHydraTypeName) nothing [
       "literal">: lambda "lit" (
         match (TestTypes.testTypeHydraLiteralTypeName) nothing [
-          "boolean">: lambda "b" (primitive DefLiterals.showBoolean @@ var "b"),
+          "boolean">: lambda "b" (primitive DefLiterals.printBoolean @@ var "b"),
           "string">: lambda "s" (var "s")] @@
         var "lit"),
       "list">: lambda "nested" (string "list")])
     (match (TestTypes.testTypeHydraTypeName) nothing [
       "literal">: lambdaTyped "lit" (Core.typeVariable $ TestTypes.testTypeHydraLiteralTypeName) (
         match (TestTypes.testTypeHydraLiteralTypeName) nothing [
-          "boolean">: lambdaTyped "b" T.boolean (primitive DefLiterals.showBoolean @@ var "b"),
+          "boolean">: lambdaTyped "b" T.boolean (primitive DefLiterals.printBoolean @@ var "b"),
           "string">: lambdaTyped "s" T.string (var "s")] @@
         var "lit"),
       "list">: lambdaTyped "nested" (Core.typeVariable $ TestTypes.testTypeHydraTypeName) (string "list")])
@@ -1167,10 +1168,10 @@ unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests"
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32),
   checkTest "match UnionMonomorphic with default" []
     (match (TestTypes.testTypeUnionMonomorphicName) (just (string "fallback")) [
-      "bool">: lambda "b" (primitive DefLiterals.showBoolean @@ var "b"),
+      "bool">: lambda "b" (primitive DefLiterals.printBoolean @@ var "b"),
       "string">: lambda "s" (var "s")])
     (match (TestTypes.testTypeUnionMonomorphicName) (just (string "fallback")) [
-      "bool">: lambdaTyped "b" T.boolean (primitive DefLiterals.showBoolean @@ var "b"),
+      "bool">: lambdaTyped "b" T.boolean (primitive DefLiterals.printBoolean @@ var "b"),
       "string">: lambdaTyped "s" T.string (var "s")])
     (T.function (Core.typeVariable $ TestTypes.testTypeUnionMonomorphicName) T.string)]
 
@@ -1453,9 +1454,9 @@ chainedUnwrappingTests = define "chainedUnwrappingTests" $
   subgroup "Chained unwrapping" [
   checkTest "unwrap then process" []
     (lambda "wrapped" $
-      primitive DefStrings.cat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
+      primitive DefStrings.concat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
     (lambdaTyped "wrapped" (Core.typeVariable $ TestTypes.testTypeStringAliasName) $
-      primitive DefStrings.cat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
+      primitive DefStrings.concat2 @@ (unwrap (TestTypes.testTypeStringAliasName) @@ var "wrapped") @@ string " suffix")
     (T.function (Core.typeVariable $ TestTypes.testTypeStringAliasName) T.string),
   checkTest "unwrap polymorphic then map" []
     (lambda "wrappedList" $

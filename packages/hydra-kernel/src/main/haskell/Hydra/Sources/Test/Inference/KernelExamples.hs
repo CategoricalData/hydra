@@ -55,11 +55,11 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
       expectMono 1 [tag_disabledForMinimalInference]
         (lambda "mapping" $ lambda "s" $ lets [
           "list">: primitive DefStrings.toList @@ var "s",
-          "firstLetter">: var "mapping" @@ (primitive DefStrings.fromList @@ (primitive DefOptionals.cat @@ list [primitive DefLists.maybeHead @@ var "list"]))] $
+          "firstLetter">: var "mapping" @@ (primitive DefStrings.fromList @@ (primitive DefOptionals.givens @@ list [primitive DefLists.head @@ var "list"]))] $
           primitive DefLogic.ifElse
             @@ (primitive DefStrings.null @@ var "s")
             @@ (var "s")
-            @@ (primitive DefStrings.cat2 @@ var "firstLetter" @@ (primitive DefStrings.fromList @@ (primitive DefLists.drop @@ int32 1 @@ var "list"))))
+            @@ (primitive DefStrings.concat2 @@ var "firstLetter" @@ (primitive DefStrings.fromList @@ (primitive DefLists.drop @@ int32 1 @@ var "list"))))
         (T.functionMany [T.function T.string T.string, T.string, T.string])],
 
     -- Simplified reproduction of fullyStripAndNormalizeType's 'go' binding using ifElse.
@@ -102,7 +102,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
                     @@ (primitive DefMath.add @@ var "depth" @@ int32 1)
                     @@ (primitive DefMaps.insert
                           @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_parameter) @@ var "ft")
-                          @@ (Terms.wrap (Core.nameLift _Name) (primitive DefStrings.cat2 @@ string "_" @@ (primitive DefLiterals.showInt32 @@ var "depth")))
+                          @@ (Terms.wrap (Core.nameLift _Name) (primitive DefStrings.concat2 @@ string "_" @@ (primitive DefLiterals.showInt32 @@ var "depth")))
                           @@ var "subst")
                     @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_body) @@ var "ft")]
               @@ var "t"] $

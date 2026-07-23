@@ -16,6 +16,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Ordering as DefOrdering
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Maps as DefMaps
 import qualified Hydra.Lib.Math as DefMath
@@ -243,7 +244,7 @@ testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints"
         T.boolean,
       -- equality.compare "a" "b" => Comparison
       expectMono 2 []
-        (primitive DefEquality.compare @@ string "a" @@ string "b")
+        (primitive DefOrdering.compare @@ string "a" @@ string "b")
         (T.var "hydra.util.Comparison")],
 
     subgroup "List operations with concrete types" [
@@ -382,7 +383,7 @@ testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
         (T.functionMany [T.var "t0", T.var "t0", T.boolean]),
       -- equality.compare => forall x. Ord x => x -> x -> Comparison
       expectPolyConstrained 2 []
-        (primitive DefEquality.compare)
+        (primitive DefOrdering.compare)
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.var "t0", T.var "hydra.util.Comparison"])],
 
@@ -394,11 +395,11 @@ testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
         (T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- lists.nub => forall x. Eq x => [x] -> [x]
       expectPolyConstrained 2 []
-        (primitive DefLists.nub)
+        (primitive DefLists.distinct)
         ["t0"] [("t0", ["equality"])]
         (T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- lists.elem => forall x. Eq x => x -> [x] -> Boolean
       expectPolyConstrained 3 []
-        (primitive DefLists.elem)
+        (primitive DefLists.member)
         ["t0"] [("t0", ["equality"])]
         (T.functionMany [T.var "t0", T.list (T.var "t0"), T.boolean])]]

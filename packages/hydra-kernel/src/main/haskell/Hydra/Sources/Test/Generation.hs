@@ -193,7 +193,7 @@ showDef :: TypedTerm Definition -> TypedTerm String
 showDef d = Phantoms.cases _Definition d Nothing [
     _Definition_type>>: "td" ~> Phantoms.string "",
     _Definition_term>>: "td" ~>
-      Strings.cat (list [
+      Strings.concat (list [
         Core.unName (Packaging.termDefinitionName (var "td")),
         Phantoms.string " :: ",
         Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> PrintCore.typeScheme # var "ts"),
@@ -201,15 +201,15 @@ showDef d = Phantoms.cases _Definition d Nothing [
         PrintCore.term # (Packaging.termDefinitionBody (var "td")),
         Phantoms.string "\n"]),
     _Definition_primitive>>: "pd" ~>
-      Strings.cat (list [
+      Strings.concat (list [
         Core.unName (Packaging.primitiveDefinitionName (var "pd")),
         Phantoms.string " :: <primitive>\n"])]
 
 showModule :: TypedTerm Module -> TypedTerm String
-showModule m = Strings.cat (Lists.map ("d" ~> showDef (var "d")) (Packaging.moduleDefinitions m))
+showModule m = Strings.concat (Lists.map ("d" ~> showDef (var "d")) (Packaging.moduleDefinitions m))
 
 showModules :: TypedTerm [Module] -> TypedTerm String
-showModules ms = Strings.cat (Lists.map ("m" ~> showModule (var "m")) ms)
+showModules ms = Strings.concat (Lists.map ("m" ~> showModule (var "m")) ms)
 
 showResult :: TypedTerm (Either Error [Module]) -> TypedTerm String
 showResult r = Eithers.either

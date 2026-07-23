@@ -109,7 +109,7 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
         "nested">: lambda "f" $ lambda "g" $ lambda "x" $
           var "f" @@ (var "g" @@ (var "f" @@ (var "g" @@ var "x"))),
         "int_f">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
-        "str_g">: lambda "s" $ primitive DefStrings.cat @@ list [var "s", string "!"],
+        "str_g">: lambda "s" $ primitive DefStrings.concat @@ list [var "s", string "!"],
         "bad">: var "nested" @@ var "int_f" @@ var "str_g"] $ var "bad")],
 
   subgroup "Function composition failures" [
@@ -117,7 +117,7 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
       (lets [
         "triple">: lambda "f" $ lambda "x" $ var "f" @@ (var "f" @@ (var "f" @@ var "x")),
         "increment">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
-        "stringify">: lambda "s" $ primitive DefStrings.cat @@ list [var "s", string "!"],
+        "stringify">: lambda "s" $ primitive DefStrings.concat @@ list [var "s", string "!"],
         "bad">: var "triple" @@ var "increment" @@ var "stringify"] $ var "bad"),
     expectFailure 2 []
       (lets [
@@ -321,9 +321,9 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 2 []
       (primitive DefSets.member @@ int32 42 @@ list [int32 42]),  -- Not a set
     expectFailure 3 []
-      (primitive DefLists.maybeHead @@ string "not a list"),
+      (primitive DefLists.head @@ string "not a list"),
     expectFailure 4 []
-      (primitive DefOptionals.fromOptional @@ int32 42 @@ string "not optional")],
+      (primitive DefOptionals.withDefault @@ int32 42 @@ string "not optional")],
 
   subgroup "Math primitive errors" [
     expectFailure 1 []
@@ -331,9 +331,9 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 2 []
       (primitive DefMath.mul @@ true @@ false),
     expectFailure 3 []
-      (primitive DefMath.maybeDiv @@ list [int32 42] @@ int32 2),
+      (primitive DefMath.div @@ list [int32 42] @@ int32 2),
     expectFailure 4 []
-      (primitive DefMath.maybeMod @@ int32 42 @@ string "not a number")]]
+      (primitive DefMath.mod @@ int32 42 @@ string "not a number")]]
 
 recursiveTypeTests :: TypedTermDefinition TestGroup
 recursiveTypeTests = define "recursiveTypeTests" $
@@ -388,15 +388,15 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
     expectFailure 2 []
       (primitive DefLists.length @@ int32 42),  -- Not a list
     expectFailure 3 []
-      (primitive DefLists.maybeHead @@ string "not a list"),
+      (primitive DefLists.head @@ string "not a list"),
     expectFailure 4 []
-      (primitive DefLists.maybeTail @@ int32 42)],
+      (primitive DefLists.tail @@ int32 42)],
 
   subgroup "String constructor errors" [
     expectFailure 1 []
       (primitive DefStrings.length @@ list [string "foo"]),  -- Not a string
     expectFailure 2 []
-      (primitive DefStrings.cat @@ int32 42),
+      (primitive DefStrings.concat @@ int32 42),
     expectFailure 3 []
       (primitive DefStrings.fromList @@ string "not a list"),
     expectFailure 4 []
@@ -410,7 +410,7 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
     expectFailure 3 []
       (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
     expectFailure 4 []
-      (primitive DefMath.maybeDiv @@ true @@ false)]]
+      (primitive DefMath.div @@ true @@ false)]]
 
 undefinedVariableTests :: TypedTermDefinition TestGroup
 undefinedVariableTests = define "undefinedVariableTests" $

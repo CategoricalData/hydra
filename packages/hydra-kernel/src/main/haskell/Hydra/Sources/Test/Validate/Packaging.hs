@@ -602,8 +602,8 @@ uc cname universe primNames targetModule expected = universalCase cname
   where
     showFindings :: TypedTerm [InvalidPackageError] -> TypedTerm String
     showFindings fs = retype $
-      Strings.cat2 (Phantoms.string "[") $
-        Strings.cat2 (Strings.intercalate (Phantoms.string ";") $
+      Strings.concat2 (Phantoms.string "[") $
+        Strings.concat2 (Strings.join (Phantoms.string ";") $
           Lists.map (Phantoms.lambda "e" $ Testing.showInvalidPackageErrorRef @@ Phantoms.var "e") fs)
           (Phantoms.string "]")
     retype :: TypedTerm x -> TypedTerm String

@@ -20,6 +20,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Sources.Kernel.Terms.Print.Util as PrintUtil
 
@@ -58,7 +59,7 @@ compResult _ = error "Invalid comparison"
 -- Test comparing two values
 compareTest :: String -> TypedTerm a -> TypedTerm a -> String -> TypedTerm TestCaseWithMetadata
 compareTest testName x y resultField = evalPair testName (asTerm PrintUtil.comparison)
-  (Equality.compare x y)
+  (Ordering.compare x y)
   (compResult resultField)
 
 -- Test equality
@@ -279,7 +280,7 @@ recordComparisonTests = subgroup "Record comparison (monomorphic)" [
 -- ============================================================
 
 showBool :: TypedTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 termComparisonTests :: TypedTerm TestGroup
 termComparisonTests = subgroup "Term comparison" [

@@ -359,7 +359,7 @@ sortBindingsCase cname bindings expected = universalCase cname
     showGroupFn :: TypedTerm ([(Name, Term)] -> String)
     showGroupFn = Phantoms.lambda "group" $ PrintCore.list_ @@ showBindingFn @@ Phantoms.var "group"
     showBindingFn :: TypedTerm ((Name, Term) -> String)
-    showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
+    showBindingFn = Phantoms.lambda "pair" $ Strings.concat (Phantoms.list [
       Phantoms.string "(",
       Core.unName (Pairs.first (Phantoms.var "pair")),
       Phantoms.string ", ",

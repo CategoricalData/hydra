@@ -65,9 +65,9 @@ nm s = Core.name $ Phantoms.string s
 
 -- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
 showNameSet :: TypedTerm (S.Set Name) -> TypedTerm String
-showNameSet s = Strings.cat $ plist [
+showNameSet s = Strings.concat $ plist [
   pstring "{",
-  Strings.intercalate (pstring ", ") (Lists.map (plambda "n" (Core.unName (pvar "n"))) (Sets.toList s)),
+  Strings.join (pstring ", ") (Lists.map (plambda "n" (Core.unName (pvar "n"))) (Sets.toList s)),
   pstring "}"]
   where
     plist = Phantoms.list; pstring = Phantoms.string; plambda = Phantoms.lambda; pvar = Phantoms.var

@@ -91,7 +91,7 @@ addGenerationPrefix :: TypedTermDefinition (ModuleName -> ModuleName)
 addGenerationPrefix = define "addGenerationPrefix" $
   doc "Add generation namespace prefix" $
   lambda "ns_" $
-    wrap _ModuleName (Strings.cat2 (string "generation.") (unwrap _ModuleName @@ var "ns_"))
+    wrap _ModuleName (Strings.concat2 (string "generation.") (unwrap _ModuleName @@ var "ns_"))
 
 
 -- | Build a Term representing a convertCase function call
@@ -231,8 +231,8 @@ transformToCompiledTests = define "transformToCompiledTests" $
     "desc">: project _TestGroup _TestGroup_description @@ var "tg",
     "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
     "cases_">: project _TestGroup _TestGroup_cases @@ var "tg",
-    "transformedCases">: Optionals.cat (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
-    "transformedSubgroups">: Optionals.cat (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
+    "transformedCases">: Optionals.givens (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
+    "transformedSubgroups">: Optionals.givens (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
     Logic.ifElse
       (Logic.and (Lists.null (var "transformedCases")) (Lists.null (var "transformedSubgroups")))
       nothing

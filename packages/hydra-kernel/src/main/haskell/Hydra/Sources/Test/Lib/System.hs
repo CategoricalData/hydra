@@ -25,6 +25,7 @@ import qualified Hydra.Time as Time
 import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Ordering as DefOrdering
 import qualified Hydra.Lib.Literals as DefLiterals
 import qualified Hydra.Lib.Logic as DefLogic
 import qualified Hydra.Lib.Maps as DefMaps
@@ -97,7 +98,8 @@ foldEither showRight eff = retype $
 -- Decode a binary value to a string (assuming valid UTF-8), folding the decode either via fromRight.
 decodeBytes :: TypedTerm a -> TypedTerm b
 decodeBytes b = retype $
-  primitive DefEithers.fromRight @@ string "<decode error>" @@ (primitive DefText.decodeUtf8 @@ retype b)
+  primitive DefEithers.either @@ (lambda "_e" $ string "<decode error>") @@ (lambda "s" $ var "s")
+    @@ (primitive DefText.decodeUtf8 @@ retype b)
   where
     retype :: TypedTerm x -> TypedTerm y
     retype (TypedTerm t) = TypedTerm t
@@ -196,13 +198,13 @@ systemExecute = subgroup "execute" [
     (string "0"),
   -- a program that runs and exits non-zero is right(result), NOT a SystemError; /usr/bin/false exits 1.
   effectfulCase "reports a non-zero exit status as right (not an error)"
-    (foldEither (lambda "r" $ primitive DefLiterals.showBoolean
-        @@ (primitive DefEquality.gt @@ resultExitCode (var "r") @@ int32 0))
+    (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
+        @@ (primitive DefOrdering.gt @@ resultExitCode (var "r") @@ int32 0))
       (primitive DefSystem.execute @@ command "/usr/bin/false" []))
     (string "true"),
   -- stderr is captured separately; ls of a missing path writes a diagnostic to stderr.
   effectfulCase "captures stderr separately from stdout"
-    (foldEither (lambda "r" $ primitive DefLiterals.showBoolean
+    (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
         @@ (primitive DefLogic.not @@ (primitive DefStrings.null @@ resultStderr (var "r"))))
       (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
     (string "true"),
@@ -234,7 +236,7 @@ systemGetEnvironment :: TypedTerm TestGroup
 systemGetEnvironment = subgroup "getEnvironment" [
   effectfulCase "does not contain a guaranteed-absent variable"
     (primitive DefEffects.map
-      @@ (lambda "m" $ primitive DefLiterals.showBoolean
+      @@ (lambda "m" $ primitive DefLiterals.printBoolean
             @@ (primitive DefMaps.member @@ Phantoms.wrap System._EnvironmentVariable (string absentVar) @@ var "m"))
       @@ (primitive DefSystem.getEnvironment))
     (string "false")]
@@ -245,7 +247,7 @@ systemGetEnvironmentVariable :: TypedTerm TestGroup
 systemGetEnvironmentVariable = subgroup "getEnvironmentVariable" [
   effectfulCase "yields none for a guaranteed-absent variable"
     (primitive DefEffects.map
-      @@ (lambda "m" $ primitive DefOptionals.fromOptional @@ string "absent" @@ var "m")
+      @@ (lambda "m" $ primitive DefOptionals.withDefault @@ string "absent" @@ var "m")
       @@ (primitive DefSystem.getEnvironmentVariable
             @@ Phantoms.wrap System._EnvironmentVariable (string absentVar)))
     (string "absent")]
@@ -256,19 +258,19 @@ systemGetTime :: TypedTerm TestGroup
 systemGetTime = subgroup "getTime" [
   effectfulCase "returns a positive number of seconds since the epoch"
     (primitive DefEffects.map
-      @@ (lambda "t" $ primitive DefLiterals.showBoolean
-            @@ (primitive DefEquality.gt
+      @@ (lambda "t" $ primitive DefLiterals.printBoolean
+            @@ (primitive DefOrdering.gt
                   @@ (Phantoms.project Time._Timespec Time._Timespec_seconds @@ var "t")
                   @@ int64 0))
       @@ (primitive DefSystem.getTime))
     (string "true"),
   effectfulCase "returns nanoseconds within the range [0, 1000000000)"
     (primitive DefEffects.map
-      @@ (lambda "t" $ primitive DefLiterals.showBoolean
+      @@ (lambda "t" $ primitive DefLiterals.printBoolean
             @@ (primitive DefLogic.and
-                  @@ (primitive DefEquality.gte
+                  @@ (primitive DefOrdering.gte
                         @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 0)
-                  @@ (primitive DefEquality.lt
+                  @@ (primitive DefOrdering.lt
                         @@ (Phantoms.project Time._Timespec Time._Timespec_nanoseconds @@ var "t") @@ uint32 1000000000)))
       @@ (primitive DefSystem.getTime))
     (string "true")]
@@ -278,7 +280,7 @@ systemGetWorkingDirectory :: TypedTerm TestGroup
 systemGetWorkingDirectory = subgroup "getWorkingDirectory" [
   effectfulCase "returns a non-empty path"
     (foldEither
-      (lambda "p" $ primitive DefLiterals.showBoolean
+      (lambda "p" $ primitive DefLiterals.printBoolean
         @@ (primitive DefLogic.not
               @@ (primitive DefStrings.null @@ (Phantoms.unwrap File._FilePath @@ var "p"))))
       (primitive DefSystem.getWorkingDirectory))

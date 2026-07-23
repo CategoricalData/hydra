@@ -192,10 +192,10 @@ noSchema = Phantoms.list ([] :: [TypedTerm Name])
 
 -- | Show a list of TypeConstraints as "[(left ~ right), ...]"
 showConstraints :: TypedTerm [TypeConstraint] -> TypedTerm String
-showConstraints cs = Strings.cat (Phantoms.list [
+showConstraints cs = Strings.concat (Phantoms.list [
   Phantoms.string "[",
-  Strings.intercalate (Phantoms.string ", ")
-    (Lists.map (Phantoms.lambda "c" $ Strings.cat (Phantoms.list [
+  Strings.join (Phantoms.string ", ")
+    (Lists.map (Phantoms.lambda "c" $ Strings.concat (Phantoms.list [
       Phantoms.string "(",
       PrintCore.type_ @@ Typing.typeConstraintLeft (Phantoms.var "c"),
       Phantoms.string " ~ ",
@@ -206,10 +206,10 @@ showConstraints cs = Strings.cat (Phantoms.list [
 
 -- | Show a TypeSubst as a sorted string like "{a: int32, b: string}"
 showTypeSubst :: TypedTerm TypeSubst -> TypedTerm String
-showTypeSubst ts = Strings.cat (Phantoms.list [
+showTypeSubst ts = Strings.concat (Phantoms.list [
   Phantoms.string "{",
-  Strings.intercalate (Phantoms.string ", ")
-    (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
+  Strings.join (Phantoms.string ", ")
+    (Lists.map (Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
       Core.unName (Pairs.first (Phantoms.var "p")),
       Phantoms.string ": ",
       PrintCore.type_ @@ Pairs.second (Phantoms.var "p")]))
@@ -371,8 +371,8 @@ unifyTypesTests = subgroup "unifyTypes" [
 variableOccursCase :: String -> TypedTerm Name -> TypedTerm Type -> TypedTerm Bool -> TypedTerm TestCaseWithMetadata
 variableOccursCase cname variable typ expected =
   universalCase cname
-    (Literals.showBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
-    (Literals.showBoolean expected)
+    (Literals.printBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
+    (Literals.printBoolean expected)
 
 variableOccursInTypeTests :: TypedTerm TestGroup
 variableOccursInTypeTests = subgroup "variableOccursInType" [

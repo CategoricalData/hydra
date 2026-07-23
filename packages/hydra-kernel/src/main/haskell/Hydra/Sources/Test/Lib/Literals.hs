@@ -265,7 +265,7 @@ literalsShowBoolean = subgroup "showBoolean" [
   test "true" true "true",
   test "false" false "false"]
   where
-    test name x result = primCase name DefLiterals.showBoolean [x] (string result)
+    test name x result = primCase name DefLiterals.printBoolean [x] (string result)
 
 literalsShowFloat32 :: TypedTerm TestGroup
 literalsShowFloat32 = subgroup "showFloat32" [
@@ -341,7 +341,7 @@ literalsShowString = subgroup "showString" [
   test "vertical tab" "\v" "\"\\v\"",
   test "delete" "\127" "\"\\DEL\""]
   where
-    test name x result = primCase name DefLiterals.showString [string x] (string result)
+    test name x result = primCase name DefLiterals.printString [string x] (string result)
 
 literalsShowUint16 :: TypedTerm TestGroup
 literalsShowUint16 = subgroup "showUint16" [
@@ -475,8 +475,8 @@ literalsReadBoolean = subgroup "readBoolean" [
   testJust "false" "false" false,
   testNothing "invalid" "yes"]
   where
-    testJust name x result = primCase name DefLiterals.readBoolean [string x] (Core.termOptional $ just result)
-    testNothing name x = primCase name DefLiterals.readBoolean [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseBoolean [string x] (Core.termOptional $ just result)
+    testNothing name x = primCase name DefLiterals.parseBoolean [string x] (Core.termOptional nothing)
 
 literalsReadFloat32 :: TypedTerm TestGroup
 literalsReadFloat32 = subgroup "readFloat32" [
@@ -541,8 +541,8 @@ literalsReadString = subgroup "readString" [
   testJust "empty quoted" "\"\"" "",
   testNothing "unquoted" "hello"]
   where
-    testJust name x result = primCase name DefLiterals.readString [string x] (Core.termOptional $ just (string result))
-    testNothing name x = primCase name DefLiterals.readString [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseString [string x] (Core.termOptional $ just (string result))
+    testNothing name x = primCase name DefLiterals.parseString [string x] (Core.termOptional nothing)
 
 literalsReadUint16 :: TypedTerm TestGroup
 literalsReadUint16 = subgroup "readUint16" [

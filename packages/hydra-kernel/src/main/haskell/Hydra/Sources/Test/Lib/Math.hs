@@ -51,19 +51,15 @@ allTests = definitionInModule module_ "allTests" $
       mathAbs,
       mathAdd,
       mathEven,
-      mathMax,
-      mathMaybeDiv,
-      mathMin,
-      mathMaybeMod,
+      mathDiv,
+      mathMod,
       mathMul,
       mathNegate,
       mathOdd,
-      mathMaybePred,
       mathRange,
-      mathMaybeRem,
+      mathRem,
       mathSignum,
       mathSub,
-      mathMaybeSucc,
       -- Float64 primitives
       mathAddFloat64,
       mathMulFloat64,
@@ -357,19 +353,8 @@ mathLogBase = subgroup "logBase" [
   where
     test name base x result = primCase name DefMath.logBase [float64 base, float64 x] (float64 result)
 
-mathMax :: TypedTerm TestGroup
-mathMax = subgroup "max" [
-  test "first is larger" 10 5 10,
-  test "second is larger" 5 10 10,
-  test "equal values" 7 7 7,
-  test "negative numbers" (-3) (-5) (-3),
-  test "mixed sign" (-5) 5 5,
-  test "with zero" 0 42 42]
-  where
-    test name x y result = primCase name DefMath.max [int32 x, int32 y] (int32 result)
-
-mathMaybeDiv :: TypedTerm TestGroup
-mathMaybeDiv = subgroup "maybeDiv" [
+mathDiv :: TypedTerm TestGroup
+mathDiv = subgroup "div" [
   test "basic division" 10 3 (Just 3),
   test "exact division" 10 2 (Just 5),
   test "division by zero" 10 0 Nothing,
@@ -377,55 +362,30 @@ mathMaybeDiv = subgroup "maybeDiv" [
   test "negative dividend" (-10) 3 (Just (-4)),
   test "negative divisor" 10 (-3) (Just (-4))]
   where
-    test name x y result = primCase name DefMath.maybeDiv [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.div [int32 x, int32 y] (optionalInt32 result)
 
-mathMin = subgroup "min" [
-  test "first is smaller" 5 10 5,
-  test "second is smaller" 10 5 5,
-  test "equal values" 7 7 7,
-  test "negative numbers" (-3) (-5) (-5),
-  test "mixed sign" (-5) 5 (-5),
-  test "with zero" 0 42 0]
-  where
-    test name x y result = primCase name DefMath.min [int32 x, int32 y] (int32 result)
 
-mathMaybeMod :: TypedTerm TestGroup
-mathMaybeMod = subgroup "maybeMod" [
+mathMod :: TypedTerm TestGroup
+mathMod = subgroup "mod" [
   test "basic modulo" 10 3 (Just 1),
   test "exact division" 10 2 (Just 0),
   test "division by zero" 10 0 Nothing,
   test "negative dividend" (-10) 3 (Just 2),
   test "negative divisor" 10 (-3) (Just (-2))]
   where
-    test name x y result = primCase name DefMath.maybeMod [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.mod [int32 x, int32 y] (optionalInt32 result)
 
-mathMaybePred :: TypedTerm TestGroup
-mathMaybePred = subgroup "maybePred" [
-  test "positive" 5 (Just 4),
-  test "zero" 0 (Just (-1)),
-  test "negative" (-5) (Just (-6)),
-  test "minBound" (-2147483648) Nothing]
-  where
-    test name x result = primCase name DefMath.maybePred [int32 x] (optionalInt32 result)
 
-mathMaybeRem :: TypedTerm TestGroup
-mathMaybeRem = subgroup "maybeRem" [
+mathRem :: TypedTerm TestGroup
+mathRem = subgroup "rem" [
   test "basic remainder" 10 3 (Just 1),
   test "exact division" 10 2 (Just 0),
   test "division by zero" 10 0 Nothing,
   test "negative dividend" (-10) 3 (Just (-1)),
   test "negative divisor" 10 (-3) (Just 1)]
   where
-    test name x y result = primCase name DefMath.maybeRem [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.rem [int32 x, int32 y] (optionalInt32 result)
 
-mathMaybeSucc :: TypedTerm TestGroup
-mathMaybeSucc = subgroup "maybeSucc" [
-  test "positive" 5 (Just 6),
-  test "zero" 0 (Just 1),
-  test "negative" (-5) (Just (-4)),
-  test "maxBound" 2147483647 Nothing]
-  where
-    test name x result = primCase name DefMath.maybeSucc [int32 x] (optionalInt32 result)
 
 -- Float64 tests
 --
@@ -441,7 +401,6 @@ mathMaybeSucc = subgroup "maybeSucc" [
 --     on both the expected value and the test input's expected result to eliminate
 --     platform-dependent rounding in the last digit.
 
-mathMin :: TypedTerm TestGroup
 mathMul :: TypedTerm TestGroup
 mathMul = subgroup "mul" [
   test "positive numbers" 3 5 15,

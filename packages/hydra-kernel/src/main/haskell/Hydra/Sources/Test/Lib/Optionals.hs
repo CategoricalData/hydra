@@ -21,11 +21,13 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic as Logic
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Data.Set as S
 
 
 ns :: ModuleName
@@ -49,7 +51,7 @@ nothingInt :: TypedTerm (Maybe Int)
 nothingInt = Phantoms.nothing
 
 showBool :: TypedTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 showInt32 :: TypedTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
@@ -61,7 +63,19 @@ showMaybeInt :: TypedTerm (Maybe Int -> String)
 showMaybeInt = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
 
 showMaybeString :: TypedTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ PrintCore.optional_ @@ (Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")) @@ Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ PrintCore.optional_ @@ (Phantoms.lambda "s" $ Literals.printString (Phantoms.var "s")) @@ Phantoms.var "mx"
+
+pIntSet :: [Int] -> TypedTerm (S.Set Int)
+pIntSet xs = Phantoms.set (Phantoms.int32 <$> xs)
+
+showIntSet :: TypedTerm (S.Set Int -> String)
+showIntSet = Phantoms.lambda "s" $ PrintCore.set_ @@ showInt32 @@ Phantoms.var "s"
+
+showMaybeIntList :: TypedTerm (Maybe [Int] -> String)
+showMaybeIntList = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showIntList @@ Phantoms.var "mx"
+
+showMaybeIntSet :: TypedTerm (Maybe (S.Set Int) -> String)
+showMaybeIntSet = Phantoms.lambda "mx" $ PrintCore.optional_ @@ showIntSet @@ Phantoms.var "mx"
 
 -- Test groups
 
@@ -72,15 +86,15 @@ allTests = definitionInModule module_ "allTests" $
       optionalsApply,
       optionalsBind,
       optionalsCases,
-      optionalsCat,
       optionalsCompose,
-      optionalsFromOptional,
+      optionalsGivens,
       optionalsIsGiven,
       optionalsIsNone,
       optionalsMap,
       optionalsMapOptional,
       optionalsPure,
-      optionalsToList]
+      optionalsToList,
+      optionalsWithDefault]
 
 optionalsApply :: TypedTerm TestGroup
 optionalsApply = subgroup "apply" [
@@ -110,17 +124,6 @@ optionalsCases = subgroup "cases" [
       (Optionals.cases opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
 
-optionalsCat :: TypedTerm TestGroup
-optionalsCat = subgroup "cat" [
-  test "filters nothings" [justInt 1, nothingInt, justInt 2] [1, 2],
-  test "all justs" [justInt 1, justInt 2] [1, 2],
-  test "all nothings" [nothingInt, nothingInt] [],
-  test "empty list" ([] :: [TypedTerm (Maybe Int)]) []]
-  where
-    test name input expected = evalPair name showIntList
-      (Optionals.cat (Phantoms.list input))
-      (Phantoms.list (Phantoms.int32 <$> expected))
-
 optionalsCompose :: TypedTerm TestGroup
 optionalsCompose = subgroup "compose" [
   test "both succeed" 5 (justInt 12),
@@ -129,12 +132,12 @@ optionalsCompose = subgroup "compose" [
   where
     -- f: x -> if x <= 5 then Just (x + 1) else Nothing
     funF = Phantoms.lambda "x" $
-      Logic.ifElse (Equality.lte (Phantoms.var "x") (Phantoms.int32 5))
+      Logic.ifElse (Ordering.lte (Phantoms.var "x") (Phantoms.int32 5))
         (Phantoms.just (Math.add (Phantoms.var "x") (Phantoms.int32 1)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     -- g: y -> if y >= 5 then Just (y * 2) else Nothing
     funG = Phantoms.lambda "y" $
-      Logic.ifElse (Equality.gte (Phantoms.var "y") (Phantoms.int32 5))
+      Logic.ifElse (Ordering.gte (Phantoms.var "y") (Phantoms.int32 5))
         (Phantoms.just (Math.mul (Phantoms.var "y") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name input expected = evalPair name showMaybeInt
@@ -144,14 +147,19 @@ optionalsCompose = subgroup "compose" [
       (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
 
-optionalsFromOptional :: TypedTerm TestGroup
-optionalsFromOptional = subgroup "fromOptional" [
-  test "just value" 0 (justInt 42) 42,
-  test "nothing with default" 99 nothingInt 99]
+optionalsGivens :: TypedTerm TestGroup
+optionalsGivens = subgroup "givens" [
+  test "keeps present values" [Just 1, Nothing, Just 3] [1, 3],
+  test "single just" [Just 5] [5],
+  test "all none" [Nothing, Nothing] [],
+  test "empty list" [] []]
   where
-    test name def x result = evalPair name showInt32
-      (Optionals.fromOptional (Phantoms.int32 def) x)
-      (Phantoms.int32 result)
+    test name xs expected = evalPair name showIntList
+      (Optionals.givens (Phantoms.list $ toOpt <$> xs))
+      (Phantoms.list $ Phantoms.int32 <$> expected)
+    toOpt m = case m of
+      Just n  -> justInt n
+      Nothing -> nothingInt
 
 optionalsIsGiven :: TypedTerm TestGroup
 optionalsIsGiven = subgroup "isGiven" [
@@ -187,7 +195,7 @@ optionalsMapOptional = subgroup "mapOptional" [
   test "empty input" [] []]
   where
     filterFn = Phantoms.lambda "x" $
-      Logic.ifElse (Equality.gt (Phantoms.var "x") (Phantoms.int32 2))
+      Logic.ifElse (Ordering.gt (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name xs expected = evalPair name showIntList
@@ -214,3 +222,12 @@ optionalsToList = subgroup "toList" [
     test name x expected = evalPair name showIntList
       (Optionals.toList x)
       (Phantoms.list $ Phantoms.int32 <$> expected)
+
+optionalsWithDefault :: TypedTerm TestGroup
+optionalsWithDefault = subgroup "withDefault" [
+  test "given returns value" 0 (justInt 7) 7,
+  test "none returns default" 99 nothingInt 99]
+  where
+    test name def m expected = evalPair name showInt32
+      (Optionals.withDefault (Phantoms.int32 def) m)
+      (Phantoms.int32 expected)

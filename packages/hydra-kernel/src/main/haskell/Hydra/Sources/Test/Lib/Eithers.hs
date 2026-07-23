@@ -48,7 +48,7 @@ module_ = Module {
 -- Show functions
 
 showBool :: TypedTerm (Bool -> String)
-showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
+showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 showEitherIntInt :: TypedTerm (Either Int Int -> String)
 showEitherIntInt = Phantoms.lambda "e" $ PrintCore.either_ @@ showInt32 @@ showInt32 @@ Phantoms.var "e"
@@ -84,7 +84,7 @@ showPairIntListStringList :: TypedTerm (([Int], [String]) -> String)
 showPairIntListStringList = Phantoms.lambda "p" $ PrintCore.pair_ @@ showIntList @@ showStrList @@ Phantoms.var "p"
 
 showStr :: TypedTerm (String -> String)
-showStr = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
+showStr = Phantoms.lambda "s" $ Literals.printString (Phantoms.var "s")
 
 showStrList :: TypedTerm ([String] -> String)
 showStrList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showStr @@ Phantoms.var "xs"
@@ -110,13 +110,11 @@ allTests = definitionInModule module_ "allTests" $
       eithersBimap,
       eithersIsLeft,
       eithersIsRight,
-      eithersFromLeft,
-      eithersFromRight,
       eithersEither,
-      eithersFoldl,
+      eithersFoldList,
       eithersLefts,
       eithersRights,
-      eithersPartitionEithers,
+      eithersPartition,
       eithersMap,
       eithersMapList,
       eithersMapOptional,
@@ -160,8 +158,8 @@ eithersEither = subgroup "either" [
         x)
       (Phantoms.int32 result)
 
-eithersFoldl :: TypedTerm TestGroup
-eithersFoldl = subgroup "foldl" [
+eithersFoldList :: TypedTerm TestGroup
+eithersFoldList = subgroup "foldList" [
   test "fold succeeds on all elements" [1, 2, 3] (Phantoms.right (Phantoms.int32 6)),
   test "fold short-circuits on failure" [1, 0, 3] (Phantoms.left (Phantoms.string "zero")),
   test "fold empty list" [] (Phantoms.right (Phantoms.int32 0))]
@@ -171,26 +169,8 @@ eithersFoldl = subgroup "foldl" [
         (Phantoms.left (Phantoms.string "zero"))
         (Phantoms.right (Math.add (Phantoms.var "acc") (Phantoms.var "el")))
     test name input expected = evalPair name showEitherStringInt
-      (Eithers.foldl stepFn (Phantoms.int32 0) (Phantoms.list (Phantoms.int32 <$> input)))
+      (Eithers.foldList stepFn (Phantoms.int32 0) (Phantoms.list (Phantoms.int32 <$> input)))
       expected
-
-eithersFromLeft :: TypedTerm TestGroup
-eithersFromLeft = subgroup "fromLeft" [
-  test "extract left" 99 (leftInt 42) 42,
-  test "use default for right" 99 (rightStr "test") 99]
-  where
-    test name def x result = evalPair name showInt32
-      (Eithers.fromLeft (Phantoms.int32 def) x)
-      (Phantoms.int32 result)
-
-eithersFromRight :: TypedTerm TestGroup
-eithersFromRight = subgroup "fromRight" [
-  test "extract right" "default" (rightStr "test") "test",
-  test "use default for left" "default" (leftInt 42) "default"]
-  where
-    test name def x result = evalPair name showStr
-      (Eithers.fromRight (Phantoms.string def) x)
-      (Phantoms.string result)
 
 eithersIsLeft :: TypedTerm TestGroup
 eithersIsLeft = subgroup "isLeft" [
@@ -275,15 +255,15 @@ eithersMapSet = subgroup "mapSet" [
       (Eithers.mapSet mapFn (pIntSet input))
       expected
 
-eithersPartitionEithers :: TypedTerm TestGroup
-eithersPartitionEithers = subgroup "partitionEithers" [
+eithersPartition :: TypedTerm TestGroup
+eithersPartition = subgroup "partition" [
   test "partition mixed" [leftInt 1, rightStr "a", leftInt 2, rightStr "b"] ([1, 2], ["a", "b"]),
   test "all lefts" [leftInt 1, leftInt 2] ([1, 2], []),
   test "all rights" [rightStr "a", rightStr "b"] ([], ["a", "b"]),
   test "empty list" ([] :: [TypedTerm (Either Int String)]) ([], [])]
   where
     test name input (lefts, rights) = evalPair name showPairIntListStringList
-      (Eithers.partitionEithers (Phantoms.list input))
+      (Eithers.partition (Phantoms.list input))
       (Phantoms.pair (Phantoms.list (Phantoms.int32 <$> lefts)) (Phantoms.list (Phantoms.string <$> rights)))
 
 eithersRights :: TypedTerm TestGroup

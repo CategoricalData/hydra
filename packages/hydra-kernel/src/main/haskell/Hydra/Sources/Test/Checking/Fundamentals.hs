@@ -21,6 +21,7 @@ import qualified Data.ByteString              as B
 import qualified Data.ByteString.Char8        as BC
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Functions as DefFunctions
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Logic as DefLogic
 import qualified Hydra.Lib.Maps as DefMaps
@@ -107,12 +108,12 @@ applicationsInComplexContextsTests = define "applicationsInComplexContextsTests"
   subgroup "Applications in complex contexts" [
   checkTest "application in tuple" []
     (tuple [primitive DefMath.add @@ int32 1 @@ int32 2,
-            primitive DefStrings.cat2 @@ string "a" @@ string "b"])
-    (tyapps (pair (primitive DefMath.add @@ int32 1 @@ int32 2) (primitive DefStrings.cat2 @@ string "a" @@ string "b")) [T.int32, T.string])
+            primitive DefStrings.concat2 @@ string "a" @@ string "b"])
+    (tyapps (pair (primitive DefMath.add @@ int32 1 @@ int32 2) (primitive DefStrings.concat2 @@ string "a" @@ string "b")) [T.int32, T.string])
     (T.pair T.int32 T.string),
   noChange "application in record"
     (record TestTypes.testTypePersonName [
-      "firstName">: primitive DefStrings.cat2 @@ string "John" @@ string "ny",
+      "firstName">: primitive DefStrings.concat2 @@ string "John" @@ string "ny",
       "lastName">: string "Doe",
       "age">: primitive DefMath.add @@ int32 20 @@ int32 5])
     (Core.typeVariable TestTypes.testTypePersonName),
@@ -156,10 +157,10 @@ applicationsWithComplexArgumentsTests = define "applicationsWithComplexArguments
         "age">: int32 25])
     T.string,
   checkTest "application with list argument" []
-    (lets ["maybeHead">: lambda "xs" $ primitive DefLists.maybeHead @@ var "xs"] $
+    (lets ["maybeHead">: lambda "xs" $ primitive DefLists.head @@ var "xs"] $
       var "maybeHead" @@ list [string "first", string "second"])
     (letsTyped [
-      ("maybeHead", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive DefLists.maybeHead) (T.var "t0") @@ var "xs",
+      ("maybeHead", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive DefLists.head) (T.var "t0") @@ var "xs",
         T.poly ["t0"] $ T.function (T.list (T.var "t0")) (T.optional (T.var "t0")))] $
       tyapp (var "maybeHead") T.string @@ list [string "first", string "second"])
     (T.optional T.string)]
@@ -200,7 +201,7 @@ partialApplicationsTests = define "partialApplicationsTests" $
     (primitive DefMath.add @@ int32 5)
     (T.function T.int32 T.int32),
   noChange "partially applied string cat"
-    (primitive DefStrings.cat2 @@ string "prefix")
+    (primitive DefStrings.concat2 @@ string "prefix")
     (T.function T.string T.string)]
 
 polymorphicApplicationsTests :: TypedTermDefinition TestGroup
@@ -224,11 +225,11 @@ polymorphicApplicationsTests = define "polymorphicApplicationsTests" $
     T.string,
   checkTest "polymorphic flip" []
     (lets ["flip">: lambda "f" $ lambda "x" $ lambda "y" $ var "f" @@ var "y" @@ var "x"] $
-      var "flip" @@ primitive DefStrings.cat2 @@ string "world" @@ string "hello")
+      var "flip" @@ primitive DefStrings.concat2 @@ string "world" @@ string "hello")
     (letsTyped [
       ("flip", tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t2"))) $ lambdaTyped "x" (T.var "t1") $ lambdaTyped "y" (T.var "t0") $ var "f" @@ var "y" @@ var "x",
         T.poly ["t0", "t1", "t2"] $ T.function (T.function (T.var "t0") (T.function (T.var "t1") (T.var "t2"))) (T.function (T.var "t1") (T.function (T.var "t0") (T.var "t2"))))] $
-      tyapps (var "flip") [T.string, T.string, T.string] @@ primitive DefStrings.cat2 @@ string "world" @@ string "hello")
+      tyapps (var "flip") [T.string, T.string, T.string] @@ primitive DefStrings.concat2 @@ string "world" @@ string "hello")
     T.string]
 
 simpleFunctionApplicationsTests :: TypedTermDefinition TestGroup
@@ -242,7 +243,7 @@ simpleFunctionApplicationsTests = define "simpleFunctionApplicationsTests" $
     (primitive DefMath.add @@ int32 10 @@ int32 20)
     T.int32,
   noChange "string concatenation"
-    (primitive DefStrings.cat2 @@ string "hello" @@ string "world")
+    (primitive DefStrings.concat2 @@ string "hello" @@ string "world")
     T.string]
 
 ------ Lambdas ------
@@ -433,13 +434,13 @@ letWithComplexExpressionsTests = define "letWithComplexExpressionsTests" $
     (record TestTypes.testTypePersonName [
       "firstName">: lets ["first">: string "John",
                               "middle">: string "Q"] $
-                             primitive DefStrings.cat2 @@ var "first" @@ var "middle",
+                             primitive DefStrings.concat2 @@ var "first" @@ var "middle",
       "lastName">: string "Doe",
       "age">: int32 30])
     (record TestTypes.testTypePersonName [
       "firstName">: letsTyped [("first", string "John", T.mono T.string),
                                    ("middle", string "Q", T.mono T.string)] $
-                         primitive DefStrings.cat2 @@ var "first" @@ var "middle",
+                         primitive DefStrings.concat2 @@ var "first" @@ var "middle",
       "lastName">: string "Doe",
       "age">: int32 30])
     (Core.typeVariable TestTypes.testTypePersonName),
@@ -678,8 +679,8 @@ monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
     (primitive DefMath.add)
     (T.function T.int32 (T.function T.int32 T.int32)),
   checkTest "polymorphic identity" []
-    (primitive DefEquality.identity)
-    (tylam "t0" $ tyapp (primitive DefEquality.identity) (T.var "t0"))
+    (primitive DefFunctions.identity)
+    (tylam "t0" $ tyapp (primitive DefFunctions.identity) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.var "t0") (T.var "t0")),
   checkTest "polymorphic map" []
     (primitive DefLists.map)
@@ -749,8 +750,8 @@ unaryPrimitivesTests :: TypedTermDefinition TestGroup
 unaryPrimitivesTests = define "unaryPrimitivesTests" $
   subgroup "Unary primitives" [
   checkTest "lists maybeHead" []
-    (primitive DefLists.maybeHead)
-    (tylam "t0" $ tyapp (primitive DefLists.maybeHead) (T.var "t0"))
+    (primitive DefLists.head)
+    (tylam "t0" $ tyapp (primitive DefLists.head) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.list $ T.var "t0") (T.optional $ T.var "t0")),
   noChange "math neg"
     (primitive DefMath.negate)
