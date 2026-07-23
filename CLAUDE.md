@@ -308,6 +308,20 @@ run that head's own `bin/run-tests.sh` or `bin/test-distribution.sh`
 (`bin/run-bootstrapping-demo.sh`) is a separate, heavier validation
 that exercises cross-host code generation plus tests.
 
+**CI runs `/sync` + `/test all`, but NOT `/bootstrap`.** GitHub CI (`.github/workflows/ci.yml`)
+regenerates all-target dists (`bin/sync.sh --hosts all --targets all`) and **runs the hydra-kernel
+test suite as a target on every host** — a dedicated job per host: Haskell `stack test`, Java
+`./gradlew :hydra-java:test`, Python/Scala `test-distribution.sh`, TypeScript
+`heads/typescript/bin/test-distribution.sh hydra-kernel`, and each Lisp dialect via
+`packages/hydra-lisp/bin/run-tests.sh <dialect>` — plus the cold-clone sync and the `#535`
+regression harnesses. So CI's coverage **equals the `/sync` + `/test all` surface** (kernel tests
+on all nine hosts). **What CI does NOT run is `/bootstrap` (`run-bootstrapping-demo.sh`): the
+cross-host generation matrix — each host generating every *other* target — is exercised ONLY by
+`/bootstrap`, which runs ONLY in the staging cycle** (pull → `/sync` → `/test` → `/bootstrap` →
+push), driven by the staging agent. So a green CI confirms per-host kernel tests but is **not** a
+substitute for `/bootstrap`; "did you bootstrap?" is a staging-only gate CI can never satisfy —
+never skip `/bootstrap` at a staging land on the assumption CI covers it.
+
 See [docs/recipes/code-generation.md](docs/recipes/code-generation.md)
 and [docs/troubleshooting.md](docs/troubleshooting.md) (for stale-dist and cache-hit issues).
 
