@@ -390,7 +390,7 @@
                                     "first": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -404,7 +404,7 @@
                                     "second": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -1229,7 +1229,7 @@
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.optionals.cat"},
+                                                        "body": {"variable": "hydra.lib.optionals.givens"},
                                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.TypeScheme"}}}}},
                                                     "argument": {"variable": "mpairs"}}}}}}}}},
                                     "argument": {

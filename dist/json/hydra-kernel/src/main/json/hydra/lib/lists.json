@@ -46,10 +46,15 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "fs",
+              "description": "the list of functions to apply",
               "type": {"list": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "xs",
+              "description": "the list of values to apply them to",
+              "type": {"list": {"variable": "x"}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -60,14 +65,13 @@
           "description": "Return the element at the given index, or Nothing if out of bounds.",
           "comments": [
             "at(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
-            "New name for maybeAt (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "i", "description": "the index to look up", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "xs", "description": "the list to index into", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -83,9 +87,10 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {"name": "xs", "description": "the list to bind over", "type": {"list": {"variable": "x"}}, "isLazy": false},
             {
-              "name": "arg1",
+              "name": "f",
+              "description": "the function returning a list for each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
               "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
@@ -132,14 +137,16 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the first list-returning function",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
               "isLazy": false},
             {
-              "name": "arg1",
+              "name": "g",
+              "description": "the second list-returning function",
               "type": {"function": {"domain": {"variable": "y"}, "codomain": {"list": {"variable": "z"}}}},
               "isLazy": false},
-            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the input value", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "z"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -154,7 +161,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "x"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "xss",
+              "description": "the list of lists to concatenate",
+              "type": {"list": {"list": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -168,8 +180,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the first list", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {"name": "ys", "description": "the list to append", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -185,8 +197,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "x", "description": "the value to prepend", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to prepend to", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -197,13 +209,12 @@
           "description": "Remove duplicate elements from a list.",
           "comments": [
             "distinct(xs) returns the list of distinct elements of xs, in the order of their first occurrence.",
-            "New name for nub (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to deduplicate", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -219,8 +230,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "n",
+              "description": "the number of elements to drop",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to drop from", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -237,10 +252,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to drop from", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -259,24 +275,6 @@
                         "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
-        "name": "hydra.lib.lists.elem",
-        "metadata": {
-          "description": "Test whether an element is in a list.",
-          "comments": [
-            "elem(x, xs) returns true iff some element of xs is equal to x.",
-            "Requires an 'equality' constraint on the element type.",
-            "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
         "name": "hydra.lib.lists.filter",
         "metadata": {
           "description": "Filter a list by a predicate.",
@@ -288,10 +286,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to filter", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -342,10 +341,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to search", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -394,14 +394,15 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the branching step function",
               "type": {
                 "function": {
                   "domain": {"variable": "x"},
                   "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"list": {"variable": "x"}}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "acc0", "description": "the initial accumulator", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -419,12 +420,13 @@
           "typeParameters": [{"name": "y", "constraints": []}, {"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the step function combining accumulator and element",
               "type": {
                 "function": {"domain": {"variable": "y"}, "codomain": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "y"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "acc0", "description": "the initial accumulator", "type": {"variable": "y"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"variable": "y"}}},
         "isPure": true,
         "isTotal": true}},
@@ -441,12 +443,13 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the step function combining element and accumulator",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "y"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "y"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "acc0", "description": "the initial accumulator", "type": {"variable": "y"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"variable": "y"}}},
         "isPure": true,
         "isTotal": true}},
@@ -462,7 +465,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to group", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"list": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -473,12 +476,11 @@
           "description": "Return the first element, or Nothing if the list is empty.",
           "comments": [
             "head(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
-            "New name for maybeHead (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Wraps Haskell's partial head in maybe."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to take the head of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -489,30 +491,17 @@
           "description": "Return all elements except the last, or Nothing if the list is empty.",
           "comments": [
             "init(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
-            "New name for maybeInit (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Wraps Haskell's partial init in maybe."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.intercalate",
-        "metadata": {
-          "description": "Intercalate a list of lists with a separator list between each.",
-          "comments": [
-            "intercalate(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists. Equivalent to concat(intersperse(sep, xss)).",
-            "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"list": {"variable": "x"}}}, "isLazy": false}],
-          "result": {"type": {"list": {"variable": "x"}}}},
+            {
+              "name": "xs",
+              "description": "the list to take the initial segment of",
+              "type": {"list": {"variable": "x"}},
+              "isLazy": false}],
+          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -527,8 +516,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "sep", "description": "the separator value to insert", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to intersperse into", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -539,14 +528,17 @@
           "description": "Intercalate a list of lists with a separator list between each.",
           "comments": [
             "join(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists. Equivalent to concat(intersperse(sep, xss)).",
-            "New name for intercalate (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"list": {"variable": "x"}}}, "isLazy": false}],
+            {"name": "sep", "description": "the separator list to insert", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {
+              "name": "xss",
+              "description": "the list of lists to join",
+              "type": {"list": {"list": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -557,12 +549,16 @@
           "description": "Return the last element, or Nothing if the list is empty.",
           "comments": [
             "last(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
-            "New name for maybeLast (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Wraps Haskell's partial last in maybe."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "xs",
+              "description": "the list to take the last element of",
+              "type": {"list": {"variable": "x"}},
+              "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -578,7 +574,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to measure", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -594,8 +590,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to each element",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -613,10 +613,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the list-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to traverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"list": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -633,10 +634,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the list-returning function to apply",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {"name": "m", "description": "the optional value to traverse", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"optional": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -654,88 +656,12 @@
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the list-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"list": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s", "description": "the set to traverse", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"set": {"variable": "y"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.maybeAt",
-        "metadata": {
-          "description": "Return the element at the given index, or Nothing if out of bounds.",
-          "comments": [
-            "maybeAt(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
-            "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.maybeHead",
-        "metadata": {
-          "description": "Return the first element, or Nothing if the list is empty.",
-          "comments": [
-            "maybeHead(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
-            "Total. Wraps Haskell's partial head in maybe."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.maybeInit",
-        "metadata": {
-          "description": "Return all elements except the last, or Nothing if the list is empty.",
-          "comments": [
-            "maybeInit(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
-            "Total. Wraps Haskell's partial init in maybe."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.maybeLast",
-        "metadata": {
-          "description": "Return the last element, or Nothing if the list is empty.",
-          "comments": [
-            "maybeLast(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
-            "Total. Wraps Haskell's partial last in maybe."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.maybeTail",
-        "metadata": {
-          "description": "Return all elements except the first, or Nothing if the list is empty.",
-          "comments": [
-            "maybeTail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
-            "Total. Wraps Haskell's partial tail in maybe."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -745,33 +671,15 @@
           "description": "Test whether an element is in a list.",
           "comments": [
             "member(x, xs) returns true iff some element of xs is equal to x.",
-            "New name for elem (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "x", "description": "the value to look for", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to search", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.nub",
-        "metadata": {
-          "description": "Remove duplicate elements from a list.",
-          "comments": [
-            "nub(xs) returns the list of distinct elements of xs, in the order of their first occurrence.",
-            "Requires an 'equality' constraint on the element type.",
-            "Quadratic in the length of xs in the worst case.",
-            "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -783,7 +691,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to test", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -800,10 +708,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to partition", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -859,7 +768,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to wrap", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -875,8 +784,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "n", "description": "the number of copies", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "x", "description": "the value to replicate", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -889,7 +798,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to reverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -902,7 +811,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to wrap in a single-element list", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -918,7 +827,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to sort", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -929,33 +838,18 @@
           "description": "Sort a list using a key-extraction function.",
           "comments": [
             "sortBy(f, xs) returns xs sorted in ascending order by f(x) for each element x. Sort is stable: elements with equal keys preserve their original relative order.",
-            "New name for sortOn (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"list": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.lists.sortOn",
-        "metadata": {
-          "description": "Sort a list using a key-extraction function.",
-          "comments": [
-            "sortOn(f, xs) returns xs sorted in ascending order by f(x) for each element x. Sort is stable: elements with equal keys preserve their original relative order.",
-            "Requires an 'ordering' constraint on the key type.",
-            "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the key-extraction function",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to sort", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -972,10 +866,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to split", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -1044,12 +939,11 @@
           "description": "Return all elements except the first, or Nothing if the list is empty.",
           "comments": [
             "tail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
-            "New name for maybeTail (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Wraps Haskell's partial tail in maybe."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to take the tail of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"list": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -1065,8 +959,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "n",
+              "description": "the number of elements to take",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to take from", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -1084,10 +982,11 @@
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to take from", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -1115,7 +1014,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "x"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "xss",
+              "description": "the list of lists to transpose",
+              "type": {"list": {"list": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"list": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -1130,7 +1034,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "xs", "description": "the list to decompose", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"pair": {"first": {"variable": "x"}, "second": {"list": {"variable": "x"}}}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -1146,8 +1050,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "xs", "description": "the first list", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {"name": "ys", "description": "the second list", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"list": {"pair": {"first": {"variable": "x"}, "second": {"variable": "y"}}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -1164,12 +1068,13 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the combining function",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "xs", "description": "the first list", "type": {"list": {"variable": "x"}}, "isLazy": false},
+            {"name": "ys", "description": "the second list", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "z"}}}},
         "isPure": true,
         "isTotal": true}}]}

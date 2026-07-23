@@ -514,7 +514,7 @@
                         "typeName": "hydra.rdf.syntax.Iri",
                         "body": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "ns"}}},
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "ns"}}},
                             "argument": {"variable": "local"}}}}}}}}},
             "annotation": {
               "map": [
@@ -590,7 +590,7 @@
                     "typeName": "hydra.rdf.syntax.Iri",
                     "body": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "urn:"}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "urn:"}}}},
                         "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "name"}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra name to an RDF IRI"}}}]}}}}},
     {
@@ -622,7 +622,7 @@
                                       "typeName": "hydra.rdf.syntax.BlankNode",
                                       "body": {
                                         "application": {
-                                          "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "b"}}}},
+                                          "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "b"}}}},
                                           "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "counter"}}}}}}}}}},
                             "second": {
                               "application": {
@@ -680,7 +680,7 @@
                             "typeName": "hydra.rdf.syntax.Iri",
                             "body": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"literal": {"string": "urn:"}},

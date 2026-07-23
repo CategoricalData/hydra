@@ -1173,7 +1173,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1194,7 +1194,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {"literal": {"boolean": true}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1226,7 +1226,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1247,7 +1247,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {"literal": {"boolean": false}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1279,7 +1279,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {
@@ -1299,7 +1299,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {"literal": {"boolean": false}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
@@ -1505,7 +1505,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.null"}, "type": "unit"}},
@@ -1522,7 +1522,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {"literal": {"boolean": true}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
@@ -1554,7 +1554,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {
                                                                     "application": {
                                                                       "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.null"}, "type": {"literal": {"integer": "int32"}}}},
@@ -1571,7 +1571,7 @@
                                                                     "lambda": {
                                                                       "parameter": "b",
                                                                       "domain": {"literal": "boolean"},
-                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.showBoolean"}, "argument": {"variable": "b"}}}}},
+                                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printBoolean"}, "argument": {"variable": "b"}}}}},
                                                                   "argument": {"literal": {"boolean": false}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},

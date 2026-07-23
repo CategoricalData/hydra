@@ -416,7 +416,7 @@
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.optionals.cat"},
+                                                    "body": {"variable": "hydra.lib.optionals.givens"},
                                                     "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Term"}}}}},
                                                 "argument": {
                                                   "application": {
@@ -995,7 +995,7 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": "boolean"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "boolean"}}},
                                 "argument": {"literal": {"boolean": false}}}},
                             "argument": {
                               "application": {

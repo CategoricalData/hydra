@@ -51,7 +51,7 @@
                     "domain": {"list": {"variable": "t0"}},
                     "body": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "t0"}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.distinct"}, "type": {"variable": "t0"}}},
                         "argument": {"variable": "xs"}}}}},
                 "annotation": {
                   "map": [
@@ -295,7 +295,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lt"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lt"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
@@ -305,7 +305,7 @@
                         "argument": {
                           "optional": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
+                              "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "/"}}}},
                               "argument": {
                                 "application": {
                                   "function": {

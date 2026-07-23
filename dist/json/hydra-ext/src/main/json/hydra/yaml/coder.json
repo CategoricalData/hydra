@@ -192,7 +192,7 @@
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.yaml.model.Node"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                                     "argument": {"variable": "defaultValue"}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -841,7 +841,7 @@
                                                                                 "application": {
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.lib.optionals.cat"},
+                                                                                      "body": {"variable": "hydra.lib.optionals.givens"},
                                                                                       "type": {"pair": {"first": {"variable": "hydra.yaml.model.Node"}, "second": {"variable": "hydra.yaml.model.Node"}}}}},
                                                                                   "argument": {"variable": "maybeFields"}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -903,7 +903,7 @@
                                                               "typeName": "hydra.errors.OtherError",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {"list": [{"literal": {"string": "expected boolean, found scalar"}}]}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.core.Literal"}}},
@@ -959,7 +959,7 @@
                                                                   "typeName": "hydra.errors.OtherError",
                                                                   "body": {
                                                                     "application": {
-                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                       "argument": {"list": [{"literal": {"string": "expected decimal, found scalar"}}]}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.core.Literal"}}},
@@ -1055,7 +1055,7 @@
                                                                       "typeName": "hydra.errors.OtherError",
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                           "argument": {"list": [{"literal": {"string": "expected float, found scalar"}}]}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.core.Literal"}}},
@@ -1142,7 +1142,7 @@
                                                                           "typeName": "hydra.errors.OtherError",
                                                                           "body": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                               "argument": {"list": [{"literal": {"string": "expected integer, found scalar"}}]}}}}}}}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.core.Literal"}}},
@@ -1204,7 +1204,7 @@
                                                                               "typeName": "hydra.errors.OtherError",
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                   "argument": {"list": [{"literal": {"string": "expected string, found scalar"}}]}}}}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.core.Literal"}}},
@@ -1437,7 +1437,7 @@
                                                                                                                                       "typeName": "hydra.errors.OtherError",
                                                                                                                                       "body": {
                                                                                                                                         "application": {
-                                                                                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                                           "argument": {"list": [{"literal": {"string": "YAML cannot represent float value: "}}, {"variable": "shown"}]}}}}}}}}}},
                                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                     "type": {"variable": "hydra.yaml.model.Scalar"}}}}},
@@ -2000,7 +2000,7 @@
                                                                               "typeName": "hydra.errors.OtherError",
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                   "argument": {
                                                                                     "list": [
                                                                                       {"literal": {"string": "expected literal term, found: "}},
@@ -2110,7 +2110,7 @@
                                                                                   "typeName": "hydra.errors.OtherError",
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                       "argument": {
                                                                                         "list": [
                                                                                           {"literal": {"string": "expected list term, found: "}},
@@ -2359,7 +2359,7 @@
                                                                                               "typeName": "hydra.errors.OtherError",
                                                                                               "body": {
                                                                                                 "application": {
-                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                   "argument": {
                                                                                                     "list": [
                                                                                                       {"literal": {"string": "expected optional term, found: "}},
@@ -2637,7 +2637,7 @@
                                                                                           "typeName": "hydra.errors.OtherError",
                                                                                           "body": {
                                                                                             "application": {
-                                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                                               "argument": {
                                                                                                 "list": [
                                                                                                   {"literal": {"string": "unsupported type in YAML: "}},
@@ -3266,7 +3266,7 @@
                                                                                                                                                                               "typeName": "hydra.errors.OtherError",
                                                                                                                                                                               "body": {
                                                                                                                                                                                 "application": {
-                                                                                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                                                                                   "argument": {
                                                                                                                                                                                     "list": [
                                                                                                                                                                                       {"literal": {"string": "expected map term, found: "}},
@@ -3629,7 +3629,7 @@
                                                       "typeName": "hydra.errors.OtherError",
                                                       "body": {
                                                         "application": {
-                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                           "argument": {
                                                             "list": [
                                                               {"literal": {"string": "expected unit, found: "}},

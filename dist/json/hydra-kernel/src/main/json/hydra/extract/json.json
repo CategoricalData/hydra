@@ -61,15 +61,16 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "expected "}}}},
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "expected "}}}},
                                                 "argument": {"literal": {"string": "JSON array"}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " but found "}}}},
+                                              "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " but found "}}}},
                                             "argument": {"application": {"function": {"variable": "hydra.extract.json.showValue"}, "argument": {"variable": "value"}}}}}}}}},
                                 "type": {"literal": "string"}}},
                             "type": {"list": {"variable": "hydra.json.model.Value"}}}},
@@ -118,15 +119,16 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "expected "}}}},
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "expected "}}}},
                                                 "argument": {"literal": {"string": "JSON number"}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " but found "}}}},
+                                              "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " but found "}}}},
                                             "argument": {"application": {"function": {"variable": "hydra.extract.json.showValue"}, "argument": {"variable": "value"}}}}}}}}},
                                 "type": {"literal": "string"}}},
                             "type": {"literal": "decimal"}}},
@@ -179,15 +181,16 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "expected "}}}},
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "expected "}}}},
                                                 "argument": {"literal": {"string": "JSON object"}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " but found "}}}},
+                                              "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " but found "}}}},
                                             "argument": {"application": {"function": {"variable": "hydra.extract.json.showValue"}, "argument": {"variable": "value"}}}}}}}}},
                                 "type": {"literal": "string"}}},
                             "type": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
@@ -249,15 +252,16 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "expected "}}}},
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "expected "}}}},
                                                 "argument": {"literal": {"string": "JSON string"}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " but found "}}}},
+                                              "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " but found "}}}},
                                             "argument": {"application": {"function": {"variable": "hydra.extract.json.showValue"}, "argument": {"variable": "value"}}}}}}}}},
                                 "type": {"literal": "string"}}},
                             "type": {"literal": "string"}}},
@@ -517,7 +521,7 @@
                                           "either": {
                                             "left": {
                                               "application": {
-                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                 "argument": {
                                                   "list": [
                                                     {"literal": {"string": "required attribute "}},

@@ -45,8 +45,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "boolean"}, "isLazy": false}],
+            {"name": "p", "description": "the first boolean operand", "type": {"literal": "boolean"}, "isLazy": false},
+            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -76,9 +76,9 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": true},
-            {"name": "arg2", "type": {"variable": "x"}, "isLazy": true}],
+            {"name": "p", "description": "the boolean condition", "type": {"literal": "boolean"}, "isLazy": false},
+            {"name": "t", "description": "the value returned when p is true", "type": {"variable": "x"}, "isLazy": true},
+            {"name": "f", "description": "the value returned when p is false", "type": {"variable": "x"}, "isLazy": true}],
           "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
@@ -91,7 +91,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false}],
+          "parameters": [{"name": "p", "description": "the boolean value to negate", "type": {"literal": "boolean"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -118,8 +118,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "boolean"}, "isLazy": false}],
+            {"name": "p", "description": "the first boolean operand", "type": {"literal": "boolean"}, "isLazy": false},
+            {"name": "q", "description": "the second boolean operand", "type": {"literal": "boolean"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,

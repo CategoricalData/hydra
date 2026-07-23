@@ -1088,7 +1088,7 @@
                                                 "type": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"literal": {"integer": "int32"}}}}}},
                                             "argument": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {"variable": "codes"}}}}},
                                         "argument": {
                                           "typeApplication": {
@@ -1502,7 +1502,8 @@
                                                                   "name": "message",
                                                                   "term": {
                                                                     "application": {
-                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "expected: "}}}},
+                                                                      "function": {
+                                                                        "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "expected: "}}}},
                                                                       "argument": {"variable": "str"}}}},
                                                                 {"name": "remainder", "term": {"variable": "input"}}]}}}}},
                                                     "type": {"literal": "string"}}}}}}}}}}}}}}}}},

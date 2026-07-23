@@ -47,11 +47,16 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "ef",
+              "description": "the either containing the function to apply",
               "type": {
                 "either": {"left": {"variable": "x"}, "right": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+            {
+              "name": "ex",
+              "description": "the either containing the argument",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "z"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -87,9 +92,21 @@
             {"name": "z", "constraints": []},
             {"name": "w", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "z"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "w"}}}, "isLazy": false},
-            {"name": "arg2", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to a Left value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "z"}}},
+              "isLazy": false},
+            {
+              "name": "g",
+              "description": "the function to apply to a Right value",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "w"}}},
+              "isLazy": false},
+            {
+              "name": "e",
+              "description": "the either value to map over",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"variable": "w"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -131,9 +148,14 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false},
             {
-              "name": "arg1",
+              "name": "e",
+              "description": "the either value to bind",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false},
+            {
+              "name": "f",
+              "description": "the function to apply to a Right value",
               "type": {
                 "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "x"}, "right": {"variable": "z"}}}}},
               "isLazy": false}],
@@ -174,16 +196,18 @@
             {"name": "w", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the first Kleisli arrow to apply",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"either": {"left": {"variable": "w"}, "right": {"variable": "y"}}}}},
               "isLazy": false},
             {
-              "name": "arg1",
+              "name": "g",
+              "description": "the second Kleisli arrow to apply",
               "type": {
                 "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "w"}, "right": {"variable": "z"}}}}},
               "isLazy": false},
-            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the input value", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "w"}, "right": {"variable": "z"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -216,9 +240,21 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "z"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}}, "isLazy": false},
-            {"name": "arg2", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to a Left value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "z"}}},
+              "isLazy": false},
+            {
+              "name": "g",
+              "description": "the function to apply to a Right value",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}},
+              "isLazy": false},
+            {
+              "name": "e",
+              "description": "the either value to eliminate",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "z"}}},
         "isPure": true,
         "isTotal": true}},
@@ -229,22 +265,22 @@
           "description": "Left-fold over a list with an Either-returning function, short-circuiting on Left.",
           "comments": [
             "foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: it iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed.",
-            "New name for foldl (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the Either-returning folding function",
               "type": {
                 "function": {
                   "domain": {"variable": "x"},
                   "codomain": {
                     "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "acc0", "description": "the initial accumulator value", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold over", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -282,132 +318,6 @@
                                                     "argument": {"variable": "el"}}}}}}}}}}}}},
                             "argument": {"either": {"right": {"variable": "acc0"}}}}},
                         "argument": {"variable": "xs"}}}}}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.eithers.foldl",
-        "metadata": {
-          "description": "Left-fold over a list with an Either-returning function, short-circuiting on Left.",
-          "comments": [
-            "foldl(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: foldl iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed. Equivalent to chaining bind over the list.",
-            "Total in the sense that it terminates on finite inputs; the result is a Left whenever any application of f returns one.",
-            "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "domain": {"variable": "x"},
-                  "codomain": {
-                    "function": {"domain": {"variable": "y"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}}}},
-              "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "f",
-            "body": {
-              "lambda": {
-                "parameter": "acc0",
-                "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldl"},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "acc",
-                                    "body": {
-                                      "lambda": {
-                                        "parameter": "el",
-                                        "body": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.eithers.bind"}, "argument": {"variable": "acc"}}},
-                                            "argument": {
-                                              "lambda": {
-                                                "parameter": "a",
-                                                "body": {
-                                                  "application": {
-                                                    "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "a"}}},
-                                                    "argument": {"variable": "el"}}}}}}}}}}}}},
-                            "argument": {"either": {"right": {"variable": "acc0"}}}}},
-                        "argument": {"variable": "xs"}}}}}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.eithers.fromLeft",
-        "metadata": {
-          "description": "Extract the Left value, or return a default.",
-          "comments": [
-            "fromLeft(def, e) returns the contained Left value if e is a Left, or def if e is a Right.",
-            "Total. Corresponds to Haskell's Data.Either.fromLeft :: a -> Either a b -> a."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": true},
-            {"name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
-          "result": {"type": {"variable": "x"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "def",
-            "body": {
-              "lambda": {
-                "parameter": "e",
-                "body": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.eithers.either"},
-                            "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}},
-                        "argument": {"lambda": {"parameter": "_", "body": {"variable": "def"}}}}},
-                    "argument": {"variable": "e"}}}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.eithers.fromRight",
-        "metadata": {
-          "description": "Extract the Right value, or return a default.",
-          "comments": [
-            "fromRight(def, e) returns the contained Right value if e is a Right, or def if e is a Left.",
-            "Total. Corresponds to Haskell's Data.Either.fromRight :: b -> Either a b -> b."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "y"}, "isLazy": true},
-            {"name": "arg1", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
-          "result": {"type": {"variable": "y"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "def",
-            "body": {
-              "lambda": {
-                "parameter": "e",
-                "body": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.eithers.either"},
-                            "argument": {"lambda": {"parameter": "_", "body": {"variable": "def"}}}}},
-                        "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}},
-                    "argument": {"variable": "e"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.isLeft",
@@ -419,7 +329,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "e",
+              "description": "the either value to test",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -447,7 +362,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "e",
+              "description": "the either value to test",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -476,7 +396,11 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}, "isLazy": false}],
+            {
+              "name": "xs",
+              "description": "the list of either values to extract Lefts from",
+              "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -527,8 +451,16 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to a Right value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {
+              "name": "e",
+              "description": "the either value to map over",
+              "type": {"either": {"left": {"variable": "z"}, "right": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -564,11 +496,12 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the either-returning function to apply to each element",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"list": {"variable": "y"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -628,11 +561,12 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the either-returning function to apply to the contained value",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {"name": "m", "description": "the optional to map over", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"optional": {"variable": "y"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -671,11 +605,12 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the either-returning function to apply to each element",
               "type": {
                 "function": {"domain": {"variable": "x"}, "codomain": {"either": {"left": {"variable": "z"}, "right": {"variable": "y"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s", "description": "the set to map over", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "z"}, "right": {"set": {"variable": "y"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -738,75 +673,16 @@
           "description": "Partition a list of either values into lefts and rights.",
           "comments": [
             "partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
-            "New name for partitionEithers (which is retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}, "isLazy": false}],
-          "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "y"}}}}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "xs",
-            "body": {
-              "application": {
-                "function": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {"variable": "hydra.lib.lists.foldr"},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "e",
-                            "body": {
-                              "lambda": {
-                                "parameter": "acc",
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {"variable": "hydra.lib.eithers.either"},
-                                            "argument": {
-                                              "lambda": {
-                                                "parameter": "l",
-                                                "body": {
-                                                  "pair": {
-                                                    "first": {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "l"}}},
-                                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
-                                                    "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "r",
-                                            "body": {
-                                              "pair": {
-                                                "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}},
-                                                "second": {
-                                                  "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "r"}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}},
-                                    "argument": {"variable": "e"}}}}}}}}},
-                    "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
-                "argument": {"variable": "xs"}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.eithers.partitionEithers",
-        "metadata": {
-          "description": "Partition a list of either values into lefts and rights.",
-          "comments": [
-            "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
-            "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}, "isLazy": false}],
+            {
+              "name": "xs",
+              "description": "the list of either values to partition",
+              "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}},
+              "isLazy": false}],
           "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "y"}}}}}},
         "isPure": true,
         "isTotal": true,
@@ -868,7 +744,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "y"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to wrap as a Right", "type": {"variable": "y"}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -885,7 +761,11 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}, "isLazy": false}],
+            {
+              "name": "xs",
+              "description": "the list of either values to extract Rights from",
+              "type": {"list": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true,

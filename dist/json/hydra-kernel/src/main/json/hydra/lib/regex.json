@@ -45,8 +45,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to search for", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to search within", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": "string"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -63,8 +63,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to search for", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to search within", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"list": {"literal": "string"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -81,8 +81,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to test", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to test against", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -100,9 +100,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg2", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to match", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "repl", "description": "the replacement string", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to operate on", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -119,9 +119,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg2", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to match", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "repl", "description": "the replacement string", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to operate on", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -139,8 +139,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+            {"name": "pat", "description": "the regex pattern to split on", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "s", "description": "the string to split", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"list": {"literal": "string"}}}},
         "isPure": true,
         "isTotal": true}}]}

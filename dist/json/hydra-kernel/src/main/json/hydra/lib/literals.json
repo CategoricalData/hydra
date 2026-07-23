@@ -43,7 +43,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
@@ -58,7 +58,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int16"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -73,7 +73,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -88,7 +88,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -103,7 +103,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int8"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -118,7 +118,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "uint16"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -133,7 +133,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "uint32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -148,7 +148,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "uint64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -163,7 +163,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "uint8"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -179,7 +179,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [{"name": "b", "description": "the binary data to convert", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"list": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -195,7 +195,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [{"name": "b", "description": "the binary data to decode", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -208,7 +208,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -223,7 +223,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -238,7 +238,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -253,7 +253,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float32 to convert", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
           "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
@@ -268,7 +268,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float32 to convert", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -283,7 +283,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float64 to convert", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
@@ -298,7 +298,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float64 to convert", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -313,7 +313,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int16 to convert", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -328,7 +328,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int32 to convert", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -343,7 +343,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int64 to convert", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -356,8 +356,66 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int8 to convert", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.parseBoolean",
+        "metadata": {
+          "description": "Parse a string as a boolean.",
+          "comments": [
+            "parseBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
+            "Total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "boolean"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.parseString",
+        "metadata": {
+          "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
+          "comments": [
+            "parseString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
+            "Total. The inverse of printString."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the string-literal token to parse", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "string"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.printBoolean",
+        "metadata": {
+          "description": "Render a boolean as a string.",
+          "comments": ["printBoolean(true) = \"true\"; printBoolean(false) = \"false\".", "Total. The inverse of parseBoolean."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "b", "description": "the boolean to render", "type": {"literal": "boolean"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.literals.printString",
+        "metadata": {
+          "description": "Render a string as a string-literal token (escaped and quoted).",
+          "comments": [
+            "printString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
+            "Total. The inverse of parseString."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the string to render", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -372,23 +430,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "bigint"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.readBoolean",
-        "metadata": {
-          "description": "Parse a string as a boolean.",
-          "comments": [
-            "readBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
-            "Total."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": "boolean"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -403,7 +446,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": "decimal"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -419,7 +462,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"float": "float32"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -435,7 +478,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"float": "float64"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -450,7 +493,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "int16"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -465,7 +508,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -480,7 +523,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "int64"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -495,23 +538,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "int8"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.readString",
-        "metadata": {
-          "description": "Parse a string-literal token to a plain string (Just) or Nothing on parse failure.",
-          "comments": [
-            "readString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
-            "Total. The inverse of showString."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": "string"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -525,7 +553,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "uint16"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -540,7 +568,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "uint32"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -555,7 +583,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "uint64"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -570,7 +598,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "uint8"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -585,20 +613,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.showBoolean",
-        "metadata": {
-          "description": "Render a boolean as a string.",
-          "comments": ["showBoolean(true) = \"true\"; showBoolean(false) = \"false\".", "Total. The inverse of readBoolean."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the bigint to render", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -613,7 +628,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the decimal to render", "type": {"literal": "decimal"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -628,7 +643,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float32 to render", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -643,7 +658,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the float64 to render", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -658,7 +673,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int16 to render", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -673,7 +688,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int32 to render", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -688,7 +703,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int64 to render", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -703,22 +718,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.showString",
-        "metadata": {
-          "description": "Render a string as a string-literal token (escaped and quoted).",
-          "comments": [
-            "showString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
-            "Total. The inverse of readString."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the int8 to render", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -731,7 +731,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint16 to render", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -744,7 +744,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint32 to render", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -757,7 +757,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint64 to render", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -770,7 +770,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint8 to render", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
@@ -783,7 +783,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the string to encode", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}},
@@ -798,7 +798,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint16 to convert", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -813,7 +813,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint32 to convert", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -828,7 +828,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint64 to convert", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -843,7 +843,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the uint8 to convert", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}}]}

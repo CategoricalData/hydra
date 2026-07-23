@@ -93,7 +93,7 @@
                                                                       "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                           "argument": {
                                                                             "list": [
                                                                               {"literal": {"string": "("}},
@@ -169,7 +169,7 @@
                                                                       "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                           "argument": {
                                                                             "list": [
                                                                               {"literal": {"string": "("}},
@@ -234,7 +234,7 @@
                                                                       "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                           "argument": {
                                                                             "list": [
                                                                               {"literal": {"string": "("}},
@@ -310,7 +310,7 @@
                                                                       "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}},
                                                                       "body": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat"},
                                                                           "argument": {
                                                                             "list": [
                                                                               {"literal": {"string": "("}},

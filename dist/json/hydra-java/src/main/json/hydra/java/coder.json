@@ -2557,7 +2557,7 @@
                                                                             "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                                         "argument": {
                                                                           "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Name"}}},
                                                                             "argument": {"variable": "names"}}}}},
                                                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}},
                                                                 "argument": {
@@ -2991,7 +2991,7 @@
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {
-                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.java.syntax.BlockStatement"}}},
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.java.syntax.BlockStatement"}}},
                                                                                             "argument": {"variable": "inits"}}}}},
                                                                                     "argument": {"variable": "decls"}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -4112,7 +4112,7 @@
                                     "argument": {"literal": {"string": "builder"}}}}}}}},
                         "argument": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "base"}}},
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "base"}}},
                             "argument": {"literal": {"string": "_"}}}}}},
                     "argument": {"variable": "base"}}}}}}}}},
     {
@@ -5272,7 +5272,9 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "no type scheme for element "}}}},
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.strings.concat2"},
+                                                                              "argument": {"literal": {"string": "no type scheme for element "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"unwrap": "hydra.core.Name"},
@@ -5343,7 +5345,7 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {"variable": "n"}}},
                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                     "argument": {
@@ -5397,7 +5399,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {"variable": "n2"}}},
                                                     "argument": {"literal": {"integer": {"int32": 0}}}}}}},
                                             "argument": {
@@ -6678,7 +6680,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"variable": "hydra.lib.optionals.fromOptional"},
+                                        "body": {"variable": "hydra.lib.optionals.withDefault"},
                                         "type": {"list": {"variable": "hydra.java.syntax.BlockStatement"}}}},
                                     "argument": {"variable": "zeroStmts"}}},
                                 "argument": {
@@ -6796,11 +6798,11 @@
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.init"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                                     "argument": {"variable": "restFields"}}}}}}}}}}}}},
                                                             "argument": {
                                                               "list": [
@@ -6821,11 +6823,11 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                                         "argument": {"variable": "firstField"}}},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                                         "argument": {"variable": "restFields"}}}}}}}}}}}}}]}}}}}}}}}}}}},
                                     "argument": {
                                       "application": {
@@ -7199,7 +7201,7 @@
                                     "name": "comment",
                                     "term": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "list": [
                                             {"literal": {"string": "Name of the {@code "}},
@@ -7262,7 +7264,7 @@
                                 "name": "comment",
                                 "term": {
                                   "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "function": {"variable": "hydra.lib.strings.concat"},
                                     "argument": {
                                       "list": [
                                         {"literal": {"string": "Name of the {@code "}},
@@ -7539,13 +7541,13 @@
                                                                                             "application": {
                                                                                               "function": {
                                                                                                 "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                   "argument": {"variable": "fallback"}}},
                                                                                               "argument": {
                                                                                                 "application": {
                                                                                                   "function": {
                                                                                                     "application": {
-                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeAt"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.at"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                       "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                                                                   "argument": {"variable": "typeArgs"}}}}}},
                                                                                         {
@@ -7554,13 +7556,13 @@
                                                                                             "application": {
                                                                                               "function": {
                                                                                                 "application": {
-                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                   "argument": {"variable": "fallback"}}},
                                                                                               "argument": {
                                                                                                 "application": {
                                                                                                   "function": {
                                                                                                     "application": {
-                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeAt"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.at"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                       "argument": {"literal": {"integer": {"int32": 1}}}}},
                                                                                                   "argument": {"variable": "typeArgs"}}}}}}]}}}}}}},
                                                                         "type": {"variable": "t2"}}},
@@ -8637,12 +8639,12 @@
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                    "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "function": {"unwrap": "hydra.java.syntax.Identifier"},
@@ -8687,7 +8689,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -8758,7 +8760,7 @@
                                                                                                             "name": "comment",
                                                                                                             "term": {
                                                                                                               "application": {
-                                                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                 "argument": {
                                                                                                                   "list": [
                                                                                                                     {"literal": {"string": "Returns a copy of this {@link "}},
@@ -8915,7 +8917,7 @@
                                                                                                                                     "domain": {"literal": "string"},
                                                                                                                                     "body": {
                                                                                                                                       "application": {
-                                                                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                                         "argument": {"list": [{"literal": {"string": "@param "}}, {"variable": "fname"}, {"literal": {"string": " "}}, {"variable": "d"}]}}}}}}}}},
                                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                     "type": {"literal": "string"}}}}}}}}}}}}},
@@ -8954,7 +8956,7 @@
                                                                                                 "name": "consBaseComment",
                                                                                                 "term": {
                                                                                                   "application": {
-                                                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                     "argument": {
                                                                                                       "list": [
                                                                                                         {"literal": {"string": "Constructs an immutable {@link "}},
@@ -8977,14 +8979,14 @@
                                                                                                         "argument": {"variable": "consBaseComment"}}},
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                         "argument": {
                                                                                                           "list": [
                                                                                                             {"variable": "consBaseComment"},
                                                                                                             {"literal": {"string": "\n\n"}},
                                                                                                             {
                                                                                                               "application": {
-                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "\n"}}}},
+                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
                                                                                                                 "argument": {"variable": "nonEmptyParamLines"}}}]}}}}},
                                                                                                 "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                                                               {
@@ -9801,10 +9803,10 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                             "argument": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "elNameStr"}}},
+                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "elNameStr"}}},
                                                                                                 "argument": {"literal": {"string": "."}}}}}},
                                                                                         "argument": {"variable": "varLocalStr"}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}},
@@ -9849,7 +9851,7 @@
                                                                                     "name": "comment",
                                                                                     "term": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                         "argument": {
                                                                                           "list": [{"literal": {"string": "Visit the {@link "}}, {"variable": "linkVarNameStr"}, {"literal": {"string": "} case."}}]}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
@@ -10165,10 +10167,10 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                             "argument": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "elNameStr"}}},
+                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "elNameStr"}}},
                                                                                                 "argument": {"literal": {"string": "."}}}}}},
                                                                                         "argument": {"variable": "varLocalStr"}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}},
@@ -10242,7 +10244,7 @@
                                                                                     "name": "comment",
                                                                                     "term": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                         "argument": {
                                                                                           "list": [{"literal": {"string": "Visit the {@link "}}, {"variable": "linkVarNameStr"}, {"literal": {"string": "} case."}}]}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
@@ -10449,7 +10451,7 @@
                                                                                     "name": "privateConstComment",
                                                                                     "term": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                         "argument": {
                                                                                           "list": [{"literal": {"string": "Constructs an immutable {@link "}}, {"variable": "elNameStr"}, {"literal": {"string": "}."}}]}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}},
@@ -10461,14 +10463,14 @@
                                                                                     "name": "visitorIfaceComment",
                                                                                     "term": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                         "argument": {"list": [{"literal": {"string": "Visitor over {@link "}}, {"variable": "elNameStr"}, {"literal": {"string": "}."}}]}}},
                                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                                                   {
                                                                                     "name": "partialVisitorIfaceComment",
                                                                                     "term": {
                                                                                       "application": {
-                                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                                         "argument": {
                                                                                           "list": [
                                                                                             {"literal": {"string": "Partial visitor over {@link "}},
@@ -10723,7 +10725,7 @@
                                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Field"}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
@@ -10791,7 +10793,7 @@
                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Field"}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {
@@ -10842,7 +10844,7 @@
                                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Field"}}},
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "function": {
@@ -10931,7 +10933,7 @@
                                                                                         "type": {"variable": "hydra.core.Type"}}},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Field"}}},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {
@@ -10982,7 +10984,7 @@
                                                                                                         "type": {"variable": "hydra.core.Type"}}},
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Field"}}},
+                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Field"}}},
                                                                                                         "argument": {
                                                                                                           "application": {
                                                                                                             "function": {
@@ -11119,7 +11121,7 @@
                     "function": {
                       "application": {
                         "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"variable": "hydra.core.Binding"}}}},
+                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"list": {"variable": "hydra.core.Binding"}}}},
                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}}}},
                     "argument": {
                       "application": {
@@ -11920,7 +11922,7 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {"variable": "selfRefCount"}}},
                                                             "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                     "argument": {
@@ -12191,12 +12193,12 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                "function": {"variable": "hydra.lib.strings.concat2"},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.lib.strings.cat2"},
+                                                        "function": {"variable": "hydra.lib.strings.concat2"},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -12234,12 +12236,12 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                                    "function": {"variable": "hydra.lib.strings.concat2"},
                                                     "argument": {
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {
@@ -12323,11 +12325,11 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": "string"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "string"}}},
                                 "argument": {"variable": "nsStr"}}},
                             "argument": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
                                 "argument": {"variable": "parts"}}}}}}}}}}}}}}},
     {
       "term": {
@@ -12762,7 +12764,7 @@
                                                                                                             "body": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
-                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.eithers.foldl"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
+                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.eithers.foldList"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                                                         "argument": {
@@ -13170,7 +13172,7 @@
                                                                                                                                     "body": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
-                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.eithers.foldl"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
+                                                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.eithers.foldList"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
                                                                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                                 "argument": {
@@ -14165,14 +14167,14 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "elimination case"}}}},
+                                                                                "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "elimination case"}}}},
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " in "}}}},
+                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " in "}}}},
                                                                                   "argument": {"literal": {"string": "encodeElimination"}}}}}}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.java.syntax.Expression"}}},
@@ -15272,7 +15274,7 @@
                                                                     "application": {
                                                                       "function": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat2"},
                                                                           "argument": {"literal": {"string": "Unimplemented function variant: "}}}},
                                                                       "argument": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "funTerm"}}}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -15427,7 +15429,7 @@
                                                                                                                 "application": {
                                                                                                                   "function": {
                                                                                                                     "application": {
-                                                                                                                      "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                      "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                                       "argument": {"literal": {"string": "expected function type for lambda body, but got: "}}}},
                                                                                                                   "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "cod"}}}}}}}}}}}},
                                                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -15852,7 +15854,7 @@
                                             "name": "suffix",
                                             "term": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "."}}}},
+                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "."}}}},
                                                 "argument": {"variable": "hydra.java.names.applyMethodName"}}},
                                             "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                           {
@@ -15903,7 +15905,7 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
                                                             "argument": {"variable": "arity"}}},
                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                 "argument": {
@@ -15920,7 +15922,7 @@
                                                                     "typeName": "hydra.java.syntax.Identifier",
                                                                     "body": {
                                                                       "application": {
-                                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                                         "argument": {"list": [{"variable": "className"}, {"literal": {"string": "::"}}, {"variable": "hydra.java.names.applyMethodName"}]}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.java.syntax.Expression"}}}}},
@@ -15946,7 +15948,7 @@
                                                                     "typeName": "hydra.core.Name",
                                                                     "body": {
                                                                       "application": {
-                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "p"}}}},
+                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "p"}}}},
                                                                         "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}}}}}}}}}},
                                                         "argument": {
                                                           "application": {
@@ -16156,7 +16158,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                             "argument": {"variable": "w"}}},
                                                                                         "argument": {"literal": {"integer": {"int32": 127}}}}}}},
                                                                                 "argument": {
@@ -17444,14 +17446,14 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "nullary function"}}}},
+                                                                                "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "nullary function"}}}},
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": " in "}}}},
+                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " in "}}}},
                                                                                   "argument": {"application": {"function": {"variable": "hydra.print.core.term"}, "argument": {"variable": "funTerm"}}}}}}}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "t4"}}}}}}}}}}}}}}}}}}}}}}}}},
@@ -18003,16 +18005,16 @@
                                                             "typeName": "hydra.java.syntax.Identifier",
                                                             "body": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
+                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": "string"}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"list": {"literal": "string"}}}},
                                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                                                                     "argument": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": "string"}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.init"}, "type": {"literal": "string"}}},
                                                                         "argument": {"variable": "parts"}}}}}}}}},
                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Identifier"}}},
                                                       {
@@ -18024,11 +18026,11 @@
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": "string"}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "fullName"}}},
                                                                 "argument": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "parts"}}}}}}},
                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.Identifier"}}}],
                                                     "body": {
@@ -18522,7 +18524,7 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cat"},
+                                                                                "body": {"variable": "hydra.lib.optionals.givens"},
                                                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.Name"}}}}},
                                                                             "argument": {
                                                                               "application": {
@@ -18701,7 +18703,7 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.fromOptional"},
+                                                                                "body": {"variable": "hydra.lib.optionals.withDefault"},
                                                                                 "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                                                                             "argument": {
                                                                               "typeApplication": {
@@ -19219,7 +19221,7 @@
                                                                                                                                                       "application": {
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
-                                                                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                                                                             "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "p"}}}}},
                                                                                                                                                         "argument": {"variable": "tcoSuffix"}}}}}}}}},
                                                                                                                                         "argument": {"variable": "params"}}},
@@ -22944,7 +22946,7 @@
                                                                 "typeName": "hydra.java.syntax.Identifier",
                                                                 "body": {
                                                                   "application": {
-                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                     "argument": {
                                                                       "list": [
                                                                         {"variable": "typeId"},
@@ -23814,26 +23816,26 @@
                                                                                                                                                   "application": {
                                                                                                                                                     "function": {
                                                                                                                                                       "application": {
-                                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                                                                         "argument": {"variable": "correctedTyp"}}},
                                                                                                                                                     "argument": {
                                                                                                                                                       "application": {
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
-                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeAt"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.at"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                                                                             "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                                                                                                                         "argument": {"variable": "allTypeArgs"}}}}},
                                                                                                                                                 "second": {
                                                                                                                                                   "application": {
                                                                                                                                                     "function": {
                                                                                                                                                       "application": {
-                                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                                                                         "argument": {"variable": "correctedTyp"}}},
                                                                                                                                                     "argument": {
                                                                                                                                                       "application": {
                                                                                                                                                         "function": {
                                                                                                                                                           "application": {
-                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeAt"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.at"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}},
                                                                                                                                                         "argument": {"variable": "allTypeArgs"}}}}}}},
                                                                                                                                             "type": {"variable": "hydra.core.Type"}}},
@@ -24709,11 +24711,11 @@
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                     "argument": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                     "argument": {"variable": "args2"}}}}},
                                                                             "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}}],
                                                                         "body": {
@@ -24887,7 +24889,7 @@
                                                                                                                         "function": {"variable": "hydra.java.utils.javaIdentifier"},
                                                                                                                         "argument": {
                                                                                                                           "application": {
-                                                                                                                            "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                            "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                             "argument": {
                                                                                                                               "list": [
                                                                                                                                 {"literal": {"string": "_tco_match_"}},
@@ -25728,7 +25730,7 @@
                                                                     "application": {
                                                                       "function": {
                                                                         "application": {
-                                                                          "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                          "function": {"variable": "hydra.lib.strings.concat2"},
                                                                           "argument": {"literal": {"string": "can't encode unsupported type in Java: "}}}},
                                                                       "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -26834,7 +26836,7 @@
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Name"}}},
                                                                     "argument": {"variable": "name0"}}},
                                                                 "argument": {
                                                                   "application": {
@@ -27614,7 +27616,7 @@
                                                                 "typeName": "hydra.core.Name",
                                                                 "body": {
                                                                   "application": {
-                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                     "argument": {
                                                                       "list": [
                                                                         {"variable": "hydra.java.names.instanceName"},
@@ -28097,7 +28099,7 @@
                     "function": {
                       "application": {
                         "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
+                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
                         "argument": {"variable": "inner"}}},
                     "argument": {
                       "application": {
@@ -28201,7 +28203,7 @@
                                                         "typeName": "hydra.core.Name",
                                                         "body": {
                                                           "application": {
-                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "p"}}}},
+                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "p"}}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}}}}}}}}}},
                                             "argument": {
                                               "application": {
@@ -29646,7 +29648,7 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Name"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Name"}}},
                                     "argument": {"variable": "name"}}},
                                 "argument": {
                                   "application": {
@@ -29773,7 +29775,7 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.elem"}, "type": {"variable": "t0"}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "t0"}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
@@ -29822,7 +29824,7 @@
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                "body": {"variable": "hydra.lib.lists.head"},
                                 "type": {"pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
                             "argument": {"variable": "selfRefs"}}}}}}}}}}}}},
     {
@@ -30035,7 +30037,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat2"},
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
                                         "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "base"}}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}}}}}},
                             "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
@@ -30324,7 +30326,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.lib.strings.fromList"},
@@ -30515,7 +30517,7 @@
                                                                                                       "application": {
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                            "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {"unwrap": "hydra.java.syntax.Identifier"},
@@ -30535,7 +30537,7 @@
                                                                                                                                 "term": {"application": {"function": {"variable": "hydra.formatting.capitalize"}, "argument": {"variable": "localName"}}}}]}}}}}}}}}},
                                                                                                         "argument": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "."}}}},
+                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "."}}}},
                                                                                                             "argument": {"variable": "hydra.java.names.applyMethodName"}}}}}}}}}}},
                                                                                         "argument": {
                                                                                           "wrap": {
@@ -30851,7 +30853,7 @@
                                                                         "application": {
                                                                           "function": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat2"},
                                                                               "argument": {"literal": {"string": "expected function type, got: "}}}},
                                                                           "argument": {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "t"}}}}}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -31281,10 +31283,10 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                    "function": {"variable": "hydra.lib.strings.concat2"},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "id"}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "id"}}},
                                         "argument": {"literal": {"string": "."}}}}}},
                                 "argument": {"variable": "local"}}}}}}}}}}}}}}},
     {
@@ -31889,7 +31891,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
                         "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "v"}}}}},
                     "argument": {"literal": {"integer": {"int32": 4}}}}}}}}}}},
     {
@@ -32052,7 +32054,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": "boolean"}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "boolean"}}},
                         "argument": {"literal": {"boolean": false}}}},
                     "argument": {
                       "application": {
@@ -32164,14 +32166,14 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
                             "argument": {"variable": "c"}}},
                         "argument": {"literal": {"integer": {"int32": 48}}}}}}},
                 "argument": {
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
                         "argument": {"variable": "c"}}},
                     "argument": {"literal": {"integer": {"int32": 57}}}}}}}}}}},
     {
@@ -32441,7 +32443,7 @@
                     "name": "vars",
                     "term": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.core.Name"}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.distinct"}, "type": {"variable": "hydra.core.Name"}}},
                         "argument": {
                           "application": {
                             "function": {
@@ -32759,11 +32761,11 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": "string"}}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"list": {"literal": "string"}}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": "string"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.init"}, "type": {"literal": "string"}}},
                             "argument": {"variable": "parts"}}}}},
                     "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
                 "body": {
@@ -32785,7 +32787,7 @@
                           "typeName": "hydra.packaging.ModuleName",
                           "body": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
+                              "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
                               "argument": {"variable": "initParts"}}}}}}}}}}}}}},
     {
       "term": {
@@ -33174,7 +33176,7 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
                                     "argument": {"variable": "n"}}},
                                 "argument": {"literal": {"integer": {"int32": 0}}}}}}},
                         "argument": {
@@ -33293,7 +33295,7 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
                                     "argument": {"variable": "n"}}},
                                 "argument": {"literal": {"integer": {"int32": 0}}}}}}},
                         "argument": {
@@ -33974,14 +33976,14 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"variable": "nLambdaDoms"}}},
                                                 "argument": {"literal": {"integer": {"int32": 0}}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {"variable": "nArgs"}}},
                                             "argument": {"literal": {"integer": {"int32": 0}}}}}}}}},
                                 "argument": {
@@ -34247,7 +34249,7 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Term"}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Term"}}},
                                                 "argument": {"variable": "f"}}},
                                             "argument": {
                                               "application": {
@@ -34756,10 +34758,12 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
-                                                                              "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "Builds an immutable {@link "}}}},
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.lib.strings.concat2"},
+                                                                                "argument": {"literal": {"string": "Builds an immutable {@link "}}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "recordLocalName"}}},
                                                                                 "argument": {"literal": {"string": "}."}}}}}}}},
                                                                     "argument": {
                                                                       "application": {
@@ -34825,11 +34829,11 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                 "argument": {"literal": {"string": "A fluent builder for {@link "}}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "recordLocalName"}}},
                                                                                 "argument": {"literal": {"string": "}."}}}}}}}},
                                                                     "argument": {
                                                                       "inject": {
@@ -34887,11 +34891,11 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                 "argument": {"literal": {"string": "Creates a new fluent builder for {@link "}}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "recordLocalName"}}},
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "recordLocalName"}}},
                                                                                 "argument": {"literal": {"string": "}."}}}}}}}},
                                                                     "argument": {
                                                                       "application": {
@@ -35671,7 +35675,7 @@
                                             "name": "methodName",
                                             "term": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "with"}}}},
+                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "with"}}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {"variable": "hydra.formatting.nonAlnumToUnderscores"},
@@ -36082,7 +36086,7 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.elem"}, "type": {"variable": "t0"}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "t0"}}},
                                             "argument": {"variable": "inVar"}}},
                                         "argument": {"variable": "outVars"}}}}},
                                 "argument": {
@@ -36351,7 +36355,7 @@
                                                         "name": "helperName",
                                                         "term": {
                                                           "application": {
-                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "_init_"}}}},
+                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "_init_"}}}},
                                                             "argument": {"variable": "varName"}}},
                                                         "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                       {
@@ -37133,7 +37137,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.lt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lt"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.java.syntax.Type"}}},
@@ -37155,7 +37159,7 @@
                                                                   "typeName": "hydra.errors.OtherError",
                                                                   "body": {
                                                                     "application": {
-                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                       "argument": {
                                                                         "list": [
                                                                           {"literal": {"string": "needed type arguments for "}},
@@ -37542,7 +37546,7 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Binding"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Binding"}}},
                                                             "argument": {
                                                               "record": {
                                                                 "typeName": "hydra.core.Binding",
@@ -37554,7 +37558,7 @@
                                                                     "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}]}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Binding"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Binding"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {
@@ -37860,7 +37864,7 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.core.Binding"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.core.Binding"}}},
                                                             "argument": {
                                                               "record": {
                                                                 "typeName": "hydra.core.Binding",
@@ -37872,7 +37876,7 @@
                                                                     "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}]}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.core.Binding"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.core.Binding"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {
@@ -39092,7 +39096,7 @@
                                                                                                                                 "typeName": "hydra.core.Name",
                                                                                                                                 "body": {
                                                                                                                                   "application": {
-                                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "p"}}}},
+                                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "p"}}}},
                                                                                                                                     "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}}}}}}}}}},
                                                                                                                     "argument": {
                                                                                                                       "application": {
@@ -39700,7 +39704,7 @@
                                                                                 "application": {
                                                                                   "function": {
                                                                                     "application": {
-                                                                                      "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                      "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                       "argument": {"literal": {"string": "visitBranch: field term is not a lambda: "}}}},
                                                                                   "argument": {
                                                                                     "application": {

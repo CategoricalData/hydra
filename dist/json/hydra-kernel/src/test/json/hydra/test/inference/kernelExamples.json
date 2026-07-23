@@ -125,7 +125,7 @@
                                                                           "body": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
+                                                                                "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
                                                                               "argument": {"literal": {"string": "failed"}}}}}}}},
                                                                   "argument": {
                                                                     "lambda": {
@@ -291,7 +291,7 @@
                                                                                                                                                                       "typeName": "hydra.core.Term",
                                                                                                                                                                       "field": {
                                                                                                                                                                         "name": "variable",
-                                                                                                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.cat"}}}}}}}},
+                                                                                                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.givens"}}}}}}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "argument",
                                                                                                                                                                   "term": {
@@ -317,7 +317,7 @@
                                                                                                                                                                                               "typeName": "hydra.core.Term",
                                                                                                                                                                                               "field": {
                                                                                                                                                                                                 "name": "variable",
-                                                                                                                                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}}}}}}}},
+                                                                                                                                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.head"}}}}}}}},
                                                                                                                                                                                         {
                                                                                                                                                                                           "name": "argument",
                                                                                                                                                                                           "term": {
@@ -428,7 +428,7 @@
                                                                                                                                                           "typeName": "hydra.core.Term",
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "variable",
-                                                                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                                                                                     {
                                                                                                                                                       "name": "argument",
                                                                                                                                                       "term": {
@@ -651,7 +651,7 @@
                                                                           "body": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
+                                                                                "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
                                                                               "argument": {"literal": {"string": "failed"}}}}}}}},
                                                                   "argument": {
                                                                     "lambda": {
@@ -1332,7 +1332,7 @@
                                                                           "body": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
+                                                                                "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "INFERENCE ERROR: "}}}},
                                                                               "argument": {"literal": {"string": "failed"}}}}}}}},
                                                                   "argument": {
                                                                     "lambda": {
@@ -1713,7 +1713,7 @@
                                                                                                                                                                                                                                                                                                                 "typeName": "hydra.core.Term",
                                                                                                                                                                                                                                                                                                                 "field": {
                                                                                                                                                                                                                                                                                                                   "name": "variable",
-                                                                                                                                                                                                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                                                                                                                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                                                                                             "name": "argument",
                                                                                                                                                                                                                                                                                                             "term": {

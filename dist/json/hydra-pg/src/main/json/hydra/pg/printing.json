@@ -112,7 +112,7 @@
                                 "name": "props",
                                 "term": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": ", "}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -165,7 +165,7 @@
                                 "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                             "body": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"variable": "id"},
@@ -305,13 +305,13 @@
                                   "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}],
                             "body": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"literal": {"string": "vertices:"}},
                                     {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -329,7 +329,7 @@
                                                     "domain": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
                                                     "body": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                         "argument": {
                                                           "list": [
                                                             {"literal": {"string": "\n\t"}},
@@ -344,7 +344,7 @@
                                     {"literal": {"string": "\nedges:"}},
                                     {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -362,7 +362,7 @@
                                                     "domain": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
                                                     "body": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                                        "function": {"variable": "hydra.lib.strings.concat"},
                                                         "argument": {
                                                           "list": [
                                                             {"literal": {"string": "\n\t"}},
@@ -411,7 +411,7 @@
                             "domain": {"variable": "t0"},
                             "body": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"application": {"function": {"unwrap": "hydra.pg.model.PropertyKey"}, "argument": {"variable": "key"}}},
@@ -479,7 +479,7 @@
                                 "name": "props",
                                 "term": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": ", "}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -532,7 +532,7 @@
                                 "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                             "body": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"variable": "id"},

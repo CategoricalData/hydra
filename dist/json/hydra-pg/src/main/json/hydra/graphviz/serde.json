@@ -553,7 +553,7 @@
                     "function": {"variable": "hydra.serialization.cst"},
                     "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "function": {"variable": "hydra.lib.strings.concat"},
                         "argument": {
                           "list": [
                             {"literal": {"string": "\""}},
@@ -594,7 +594,7 @@
                         "function": {"variable": "hydra.serialization.noSep"},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "list": [
                                 {
@@ -693,7 +693,7 @@
                         "function": {"variable": "hydra.serialization.spaceSep"},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "list": [
                                 {
@@ -883,7 +883,7 @@
                     "function": {"variable": "hydra.serialization.spaceSep"},
                     "argument": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                         "argument": {
                           "list": [
                             {
@@ -967,7 +967,7 @@
                             "function": {"variable": "hydra.serialization.spaceSep"},
                             "argument": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {
                                   "list": [
                                     {

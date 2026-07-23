@@ -34,25 +34,6 @@
   "definitions": [
     {
       "primitive": {
-        "name": "hydra.lib.equality.compare",
-        "metadata": {
-          "description": "Compare two values and return a Comparison.",
-          "comments": [
-            "compare(x, y) returns the hydra.util.Comparison value that classifies the relationship between x and y under the type's ordering: LessThan if x < y, EqualTo if x == y, GreaterThan if x > y.",
-            "The result type's three-valued tag is the canonical primitive comparison; the boolean comparators (lt/lte/gt/gte) and equal are derivable from it.",
-            "Requires an 'ordering' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Ord instance.",
-            "Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.util.Comparison"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
         "name": "hydra.lib.equality.equal",
         "metadata": {
           "description": "Check whether two values are equal.",
@@ -65,171 +46,11 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the first value to compare", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the second value to compare", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.gt",
-        "metadata": {
-          "description": "Check whether the first value is greater than the second.",
-          "comments": [
-            "gt(x, y) returns true iff x > y under the type's ordering.",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.gte",
-        "metadata": {
-          "description": "Check whether the first value is greater than or equal to the second.",
-          "comments": [
-            "gte(x, y) returns true iff x >= y under the type's ordering.",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.identity",
-        "metadata": {
-          "description": "Return a value unchanged.",
-          "comments": ["identity(x) = x. The polymorphic identity function.", "Total. Corresponds to Haskell's id :: a -> a."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"variable": "x"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.lt",
-        "metadata": {
-          "description": "Check whether the first value is less than the second.",
-          "comments": [
-            "lt(x, y) returns true iff x < y under the type's ordering.",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.lte",
-        "metadata": {
-          "description": "Check whether the first value is less than or equal to the second.",
-          "comments": [
-            "lte(x, y) returns true iff x <= y under the type's ordering.",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.max",
-        "metadata": {
-          "description": "Return the maximum of two values.",
-          "comments": [
-            "max(x, y) returns the larger of x and y under the type's ordering; if x == y, it returns y (matching Haskell's convention).",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's max :: Ord a => a -> a -> a."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"variable": "x"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "x",
-            "body": {
-              "lambda": {
-                "parameter": "y",
-                "body": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.logic.ifElse"},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.equality.gte"}, "argument": {"variable": "x"}}},
-                                "argument": {"variable": "y"}}}}},
-                        "argument": {"variable": "x"}}},
-                    "argument": {"variable": "y"}}}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.equality.min",
-        "metadata": {
-          "description": "Return the minimum of two values.",
-          "comments": [
-            "min(x, y) returns the smaller of x and y under the type's ordering; if x == y, it returns x (matching Haskell's convention).",
-            "Requires an 'ordering' constraint on the argument type.",
-            "Total. Corresponds to Haskell's min :: Ord a => a -> a -> a."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"variable": "x"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "x",
-            "body": {
-              "lambda": {
-                "parameter": "y",
-                "body": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.logic.ifElse"},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.equality.lte"}, "argument": {"variable": "x"}}},
-                                "argument": {"variable": "y"}}}}},
-                        "argument": {"variable": "x"}}},
-                    "argument": {"variable": "y"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.equality.notEqual",
@@ -243,8 +64,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the first value to compare", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the second value to compare", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,

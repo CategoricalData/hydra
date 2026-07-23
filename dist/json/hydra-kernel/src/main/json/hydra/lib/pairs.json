@@ -48,9 +48,21 @@
             {"name": "c", "constraints": []},
             {"name": "d", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "c"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"function": {"domain": {"variable": "b"}, "codomain": {"variable": "d"}}}, "isLazy": false},
-            {"name": "arg2", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function applied to the first element",
+              "type": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "c"}}},
+              "isLazy": false},
+            {
+              "name": "g",
+              "description": "the function applied to the second element",
+              "type": {"function": {"domain": {"variable": "b"}, "codomain": {"variable": "d"}}},
+              "isLazy": false},
+            {
+              "name": "p",
+              "description": "the pair to map over",
+              "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}},
+              "isLazy": false}],
           "result": {"type": {"pair": {"first": {"variable": "c"}, "second": {"variable": "d"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -82,7 +94,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "p",
+              "description": "the pair whose first element is returned",
+              "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "a"}}},
         "isPure": true,
         "isTotal": true}},
@@ -95,7 +112,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "p",
+              "description": "the pair whose second element is returned",
+              "type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "b"}}},
         "isPure": true,
         "isTotal": true}}]}

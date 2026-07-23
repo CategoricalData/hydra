@@ -46,9 +46,17 @@
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "t2"}, "codomain": {"variable": "t3"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "t2"}}}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "t1"}, "isLazy": false}],
+            {
+              "name": "g",
+              "description": "the outer function, applied to the result of f",
+              "type": {"function": {"domain": {"variable": "t2"}, "codomain": {"variable": "t3"}}},
+              "isLazy": false},
+            {
+              "name": "f",
+              "description": "the inner function, applied to x first",
+              "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "t2"}}},
+              "isLazy": false},
+            {"name": "x", "description": "the argument to which f is applied", "type": {"variable": "t1"}, "isLazy": false}],
           "result": {"type": {"variable": "t3"}}},
         "isPure": true,
         "isTotal": true,
@@ -78,8 +86,8 @@
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "t1"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "t2"}, "isLazy": false}],
+            {"name": "x", "description": "the value to return", "type": {"variable": "t1"}, "isLazy": false},
+            {"name": "y", "description": "the ignored second argument", "type": {"variable": "t2"}, "isLazy": false}],
           "result": {"type": {"variable": "t1"}}},
         "isPure": true,
         "isTotal": true,
@@ -97,12 +105,13 @@
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the binary function whose argument order is swapped",
               "type": {
                 "function": {"domain": {"variable": "t1"}, "codomain": {"function": {"domain": {"variable": "t2"}, "codomain": {"variable": "t3"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "t2"}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "t1"}, "isLazy": false}],
+            {"name": "x", "description": "the argument passed as f's second argument", "type": {"variable": "t2"}, "isLazy": false},
+            {"name": "y", "description": "the argument passed as f's first argument", "type": {"variable": "t1"}, "isLazy": false}],
           "result": {"type": {"variable": "t3"}}},
         "isPure": true,
         "isTotal": true,
@@ -131,7 +140,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "t1"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to return unchanged", "type": {"variable": "t1"}, "isLazy": false}],
           "result": {"type": {"variable": "t1"}}},
         "isPure": true,
         "isTotal": true,

@@ -8044,7 +8044,7 @@
                                                                                                                                 "typeName": "hydra.core.Term",
                                                                                                                                 "field": {
                                                                                                                                   "name": "variable",
-                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.equality.gt"}}}}}}}},
+                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.ordering.gt"}}}}}}}},
                                                                                                                           {
                                                                                                                             "name": "argument",
                                                                                                                             "term": {
@@ -16971,7 +16971,7 @@
                                                                                                                 "typeName": "hydra.core.Term",
                                                                                                                 "field": {
                                                                                                                   "name": "variable",
-                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showBoolean"}}}}}}}},
+                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printBoolean"}}}}}}}},
                                                                                                           {
                                                                                                             "name": "argument",
                                                                                                             "term": {
@@ -20932,7 +20932,7 @@
                                                                                                                                                                       "typeName": "hydra.core.Term",
                                                                                                                                                                       "field": {
                                                                                                                                                                         "name": "variable",
-                                                                                                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showBoolean"}}}}}}}},
+                                                                                                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printBoolean"}}}}}}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "argument",
                                                                                                                                                                   "term": {
@@ -26435,7 +26435,7 @@
                                                                                                     "typeName": "hydra.core.Term",
                                                                                                     "field": {
                                                                                                       "name": "variable",
-                                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                               {
                                                                                                 "name": "argument",
                                                                                                 "term": {

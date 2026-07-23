@@ -45,8 +45,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "x", "description": "the element to remove", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "s", "description": "the set to remove the element from", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -63,8 +63,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s1", "description": "the set to subtract from", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "s2", "description": "the set of elements to remove", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -135,10 +135,11 @@
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "predicate",
+              "description": "the predicate to test each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s", "description": "the set to filter", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -167,7 +168,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "xs",
+              "description": "the list of elements to build the set from",
+              "type": {"list": {"variable": "x"}},
+              "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -184,8 +190,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "x", "description": "the element to add", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "s", "description": "the set to add the element to", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -202,8 +208,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s1", "description": "the first set", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "s2", "description": "the second set", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -257,8 +263,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to each element",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "s", "description": "the set to map over", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true,
@@ -288,8 +298,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "x", "description": "the element to test for membership", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "s", "description": "the set to test against", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -305,7 +315,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the set to test for emptiness", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -321,7 +331,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the single element of the set", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -337,7 +347,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the set whose size is returned", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -353,7 +363,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "s", "description": "the set to convert to a list", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -370,8 +380,8 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s1", "description": "the first set", "type": {"set": {"variable": "x"}}, "isLazy": false},
+            {"name": "s2", "description": "the second set", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -412,7 +422,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "arg0", "type": {"list": {"set": {"variable": "x"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "ss",
+              "description": "the list of sets to union together",
+              "type": {"list": {"set": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"set": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,

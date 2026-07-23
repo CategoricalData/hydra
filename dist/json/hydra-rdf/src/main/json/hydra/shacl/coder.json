@@ -519,7 +519,7 @@
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "function": {
-                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}},
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}},
                                                                                                 "argument": {"list": [{"variable": "minC"}, {"variable": "maxC"}]}}}}}},
                                                                                       {
                                                                                         "name": "defaultValue",
@@ -1554,7 +1554,7 @@
                                                                               "application": {
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.optionals.fromOptional"},
+                                                                                    "body": {"variable": "hydra.lib.optionals.withDefault"},
                                                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
                                                                                 "argument": {"variable": "descs"}}},
                                                                             "argument": {
@@ -2838,7 +2838,7 @@
                                     "name": "typeEls",
                                     "term": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.core.Binding"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.core.Binding"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -3177,7 +3177,7 @@
                             "function": {"typeApplication": {"body": {"variable": "hydra.shacl.coder.err"}, "type": {"variable": "t0"}}},
                             "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {
                                   "list": [
                                     {"literal": {"string": "Expected "}},

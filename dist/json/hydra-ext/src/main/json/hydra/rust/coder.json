@@ -2286,10 +2286,10 @@
                                                                                                   "application": {
                                                                                                     "function": {
                                                                                                       "application": {
-                                                                                                        "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                        "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                         "argument": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "tname"}}},
+                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "tname"}}},
                                                                                                             "argument": {"literal": {"string": "::"}}}}}},
                                                                                                     "argument": {"variable": "fname"}}}}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -2340,10 +2340,10 @@
                                                                                                               "application": {
                                                                                                                 "function": {
                                                                                                                   "application": {
-                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                    "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                                     "argument": {
                                                                                                                       "application": {
-                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "tname"}}},
+                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "tname"}}},
                                                                                                                         "argument": {"literal": {"string": "::"}}}}}},
                                                                                                                 "argument": {"variable": "fname"}}}}}}},
                                                                                                     "argument": {"list": [{"variable": "sval"}]}}}}},
@@ -4022,10 +4022,10 @@
                                                                                                                                             "application": {
                                                                                                                                               "function": {
                                                                                                                                                 "application": {
-                                                                                                                                                  "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                                                  "function": {"variable": "hydra.lib.strings.concat2"},
                                                                                                                                                   "argument": {
                                                                                                                                                     "application": {
-                                                                                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "tname"}}},
+                                                                                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "tname"}}},
                                                                                                                                                       "argument": {"literal": {"string": "::"}}}}}},
                                                                                                                                               "argument": {"variable": "cfname"}}}},
                                                                                                                                         {

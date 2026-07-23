@@ -42,7 +42,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.Command"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "command",
+              "description": "the program and arguments to run",
+              "type": {"variable": "hydra.system.Command"},
+              "isLazy": false}],
           "result": {
             "type": {
               "effect": {
@@ -59,7 +64,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.StatusCode"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "code",
+              "description": "the status code to terminate the process with",
+              "type": {"variable": "hydra.system.StatusCode"},
+              "isLazy": false}],
           "result": {"type": {"effect": "unit"}}},
         "isPure": false,
         "isTotal": true}},
@@ -88,7 +98,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.EnvironmentVariable"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "name",
+              "description": "the name of the environment variable to look up",
+              "type": {"variable": "hydra.system.EnvironmentVariable"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"optional": {"literal": "string"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -144,7 +159,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "bytes",
+              "description": "the raw bytes to write to standard error",
+              "type": {"literal": "binary"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.system.SystemError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -158,7 +178,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "bytes",
+              "description": "the raw bytes to write to standard output",
+              "type": {"literal": "binary"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.system.SystemError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}}]}

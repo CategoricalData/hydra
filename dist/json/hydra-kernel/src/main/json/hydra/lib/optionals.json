@@ -46,10 +46,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "mf",
+              "description": "the optional function",
               "type": {"optional": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {"name": "mx", "description": "the optional argument", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true,
@@ -85,9 +86,10 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false},
+            {"name": "m", "description": "the optional value to bind", "type": {"optional": {"variable": "x"}}, "isLazy": false},
             {
-              "name": "arg1",
+              "name": "f",
+              "description": "the continuation to apply to the contained value",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
               "isLazy": false}],
           "result": {"type": {"optional": {"variable": "y"}}}},
@@ -119,58 +121,24 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "y"}, "isLazy": true},
-            {"name": "arg2", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false}],
+            {
+              "name": "m",
+              "description": "the optional value to eliminate",
+              "type": {"optional": {"variable": "x"}},
+              "isLazy": false},
+            {
+              "name": "def",
+              "description": "the value to return when the optional is none",
+              "type": {"variable": "y"},
+              "isLazy": true},
+            {
+              "name": "f",
+              "description": "the function to apply to the contained value when the optional is given",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "y"}}},
         "isPure": true,
         "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.optionals.cat",
-        "metadata": {
-          "description": "Concatenate optionals, keeping only the present values.",
-          "comments": [
-            "cat(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
-            "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"optional": {"variable": "x"}}}, "isLazy": false}],
-          "result": {"type": {"list": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "xs",
-            "body": {
-              "application": {
-                "function": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {"variable": "hydra.lib.lists.foldr"},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "m",
-                            "body": {
-                              "lambda": {
-                                "parameter": "acc",
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                                        "argument": {"variable": "acc"}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "v",
-                                        "body": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "v"}}},
-                                            "argument": {"variable": "acc"}}}}}}}}}}}}},
-                    "argument": {"list": []}}},
-                "argument": {"variable": "xs"}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.compose",
@@ -185,14 +153,16 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the first Kleisli arrow",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
               "isLazy": false},
             {
-              "name": "arg1",
+              "name": "g",
+              "description": "the second Kleisli arrow",
               "type": {"function": {"domain": {"variable": "y"}, "codomain": {"optional": {"variable": "z"}}}},
               "isLazy": false},
-            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the value to apply the composition to", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "z"}}}},
         "isPure": true,
         "isTotal": true,
@@ -226,14 +196,15 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the optional-returning step function",
               "type": {
                 "function": {
                   "domain": {"variable": "x"},
                   "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"optional": {"variable": "x"}}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "acc", "description": "the initial accumulator", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold over", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -273,47 +244,21 @@
                         "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
-        "name": "hydra.lib.optionals.fromOptional",
-        "metadata": {
-          "description": "Return the value contained in an optional, falling back to a default if absent.",
-          "comments": [
-            "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
-            "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": true},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"variable": "x"}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "def",
-            "body": {
-              "lambda": {
-                "parameter": "m",
-                "body": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                        "argument": {"variable": "def"}}},
-                    "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}}}},
-    {
-      "primitive": {
         "name": "hydra.lib.optionals.givens",
         "metadata": {
           "description": "Concatenate optionals, keeping only the present values.",
           "comments": [
             "givens(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
-            "New name for cat (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"optional": {"variable": "x"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "xs",
+              "description": "the list of optionals to concatenate",
+              "type": {"list": {"optional": {"variable": "x"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -359,7 +304,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "m", "description": "the optional to test", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -384,7 +329,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "m", "description": "the optional to test", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -411,8 +356,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to the contained value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "m", "description": "the optional to map over", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true,
@@ -445,10 +394,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the optional-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to traverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"list": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -508,10 +458,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the partial function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "y"}}}},
         "isPure": true,
         "isTotal": true,
@@ -523,7 +474,7 @@
                 "parameter": "xs",
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.optionals.cat"},
+                    "function": {"variable": "hydra.lib.optionals.givens"},
                     "argument": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
@@ -542,10 +493,11 @@
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the optional-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"optional": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s", "description": "the set to traverse", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"set": {"variable": "y"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -612,7 +564,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to wrap in given", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -628,7 +580,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "parameters": [{"name": "m", "description": "the optional to convert", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
@@ -649,14 +601,17 @@
           "description": "Return the value contained in an optional, falling back to a default if absent.",
           "comments": [
             "withDefault(def, m) returns x when m is given(x), and def when m is none.",
-            "New name for fromOptional (retained as a deprecated alias until the #417 breaking wave removes it).",
             "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "x"}, "isLazy": true},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "def",
+              "description": "the default value to return when the optional is none",
+              "type": {"variable": "x"},
+              "isLazy": true},
+            {"name": "m", "description": "the optional to unwrap", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true,

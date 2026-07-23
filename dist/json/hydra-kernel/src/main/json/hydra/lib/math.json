@@ -44,7 +44,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the integer whose absolute value is taken",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -60,7 +65,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the cosine value whose arc cosine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -76,7 +86,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose inverse hyperbolic cosine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -92,8 +107,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+            {"name": "x", "description": "the first addend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the second addend", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -110,8 +125,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "x", "description": "the first addend", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {"name": "y", "description": "the second addend", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -127,7 +142,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the sine value whose arc sine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -142,7 +162,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose inverse hyperbolic sine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -157,7 +182,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the tangent value whose arc tangent is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -174,8 +204,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "y", "description": "the ordinate (y-coordinate)", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {"name": "x", "description": "the abscissa (x-coordinate)", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -190,7 +220,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose inverse hyperbolic tangent is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -206,7 +241,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value to round up toward positive infinity",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -221,7 +261,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -236,8 +276,32 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose hyperbolic cosine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.math.div",
+        "metadata": {
+          "description": "Integer division, or Nothing if dividing by zero.",
+          "comments": [
+            "Total integer division: div(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.",
+            "The division rounds toward negative infinity (floor), so for example div(-7, 2) = Just(-4).",
+            "The boundary case div(minBound, -1), whose mathematical result +2147483648 is not representable in int32, wraps to minBound (the two's-complement overflow).",
+            "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -263,7 +327,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the integer to test for evenness",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -278,10 +347,10 @@
                     "argument": {
                       "application": {
                         "function": {
-                          "application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
+                          "application": {"function": {"variable": "hydra.lib.optionals.withDefault"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                         "argument": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.math.maybeMod"}, "argument": {"variable": "x"}}},
+                            "function": {"application": {"function": {"variable": "hydra.lib.math.mod"}, "argument": {"variable": "x"}}},
                             "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                 "argument": {"literal": {"integer": {"int32": 0}}}}}}}}},
     {
@@ -295,7 +364,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the exponent", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -311,7 +380,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value to round down toward negative infinity",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -326,7 +400,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose natural logarithm is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -343,129 +422,31 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "b", "description": "the logarithm base", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {
+              "name": "x",
+              "description": "the value whose logarithm is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
     {
       "primitive": {
-        "name": "hydra.lib.math.max",
-        "metadata": {
-          "description": "The maximum of two integers.",
-          "comments": [
-            "Return the larger of two int32 values under the usual signed-integer total order.",
-            "Total on all inputs. Corresponds to Haskell's max :: Int32 -> Int32 -> Int32."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.maybeDiv",
-        "metadata": {
-          "description": "Integer division, or Nothing if dividing by zero.",
-          "comments": [
-            "Total integer division: maybeDiv(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.",
-            "The division rounds toward negative infinity (floor), so for example maybeDiv(-7, 2) = Just(-4).",
-            "The boundary case maybeDiv(minBound, -1), whose mathematical result +2147483648 is not representable in int32, wraps to minBound (the two's-complement overflow).",
-            "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.maybeMod",
+        "name": "hydra.lib.math.mod",
         "metadata": {
           "description": "Integer modulus, or Nothing if dividing by zero.",
           "comments": [
-            "Total integer modulus: maybeMod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
-            "The result satisfies the identity x = (maybeDiv(x, y) result) * y + (maybeMod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example maybeMod(-7, 2) = Just(1).",
+            "Total integer modulus: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
+            "The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2) = Just(1).",
             "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.maybePred",
-        "metadata": {
-          "description": "The predecessor of an integer, or Nothing on underflow.",
-          "comments": [
-            "maybePred(x) returns Just(x - 1) when x > minBound, and Nothing when x = minBound (i.e. -2147483648). The function is total and does not wrap.",
-            "Corresponds to Haskell's pred :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's pred is a partial function that raises an error on minBound)."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.maybeRem",
-        "metadata": {
-          "description": "Integer remainder, or Nothing if dividing by zero.",
-          "comments": [
-            "Total integer remainder: maybeRem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
-            "The result satisfies x = (truncate(x / y)) * y + (maybeRem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example maybeRem(-7, 2) = Just(-1).",
-            "The boundary case maybeRem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed).",
-            "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.maybeSucc",
-        "metadata": {
-          "description": "The successor of an integer, or Nothing on overflow.",
-          "comments": [
-            "maybeSucc(x) returns Just(x + 1) when x < maxBound, and Nothing when x = maxBound (i.e. 2147483647). The function is total and does not wrap.",
-            "Corresponds to Haskell's succ :: Int32 -> Int32, wrapped in maybe to make the boundary case total (Haskell's succ is a partial function that raises an error on maxBound)."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.math.min",
-        "metadata": {
-          "description": "The minimum of two integers.",
-          "comments": [
-            "Return the smaller of two int32 values under the usual signed-integer total order.",
-            "Total on all inputs. Corresponds to Haskell's min :: Int32 -> Int32 -> Int32."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -480,8 +461,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+            {"name": "x", "description": "the first factor", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the second factor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -498,8 +479,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "x", "description": "the first factor", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {"name": "y", "description": "the second factor", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -515,7 +496,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the integer to negate", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -530,7 +511,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the value to negate", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -545,7 +526,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the integer to test for oddness",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -581,8 +567,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "x", "description": "the base", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {"name": "y", "description": "the exponent", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -598,9 +584,36 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+            {
+              "name": "a",
+              "description": "the inclusive lower bound of the range",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false},
+            {
+              "name": "b",
+              "description": "the inclusive upper bound of the range",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"list": {"literal": {"integer": "int32"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.math.rem",
+        "metadata": {
+          "description": "Integer remainder, or Nothing if dividing by zero.",
+          "comments": [
+            "Total integer remainder: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
+            "The result satisfies x = (truncate(x / y)) * y + (rem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example rem(-7, 2) = Just(-1).",
+            "The boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed).",
+            "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -615,7 +628,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value to round to the nearest integer",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -632,8 +650,12 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+            {
+              "name": "n",
+              "description": "the number of decimal places to round to",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false},
+            {"name": "x", "description": "the float32 value to round", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -650,8 +672,12 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {
+              "name": "n",
+              "description": "the number of decimal places to round to",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false},
+            {"name": "x", "description": "the float64 value to round", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -667,7 +693,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the integer whose sign is returned",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -682,7 +713,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -697,7 +728,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose hyperbolic sine is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -713,7 +749,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose square root is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -729,8 +770,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+            {"name": "x", "description": "the minuend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "y", "description": "the subtrahend", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -747,8 +788,8 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+            {"name": "x", "description": "the minuend", "type": {"literal": {"float": "float64"}}, "isLazy": false},
+            {"name": "y", "description": "the subtrahend", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -763,7 +804,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -778,7 +819,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value whose hyperbolic tangent is computed",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -794,7 +840,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "x",
+              "description": "the value to truncate toward zero",
+              "type": {"literal": {"float": "float64"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}}]}

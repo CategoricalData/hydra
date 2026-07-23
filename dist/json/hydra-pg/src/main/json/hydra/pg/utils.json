@@ -665,7 +665,7 @@
                                                                                         "application": {
                                                                                           "function": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"variable": "hydra.lib.optionals.cat"},
+                                                                                              "body": {"variable": "hydra.lib.optionals.givens"},
                                                                                               "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
                                                                                           "argument": {
                                                                                             "list": [
@@ -1096,7 +1096,7 @@
                                                                                                         "application": {
                                                                                                           "function": {
                                                                                                             "typeApplication": {
-                                                                                                              "body": {"variable": "hydra.lib.optionals.cat"},
+                                                                                                              "body": {"variable": "hydra.lib.optionals.givens"},
                                                                                                               "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
                                                                                                           "argument": {
                                                                                                             "list": [

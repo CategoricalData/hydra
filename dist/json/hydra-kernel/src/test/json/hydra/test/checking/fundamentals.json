@@ -501,7 +501,7 @@
                                                                                       "typeName": "hydra.core.Term",
                                                                                       "field": {
                                                                                         "name": "variable",
-                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                 {
                                                                                   "name": "argument",
                                                                                   "term": {
@@ -797,7 +797,7 @@
                                                                         "typeName": "hydra.core.Term",
                                                                         "field": {
                                                                           "name": "variable",
-                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                   {
                                                                     "name": "argument",
                                                                     "term": {
@@ -2210,7 +2210,7 @@
                                                                                                                   "typeName": "hydra.core.Term",
                                                                                                                   "field": {
                                                                                                                     "name": "variable",
-                                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}}]}}}}}},
+                                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}}]}}}}}},
                                                                                               {
                                                                                                 "name": "argument",
                                                                                                 "term": {
@@ -2431,7 +2431,7 @@
                                                                                                         "typeName": "hydra.core.Term",
                                                                                                         "field": {
                                                                                                           "name": "variable",
-                                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                                   {
                                                                                                     "name": "argument",
                                                                                                     "term": {
@@ -2615,7 +2615,7 @@
                                                                                                                 "typeName": "hydra.core.Term",
                                                                                                                 "field": {
                                                                                                                   "name": "variable",
-                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                                           {
                                                                                                             "name": "argument",
                                                                                                             "term": {
@@ -3525,7 +3525,7 @@
                                                                                                                 "typeName": "hydra.core.Term",
                                                                                                                 "field": {
                                                                                                                   "name": "variable",
-                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}}}}}}}},
+                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.head"}}}}}}}},
                                                                                                           {
                                                                                                             "name": "argument",
                                                                                                             "term": {
@@ -10339,7 +10339,7 @@
                                                                                                                               "typeName": "hydra.core.Term",
                                                                                                                               "field": {
                                                                                                                                 "name": "variable",
-                                                                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat2"}}}}}}}},
                                                                                                                         {
                                                                                                                           "name": "argument",
                                                                                                                           "term": {
@@ -13800,7 +13800,7 @@
                                                           "typeName": "hydra.core.Term",
                                                           "field": {
                                                             "name": "variable",
-                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}}}}}}}}}}}}}},
+                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.head"}}}}}}}}}}}}}},
                                         {
                                           "name": "expected",
                                           "term": {
@@ -15269,7 +15269,7 @@
                                                           "typeName": "hydra.core.Term",
                                                           "field": {
                                                             "name": "variable",
-                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.equality.identity"}}}}}}}}}}}}}},
+                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.functions.identity"}}}}}}}}}}}}}},
                                         {
                                           "name": "expected",
                                           "term": {

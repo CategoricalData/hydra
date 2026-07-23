@@ -43,8 +43,12 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "binary"}, "isLazy": false}],
+            {
+              "name": "path",
+              "description": "the path of the file to append to",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false},
+            {"name": "contents", "description": "the raw bytes to append", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -59,9 +63,17 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+            {
+              "name": "recursive",
+              "description": "whether to copy a directory tree rather than a single file",
+              "type": {"literal": "boolean"},
+              "isLazy": false},
+            {"name": "source", "description": "the path to copy from", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
+            {
+              "name": "destination",
+              "description": "the path to copy to",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -76,8 +88,16 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+            {
+              "name": "recursive",
+              "description": "whether to create missing parent directories as well",
+              "type": {"literal": "boolean"},
+              "isLazy": false},
+            {
+              "name": "path",
+              "description": "the path of the directory to create",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -91,7 +111,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path to test for existence",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "boolean"}}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -105,7 +130,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path of the directory to list",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {
             "type": {
               "effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"list": {"variable": "hydra.file.FilePath"}}}}}}},
@@ -121,7 +151,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path of the file to read",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -136,8 +171,16 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+            {
+              "name": "recursive",
+              "description": "whether to remove the directory's contents as well",
+              "type": {"literal": "boolean"},
+              "isLazy": false},
+            {
+              "name": "path",
+              "description": "the path of the directory to remove",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -151,7 +194,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path of the file to remove",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -166,8 +214,16 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+            {
+              "name": "source",
+              "description": "the path to rename from",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false},
+            {
+              "name": "destination",
+              "description": "the path to rename to",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -181,7 +237,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path to retrieve metadata for",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
           "result": {
             "type": {
               "effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"variable": "hydra.file.FileStatus"}}}}}},
@@ -198,8 +259,16 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": "binary"}, "isLazy": false}],
+            {
+              "name": "path",
+              "description": "the path of the file to write",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false},
+            {
+              "name": "contents",
+              "description": "the raw bytes to write as the file's contents",
+              "type": {"literal": "binary"},
+              "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}}]}

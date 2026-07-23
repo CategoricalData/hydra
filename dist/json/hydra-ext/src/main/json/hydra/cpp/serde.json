@@ -728,7 +728,7 @@
                                 "function": {"variable": "hydra.serialization.cst"},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "&"}}}},
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "&"}}}},
                                     "argument": {"variable": "name"}}}}}}},
                         "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "name"}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a capture to an expression"}}}]}}}}},
@@ -931,7 +931,7 @@
                             "function": {"variable": "hydra.serialization.spaceSep"},
                             "argument": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {
                                   "list": [
                                     {
@@ -1287,7 +1287,7 @@
                         "function": {"variable": "hydra.serialization.spaceSep"},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "list": [
                                 {
@@ -1607,7 +1607,7 @@
                                                 "function": {"variable": "hydra.serialization.cst"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "~"}}}},
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "~"}}}},
                                                     "argument": {"variable": "name"}}}}},
                                             {
                                               "application": {
@@ -2841,14 +2841,14 @@
                                 "function": {"variable": "hydra.serialization.cst"},
                                 "argument": {
                                   "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "function": {"variable": "hydra.lib.strings.concat"},
                                     "argument": {"list": [{"literal": {"string": "#include <"}}, {"variable": "name"}, {"literal": {"string": ">"}}]}}}}}}},
                         "argument": {
                           "application": {
                             "function": {"variable": "hydra.serialization.cst"},
                             "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {"list": [{"literal": {"string": "#include \""}}, {"variable": "name"}, {"literal": {"string": "\""}}]}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -2933,7 +2933,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "0x"}}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "0x"}}}},
                                         "argument": {"variable": "h"}}}}}}}},
                           {
                             "name": "octal",
@@ -2946,7 +2946,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "0"}}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "0"}}}},
                                         "argument": {"variable": "o"}}}}}}}},
                           {
                             "name": "binary",
@@ -2959,7 +2959,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "0b"}}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "0b"}}}},
                                         "argument": {"variable": "b"}}}}}}}}]}},
                     "argument": {"variable": "i"}}}}},
             "annotation": {
@@ -3141,7 +3141,7 @@
                                 "function": {"variable": "hydra.serialization.cst"},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "label"}}},
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "label"}}},
                                     "argument": {"literal": {"string": ":"}}}}}},
                             {"application": {"function": {"variable": "hydra.cpp.serde.statementToExpr"}, "argument": {"variable": "stmt"}}}]}}}}}}},
             "annotation": {
@@ -3449,7 +3449,7 @@
                                                 "function": {"variable": "hydra.serialization.cst"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                     "argument": {"list": [{"literal": {"string": "\""}}, {"variable": "f"}, {"literal": {"string": "\""}}]}}}}}]}}}}}]}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a line directive to an expression"}}}]}}}}},
@@ -3503,7 +3503,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "list": [
                                             {"literal": {"string": "'"}},
@@ -3520,7 +3520,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "list": [
                                             {"literal": {"string": "\""}},
@@ -4228,7 +4228,8 @@
                                 "function": {"variable": "hydra.serialization.cst"},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "namespace "}}}},
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "namespace "}}}},
                                     "argument": {"variable": "name"}}}}},
                             {
                               "application": {
@@ -4467,7 +4468,7 @@
                                         "argument": {"variable": "unnamed"}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {"list": [{"literal": {"string": "/*"}}, {"variable": "name"}, {"literal": {"string": "*/"}}]}}}}},
                                 "argument": {"variable": "name"}}}}},
                         "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
@@ -4708,7 +4709,8 @@
                     "function": {"variable": "hydra.serialization.cst"},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "#pragma "}}}},
+                        "function": {
+                          "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "#pragma "}}}},
                         "argument": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.PragmaDirective", "fieldName": "content"}},
@@ -4970,7 +4972,7 @@
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "list": [
                                 {
@@ -5068,7 +5070,7 @@
                         "function": {"variable": "hydra.serialization.cst"},
                         "argument": {
                           "application": {
-                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "function": {"variable": "hydra.lib.strings.concat"},
                             "argument": {"list": [{"variable": "ns"}, {"literal": {"string": "::"}}, {"variable": "name"}]}}}}}}}}},
             "annotation": {
               "map": [
@@ -6133,7 +6135,7 @@
                                 "argument": {"variable": "isMultiline"}}},
                             "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.cat"},
+                                "function": {"variable": "hydra.lib.strings.concat"},
                                 "argument": {"list": [{"literal": {"string": "/* "}}, {"variable": "s"}, {"literal": {"string": " */"}}]}}}}},
                         "argument": {
                           "application": {
@@ -6152,7 +6154,7 @@
                                 "argument": {"literal": {"string": "//"}}}},
                             "argument": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "// "}}}},
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "// "}}}},
                                 "argument": {"variable": "s"}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -6274,7 +6276,7 @@
                                             "function": {"variable": "hydra.serialization.cst"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "using "}}}},
+                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "using "}}}},
                                                 "argument": {"variable": "name"}}}}},
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "="}}}},
                                         {"application": {"function": {"variable": "hydra.cpp.serde.typeExpressionToExpr"}, "argument": {"variable": "typ"}}}]}}}}}}},

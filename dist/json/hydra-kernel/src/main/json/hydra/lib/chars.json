@@ -51,7 +51,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -68,7 +73,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -84,7 +94,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -101,7 +116,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -117,7 +137,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -134,7 +159,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -151,7 +181,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to convert, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -168,7 +203,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to convert, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}}]}

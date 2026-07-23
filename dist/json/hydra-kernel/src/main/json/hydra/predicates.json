@@ -119,7 +119,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {"variable": "hydra.arity.typeArity"},
@@ -361,7 +361,7 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {"variable": "hydra.arity.typeSchemeArity"},
@@ -384,7 +384,7 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"application": {"function": {"variable": "hydra.arity.typeSchemeArity"}, "argument": {"variable": "ts"}}}}},
                                                 "argument": {"literal": {"integer": {"int32": 0}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
@@ -793,7 +793,7 @@
                                                         "argument": {"variable": "cx"}}},
                                                     "argument": {"variable": "graph"}}},
                                                 "argument": {"literal": {"boolean": false}}}},
-                                            "argument": {"typeApplication": {"body": {"variable": "hydra.lib.equality.identity"}, "type": {"variable": "hydra.core.Type"}}}}},
+                                            "argument": {"typeApplication": {"body": {"variable": "hydra.lib.functions.identity"}, "type": {"variable": "hydra.core.Type"}}}}},
                                         "argument": {
                                           "application": {"function": {"project": {"typeName": "hydra.core.Binding", "fieldName": "name"}}, "argument": {"variable": "el"}}}}}}}}}}}}}}},
                 "annotation": {
@@ -962,7 +962,7 @@
                                                         "argument": {"variable": "cx"}}},
                                                     "argument": {"variable": "graph"}}},
                                                 "argument": {"literal": {"boolean": false}}}},
-                                            "argument": {"typeApplication": {"body": {"variable": "hydra.lib.equality.identity"}, "type": {"variable": "hydra.core.Type"}}}}},
+                                            "argument": {"typeApplication": {"body": {"variable": "hydra.lib.functions.identity"}, "type": {"variable": "hydra.core.Type"}}}}},
                                         "argument": {"variable": "name"}}}}}}}}}}}}},
                 "annotation": {
                   "map": [

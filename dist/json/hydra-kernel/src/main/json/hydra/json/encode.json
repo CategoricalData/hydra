@@ -649,7 +649,7 @@
                                                                           "either": {
                                                                             "left": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "cannot apply a non-parametric type: "}},
@@ -768,7 +768,7 @@
                                                                                               "either": {
                                                                                                 "left": {
                                                                                                   "application": {
-                                                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                     "argument": {
                                                                                                       "list": [
                                                                                                         {"literal": {"string": "unknown type variable: "}},
@@ -806,7 +806,7 @@
                                                           "either": {
                                                             "left": {
                                                               "application": {
-                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                 "argument": {
                                                                   "list": [
                                                                     {"literal": {"string": "unsupported type for JSON encoding: "}},
@@ -1545,7 +1545,7 @@
                                                                                                                 "application": {
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"variable": "hydra.lib.optionals.cat"},
+                                                                                                                      "body": {"variable": "hydra.lib.optionals.givens"},
                                                                                                                       "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
                                                                                                                   "argument": {"variable": "pairs"}}}}}}}}}},
                                                                                                 "argument": {"variable": "encodedPairs"}}}}}}}}}}}}}}}}]}},
@@ -1644,7 +1644,7 @@
                                                                                                               "either": {
                                                                                                                 "left": {
                                                                                                                   "application": {
-                                                                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                     "argument": {"list": [{"literal": {"string": "unknown variant: "}}, {"variable": "fname"}]}}}}},
                                                                                                             "type": {"literal": "string"}}},
                                                                                                         "type": {"variable": "hydra.core.Type"}}}}},
@@ -2460,7 +2460,7 @@
                                       "either": {
                                         "left": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.strings.cat"},
+                                            "function": {"variable": "hydra.lib.strings.concat"},
                                             "argument": {
                                               "list": [
                                                 {"literal": {"string": "unsupported term variant for JSON encoding: "}},

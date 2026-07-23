@@ -48,7 +48,7 @@
                 "domain": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "module namespaces conflict when mapped to target language path: "}},
@@ -87,7 +87,7 @@
                 "domain": {"variable": "hydra.error.packaging.ConflictingVariantNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "in module "}},
@@ -143,7 +143,7 @@
                 "domain": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "definition "}},
@@ -182,7 +182,7 @@
                 "domain": {"variable": "hydra.error.packaging.DefinitionsOutOfOrderError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "in module "}},
@@ -229,7 +229,7 @@
                 "domain": {"variable": "hydra.error.packaging.DuplicateDefinitionNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "in module "}},
@@ -268,7 +268,7 @@
                 "domain": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "duplicate module namespace "}},
@@ -299,7 +299,7 @@
                 "domain": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "in module "}},
@@ -347,7 +347,7 @@
                 "body": {
                   "application": {
                     "function": {
-                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid module: "}}}},
+                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "invalid module: "}}}},
                     "argument": {
                       "application": {
                         "function": {
@@ -383,7 +383,7 @@
                 "domain": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "namespace "}},
@@ -416,7 +416,7 @@
                 "body": {
                   "application": {
                     "function": {
-                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid package: "}}}},
+                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "invalid package: "}}}},
                     "argument": {
                       "application": {
                         "function": {
@@ -446,7 +446,7 @@
                 "domain": {"variable": "hydra.error.packaging.InvalidPackageNameError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "package name "}},
@@ -476,7 +476,7 @@
                 "domain": {"variable": "hydra.error.packaging.MissingDocumentationError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "in module "}},
@@ -514,7 +514,7 @@
                 "domain": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "module "}},

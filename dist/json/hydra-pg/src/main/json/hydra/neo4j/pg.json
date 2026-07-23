@@ -102,7 +102,7 @@
                                     "name": "expanded",
                                     "term": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {
                                           "list": [
                                             {
@@ -147,7 +147,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -755,7 +755,7 @@
                                                                           "either": {
                                                                             "left": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no node with id "}},
@@ -798,12 +798,11 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "function": {
-                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                                             "argument": {"wrap": {"typeName": "hydra.neo4j.model.NodeLabel", "body": {"literal": {"string": ""}}}}}},
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "function": {
-                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                                             "argument": {"variable": "labels"}}}}}}},
                                                                                 "type": {"literal": "string"}}},
                                                                             "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
@@ -815,7 +814,7 @@
                                                                               "either": {
                                                                                 "left": {
                                                                                   "application": {
-                                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                    "function": {"variable": "hydra.lib.strings.concat"},
                                                                                     "argument": {
                                                                                       "list": [
                                                                                         {"literal": {"string": "endpoint node is not single-labeled: "}},
@@ -1039,12 +1038,11 @@
                                     "function": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                         "argument": {"wrap": {"typeName": "hydra.neo4j.model.NodeLabel", "body": {"literal": {"string": ""}}}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                         "argument": {"variable": "labels"}}}}},
                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.NodeLabel"}}}],
                             "body": {
@@ -1264,7 +1262,7 @@
                                           "either": {
                                             "left": {
                                               "application": {
-                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                 "argument": {
                                                   "list": [
                                                     {"literal": {"string": "cannot map a multi-label Neo4j node to a single-label property-graph vertex: "}},

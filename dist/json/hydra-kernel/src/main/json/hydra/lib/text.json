@@ -43,7 +43,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [
+            {"name": "bytes", "description": "the byte sequence to decode as UTF-8", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"literal": "string"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -58,7 +59,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "parameters": [{"name": "text", "description": "the text to encode as UTF-8", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}}]}

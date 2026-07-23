@@ -47,11 +47,16 @@
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the update function, applied to the optional current value at the key",
               "type": {"function": {"domain": {"optional": {"variable": "v"}}, "codomain": {"optional": {"variable": "v"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {"name": "k", "description": "the key whose binding to alter", "type": {"variable": "k"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to update",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -110,9 +115,21 @@
             {"name": "v1", "constraints": []},
             {"name": "v2", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "k1"}, "codomain": {"variable": "k2"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"function": {"domain": {"variable": "v1"}, "codomain": {"variable": "v2"}}}, "isLazy": false},
-            {"name": "arg2", "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v1"}}}, "isLazy": false}],
+            {
+              "name": "fk",
+              "description": "the function to apply to each key",
+              "type": {"function": {"domain": {"variable": "k1"}, "codomain": {"variable": "k2"}}},
+              "isLazy": false},
+            {
+              "name": "fv",
+              "description": "the function to apply to each value",
+              "type": {"function": {"domain": {"variable": "v1"}, "codomain": {"variable": "v2"}}},
+              "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to transform",
+              "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v1"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k2"}, "values": {"variable": "v2"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -160,8 +177,12 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {"name": "k", "description": "the key to remove", "type": {"variable": "k"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to remove the key from",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -179,8 +200,16 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "m1",
+              "description": "the map whose bindings are retained",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false},
+            {
+              "name": "m2",
+              "description": "the map whose keys are subtracted",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -196,7 +225,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map whose values to return",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "v"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -230,10 +264,15 @@
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each value",
               "type": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "m",
+              "description": "the map to filter",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -273,13 +312,18 @@
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "p",
+              "description": "the predicate to test each key and value",
               "type": {
                 "function": {
                   "domain": {"variable": "k"},
                   "codomain": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": "boolean"}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "m",
+              "description": "the map to filter",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -321,9 +365,17 @@
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "v"}, "isLazy": true},
-            {"name": "arg1", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "def",
+              "description": "the default value, returned when the key is absent",
+              "type": {"variable": "v"},
+              "isLazy": true},
+            {"name": "k", "description": "the key to look up", "type": {"variable": "k"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to search",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "v"}}},
         "isPure": true,
         "isTotal": true,
@@ -338,7 +390,7 @@
                     "parameter": "m",
                     "body": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"variable": "def"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.withDefault"}, "argument": {"variable": "def"}}},
                         "argument": {
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.maps.lookup"}, "argument": {"variable": "k"}}},
@@ -356,7 +408,11 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}, "isLazy": false}],
+            {
+              "name": "xs",
+              "description": "the list of key-value pairs to build the map from",
+              "type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -373,9 +429,13 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "v"}, "isLazy": false},
-            {"name": "arg2", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {"name": "k", "description": "the key to insert", "type": {"variable": "k"}, "isLazy": false},
+            {"name": "v", "description": "the value to bind to the key", "type": {"variable": "v"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to insert into",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -393,8 +453,16 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "m1",
+              "description": "the map whose bindings are retained",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false},
+            {
+              "name": "m2",
+              "description": "the map whose key set is intersected",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -410,7 +478,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map whose keys to return",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"variable": "k"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -427,8 +500,12 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {"name": "k", "description": "the key to look up", "type": {"variable": "k"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to search",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"optional": {"variable": "v"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -448,8 +525,16 @@
             {"name": "v2", "constraints": []},
             {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "v1"}, "codomain": {"variable": "v2"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v1"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to each value",
+              "type": {"function": {"domain": {"variable": "v1"}, "codomain": {"variable": "v2"}}},
+              "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to transform",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v1"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v2"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -494,8 +579,16 @@
             {"name": "k2", "constraints": [{"simple": "ordering"}]},
             {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "k1"}, "codomain": {"variable": "k2"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the function to apply to each key",
+              "type": {"function": {"domain": {"variable": "k1"}, "codomain": {"variable": "k2"}}},
+              "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to transform",
+              "type": {"map": {"keys": {"variable": "k1"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k2"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true,
@@ -537,8 +630,12 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {"name": "k", "description": "the key to test for", "type": {"variable": "k"}, "isLazy": false},
+            {
+              "name": "m",
+              "description": "the map to test",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -554,7 +651,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map to test",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
@@ -571,8 +673,8 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "v"}, "isLazy": false}],
+            {"name": "k", "description": "the key of the single binding", "type": {"variable": "k"}, "isLazy": false},
+            {"name": "v", "description": "the value of the single binding", "type": {"variable": "v"}, "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -588,7 +690,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map whose bindings to count",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -604,7 +711,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map to convert",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"list": {"pair": {"first": {"variable": "k"}, "second": {"variable": "v"}}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -621,8 +733,16 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
+            {
+              "name": "m1",
+              "description": "the map whose bindings take precedence",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false},
+            {
+              "name": "m2",
+              "description": "the map whose remaining bindings are added",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}},
@@ -639,7 +759,12 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"list": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}, "isLazy": false}],
+          "parameters": [
+            {
+              "name": "ms",
+              "description": "the list of maps to combine",
+              "type": {"list": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}},
+              "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
         "isPure": true,
         "isTotal": true}}]}

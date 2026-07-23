@@ -62,7 +62,7 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid id: "}}}},
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "invalid id: "}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.print.error.pg.invalidValueError"}, "argument": {"variable": "v"}}}}}}}},
                           {
                             "name": "inVertexLabel",
@@ -73,7 +73,7 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "wrong in-vertex label: "}}}},
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "wrong in-vertex label: "}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.print.error.pg.wrongVertexLabelError"}, "argument": {"variable": "w"}}}}}}}},
                           {
                             "name": "inVertexNotFound",
@@ -94,7 +94,7 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "wrong out-vertex label: "}}}},
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "wrong out-vertex label: "}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.print.error.pg.wrongVertexLabelError"}, "argument": {"variable": "w"}}}}}}}},
                           {
                             "name": "outVertexNotFound",
@@ -125,7 +125,7 @@
                 "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "property "}},
@@ -179,7 +179,7 @@
                         "domain": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}, "argument": {"variable": "t0"}}},
                         "body": {
                           "application": {
-                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "function": {"variable": "hydra.lib.strings.concat"},
                             "argument": {
                               "list": [
                                 {"literal": {"string": "edge "}},
@@ -308,7 +308,7 @@
                         "domain": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}, "argument": {"variable": "t0"}}},
                         "body": {
                           "application": {
-                            "function": {"variable": "hydra.lib.strings.cat"},
+                            "function": {"variable": "hydra.lib.strings.concat"},
                             "argument": {
                               "list": [
                                 {"literal": {"string": "vertex "}},
@@ -366,7 +366,7 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid value: "}}}},
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "invalid value: "}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.print.error.pg.invalidValueError"}, "argument": {"variable": "v"}}}}}}}},
                           {
                             "name": "missingRequired",
@@ -377,7 +377,9 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "missing required property: "}}}},
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {"literal": {"string": "missing required property: "}}}},
                                     "argument": {"application": {"function": {"unwrap": "hydra.pg.model.PropertyKey"}, "argument": {"variable": "k"}}}}}}}},
                           {
                             "name": "unexpectedKey",
@@ -388,7 +390,9 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected property key: "}}}},
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {"literal": {"string": "unexpected property key: "}}}},
                                     "argument": {"application": {"function": {"unwrap": "hydra.pg.model.PropertyKey"}, "argument": {"variable": "k"}}}}}}}}]}},
                     "argument": {"variable": "e"}}}}},
             "annotation": {
@@ -408,7 +412,7 @@
                 "domain": {"variable": "hydra.error.pg.InvalidValueError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "expected "}},
@@ -451,7 +455,7 @@
                                 "body": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "invalid id: "}}}},
+                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "invalid id: "}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.print.error.pg.invalidValueError"}, "argument": {"variable": "v"}}}}}}}},
                           {
                             "name": "label",
@@ -487,7 +491,7 @@
                 "domain": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "no such edge label: "}},
@@ -515,7 +519,7 @@
                 "domain": {"variable": "hydra.error.pg.NoSuchVertexLabelError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "no such vertex label: "}},
@@ -544,7 +548,7 @@
                 "domain": {"variable": "hydra.error.pg.WrongVertexLabelError"},
                 "body": {
                   "application": {
-                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "function": {"variable": "hydra.lib.strings.concat"},
                     "argument": {
                       "list": [
                         {"literal": {"string": "expected vertex label "}},

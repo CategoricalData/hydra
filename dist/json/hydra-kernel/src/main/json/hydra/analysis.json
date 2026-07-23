@@ -90,7 +90,7 @@
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
@@ -1252,7 +1252,7 @@
                             "argument": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
@@ -1572,7 +1572,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                     "argument": {
                                                                       "application": {
                                                                         "function": {
@@ -2641,7 +2641,7 @@
                                 "name": "defTerms",
                                 "term": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.core.Term"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.core.Term"}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -2797,7 +2797,7 @@
                                 "name": "defTerms",
                                 "term": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.core.Term"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.core.Term"}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -2918,7 +2918,7 @@
                                                     "name": "allBindings",
                                                     "term": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.core.Binding"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.core.Binding"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {

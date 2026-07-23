@@ -56,7 +56,7 @@
                     "body": {
                       "application": {
                         "function": {
-                          "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "generation."}}}},
+                          "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "generation."}}}},
                         "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns_"}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add generation namespace prefix"}}}]}}}}},
     {
@@ -683,7 +683,7 @@
                         "term": {
                           "application": {
                             "function": {
-                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                             "argument": {
                               "application": {
                                 "function": {
@@ -710,7 +710,8 @@
                         "name": "transformedSubgroups",
                         "term": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cat"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.givens"}, "type": {"variable": "hydra.testing.TestGroup"}}},
                             "argument": {
                               "application": {
                                 "function": {

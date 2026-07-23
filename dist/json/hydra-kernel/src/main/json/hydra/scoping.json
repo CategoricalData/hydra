@@ -270,7 +270,7 @@
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.optionals.cat"},
+                                                            "body": {"variable": "hydra.lib.optionals.givens"},
                                                             "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.TypeScheme"}}}}},
                                                         "argument": {
                                                           "application": {
@@ -649,7 +649,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.optionals.cat"},
+                                            "body": {"variable": "hydra.lib.optionals.givens"},
                                             "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.core.TypeScheme"}}}}},
                                         "argument": {
                                           "application": {
@@ -1209,7 +1209,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.optionals.fromOptional"},
+                                            "body": {"variable": "hydra.lib.optionals.withDefault"},
                                             "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
                                         "argument": {
                                           "typeApplication": {
@@ -1472,7 +1472,7 @@
                                                                                                                             "typeName": "hydra.core.Name",
                                                                                                                             "body": {
                                                                                                                               "application": {
-                                                                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                                 "argument": {
                                                                                                                                   "list": [
                                                                                                                                     {"literal": {"string": "arg"}},

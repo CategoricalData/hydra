@@ -144,7 +144,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -227,7 +227,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -323,7 +323,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -456,7 +456,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -568,7 +568,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -702,7 +702,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -866,7 +866,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -991,7 +991,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1140,7 +1140,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1295,7 +1295,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1424,7 +1424,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1528,7 +1528,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1639,7 +1639,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1781,7 +1781,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -1911,7 +1911,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2022,7 +2022,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2171,7 +2171,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2321,7 +2321,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2469,7 +2469,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2624,7 +2624,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2796,7 +2796,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -2976,7 +2976,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3181,7 +3181,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3380,7 +3380,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3496,7 +3496,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3606,7 +3606,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3710,7 +3710,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3839,7 +3839,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -3956,7 +3956,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4085,7 +4085,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4193,7 +4193,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4366,7 +4366,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4470,7 +4470,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4580,7 +4580,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4682,7 +4682,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4814,7 +4814,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -4927,7 +4927,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5069,7 +5069,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5255,7 +5255,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5428,7 +5428,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5617,7 +5617,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5777,7 +5777,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -5949,7 +5949,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6123,7 +6123,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6252,7 +6252,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6381,7 +6381,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6578,7 +6578,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6697,7 +6697,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6834,7 +6834,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -6976,7 +6976,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7101,7 +7101,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7256,7 +7256,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7401,7 +7401,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7559,7 +7559,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7698,7 +7698,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -7878,7 +7878,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -8050,7 +8050,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -8236,7 +8236,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -8439,7 +8439,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -8625,7 +8625,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -8784,7 +8784,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9003,7 +9003,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9145,7 +9145,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9255,7 +9255,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9298,7 +9298,7 @@
                                                                                     "typeName": "hydra.core.Term",
                                                                                     "field": {
                                                                                       "name": "variable",
-                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}}}}}}}},
+                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.head"}}}}}}}},
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
@@ -9360,7 +9360,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9403,7 +9403,7 @@
                                                                                     "typeName": "hydra.core.Term",
                                                                                     "field": {
                                                                                       "name": "variable",
-                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeTail"}}}}}}}},
+                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.tail"}}}}}}}},
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
@@ -9483,7 +9483,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9594,7 +9594,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9637,7 +9637,7 @@
                                                                                     "typeName": "hydra.core.Term",
                                                                                     "field": {
                                                                                       "name": "variable",
-                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat"}}}}}}}},
+                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat"}}}}}}}},
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
@@ -9704,7 +9704,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9809,7 +9809,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -9932,7 +9932,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10074,7 +10074,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10204,7 +10204,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10334,7 +10334,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10388,7 +10388,7 @@
                                                                                                   "typeName": "hydra.core.Term",
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}}}}}}}},
+                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.div"}}}}}}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
@@ -10487,7 +10487,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10692,7 +10692,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -10872,7 +10872,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -11090,7 +11090,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -11253,7 +11253,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -11515,7 +11515,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -11724,7 +11724,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -11881,7 +11881,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12032,7 +12032,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12238,7 +12238,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12391,7 +12391,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12576,7 +12576,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12740,7 +12740,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -12919,7 +12919,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -13110,7 +13110,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -13358,7 +13358,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -13531,7 +13531,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -13790,7 +13790,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -14123,7 +14123,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -14326,7 +14326,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -14636,7 +14636,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -14822,7 +14822,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15128,7 +15128,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15334,7 +15334,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15482,7 +15482,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15630,7 +15630,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15759,7 +15759,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -15896,7 +15896,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16026,7 +16026,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16168,7 +16168,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16211,7 +16211,7 @@
                                                                                     "typeName": "hydra.core.Term",
                                                                                     "field": {
                                                                                       "name": "variable",
-                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}}}}}}}},
+                                                                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.head"}}}}}}}},
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
@@ -16273,7 +16273,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16327,7 +16327,7 @@
                                                                                                   "typeName": "hydra.core.Term",
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.fromOptional"}}}}}}}},
+                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.withDefault"}}}}}}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
@@ -16416,7 +16416,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16546,7 +16546,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16669,7 +16669,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16723,7 +16723,7 @@
                                                                                                   "typeName": "hydra.core.Term",
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}}}}}}}},
+                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.div"}}}}}}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
@@ -16811,7 +16811,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -16865,7 +16865,7 @@
                                                                                                   "typeName": "hydra.core.Term",
                                                                                                   "field": {
                                                                                                     "name": "variable",
-                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.maybeMod"}}}}}}}},
+                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.mod"}}}}}}}},
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
@@ -16971,7 +16971,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -17256,7 +17256,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -17497,7 +17497,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -17765,7 +17765,7 @@
                                                                                                                             "typeName": "hydra.core.Term",
                                                                                                                             "field": {
                                                                                                                               "name": "variable",
-                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat"}}}}}}}},
+                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat"}}}}}}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
                                                                                                                         "term": {
@@ -17907,7 +17907,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},
@@ -18145,7 +18145,7 @@
                                                                                                                             "typeName": "hydra.core.Term",
                                                                                                                             "field": {
                                                                                                                               "name": "variable",
-                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.cat"}}}}}}}},
+                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.strings.concat"}}}}}}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
                                                                                                                         "term": {
@@ -18274,7 +18274,7 @@
                                                                       "body": {
                                                                         "application": {
                                                                           "function": {
-                                                                            "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
+                                                                            "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unexpected: "}}}},
                                                                           "argument": {
                                                                             "application": {
                                                                               "function": {"variable": "hydra.print.core.typeScheme"},

@@ -43,7 +43,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}},
@@ -58,7 +58,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}}]}

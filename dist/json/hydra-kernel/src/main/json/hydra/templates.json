@@ -976,7 +976,7 @@
                                                                                                                 "term": {
                                                                                                                   "application": {
                                                                                                                     "function": {
-                                                                                                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "unbound variable "}}}},
+                                                                                                                      "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "unbound variable "}}}},
                                                                                                                     "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "vname"}}}}}}]}}}}}}}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                     "type": {"variable": "hydra.core.Term"}}}}},

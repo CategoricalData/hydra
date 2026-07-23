@@ -1883,7 +1883,7 @@
                                                                           "domain": {"variable": "hydra.packaging.Module"},
                                                                           "body": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                               "argument": {
                                                                                 "list": [
                                                                                   {
@@ -1915,7 +1915,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "type:"}},
@@ -1934,7 +1934,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "prim:"}},
@@ -1953,7 +1953,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "term:"}},
@@ -2009,7 +2009,7 @@
                                                                           "domain": {"variable": "hydra.packaging.Module"},
                                                                           "body": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                               "argument": {
                                                                                 "list": [
                                                                                   {
@@ -2041,7 +2041,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "type:"}},
@@ -2060,7 +2060,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "prim:"}},
@@ -2079,7 +2079,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "term:"}},
@@ -2150,7 +2150,7 @@
                                                                           "domain": {"variable": "hydra.packaging.Module"},
                                                                           "body": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                               "argument": {
                                                                                 "list": [
                                                                                   {
@@ -2182,7 +2182,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "type:"}},
@@ -2201,7 +2201,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "prim:"}},
@@ -2220,7 +2220,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "term:"}},
@@ -2464,7 +2464,7 @@
                                                                           "domain": {"variable": "hydra.packaging.Module"},
                                                                           "body": {
                                                                             "application": {
-                                                                              "function": {"variable": "hydra.lib.strings.cat"},
+                                                                              "function": {"variable": "hydra.lib.strings.concat"},
                                                                               "argument": {
                                                                                 "list": [
                                                                                   {
@@ -2496,7 +2496,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "type:"}},
@@ -2515,7 +2515,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "prim:"}},
@@ -2534,7 +2534,7 @@
                                                                                                               "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                               "body": {
                                                                                                                 "application": {
-                                                                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                                   "argument": {
                                                                                                                     "list": [
                                                                                                                       {"literal": {"string": "term:"}},
@@ -2743,7 +2743,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -2853,7 +2853,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -2872,7 +2872,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -2891,7 +2891,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -3010,7 +3010,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -3090,7 +3090,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -3109,7 +3109,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -3128,7 +3128,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -3235,7 +3235,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -3327,7 +3327,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -3346,7 +3346,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -3365,7 +3365,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -3466,7 +3466,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -3555,7 +3555,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -3574,7 +3574,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -3593,7 +3593,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -3709,7 +3709,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -3858,7 +3858,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -3877,7 +3877,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -3896,7 +3896,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -4054,7 +4054,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -4173,7 +4173,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -4192,7 +4192,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -4211,7 +4211,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -4357,7 +4357,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -4457,7 +4457,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -4476,7 +4476,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -4495,7 +4495,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},
@@ -4604,7 +4604,7 @@
                                                               "domain": "unit",
                                                               "body": {
                                                                 "application": {
-                                                                  "function": {"variable": "hydra.lib.strings.cat"},
+                                                                  "function": {"variable": "hydra.lib.strings.concat"},
                                                                   "argument": {
                                                                     "list": [
                                                                       {
@@ -4701,7 +4701,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "type:"}},
@@ -4720,7 +4720,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "prim:"}},
@@ -4739,7 +4739,7 @@
                                                                                                   "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                                      "function": {"variable": "hydra.lib.strings.concat"},
                                                                                                       "argument": {
                                                                                                         "list": [
                                                                                                           {"literal": {"string": "term:"}},

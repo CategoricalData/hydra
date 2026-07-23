@@ -360,7 +360,7 @@
                                                                         "term": {
                                                                           "application": {
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.nub"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
+                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.distinct"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
                                                                             "argument": {
                                                                               "application": {
                                                                                 "function": {

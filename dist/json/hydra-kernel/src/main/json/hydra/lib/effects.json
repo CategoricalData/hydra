@@ -44,10 +44,15 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "ef",
+              "description": "the effect producing the function to apply",
               "type": {"effect": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "ex",
+              "description": "the effect producing the argument",
+              "type": {"effect": {"variable": "x"}},
+              "isLazy": false}],
           "result": {"type": {"effect": {"variable": "y"}}}},
         "isPure": false,
         "isTotal": true}},
@@ -63,9 +68,10 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"effect": {"variable": "x"}}, "isLazy": false},
+            {"name": "e", "description": "the effect to interpret first", "type": {"effect": {"variable": "x"}}, "isLazy": false},
             {
-              "name": "arg1",
+              "name": "f",
+              "description": "the function producing the next effect from e's result",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
               "isLazy": false}],
           "result": {"type": {"effect": {"variable": "y"}}}},
@@ -82,14 +88,16 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the first effect-returning function",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
               "isLazy": false},
             {
-              "name": "arg1",
+              "name": "g",
+              "description": "the second effect-returning function",
               "type": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "z"}}}},
               "isLazy": false},
-            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+            {"name": "x", "description": "the input to the composed computation", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"effect": {"variable": "z"}}}},
         "isPure": false,
         "isTotal": true}},
@@ -98,44 +106,21 @@
         "name": "hydra.lib.effects.foldList",
         "metadata": {
           "description": "Left-fold over a list with an effect-returning function.",
-          "comments": [
-            "foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right.",
-            "New name for foldl (retained as a deprecated alias until the #417 breaking wave removes it)."],
+          "comments": ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the effect-returning combining function",
               "type": {
                 "function": {
                   "domain": {"variable": "x"},
                   "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "x"}}}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
-          "result": {"type": {"effect": {"variable": "x"}}}},
-        "isPure": false,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.effects.foldl",
-        "metadata": {
-          "description": "Left-fold over a list with an effect-returning function.",
-          "comments": ["foldl(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "function": {
-                  "domain": {"variable": "x"},
-                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "x"}}}}}},
-              "isLazy": false},
-            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+            {"name": "acc0", "description": "the initial accumulator value", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold over", "type": {"list": {"variable": "y"}}, "isLazy": false}],
           "result": {"type": {"effect": {"variable": "x"}}}},
         "isPure": false,
         "isTotal": true}},
@@ -151,8 +136,12 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
-            {"name": "arg1", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
+            {
+              "name": "f",
+              "description": "the pure function to apply to the effect's result",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "e", "description": "the effect to interpret", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"effect": {"variable": "y"}}}},
         "isPure": false,
         "isTotal": true}},
@@ -168,10 +157,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the effect-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"effect": {"list": {"variable": "y"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -187,10 +177,11 @@
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the effect-returning function to apply to the contained value",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+            {"name": "m", "description": "the optional to map over", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"effect": {"optional": {"variable": "y"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -207,10 +198,11 @@
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
+              "name": "f",
+              "description": "the effect-returning function to apply to each element",
               "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+            {"name": "s", "description": "the set to map over", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"effect": {"set": {"variable": "y"}}}}},
         "isPure": false,
         "isTotal": true}},
@@ -223,7 +215,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "parameters": [{"name": "x", "description": "the pure value to lift into an effect", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"effect": {"variable": "x"}}}},
         "isPure": false,
         "isTotal": true}}]}

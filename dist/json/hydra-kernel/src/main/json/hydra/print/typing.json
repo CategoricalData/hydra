@@ -65,7 +65,7 @@
                         "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
                     "body": {
                       "application": {
-                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "function": {"variable": "hydra.lib.strings.concat"},
                         "argument": {
                           "list": [
                             {"application": {"function": {"variable": "hydra.print.core.type"}, "argument": {"variable": "ltyp"}}},
@@ -138,7 +138,7 @@
                                     "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
                                 "body": {
                                   "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "function": {"variable": "hydra.lib.strings.concat"},
                                     "argument": {
                                       "list": [
                                         {"variable": "name"},
@@ -168,13 +168,13 @@
                         "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
                     "body": {
                       "application": {
-                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "function": {"variable": "hydra.lib.strings.concat"},
                         "argument": {
                           "list": [
                             {"literal": {"string": "{"}},
                             {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ","}}}},
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": ","}}}},
                                 "argument": {"variable": "pairStrs"}}},
                             {"literal": {"string": "}"}}]}}}}}}},
             "annotation": {

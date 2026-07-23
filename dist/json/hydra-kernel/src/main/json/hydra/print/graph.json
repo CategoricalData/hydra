@@ -64,13 +64,13 @@
                         "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
                     "body": {
                       "application": {
-                        "function": {"variable": "hydra.lib.strings.cat"},
+                        "function": {"variable": "hydra.lib.strings.concat"},
                         "argument": {
                           "list": [
                             {"literal": {"string": "{"}},
                             {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": ", "}}}},
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": ", "}}}},
                                 "argument": {"variable": "elementStrs"}}},
                             {"literal": {"string": "}"}}]}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of bindings as a string"}}}]}}}}}]}

@@ -68,7 +68,7 @@
                                     "type": {"optional": {"literal": "string"}}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
                                     "argument": {"variable": "segs"}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                         "argument": {
@@ -96,7 +96,7 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {
                                                       "application": {
                                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
@@ -104,7 +104,7 @@
                                                 "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
                                             "argument": {"variable": "dotParts"}}}}},
                                     "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}}}}}}}}}}}},
             "annotation": {
@@ -228,7 +228,7 @@
                                 "domain": {"variable": "hydra.packaging.ModuleName"},
                                 "body": {
                                   "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "function": {"variable": "hydra.lib.strings.concat"},
                                     "argument": {
                                       "list": [
                                         {"application": {"function": {"variable": "hydra.codegen.moduleNameToPath"}, "argument": {"variable": "m"}}},
@@ -514,7 +514,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gte"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
@@ -523,7 +523,7 @@
                             "argument": {
                               "optional": {
                                 "application": {
-                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
+                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "/"}}}},
                                   "argument": {
                                     "application": {
                                       "function": {

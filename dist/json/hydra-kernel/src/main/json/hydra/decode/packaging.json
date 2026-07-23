@@ -269,7 +269,7 @@
                                                                             "typeName": "hydra.errors.DecodingError",
                                                                             "body": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no such field "}},
@@ -558,7 +558,7 @@
                                                                             "typeName": "hydra.errors.DecodingError",
                                                                             "body": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no such field "}},
@@ -943,7 +943,7 @@
                                                                             "typeName": "hydra.errors.DecodingError",
                                                                             "body": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no such field "}},
@@ -1920,7 +1920,7 @@
                                                                             "typeName": "hydra.errors.DecodingError",
                                                                             "body": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no such field "}},
@@ -5050,7 +5050,7 @@
                                                                             "typeName": "hydra.errors.DecodingError",
                                                                             "body": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "function": {"variable": "hydra.lib.strings.concat"},
                                                                                 "argument": {
                                                                                   "list": [
                                                                                     {"literal": {"string": "no such field "}},
