@@ -58,15 +58,6 @@ boolean = TermCoder Types.boolean encode decode
     encode _cx g = ExtractCore.boolean g
     decode _cx = Right . Terms.boolean
 
--- | Build a TypeScheme from type variables and a type
--- Uses polyConstrained if there are any constraints, otherwise poly
-buildTypeScheme :: [TypeVar] -> Type -> TypeScheme
-buildTypeScheme vars typ =
-  let constraints = typeVarsToConstraints vars
-  in if L.null constraints
-     then Types.poly (typeVarNames vars) typ
-     else Types.polyConstrained (fmap (\tv -> (typeVarName tv, typeVarClasses tv)) vars) typ
-
 instance IsString (TermCoder Term) where fromString = variable
 
 comparison :: TermCoder Comparison
@@ -91,19 +82,6 @@ primName = primitiveDefinitionName
 -- 'ToPrimName' (used by prim0/prim1/prim2/prim3 below to accept a generated PrimitiveDefinition
 -- directly, e.g. @prim2 DefMath.add ...@) is defined in 'Hydra.Overlay.Haskell.Dsl.Terms' to avoid an import cycle
 -- and re-exported here for the registry/DSL modules.
-
--- | Synthesize a minimal PrimitiveDefinition from a name and TypeScheme.
--- Used by the prim0/prim1/prim2/prim3 helpers to bridge the kernel-shape change
--- before the per-primitive metadata audit (description, isPure/isTotal exceptions,
--- defaultImplementation) is performed.
-defaultPrimitiveDefinition :: Name -> TypeScheme -> PrimitiveDefinition
-defaultPrimitiveDefinition name typ = PrimitiveDefinition {
-  primitiveDefinitionName = name,
-  primitiveDefinitionSignature = typeSchemeToTermSignature typ,
-  primitiveDefinitionMetadata = Nothing,
-  primitiveDefinitionIsPure = True,
-  primitiveDefinitionIsTotal = True,
-  primitiveDefinitionDefaultImplementation = Nothing}
 
 -- | Convert a TypeScheme to a TermSignature. A convenience alias for
 -- typeSchemeToTermSignature, used by primitive-declaration source modules.
@@ -298,12 +276,6 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) encode decode
 otherErr :: Typing.InferenceContext -> String -> Error.Error
 otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
 
--- | A type variable specification with optional class constraints
-data TypeVar = TypeVar {
-  typeVarName :: String,
-  typeVarClasses :: [Name]
-}
-
 pair :: TermCoder x -> TermCoder y -> TermCoder (x, y)
 pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) encode decode
   where
@@ -313,50 +285,41 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
       yTerm <- termCoderDecode yCoder cx y
       return $ Terms.pair xTerm yTerm
 
-prim0 :: ToPrimName n => n -> x -> [TypeVar] -> TermCoder x -> Primitive
-prim0 n value vars output = Primitive (defaultPrimitiveDefinition name typ) impl
+-- The prim0..prim3 registration helpers take the primitive's authoritative, translingual
+-- 'PrimitiveDefinition' (from the generated Hydra.Lib.* modules, e.g. @DefMath.add@) and use its
+-- signature verbatim as the single source of truth for the primitive's type — including class
+-- constraints, parameter laziness, and metadata. The 'TermCoder' arguments now serve ONLY the
+-- runtime marshalling of the implementation (term<->native encode/decode); their 'termCoderType'
+-- no longer contributes to the primitive's declared type. This removes the former divergence risk
+-- between the hand-written registration type and the generated definition (#566).
+
+prim0 :: PrimitiveDefinition -> x -> TermCoder x -> Primitive
+prim0 def value output = Primitive def impl
   where
-    name = toPrimName n
-    typ = buildTypeScheme vars $ termCoderType output
     impl _g _args = termCoderDecode output primCx value
 
-prim1 :: ToPrimName n => n -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
-prim1 n compute vars input1 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim1 :: PrimitiveDefinition -> (x -> y) -> TermCoder x -> TermCoder y -> Primitive
+prim1 def compute input1 output = Primitive def impl
   where
-    name = toPrimName n
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType output]
     impl g args = do
-      ExtractCore.nArgs name 1 args
+      ExtractCore.nArgs (primitiveDefinitionName def) 1 args
       arg1 <- termCoderEncode input1 primCx g (args !! 0)
       termCoderDecode output primCx $ compute arg1
 
-prim2 :: ToPrimName n => n -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2 n compute vars input1 input2 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim2 :: PrimitiveDefinition -> (x -> y -> z) -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2 def compute input1 input2 output = Primitive def impl
   where
-    name = toPrimName n
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType input2,
-      termCoderType output]
     impl g args = do
-      ExtractCore.nArgs name 2 args
+      ExtractCore.nArgs (primitiveDefinitionName def) 2 args
       arg1 <- termCoderEncode input1 primCx g (args !! 0)
       arg2 <- termCoderEncode input2 primCx g (args !! 1)
       termCoderDecode output primCx $ compute arg1 arg2
 
-prim3 :: ToPrimName n => n -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim3 n compute vars input1 input2 input3 output = Primitive (defaultPrimitiveDefinition name typ) impl
+prim3 :: PrimitiveDefinition -> (w -> x -> y -> z) -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim3 def compute input1 input2 input3 output = Primitive def impl
   where
-    name = toPrimName n
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType input2,
-      termCoderType input3,
-      termCoderType output]
     impl g args = do
-      ExtractCore.nArgs name 3 args
+      ExtractCore.nArgs (primitiveDefinitionName def) 3 args
       arg1 <- termCoderEncode input1 primCx g (args !! 0)
       arg2 <- termCoderEncode input2 primCx g (args !! 1)
       arg3 <- termCoderEncode input3 primCx g (args !! 2)
@@ -379,15 +342,6 @@ term = TermCoder (TypeVariable _Term) encode decode
   where
     encode _cx _g = Right
     decode _cx = Right
-
--- | Get just the variable names from a list of TypeVars
-typeVarNames :: [TypeVar] -> [String]
-typeVarNames = fmap typeVarName
-
--- | Convert a list of TypeVars to the format needed by polyConstrained
--- Filters out variables with no constraints
-typeVarsToConstraints :: [TypeVar] -> [(String, [Name])]
-typeVarsToConstraints = filter (not . L.null . snd) . fmap (\tv -> (typeVarName tv, typeVarClasses tv))
 
 type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) encode decode
@@ -420,18 +374,6 @@ uint8 = TermCoder Types.uint8 encode decode
   where
     encode _cx g = ExtractCore.uint8 g
     decode _cx = Right . Terms.uint8
-
--- | Create an unconstrained type variable
-v :: String -> TypeVar
-v name = TypeVar name []
-
--- | Create a type variable with Eq constraint
-vEq :: String -> TypeVar
-vEq name = TypeVar name [Name "equality"]
-
--- | Create a type variable with Ord constraint
-vOrd :: String -> TypeVar
-vOrd name = TypeVar name [Name "ordering"]
 
 variable :: String -> TermCoder Term
 variable v = TermCoder (Types.var v) encode decode

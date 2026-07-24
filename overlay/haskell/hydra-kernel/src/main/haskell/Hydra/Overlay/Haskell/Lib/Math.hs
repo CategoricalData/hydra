@@ -1,9 +1,11 @@
 -- | Haskell implementations of hydra.lib.math primitives
+{-# LANGUAGE RankNTypes #-}
 
 module Hydra.Overlay.Haskell.Lib.Math where
 
-import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), (.), ($), (+), (-), (*), (==), (||))
+import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), String, (.), ($), (+), (-), (*), (==), (||))
 import qualified Prelude
+import qualified Hydra.Core as Core
 
 
 -- | Return the absolute value.
@@ -213,3 +215,91 @@ truncate :: Double -> Double
 truncate x
   | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
   | Prelude.otherwise = Prelude.fromIntegral (Prelude.truncate x :: Integer)
+
+-- Constraint-polymorphic ('numeric') arithmetic over raw terms.
+--
+-- These implementations back the polymorphic add/sub/mul/negate primitives, which are
+-- registered with identity (Term) coders (see Hydra.Overlay.Haskell.Libraries) so that the
+-- runtime numeric type is discovered by dispatching on the argument's literal variant. Each
+-- variant delegates to Haskell's Num instance for the underlying representation type, which
+-- gives the correct per-type semantics for free: two's-complement wraparound for the
+-- fixed-width integer types, arbitrary precision for bigint, and IEEE 754 for the floats.
+--
+-- Type inference guarantees both operands of a binary op share one 'numeric' type, so the
+-- dispatch keys on the first operand and requires the second to match; a mismatch or a
+-- non-numeric literal is an internal invariant violation and fails loudly.
+
+-- | Apply a Num-polymorphic binary operation to two numeric terms, dispatching on the runtime
+--   integer/float variant.
+numericBinary :: String -> (forall a. Num a => a -> a -> a) -> Core.Term -> Core.Term -> Core.Term
+numericBinary opName op x y = case (numericLiteral opName x, numericLiteral opName y) of
+  (Core.LiteralInteger ix, Core.LiteralInteger iy) ->
+    Core.TermLiteral $ Core.LiteralInteger $ integerBinary opName op ix iy
+  (Core.LiteralFloat fx, Core.LiteralFloat fy) ->
+    Core.TermLiteral $ Core.LiteralFloat $ floatBinary opName op fx fy
+  _ -> Prelude.error $ "hydra.lib.math." Prelude.++ opName Prelude.++ ": operands are not the same numeric kind"
+
+-- | Apply a Num-polymorphic unary operation to a numeric term.
+numericUnary :: String -> (forall a. Num a => a -> a) -> Core.Term -> Core.Term
+numericUnary opName op x = case numericLiteral opName x of
+  Core.LiteralInteger ix -> Core.TermLiteral $ Core.LiteralInteger $ integerUnary op ix
+  Core.LiteralFloat fx -> Core.TermLiteral $ Core.LiteralFloat $ floatUnary op fx
+  _ -> Prelude.error $ "hydra.lib.math." Prelude.++ opName Prelude.++ ": operand is not numeric"
+
+-- | Extract the literal from a term, failing loudly on any non-literal term.
+numericLiteral :: String -> Core.Term -> Core.Literal
+numericLiteral opName term = case term of
+  Core.TermLiteral lit -> lit
+  _ -> Prelude.error $ "hydra.lib.math." Prelude.++ opName Prelude.++ ": expected a literal term"
+
+integerBinary :: String -> (forall a. Num a => a -> a -> a) -> Core.IntegerValue -> Core.IntegerValue -> Core.IntegerValue
+integerBinary opName op ix iy = case (ix, iy) of
+  (Core.IntegerValueBigint a, Core.IntegerValueBigint b) -> Core.IntegerValueBigint (op a b)
+  (Core.IntegerValueInt8 a,   Core.IntegerValueInt8 b)   -> Core.IntegerValueInt8 (op a b)
+  (Core.IntegerValueInt16 a,  Core.IntegerValueInt16 b)  -> Core.IntegerValueInt16 (op a b)
+  (Core.IntegerValueInt32 a,  Core.IntegerValueInt32 b)  -> Core.IntegerValueInt32 (op a b)
+  (Core.IntegerValueInt64 a,  Core.IntegerValueInt64 b)  -> Core.IntegerValueInt64 (op a b)
+  (Core.IntegerValueUint8 a,  Core.IntegerValueUint8 b)  -> Core.IntegerValueUint8 (op a b)
+  (Core.IntegerValueUint16 a, Core.IntegerValueUint16 b) -> Core.IntegerValueUint16 (op a b)
+  (Core.IntegerValueUint32 a, Core.IntegerValueUint32 b) -> Core.IntegerValueUint32 (op a b)
+  (Core.IntegerValueUint64 a, Core.IntegerValueUint64 b) -> Core.IntegerValueUint64 (op a b)
+  _ -> Prelude.error $ "hydra.lib.math." Prelude.++ opName Prelude.++ ": integer operands differ in precision"
+
+integerUnary :: (forall a. Num a => a -> a) -> Core.IntegerValue -> Core.IntegerValue
+integerUnary op iv = case iv of
+  Core.IntegerValueBigint a -> Core.IntegerValueBigint (op a)
+  Core.IntegerValueInt8 a   -> Core.IntegerValueInt8 (op a)
+  Core.IntegerValueInt16 a  -> Core.IntegerValueInt16 (op a)
+  Core.IntegerValueInt32 a  -> Core.IntegerValueInt32 (op a)
+  Core.IntegerValueInt64 a  -> Core.IntegerValueInt64 (op a)
+  Core.IntegerValueUint8 a  -> Core.IntegerValueUint8 (op a)
+  Core.IntegerValueUint16 a -> Core.IntegerValueUint16 (op a)
+  Core.IntegerValueUint32 a -> Core.IntegerValueUint32 (op a)
+  Core.IntegerValueUint64 a -> Core.IntegerValueUint64 (op a)
+
+floatBinary :: String -> (forall a. Num a => a -> a -> a) -> Core.FloatValue -> Core.FloatValue -> Core.FloatValue
+floatBinary opName op fx fy = case (fx, fy) of
+  (Core.FloatValueFloat32 a, Core.FloatValueFloat32 b) -> Core.FloatValueFloat32 (op a b)
+  (Core.FloatValueFloat64 a, Core.FloatValueFloat64 b) -> Core.FloatValueFloat64 (op a b)
+  _ -> Prelude.error $ "hydra.lib.math." Prelude.++ opName Prelude.++ ": float operands differ in precision"
+
+floatUnary :: (forall a. Num a => a -> a) -> Core.FloatValue -> Core.FloatValue
+floatUnary op fv = case fv of
+  Core.FloatValueFloat32 a -> Core.FloatValueFloat32 (op a)
+  Core.FloatValueFloat64 a -> Core.FloatValueFloat64 (op a)
+
+-- | Polymorphic addition over numeric terms.
+addTerm :: Core.Term -> Core.Term -> Core.Term
+addTerm = numericBinary "add" (+)
+
+-- | Polymorphic subtraction over numeric terms.
+subTerm :: Core.Term -> Core.Term -> Core.Term
+subTerm = numericBinary "sub" (-)
+
+-- | Polymorphic multiplication over numeric terms.
+mulTerm :: Core.Term -> Core.Term -> Core.Term
+mulTerm = numericBinary "mul" (*)
+
+-- | Polymorphic negation over numeric terms.
+negateTerm :: Core.Term -> Core.Term
+negateTerm = numericUnary "negate" Prelude.negate
