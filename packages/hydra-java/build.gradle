@@ -60,7 +60,10 @@ sourceSets {
             srcDir file("$projectDir/../../heads/java/src/main/java")
             include 'hydra/BenchInference.java'
             include 'hydra/Bootstrap.java'
-            include 'hydra/Generation.java'
+            // hydra.overlay.java.build.Generation (#459) moved into the hydra-build
+            // overlay — the main source set above already picks it up via its
+            // dist/java/hydra-build/src/main/java srcDir (line 33), since
+            // copy-overlay.sh merges it onto that dist tree on every assemble.
             include 'hydra/GenerationTargets.java'
             include 'hydra/HydraTestBase.java'
             include 'hydra/UpdateJavaJson.java'

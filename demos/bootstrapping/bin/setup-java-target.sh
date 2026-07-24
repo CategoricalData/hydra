@@ -17,6 +17,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/heads/java"
 JAVA_RESOURCES="$SCRIPT_DIR/../resources/java"
+# hydra.overlay.java.build.Generation (#459): moved out of heads/java into the
+# hydra-build overlay so it travels with dist/java/hydra-build/ via copy-overlay.sh.
+GENERATION_SRC="$HYDRA_ROOT/overlay/java/hydra-build/src/main/java/hydra/overlay/java/build/Generation.java"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -43,9 +46,15 @@ mkdir -p "$JAVA_DST"
 
 # Head-only driver classes (NOT part of the kernel runtime overlay; #418): they
 # stay in heads/java/src and are copied directly.
-for f in Bootstrap.java Generation.java GenerationTargets.java HydraTestBase.java; do
+for f in Bootstrap.java GenerationTargets.java HydraTestBase.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
+
+# hydra.overlay.java.build.Generation (#459) lives under the hydra-build overlay,
+# package-qualified as hydra.overlay.java.build — preserve that subdirectory
+# structure rather than flattening into hydra/ like the head-only classes above.
+mkdir -p "$JAVA_DST/overlay/java/build"
+cp "$GENERATION_SRC" "$JAVA_DST/overlay/java/build/"
 
 # Kernel runtime: a single overlay copy from overlay/java/hydra-kernel/ (#418).
 # This brings in Adapters.java, Coders.java, the full lib/dsl/util/tools trees, and

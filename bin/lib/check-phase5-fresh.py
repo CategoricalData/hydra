@@ -44,11 +44,12 @@ from pathlib import Path
 
 
 # headsExtras include list from packages/hydra-java/build.gradle:54-65.
-# Keep in sync.
+# Keep in sync. hydra.overlay.java.build.Generation (#459) moved into the
+# hydra-build overlay, tracked by dist/json/hydra-kernel's own fingerprint below
+# (its module set already includes hydra-build), not this list.
 JAVA_HEADS_EXTRAS = (
     "hydra/BenchInference.java",
     "hydra/Bootstrap.java",
-    "hydra/Generation.java",
     "hydra/HydraTestBase.java",
     "hydra/UpdateJavaJson.java",
     "hydra/ProfileJavaCoder.java",

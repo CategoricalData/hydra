@@ -122,7 +122,7 @@ build_java() {
     find "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/encode/neo4j" -name '*.java'
     find "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/error/neo4j" -name '*.java'
     echo "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/validate/Neo4j.java"
-    echo "$REPO_ROOT/heads/java/src/main/java/hydra/Generation.java"
+    echo "$REPO_ROOT/overlay/java/hydra-build/src/main/java/hydra/overlay/java/build/Generation.java"
     find "$REPO_ROOT/demos/src/main/java/hydra/demos/neo4jvalidation" -name '*.java' \
       ! -name 'Neo4jValidationDemo.java'
   } | sort -u > "$srcs"
