@@ -825,24 +825,18 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
                         f"_write_package_split_json: unexpected encode result {result!r}")
 
 
-def _namespaces_array(mods):
-    """A sorted JSON string array of the namespaces of the given modules."""
-    names = sorted(m.name.value for m in mods)
-    return JsonModel.ValueArray([JsonModel.ValueString(n) for n in names])
-
-
 def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
     """Write each package's manifest.json in the current (#511) schema:
     mainDslModules / mainEncodingModules / mainModules / manifestFormatVersion /
-    package / testModules. Mirrors Java's Generation.writePackageManifests and
-    the underlying Haskell writer's field order and formatting (alphabetized
-    keys, via hydra.json.writer.print_json so output is byte-for-byte
-    consistent with the other native drivers).
+    package / testModules. Field assembly + serialization is delegated to the
+    generated hydra.build.manifest_writer (#607), which mirrors the Java and
+    Haskell writers' field order and formatting (alphabetized keys) exactly.
 
     Only packages present in main_mods are visited (mirrors Java): a package
     whose sources feed dsl_mods/enc_mods but not main_mods won't get a
     manifest written here.
     """
+    from hydra.build.manifest_writer import package_manifest_json
     from hydra.json.writer import print_json
 
     main_by_pkg = dict(group_by_package(dist_json_root, main_mods))
@@ -853,15 +847,8 @@ def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
         main = main_by_pkg.get(pkg, [])
         dsl = dsl_by_pkg.get(pkg, [])
         enc = enc_by_pkg.get(pkg, [])
-        fields = [
-            ("mainDslModules", _namespaces_array(dsl)),
-            ("mainEncodingModules", _namespaces_array(enc)),
-            ("mainModules", _namespaces_array(main)),
-            ("manifestFormatVersion", JsonModel.ValueNumber(Decimal(1))),
-            ("package", JsonModel.ValueString(pkg)),
-            ("testModules", _namespaces_array([])),
-        ]
-        json_str = print_json(JsonModel.ValueObject(fields))
+        manifest_value = package_manifest_json(pkg, main, dsl, enc, [])
+        json_str = print_json(manifest_value)
         pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
         os.makedirs(pkg_dir, exist_ok=True)
         file_path = os.path.join(pkg_dir, "manifest.json")

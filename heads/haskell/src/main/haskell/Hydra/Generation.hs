@@ -12,6 +12,7 @@ import Hydra.Overlay.Haskell.Bootstrap
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn, namespaceToPackageMaybeIn)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
+import qualified Hydra.Build.ManifestWriter as GenManifestWriter
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Decoding as Decoding
@@ -1852,16 +1853,17 @@ writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSo
           dslForPkg     = M.findWithDefault [] pkg dslByPkg
           encForPkg     = M.findWithDefault [] pkg encByPkg
           testForPkg    = M.findWithDefault [] pkg testByPkg
-          -- Keep fields alphabetized so the emitted manifest.json byte order is unchanged
-          -- by the switch to order-preserving JSON objects (see docs/json-format.md).
-          jsonVal = Json.ValueObject [
-              ("mainDslModules",      namespacesJson dslForPkg),
-              ("mainEncodingModules", namespacesJson encForPkg),
-              ("mainModules",    namespacesJson mainForPkg),
-              ("manifestFormatVersion", Json.ValueNumber 1),
-              ("moduleFormatVersion", Json.ValueNumber currentModuleFormatVersion),
-              ("package",        Json.ValueString pkg),
-              ("testModules",    namespacesJson testForPkg)]
+          -- #607: field assembly + serialization delegated to the generated
+          -- hydra.build.manifestWriter (packageManifestJson), which reproduces this
+          -- driver's alphabetized field order and sorted namespace arrays exactly.
+          -- moduleFormatVersion is Haskell-specific (read back by
+          -- readModuleFormatVersion below; #560's precedent keeps such host-specific
+          -- deltas host-native rather than generalizing them into the shared module),
+          -- so it is spliced into the generated fields at its alphabetical position.
+          Json.ValueObject genFields = GenManifestWriter.packageManifestJson
+            pkg mainForPkg dslForPkg encForPkg testForPkg
+          jsonVal = Json.ValueObject $ insertAfter "manifestFormatVersion"
+            ("moduleFormatVersion", Json.ValueNumber currentModuleFormatVersion) genFields
           jsonStr = JsonWriter.printJson jsonVal
           pkgDir  = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
           filePath = pkgDir FP.</> "manifest.json"
@@ -1869,10 +1871,8 @@ writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSo
       writeFile filePath (jsonStr ++ "\n")
       putStrLn $ "Wrote manifest: " ++ filePath
   where
-    -- Sort namespace strings lexicographically for cross-host byte stability;
-    -- see docs/json-format.md "Stability of byte order".
-    namespacesJson mods = Json.ValueArray $ fmap Json.ValueString
-      (L.sort (fmap (unModuleName . moduleName) mods))
+    insertAfter key kv (f@(k, _):fs) = f : if k == key then kv : fs else insertAfter key kv fs
+    insertAfter _ kv [] = [kv]
 
 ----------------------------------------
 -- JSON Module Import
