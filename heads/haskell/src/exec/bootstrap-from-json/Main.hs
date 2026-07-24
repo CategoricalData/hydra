@@ -811,10 +811,23 @@ main = do
   let redirectSchemeTestEnv langSeg s =
         replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
           $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+  -- #568: one of three driver-level choke points that must apply the hydra.lib.*
+  -- overlay-redirect existence correction (see the #568 block in Hydra.Generation,
+  -- alongside Hydra.Haskell.Generation.writeHaskell and
+  -- Hydra.ExtGeneration.writeTypeScript). The Haskell/TypeScript DSL coders
+  -- redirect every hydra.lib.<sub> reference to the overlay path unconditionally
+  -- (they have no I/O, so they can't check which subs actually have an overlay);
+  -- these two corrections narrow that back down using an on-disk existence scan,
+  -- so this driver's own haskell/typescript output gets the same #568 fix as the
+  -- sync-haskell entry point (writeHaskell/writeTypeScript).
+  haskellKnownLibSubs <- overlayLibSubs haskellOverlayLibDir
+  typeScriptKnownLibSubs <- overlayLibSubs typeScriptOverlayLibDir
   let consumerTransform = case target of
+        "haskell"     -> correctHaskellLibRedirect haskellKnownLibSubs
         "java"        -> redirectForSubs libSubsJava "java"
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
+        "typescript"  -> correctTypeScriptLibRedirect typeScriptKnownLibSubs
         "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
         "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
         "common-lisp" -> redirectLispFlat "common_lisp"

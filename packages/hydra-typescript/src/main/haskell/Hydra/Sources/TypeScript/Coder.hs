@@ -1521,13 +1521,17 @@ importsToText = def "importsToText" $
         -- only the generated PrimitiveDefinition def-modules). A generated reference to
         -- hydra.lib.<x> must import from overlay/typescript/lib/<x>. Remap ONLY the on-disk
         -- path here; the module alias (nsSlug below) keeps the original hydra.lib.<x> segments
-        -- so the import alias still matches the call sites. Other namespaces (including
-        -- hydra.lib.defaults, which is a separate kernel-emitted tree with no host-native
-        -- counterpart -- see #565/#549) pass through unchanged.
+        -- so the import alias still matches the call sites. This rewrite is intentionally
+        -- SHAPE-ONLY (no existence check): the DSL has no I/O, so it cannot know which
+        -- hydra.lib.<sub> subs actually have an overlay implementation on this host. A
+        -- subsequent driver-level correction (Hydra.Generation.correctTypeScriptLibRedirect,
+        -- applied by every caller of this coder -- see the #568 comments at writeTypeScript /
+        -- bootstrap-from-json's dispatch) narrows this back down using an on-disk existence
+        -- scan, so an overlay-less module like hydra.lib.defaults ends up pointing at its
+        -- generated def-module path rather than a dangling overlay path. #568 (was: a by-name
+        -- exclusion here, #565).
         "targetPathSegs" <~ Logic.ifElse
-          (Logic.and
-            (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
-            (Logic.not (Equality.equal (unwrap _ModuleName @@ var "ns") (string "hydra.lib.defaults"))))
+          (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
           (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
           (var "targetSegs") $
         "targetPath" <~ Strings.join (string "/") (var "targetPathSegs") $

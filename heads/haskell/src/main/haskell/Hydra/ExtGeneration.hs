@@ -106,8 +106,20 @@ writeRust = generateSources moduleToRust rustLanguage True
 
 -- | Generate TypeScript source files from modules.
 -- Emission flags come from typeScriptLanguage's supportedFeatures.
+--
+-- #568: one of three driver-level choke points that must apply the
+-- hydra.lib.* overlay-redirect existence correction (see the #568 block in
+-- Hydra.Generation, alongside Hydra.Haskell.Generation.writeHaskell and
+-- bootstrap-from-json/Main.hs's dispatch). The DSL coder
+-- (Hydra.TypeScript.Coder.importsToText) redirects every hydra.lib.<sub>
+-- reference to the overlay path unconditionally (it has no I/O, so it can't
+-- check which subs actually have an overlay); correctTypeScriptLibRedirect
+-- narrows that back down using an on-disk existence scan.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False
+writeTypeScript basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs typeScriptOverlayLibDir
+  generateSourcesWithTransform (correctTypeScriptLibRedirect knownSubs)
+    moduleToTypeScript typeScriptLanguage False basePath universeModules modulesToGenerate
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory

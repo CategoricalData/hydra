@@ -182,22 +182,25 @@ constructModule = haskellCoderDefinition "constructModule" $
   -- references them as the canonical "hydra.lib.<sub>" (three segments
   -- exactly). When we see a referenced namespace matching that shape,
   -- rewrite the middle so generated Haskell imports the host-native
-  -- module. Other namespaces (including hydra.lib.defaults, which is a
-  -- separate kernel-emitted tree with no host-native counterpart) pass
-  -- through unchanged.
+  -- module. This rewrite is intentionally SHAPE-ONLY (no existence check):
+  -- the DSL has no I/O, so it cannot know which hydra.lib.<sub> subs
+  -- actually have an overlay implementation on this host. A subsequent
+  -- driver-level correction (Hydra.Generation.correctHaskellLibRedirect,
+  -- applied by every caller of this coder -- see the #568 comments at
+  -- writeHaskell / bootstrap-from-json's dispatch) narrows this back down
+  -- using an on-disk existence scan, so an overlay-less module like
+  -- hydra.lib.defaults ends up pointing at the kernel module rather than a
+  -- dangling overlay path. #568 (was: a by-name exclusion here, #549).
   "hRaw">: "namespace" ~> unwrap _ModuleName @@ var "namespace",
   "h">: "namespace" ~>
     "raw" <~ (unwrap _ModuleName @@ var "namespace") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
     Logic.ifElse
       (Logic.and
-        (Logic.and
-          (Equality.equal (Lists.length (var "parts")) (int32 3))
-          (Equality.equal
-            (Lists.take (int32 2) (var "parts"))
-            (list [string "hydra", string "lib"])))
-        (Logic.not
-          (Equality.equal (var "raw") (string "hydra.lib.defaults"))))
+        (Equality.equal (Lists.length (var "parts")) (int32 3))
+        (Equality.equal
+          (Lists.take (int32 2) (var "parts"))
+          (list [string "hydra", string "lib"])))
       (Strings.concat2 (string "hydra.overlay.haskell.lib.")
         (Strings.join (string ".") (Lists.drop (int32 2) (var "parts"))))
       (var "raw"),

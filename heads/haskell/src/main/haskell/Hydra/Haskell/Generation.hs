@@ -23,8 +23,20 @@ import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
+--
+-- #568: one of three driver-level choke points that must apply the
+-- hydra.lib.* overlay-redirect existence correction (see the #568 block in
+-- Hydra.Generation, alongside Hydra.ExtGeneration.writeTypeScript and
+-- bootstrap-from-json/Main.hs's dispatch). The DSL coder
+-- (Hydra.Haskell.Coder.constructModule) redirects every hydra.lib.<sub>
+-- reference to the overlay path unconditionally (it has no I/O, so it can't
+-- check which subs actually have an overlay); correctHaskellLibRedirect
+-- narrows that back down using an on-disk existence scan.
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeHaskell = generateSources moduleToHaskell haskellLanguage True
+writeHaskell basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs haskellOverlayLibDir
+  generateSourcesWithTransform (correctHaskellLibRedirect knownSubs)
+    moduleToHaskell haskellLanguage True basePath universeModules modulesToGenerate
 
 ----------------------------------------
 

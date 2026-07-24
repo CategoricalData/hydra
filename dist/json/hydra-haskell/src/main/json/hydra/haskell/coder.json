@@ -316,40 +316,25 @@
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"variable": "hydra.lib.logic.and"},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
-                                                                                                "argument": {"variable": "parts"}}}}},
-                                                                                        "argument": {"literal": {"integer": {"int32": 3}}}}}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                                                                        "argument": {"variable": "parts"}}}}},
+                                                                                "argument": {"literal": {"integer": {"int32": 3}}}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": "string"}}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": "string"}}}},
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": "string"}}},
-                                                                                                "argument": {"literal": {"integer": {"int32": 2}}}}},
-                                                                                            "argument": {"variable": "parts"}}}}},
-                                                                                    "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "lib"}}]}}}}}}},
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "function": {"variable": "hydra.lib.logic.not"},
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
-                                                                                    "argument": {"variable": "raw"}}},
-                                                                                "argument": {"literal": {"string": "hydra.lib.defaults"}}}}}}}}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": "string"}}},
+                                                                                        "argument": {"literal": {"integer": {"int32": 2}}}}},
+                                                                                    "argument": {"variable": "parts"}}}}},
+                                                                            "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "lib"}}]}}}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -1508,7 +1493,10 @@
                                                                                                         "function": {"typeApplication": {"body": {"variable": "hydra.haskell.coder.encodeTerm"}, "type": {"variable": "t0"}}},
                                                                                                         "argument": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "depth"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "depth"}}},
                                                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                                     "argument": {"variable": "namespaces"}}},
                                                                                                 "argument": {"variable": "rhsTerm"}}},
