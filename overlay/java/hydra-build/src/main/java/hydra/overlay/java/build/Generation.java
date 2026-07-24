@@ -1139,9 +1139,9 @@ public class Generation {
      * into {@code generateCoderModules}). Adds encode/decode synthesis to the native
      * Java path, which previously generated only DSL wrappers (#511): a
      * translingual type module authored in the Java DSL (e.g. hydra.gradle) gets a
-     * generated hydra.decode.<x> exactly as kernel types get hydra.decode.packaging,
+     * generated {@code hydra.decode.<x>} exactly as kernel types get hydra.decode.packaging,
      * so its JSON (e.g. overlay build.json) is read by the canonical
-     * Decode.fromJson → Term → hydra.decode.<x> path rather than any hand-written
+     * Decode.fromJson → Term → {@code hydra.decode.<x>} path rather than any hand-written
      * parser.
      */
     public static List<Module> generateEncoderModules(
