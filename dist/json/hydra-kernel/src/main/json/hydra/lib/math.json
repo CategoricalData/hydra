@@ -99,17 +99,18 @@
       "primitive": {
         "name": "hydra.lib.math.add",
         "metadata": {
-          "description": "Integer addition.",
+          "description": "Numeric addition.",
           "comments": [
-            "Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
-            "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."],
+            "Constraint-polymorphic addition over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 addition reduces x + y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
+            "Requires a 'numeric' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Num instance.",
+            "The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
-            {"name": "x", "description": "the first addend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the second addend", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -453,17 +454,18 @@
       "primitive": {
         "name": "hydra.lib.math.mul",
         "metadata": {
-          "description": "Integer multiplication.",
+          "description": "Numeric multiplication.",
           "comments": [
-            "Two's-complement 32-bit signed integer multiplication. The result is x * y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
-            "The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."],
+            "Constraint-polymorphic multiplication over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 multiplication reduces x * y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
+            "Requires a 'numeric' type-class constraint on the argument type.",
+            "The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
-            {"name": "x", "description": "the first factor", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the second factor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -488,16 +490,16 @@
       "primitive": {
         "name": "hydra.lib.math.negate",
         "metadata": {
-          "description": "Negate an integer.",
+          "description": "Numeric negation.",
           "comments": [
-            "Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and reinterpreted as a signed int32.",
-            "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e. negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
-            "Corresponds to Haskell's negate :: Int32 -> Int32."],
+            "Constraint-polymorphic arithmetic negation over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width integers the result is 0 - x reduced modulo 2^32 and reinterpreted as signed (total but not injective at the boundary: negate(minBound) = minBound, because +2147483648 is not representable in int32); for floating-point it flips the sign bit per IEEE 754 ੵ.5.1.",
+            "Requires a 'numeric' type-class constraint on the argument type.",
+            "Corresponds to Haskell's negate :: Num a => a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "x", "description": "the integer to negate", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -762,17 +764,18 @@
       "primitive": {
         "name": "hydra.lib.math.sub",
         "metadata": {
-          "description": "Integer subtraction.",
+          "description": "Numeric subtraction.",
           "comments": [
-            "Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception raised).",
-            "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."],
+            "Constraint-polymorphic subtraction over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 subtraction reduces x - y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
+            "Requires a 'numeric' type-class constraint on the argument type.",
+            "The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
-            {"name": "x", "description": "the minuend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the subtrahend", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {

@@ -49,6 +49,25 @@
                   "value": {"literal": {"string": "The equality type class: instances support structural equality."}}}]}}}}},
     {
       "term": {
+        "name": "hydra.classes.numeric",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.typing.TypeClass",
+                "fields": [
+                  {
+                    "name": "description",
+                    "term": {"literal": {"string": "Numeric: instances support arithmetic (addition, subtraction, multiplication, negation)."}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The numeric type class: instances support arithmetic (addition, subtraction, multiplication, negation)."}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.classes.ordering",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}},
         "body": {

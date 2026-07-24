@@ -210,7 +210,10 @@
                                                                   "fields": [
                                                                     {
                                                                       "name": "variables",
-                                                                      "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}]}},
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                          {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t1"}}}}]}},
                                                                     {
                                                                       "name": "body",
                                                                       "term": {
@@ -244,14 +247,7 @@
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "typeName": "hydra.core.Type",
-                                                                                                      "field": {
-                                                                                                        "name": "literal",
-                                                                                                        "term": {
-                                                                                                          "inject": {
-                                                                                                            "typeName": "hydra.core.LiteralType",
-                                                                                                            "field": {
-                                                                                                              "name": "integer",
-                                                                                                              "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}}}}},
+                                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t1"}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "codomain",
                                                                                     "term": {
@@ -274,14 +270,7 @@
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "typeName": "hydra.core.Type",
-                                                                                                      "field": {
-                                                                                                        "name": "literal",
-                                                                                                        "term": {
-                                                                                                          "inject": {
-                                                                                                            "typeName": "hydra.core.LiteralType",
-                                                                                                            "field": {
-                                                                                                              "name": "integer",
-                                                                                                              "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}}}}}]}}}}}},
+                                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t1"}}}}}}}}]}}}}}}]}}}}}},
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
@@ -300,7 +289,21 @@
                                                                                           {
                                                                                             "inject": {
                                                                                               "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ordering"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ordering"}}}}}}}]}}]}}},
+                                                                            {
+                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t1"}}}},
+                                                                              "value": {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "classes",
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.core.TypeClassConstraint",
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -891,7 +894,9 @@
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
                                                                   "fields": [
-                                                                    {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                                                                    {
+                                                                      "name": "variables",
+                                                                      "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}]}},
                                                                     {
                                                                       "name": "body",
                                                                       "term": {
@@ -913,14 +918,7 @@
                                                                                           "term": {
                                                                                             "inject": {
                                                                                               "typeName": "hydra.core.Type",
-                                                                                              "field": {
-                                                                                                "name": "literal",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "typeName": "hydra.core.LiteralType",
-                                                                                                    "field": {
-                                                                                                      "name": "integer",
-                                                                                                      "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}}}},
+                                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}}}}}}}},
                                                                                   {
                                                                                     "name": "codomain",
                                                                                     "term": {
@@ -931,20 +929,30 @@
                                                                                           "term": {
                                                                                             "inject": {
                                                                                               "typeName": "hydra.core.Type",
-                                                                                              "field": {
-                                                                                                "name": "literal",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "typeName": "hydra.core.LiteralType",
-                                                                                                    "field": {
-                                                                                                      "name": "integer",
-                                                                                                      "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}}}}]}}}}}},
+                                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}}}}}}}}]}}}}}},
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                        "optional": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                              "value": {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "classes",
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.core.TypeClassConstraint",
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ordering"}}}}}}},
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.core.TypeClassConstraint",
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -5425,7 +5433,9 @@
                                                                 "record": {
                                                                   "typeName": "hydra.core.TypeScheme",
                                                                   "fields": [
-                                                                    {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                                                                    {
+                                                                      "name": "variables",
+                                                                      "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}]}},
                                                                     {
                                                                       "name": "body",
                                                                       "term": {
@@ -5442,14 +5452,7 @@
                                                                                     "term": {
                                                                                       "inject": {
                                                                                         "typeName": "hydra.core.Type",
-                                                                                        "field": {
-                                                                                          "name": "literal",
-                                                                                          "term": {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.LiteralType",
-                                                                                              "field": {
-                                                                                                "name": "integer",
-                                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
+                                                                                        "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}}}}},
                                                                                   {
                                                                                     "name": "codomain",
                                                                                     "term": {
@@ -5471,33 +5474,32 @@
                                                                                                         "term": {
                                                                                                           "inject": {
                                                                                                             "typeName": "hydra.core.Type",
-                                                                                                            "field": {
-                                                                                                              "name": "literal",
-                                                                                                              "term": {
-                                                                                                                "inject": {
-                                                                                                                  "typeName": "hydra.core.LiteralType",
-                                                                                                                  "field": {
-                                                                                                                    "name": "integer",
-                                                                                                                    "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}}}},
+                                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}}}}}}}},
                                                                                                 {
                                                                                                   "name": "codomain",
                                                                                                   "term": {
                                                                                                     "inject": {
                                                                                                       "typeName": "hydra.core.Type",
-                                                                                                      "field": {
-                                                                                                        "name": "literal",
-                                                                                                        "term": {
-                                                                                                          "inject": {
-                                                                                                            "typeName": "hydra.core.LiteralType",
-                                                                                                            "field": {
-                                                                                                              "name": "integer",
-                                                                                                              "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}}}}}]}}}}}},
+                                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}}}}}}]}}}}}}]}}}}}},
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                        "optional": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                              "value": {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "classes",
+                                                                                      "term": {
+                                                                                        "list": [
+                                                                                          {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.core.TypeClassConstraint",
+                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",

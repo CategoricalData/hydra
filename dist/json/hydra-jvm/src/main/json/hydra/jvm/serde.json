@@ -235,16 +235,22 @@
                             "argument": {"literal": {"integer": {"int32": 10}}}}}}},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "n"}}},
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                            "argument": {"variable": "n"}}},
                         "argument": {"literal": {"integer": {"int32": 48}}}}}}},
                 "argument": {
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"variable": "hydra.lib.math.add"},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                         "argument": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "n"}}},
                             "argument": {"literal": {"integer": {"int32": 10}}}}}}},
                     "argument": {"literal": {"integer": {"int32": 65}}}}}}}}}}},
     {
@@ -279,7 +285,10 @@
                             "name": "n'",
                             "term": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"variable": "n"}}},
                                 "argument": {"literal": {"integer": {"int32": 65536}}}}},
                             "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
                           {
@@ -287,7 +296,9 @@
                             "term": {
                               "application": {
                                 "function": {
-                                  "application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"literal": {"integer": {"int32": 55296}}}}},
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"literal": {"integer": {"int32": 55296}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {
@@ -305,7 +316,9 @@
                             "term": {
                               "application": {
                                 "function": {
-                                  "application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"literal": {"integer": {"int32": 56320}}}}},
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"literal": {"integer": {"int32": 56320}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {

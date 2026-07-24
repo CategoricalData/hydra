@@ -5432,7 +5432,10 @@
                             "domain": {"variable": "hydra.core.Lambda"},
                             "body": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"literal": {"integer": {"int32": 1}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {"variable": "hydra.java.coder.classifyDataTerm_countLambdaParams"},
@@ -8349,7 +8352,10 @@
                             "domain": {"variable": "hydra.core.FunctionType"},
                             "body": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"literal": {"integer": {"int32": 1}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {"variable": "hydra.java.coder.countFunctionParams"},
@@ -15871,7 +15877,7 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"variable": "hydra.lib.math.sub"},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "classWithApply"}}}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "suffix"}}}}}}},
                                                     "argument": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "classWithApply"}}}}}}},
@@ -15955,7 +15961,10 @@
                                                             "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "arity"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "argument": {"variable": "arity"}}},
                                                                 "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                                     "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}},
                                                   {
@@ -25108,7 +25117,10 @@
                                                                                                                                                                                                         "argument": {"variable": "tcoVarRenames"}}},
                                                                                                                                                                                                     "argument": {
                                                                                                                                                                                                       "application": {
-                                                                                                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "tcoDepth"}}},
+                                                                                                                                                                                                        "function": {
+                                                                                                                                                                                                          "application": {
+                                                                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                                                                                                            "argument": {"variable": "tcoDepth"}}},
                                                                                                                                                                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                                                                                                                                 "argument": {"variable": "branchBody"}}},
                                                                                                                                                                                             "argument": {"variable": "cx"}}},
@@ -28210,7 +28222,10 @@
                                                 "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "arity"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"variable": "arity"}}},
                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}},
                                       {
@@ -30063,7 +30078,10 @@
                                         "argument": {"variable": "avoid"}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "i"}}},
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "i"}}},
                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                             "argument": {"variable": "candidate"}}}}}}}}}}}}},
     {
@@ -30339,7 +30357,7 @@
                                                                                                           "application": {
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "function": {"variable": "hydra.lib.math.sub"},
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                                                 "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "s"}}}}},
                                                                                                             "argument": {
                                                                                                               "application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "hydra.java.names.applyMethodName"}}}}}}},
@@ -33223,7 +33241,10 @@
                                                     "function": {"variable": "hydra.java.coder.peelDomainTypes"},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "n"}}},
                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                 "argument": {
                                                   "application": {
@@ -33342,7 +33363,10 @@
                                                     "function": {"variable": "hydra.java.coder.peelDomainsAndCod"},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "n"}}},
                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                 "argument": {
                                                   "application": {
@@ -33455,7 +33479,10 @@
                                                     "function": {"application": {"function": {"variable": "hydra.java.coder.peelExpectedTypes"}, "argument": {"variable": "subst"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "n"}}},
                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                 "argument": {
                                                   "application": {
@@ -34004,7 +34031,10 @@
                                                     "function": {"variable": "hydra.java.coder.peelDomainsAndCod"},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "nLambdaDoms"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "nLambdaDoms"}}},
                                                         "argument": {"variable": "nArgs"}}}}},
                                                 "argument": {"variable": "resultType"}}}}},
                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}},
@@ -39103,7 +39133,10 @@
                                                                                                                         "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                                                                                         "argument": {
                                                                                                                           "application": {
-                                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "arity"}}},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                                "argument": {"variable": "arity"}}},
                                                                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                                                                                                 "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}},
                                                                                                               {
