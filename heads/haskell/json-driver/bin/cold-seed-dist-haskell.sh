@@ -70,6 +70,24 @@ sed -i \
     -e 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
     "$HEADMODS/Generation.hs"
 
+# #607 cold-seed shim: writePerPackageManifestsJson's field assembly delegates to
+# hydra.build.manifestWriter (Hydra.Build.ManifestWriter), a hydra-build module not
+# yet published to Hackage (unlike #560's Hydra.Build.Routing, which was already in
+# the published 0.17.1 release the seeder links against). ColdSeedMain never calls
+# writePerPackageManifestsJson (it only seeds source trees + emits package.yaml, not
+# Hydra's manifest.json), so the import is dead weight in this ephemeral copy — drop
+# it and stub the one call site so the copy compiles without the unpublished module.
+# Drop this patch once hydra-build republishes with ManifestWriter included.
+# Intentional-but-provisional (staging-gce, #607 revert triage): accepted as a
+# same-pattern extension of the #497 shim above to un-red CI fast, but a growing
+# sed pile here is fragile. Follow-up: make the split STRUCTURAL — a cold-seeder
+# Generation variant that never imports ManifestWriter — so this sed can go away.
+sed -i \
+    -e '/^import qualified Hydra\.Build\.ManifestWriter as GenManifestWriter$/d' \
+    -e 's/GenManifestWriter\.packageManifestJson/error "writePerPackageManifestsJson: unreachable in the cold-seeder (#607\/#608)"/' \
+    -e '/^            pkg mainForPkg dslForPkg encForPkg testForPkg$/d' \
+    "$HEADMODS/Generation.hs"
+
 # 0b. (#608) Refresh typesmods/ with a build-time copy of the Terms-FREE DSL Types
 #     subtree the cold seeder compiles as its JSON decode-universe context:
 #     Hydra/Sources/Kernel/Types/** plus the single Hydra/Sources/Json/Model.hs it
