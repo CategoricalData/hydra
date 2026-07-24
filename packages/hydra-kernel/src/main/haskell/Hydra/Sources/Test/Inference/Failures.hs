@@ -119,11 +119,16 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
         "increment">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
         "stringify">: lambda "s" $ primitive DefStrings.concat @@ list [var "s", string "!"],
         "bad">: var "triple" @@ var "increment" @@ var "stringify"] $ var "bad"),
+    -- 'increment' pins add to int32 (via the int32 literal); bare add is now polymorphic
+    -- (numeric x => x -> x -> x) and would let this composition type-check, so we monomorphize
+    -- it to int32 -> int32 to preserve the intended conflict against strings.length : string ->
+    -- int32.
     expectFailure 2 []
       (lets [
         "compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
         "reverse_compose">: lambda "g" $ lambda "f" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
-        "bad">: var "compose" @@ var "reverse_compose" @@ primitive DefMath.add @@ primitive DefStrings.length] $
+        "increment">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
+        "bad">: var "compose" @@ var "reverse_compose" @@ var "increment" @@ primitive DefStrings.length] $
         var "bad")]]
 
 constraintSolverEdgeCaseTests :: TypedTermDefinition TestGroup
@@ -328,8 +333,12 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
   subgroup "Math primitive errors" [
     expectFailure 1 []
       (primitive DefMath.add @@ string "not a number" @@ int32 42),
+    -- add/sub/mul are now constraint-polymorphic (numeric x => x -> x -> x), so two boolean
+    -- operands would only be rejected by instance enforcement, which does not yet exist (see the
+    -- #566 enforcement gap). This case instead exercises a mismatch that fails via unification
+    -- regardless of the numeric constraint: the two operands have different types.
     expectFailure 2 []
-      (primitive DefMath.mul @@ true @@ false),
+      (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
     expectFailure 3 []
       (primitive DefMath.div @@ list [int32 42] @@ int32 2),
     expectFailure 4 []

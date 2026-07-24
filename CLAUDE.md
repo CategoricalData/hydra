@@ -328,6 +328,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |
 | Understand type inference (HM + class constraints) | [Inference wiki](https://github.com/CategoricalData/hydra/wiki/Inference) |
+| Understand type classes (`equality`/`numeric`/`ordering`; mapping to hosts without native type classes) | [Type classes wiki](https://github.com/CategoricalData/hydra/wiki/Type-classes) |
 | Understand the validation framework (checks, profiles, constraint catalog) | [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation) |
 | Write Haskell / Java / Python / Scala DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) / [-scala.md](docs/dsl-guide-scala.md) |
 | Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |

@@ -91,10 +91,12 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
 
     -- Mixed: collection terms combined with primitives (monomorphic cases)
     subgroup "Collection terms with primitives" [
-      -- \x -> set{x, math.negate x}  =>  Int32 -> Set Int32  (negate forces Int32)
-      expectMono 1 [tag_disabledForMinimalInference]
+      -- \x -> set{x, math.negate x}  =>  forall t. (Numeric t, Ord t) => t -> Set t
+      -- negate now carries a 'numeric' constraint; the set literal adds 'ordering' on the same variable.
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (lambda "x" $ set [var "x", primitive DefMath.negate @@ var "x"])
-        (T.function T.int32 (T.set T.int32)),
+        ["t0"] [("t0", ["ordering", "numeric"])]
+        (T.function (T.var "t0") (T.set $ T.var "t0")),
       -- \k -> map{k: lists.sort (list [k])}
       -- Key needs Ord (from map literal), value needs Ord (from lists.sort) — same variable
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
@@ -183,13 +185,15 @@ testGroupForLetBindings = define "testGroupForLetBindings" $
         (T.function (T.list $ T.pair (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1")))],
 
     subgroup "Let-bound with partial instantiation" [
-      -- let f = \m -> maps.map math.negate m in f  => Ord k => Map k Int32 -> Map k Int32
+      -- let f = \m -> maps.map math.negate m in f
+      --   => forall k v. (Ord k, Numeric v) => Map k v -> Map k v
+      -- negate no longer forces Int32; the value type is now numeric-polymorphic.
       expectPolyConstrained 1 []
         (lets [
           "f">: lambda "m" $ primitive DefMaps.map @@ primitive DefMath.negate @@ var "m"]
           $ var "f")
-        ["t0"] [("t0", ["ordering"])]
-        (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
+        ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["numeric"])]
+        (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1"))),
       -- let f = \xs -> sets.fromList xs in f  => Ord x => [x] -> Set x
       expectPolyConstrained 2 []
         (lets [
@@ -386,6 +390,28 @@ testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
         (primitive DefOrdering.compare)
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.var "t0", T.var "hydra.util.Comparison"])],
+
+    subgroup "Numeric primitives (numeric on argument type)" [
+      -- math.add => forall x. Numeric x => x -> x -> x
+      expectPolyConstrained 1 []
+        (primitive DefMath.add)
+        ["t0"] [("t0", ["numeric"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      -- math.sub => forall x. Numeric x => x -> x -> x
+      expectPolyConstrained 2 []
+        (primitive DefMath.sub)
+        ["t0"] [("t0", ["numeric"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      -- math.mul => forall x. Numeric x => x -> x -> x
+      expectPolyConstrained 3 []
+        (primitive DefMath.mul)
+        ["t0"] [("t0", ["numeric"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      -- math.negate => forall x. Numeric x => x -> x
+      expectPolyConstrained 4 []
+        (primitive DefMath.negate)
+        ["t0"] [("t0", ["numeric"])]
+        (T.function (T.var "t0") (T.var "t0"))],
 
     subgroup "List primitives with constraints" [
       -- lists.sort => forall x. Ord x => [x] -> [x]

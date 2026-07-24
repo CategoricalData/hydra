@@ -90,7 +90,10 @@ allTests = definitionInModule module_ "allTests" $
       mathRound,
       mathRoundFloat32,
       mathRoundFloat64,
-      mathTruncate]
+      mathTruncate,
+      -- Constraint-polymorphic ('numeric') dispatch: add/sub/mul/negate applied to numeric types
+      -- other than int32, exercising value-level dispatch on the runtime literal variant (#566).
+      mathNumericDispatch]
 
 mathAbs :: TypedTerm TestGroup
 mathAbs = subgroup "abs" [
@@ -441,6 +444,30 @@ mathNegateFloat64 = subgroup "negateFloat64" [
   test "fractional" 1.5 (-1.5)]
   where
     test name x result = primCase name DefMath.negateFloat64 [float64 x] (float64 result)
+
+-- | Value-level polymorphic dispatch of the 'numeric'-constrained primitives add/sub/mul/negate
+--   on numeric types other than int32. The int32 cases are already covered by mathAdd/mathSub/
+--   mathMul/mathNegate above; these exercise the runtime dispatch on float64, int64, and bigint
+--   literals, confirming that the single polymorphic primitive computes with the correct per-type
+--   semantics (#566).
+mathNumericDispatch :: TypedTerm TestGroup
+mathNumericDispatch = supergroup "polymorphic numeric dispatch" [
+  subgroup "add" [
+    primCase "float64" DefMath.add [float64 1.5, float64 2.5] (float64 4.0),
+    primCase "int64"   DefMath.add [int64 1000000000000, int64 1] (int64 1000000000001),
+    primCase "bigint"  DefMath.add [bigint 100000000000000000000, bigint 1] (bigint 100000000000000000001)],
+  subgroup "sub" [
+    primCase "float64" DefMath.sub [float64 5.0, float64 1.5] (float64 3.5),
+    primCase "int64"   DefMath.sub [int64 1000000000001, int64 1] (int64 1000000000000),
+    primCase "bigint"  DefMath.sub [bigint 100000000000000000001, bigint 1] (bigint 100000000000000000000)],
+  subgroup "mul" [
+    primCase "float64" DefMath.mul [float64 2.0, float64 2.5] (float64 5.0),
+    primCase "int64"   DefMath.mul [int64 1000000, int64 1000000] (int64 1000000000000),
+    primCase "bigint"  DefMath.mul [bigint 10000000000, bigint 10000000000] (bigint 100000000000000000000)],
+  subgroup "negate" [
+    primCase "float64" DefMath.negate [float64 2.5] (float64 (-2.5)),
+    primCase "int64"   DefMath.negate [int64 1000000000000] (int64 (-1000000000000)),
+    primCase "bigint"  DefMath.negate [bigint 100000000000000000000] (bigint (-100000000000000000000))]]
 
 mathOdd :: TypedTerm TestGroup
 mathOdd = subgroup "odd" [

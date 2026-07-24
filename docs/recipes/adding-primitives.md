@@ -197,9 +197,10 @@ Conventions established across the 18 `hydra.lib.*` module names (#319):
   `optional`, `set`). Use Haskell type names (`Int32`, `Double`, `Bool`, `Maybe`)
   *only* inside `Corresponds to Haskell's <name> :: <Haskell-sig>` cross-references.
 - **Do not mention Haskell typeclasses** (`Num`, `Floating`, `Ord`, `Enum`).
-  Hydra does not have typeclasses. The closest Hydra concept is the per-type-var
-  constraint set (e.g. `'ordering'`, `'equality'`); name those explicitly when
-  relevant.
+  Hydra has its own lightweight type-class system with three built-in classes
+  (`'equality'`, `'numeric'`, `'ordering'`) carried as per-type-var constraints;
+  name those explicitly when relevant, rather than the Haskell classes. See the
+  [Type classes](https://github.com/CategoricalData/hydra/wiki/Type-classes) wiki page.
 - **Special-value notation.** IEEE 754 sentinels compact: `±0`, `±∞`, `NaN`.
   Ranges in interval notation: `[0, π]`, `(-π/2, +π/2)`. Use unicode `±`, `∞`,
   `π`, `√`; encode as Haskell escape sequences (`\xB1`, `\x221E`, `\x03C0`,

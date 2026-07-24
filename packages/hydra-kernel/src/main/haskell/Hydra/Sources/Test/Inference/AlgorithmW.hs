@@ -131,11 +131,12 @@ testGroupForSystemF = define "testGroupForSystemF" $
 --  --		in (+ (S (S 0)) (S 0))
 --  --System F type:
 --  -- 	Nat
-    expectMono 7 []
+    -- Type changed: negate is now numeric-polymorphic (#566), so the result is a numeric var.
+    expectPolyConstrained 7 []
       (lets [
         "+" >: lambdas ["x", "y"] (primSucc @@ (var "+" @@ (primPred @@ var "x") @@ var "y"))]
         $ var "+" @@ (primSucc @@ (primSucc @@ int32 0)) @@ (primSucc @@ int32 0))
-      T.int32,
+      ["t0"] [("t0", ["numeric"])] (T.var "t0"),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (f 0 x)))

@@ -65,10 +65,11 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
 
     -- Applying maps.map to a concrete function
     subgroup "maps.map applied to a function" [
-      -- maps.map (partially applied): maps.map negate => map<k, int32> -> map<k, int32>
+      -- maps.map (partially applied): maps.map negate => map<k, v> -> map<k, v>
+      -- Type changed: negate is now numeric-polymorphic (#566), so the value type is a numeric var.
       expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (primitive DefMaps.map @@ primitive DefMath.negate)
-        ["t0"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
+        ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["numeric"])] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1"))),
       -- maps.map with a lambda
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
         (primitive DefMaps.map @@ lambda "x" (list [var "x"]))
@@ -80,10 +81,11 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
 
     -- Applying sets.map to cross-collection functions
     subgroup "sets.map applied to a function" [
-      -- sets.map negate => set<int32> -> set<int32>
-      expectMono 1 [tag_disabledForMinimalInference]
+      -- sets.map negate => set<t> -> set<t>
+      -- Type changed: negate is now numeric-polymorphic (#566); set element is ordered + numeric.
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (primitive DefSets.map @@ primitive DefMath.negate)
-        (T.function (T.set T.int32) (T.set T.int32)),
+        ["t0"] [("t0", ["ordering", "numeric"])] (T.function (T.set (T.var "t0")) (T.set (T.var "t0"))),
       -- sets.map with lists.length: set<list<t>> -> set<int32>
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
         (primitive DefSets.map @@ primitive DefLists.length)
@@ -186,9 +188,10 @@ testGroupForFolds :: TypedTermDefinition TestGroup
 testGroupForFolds = define "testGroupForFolds" $
   supergroup "Eliminations" [
     subgroup "List eliminations (folds)" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      -- Type changed: add is now numeric-polymorphic (#566), so the fold accumulator is a numeric var.
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         foldAdd
-        (T.functionMany [T.int32, T.list T.int32, T.int32]),
+        ["t0"] [("t0", ["numeric"])] (T.functionMany [T.var "t0", T.list (T.var "t0"), T.var "t0"]),
       expectMono 2 [tag_disabledForMinimalInference]
         (foldAdd @@ int32 0)
         (T.function (T.list T.int32) T.int32),

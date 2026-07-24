@@ -641,9 +641,15 @@ stringLiteralsTests = define "stringLiteralsTests" $
 binaryPrimitivesTests :: TypedTermDefinition TestGroup
 binaryPrimitivesTests = define "binaryPrimitivesTests" $
   subgroup "Binary primitives" [
-  noChange "math add"
+  -- math.add is now constraint-polymorphic: forall x. numeric x => x -> x -> x.
+  -- The checking phase compares F-types (typeSchemeToFType drops constraints), so
+  -- the numeric constraint is not surfaced here; the expected F-type is the bare
+  -- forall. The constraint itself is asserted in the inference-phase test
+  -- (Sources/Test/Inference/Classes.hs, "Numeric primitives").
+  checkTest "math add" []
     (primitive DefMath.add)
-    (T.function T.int32 (T.function T.int32 T.int32)),
+    (tylam "t0" $ tyapp (primitive DefMath.add) (T.var "t0"))
+    (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.var "t0"))),
   checkTest "lists cons" []
     (primitive DefLists.cons)
     (tylam "t0" $ tyapp (primitive DefLists.cons) (T.var "t0"))
@@ -675,9 +681,13 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
 monomorphicVsPolymorphicTests :: TypedTermDefinition TestGroup
 monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
   subgroup "Monomorphic vs polymorphic" [
+  -- math.add is now constraint-polymorphic (forall x. numeric x => x -> x -> x),
+  -- so it no longer serves as the "monomorphic" contrast here. math.abs
+  -- (int32 -> int32) is genuinely monomorphic, preserving the pedagogical
+  -- monomorphic-vs-polymorphic split of this group.
   noChange "monomorphic math"
-    (primitive DefMath.add)
-    (T.function T.int32 (T.function T.int32 T.int32)),
+    (primitive DefMath.abs)
+    (T.function T.int32 T.int32),
   checkTest "polymorphic identity" []
     (primitive DefFunctions.identity)
     (tylam "t0" $ tyapp (primitive DefFunctions.identity) (T.var "t0"))
@@ -753,9 +763,14 @@ unaryPrimitivesTests = define "unaryPrimitivesTests" $
     (primitive DefLists.head)
     (tylam "t0" $ tyapp (primitive DefLists.head) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.list $ T.var "t0") (T.optional $ T.var "t0")),
-  noChange "math neg"
+  -- math.negate is now constraint-polymorphic: forall x. numeric x => x -> x.
+  -- As with math.add, the checking phase compares F-types (constraints dropped by
+  -- typeSchemeToFType), so the expected type is the bare forall; the numeric
+  -- constraint is asserted in Sources/Test/Inference/Classes.hs.
+  checkTest "math neg" []
     (primitive DefMath.negate)
-    (T.function T.int32 T.int32),
+    (tylam "t0" $ tyapp (primitive DefMath.negate) (T.var "t0"))
+    (T.forAll "t0" $ T.function (T.var "t0") (T.var "t0")),
   noChange "logic not"
     (primitive DefLogic.not)
     (T.function T.boolean T.boolean)]

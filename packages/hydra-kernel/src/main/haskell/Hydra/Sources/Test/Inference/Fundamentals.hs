@@ -73,12 +73,14 @@ testGroupForLambdas = define "testGroupForLambdas" $
         ["t0"] (T.function (T.var "t0") T.int16)],
 
     subgroup "Nested lambdas" [
-      expectMono 1 []
+      -- Type changed: add is now numeric-polymorphic (#566), so the operands are a numeric var.
+      expectPolyConstrained 1 []
         (lambda "x" $ lambda "y" $ primitive DefMath.add @@ var "x" @@ var "y")
-        (T.functionMany [T.int32, T.int32, T.int32]),
-      expectMono 2 []
+        ["t0"] [("t0", ["numeric"])] (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      -- Type changed: add is now numeric-polymorphic (#566), so the operands are a numeric var.
+      expectPolyConstrained 2 []
         (lambda "x" $ list [lambda "y" $ primitive DefMath.add @@ var "x" @@ var "y"])
-        (T.function T.int32 $ T.list $ T.function T.int32 T.int32)],
+        ["t0"] [("t0", ["numeric"])] (T.function (T.var "t0") $ T.list $ T.function (T.var "t0") (T.var "t0"))],
 
     subgroup "Nested lambdas with shadowing" [
       expectPoly 1 []
@@ -166,15 +168,17 @@ testGroupForLet = define "testGroupForLet" $
         (lets ["x">: float32 42.0] $ lambdas ["y", "z"] $ var "x")
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32)),
       -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
-      expectMono 2 []
+      -- Type changed: mul is now numeric-polymorphic (#566), so 'square' operates over a numeric var.
+      expectPolyConstrained 2 []
         (lets [
             "square">: lambda "z" $ primitive DefMath.mul @@ var "z" @@ var "z"] $
           lambdas ["f", "x", "y"] $ primitive DefLogic.ifElse
               @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
               @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
               @@ (var "f" @@ var "x" @@ var "y"))
-        (T.functionMany [
-          T.functionMany [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean]),
+        ["t0"] [("t0", ["numeric"])] (T.function
+          (T.functionMany [T.var "t0", T.boolean, T.boolean])
+          (T.functionMany [T.var "t0", T.boolean, T.boolean])),
       expectPoly 3 []
         (lets [
           "id">: lambda "x" $ var "x"]
@@ -249,12 +253,13 @@ testGroupForLet = define "testGroupForLet" $
       --   ["t0", "t1"] (T.pair
       --     (T.functionMany [T.var "t0", T.int32, T.var "t1"])
       --     (T.functionMany [T.int32, T.var "t0", T.var "t1"])),
-      expectMono 4 []
+      -- Type changed: S/P (negate) is now numeric-polymorphic (#566), so the result is a numeric var.
+      expectPolyConstrained 4 []
         -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
         (lets [
           "plus">: lambda "x" $ lambda "y" $ s @@ (var "plus" @@ (p @@ var "x") @@ var "y")]
           $ var "plus" @@ (s @@ (s @@ int32 0)) @@ (s @@ int32 0))
-        T.int32,
+        ["t0"] [("t0", ["numeric"])] (T.var "t0"),
       expectMono 5 []
         -- letrecs id = (\z. z)
         --     f = (\p0. (pair (id p0) (id p0)))
@@ -581,15 +586,18 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
         (T.list T.int32)],
 
     subgroup "Lambdas and primitives" [
-      expectMono 1 []
+      expectPolyConstrained 1 []
         (primitive DefMath.add)
-        (T.functionMany [T.int32, T.int32, T.int32]),
-      expectMono 2 []
+        ["t0"] [("t0", ["numeric"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      expectPolyConstrained 2 []
         (lambda "x" (primitive DefMath.add @@ var "x"))
-        (T.functionMany [T.int32, T.int32, T.int32]),
-      expectMono 3 []
+        ["t0"] [("t0", ["numeric"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "t0"]),
+      expectPolyConstrained 3 []
         (lambda "x" (primitive DefMath.add @@ var "x" @@ var "x"))
-        (T.function T.int32 T.int32)],
+        ["t0"] [("t0", ["numeric"])]
+        (T.function (T.var "t0") (T.var "t0"))],
 
     subgroup "Mixed expressions with lambdas, constants, and primitive functions" [
       expectMono 1 []
@@ -696,12 +704,12 @@ testGroupForPrimitives = define "testGroupForPrimitives" $
         (Core.typeEffect $ T.either_ fileErrorType T.binary)],
 
     subgroup "Monomorphic primitive functions" [
+      -- Note: math.sub was formerly listed here as a monomorphic int32 example, but it is now
+      -- constraint-polymorphic (numeric x => x -> x -> x); see the Type classes / Numeric
+      -- primitives group. strings.length remains a genuinely monomorphic primitive.
       expectMono 1 []
         (primitive $ DefStrings.length)
-        (T.function T.string T.int32),
-      expectMono 2 []
-        (primitive DefMath.sub)
-        (T.functionMany [T.int32, T.int32, T.int32])],
+        (T.function T.string T.int32)],
 
     subgroup "Polymorphic primitive functions" [
       expectPoly 1 []
