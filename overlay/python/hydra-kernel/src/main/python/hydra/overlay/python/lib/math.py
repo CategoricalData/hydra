@@ -9,6 +9,100 @@ from hydra.overlay.python.dsl.python import frozenlist, Optional, Given, None_
 
 import builtins as _builtins
 
+
+# ===== Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate =====
+#
+# These primitives are registered with a 'numeric' class constraint and identity (Term) coders
+# (see sources/libraries.py), so on the interpreter path they receive raw Terms and must dispatch
+# on the operand's literal variant. On the generated-code path they are called directly with native
+# Python numbers. Both are handled in one function, dual-mode, mirroring equality.compare: try the
+# native operation first and fall back to Term dispatch on TypeError. Python's arithmetic operators
+# are already runtime-polymorphic, so the native path needs no per-type branching; the Term path
+# reconstructs the same literal variant so the result stays correctly typed. No typeclass mechanism
+# is consulted at runtime — the host has none.
+
+def _numeric_binary(x, y, op):
+    """Apply a binary numeric operation, dispatching Terms on their literal variant when needed."""
+    try:
+        return op(x, y)
+    except TypeError:
+        return _numeric_binary_terms(x, y, op)
+
+
+def _numeric_unary(x, op):
+    """Apply a unary numeric operation, dispatching a Term on its literal variant when needed."""
+    try:
+        return op(x)
+    except TypeError:
+        return _numeric_unary_terms(x, op)
+
+
+def _numeric_binary_terms(x, y, op):
+    import hydra.core
+    lx = _numeric_literal(x)
+    ly = _numeric_literal(y)
+    if isinstance(lx, hydra.core.LiteralInteger) and isinstance(ly, hydra.core.LiteralInteger):
+        return hydra.core.TermLiteral(hydra.core.LiteralInteger(
+            _rewrap_integer(lx.value, op(lx.value.value, ly.value.value))))
+    if isinstance(lx, hydra.core.LiteralFloat) and isinstance(ly, hydra.core.LiteralFloat):
+        return hydra.core.TermLiteral(hydra.core.LiteralFloat(
+            _rewrap_float(lx.value, op(lx.value.value, ly.value.value))))
+    raise TypeError("hydra.lib.math: operands are not the same numeric kind")
+
+
+def _numeric_unary_terms(x, op):
+    import hydra.core
+    lx = _numeric_literal(x)
+    if isinstance(lx, hydra.core.LiteralInteger):
+        return hydra.core.TermLiteral(hydra.core.LiteralInteger(
+            _rewrap_integer(lx.value, op(lx.value.value))))
+    if isinstance(lx, hydra.core.LiteralFloat):
+        return hydra.core.TermLiteral(hydra.core.LiteralFloat(
+            _rewrap_float(lx.value, op(lx.value.value))))
+    raise TypeError("hydra.lib.math: operand is not numeric")
+
+
+def _numeric_literal(term):
+    import hydra.core
+    if isinstance(term, hydra.core.TermLiteral):
+        return term.value
+    raise TypeError("hydra.lib.math: expected a literal term")
+
+
+# Width (signed?, bits) per fixed-width IntegerValue variant, keyed by class NAME to avoid importing
+# hydra.core at module-load time. Bigint has no entry — it keeps full arbitrary precision.
+_INT_WIDTHS = {
+    "IntegerValueInt8": (True, 8),
+    "IntegerValueInt16": (True, 16),
+    "IntegerValueInt32": (True, 32),
+    "IntegerValueInt64": (True, 64),
+    "IntegerValueUint8": (False, 8),
+    "IntegerValueUint16": (False, 16),
+    "IntegerValueUint32": (False, 32),
+    "IntegerValueUint64": (False, 64),
+}
+
+
+def _rewrap_integer(like, value):
+    """Reconstruct the same IntegerValue variant as `like`, narrowing the result to the variant's
+    width. Fixed-width integers get two's-complement wraparound (matching the Haskell and Java
+    hosts, whose fixed-width representation types wrap on overflow); bigint keeps full precision.
+    Python ints are arbitrary-precision, so without this narrowing an int32 overflow would silently
+    produce an out-of-range value and diverge from the other hosts."""
+    width = _INT_WIDTHS.get(type(like).__name__)
+    if width is not None:
+        signed, bits = width
+        value &= (1 << bits) - 1
+        if signed and value >= (1 << (bits - 1)):
+            value -= (1 << bits)
+    return type(like)(value)
+
+
+def _rewrap_float(like, value):
+    """Reconstruct the same FloatValue variant as `like` around a new native float value."""
+    return type(like)(value)
+
+
 def _safe(f, x):
     """Wrap a math function to return NaN/Inf on domain/range errors (matching Haskell/Java IEEE 754 behavior).
     Python's math module raises ValueError for e.g. sin(inf), cos(inf), log(-1),
@@ -38,9 +132,9 @@ def acosh(x: float) -> float:
     return _safe(math.acosh, x)
 
 
-def add(x: int, y: int) -> int:
-    """Add two numbers."""
-    return x + y
+def add(x, y):
+    """Add two numbers (constraint-polymorphic over the 'numeric' class)."""
+    return _numeric_binary(x, y, lambda a, b: a + b)
 
 
 def add_float64(x: float, y: float) -> float:
@@ -182,9 +276,9 @@ def min_(x: int, y: int) -> int:
 min = min_
 
 
-def mul(x: int, y: int) -> int:
-    """Multiply two numbers."""
-    return x * y
+def mul(x, y):
+    """Multiply two numbers (constraint-polymorphic over the 'numeric' class)."""
+    return _numeric_binary(x, y, lambda a, b: a * b)
 
 
 def mul_float64(x: float, y: float) -> float:
@@ -192,9 +286,9 @@ def mul_float64(x: float, y: float) -> float:
     return x * y
 
 
-def negate(x: int) -> int:
-    """Negate a number."""
-    return -x
+def negate(x):
+    """Negate a number (constraint-polymorphic over the 'numeric' class)."""
+    return _numeric_unary(x, lambda a: -a)
 
 
 def negate_float64(x: float) -> float:
@@ -302,9 +396,9 @@ def sqrt(x: float) -> float:
     return _safe(math.sqrt, x)
 
 
-def sub(x: int, y: int) -> int:
-    """Subtract two numbers."""
-    return x - y
+def sub(x, y):
+    """Subtract two numbers (constraint-polymorphic over the 'numeric' class)."""
+    return _numeric_binary(x, y, lambda a, b: a - b)
 
 
 def sub_float64(x: float, y: float) -> float:

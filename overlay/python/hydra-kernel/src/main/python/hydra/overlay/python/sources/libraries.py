@@ -668,12 +668,18 @@ def register_math_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
+    # Constraint-polymorphic ('numeric') arithmetic: registered with identity (Term) coders and a
+    # 'numeric' class constraint, so the runtime numeric type is discovered by dispatching on the
+    # operand's literal variant (see math.add/sub/mul/negate). Mirrors equality.compare.
+    x_num = prims.variable("x")
+    _x_num = prims.v_num("x")
+
     # Int32 primitives
     primitives[def_math.abs.name] = prims.prim1(
         def_math.abs.name, math.abs_, [], prims.int32(), prims.int32()
     )
     primitives[def_math.add.name] = prims.prim2(
-        def_math.add.name, math.add, [], prims.int32(), prims.int32(), prims.int32()
+        def_math.add.name, math.add, [_x_num], x_num, x_num, x_num
     )
     primitives[def_math.add_float64.name] = prims.prim2(
         def_math.add_float64.name, math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
@@ -682,13 +688,13 @@ def register_math_primitives() -> dict[Name, Primitive]:
         def_math.even.name, math.even, [], prims.int32(), prims.boolean()
     )
     primitives[def_math.mul.name] = prims.prim2(
-        def_math.mul.name, math.mul, [], prims.int32(), prims.int32(), prims.int32()
+        def_math.mul.name, math.mul, [_x_num], x_num, x_num, x_num
     )
     primitives[def_math.mul_float64.name] = prims.prim2(
         def_math.mul_float64.name, math.mul_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
     primitives[def_math.negate.name] = prims.prim1(
-        def_math.negate.name, math.negate, [], prims.int32(), prims.int32()
+        def_math.negate.name, math.negate, [_x_num], x_num, x_num
     )
     primitives[def_math.negate_float64.name] = prims.prim1(
         def_math.negate_float64.name, math.negate_float64, [], prims.float64(), prims.float64()
@@ -703,7 +709,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
         def_math.signum.name, math.signum, [], prims.int32(), prims.int32()
     )
     primitives[def_math.sub.name] = prims.prim2(
-        def_math.sub.name, math.sub, [], prims.int32(), prims.int32(), prims.int32()
+        def_math.sub.name, math.sub, [_x_num], x_num, x_num, x_num
     )
     primitives[def_math.sub_float64.name] = prims.prim2(
         def_math.sub_float64.name, math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
