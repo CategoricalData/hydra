@@ -987,18 +987,32 @@ public class Generation {
             List<Module> main = mainByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
             List<Module> dsl  = dslByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
             List<Module> enc  = encByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
-            // #607: field assembly + serialization delegated to the generated
-            // hydra.build.manifestWriter (packageManifestJson), which reproduces this
-            // driver's alphabetized field order and sorted namespace arrays exactly.
-            Value manifestValue = hydra.build.ManifestWriter.packageManifestJson(
-                pkg, main, dsl, enc, java.util.Collections.emptyList());
-            String jsonStr = hydra.json.Writer.printJson(manifestValue);
+            // Field order alphabetized to match the Haskell writer's byte output.
+            List<Pair<String, Value>> fields = new ArrayList<>();
+            fields.add(new Pair<>("mainDslModules", namespacesArray(dsl)));
+            fields.add(new Pair<>("mainEncodingModules", namespacesArray(enc)));
+            fields.add(new Pair<>("mainModules", namespacesArray(main)));
+            fields.add(new Pair<>("manifestFormatVersion",
+                new Value.Number_(java.math.BigDecimal.valueOf(1))));
+            fields.add(new Pair<>("package", new Value.String_(pkg)));
+            fields.add(new Pair<>("testModules", namespacesArray(java.util.Collections.emptyList())));
+            String jsonStr = hydra.json.Writer.printJson(new Value.Object_(fields));
             Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
             Files.createDirectories(pkgDir);
             Path filePath = pkgDir.resolve("manifest.json");
             Files.write(filePath, (jsonStr + "\n").getBytes(StandardCharsets.UTF_8));
             System.err.println("  Wrote manifest: " + filePath);
         }
+    }
+
+    /** A sorted JSON string array of the namespaces of the given modules. */
+    private static Value namespacesArray(List<Module> mods) {
+        List<String> nss = new ArrayList<>();
+        for (Module m : mods) nss.add(m.name.value);
+        java.util.Collections.sort(nss);
+        List<Value> arr = new ArrayList<>();
+        for (String ns : nss) arr.add(new Value.String_(ns));
+        return new Value.Array(arr);
     }
 
     /**
