@@ -895,7 +895,18 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
       -- per-package input digest must cover native-generator-owned
       -- hydra.<lang>.* modules even though their JSON write is excluded
       -- (#344). See refreshPerPackageDigests for the full rationale (#400).
-      CM.when doInfer $ ensurePerPackageDigests routingMap distJsonRoot universeMods
+      --
+      -- #606: also finalize (selfHash/depHash), not just ensurePerPackageDigests's
+      -- plain hashes map. ensurePerPackageDigests only rewrites a package's
+      -- digest when its recomputed content differs from what's on disk (e.g. a
+      -- native-driver JSON change for hydra-java/python/jvm, invisible to this
+      -- Haskell-side cache-hit check) — via the v1 writeDigest, which silently
+      -- drops selfHash/depHash:*. Without this, that rewrite leaves the package's
+      -- transitive-invalidation fields stale, and a stale value can spuriously
+      -- match an equally-stale recorded output digest (a false Phase-3 hit).
+      CM.when doInfer $ do
+        ensurePerPackageDigests routingMap distJsonRoot universeMods
+        finalizePerPackageDigests distJsonRoot
     Nothing -> do
       -- Try the incremental path: partition modules into clean
       -- (DSL hash unchanged) and dirty. Re-infer only the dirty ones
@@ -912,6 +923,7 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods allMods
+            finalizePerPackageDigests distJsonRoot
         Just (IncrementalPartial allMods dirtyMods) -> do
           -- Incremental inference succeeded; only rewrite JSON for the
           -- dirty modules. Clean modules' on-disk JSON is already
@@ -924,6 +936,7 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods allMods
+            finalizePerPackageDigests distJsonRoot
         Just IncrementalPartialPreWritten -> do
           -- #381 follow-up: tryIncrementalInference routed through
           -- inferAndWriteByPackage, which already inferred and wrote JSON
@@ -934,6 +947,7 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods mods
+            finalizePerPackageDigests distJsonRoot
         Nothing -> do
           -- #381: per-package iterative inference. Replaces the
           -- universe-wide 'inferModulesIO universeMods mods' that runs
@@ -948,6 +962,7 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods mods
+            finalizePerPackageDigests distJsonRoot
 
 -- | Write test-suite modules to JSON via the per-package incremental
 -- inference driver (#395), the test-side analogue of

@@ -16,11 +16,16 @@ module Hydra.DigestSpec where
 import qualified Hydra.Digest as Digest
 import Hydra.Digest
   ( Digest(..), DigestEntry(..), DigestKind(..)
-  , Generation(..), GenerationMode(..) )
+  , Generation(..), GenerationMode(..)
+  , PerPackageDigest(..) )
+import Hydra.Generation (ensurePerPackageDigests, finalizePerPackageDigests, perPackageDigestPath)
 import Hydra.Packaging (Module(..), ModuleName(..))
+import Hydra.PackageRouting (buildRoutingMap)
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified System.Directory as SD
+import System.FilePath ((</>), takeDirectory)
 import qualified Test.Hspec as H
 
 
@@ -231,3 +236,174 @@ spec = do
       genHydraVersion g `H.shouldBe` Nothing
       genRevision g `H.shouldBe` Nothing
       genTimestamp g `H.shouldBe` Nothing
+
+  -- #606: a native-driver JSON change (e.g. #398's coder-runtime field
+  -- reorder, which touches no .java/.py SOURCE) updates a native-owned
+  -- package's jsonContent: hashes WITHOUT changing hashUniverse's
+  -- universe-wide hash (hashUniverse only reads DSL SOURCE, never native
+  -- driver JSON OUTPUT -- see hashPackageJsonContent's #398/#469 doc
+  -- comment above). So a subsequent Haskell-side sync sees a cache HIT and
+  -- takes writeModulesJsonPackageSplit's cache-hit branch:
+  -- 'ensurePerPackageDigests' correctly detects the jsonContent mismatch
+  -- (stored /= recomputed) and rewrites the package's digest -- but via the
+  -- v1 'Digest.writeDigest', which silently drops selfHash/depHash:* (parse/
+  -- serializeDigest never round-trip those keys). Before the #606 fix,
+  -- NOTHING downstream ever repaired the dropped fields on this path, so
+  -- Phase 3's digest-check could compare two independently-stale-but-equal
+  -- selfHash/depHash pairs and report a false cache hit. This is latent, not
+  -- live, for DSL-authored packages like hydra-build: their JSON content is
+  -- driven entirely by the SAME DSL-source hash that gates the universe-wide
+  -- check, so a real content change there always forces a miss instead
+  -- (confirmed by a live repro, see the #606 branch plan / issue).
+  --
+  -- The fix: writeModulesJsonPackageSplit's cache-hit branch now calls
+  -- 'finalizePerPackageDigests' right after 'ensurePerPackageDigests', so
+  -- whatever the v1 writer just dropped gets correctly recomputed in the
+  -- same pass. These tests exercise 'ensurePerPackageDigests' directly (the
+  -- actual buggy function), not just 'finalizePerPackageDigests' in
+  -- isolation, so the trigger condition is encoded precisely.
+  H.describe "ensurePerPackageDigests + finalizePerPackageDigests (#606)" $ do
+    H.it "ensurePerPackageDigests alone drops selfHash/depHash on a native-package content change (pre-#606-fix behavior)" $ do
+      tmpRoot <- (</> "hydra-606-spec-bare") <$> SD.getTemporaryDirectory
+      SD.removePathForcibly tmpRoot
+      SD.createDirectoryIfMissing True tmpRoot
+
+      -- hydra-java's real declared deps (packages/hydra-java/package.json):
+      -- hydra-kernel + hydra-jvm. Seed both with correct, already-finalized
+      -- digests (as a real prior sync would have left them).
+      let writeFinalizedMap pkg hmap deps = do
+            let dpath = perPackageDigestPath tmpRoot pkg
+                selfH = Digest.computeSelfHash hmap
+            SD.createDirectoryIfMissing True (takeDirectory dpath)
+            Digest.writePerPackageDigest dpath (PerPackageDigest hmap selfH (M.fromList deps))
+          writeFinalized pkg hashes deps =
+            writeFinalizedMap pkg (M.fromList [(ModuleName k, v) | (k, v) <- hashes]) deps
+          -- The REAL native-driver JSON file 'hashPackageJsonContent' reads
+          -- from disk -- writing THIS (not just a digest key) is what makes
+          -- the jsonContent-only-change trigger faithful.
+          javaJsonPath = tmpRoot </> "hydra-java" </> "src" </> "main" </> "json" </> "hydra" </> "java" </> "coder.json"
+
+      writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-1")] []
+      writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-1")] []
+      kernelBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      SD.createDirectoryIfMissing True (takeDirectory javaJsonPath)
+      writeFile javaJsonPath "{\"v\": \"old\"}"
+      oldJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
+      writeFinalizedMap "hydra-java" oldJsonDigest
+        [("hydra-kernel", Digest.ppSelfHash kernelBefore), ("hydra-jvm", Digest.ppSelfHash jvmBefore)]
+
+      -- The native-driver regen: rewrite the JSON file's bytes with no
+      -- accompanying .java source edit.
+      writeFile javaJsonPath "{\"v\": \"new\"}"
+
+      -- 'universeMods': a single synthetic hydra.java.coder module, routed
+      -- to hydra-java via a real RoutingMap. hashUniverse resolves its DSL
+      -- source file via 'Digest.discoverModuleNameFiles' (reads the REAL
+      -- packages/hydra-java/.../coder.java on disk, since these tests run
+      -- from heads/haskell's cwd) -- unchanged, so the SOURCE-side hash
+      -- matches. The jsonContent file is the only thing that changed
+      -- (simulating a native-driver JSON regen with no .java source edit).
+      let routingMap = buildRoutingMap [("hydra-java", [ModuleName "hydra.java.coder"])]
+          universeMods = [nameOnly "hydra.java.coder"]
+      ensurePerPackageDigests routingMap tmpRoot universeMods
+
+      after <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      newJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
+      let jsonKey = ModuleName "jsonContent:hydra/java/coder.json"
+      -- Confirm the mismatch really was a jsonContent-only change, not some
+      -- other accident: the recorded hash for the JSON file moved from old
+      -- to new content (the source-side hydra.java.coder entry is also
+      -- present but unaffected -- not asserted on here).
+      M.lookup jsonKey (Digest.ppHashes after) `H.shouldBe` M.lookup jsonKey newJsonDigest
+      M.lookup jsonKey (Digest.ppHashes after) `H.shouldNotBe` M.lookup jsonKey oldJsonDigest
+      -- ... but selfHash/depHash were dropped by the v1 writer underneath
+      -- ensurePerPackageDigests -- this is the bug, pinned so a future
+      -- regression in ensurePerPackageDigests's own writer is caught even if
+      -- the surrounding finalize-on-every-path fix is ever removed.
+      Digest.ppSelfHash after `H.shouldBe` ""
+      Digest.ppDeps after `H.shouldBe` M.empty
+
+      SD.removePathForcibly tmpRoot
+
+    H.it "the #606 fix (ensurePerPackageDigests + finalizePerPackageDigests) preserves selfHash/depHash across the same trigger" $ do
+      tmpRoot <- (</> "hydra-606-spec-fixed") <$> SD.getTemporaryDirectory
+      SD.removePathForcibly tmpRoot
+      SD.createDirectoryIfMissing True tmpRoot
+
+      let writeFinalizedMap pkg hmap deps = do
+            let dpath = perPackageDigestPath tmpRoot pkg
+                selfH = Digest.computeSelfHash hmap
+            SD.createDirectoryIfMissing True (takeDirectory dpath)
+            Digest.writePerPackageDigest dpath (PerPackageDigest hmap selfH (M.fromList deps))
+          writeFinalized pkg hashes deps =
+            writeFinalizedMap pkg (M.fromList [(ModuleName k, v) | (k, v) <- hashes]) deps
+          -- The REAL native-driver JSON file that hashPackageJsonContent
+          -- reads from disk (dist/json/hydra-java/src/main/json/hydra/
+          -- java/coder.json). Writing this -- not just a digest key -- is
+          -- what makes the jsonContent-only-change trigger faithful: a
+          -- real native-driver regen changes THIS file's bytes with no
+          -- accompanying .java source edit.
+          javaJsonPath = tmpRoot </> "hydra-java" </> "src" </> "main" </> "json" </> "hydra" </> "java" </> "coder.json"
+
+      writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-2")] []
+      writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")] []
+      kernelBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      SD.createDirectoryIfMissing True (takeDirectory javaJsonPath)
+      writeFile javaJsonPath "{\"v\": \"old\"}"
+      oldJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
+      writeFinalizedMap "hydra-java" oldJsonDigest
+        [("hydra-kernel", Digest.ppSelfHash kernelBefore), ("hydra-jvm", Digest.ppSelfHash jvmBefore)]
+
+      -- The native-driver regen: rewrite the JSON file's bytes with no
+      -- accompanying .java source edit.
+      writeFile javaJsonPath "{\"v\": \"new\"}"
+
+      let routingMap = buildRoutingMap [("hydra-java", [ModuleName "hydra.java.coder"])]
+          universeMods = [nameOnly "hydra.java.coder"]
+      -- Exactly the sequence writeModulesJsonPackageSplit's cache-hit branch
+      -- now runs (Generation.hs, #606 fix).
+      ensurePerPackageDigests routingMap tmpRoot universeMods
+      finalizePerPackageDigests tmpRoot
+
+      after <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      kernelAfter <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmAfter <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      newJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
+
+      -- selfHash is populated and correctly derived from the (updated)
+      -- jsonContent hash -- the mismatch was still detected and written.
+      let jsonKey = ModuleName "jsonContent:hydra/java/coder.json"
+      Digest.ppSelfHash after `H.shouldNotBe` ""
+      Digest.ppSelfHash after `H.shouldBe` Digest.computeSelfHash (Digest.ppHashes after)
+      M.lookup jsonKey (Digest.ppHashes after) `H.shouldBe` M.lookup jsonKey newJsonDigest
+      M.lookup jsonKey (Digest.ppHashes after) `H.shouldNotBe` M.lookup jsonKey oldJsonDigest
+      -- depHash:hydra-kernel / depHash:hydra-jvm correctly carry those
+      -- packages' selfHashes -- the transitive-invalidation edge that a
+      -- dropped depHash would otherwise silently break, letting Phase 3
+      -- compare two stale-but-equal digests and report a false cache hit.
+      M.lookup "hydra-kernel" (Digest.ppDeps after) `H.shouldBe` Just (Digest.ppSelfHash kernelAfter)
+      M.lookup "hydra-jvm" (Digest.ppDeps after) `H.shouldBe` Just (Digest.ppSelfHash jvmAfter)
+
+      SD.removePathForcibly tmpRoot
+
+    H.it "is idempotent: a second run is a no-op over an already-finalized tree" $ do
+      tmpRoot <- (</> "hydra-606-spec-idempotent") <$> SD.getTemporaryDirectory
+      SD.removePathForcibly tmpRoot
+      SD.createDirectoryIfMissing True tmpRoot
+      let writeHashesOnly pkg hashes = do
+            let dpath = perPackageDigestPath tmpRoot pkg
+            SD.createDirectoryIfMissing True (takeDirectory dpath)
+            Digest.writeDigest dpath (M.fromList [(ModuleName k, v) | (k, v) <- hashes])
+      writeHashesOnly "hydra-kernel" [("hydra.core", "kernel-hash-2")]
+      writeHashesOnly "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")]
+      writeHashesOnly "hydra-java"   [("jsonContent:hydra/java/coder.json", "java-json-hash-2")]
+
+      finalizePerPackageDigests tmpRoot
+      once <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      finalizePerPackageDigests tmpRoot
+      twice <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+
+      twice `H.shouldBe` once
+      SD.removePathForcibly tmpRoot
