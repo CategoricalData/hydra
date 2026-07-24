@@ -32,6 +32,7 @@ module_ = Module {
   where
     definitions = [
       toDefinition equality,
+      toDefinition numeric,
       toDefinition ordering]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -41,6 +42,11 @@ equality :: TypedTermDefinition TypeClass
 equality = define "equality" $
   doc "The equality type class: instances support structural equality." $
   Typing.typeClass (string "Equality: instances support structural equality.")
+
+numeric :: TypedTermDefinition TypeClass
+numeric = define "numeric" $
+  doc "The numeric type class: instances support arithmetic (addition, subtraction, multiplication, negation)." $
+  Typing.typeClass (string "Numeric: instances support arithmetic (addition, subtraction, multiplication, negation).")
 
 ordering :: TypedTermDefinition TypeClass
 ordering = define "ordering" $

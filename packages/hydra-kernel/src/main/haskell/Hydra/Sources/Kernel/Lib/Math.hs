@@ -41,8 +41,19 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
--- Shared monomorphic signatures. Each non-nullary helper takes an authored
--- (name, description) parameter list and threads it through sigWithParams.
+-- Shared type variable for numeric-polymorphic signatures.
+tx :: Type
+tx = Types.var "x"
+
+-- Constraint-polymorphic 'numeric' signatures (numeric x => ...).
+-- These mirror the argument-driven pattern used by equality/ordering primitives.
+numericTo :: TermSignature
+numericTo = sig $ Types.polyConstrained [("x", [Name "numeric"])] (tx Types.~> tx)
+
+numericTo2 :: TermSignature
+numericTo2 = sig $ Types.polyConstrained [("x", [Name "numeric"])] (tx Types.~> tx Types.~> tx)
+
+-- Shared monomorphic signatures.
 f64Const :: TermSignature
 f64Const = sig $ TypeScheme [] Types.float64 Nothing
 
@@ -100,11 +111,14 @@ acosh = define "acosh" "The hyperbolic arc cosine of a floating-point number." (
    "Corresponds to the IEEE 754 \xA79.2 acosh operation and to Haskell's acosh :: Double -> Double."]
 
 add :: PrimitiveDefinition
-add = define "add" "Integer addition." (int32To2 [("x", "the first addend"), ("y", "the second addend")])
-  ["Two's-complement 32-bit signed integer addition. The result is x + y reduced modulo 2^32 and\
-  \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
-  \ raised).",
-   "The operation is total. Corresponds to Haskell's (+) :: Int32 -> Int32 -> Int32."]
+add = define "add" "Numeric addition." numericTo2
+  ["Constraint-polymorphic addition over any type with a 'numeric' instance. The per-type semantics\
+  \ live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 addition\
+  \ reduces x + y modulo 2^32 and reinterprets as signed, wrapping silently on overflow),\
+  \ IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
+   "Requires a 'numeric' type-class constraint on the argument type, which is the closest Hydra\
+   \ equivalent to Haskell's Num instance.",
+   "The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a."]
 
 addFloat64 :: PrimitiveDefinition
 addFloat64 = define "addFloat64" "Floating-point addition." (f64To2 [("x", "the first addend"), ("y", "the second addend")])
@@ -252,11 +266,13 @@ rem = define "rem" "Integer remainder, or Nothing if dividing by zero." (int32To
   \ case total."]
 
 mul :: PrimitiveDefinition
-mul = define "mul" "Integer multiplication." (int32To2 [("x", "the first factor"), ("y", "the second factor")])
-  ["Two's-complement 32-bit signed integer multiplication. The result is x * y reduced modulo 2^32 and\
-  \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
-  \ raised).",
-   "The operation is total. Corresponds to Haskell's (*) :: Int32 -> Int32 -> Int32."]
+mul = define "mul" "Numeric multiplication." numericTo2
+  ["Constraint-polymorphic multiplication over any type with a 'numeric' instance. The per-type\
+  \ semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32\
+  \ multiplication reduces x * y modulo 2^32 and reinterprets as signed, wrapping silently on\
+  \ overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
+   "Requires a 'numeric' type-class constraint on the argument type.",
+   "The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a."]
 
 mulFloat64 :: PrimitiveDefinition
 mulFloat64 = define "mulFloat64" "Floating-point multiplication." (f64To2 [("x", "the first factor"), ("y", "the second factor")])
@@ -269,12 +285,14 @@ mulFloat64 = define "mulFloat64" "Floating-point multiplication." (f64To2 [("x",
   \ IEEE 754 \xA75.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."]
 
 negate :: PrimitiveDefinition
-negate = define "negate" "Negate an integer." (int32To [("x", "the integer to negate")])
-  ["Arithmetic negation of a 32-bit signed integer. The result is 0 - x reduced modulo 2^32 and\
-  \ reinterpreted as a signed int32.",
-   "The function is total but not injective at the boundary: negate(minBound) = minBound (i.e.\
-  \ negate(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
-   "Corresponds to Haskell's negate :: Int32 -> Int32."]
+negate = define "negate" "Numeric negation." numericTo
+  ["Constraint-polymorphic arithmetic negation over any type with a 'numeric' instance. The per-type\
+  \ semantics live in the instance: for fixed-width integers the result is 0 - x reduced modulo 2^32\
+  \ and reinterpreted as signed (total but not injective at the boundary: negate(minBound) = minBound,\
+  \ because +2147483648 is not representable in int32); for floating-point it flips the sign bit per\
+  \ IEEE 754 \xA75.5.1.",
+   "Requires a 'numeric' type-class constraint on the argument type.",
+   "Corresponds to Haskell's negate :: Num a => a -> a."]
 
 negateFloat64 :: PrimitiveDefinition
 negateFloat64 = define "negateFloat64" "Negate a floating-point number." (f64To [("x", "the value to negate")])
@@ -378,11 +396,13 @@ sqrt = define "sqrt" "The non-negative square root of a floating-point number." 
   \ Double."]
 
 sub :: PrimitiveDefinition
-sub = define "sub" "Integer subtraction." (int32To2 [("x", "the minuend"), ("y", "the subtrahend")])
-  ["Two's-complement 32-bit signed integer subtraction. The result is x - y reduced modulo 2^32 and\
-  \ reinterpreted as a signed int32 (i.e. arithmetic wraps silently on overflow, with no exception\
-  \ raised).",
-   "The operation is total. Corresponds to Haskell's (-) :: Int32 -> Int32 -> Int32."]
+sub = define "sub" "Numeric subtraction." numericTo2
+  ["Constraint-polymorphic subtraction over any type with a 'numeric' instance. The per-type semantics\
+  \ live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 subtraction\
+  \ reduces x - y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754\
+  \ round-to-nearest for floating-point, and arbitrary precision for bigint.",
+   "Requires a 'numeric' type-class constraint on the argument type.",
+   "The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a."]
 
 subFloat64 :: PrimitiveDefinition
 subFloat64 = define "subFloat64" "Floating-point subtraction." (f64To2 [("x", "the minuend"), ("y", "the subtrahend")])
