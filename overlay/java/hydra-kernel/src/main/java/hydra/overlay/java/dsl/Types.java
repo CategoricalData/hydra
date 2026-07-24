@@ -491,6 +491,7 @@ public interface Types {
 
     Set<Name> ORD = PersistentSet.singleton(name("ordering"));
     Set<Name> EQ = PersistentSet.singleton(name("equality"));
+    Set<Name> NUMERIC = PersistentSet.singleton(name("numeric"));
     Set<Name> NONE = PersistentSet.empty();
 
     /**
@@ -505,6 +506,13 @@ public interface Types {
      */
     static TypeScheme schemeEq(String var, Type body) {
         return constrained1(var, EQ, body);
+    }
+
+    /**
+     * Create a type scheme with one Numeric-constrained type variable.
+     */
+    static TypeScheme schemeNum(String var, Type body) {
+        return constrained1(var, NUMERIC, body);
     }
 
     /**
