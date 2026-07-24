@@ -1051,14 +1051,20 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"variable": "hydra.lib.math.add"},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "acc"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "argument": {"variable": "acc"}}},
                                                         "argument": {"literal": {"integer": {"int32": 10}}}}}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "d"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"variable": "d"}}},
                                                     "argument": {"literal": {"integer": {"int32": 48}}}}}}}}}}}}},
                                 "argument": {"literal": {"integer": {"int32": 0}}}}},
                             "argument": {"variable": "digits"}}}}}}},

@@ -4683,7 +4683,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"variable": "hydra.lib.math.add"},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.Term"}}},
@@ -6436,7 +6436,10 @@
                                                                                                                                                     "function": {"variable": "helper"},
                                                                                                                                                     "argument": {
                                                                                                                                                       "application": {
-                                                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "level"}}},
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                                                            "argument": {"variable": "level"}}},
                                                                                                                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                                                                                 "argument": {
                                                                                                                                                   "application": {

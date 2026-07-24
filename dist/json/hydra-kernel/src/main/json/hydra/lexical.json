@@ -460,7 +460,10 @@
                                                 "function": {"variable": "tryName"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "index"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"variable": "index"}}},
                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                         "argument": {"variable": "candidate"}}}}}}},
                             "typeScheme": {

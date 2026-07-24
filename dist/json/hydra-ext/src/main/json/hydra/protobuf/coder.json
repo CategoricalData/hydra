@@ -1092,7 +1092,7 @@
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"variable": "hydra.lib.math.add"},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {"project": {"typeName": "hydra.protobuf.environment.EncoderState", "fieldName": "fieldIndex"}},
@@ -2580,7 +2580,7 @@
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"variable": "hydra.lib.math.add"},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {"project": {"typeName": "hydra.protobuf.environment.EncoderState", "fieldName": "fieldIndex"}},
@@ -4030,7 +4030,7 @@
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"variable": "hydra.lib.math.add"},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {"project": {"typeName": "hydra.protobuf.environment.EncoderState", "fieldName": "fieldIndex"}},
@@ -4115,7 +4115,7 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"variable": "hydra.lib.math.add"},
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "function": {"project": {"typeName": "hydra.protobuf.environment.EncoderState", "fieldName": "fieldIndex"}},

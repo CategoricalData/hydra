@@ -107,7 +107,10 @@
                                                 "function": {"variable": "tryLabel"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "index"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"variable": "index"}}},
                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                         "argument": {"variable": "candidate"}}}}}}},
                             "typeScheme": {
@@ -613,7 +616,10 @@
                                         "name": "freshTypeVariableCount",
                                         "term": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "count"}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "count"}}},
                                             "argument": {"literal": {"integer": {"int32": 1}}}}}},
                                       {
                                         "name": "trace",

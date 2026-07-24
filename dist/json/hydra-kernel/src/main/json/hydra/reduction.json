@@ -647,7 +647,7 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"variable": "hydra.lib.math.sub"},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {"application": {"function": {"variable": "termArityWithContext"}, "argument": {"variable": "tx"}}},
@@ -907,7 +907,10 @@
                                                                                     "function": {"variable": "domainTypes"},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "argument": {"variable": "n"}}},
                                                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                 "argument": {
                                                                                   "optional": {
@@ -1043,7 +1046,10 @@
                                                                                           "argument": {"variable": "ftyp"}}}}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"variable": "n"}}},
                                                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}}},
                                                                       {
                                                                         "name": "annotated",
@@ -1168,7 +1174,10 @@
                                                                                 "name": "needed",
                                                                                 "term": {
                                                                                   "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "arity"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"variable": "arity"}}},
                                                                                     "argument": {"variable": "numArgs"}}},
                                                                                 "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
                                                                             "body": {
@@ -4429,7 +4438,10 @@
                                                                                                                                                                                         "function": {"variable": "padn"},
                                                                                                                                                                                         "argument": {
                                                                                                                                                                                           "application": {
-                                                                                                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "lhsarity"}}},
+                                                                                                                                                                                            "function": {
+                                                                                                                                                                                              "application": {
+                                                                                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                                                                                                "argument": {"variable": "lhsarity"}}},
                                                                                                                                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                                                                                                                     "argument": {"variable": "a2"}}}}},
                                                                                                                                                                             "argument": {"variable": "a2"}}}}},
@@ -4700,7 +4712,7 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.math.sub"},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {"application": {"function": {"variable": "hydra.reduction.etaExpansionArity"}, "argument": {"variable": "graph"}}},

@@ -1324,7 +1324,10 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.replicate"}, "type": {"literal": {"integer": "int32"}}}},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "depth"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {"variable": "depth"}}},
                                                 "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                         "argument": {"literal": {"integer": {"int32": 32}}}}}}},
                                 "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
@@ -1545,7 +1548,10 @@
                                                                               "typeApplication": {"body": {"variable": "hydra.haskell.testing.generateTestGroupHierarchy"}, "type": {"variable": "t0"}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "depth"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                    "argument": {"variable": "depth"}}},
                                                                                 "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                         "argument": {"variable": "subgroup"}}}}}}}}}}},
                                                     "argument": {"variable": "subgroups"}}}}}}}}}}}}}}}}}}},

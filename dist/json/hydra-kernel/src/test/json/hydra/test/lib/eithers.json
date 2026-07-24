@@ -546,7 +546,10 @@
                                                                                   "domain": {"literal": {"integer": "int32"}},
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "argument": {"variable": "x"}}},
                                                                                       "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                           "argument": {
                                                                             "lambda": {
@@ -669,7 +672,10 @@
                                                                                   "domain": {"literal": {"integer": "int32"}},
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "argument": {"variable": "x"}}},
                                                                                       "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                           "argument": {
                                                                             "lambda": {
@@ -1030,7 +1036,10 @@
                                                                                   "domain": {"literal": {"integer": "int32"}},
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "argument": {"variable": "x"}}},
                                                                                       "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                           "argument": {
                                                                             "lambda": {
@@ -1106,7 +1115,10 @@
                                                                                   "domain": {"literal": {"integer": "int32"}},
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                          "argument": {"variable": "x"}}},
                                                                                       "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                           "argument": {
                                                                             "lambda": {
@@ -1246,7 +1258,10 @@
                                                                                                     "either": {
                                                                                                       "right": {
                                                                                                         "application": {
-                                                                                                          "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                              "argument": {"variable": "acc"}}},
                                                                                                           "argument": {"variable": "el"}}}}},
                                                                                                   "type": {"literal": "string"}}},
                                                                                               "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
@@ -1392,7 +1407,10 @@
                                                                                                     "either": {
                                                                                                       "right": {
                                                                                                         "application": {
-                                                                                                          "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                              "argument": {"variable": "acc"}}},
                                                                                                           "argument": {"variable": "el"}}}}},
                                                                                                   "type": {"literal": "string"}}},
                                                                                               "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
@@ -1537,7 +1555,10 @@
                                                                                                     "either": {
                                                                                                       "right": {
                                                                                                         "application": {
-                                                                                                          "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                              "argument": {"variable": "acc"}}},
                                                                                                           "argument": {"variable": "el"}}}}},
                                                                                                   "type": {"literal": "string"}}},
                                                                                               "type": {"literal": {"integer": "int32"}}}}}}}}}}}},
@@ -2978,7 +2999,10 @@
                                                                               "domain": {"literal": {"integer": "int32"}},
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {"variable": "x"}}},
                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                       "argument": {
                                                                         "typeApplication": {
@@ -3091,7 +3115,10 @@
                                                                               "domain": {"literal": {"integer": "int32"}},
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {"variable": "x"}}},
                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                       "argument": {
                                                                         "typeApplication": {
@@ -3254,7 +3281,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -3418,7 +3448,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -3576,7 +3609,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -3749,7 +3785,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -3907,7 +3946,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -4064,7 +4106,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": "string"}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -4238,7 +4283,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": {"integer": "int32"}}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -4403,7 +4451,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": {"integer": "int32"}}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},
@@ -4563,7 +4614,10 @@
                                                                                             "either": {
                                                                                               "right": {
                                                                                                 "application": {
-                                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                      "argument": {"variable": "x"}}},
                                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}},
                                                                                           "type": {"literal": {"integer": "int32"}}}},
                                                                                       "type": {"literal": {"integer": "int32"}}}}}}}}}},

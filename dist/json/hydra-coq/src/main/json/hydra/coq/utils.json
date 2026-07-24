@@ -2362,7 +2362,10 @@
                                                                             "function": {"variable": "nestedSecond"},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "k"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                    "argument": {"variable": "k"}}},
                                                                                 "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                         "argument": {"variable": "v"}}}}}}}}}}},
                                                     "typeScheme": {
@@ -2399,7 +2402,10 @@
                                                                                     "argument": {"variable": "i"}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"variable": "n"}}},
                                                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                                                         "argument": {
                                                                           "application": {
@@ -2499,7 +2505,10 @@
                                                                                 "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "n"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"variable": "n"}}},
                                                                                     "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
                                                                         "argument": {"variable": "grp"}}}}}}},
                                                             "typeScheme": {

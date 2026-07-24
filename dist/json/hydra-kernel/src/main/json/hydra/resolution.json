@@ -870,7 +870,10 @@
                                                                         "function": {"variable": "go"},
                                                                         "argument": {
                                                                           "application": {
-                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "depth"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                "argument": {"variable": "depth"}}},
                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                     "argument": {
                                                                       "application": {

@@ -898,7 +898,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -7292,7 +7295,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -7458,7 +7464,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -7673,7 +7682,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -7857,7 +7869,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8033,7 +8048,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8210,7 +8228,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8371,7 +8392,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8513,7 +8537,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8661,7 +8688,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8809,7 +8839,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -8964,7 +8997,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {
@@ -9131,7 +9167,10 @@
                                                                                                         "domain": {"variable": "hydra.core.Term"},
                                                                                                         "body": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "acc"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                "argument": {"variable": "acc"}}},
                                                                                                             "argument": {
                                                                                                               "application": {
                                                                                                                 "function": {

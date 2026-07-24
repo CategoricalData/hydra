@@ -976,7 +976,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.math.sub"},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "stripped"}}}}},
                                     "argument": {"literal": {"integer": {"int32": 1}}}}},
                                 "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],

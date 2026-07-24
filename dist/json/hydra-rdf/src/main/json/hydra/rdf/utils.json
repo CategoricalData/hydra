@@ -626,7 +626,10 @@
                                           "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "counter"}}}}}}}}}},
                             "second": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "counter"}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {"variable": "counter"}}},
                                 "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                         "type": {"variable": "hydra.rdf.syntax.Resource"}}},
                     "type": {"literal": {"integer": "int32"}}}}}},

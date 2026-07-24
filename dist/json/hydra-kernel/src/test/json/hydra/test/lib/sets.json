@@ -2639,7 +2639,10 @@
                                                                               "domain": {"literal": {"integer": "int32"}},
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {"variable": "x"}}},
                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                       "argument": {
                                                                         "set": [{"literal": {"integer": {"int32": 1}}}, {"literal": {"integer": {"int32": 2}}}, {"literal": {"integer": {"int32": 3}}}]}}}}}}}},
@@ -2723,7 +2726,10 @@
                                                                               "domain": {"literal": {"integer": "int32"}},
                                                                               "body": {
                                                                                 "application": {
-                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.math.mul"}, "argument": {"variable": "x"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mul"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                      "argument": {"variable": "x"}}},
                                                                                   "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
                                                                       "argument": {"typeApplication": {"body": {"set": []}, "type": {"literal": {"integer": "int32"}}}}}}}}}}},
                                                         {

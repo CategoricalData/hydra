@@ -2282,7 +2282,10 @@
                                                                         "function": {"variable": "rangeFrom"},
                                                                         "argument": {
                                                                           "application": {
-                                                                            "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "start"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                "argument": {"variable": "start"}}},
                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}}}}}},
                                                             "typeScheme": {
                                                               "variables": [],

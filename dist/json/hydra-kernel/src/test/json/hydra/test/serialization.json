@@ -42,7 +42,10 @@
             "function": {
               "application": {
                 "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "->"}}}},
-                "argument": {"application": {"function": {"variable": "hydra.lib.math.negate"}, "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                "argument": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.negate"}, "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {"literal": {"integer": {"int32": 1}}}}}}},
             "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}}}},
     {
       "term": {
@@ -86,7 +89,10 @@
             "function": {
               "application": {
                 "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "->"}}}},
-                "argument": {"application": {"function": {"variable": "hydra.lib.math.negate"}, "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                "argument": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.negate"}, "type": {"literal": {"integer": "int32"}}}},
+                    "argument": {"literal": {"integer": {"int32": 1}}}}}}},
             "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}}}},
     {
       "term": {

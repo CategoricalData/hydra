@@ -1416,7 +1416,10 @@
                                             "name": "counter",
                                             "term": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "i"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {"variable": "i"}}},
                                                 "argument": {"literal": {"integer": {"int32": 1}}}}}},
                                           {
                                             "name": "indices",
