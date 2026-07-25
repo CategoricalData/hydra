@@ -106,7 +106,7 @@
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                                         "type": {
                                                           "either": {
                                                             "left": {"variable": "hydra.errors.Error"},

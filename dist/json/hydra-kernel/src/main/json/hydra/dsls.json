@@ -4008,7 +4008,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                     "type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}}},
                                                 "argument": {
                                                   "application": {
@@ -5637,7 +5637,7 @@
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                             "type": {"literal": "string"}}},
                                                                         "argument": {"variable": "ns"}}},
                                                                     "argument": {"literal": {"string": ""}}}},

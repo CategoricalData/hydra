@@ -956,7 +956,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
                                             "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {
                                           "application": {

@@ -1974,7 +1974,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
-                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                                       "type": {"literal": "string"}}},
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
@@ -2100,7 +2100,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
-                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                                       "type": {"literal": "string"}}},
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
@@ -2241,7 +2241,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
-                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                                       "type": {"literal": "string"}}},
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
@@ -2555,7 +2555,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
-                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                                       "type": {"literal": "string"}}},
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
@@ -2912,7 +2912,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -3149,7 +3149,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -3386,7 +3386,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -3614,7 +3614,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -3917,7 +3917,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -4232,7 +4232,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -4516,7 +4516,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {
@@ -4760,7 +4760,7 @@
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
-                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                                                                            "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.typing.TermSignature"}}},
                                                                                                                           "type": {"literal": "string"}}},
                                                                                                                       "argument": {
                                                                                                                         "application": {

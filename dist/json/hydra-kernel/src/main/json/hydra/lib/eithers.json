@@ -231,10 +231,11 @@
       "primitive": {
         "name": "hydra.lib.eithers.either",
         "metadata": {
-          "description": "Eliminate an either value by applying one of two functions.",
+          "description": "Eliminate an either value by applying one of two functions (deprecated; use match).",
           "comments": [
             "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
-            "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
+            "Deprecated since 0.18; use match, which takes the scrutinee first.",
+            "either(f, g, e) is match(e, f, g); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
           "seeAlso": []},
         "signature": {
@@ -257,7 +258,23 @@
               "isLazy": false}],
           "result": {"type": {"variable": "z"}}},
         "isPure": true,
-        "isTotal": true}},
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "f",
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "body": {
+                  "lambda": {
+                    "parameter": "e",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.eithers.match"}, "argument": {"variable": "e"}}},
+                            "argument": {"variable": "f"}}},
+                        "argument": {"variable": "g"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.foldList",
@@ -580,7 +597,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                         "argument": {"either": {"right": {"optional": null}}}}},
                     "argument": {
                       "lambda": {
@@ -666,6 +683,37 @@
                                                     "argument": {"variable": "acc"}}}}}}}}}}}}},
                             "argument": {"either": {"right": {"list": []}}}}},
                         "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.eithers.match",
+        "metadata": {
+          "description": "Case analysis on an either value, with scrutinee-first argument order.",
+          "comments": [
+            "match(e, f, g) returns f(x) if e is Left x and g(y) if e is Right y.",
+            "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it. The either value is the first argument, matching hydra.lib.optionals.match and the convention for case-statement-like elimination.",
+            "Total. Argument order is (e, f, g) rather than Haskell's either :: (f, g, e)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "e",
+              "description": "the either value to eliminate",
+              "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}},
+              "isLazy": false},
+            {
+              "name": "f",
+              "description": "the function to apply to a Left value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "z"}}},
+              "isLazy": false},
+            {
+              "name": "g",
+              "description": "the function to apply to a Right value",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"variable": "z"}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "z"}}},
+        "isPure": true,
+        "isTotal": true}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.partition",

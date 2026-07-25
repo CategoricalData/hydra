@@ -47,7 +47,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -286,7 +286,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -525,7 +525,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -764,7 +764,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -1508,7 +1508,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                                                 "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}}},
                                                                             "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                         "argument": {"variable": "labelForVertexId"}}},
@@ -1526,7 +1526,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                     "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -1597,7 +1597,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                                                 "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}}},
                                                                             "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                         "argument": {"variable": "labelForVertexId"}}},
@@ -1615,7 +1615,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                     "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -1725,7 +1725,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                                                 "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}}},
                                                                             "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                         "argument": {"variable": "labelForVertexId"}}},
@@ -1743,7 +1743,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                     "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -1814,7 +1814,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                                                 "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}}},
                                                                             "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                         "argument": {"variable": "labelForVertexId"}}},
@@ -1832,7 +1832,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
+                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                     "type": {"optional": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -2074,7 +2074,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                    "body": {"variable": "hydra.lib.optionals.match"},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t1"}}}}},
                                                                                 "type": {
                                                                                   "application": {
@@ -2250,7 +2250,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                    "body": {"variable": "hydra.lib.optionals.match"},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t1"}}}}},
                                                                                 "type": {
                                                                                   "application": {
@@ -2625,7 +2625,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t1"}}},
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t1"}}},
                                                                                             "type": {"optional": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                                         "argument": {
                                                                                           "application": {
@@ -2785,7 +2785,7 @@
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t0"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t0"}}},
                                                                                         "type": {"optional": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -2867,7 +2867,7 @@
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t0"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t0"}}},
                                                                                         "type": {"optional": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                                     "argument": {
                                                                                       "application": {

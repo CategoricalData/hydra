@@ -105,40 +105,9 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                         "argument": {"optional": null}}},
                     "argument": {"variable": "f"}}}}}}}}},
-    {
-      "primitive": {
-        "name": "hydra.lib.optionals.cases",
-        "metadata": {
-          "description": "Case analysis on an optional, with cases-style argument order.",
-          "comments": [
-            "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
-            "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
-            "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
-          "parameters": [
-            {
-              "name": "m",
-              "description": "the optional value to eliminate",
-              "type": {"optional": {"variable": "x"}},
-              "isLazy": false},
-            {
-              "name": "def",
-              "description": "the value to return when the optional is none",
-              "type": {"variable": "y"},
-              "isLazy": true},
-            {
-              "name": "f",
-              "description": "the function to apply to the contained value when the optional is given",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
-              "isLazy": false}],
-          "result": {"type": {"variable": "y"}}},
-        "isPure": true,
-        "isTotal": true}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.compose",
@@ -282,7 +251,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                                         "argument": {"variable": "acc"}}},
                                     "argument": {
                                       "lambda": {
@@ -315,7 +284,7 @@
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                     "argument": {"literal": {"boolean": false}}}},
                 "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": true}}}}}}}}}},
     {
@@ -340,7 +309,7 @@
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                     "argument": {"literal": {"boolean": true}}}},
                 "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": false}}}}}}}}}},
     {
@@ -375,7 +344,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                         "argument": {"optional": null}}},
                     "argument": {
                       "lambda": {
@@ -555,6 +524,37 @@
                         "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.optionals.match",
+        "metadata": {
+          "description": "Case analysis on an optional, with scrutinee-first argument order.",
+          "comments": [
+            "match(m, def, f) returns f(x) when m is given(x), and def when m is none.",
+            "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
+            "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the optional value to eliminate",
+              "type": {"optional": {"variable": "x"}},
+              "isLazy": false},
+            {
+              "name": "def",
+              "description": "the value to return when the optional is none",
+              "type": {"variable": "y"},
+              "isLazy": true},
+            {
+              "name": "f",
+              "description": "the function to apply to the contained value when the optional is given",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false}],
+          "result": {"type": {"variable": "y"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.optionals.pure",
         "metadata": {
           "description": "Wrap a value in given.",
@@ -591,7 +591,7 @@
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                     "argument": {"list": []}}},
                 "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}}}},
     {
@@ -625,6 +625,6 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                         "argument": {"variable": "def"}}},
                     "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}}}}]}
