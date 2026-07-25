@@ -225,7 +225,7 @@ decodeLiteral = define "decodeLiteral" $
   cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       "strResult" <~ (expectString @@ var "value") $
-      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.stringToBinary $ var "s") (var "strResult"),
+      Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.base64ToBinary $ var "s") (var "strResult"),
 
     _LiteralType_boolean>>: constant $
       cases _Value (var "value")

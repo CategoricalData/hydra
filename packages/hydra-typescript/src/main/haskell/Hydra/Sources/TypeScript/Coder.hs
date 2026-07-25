@@ -476,7 +476,7 @@ encodeLiteral = def "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit")
     (Just $ var "litExpr" @@ inject TS._Literal TS._Literal_null unit) [
     _Literal_binary>>: lambda "b" $
-      var "strLit" @@ (Literals.binaryToString (var "b")),
+      var "strLit" @@ (Literals.binaryToBase64 (var "b")),
     _Literal_boolean>>: lambda "b" $
       var "boolLit" @@ var "b",
     _Literal_decimal>>: lambda "d" $

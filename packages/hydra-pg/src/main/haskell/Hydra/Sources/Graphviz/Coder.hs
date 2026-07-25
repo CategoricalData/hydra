@@ -203,7 +203,7 @@ termLabel = define "termLabel" $
       _Term_list>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "[]") (string "list")),
       _Term_literal>>: "l" ~>
         var "simpleLabel" @@ (match _Literal (Just $ string "?") [
-          _Literal_binary>>: "s" ~> Literals.binaryToString (var "s"),
+          _Literal_binary>>: "s" ~> Literals.binaryToBase64 (var "s"),
           _Literal_boolean>>: "b" ~> Literals.printBoolean (var "b"),
           _Literal_integer>>: "i" ~>
             match _IntegerValue (Just $ string "?") [

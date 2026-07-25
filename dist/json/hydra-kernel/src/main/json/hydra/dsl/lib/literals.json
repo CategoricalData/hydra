@@ -66,6 +66,51 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.dsl.lib.literals.base64ToBinary",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.base64ToBinary"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "s"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.lib.literals.base64ToBinary"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.lib.literals.bigintToDecimal",
         "signature": {
           "typeParameters": [],
@@ -479,6 +524,51 @@
                   "value": {"literal": {"string": "DSL reference to hydra.lib.literals.bigintToUint8"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.lib.literals.binaryToBase64",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "b",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToBase64"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "b"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.lib.literals.binaryToBase64"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.lib.literals.binaryToBytes",
         "signature": {
           "typeParameters": [],
@@ -524,51 +614,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL reference to hydra.lib.literals.binaryToBytes"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.lib.literals.binaryToString",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "b",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToString"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "b"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL reference to hydra.lib.literals.binaryToString"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.lib.literals.decimalToBigint",
@@ -2320,51 +2365,6 @@
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.literals.showUint8"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.lib.literals.stringToBinary",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "binary"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "s",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.stringToBinary"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "s"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL reference to hydra.lib.literals.stringToBinary"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.lib.literals.uint16ToBigint",

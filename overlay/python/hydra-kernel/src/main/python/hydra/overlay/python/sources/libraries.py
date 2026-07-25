@@ -1106,8 +1106,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.binary_to_bytes.name, literals.binary_to_bytes, [],
         prims.binary(), prims.list_(prims.int32())
     )
-    primitives[def_literals.binary_to_string.name] = prims.prim1(
-        def_literals.binary_to_string.name, literals.binary_to_string, [],
+    primitives[def_literals.binary_to_base64.name] = prims.prim1(
+        def_literals.binary_to_base64.name, literals.binary_to_base64, [],
         prims.binary(), prims.string()
     )
     primitives[def_literals.decimal_to_bigint.name] = prims.prim1(
@@ -1270,8 +1270,8 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         def_literals.print_string.name, literals.print_string, [],
         prims.string(), prims.string()
     )
-    primitives[def_literals.string_to_binary.name] = prims.prim1(
-        def_literals.string_to_binary.name, literals.string_to_binary, [],
+    primitives[def_literals.base64_to_binary.name] = prims.prim1(
+        def_literals.base64_to_binary.name, literals.base64_to_binary, [],
         prims.string(), prims.binary()
     )
     primitives[def_literals.uint8_to_bigint.name] = prims.prim1(

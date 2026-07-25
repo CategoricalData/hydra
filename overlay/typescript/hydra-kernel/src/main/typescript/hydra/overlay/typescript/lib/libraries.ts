@@ -80,7 +80,7 @@ const tFloat = (f: number, w: "float32" | "float64" = "float64"): Term =>
   litTerm({ tag: "float", value: { tag: w, value: f } });
 const tString = (s: string): Term =>
   litTerm({ tag: "string", value: s });
-// `b` is `Uint8Array | string` because the kernel `stringToBinary`
+// `b` is `Uint8Array | string` because the kernel `base64ToBinary`
 // primitive currently returns its argument unchanged (`(s: string): string`)
 // rather than encoding to bytes. Accepting both keeps the Term shape
 // runtime-correct without requiring a heap-allocation here.
@@ -790,15 +790,15 @@ const literalsPrimitives = (): readonly Primitive[] => [
         }
         return bind(dAnyFloat(g, a0), (f) => right(tFloat(f)));
       })),
-  prim("hydra.lib.literals.binaryToString", scheme(tyFn(tyBinary, tyString)),
+  prim("hydra.lib.literals.binaryToBase64", scheme(tyFn(tyBinary, tyString)),
     (g, args) =>
-      bind(need(args, 0, "binaryToString"), (a0) =>
+      bind(need(args, 0, "binaryToBase64"), (a0) =>
         bind(dBinary(g, a0) as Either<HydraError, unknown>, (b) =>
-          right(tString(libLiterals.binaryToString(b as Uint8Array | string)))))),
-  prim("hydra.lib.literals.stringToBinary", scheme(tyFn(tyString, tyBinary)),
+          right(tString(libLiterals.binaryToBase64(b as Uint8Array | string)))))),
+  prim("hydra.lib.literals.base64ToBinary", scheme(tyFn(tyString, tyBinary)),
     (g, args) =>
-      bind(need(args, 0, "stringToBinary"), (a0) =>
-        bind(dString(g, a0), (s) => right(tBinary(libLiterals.stringToBinary(s)))))),
+      bind(need(args, 0, "base64ToBinary"), (a0) =>
+        bind(dString(g, a0), (s) => right(tBinary(libLiterals.base64ToBinary(s)))))),
   // binaryToBytes: binary -> [int32] (byte values 0-255). Impl in overlay literals.ts.
   prim("hydra.lib.literals.binaryToBytes", scheme(tyFn(tyBinary, tyList(tyInt32))),
     (g, args) =>

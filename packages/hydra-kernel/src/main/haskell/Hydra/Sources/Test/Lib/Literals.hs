@@ -436,16 +436,16 @@ allTests = definitionInModule module_ "allTests" $
       literalsReadBoolean,
       literalsReadString,
       -- Binary conversions
-      literalsStringToBinary,
-      literalsBinaryToString,
+      literalsBase64ToBinary,
+      literalsBinaryToBase64,
       literalsBinaryToBytes]
 
-literalsBinaryToString :: TypedTerm TestGroup
-literalsBinaryToString = subgroup "binaryToString" [
+literalsBinaryToBase64 :: TypedTerm TestGroup
+literalsBinaryToBase64 = subgroup "binaryToBase64" [
   test "simple binary" (BC.pack "hello") "aGVsbG8=",
   test "empty binary" B.empty ""]
   where
-    test name x result = primCase name DefLiterals.binaryToString [binary x] (string result)
+    test name x result = primCase name DefLiterals.binaryToBase64 [binary x] (string result)
 
 literalsBinaryToBytes :: TypedTerm TestGroup
 literalsBinaryToBytes = subgroup "binaryToBytes" [
@@ -467,7 +467,7 @@ literalsReadBigint = subgroup "readBigint" [
     testNothing name x = primCase name DefLiterals.readBigint [string x] (Core.termOptional nothing)
 
 -- Binary/String conversion
--- Note: binaryToString and stringToBinary use base64 encoding
+-- Note: binaryToBase64 and base64ToBinary use base64 encoding
 
 literalsReadBoolean :: TypedTerm TestGroup
 literalsReadBoolean = subgroup "readBoolean" [
@@ -585,9 +585,9 @@ literalsReadUint8 = subgroup "readUint8" [
     testJust name x result = primCase name DefLiterals.readUint8 [string x] (Core.termOptional $ just (uint8 result))
     testNothing name x = primCase name DefLiterals.readUint8 [string x] (Core.termOptional nothing)
 
-literalsStringToBinary :: TypedTerm TestGroup
-literalsStringToBinary = subgroup "stringToBinary" [
+literalsBase64ToBinary :: TypedTerm TestGroup
+literalsBase64ToBinary = subgroup "base64ToBinary" [
   test "simple base64" "aGVsbG8=" (BC.pack "hello"),
   test "empty string" "" B.empty]
   where
-    test name x result = primCase name DefLiterals.stringToBinary [string x] (binary result)
+    test name x result = primCase name DefLiterals.base64ToBinary [string x] (binary result)

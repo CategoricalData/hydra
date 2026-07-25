@@ -85,9 +85,9 @@ func BigintToUint64(i *big.Int) uint64 {
 	return i.Uint64()
 }
 
-// BinaryToString converts binary data to a base64-encoded string.
-// hydra.lib.literals.binaryToString : Binary -> String
-func BinaryToString(b []byte) string {
+// BinaryToBase64 converts binary data to a base64-encoded string.
+// hydra.lib.literals.binaryToBase64 : Binary -> String
+func BinaryToBase64(b []byte) string {
 	return base64.StdEncoding.EncodeToString(b)
 }
 
@@ -151,9 +151,9 @@ func Uint64ToBigint(i uint64) *big.Int {
 	return new(big.Int).SetUint64(i)
 }
 
-// StringToBinary converts a base64-encoded string to binary data.
-// hydra.lib.literals.stringToBinary : String -> Binary
-func StringToBinary(s string) []byte {
+// Base64ToBinary converts a base64-encoded string to binary data.
+// hydra.lib.literals.base64ToBinary : String -> Binary
+func Base64ToBinary(s string) []byte {
 	b, err := base64.StdEncoding.DecodeString(s)
 	if err != nil {
 		return []byte(s) // fallback to raw bytes

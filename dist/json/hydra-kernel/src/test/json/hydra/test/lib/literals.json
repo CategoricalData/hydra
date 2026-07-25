@@ -18544,7 +18544,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "stringToBinary"}}},
+                              {"name": "name", "term": {"literal": {"string": "base64ToBinary"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -18624,7 +18624,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.stringToBinary"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.base64ToBinary"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -18721,7 +18721,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.stringToBinary"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.base64ToBinary"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -18751,7 +18751,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "binaryToString"}}},
+                              {"name": "name", "term": {"literal": {"string": "binaryToBase64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -18831,7 +18831,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToString"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToBase64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -18928,7 +18928,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToString"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.binaryToBase64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {

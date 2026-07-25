@@ -20,7 +20,7 @@
 ;;   binary/bytes  : a unibyte string (a sequence of raw bytes). This matches encode-coding-string
 ;;                   output and the buffer-string of an insert-file-contents-literally read, and is
 ;;                   accepted directly by write-region. The literals binary helpers (binary_to_bytes,
-;;                   binary_to_string) iterate it uniformly via mapcar/vconcat/aref.
+;;                   binary_to_base64) iterate it uniformly via mapcar/vconcat/aref.
 ;;
 ;; All functions are curried, matching the emacs-lisp prim runtime style.
 

@@ -66,8 +66,8 @@ decimalToFloat64 :: Scientific -> Double
 decimalToFloat64 = toRealFloat
 
 -- | Convert binary to string by base64 encoding.
-binaryToString :: B.ByteString -> String
-binaryToString = T.unpack . TE.decodeUtf8 . B64.encode
+binaryToBase64 :: B.ByteString -> String
+binaryToBase64 = T.unpack . TE.decodeUtf8 . B64.encode
 
 -- | Convert a float32 (Float) to a decimal (Scientific).
 float32ToDecimal :: Float -> Scientific
@@ -247,8 +247,8 @@ showUint64 = show
 
 -- | Convert string to binary by base64 decoding.
 -- Returns an empty ByteString if decoding fails.
-stringToBinary :: String -> B.ByteString
-stringToBinary s = case B64.decode (TE.encodeUtf8 $ T.pack s) of
+base64ToBinary :: String -> B.ByteString
+base64ToBinary s = case B64.decode (TE.encodeUtf8 $ T.pack s) of
   Left _ -> B.empty
   Right bs -> bs
 

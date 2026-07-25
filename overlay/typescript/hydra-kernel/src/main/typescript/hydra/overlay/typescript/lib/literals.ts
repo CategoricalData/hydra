@@ -156,13 +156,13 @@ export const float = (f: number): FloatValue => ({ tag: "float64", value: f });
 // === binary <-> string ===
 // Hydra binary literals are byte strings; the TS runtime uses Uint8Array.
 
-// `binaryToString` produces a base64 string from the binary content.
+// `binaryToBase64` produces a base64 string from the binary content.
 // In the TypeScript runtime, binary literal values are stored as base64
 // strings already (because that's how the coder emits them in TS source),
 // so this is the identity for string inputs. For Uint8Array (e.g. when
 // constructed programmatically), encode to base64. Treats null/undefined
 // as the empty binary.
-export const binaryToString = (b: Uint8Array | ReadonlyArray<number> | string | null | undefined): string => {
+export const binaryToBase64 = (b: Uint8Array | ReadonlyArray<number> | string | null | undefined): string => {
   if (b === null || b === undefined) return "";
   if (typeof b === "string") return b;
   // Uint8Array or readonly number[] → base64
@@ -173,12 +173,12 @@ export const binaryToString = (b: Uint8Array | ReadonlyArray<number> | string | 
     : Buffer.from(raw, "binary").toString("base64");
 };
 
-// `stringToBinary` is the inverse: given a base64 string, return the
+// `base64ToBinary` is the inverse: given a base64 string, return the
 // binary representation. Since the TypeScript runtime represents binary
 // content as base64 strings at the Term level, this is also the identity
 // for the round-trip — caller has the base64 string back as the binary
-// value, which is what `binaryToString` will accept.
-export const stringToBinary = (s: string): string => s;
+// value, which is what `binaryToBase64` will accept.
+export const base64ToBinary = (s: string): string => s;
 
 // `binaryToBytes` decodes a binary value into a list of byte values
 // (0-255). Mirrors Python's `binary_to_bytes`. The TS runtime stores
