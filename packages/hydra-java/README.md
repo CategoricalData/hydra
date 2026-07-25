@@ -9,7 +9,7 @@ Hydra is a type-aware data transformation toolkit which aims to be highly flexib
 It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, Scala, TypeScript, and Lisp.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 
-JavaDocs for Hydra-Java can be found [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc),
+JavaDocs for Hydra-Java can be found [here](https://categoricaldata.net/hydra/java/javadoc/hydra-java/),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java).
 
 ## Getting Started

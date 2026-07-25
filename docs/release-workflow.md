@@ -516,15 +516,17 @@ The following are Java-specific release steps:
 * Set up your Java environment as described in the
   [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md).
 * Update the JavaDocs.
-  * A combined JavaDoc site spanning hydra-kernel, hydra-rdf, hydra-pg, and hydra-java
-    is automatically generated and deployed to GitHub Pages when a new tag is pushed.
-    The `pages.yml` workflow fires after CI succeeds on the tag, pulls the
-    `dist-java` artifact from that CI run, and javadocs the combined source tree
-    in a single invocation so cross-package `@link`s resolve.
+  * A per-package JavaDoc site (one tree per published Java package: hydra-kernel,
+    hydra-rdf, hydra-pg, hydra-java) is automatically generated and deployed to
+    GitHub Pages when a new tag is pushed. The `pages.yml` workflow fires after CI
+    succeeds on the tag, pulls the `dist-java` artifact from that CI run, and
+    javadocs each package separately, linking hydra-rdf/hydra-pg/hydra-java back to
+    hydra-kernel via `-linkoffline` so cross-package `@link`s resolve.
     No manual steps are needed for JavaDoc publishing.
-  * Check the updated combined JavaDocs
-    [here](https://categoricaldata.net/hydra/hydra-java/javadoc)
-    after the tag is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
+  * Check the updated JavaDocs
+    [here](https://categoricaldata.net/hydra/java/javadoc/hydra-kernel/)
+    (and the sibling `hydra-rdf`, `hydra-pg`, `hydra-java` packages) after the tag
+    is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
 * Publish each artifact to Maven Central via the [Central Portal](https://central.sonatype.com).
   * **JDK requirement:** the `nmcp` plugin (which the generated `build.gradle` uses to talk
     to the Central Portal publisher API) requires JDK 17+ to *run* Gradle, even though it

@@ -1,18 +1,19 @@
 name: Deploy JavaDocs to GitHub Pages
 
-# Tag-triggered: build the combined JavaDoc site from the dist/java/ tree the
-# CI workflow already generated on a tag push, and deploy it as a Pages
-# artifact. Commits nothing to any branch. workflow_dispatch covers manual
-# re-runs without re-tagging.
+# Tag-triggered: build one JavaDoc tree per published Java package from the
+# dist/java/ tree the CI workflow already generated on a tag push, and deploy
+# them as a single Pages artifact at java/javadoc/<package>/. Commits nothing
+# to any branch. workflow_dispatch covers manual re-runs without re-tagging.
 #
 # Why workflow_run instead of inlining into ci.yml: keeps Pages-specific
 # logic (permissions: pages/id-token, concurrency: pages, environment:
 # github-pages) isolated from the test matrix. The trade-off is a
 # cross-workflow artifact download, handled below via run-id + github-token.
 #
-# Resolves #450. Companion: #449 (the strict @link errors absorbed here via
-# -Xdoclint:none). Companion: #451 (restore hydra-ext to the combined
-# sourcepath once it ships to Maven Central).
+# Per-package layout + -linkoffline cross-links: #616. Originally #450.
+# Companion: #449 (the strict @link errors absorbed here via -Xdoclint:none).
+# Companion: #451 (restore hydra-ext to the build once it ships to Maven
+# Central).
 
 on:
   workflow_run:
@@ -32,7 +33,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build combined JavaDoc site
+    name: Build per-package JavaDoc site
     runs-on: ubuntu-latest
     # Coarse gate: cheap rejections happen here so the job doesn't even start
     # for non-tag CI runs. The fine-grained tag check (which needs the GitHub
@@ -103,9 +104,17 @@ jobs:
           run-id: ${{ steps.ci-run.outputs.run_id }}
           github-token: ${{ github.token }}
 
-      # Single combined javadoc invocation over the union of published Java
-      # package sources, so cross-package @link references resolve. Per-package
-      # builds would produce dead cross-links.
+      # One javadoc invocation per published Java package, laid out at
+      # java/javadoc/<package>/ so /hydra/java/ stays free for other Java
+      # artifacts (#616). Build order follows the dependency DAG: hydra-kernel
+      # has no Hydra dependencies and is built first; hydra-rdf, hydra-pg, and
+      # hydra-java each depend only on hydra-kernel (not on each other, per
+      # docs/getting-started.md and their build.gradle/build.json), so each is
+      # linked to the just-built kernel output via -linkoffline. -linkoffline
+      # takes the package's published URL (baked into the emitted links) plus
+      # a local directory to read the element/package list from during the
+      # build — here, kernel's own freshly-built output, since it isn't
+      # published yet at deploy time.
       #
       # -Xdoclint:none downgrades all doc-checking errors to warnings. This
       # absorbs the cosmetic issues covered by #449 (unqualified @link refs
@@ -114,53 +123,64 @@ jobs:
       # (Terms.java, Types.java) that javadoc reads as malformed HTML.
       # `-Xdoclint:all,-reference,-missing,-html` does NOT suppress the
       # malformed-HTML error in practice — it surfaces from the parser, not
-      # doclint — so `none` is the only working knob today.
+      # doclint — so `none` is the only working knob today. Applied per
+      # package (not blanket) now that builds are separate, but every package
+      # still needs it until the underlying comments are fixed.
       # This lenience is Pages-only; the per-package Maven build keeps the
       # strict default.
       #
       # hydra-ext is excluded until it ships to Maven Central (#451).
-      - name: Run combined javadoc
+      - name: Run per-package javadoc
         if: steps.ci-run.outputs.proceed == 'true'
+        env:
+          PAGES_BASE_URL: https://categoricaldata.net/hydra/java/javadoc
         run: |
           set -euo pipefail
-          # Combined API for all published Java packages (kernel, rdf, pg, java),
-          # so the path is the neutral /javadoc/ rather than /hydra-java/javadoc/.
-          out=_site/javadoc
-          mkdir -p "$out"
+          root=_site/java/javadoc
 
-          # Collect every .java file under the four published packages.
-          srcs=$(mktemp)
-          find \
-            dist/java/hydra-kernel/src/main/java \
-            dist/java/hydra-rdf/src/main/java \
-            dist/java/hydra-pg/src/main/java \
-            dist/java/hydra-java/src/main/java \
-            -name '*.java' -print > "$srcs"
+          build_javadoc() {
+            local pkg="$1"
+            shift
+            local extra_args=("$@")
+            local src="dist/java/${pkg}/src/main/java"
+            local out="${root}/${pkg}"
+            mkdir -p "$out"
 
-          echo "JavaDoc source count: $(wc -l < "$srcs")"
+            local srcs
+            srcs=$(mktemp)
+            find "$src" -name '*.java' -print > "$srcs"
+            echo "JavaDoc source count for ${pkg}: $(wc -l < "$srcs")"
 
-          sourcepath="dist/java/hydra-kernel/src/main/java"
-          sourcepath="$sourcepath:dist/java/hydra-rdf/src/main/java"
-          sourcepath="$sourcepath:dist/java/hydra-pg/src/main/java"
-          sourcepath="$sourcepath:dist/java/hydra-java/src/main/java"
+            javadoc \
+              -d "$out" \
+              -quiet \
+              -Xdoclint:none \
+              -encoding UTF-8 \
+              -charset UTF-8 \
+              -docencoding UTF-8 \
+              -windowtitle "Hydra Java API: ${pkg}" \
+              -doctitle "Hydra Java API: ${pkg}" \
+              -sourcepath "$src" \
+              "${extra_args[@]}" \
+              @"$srcs"
+          }
 
-          javadoc \
-            -d "$out" \
-            -quiet \
-            -Xdoclint:none \
-            -encoding UTF-8 \
-            -charset UTF-8 \
-            -docencoding UTF-8 \
-            -windowtitle "Hydra Java API" \
-            -doctitle "Hydra Java API" \
-            -sourcepath "$sourcepath" \
-            @"$srcs"
+          # hydra-kernel first: base package, no cross-links needed.
+          build_javadoc hydra-kernel
 
           # Sanity check: Term.html confirms the kernel sources rendered.
-          test -f "$out/hydra/core/Term.html" || {
+          test -f "${root}/hydra-kernel/hydra/core/Term.html" || {
             echo "::error::hydra/core/Term.html missing from generated javadoc"
             exit 1
           }
+
+          # hydra-rdf, hydra-pg, hydra-java each depend only on hydra-kernel;
+          # link their @link/@see references at hydra.core.* etc. back to the
+          # kernel's published (soon-to-be-published) output.
+          for pkg in hydra-rdf hydra-pg hydra-java; do
+            build_javadoc "$pkg" \
+              -linkoffline "${PAGES_BASE_URL}/hydra-kernel" "${root}/hydra-kernel"
+          done
 
       - name: Stage landing page
         if: steps.ci-run.outputs.proceed == 'true'
