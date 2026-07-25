@@ -153,7 +153,7 @@ coqLibPrimitiveNames = Set.fromList [
   "asinh","at","atan","atan2","atanh","bigintToDecimal","bigintToInt16",
   "bigintToInt32","bigintToInt64","bigintToInt8","bigintToUint16",
   "bigintToUint32","bigintToUint64","bigintToUint8","bimap","binaryToBytes",
-  "binaryToString","bind","cases","cat","cat2","ceiling","charAt","compare",
+  "binaryToBase64","bind","cases","cat","cat2","ceiling","charAt","compare",
   "compose","concat","concat2","cons","contains","cos","cosh",
   "decimalToBigint","decimalToFloat32","decimalToFloat64","delete",
   "difference","div","drop","dropWhile","e","either","elem","elems","empty",
@@ -179,7 +179,7 @@ coqLibPrimitiveNames = Set.fromList [
   "showFloat64","showInt16","showInt32","showInt64","showInt8","showString",
   "showUint16","showUint32","showUint64","showUint8","signum","sin",
   "singleton","sinh","size","sort","sortOn","span","split","splitOn","sqrt",
-  "stringToBinary","sub","subFloat64","succ","tail","take","tan","tanh",
+  "base64ToBinary","sub","subFloat64","succ","tail","take","tan","tanh",
   "toList","toLower","toUpper","transpose","truncate","uint16ToBigint",
   "uint32ToBigint","uint64ToBigint","uint8ToBigint","union","unions",
   "unlines","zip","zipWith"]

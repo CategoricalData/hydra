@@ -137,7 +137,7 @@
                                     "fields": [
                                       {
                                         "name": "lexicalForm",
-                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "s"}}}},
+                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "s"}}}},
                                       {
                                         "name": "datatypeIri",
                                         "term": {

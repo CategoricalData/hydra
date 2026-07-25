@@ -150,7 +150,7 @@ encodeLiteral = define "encodeLiteral" $
     cases _Literal (var "lit") Nothing [
       _Literal_binary>>: lambda "s" $
         record Rdf._Literal [
-          Rdf._Literal_lexicalForm>>: Literals.binaryToString (var "s"),
+          Rdf._Literal_lexicalForm>>: Literals.binaryToBase64 (var "s"),
           Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "base64Binary",
           Rdf._Literal_languageTag>>: nothing],
       _Literal_boolean>>: lambda "b" $

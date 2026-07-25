@@ -528,7 +528,7 @@
                                                               "lambda": {
                                                                 "parameter": "s",
                                                                 "domain": {"literal": "binary"},
-                                                                "body": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "s"}}}}}},
+                                                                "body": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "s"}}}}}},
                                                           {
                                                             "name": "boolean",
                                                             "handler": {

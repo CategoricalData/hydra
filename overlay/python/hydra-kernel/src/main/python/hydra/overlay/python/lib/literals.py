@@ -97,7 +97,7 @@ def binary_to_bytes(s: bytes) -> tuple[int, ...]:
     return tuple(s)
 
 
-def binary_to_string(s: bytes) -> str:
+def binary_to_base64(s: bytes) -> str:
     """Convert binary to string by base64 encoding."""
     import base64
     return base64.b64encode(s).decode('ascii')
@@ -488,7 +488,7 @@ def show_uint64(x: int) -> str:
     return str(x)
 
 
-def string_to_binary(s: str) -> bytes:
+def base64_to_binary(s: str) -> bytes:
     """Convert string to binary by base64 decoding."""
     import base64
     return base64.b64decode(s)

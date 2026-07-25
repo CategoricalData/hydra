@@ -364,9 +364,9 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
       (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal") (PrintCore.literal @@ var "l"))) [
       _Literal_binary>>: "bs" ~>
         right $ HaskellUtilsSource.hsapp
-          @@ (HaskellUtilsSource.hsvar @@ string "Literals.stringToBinary")
+          @@ (HaskellUtilsSource.hsvar @@ string "Literals.base64ToBinary")
           @@ (HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_string
-              $ Literals.binaryToString $ var "bs")),
+              $ Literals.binaryToBase64 $ var "bs")),
       _Literal_boolean>>: "b" ~>
         right $ HaskellUtilsSource.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
       _Literal_decimal>>: "d" ~>

@@ -534,10 +534,10 @@ literalAdapter = define "literalAdapter" $
             cases _Term (var "t") Nothing [
               _Term_literal>>: lambda "lit" $
                 cases _Literal (var "lit") Nothing [
-                  _Literal_binary>>: lambda "b" $ right (inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))]])
+                  _Literal_binary>>: lambda "b" $ right (inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b")))]])
           @@ (lambda "j" $
             cases JM._Value (var "j") Nothing [
-              JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))]),
+              JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))]),
       _LiteralType_integer>>: lambda "it" $ integerAdapter @@ var "cx" @@ var "typ" @@ var "it",
       _LiteralType_float>>: lambda "ft" $ floatAdapter @@ var "cx" @@ var "typ" @@ var "ft"]
 
@@ -636,7 +636,7 @@ termToJsonValue = define "termToJsonValue" $
           _Literal_boolean>>: lambda "b" $ inject JM._Value JM._Value_boolean (var "b"),
           _Literal_integer>>: lambda "iv" $ inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"),
           _Literal_float>>: lambda "fv" $ inject JM._Value JM._Value_number (floatValueToDouble @@ var "fv"),
-          _Literal_binary>>: lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b"))],
+          _Literal_binary>>: lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b"))],
       _Term_list>>: lambda "ts" $
         inject JM._Value JM._Value_array (Lists.map (asTerm termToJsonValue) (var "ts")),
       _Term_map>>: lambda "m" $

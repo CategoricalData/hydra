@@ -6338,7 +6338,7 @@
                                                                                                                     "typeName": "hydra.json.model.Value",
                                                                                                                     "field": {
                                                                                                                       "name": "string",
-                                                                                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}},
+                                                                                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}},
                                                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                                                         "type": {"variable": "hydra.json.model.Value"}}}}}}]}},
                                                                                         "argument": {"variable": "lit"}}}}}}]}},
@@ -6375,7 +6375,7 @@
                                                                                                       "typeName": "hydra.core.Literal",
                                                                                                       "field": {
                                                                                                         "name": "binary",
-                                                                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.stringToBinary"}, "argument": {"variable": "s"}}}}}}}}}}},
+                                                                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.base64ToBinary"}, "argument": {"variable": "s"}}}}}}}}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                     "type": {"variable": "hydra.core.Term"}}}}}}]}},
                                                                     "argument": {"variable": "j"}}}}}}}}}},
@@ -8155,7 +8155,7 @@
                                                     "typeName": "hydra.json.model.Value",
                                                     "field": {
                                                       "name": "string",
-                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}}}]}},
+                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}}}]}},
                                     "argument": {"variable": "lit"}}}}}},
                           {
                             "name": "list",

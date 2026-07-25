@@ -20,16 +20,16 @@ import hydra.overlay.java.util.Either;
 
 
 /**
- * Primitive function which converts binary data to a string.
- * This is currently an identity function as both types are represented as String.
+ * Primitive function which encodes binary data as a base64 string.
+ * 
  */
-public class BinaryToString extends PrimitiveFunction {
+public class BinaryToBase64 extends PrimitiveFunction {
     /**
      * Returns the unique name identifying this primitive function.
-     * @return the function name "hydra.lib.literals.binaryToString"
+     * @return the function name "hydra.lib.literals.binaryToBase64"
      */
     public Name name() {
-        return hydra.lib.Literals.binaryToString().name;
+        return hydra.lib.Literals.binaryToBase64().name;
     }
 
     /**

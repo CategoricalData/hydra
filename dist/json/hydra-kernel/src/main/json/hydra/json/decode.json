@@ -999,7 +999,7 @@
                                                               "typeName": "hydra.core.Literal",
                                                               "field": {
                                                                 "name": "binary",
-                                                                "term": {"application": {"function": {"variable": "hydra.lib.literals.stringToBinary"}, "argument": {"variable": "s"}}}}}}}}}}}}},
+                                                                "term": {"application": {"function": {"variable": "hydra.lib.literals.base64ToBinary"}, "argument": {"variable": "s"}}}}}}}}}}}}},
                                             "argument": {"variable": "strResult"}}}}}}}},
                               {
                                 "name": "boolean",

@@ -17,7 +17,7 @@ object literals:
   def binaryToBytes(b: String): Seq[Int] =
     try java.util.Base64.getDecoder.decode(b).toSeq.map(_.toInt & 0xff)
     catch case _: IllegalArgumentException => b.getBytes("ISO-8859-1").toSeq.map(_.toInt & 0xff)
-  def binaryToString(b: String): String = b
+  def binaryToBase64(b: String): String = b
   def decimalToBigint(x: BigDecimal): BigInt = x.setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toBigInt
   def decimalToFloat32(x: BigDecimal): Float = x.toFloat
   def decimalToFloat64(x: BigDecimal): Double = x.toDouble
@@ -175,7 +175,7 @@ object literals:
   def showUint16(x: Int): String = x.toString
   def showUint32(x: Long): String = x.toString
   def showUint64(x: BigInt): String = x.toString
-  def stringToBinary(s: String): String = s
+  def base64ToBinary(s: String): String = s
   def uint(it: Any)(x: BigInt): Any = x // Placeholder
   def uint8ToBigint(x: Byte): BigInt = BigInt(x.toInt & 0xff)
   def uint16ToBigint(x: Int): BigInt = BigInt(x)

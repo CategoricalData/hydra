@@ -552,7 +552,7 @@
       (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint32)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint32)     literals/hydra_lib_literals_bigint_to_uint32     [] bi u32)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint64)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint64)     literals/hydra_lib_literals_bigint_to_uint64     [] bi u64)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_bytes)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_bytes)      literals/hydra_lib_literals_binary_to_bytes      [] bin (p/tc-list i32))
-      (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_string)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_string)     literals/hydra_lib_literals_binary_to_string     [] bin s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_base64)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_base64)     literals/hydra_lib_literals_binary_to_base64     [] bin s)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_bigint)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_bigint)    literals/hydra_lib_literals_decimal_to_bigint    [] dec bi)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float32)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float32)   literals/hydra_lib_literals_decimal_to_float32   [] dec f32)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float64)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float64)   literals/hydra_lib_literals_decimal_to_float64   [] dec f64)
@@ -568,7 +568,7 @@
       (prim-name 'hydra.lib.literals/hydra_lib_literals_uint16_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint16_to_bigint)     literals/hydra_lib_literals_uint16_to_bigint     [] u16 bi)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_uint32_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint32_to_bigint)     literals/hydra_lib_literals_uint32_to_bigint     [] u32 bi)
       (prim-name 'hydra.lib.literals/hydra_lib_literals_uint64_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint64_to_bigint)     literals/hydra_lib_literals_uint64_to_bigint     [] u64 bi)
-      (prim-name 'hydra.lib.literals/hydra_lib_literals_string_to_binary)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_string_to_binary)     literals/hydra_lib_literals_string_to_binary     [] s bin)}
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_base64_to_binary)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_base64_to_binary)     literals/hydra_lib_literals_base64_to_binary     [] s bin)}
      ;; Read primitives
      {(prim-name 'hydra.lib.literals/hydra_lib_literals_read_bigint)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_bigint)   literals/hydra_lib_literals_read_bigint   [] s (p/tc-optional bi))
       (prim-name 'hydra.lib.literals/hydra_lib_literals_parse_boolean) (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_parse_boolean) literals/hydra_lib_literals_parse_boolean [] s (p/tc-optional b))

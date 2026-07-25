@@ -7,10 +7,11 @@
 # hydra.lib.text
 
 Text encoding.
-These primitives are the canonical conversions between Hydra's `binary` and `string` types;
-the older `hydra.lib.literals.binaryToString` and `hydra.lib.literals.stringToBinary` are
-deprecated in their favor.
-Both use UTF-8, and both are pure: file and other byte-oriented I/O is performed separately
+These primitives are the canonical UTF-8 conversions between Hydra's `binary` and `string` types,
+for interpreting bytes as text. They are distinct from `hydra.lib.literals.binaryToBase64` /
+`base64ToBinary`, which are total, round-trippable base64 conversions for embedding arbitrary
+binary in a string context (e.g. a JSON value) — use those when the bytes are not necessarily text.
+Both `text` primitives are pure: file and other byte-oriented I/O is performed separately
 (see `hydra.lib.files`), with encoding and decoding applied before or after.
 
 #### decodeUtf8 — **Draft**
