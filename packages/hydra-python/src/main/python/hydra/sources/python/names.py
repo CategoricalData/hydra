@@ -148,7 +148,7 @@ def _encode_name():
         ],
         Logic.if_else(
             var("isQualified"),
-            Optionals.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
+            Optionals.match(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
                 Logic.if_else(
                     Equality.equal(
                         var("mns"),
@@ -164,7 +164,7 @@ def _encode_name():
                         ),
                     ),
                     # Different or no namespace
-                    Optionals.cases(var("mns"), wrap(_PY_NAME, var("pyLocal")), lam(
+                    Optionals.match(var("mns"), wrap(_PY_NAME, var("pyLocal")), lam(
                             "nsVal",
                             wrap(
                                 _PY_NAME,
@@ -226,7 +226,7 @@ def _encode_name_qualified():
                 ),
             ),
         ],
-        Optionals.cases(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
+        Optionals.match(Maps.lookup(var("name"), var("boundVars")), # Not a bound type variable
             Logic.if_else(
                 Equality.equal(
                     var("mns"),
@@ -242,7 +242,7 @@ def _encode_name_qualified():
                     ),
                 ),
                 # Different namespace - snake-cased namespace + sanitized local
-                Optionals.cases(var("mns"), wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))), lam(
+                Optionals.match(var("mns"), wrap(_PY_NAME, _local("sanitizePythonName")(var("local"))), lam(
                         "nsVal",
                         wrap(
                             _PY_NAME,
@@ -461,7 +461,7 @@ def _variable_reference():
                 hydra.dsl.names.module_name_of(var("name")),
             ),
             field("sameNamespace",
-                Optionals.cases(var("mns"), false(), lam(
+                Optionals.match(var("mns"), false(), lam(
                         "ns",
                         Equality.equal(var("ns"), var("focusNs")),
                     ),),

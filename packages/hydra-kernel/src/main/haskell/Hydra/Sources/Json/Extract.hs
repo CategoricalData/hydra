@@ -146,17 +146,17 @@ opt = define "opt" $
 optArray :: TypedTermDefinition (String -> M.Map String Value -> Either String (Maybe [Value]))
 optArray = define "optArray" $
   doc "Look up an optional array field in a JSON object" $
-  lambdas ["fname", "m"] $ Optionals.cases (opt @@ var "fname" @@ var "m") (right nothing) (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
+  lambdas ["fname", "m"] $ Optionals.match (opt @@ var "fname" @@ var "m") (right nothing) (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
 
 optString :: TypedTermDefinition (String -> M.Map String Value -> Either String (Maybe String))
 optString = define "optString" $
   doc "Look up an optional string field in a JSON object" $
-  lambdas ["fname", "m"] $ Optionals.cases (opt @@ var "fname" @@ var "m") (right nothing) (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
+  lambdas ["fname", "m"] $ Optionals.match (opt @@ var "fname" @@ var "m") (right nothing) (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
 
 require :: TypedTermDefinition (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
-  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.concat $ list [
+  lambdas ["fname", "m"] $ Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.concat $ list [
       string "required attribute ",
       showValue @@ (Json.valueString $ var "fname"),
       string " not found"]) (lambda "value" $ right $ var "value")

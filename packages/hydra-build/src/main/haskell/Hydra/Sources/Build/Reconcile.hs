@@ -108,7 +108,7 @@ extensionOf = define "extensionOf" $
   doc "The extension of a relative path, or none if the filename has no '.'" $
   "path" ~>
   "segs" <~ Strings.splitOn (string "/") (var "path") $
-  Optionals.cases (Lists.last (var "segs")) nothing ("fileName" ~>
+  Optionals.match (Lists.last (var "segs")) nothing ("fileName" ~>
     "dotParts" <~ Strings.splitOn (string ".") (var "fileName") $
     Logic.ifElse (Ordering.gt (Lists.length (var "dotParts")) (int32 1))
       (Lists.last (var "dotParts"))
@@ -150,8 +150,8 @@ matchesExts :: TypedTermDefinition (Maybe (S.Set String) -> String -> Bool)
 matchesExts = define "matchesExts" $
   doc "Whether a path's extension satisfies the optional extension restriction" $
   "restrictExts" ~> "path" ~>
-  Optionals.cases (var "restrictExts" :: TypedTerm (Maybe (S.Set String))) true ("exts" ~>
-    Optionals.cases (extensionOf @@ var "path") false ("ext" ~>
+  Optionals.match (var "restrictExts" :: TypedTerm (Maybe (S.Set String))) true ("exts" ~>
+    Optionals.match (extensionOf @@ var "path") false ("ext" ~>
       Sets.member (var "ext") (var "exts" :: TypedTerm (S.Set String))))
 
 -- | Whether a path satisfies the optional prefix restriction. A none restriction
@@ -161,7 +161,7 @@ matchesPrefixes :: TypedTermDefinition (Maybe (S.Set String) -> String -> Bool)
 matchesPrefixes = define "matchesPrefixes" $
   doc "Whether a path satisfies the optional prefix restriction" $
   "restrictPrefixes" ~> "path" ~>
-  Optionals.cases (var "restrictPrefixes" :: TypedTerm (Maybe (S.Set String))) true ("prefixes" ~>
+  Optionals.match (var "restrictPrefixes" :: TypedTerm (Maybe (S.Set String))) true ("prefixes" ~>
     isUnderAnyPrefix @@ (var "prefixes" :: TypedTerm (S.Set String)) @@ var "path")
 
 -- | The owned second-level prefixes derived from a set of written module names: the

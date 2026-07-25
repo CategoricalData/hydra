@@ -203,7 +203,7 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
                     ++ (string " (") ++ var "comment" ++ (string ")"))))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
-  Optionals.cases (Lists.uncons $ var "constraints") (right (asTerm Substitution.idTypeSubst)) ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
+  Optionals.match (Lists.uncons $ var "constraints") (right (asTerm Substitution.idTypeSubst)) ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
 
 unifyTypeLists :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $

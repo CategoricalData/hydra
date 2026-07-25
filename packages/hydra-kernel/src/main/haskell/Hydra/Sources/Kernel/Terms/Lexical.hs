@@ -187,7 +187,7 @@ dereferenceVariable :: TypedTermDefinition (Graph -> Name -> Either Error Bindin
 dereferenceVariable = define "dereferenceVariable" $
   doc "Look up a binding by name in a graph, returning Either an error or the binding" $
   "graph" ~> "name" ~>
-  Optionals.cases (lookupBinding @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) right_
+  Optionals.match (lookupBinding @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) right_
 
 elementsToGraph :: TypedTermDefinition (Graph -> M.Map Name TypeScheme -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
@@ -225,7 +225,7 @@ getField :: TypedTermDefinition (M.Map Name Term -> Name -> (Term -> Either Erro
 getField = define "getField" $
   doc "Look up a field by name in a record's field map and decode its value, failing if the field is missing" $
   "m" ~> "fname" ~> "decode" ~>
-  Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "m")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) (var "decode")
+  Optionals.match (Maps.lookup (var "fname" :: TypedTerm Name) (var "m")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) (var "decode")
 
 graphToBindings :: TypedTermDefinition (Graph -> [Binding])
 graphToBindings = define "graphToBindings" $
@@ -305,7 +305,7 @@ matchUnion = define "matchUnion" $
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
-        Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
+        Optionals.match (Maps.lookup (var "fname" :: TypedTerm Name) (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
         (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.concat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "term")))]
@@ -329,13 +329,13 @@ requireBinding = define "requireBinding" $
     (string ". Available elements: {") ++
     (Strings.join (string ", ") (var "ellipsis" @@ (Lists.map (reify Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
     (string "}")) $
-  Optionals.cases (lookupBinding @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg"))) (reify right)
+  Optionals.match (lookupBinding @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg"))) (reify right)
 
 requirePrimitive :: TypedTermDefinition (Graph -> Name -> Either Error Primitive)
 requirePrimitive = define "requirePrimitive" $
   doc "Look up a primitive in a graph by name, failing if it is not registered" $
   "graph" ~> "name" ~>
-  Optionals.cases (lookupPrimitive @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name"))) (reify right)
+  Optionals.match (lookupPrimitive @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name"))) (reify right)
 
 requirePrimitiveType :: TypedTermDefinition (Graph -> Name -> Either Error TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
@@ -352,7 +352,7 @@ requireTerm :: TypedTermDefinition (Graph -> Name -> Either Error Term)
 requireTerm = define "requireTerm" $
   doc "Resolve a name to a term in the graph, following variable references, and fail if the name is not bound" $
   "graph" ~> "name" ~>
-  Optionals.cases (resolveTerm @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) (reify right)
+  Optionals.match (resolveTerm @@ var "graph" @@ var "name") (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) (reify right)
 
 resolveTerm :: TypedTermDefinition (Graph -> Name -> Maybe Term)
 resolveTerm = define "resolveTerm" $
@@ -363,7 +363,7 @@ resolveTerm = define "resolveTerm" $
     cases _Term (var "stripped")
       (Just (just (var "term"))) [
       _Term_variable>>: "name'" ~> resolveTerm @@ var "graph" @@ var "name'"]) $
-  Optionals.cases (lookupTerm @@ var "graph" @@ var "name") nothing (var "recurse")
+  Optionals.match (lookupTerm @@ var "graph" @@ var "name") nothing (var "recurse")
 
 stripAndDereferenceTerm :: TypedTermDefinition (Graph -> Term -> Either Error Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $

@@ -360,13 +360,13 @@ public class Libraries {
         return Arrays.asList(
                 new hydra.overlay.java.lib.optionals.Apply(),
                 new hydra.overlay.java.lib.optionals.Bind(),
-                new hydra.overlay.java.lib.optionals.Cases(),
                 new hydra.overlay.java.lib.optionals.Compose(),
                 new hydra.overlay.java.lib.optionals.Givens(),
                 new hydra.overlay.java.lib.optionals.IsGiven(),
                 new hydra.overlay.java.lib.optionals.IsNone(),
                 new hydra.overlay.java.lib.optionals.Map(),
                 new hydra.overlay.java.lib.optionals.MapOptional(),
+                new hydra.overlay.java.lib.optionals.Match(),
                 new hydra.overlay.java.lib.optionals.Pure(),
                 new hydra.overlay.java.lib.optionals.ToList(),
                 new hydra.overlay.java.lib.optionals.WithDefault());

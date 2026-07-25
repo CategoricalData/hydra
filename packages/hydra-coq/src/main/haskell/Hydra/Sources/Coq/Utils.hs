@@ -149,7 +149,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       (collectFreeTypeVars @@ (Core.applicationFunction $ var "app"))
       (collectFreeTypeVars @@ (Core.applicationArgument $ var "app")),
     _Term_cases>>: "cs" ~> Sets.union
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectFreeTypeVars @@ var "d"))
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectFreeTypeVars @@ var "d"))
       (Sets.unions $ Lists.map
         (lambda "f" $ collectFreeTypeVars @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs")),
@@ -161,7 +161,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       collectFreeTypeVars @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
     _Term_lambda>>: "lam" ~> lets [
       "paramName">: unwrap _Name @@ (Core.lambdaParameter $ var "lam"),
-      "domVars">: Optionals.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty"),
+      "domVars">: Optionals.match (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty"),
       "bodyVars">: collectFreeTypeVars @@ (Core.lambdaBody $ var "lam"),
       "allVars">: (Sets.union (var "domVars") (var "bodyVars") :: TypedTerm (S.Set String))] $
       Logic.ifElse (isTypeVarLike @@ var "paramName")
@@ -171,12 +171,12 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       "bindVars">: (Sets.unions $ Lists.map
         (lambda "b" $ Sets.union
           (collectFreeTypeVars @@ (Core.bindingTerm $ var "b"))
-          (Optionals.cases (Core.bindingTypeScheme $ var "b") (Sets.empty :: TypedTerm (S.Set String)) (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")))
+          (Optionals.match (Core.bindingTypeScheme $ var "b") (Sets.empty :: TypedTerm (S.Set String)) (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")))
         (Core.letBindings $ var "lt") :: TypedTerm (S.Set String))] $
       (Sets.union (var "bindVars") (collectFreeTypeVars @@ (Core.letBody $ var "lt")) :: TypedTerm (S.Set String)),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ collectFreeTypeVars @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectFreeTypeVars @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectFreeTypeVars @@ var "el"),
     _Term_pair>>: "p" ~> (Sets.union
       (collectFreeTypeVars @@ Pairs.first (var "p"))
       (collectFreeTypeVars @@ Pairs.second (var "p")) :: TypedTerm (S.Set String)),
@@ -276,7 +276,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
         (Sets.unions $ Lists.map
           (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.caseAlternativeHandler $ var "f"))
           (Core.caseStatementCases $ var "cs"))
-        (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectQualifiedNamesInTerm @@ var "d"))),
+        (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectQualifiedNamesInTerm @@ var "d"))),
     _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ collectQualifiedNamesInTerm @@ var "l")
       (lambda "r" $ collectQualifiedNamesInTerm @@ var "r")
@@ -285,7 +285,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (qualifiedFromName @@ (Core.injectionTypeName $ var "inj"))
       (collectQualifiedNamesInTerm @@ (Core.fieldTerm $ Core.injectionField $ var "inj")),
     _Term_lambda>>: "lam" ~> Sets.union
-      (Optionals.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy"))
+      (Optionals.match (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy"))
       (collectQualifiedNamesInTerm @@ (Core.lambdaBody $ var "lam")),
     _Term_let>>: "lt" ~> Sets.union
       (Sets.unions $ Lists.map
@@ -294,7 +294,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (collectQualifiedNamesInTerm @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ collectQualifiedNamesInTerm @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectQualifiedNamesInTerm @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectQualifiedNamesInTerm @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (collectQualifiedNamesInTerm @@ Pairs.first (var "p"))
       (collectQualifiedNamesInTerm @@ Pairs.second (var "p")),
@@ -474,7 +474,7 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
   doc "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders" $
   "initialBound" ~> "term0" ~>
   "eraseIfUnbound" <~ ("bound" ~> "mdom" ~>
-    Optionals.cases (var "mdom") (Phantoms.nothing :: TypedTerm (Maybe Type)) ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
+    Optionals.match (var "mdom") (Phantoms.nothing :: TypedTerm (Maybe Type)) ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
         (Phantoms.nothing :: TypedTerm (Maybe Type))
         (Phantoms.just $ var "ty"))) $
   "f" <~ ("recurse" ~> "bound" ~> "term" ~>
@@ -482,7 +482,7 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
       _Term_lambda>>: "lam" ~>
         "paramName" <~ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")) $
         "dom" <~ (Core.lambdaDomain $ var "lam") $
-        "isTypeParam" <~ Optionals.cases (var "dom") (boolean False) ("d" ~> cases _Type (var "d") (Just (boolean False)) [
+        "isTypeParam" <~ Optionals.match (var "dom") (boolean False) ("d" ~> cases _Type (var "d") (Just (boolean False)) [
             _Type_variable>>: "v" ~>
               Equality.equal (unwrap _Name @@ var "v") (string "Type")]) $
         "bound2" <~ Logic.ifElse
@@ -988,7 +988,7 @@ termRefs = define "termRefs" $
       (Sets.unions $ Lists.map
         (lambda "f" $ termRefs @@ var "locals" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ termRefs @@ var "locals" @@ var "d")),
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ termRefs @@ var "locals" @@ var "d")),
     _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ termRefs @@ var "locals" @@ var "l")
       (lambda "r" $ termRefs @@ var "locals" @@ var "r")
@@ -1004,7 +1004,7 @@ termRefs = define "termRefs" $
       (termRefs @@ var "locals" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ termRefs @@ var "locals" @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ termRefs @@ var "locals" @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ termRefs @@ var "locals" @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (termRefs @@ var "locals" @@ Pairs.first (var "p"))
       (termRefs @@ var "locals" @@ Pairs.second (var "p")),

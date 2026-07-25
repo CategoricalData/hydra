@@ -25,9 +25,9 @@ bind = (>>=)
 compose :: (a -> Either e b) -> (b -> Either e c) -> a -> Either e c
 compose f g x = bind (f x) g
 
--- | Eliminate an Either value by applying one of two functions.
+-- | Eliminate an Either value by applying one of two functions (deprecated; use match).
 either :: (a -> c) -> (b -> c) -> Either a b -> c
-either = E.either
+either f g e = match e f g
 
 -- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
 foldList :: (a -> b -> Either c a) -> a -> [b] -> Either c a
@@ -60,6 +60,10 @@ mapOptional = CM.mapM
 -- | Map a function returning Either over a Set, collecting results or short-circuiting on Left.
 mapSet :: Ord b => (a -> Either c b) -> S.Set a -> Either c (S.Set b)
 mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
+
+-- | Case analysis on an Either value, with the scrutinee first.
+match :: Either a b -> (a -> c) -> (b -> c) -> c
+match e f g = E.either f g e
 
 -- | Partition a list of Eithers into lefts and rights.
 partition :: [Either a b] -> ([a], [b])

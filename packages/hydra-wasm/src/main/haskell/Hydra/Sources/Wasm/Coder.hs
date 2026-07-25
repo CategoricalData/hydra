@@ -130,7 +130,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
       "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "recordFieldsOf" @@ var "tbody") $
-      Optionals.cases (var "mfields")
+      Optionals.match (var "mfields")
         (nothing :: TypedTerm (Maybe (Name, [(Name, Int)])))
         (lambda "fts" $
           "namedOffsets" <~ (Lists.map
@@ -243,7 +243,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
       "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "unionFieldsOf" @@ var "tbody") $
-      Optionals.cases (var "mfields")
+      Optionals.match (var "mfields")
         (nothing :: TypedTerm (Maybe (Name, [(Name, Int)])))
         (lambda "fts" $
           "namedIndexes" <~ (Lists.map
@@ -396,7 +396,7 @@ encodeApplication = def "encodeApplication" $
          -- through it will trap at runtime, which is distinguishable from a
          -- correctly-constructed closure dispatch.
          ("mFirstArg" <~ Lists.head (var "args") $
-          "firstArgInstrs" <~ Optionals.cases (var "mFirstArg")
+          "firstArgInstrs" <~ Optionals.match (var "mFirstArg")
             -- Zero-arg closure call: push placeholder. Real zero-arg closures
             -- need a separate signature (to come).
             (list [inject W._Instruction W._Instruction_const $
@@ -440,7 +440,7 @@ encodeApplication = def "encodeApplication" $
          -- to match the callee's param count.
          ("mSig" <~ Maps.lookup (var "lname") (var "funcSigs" :: TypedTerm (M.Map String ([W.ValType], [W.ValType]))) $
           "callerArgCount" <~ Lists.length (var "args") $
-          "calleeParamCount" <~ Optionals.cases (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
+          "calleeParamCount" <~ Optionals.match (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
           "padCount" <~ Math.sub (var "calleeParamCount") (var "callerArgCount") $
           "padInstrs" <~ Lists.concat (Lists.replicate
             (Logic.ifElse (Ordering.gt (var "padCount") (int32 0)) (var "padCount") (int32 0))
@@ -457,7 +457,7 @@ encodeApplication = def "encodeApplication" $
      -- side effect. Projection takes only one "real" arg, so extra args would be a
      -- type error at the Hydra level anyway.
      _Term_project>>: lambda "proj" $
-       Optionals.cases (Lists.head (var "args"))
+       Optionals.match (Lists.head (var "args"))
          -- No args: treat as a bare projection function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -467,7 +467,7 @@ encodeApplication = def "encodeApplication" $
      -- Case statement applied to args: the first arg is the union value being dispatched
      -- on. Encode just that first arg as the scrutinee, same pattern as _Term_project.
      _Term_cases>>: lambda "cs" $
-       Optionals.cases (Lists.head (var "args"))
+       Optionals.match (Lists.head (var "args"))
          -- No args: treat as a bare cases function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
@@ -566,7 +566,7 @@ encodeCases = def "encodeCases" $
     -- branch to; its body is an `i32.const 0` placeholder.
     "defaultArmLabel" <~ (string "_default") $
     "mDefault" <~ Core.caseStatementDefault (var "cs") $
-    "defaultArmBody" <<~ Optionals.cases (var "mDefault")
+    "defaultArmBody" <<~ Optionals.match (var "mDefault")
       (right (list [inject W._Instruction W._Instruction_const $
         inject W._ConstValue W._ConstValue_i32 (int32 0)]))
       (lambda "defTerm" $
@@ -587,7 +587,7 @@ encodeCases = def "encodeCases" $
             (var "explicitArms")))) $
     "typeName" <~ Core.caseStatementTypeName (var "cs") $
     "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes" :: TypedTerm (M.Map Name [(Name, Int)])) $
-    "brTableLabels" <~ Optionals.cases (var "mUnionVariants")
+    "brTableLabels" <~ Optionals.match (var "mUnionVariants")
       -- Fallback: no variant info for this type. Use the explicit-arm labels
       -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
       -- explicit arms hit the default.
@@ -745,7 +745,7 @@ encodeProjection = def "encodeProjection" $
     -- Compute the offset if the type is known and the field exists in it. Returns
     -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
     -- any entry in the type's field list.
-    "mOffset" <~ (Optionals.cases (var "mFields")
+    "mOffset" <~ (Optionals.match (var "mFields")
       (nothing :: TypedTerm (Maybe Int))
       (lambda "pairs" $
         -- Find the first pair (fn, off) where fn == fieldName.
@@ -753,7 +753,7 @@ encodeProjection = def "encodeProjection" $
           (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
           (var "pairs") $
         Optionals.map (reify Pairs.second) (Lists.head (var "matching")))) $
-    Optionals.cases (var "mOffset")
+    Optionals.match (var "mOffset")
       -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
       (right (Lists.concat (list [
         var "scrutineeInstrs",
@@ -862,13 +862,13 @@ encodeTerm = def "encodeTerm" $
        -- Look up the tag in the universe-wide variant table. Fall back to 0 when the
        -- type or variant is unknown (shouldn't happen for well-formed Hydra terms).
        "mVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes" :: TypedTerm (M.Map Name [(Name, Int)])) $
-       "tag" <~ Optionals.cases (var "mVariants")
+       "tag" <~ Optionals.match (var "mVariants")
          (int32 0)
          (lambda "pairs" $
            "matching" <~ Lists.filter
              (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
              (var "pairs") $
-           Optionals.cases (Lists.head (var "matching"))
+           Optionals.match (Lists.head (var "matching"))
              (int32 0)
              (lambda "p" $ Pairs.second (var "p"))) $
        -- Compute payload instructions: `i32.const 0` for unit, else encode the term.
@@ -998,7 +998,7 @@ encodeTerm = def "encodeTerm" $
        cases _Literal (var "lit") (Just $
          right (list [encodeLiteral @@ var "lit"])) [
          _Literal_string>>: lambda "s" $
-           Optionals.cases
+           Optionals.match
              (Maps.lookup (var "s") (var "stringOffsets" :: TypedTerm (M.Map String Int)))
              -- Unknown string (shouldn't happen if collectStrings was run first):
              -- fall back to the placeholder.
@@ -1076,7 +1076,7 @@ encodeTerm = def "encodeTerm" $
          var "mapStoreInstrs",
          var "mapFinalInstrs"])),
      _Term_optional>>: lambda "mt" $
-       Optionals.cases (var "mt")
+       Optionals.match (var "mt")
          -- Nothing: push 0 (null pointer / tag for None)
          (right (list [
            inject W._Instruction W._Instruction_const $
@@ -1280,7 +1280,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
-    "typ" <~ Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
+    "typ" <~ Optionals.match (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $
@@ -1331,7 +1331,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Encode body: for bare eliminations (detected by extractLambdaParams producing synthetic
     -- param "arg_0"), pass local.get of the first Hydra param as the scrutinee.
     "dBody" <~ (Strip.deannotateTerm @@ var "innerBody") $
-    "scrutineeInstrs" <~ Optionals.cases (Lists.head (var "paramNameStrs"))
+    "scrutineeInstrs" <~ Optionals.match (Lists.head (var "paramNameStrs"))
       (list ([] :: [TypedTerm W.Instruction]))
       (lambda "p0" $ list [inject W._Instruction W._Instruction_localGet (var "p0")]) $
     "rawBodyInstrs" <<~ (cases _Term (var "dBody") (Just $

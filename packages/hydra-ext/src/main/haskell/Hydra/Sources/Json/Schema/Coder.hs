@@ -297,7 +297,7 @@ nameToPath = define "nameToPath" $
     "qn">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName (var "qn"),
     "local">: Util.qualifiedNameLocal (var "qn"),
-    "nsPart">: Optionals.cases (var "mns") (string "") ("ns" ~> Strings.concat2 (Packaging.unModuleName (var "ns")) (string "."))] $
+    "nsPart">: Optionals.match (var "mns") (string "") ("ns" ~> Strings.concat2 (Packaging.unModuleName (var "ns")) (string "."))] $
     Names.moduleNameToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "json")
@@ -337,7 +337,7 @@ transitiveTypeDeps = define "transitiveTypeDeps" $
       Logic.ifElse (Sets.member (var "n") (var "acc" :: TypedTerm (S.Set Name)))
         (var "acc")
         (lets ["acc1">: (Sets.insert (var "n") (var "acc") :: TypedTerm (S.Set Name))] $
-          Optionals.cases (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
+          Optionals.match (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
     Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps" :: TypedTerm (S.Set Name)))
 
 typeDefToDocument :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
@@ -381,7 +381,7 @@ typeToExpr = define "typeToExpr" $
           ("res" ~> Eithers.bind
             (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
             ("mdesc" ~> right (Lists.concat2
-              (Optionals.cases (var "mdesc") (list ([] :: [TypedTerm JS.Restriction])) ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")]))
+              (Optionals.match (var "mdesc") (list ([] :: [TypedTerm JS.Restriction])) ("d" ~> list [inject JS._Restriction JS._Restriction_description (var "d")]))
               (var "res"))))),
 
       _Type_application>>: ("at" ~>

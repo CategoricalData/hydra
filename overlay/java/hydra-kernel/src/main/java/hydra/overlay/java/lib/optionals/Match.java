@@ -22,13 +22,13 @@ import hydra.overlay.java.util.Either;
 /**
  * Pattern matches on Optional.
  */
-public class Cases extends PrimitiveFunction {
+public class Match extends PrimitiveFunction {
     /**
      * Returns the name of this primitive function.
-     * @return the name "hydra.lib.optionals.cases"
+     * @return the name "hydra.lib.optionals.match"
      */
     public Name name() {
-        return hydra.lib.Optionals.cases().name;
+        return hydra.lib.Optionals.match().name;
     }
 
     @Override

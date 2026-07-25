@@ -536,7 +536,7 @@
     ;; that distinguish strict from lazy evaluation (#391, #585). Without this, the Python coder's
     ;; wrapLazyArguments (which reads isLazy from graph_primitives(g), the single source of truth
     ;; per #391) silently treats every registry-built primitive as fully strict, eagerly evaluating
-    ;; both branches of e.g. if_else/optionals.cases and causing infinite recursion or spurious
+    ;; both branches of e.g. if_else/optionals.match and causing infinite recursion or spurious
     ;; TypeError: Unsupported Term on self-recursive definitions.
     (define (lazy-args idxs prim)
       (let* ((idx-set idxs)

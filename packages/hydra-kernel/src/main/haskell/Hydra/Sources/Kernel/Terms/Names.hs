@@ -112,8 +112,8 @@ compactName = define "compactName" $
     "qualName">: qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"]
-    $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
-          Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.concat $ list [var "pre", string ":", var "local"]))
+    $ Optionals.match (var "mns") (Core.unName $ var "name") (lambda "ns" $
+          Optionals.match (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.concat $ list [var "pre", string ":", var "local"]))
 
 -- | Generate a fully qualified binding name for a derived function (encoder, decoder,
 -- DSL helper, etc.) from a type/term name, given the category's namespace segments
@@ -147,8 +147,8 @@ derivedDefinitionName = define "derivedDefinitionName" $
   -- nsParts = parts minus the last element (the namespace components).
   -- Nothing means parts was empty (unreachable for a valid name);
   -- Just [] means the name has no namespace (local type).
-  Optionals.cases (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
-      Optionals.cases
+  Optionals.match (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
+      Optionals.match
         (Lists.uncons (var "nsParts"))
         -- single-element parts: local type, no namespace
         (var "noNamespaceResult")
@@ -173,7 +173,7 @@ derivedModuleName = define "derivedModuleName" $
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
   "fallback" <~ (Packaging.moduleName2 (Strings.join (string ".")
     (Lists.concat2 (var "categoryPrefix") (var "parts")))) $
-  Optionals.cases (Lists.uncons (var "parts")) (var "fallback") ("ht" ~>
+  Optionals.match (Lists.uncons (var "parts")) (var "fallback") ("ht" ~>
       Logic.ifElse
         (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "ht")) (string "hydra")))
         (Packaging.moduleName2 (Strings.join (string ".")
@@ -233,7 +233,7 @@ nameToFilePath = define "nameToFilePath" $
     Strings.join (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
       (Strings.splitOn (string ".") (Packaging.unModuleName (var "nsArg"))))) $
-  "prefix" <~ Optionals.cases (var "ns") (string "") ("n" ~> Strings.concat2 (var "nsToFilePath" @@ var "n") (string "/")) $
+  "prefix" <~ Optionals.match (var "ns") (string "") ("n" ~> Strings.concat2 (var "nsToFilePath" @@ var "n") (string "/")) $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.concat (list [var "prefix", var "suffix", string ".", DslFile.unFileExtension (var "ext")])
 
@@ -264,7 +264,7 @@ qualifyName = define "qualifyName" $
     -- Use uncons to destructure (last, rest) from the reversed parts list.
     -- Empty parts is unreachable (splitOn on a string produces >= 1 element);
     -- in that case fall back to an unqualified name.
-    $ Optionals.cases (Lists.uncons $ var "parts") (Util.qualifiedName nothing (Core.unName $ var "name")) ("uc" ~>
+    $ Optionals.match (Lists.uncons $ var "parts") (Util.qualifiedName nothing (Core.unName $ var "name")) ("uc" ~>
         "localName" <~ Pairs.first (var "uc") $
         "restReversed" <~ Pairs.second (var "uc") $
         Logic.ifElse
@@ -286,5 +286,5 @@ unqualifyName :: TypedTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
-    "prefix">: Optionals.cases (Util.qualifiedNameModuleName $ var "qname") (string "") (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")]
+    "prefix">: Optionals.match (Util.qualifiedNameModuleName $ var "qname") (string "") (lambda "n" $ (Packaging.unModuleName $ var "n") ++ string ".")]
     $ wrap _Name $ var "prefix" ++ (Util.qualifiedNameLocal $ var "qname")

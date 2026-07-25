@@ -10,7 +10,7 @@ import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map, match)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), either, foldl, map, pure)
@@ -32,7 +32,7 @@ module_ = Module {
     -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
     -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
     definitions = [apply, bimap, bind, compose, either, foldList, isLeft,
-                   isRight, lefts, map, mapList, mapOptional, mapSet, partition, pure,
+                   isRight, lefts, map, mapList, mapOptional, mapSet, match, partition, pure,
                    rights]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -105,13 +105,15 @@ compose = defineWithDefault "compose" "Kleisli composition for either."
     Eithers.bind (var "f" @@ var "x") (var "g"))
 
 either :: PrimitiveDefinition
-either = define "either" "Eliminate an either value by applying one of two functions."
+either = defineWithDefault "either" "Eliminate an either value by applying one of two functions (deprecated; use match)."
   (sigWithParams [("f", "the function to apply to a Left value"), ("g", "the function to apply to a Right value"), ("e", "the either value to eliminate")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> tz) Types.~> (ty Types.~> tz) Types.~> ee tx ty Types.~> tz) Nothing)
   ["either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
-   "The fundamental eliminator for the either type; every other primitive in this namespace can be\
-  \ derived from it.",
+   "Deprecated since 0.18; use match, which takes the scrutinee first.",
+   "either(f, g, e) is match(e, f, g); this defining equation is the specification, and the default\
+  \ implementation.",
    "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."]
+  ("f" ~> "g" ~> "e" ~> Eithers.match (var "e") (var "f") (var "g"))
 
 foldList :: PrimitiveDefinition
 foldList = defineWithDefault "foldList" "Left-fold over a list with an Either-returning function, short-circuiting on Left."
@@ -197,7 +199,7 @@ mapOptional = defineWithDefault "mapOptional" "Map a function returning either o
   \ and returns the result with Right wrapped around given.",
    "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."]
   ("f" ~> "m" ~>
-    Optionals.cases (var "m")
+    Optionals.match (var "m")
       (right nothing)
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x")))
 
@@ -218,6 +220,16 @@ mapSet = defineWithDefault "mapSet" "Map a function returning either over a set,
             "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
         (right (list ([] :: [TypedTerm Int])))
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Either Int Int) -> S.Set Int -> Either Int (S.Set Int)))
+
+match :: PrimitiveDefinition
+match = define "match" "Case analysis on an either value, with scrutinee-first argument order."
+  (sigWithParams [("e", "the either value to eliminate"), ("f", "the function to apply to a Left value"), ("g", "the function to apply to a Right value")] $ TypeScheme [Name "x", Name "y", Name "z"]
+    (ee tx ty Types.~> (tx Types.~> tz) Types.~> (ty Types.~> tz) Types.~> tz) Nothing)
+  ["match(e, f, g) returns f(x) if e is Left x and g(y) if e is Right y.",
+   "The fundamental eliminator for the either type; every other primitive in this namespace can be\
+  \ derived from it. The either value is the first argument, matching hydra.lib.optionals.match and the\
+  \ convention for case-statement-like elimination.",
+   "Total. Argument order is (e, f, g) rather than Haskell's either :: (f, g, e)."]
 
 partition :: PrimitiveDefinition
 partition = defineWithDefault "partition" "Partition a list of either values into lefts and rights."

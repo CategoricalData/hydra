@@ -124,7 +124,7 @@ decodeField  = define "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Eithers.bind
       (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
-      (lambda "mf" $ primitive DefOptionals.cases
+      (lambda "mf" $ primitive DefOptionals.match
         @@ var "mf"
         @@ (left $ Strings.concat2 (string "missing field: ") (var "name"))
         @@ (lambda "f" $ right $ var "f"))
@@ -145,7 +145,7 @@ decodeOptionalField :: TypedTermDefinition ((Value -> Either String a) -> String
 decodeOptionalField  = define "OptionalField" $
   doc "Decode an optional field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    primitive DefOptionals.cases
+    primitive DefOptionals.match
         @@ (Maps.lookup (var "name") (var "m" :: TypedTerm (M.Map String Value)))
         @@ (right nothing)
         @@ (lambda "v" (Eithers.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v")))

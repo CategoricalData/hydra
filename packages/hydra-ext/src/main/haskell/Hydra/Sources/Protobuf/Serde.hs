@@ -304,7 +304,7 @@ optDesc = define "optDesc" $
     "descs">: Lists.filter
       (lambda "opt" $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "opts")] $
-    Optionals.cases (Lists.head (var "descs")) (var "expr") (lambda "firstDesc" $ lets [
+    Optionals.match (Lists.head (var "descs")) (var "expr") (lambda "firstDesc" $ lets [
         "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
         "descStr">: cases P3._Value (var "descValue") Nothing [
           P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),

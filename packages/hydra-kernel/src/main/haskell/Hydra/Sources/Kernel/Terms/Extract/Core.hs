@@ -386,7 +386,7 @@ field = define "field" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatchErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      (Optionals.cases (Lists.head $ var "matchingFields") (var "noMatchErr") ("mf" ~>
+      (Optionals.match (Lists.head $ var "matchingFields") (var "noMatchErr") ("mf" ~>
           "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ (Core.fieldTerm $ var "mf") $
           var "mapping" @@ var "stripped"))
       (unexpected(Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
@@ -560,7 +560,7 @@ letBinding = define "letBinding" $
   Logic.ifElse (Lists.null (var "matchingBindings"))
     (var "noBindingErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
-      (Optionals.cases (Lists.head $ var "matchingBindings") (var "noBindingErr") ("b" ~> right (Core.bindingTerm $ var "b")))
+      (Optionals.match (Lists.head $ var "matchingBindings") (var "noBindingErr") ("b" ~> right (Core.bindingTerm $ var "b")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleBindings $ Error.multipleBindingsError (var "name"))))
 
 let_ :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Let)
@@ -639,7 +639,7 @@ optionalTerm = define "optionalTerm" $
     (Just (unexpected
       (Phantoms.string "optional value")
       (PrintCore.term @@ var "term"))) [
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (right nothing) ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))]
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (right nothing) ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))]
 
 optionalType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 optionalType = define "optionalType" $
@@ -703,7 +703,7 @@ requireField :: TypedTermDefinition (String -> (Graph -> Term -> Either Decoding
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
-  Optionals.cases (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") (var "fieldMap" :: TypedTerm (M.Map Name Term))) (left $ Error.decodingError $ Strings.concat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
+  Optionals.match (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") (var "fieldMap" :: TypedTerm (M.Map Name Term))) (left $ Error.decodingError $ Strings.concat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
 
 -- | Convert a Record to a Map from field Name to Term
 

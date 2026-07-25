@@ -673,8 +673,8 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
     (tylam "t0" $ tyapp (primitive DefLists.filter) (T.var "t0"))
     (T.forAll "t0" $ T.function (T.function (T.var "t0") T.boolean) (T.function (T.list $ T.var "t0") (T.list $ T.var "t0"))),
   checkTest "optionals cases" []
-    (primitive DefOptionals.cases)
-    (tylams ["t0", "t1"] $ tyapps (primitive DefOptionals.cases) [T.var "t0", T.var "t1"])
+    (primitive DefOptionals.match)
+    (tylams ["t0", "t1"] $ tyapps (primitive DefOptionals.match) [T.var "t0", T.var "t1"])
     (T.forAlls ["t0", "t1"] $
       T.function (T.optional $ T.var "t0") (T.function (T.var "t1") (T.function (T.function (T.var "t0") (T.var "t1")) (T.var "t1"))))]
 

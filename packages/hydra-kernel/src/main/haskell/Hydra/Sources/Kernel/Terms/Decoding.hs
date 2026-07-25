@@ -818,9 +818,9 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
       ("variantMap", Core.typeMap (Core.mapType (var "nameType") (var "variantFnType")),
         MetaTerms.tyapps (DeepCore.primitive DefMaps.fromList) [var "nameType", var "variantFnType"]
         @@@ (DeepCore.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
-      -- optionals.cases : forall x,y. optional<x> -> y -> (x->y) -> y;
+      -- optionals.match : forall x,y. optional<x> -> y -> (x->y) -> y;
       -- x=variantFn, y=either<DErr,unionType>. (#476)
-      MetaTerms.tyapps (DeepCore.primitive DefOptionals.cases)
+      MetaTerms.tyapps (DeepCore.primitive DefOptionals.match)
         [var "variantFnType", Core.typeEither $ Core.eitherType (var "decErrType") (var "unionType")]
         -- maps.lookup : forall k,v. k -> map<k,v> -> optional<v>; k=Name, v=variantFn. (#476)
         @@@ (MetaTerms.tyapps (DeepCore.primitive DefMaps.lookup) [var "nameType", var "variantFnType"]

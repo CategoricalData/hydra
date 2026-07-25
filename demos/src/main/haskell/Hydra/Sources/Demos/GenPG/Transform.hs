@@ -283,7 +283,7 @@ tableForEdge = define "tableForEdge" $
       (list [var "id", var "outId", var "inId"])
       (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
     Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
-      (Optionals.cases
+      (Optionals.match
         (Lists.head $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
@@ -302,7 +302,7 @@ tableForVertex = define "tableForVertex" $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
     "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
     Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
-      (Optionals.cases
+      (Optionals.match
         (Lists.head $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
@@ -505,7 +505,7 @@ parseTableLines = define "parseTableLines" $
         -- Build the table based on hasHeader flag
         Logic.ifElse (var "hasHeader")
           (-- With header: first row is header, rest are data
-            Optionals.cases
+            Optionals.match
               (Lists.uncons (var "rows"))
               (left $ string "empty rows: cannot parse header")
               (lambda "p" $ lets [
@@ -585,7 +585,7 @@ decodeCell = define "decodeCell" $
   "colType" ~> "mvalue" ~>
     "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
     "typ" <~ (project Tab._ColumnType Tab._ColumnType_type @@ var "colType") $
-    -- Lift the decoder function to a let binding before Optionals.cases
+    -- Lift the decoder function to a let binding before Optionals.match
     -- This avoids Python issues with match statements inside inline lambdas
     "decodeValue" <~ ("value" ~>
       "parseError" <~ (Strings.concat $ list [
@@ -601,7 +601,7 @@ decodeCell = define "decodeCell" $
             string "Unsupported literal type for column ",
             var "cname"]) [
             _LiteralType_boolean>>: constant $
-              Optionals.cases
+              Optionals.match
                 (Literals.parseBoolean $ var "value")
                 (left $ var "parseError")
                 ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed"),
@@ -610,12 +610,12 @@ decodeCell = define "decodeCell" $
                 string "Unsupported float type for column ",
                 var "cname"]) [
                 _FloatType_float32>>: constant $
-                  Optionals.cases
+                  Optionals.match
                     (Literals.readFloat32 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed"),
                 _FloatType_float64>>: constant $
-                  Optionals.cases
+                  Optionals.match
                     (Literals.readFloat64 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
@@ -625,12 +625,12 @@ decodeCell = define "decodeCell" $
                 string "Unsupported integer type for column ",
                 var "cname"]) [
                 _IntegerType_int32>>: constant $
-                  Optionals.cases
+                  Optionals.match
                     (Literals.readInt32 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed"),
                 _IntegerType_int64>>: constant $
-                  Optionals.cases
+                  Optionals.match
                     (Literals.readInt64 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")]
@@ -639,7 +639,7 @@ decodeCell = define "decodeCell" $
               right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
           @@ var "lt"]
       @@ var "typ") $
-    Optionals.cases
+    Optionals.match
       (var "mvalue")
       (right nothing)  -- No value - return Nothing
       (var "decodeValue")

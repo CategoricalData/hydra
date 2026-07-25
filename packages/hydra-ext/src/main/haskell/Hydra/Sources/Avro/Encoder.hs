@@ -272,7 +272,7 @@ encodeTypeInner = define "encodeTypeInner" $
                 (lambda "t" $
                   cases _Term (var "t") Nothing [
                     _Term_optional>>: lambda "ot" $
-                      Optionals.cases (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "inner" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "inner")])
+                      Optionals.match (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "inner" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "inner")])
                 (lambda "j" $
                   cases JM._Value (var "j") (Just (
                     Eithers.map (lambda "t" $ Core.termOptional (just (var "t")))
@@ -282,7 +282,7 @@ encodeTypeInner = define "encodeTypeInner" $
       _Type_wrap>>: lambda "inner" $
         encodeTypeInner @@ var "cx" @@ var "mName" @@ var "inner" @@ var "env",
       _Type_variable>>: lambda "name_" $
-        Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
+        Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
             right (pair
               (Coders.adapterWithTarget (var "existingAd") (inject Avro._Schema Avro._Schema_reference (localName @@ var "name_")))
               (var "env")))
@@ -292,7 +292,7 @@ encodeTypeWithEnv :: TypedTermDefinition (InferenceContext -> Name -> AvroEnv.En
 encodeTypeWithEnv = define "encodeTypeWithEnv" $
   doc "Encode with full environment threading. Returns the adapter and updated environment" $
   lambda "cx" $ lambda "name_" $ lambda "env" $
-    Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "type not found in type map: ") (Literals.printString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
+    Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "type not found in type map: ") (Literals.printString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
 
 enumAdapter :: TypedTermDefinition (InferenceContext -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 enumAdapter = define "enumAdapter" $
@@ -569,7 +569,7 @@ namedTypeAdapter = define "namedTypeAdapter" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0"
     $ lambda "mkNamedType" $ lambda "mkCoder" $ lets [
     "typeName">: Optionals.withDefault (typeToName @@ var "typ") (var "mName")] $
-    Optionals.cases (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Eithers.bind (foldFieldAdapters @@ var "cx" @@ var "fieldTypes" @@ var "env0") (lambda "faResult" $ lets [
+    Optionals.match (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Eithers.bind (foldFieldAdapters @@ var "cx" @@ var "fieldTypes" @@ var "env0") (lambda "faResult" $ lets [
         "fieldAdapters">: Pairs.first (var "faResult"),
         "env1">: Pairs.second (var "faResult"),
         "avroFields">: Lists.map (asTerm buildAvroField) (var "fieldAdapters"),
@@ -717,13 +717,13 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
               JM._Value_object>>: lambda "m" $ lets [
                 "mm">: (Maps.fromList (var "m") :: TypedTerm (M.Map String JM.Value)),
                 "findActive">: lambda "remaining" $
-                  Optionals.cases (Lists.uncons (var "remaining")) (left (Error.errorOther (Error.otherError (string "no non-null field in union record")))) (lambda "p" $ lets [
+                  Optionals.match (Lists.uncons (var "remaining")) (left (Error.errorOther (Error.otherError (string "no non-null field in union record")))) (lambda "p" $ lets [
                       "head_">: Pairs.first (var "p"),
                       "rest_">: Pairs.second (var "p"),
                       "fname">: Pairs.first (var "head_"),
                       "ad">: Pairs.second (var "head_"),
                       "mjv">: Maps.lookup (localName @@ var "fname") (var "mm" :: TypedTerm (M.Map String JM.Value))] $
-                      Optionals.cases (var "mjv") (var "findActive" @@ var "rest_") (lambda "jv" $
+                      Optionals.match (var "mjv") (var "findActive" @@ var "rest_") (lambda "jv" $
                           cases JM._Value (var "jv") (Just (
                             Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
                               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "jv"))) [

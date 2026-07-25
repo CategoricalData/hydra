@@ -185,17 +185,17 @@ constructEdgeCoder = define "constructEdgeCoder" $
           @@ var "fields")
           ("idAdapter" ~>
             -- Compute out/in id adapters from projection specs
-            Eithers.bind (Optionals.cases (var "mOutSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "out")))
-              ("outIdAdapter" ~> Eithers.bind (Optionals.cases (var "mInSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "in")))
+            Eithers.bind (Optionals.match (var "mOutSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "out")))
+              ("outIdAdapter" ~> Eithers.bind (Optionals.match (var "mInSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "in")))
                 ("inIdAdapter" ~>
                   -- Compute out/in vertex adapters from projection specs
-                  Eithers.bind (Optionals.cases (var "mOutSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
-                    ("outVertexAdapter" ~> Eithers.bind (Optionals.cases (var "mInSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
+                  Eithers.bind (Optionals.match (var "mOutSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
+                    ("outVertexAdapter" ~> Eithers.bind (Optionals.match (var "mInSpec") (right nothing) ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s")))
                       ("inVertexAdapter" ~> lets [
                         "vertexAdapters">: Optionals.givens (list [var "outVertexAdapter", var "inVertexAdapter"])] $
                         -- Compute out/in vertex labels from spec aliases or fall back to parentLabel
-                        Eithers.bind (Optionals.cases (var "mOutSpec") (right $ var "parentLabel") ("spec" ~> Optionals.cases (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no out-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
-                          ("outLabel" ~> Eithers.bind (Optionals.cases (var "mInSpec") (right $ var "parentLabel") ("spec" ~> Optionals.cases (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no in-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
+                        Eithers.bind (Optionals.match (var "mOutSpec") (right $ var "parentLabel") ("spec" ~> Optionals.match (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no out-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
+                          ("outLabel" ~> Eithers.bind (Optionals.match (var "mInSpec") (right $ var "parentLabel") ("spec" ~> Optionals.match (Pairs.second $ Pairs.second $ var "spec") (left $ Error.errorOther $ Error.otherError $ string "no in-vertex label") (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))))
                             ("inLabel" ~>
                               right (edgeCoder @@ var "cx" @@ var "g" @@ var "dir" @@ var "schema" @@ var "source" @@ var "eidType" @@ var "name" @@ var "label"
                                 @@ var "outLabel" @@ var "inLabel" @@ var "idAdapter" @@ var "outIdAdapter" @@ var "inIdAdapter" @@ var "propAdapters" @@ var "vertexAdapters")))))))))
@@ -249,11 +249,11 @@ edgeCoder = define "edgeCoder" $
           Eithers.bind (checkRecordName @@ var "cx" @@ var "tname" @@ (Core.recordTypeName $ var "rec"))
             ("_chk" ~> lets [
               "fieldsm">: Resolution.fieldMap @@ (Core.recordFields $ var "rec")] $
-              Eithers.bind (Optionals.cases (var "mIdAdapter") (right $ project PGM._Schema PGM._Schema_defaultEdgeId @@ var "schema") (selectEdgeId @@ var "cx" @@ var "fieldsm"))
+              Eithers.bind (Optionals.match (var "mIdAdapter") (right $ project PGM._Schema PGM._Schema_defaultEdgeId @@ var "schema") (selectEdgeId @@ var "cx" @@ var "fieldsm"))
                 ("edgeId" ~> Eithers.bind (encodeProperties @@ var "cx" @@ var "fieldsm" @@ var "propAdapters")
                   ("props" ~> lets [
                     "getVertexId">: "dirCheck" ~> "adapter" ~>
-                      Optionals.cases (Logic.ifElse (Equality.equal (var "dir") (var "dirCheck"))
+                      Optionals.match (Logic.ifElse (Equality.equal (var "dir") (var "dirCheck"))
                           nothing
                           (var "adapter")) (right $ project PGM._Schema PGM._Schema_defaultVertexId @@ var "schema") (selectVertexId @@ var "cx" @@ var "fieldsm")] $
                     Eithers.bind (var "getVertexId" @@ (inject PG._Direction PG._Direction_out unit) @@ var "outAdapter")
@@ -265,7 +265,7 @@ edgeCoder = define "edgeCoder" $
                               ("va" ~> lets [
                                 "fname">: Pairs.first $ var "va",
                                 "ad">: Pairs.second $ var "va"] $
-                                Optionals.cases (Maps.lookup (var "fname") (var "fieldsm" :: TypedTerm (M.Map Name Term))) (right nothing) ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
+                                Optionals.match (Maps.lookup (var "fname") (var "fieldsm" :: TypedTerm (M.Map Name Term))) (right nothing) ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
                                     (Coders.coderEncode (Coders.adapterCoder $ var "ad") @@ var "fterm")))
                               (var "vertexAdapters")))
                             ("deps" ~>
@@ -286,7 +286,7 @@ edgeIdAdapter = define "edgeIdAdapter" $
   doc "Create an edge id adapter" $
   "cx" ~> "g" ~> "schema" ~> "eidType" ~> "name" ~> "idKey" ~> "fields" ~>
     Eithers.bind (findIdProjectionSpec @@ var "cx" @@ false @@ var "name" @@ var "idKey" @@ var "fields")
-      ("mIdSpec" ~> Optionals.cases (var "mIdSpec") (right nothing) ("idSpec" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "eidType" @@ (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "idSpec" @@ string "id")))
+      ("mIdSpec" ~> Optionals.match (var "mIdSpec") (right nothing) ("idSpec" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "eidType" @@ (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "idSpec" @@ string "id")))
 
 -- | Construct an element adapter for a given type
 elementCoder :: TypedTermDefinition (Y.Maybe (PG.Direction, PG.VertexLabel) -> PGM.Schema Graph t v e -> Type -> t -> t -> InferenceContext -> Graph
@@ -294,8 +294,8 @@ elementCoder :: TypedTermDefinition (Y.Maybe (PG.Direction, PG.VertexLabel) -> P
 elementCoder = define "elementCoder" $
   doc "Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification" $
   "mparent" ~> "schema" ~> "source" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~> lets [
-    "dir">: Optionals.cases (var "mparent") (inject PG._Direction PG._Direction_both unit) (lambda "p" $ Pairs.first (var "p")),
-    "parentLabel">: Optionals.cases (var "mparent") (wrap PG._VertexLabel $ string "NOLABEL") (lambda "p" $ Pairs.second (var "p"))] $
+    "dir">: Optionals.match (var "mparent") (inject PG._Direction PG._Direction_both unit) (lambda "p" $ Pairs.first (var "p")),
+    "parentLabel">: Optionals.match (var "mparent") (wrap PG._VertexLabel $ string "NOLABEL") (lambda "p" $ Pairs.second (var "p"))] $
     cases _Type (Strip.deannotateType @@ var "source")
       (Just $ unexpectedE (var "cx") (string "record type") (string "other type")) [
       _Type_optional>>: "ot" ~>
@@ -385,7 +385,7 @@ encodeProperty = define "encodeProperty" $
       _Type_optional>>: constant true],
     "encodeValue">: "v" ~> Eithers.map (lambda "x" $ just (var "x"))
       (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ (Core.field (var "fname") (var "v")))] $
-    Optionals.cases
+    Optionals.match
       (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term)))
       -- Field not found in record
       (Logic.ifElse (var "isMaybe")
@@ -397,7 +397,7 @@ encodeProperty = define "encodeProperty" $
           -- Optional field: unwrap TermOptional
           (cases _Term (Strip.deannotateTerm @@ var "value") (Just $ var "encodeValue" @@ var "value") [
             _Term_optional>>: "ov" ~>
-              Optionals.cases (var "ov") (right nothing) (var "encodeValue")])
+              Optionals.match (var "ov") (right nothing) (var "encodeValue")])
           -- Required field: encode directly
           (var "encodeValue" @@ var "value"))
 
@@ -424,7 +424,7 @@ findAdjacenEdgeAdapters = define "findAdjacenEdgeAdapters" $
           PG._Direction_out>>: constant $ project PGM._AnnotationSchema PGM._AnnotationSchema_outEdgeLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
           PG._Direction_in>>: constant $ project PGM._AnnotationSchema PGM._AnnotationSchema_inEdgeLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema")]
           @@ var "dir"] $
-        Optionals.cases (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("a" ~> Eithers.bind (extractString @@ var "cx" @@ var "g" @@ var "a")
+        Optionals.match (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("a" ~> Eithers.bind (extractString @@ var "cx" @@ var "g" @@ var "a")
             ("labelStr" ~> Eithers.bind (elementCoder @@ (just (pair (var "dir") (var "parentLabel"))) @@ var "schema" @@ (Core.fieldTypeType $ var "field") @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g")
               ("elad" ~> right (just (tuple4 (var "dir") (var "field") (wrap PG._EdgeLabel $ var "labelStr") (var "elad")))))))
       (var "fields"))
@@ -436,12 +436,12 @@ findIdProjectionSpec = define "findIdProjectionSpec" $
   doc "Find an id projection spec for a field" $
   "cx" ~> "required" ~> "tname" ~> "idKey" ~> "fields" ~>
     Eithers.bind (findSingleFieldWithAnnotationKey @@ var "cx" @@ var "tname" @@ var "idKey" @@ var "fields")
-      ("mid" ~> Optionals.cases (var "mid") (Logic.ifElse (var "required")
+      ("mid" ~> Optionals.match (var "mid") (Logic.ifElse (var "required")
           (err (var "cx") (string "no " ++ (Core.unName $ var "idKey") ++ string " field"))
           (right nothing)) ("mi" ~> Eithers.map
           ("spec" ~> just (pair (var "mi") (pair (var "spec")
             (Optionals.map ("s" ~> Strings.toUpper (var "s")) nothing))))
-          (Optionals.cases (Annotations.getTypeAnnotation @@ var "idKey" @@ (Core.fieldTypeType $ var "mi")) (right (inject PGM._ValueSpec PGM._ValueSpec_value unit)) (TermsToElements.decodeValueSpec @@ var "cx" @@ Graph.emptyGraph))))
+          (Optionals.match (Annotations.getTypeAnnotation @@ var "idKey" @@ (Core.fieldTypeType $ var "mi")) (right (inject PGM._ValueSpec PGM._ValueSpec_value unit)) (TermsToElements.decodeValueSpec @@ var "cx" @@ Graph.emptyGraph))))
 
 -- | Find an incident vertex adapter for a projection spec
 findIncidentVertexAdapter :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema Graph t v e -> t -> t -> (FieldType, PGM.ValueSpec, Y.Maybe String)
@@ -458,7 +458,7 @@ findLabelString :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Nam
 findLabelString = define "findLabelString" $
   doc "Find a label string from annotations or the type name" $
   "cx" ~> "g" ~> "source" ~> "tname" ~> "labelKey" ~>
-    Optionals.cases (Annotations.getTypeAnnotation @@ var "labelKey" @@ var "source") (right $ Core.unName $ var "tname") (extractString @@ var "cx" @@ var "g")
+    Optionals.match (Annotations.getTypeAnnotation @@ var "labelKey" @@ var "source") (right $ Core.unName $ var "tname") (extractString @@ var "cx" @@ var "g")
 
 -- | Find a projection spec for a field
 findProjectionSpec :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Name -> Name -> [FieldType]
@@ -467,11 +467,11 @@ findProjectionSpec = define "findProjectionSpec" $
   doc "Find a projection spec for a field" $
   "cx" ~> "g" ~> "tname" ~> "key" ~> "aliasKey" ~> "fields" ~>
     Eithers.bind (findSingleFieldWithAnnotationKey @@ var "cx" @@ var "tname" @@ var "key" @@ var "fields")
-      ("mfield" ~> Optionals.cases (var "mfield") (right nothing) ("field" ~>
-          Optionals.cases (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field")) (left $ Error.errorOther $ Error.otherError $ string "findProjectionSpec: missing type annotation for key") ("annot" ~>
+      ("mfield" ~> Optionals.match (var "mfield") (right nothing) ("field" ~>
+          Optionals.match (Annotations.getTypeAnnotation @@ var "key" @@ (Core.fieldTypeType $ var "field")) (left $ Error.errorOther $ Error.otherError $ string "findProjectionSpec: missing type annotation for key") ("annot" ~>
               Eithers.bind (TermsToElements.decodeValueSpec @@ var "cx" @@ var "g" @@ var "annot")
                 ("spec" ~>
-                  Eithers.bind (Optionals.cases (Annotations.getTypeAnnotation @@ var "aliasKey" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("t" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "t")))
+                  Eithers.bind (Optionals.match (Annotations.getTypeAnnotation @@ var "aliasKey" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("t" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "t")))
                     ("alias" ~> right (just (pair (var "field") (pair (var "spec") (var "alias")))))))))
 
 -- | Find property specs for element fields
@@ -484,8 +484,8 @@ findPropertySpecs = define "findPropertySpecs" $
       ("field" ~> lets [
         "propKeyKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_propertyKey @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
         "propValueKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_propertyValue @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema")] $
-        Eithers.bind (Optionals.cases (Annotations.getTypeAnnotation @@ var "propKeyKey" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("a" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "a")))
-          ("alias" ~> Eithers.bind (Optionals.cases (Annotations.getTypeAnnotation @@ var "propValueKey" @@ (Core.fieldTypeType $ var "field")) (right (inject PGM._ValueSpec PGM._ValueSpec_value unit)) (TermsToElements.decodeValueSpec @@ var "cx" @@ var "g"))
+        Eithers.bind (Optionals.match (Annotations.getTypeAnnotation @@ var "propKeyKey" @@ (Core.fieldTypeType $ var "field")) (right nothing) ("a" ~> Eithers.map (lambda "x" $ just (var "x")) (extractString @@ var "cx" @@ var "g" @@ var "a")))
+          ("alias" ~> Eithers.bind (Optionals.match (Annotations.getTypeAnnotation @@ var "propValueKey" @@ (Core.fieldTypeType $ var "field")) (right (inject PGM._ValueSpec PGM._ValueSpec_value unit)) (TermsToElements.decodeValueSpec @@ var "cx" @@ var "g"))
             ("values" ~> right (pair (var "field") (pair (var "values") (var "alias"))))))
       (Lists.filter
         ("field" ~> lets [
@@ -601,7 +601,7 @@ selectEdgeId = define "selectEdgeId" $
   "cx" ~> "fields" ~> "ad" ~> lets [
     "fname">: Pairs.first $ var "ad",
     "adapter">: Pairs.second $ var "ad"] $
-    Optionals.cases (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "t")
+    Optionals.match (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "t")
 
 -- | Select a vertex id from record fields using an id adapter
 selectVertexId :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> (Name, Adapter Type t Term v e) -> Either Error v)
@@ -610,7 +610,7 @@ selectVertexId = define "selectVertexId" $
   "cx" ~> "fields" ~> "ad" ~> lets [
     "fname">: Pairs.first $ var "ad",
     "adapter">: Pairs.second $ var "ad"] $
-    Optionals.cases (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "t")
+    Optionals.match (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "t")
 
 -- | Traverse to a single term, failing if zero or multiple terms are found
 traverseToSingleTerm :: TypedTermDefinition (InferenceContext -> String -> (Term -> Either Error [Term]) -> Term -> Either Error Term)
@@ -622,7 +622,7 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
         Logic.ifElse (Lists.null $ var "terms")
           (err (var "cx") (var "desc" ++ string " did not resolve to a term"))
           (Logic.ifElse (Equality.equal (Lists.length $ var "terms") (int32 1))
-            (Optionals.cases (Lists.head $ var "terms") (err (var "cx") (var "desc" ++ string " resolved to multiple terms")) (reify right))
+            (Optionals.match (Lists.head $ var "terms") (err (var "cx") (var "desc" ++ string " resolved to multiple terms")) (reify right))
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
 
 unexpectedE :: TypedTerm InferenceContext -> TypedTerm String -> TypedTerm String -> TypedTerm (Either Error a)
@@ -667,7 +667,7 @@ vertexCoder = define "vertexCoder" $
                       "eaField">: Pairs.first $ Pairs.second $ var "ea",
                       "eaLabel">: Pairs.first $ Pairs.second $ Pairs.second $ var "ea",
                       "eaAdapter">: Pairs.second $ Pairs.second $ Pairs.second $ var "ea"] $
-                      Optionals.cases (Maps.lookup (Core.fieldTypeName $ var "eaField") (var "fmap")) (right (list ([] :: [TypedTerm (PG.ElementTree v)]))) ("fterm" ~> Eithers.map
+                      Optionals.match (Maps.lookup (Core.fieldTypeName $ var "eaField") (var "fmap")) (right (list ([] :: [TypedTerm (PG.ElementTree v)]))) ("fterm" ~> Eithers.map
                           ("tree" ~>
                             -- fixTree: inspect element tree self
                             match PG._Element Nothing [
@@ -730,4 +730,4 @@ vertexIdAdapter = define "vertexIdAdapter" $
   doc "Create a vertex id adapter" $
   "cx" ~> "g" ~> "schema" ~> "vidType" ~> "name" ~> "idKey" ~> "fields" ~>
     Eithers.bind (findIdProjectionSpec @@ var "cx" @@ true @@ var "name" @@ var "idKey" @@ var "fields")
-      ("mIdSpec" ~> Optionals.cases (var "mIdSpec") (left $ Error.errorOther $ Error.otherError $ string "vertexIdAdapter: no id projection spec") ("idSpec" ~> projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "idSpec" @@ string "id"))
+      ("mIdSpec" ~> Optionals.match (var "mIdSpec") (left $ Error.errorOther $ Error.otherError $ string "vertexIdAdapter: no id projection spec") ("idSpec" ~> projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "idSpec" @@ string "id"))

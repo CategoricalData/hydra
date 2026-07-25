@@ -114,7 +114,7 @@
           (t-lam "key"
             (t-lam "val"
               (t-lam "m"
-                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
+                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
                   (t-var "val"))
                   (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
                   (t-lam "v"
@@ -173,7 +173,7 @@
           (t-lam "cx"
             (t-lam "g"
               (t-lam "anns"
-                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.cases")
+                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
                   ;; scrutinee: maps.lookup(keyDescription, anns)
                   (t-app (t-app (t-prim "hydra.lib.maps.lookup")
                     (t-var "hydra.constants.keyDescription"))

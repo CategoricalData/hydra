@@ -230,7 +230,7 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
   doc "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name" $
   lambdas ["env", "lam"] $ lets [
     "paramName">: sanitizeVar @@ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")),
-    "binder">: Optionals.cases (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
+    "binder">: Optionals.match (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
         record C._TypeBinders [
           C._TypeBinders_names>>: list [coqName @@ var "paramName"],
           C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
@@ -407,7 +407,7 @@ encodeTerm = define "encodeTerm" $
           var "acc"])
         (coqTermQualid @@ string "nil")
         (Maps.toList (var "mt" :: TypedTerm (M.Map Term Term))),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
     _Term_pair>>: "p" ~>
       coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
         encodeTerm @@ var "env" @@ Pairs.first (var "p"),
@@ -457,7 +457,7 @@ encodeTerm = define "encodeTerm" $
       -- `list (Name * Term)`), so a blind cast would produce the wrong type.
       cases _Term (var "body")
         (Just (var "encoded")) [
-        _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
+        _Term_optional>>: "mt" ~> Optionals.match (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
             @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
               @@ list [encodeType @@ var "env" @@ var "tyArg"]))) (constant $ var "encoded"),
         -- Empty list: annotate with `list <tyArg>` when the element type is
@@ -689,20 +689,20 @@ encodeUnionElim = define "encodeUnionElim" $
               C._Pattern10_Qualid_qualid>>: coqQualid @@ string "_",
               C._Pattern10_Qualid_patterns>>: list ([] :: [TypedTerm C.Pattern1])]]],
       C._Equation_term>>: var "body"],
-    "defaultEqs">: Optionals.cases
+    "defaultEqs">: Optionals.match
       (var "csDefault")
       -- No explicit default: if the match is non-exhaustive, synthesize one as
       -- `| _ => hydra_unreachable` (replacing the old addPartialMatchCatchAll pass).
       -- If the match is exhaustive (or we lack the count), emit no default.
       (Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Ordering.gte (var "caseCount") (var "n")))
+        (Optionals.match (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Ordering.gte (var "caseCount") (var "n")))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
         (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
       (lambda "defT" $ Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Ordering.gte (var "caseCount") (var "n")))
+        (Optionals.match (var "expectedCount") (boolean False) (lambda "n" $ Ordering.gte (var "caseCount") (var "n")))
         (list ([] :: [TypedTerm C.Equation]))
         (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")])),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
@@ -762,7 +762,7 @@ extractLambdaBinders = define "extractLambdaBinders" $
     _Term_lambda>>: "lam" ~> lets [
       "param">: Core.lambdaParameter $ var "lam",
       "mDomain">: Core.lambdaDomain $ var "lam",
-      "binder">: Optionals.cases (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
+      "binder">: Optionals.match (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
           record C._TypeBinders [
             C._TypeBinders_names>>: list [coqName @@ (unwrap _Name @@ var "param")],
             C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
@@ -772,7 +772,7 @@ extractLambdaBinders = define "extractLambdaBinders" $
 isUnitDomain :: TypedTermDefinition (Maybe Type -> Bool)
 isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
-  lambda "mty" $ Optionals.cases (var "mty") (boolean False) (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
+  lambda "mty" $ Optionals.match (var "mty") (boolean False) (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
       _Type_unit>>: constant true,
       _Type_record>>: "fs" ~> Lists.null (var "fs"),
       _Type_annotated>>: "at" ~>
@@ -972,7 +972,7 @@ termReferencesVar = define "termReferencesVar" $
       (listAny
         (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
     _Term_let>>: "lt" ~> Logic.or
       (listAny
         (lambda "b" $ termReferencesVar @@ var "name" @@ (Core.bindingTerm $ var "b"))
@@ -980,7 +980,7 @@ termReferencesVar = define "termReferencesVar" $
       (termReferencesVar @@ var "name" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~>
       listAny (lambda "el" $ termReferencesVar @@ var "name" @@ var "el") (var "xs"),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
     _Term_pair>>: "p" ~> Logic.or
       (termReferencesVar @@ var "name" @@ Pairs.first (var "p"))
       (termReferencesVar @@ var "name" @@ Pairs.second (var "p")),

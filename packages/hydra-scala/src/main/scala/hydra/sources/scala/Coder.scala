@@ -501,7 +501,7 @@ object Coder:
         Phantoms.right(CoreDsl.functionTypeDomain(v("ft")))))))
 
   private val findDomainOptCases = lambda("r",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       v("r"),
       errorLeft("expected a typed term"),
       findDomainTypeCases))
@@ -543,7 +543,7 @@ object Coder:
       field("forall", findSdomForallArm)))
 
   private val findSdomOptCases = lambda("mtyp",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       v("mtyp"),
       Phantoms.right(nothing),
       findSdomTypeCases))
@@ -909,7 +909,7 @@ object Coder:
         applyP(localUtils("scalaEscapeName"),
           applyP("hydra.names.localNameOf", v("name")))),
       field("typ'",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           applyP("hydra.lib.optionals.map",
             v("hydra.scoping.termSignatureToTypeScheme"),
             PackagingDsl.termDefinitionSignature(v("td"))),
@@ -1142,18 +1142,18 @@ object Coder:
           CoreDsl.unName(CoreDsl.bindingName(v("b"))))),
       field("bterm", CoreDsl.bindingTerm(v("b"))),
       field("mts",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           CoreDsl.bindingTypeScheme(v("b")),
           applyP("hydra.lib.maps.lookup",
             CoreDsl.bindingName(v("b")),
             GraphDsl.graphBoundTypes(v("g"))),
           lambda("ts", just(v("ts"))))),
       field("isFn",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           v("mts"),
           bool(false),
           encodeLetBindingIsFnTsArm))),
-      applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lib.optionals.match",
         v("mts"),
         encodeLetBindingNoTsBranch,
         encodeLetBindingTsBranch)))))))
@@ -1389,7 +1389,7 @@ object Coder:
       field("lamParam", CoreDsl.lambdaParameter(v("lam"))),
       field("lamBody", CoreDsl.lambdaBody(v("lam"))),
       field("domIsUnit",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           CoreDsl.lambdaDomain(v("lam")),
           Phantoms.bool(false),
           lambda("dom",
@@ -1420,7 +1420,7 @@ object Coder:
           int32(0)))))
 
   private val encodeCaseIsUnitValue =
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       applyP("hydra.lib.maps.lookup", v("fname"), v("ftypes")),
       encodeCaseIsUnitFromTerm,
       lambda("dom", encodeCaseIsUnitFromType))
@@ -1431,7 +1431,7 @@ object Coder:
       applyP("hydra.lib.lists.last",
         applyP("hydra.lib.strings.splitOn",
           string("."),
-          applyP("hydra.lib.optionals.cases",
+          applyP("hydra.lib.optionals.match",
             v("sn"),
             string("x"),
             lambda("n", CoreDsl.unName(v("n")))))))
@@ -1459,7 +1459,7 @@ object Coder:
       applyP("hydra.strip.deannotateAndDetypeTerm", v("fterm")),
       Phantoms.bool(true),
       field("lambda", lambda("lam",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           CoreDsl.lambdaDomain(v("lam")),
           Phantoms.bool(true),
           lambda("dom",
@@ -1539,7 +1539,7 @@ object Coder:
 
   private val encodeFunctionSbodySdomBinder = lambda("sbody",
     applyP("hydra.lib.eithers.bind",
-      applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lib.optionals.match",
         v("mdom"),
         applyP(local("findSdom"), v("cx"), v("g"), v("meta")),
         lambda("dom",
@@ -1576,7 +1576,7 @@ object Coder:
             v("sdom")))))
 
   private val encodeFunctionUnwrapArm = lambda("name",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       v("arg"),
       encodeFunctionUnwrapNoArg,
       lambda("a",
@@ -1617,7 +1617,7 @@ object Coder:
           CoreDsl.unName(CoreDsl.projectionFieldName(v("proj"))))),
       field("typeName", CoreDsl.projectionTypeName(v("proj"))),
       field("pv", string("x"))),
-      applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lib.optionals.match",
         v("arg"),
         encodeFunctionProjectUnapplied,
         encodeFunctionProjectApplied)))
@@ -1632,7 +1632,7 @@ object Coder:
 
   private val encodeFunctionCasesAddDefaultThen = lambda("fieldCases",
     applyP("hydra.lib.eithers.bind",
-      applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lib.optionals.match",
         v("dflt"),
         Phantoms.right(v("fieldCases")),
         lambda("dfltTerm",
@@ -1646,7 +1646,7 @@ object Coder:
                     inject("hydra.scala.syntax.Pat", "wildcard", Phantoms.unit))(
                     nothing)(v("sdflt"))))))))),
       lambda("scases",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           v("arg"),
           applyP("hydra.lib.eithers.bind",
             applyP(local("findSdom"), v("cx"), v("g"), v("meta")),
@@ -1838,7 +1838,7 @@ object Coder:
                 list(v("sf"), v("ss")))))))))
 
   private val encodeTermOptionalArm = lambda("m",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       v("m"),
       Phantoms.right(applyP(localUtils("sname"), string("None"))),
       lambda("t",
@@ -1927,7 +1927,7 @@ object Coder:
             v("cx"), v("g"),
             CoreDsl.typeVariable(v("sn")))))),
       applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           applyP("hydra.lib.maps.lookup", v("fn"), v("unionFtypes")),
           casesWithDefault("hydra.core.Term",
             applyP("hydra.strip.deannotateAndDetypeTerm", v("ft")),
@@ -2268,7 +2268,7 @@ object Coder:
           field("vv", applyP("hydra.lib.pairs.second", v("p")))),
           applyP("hydra.lib.maps.alter",
             lambda("mv",
-              applyP("hydra.lib.optionals.cases", v("mv"),
+              applyP("hydra.lib.optionals.match", v("mv"),
                 just(applyP("hydra.lib.lists.singleton", v("vv"))),
                 lambda("vs", just(applyP("hydra.lib.lists.concat2", v("vs"), applyP("hydra.lib.lists.singleton", v("vv"))))))),
             v("k"), v("m"))))),
@@ -2385,9 +2385,9 @@ object Coder:
       field("directInputVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.map", lambda("p", applyP("hydra.lib.pairs.first", v("p"))), v("directPairs")))),
       field("codVar", casesWithDefault("hydra.core.Type", applyP("hydra.strip.deannotateType", v("cod")), nothing[Any], field("variable", lambda("vv", just(v("vv")))))),
       field("directRefSubst", applyP(local("directRefSubstitution"), v("directInputVars"), v("codVar"), v("groupedDirect"))),
-      field("codSubst", applyP("hydra.lib.optionals.cases", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.maps.member", v("cv"), v("selfRefSubst")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.cases", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.equality.equal", v("cv"), v("refVar")), v("hydra.lib.maps.empty"), applyP("hydra.lib.maps.singleton", v("cv"), v("refVar"))))))))),
+      field("codSubst", applyP("hydra.lib.optionals.match", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.maps.member", v("cv"), v("selfRefSubst")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.match", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.equality.equal", v("cv"), v("refVar")), v("hydra.lib.maps.empty"), applyP("hydra.lib.maps.singleton", v("cv"), v("refVar"))))))))),
       field("domVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP("hydra.lib.sets.toList", applyP(local("collectTypeVars"), v("d"))))))),
-      field("danglingSubst", applyP("hydra.lib.optionals.cases", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.sets.member", v("cv"), v("domVars")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.cases", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.maps.singleton", v("cv"), inject("hydra.core.Type", "variable", v("refVar")))))))))),
+      field("danglingSubst", applyP("hydra.lib.optionals.match", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.sets.member", v("cv"), v("domVars")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.match", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.maps.singleton", v("cv"), inject("hydra.core.Type", "variable", v("refVar")))))))))),
       applyP("hydra.lib.maps.union", applyP("hydra.lib.maps.union", applyP("hydra.lib.maps.union", applyP(local("nameMapToTypeMap"), v("selfRefSubst")), applyP(local("nameMapToTypeMap"), v("codSubst"))), v("danglingSubst")), applyP(local("nameMapToTypeMap"), v("directRefSubst")))))))
 
   lazy val detectAccumulatorUnificationDef: Definition =
@@ -2398,7 +2398,7 @@ object Coder:
       applyP("hydra.strip.deannotateType", v("t")),
       v("t"),
       field("variable", lambda("vv",
-        applyP("hydra.lib.optionals.cases", applyP("hydra.lib.maps.lookup", v("vv"), v("subst")), v("t"), lambda("rep", v("rep"))))),
+        applyP("hydra.lib.optionals.match", applyP("hydra.lib.maps.lookup", v("vv"), v("subst")), v("t"), lambda("rep", v("rep"))))),
       field("function", lambda("ft",
         inject("hydra.core.Type", "function",
           Phantoms.record("hydra.core.FunctionType",
@@ -2450,11 +2450,11 @@ object Coder:
   // here: this arm doesn't have the callee's applied value arguments in scope — see #589 plan
   // doc for the follow-up if the scheme-based half alone proves insufficient.)
   private val correctTypeAppsBody = lambda("name", lambda("fallbackTypeApps", lambda("g",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       applyP("hydra.lexical.lookupBinding", v("g"), v("name")),
       Phantoms.right(v("fallbackTypeApps")),
       lambda("el",
-        applyP("hydra.lib.optionals.cases",
+        applyP("hydra.lib.optionals.match",
           CoreDsl.bindingTypeScheme(v("el")),
           Phantoms.right(v("fallbackTypeApps")),
           lambda("ts",
@@ -2509,7 +2509,7 @@ object Coder:
             lambda("targ", applyP(local("encodeType"), v("cx"), v("g"), v("targ"))),
             v("correctedTypeArgs")),
           lambda("stypeArgs",
-            applyP("hydra.lib.optionals.cases",
+            applyP("hydra.lib.optionals.match",
               applyP("hydra.lib.maps.lookup", v("pname"),
                 GraphDsl.graphPrimitives(v("g"))),
               applyP("hydra.lib.eithers.bind",

@@ -279,7 +279,7 @@ evalPath :: TypedTermDefinition (InferenceContext -> [String] -> Term -> Either 
 evalPath = define "evalPath" $
   doc "Evaluate a path (list of steps) on a term, returning all resulting terms" $
   "cx" ~> "path" ~> "term" ~>
-    Optionals.cases (Lists.uncons $ var "path") (right (list [var "term"])) (lambda "p" $
+    Optionals.match (Lists.uncons $ var "path") (right (list [var "term"])) (lambda "p" $
         Eithers.bind (evalStep @@ var "cx" @@ Pairs.first (var "p") @@ var "term")
           ("results" ~> Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
             (Eithers.mapList (evalPath @@ var "cx" @@ Pairs.second (var "p")) (var "results"))))
@@ -296,9 +296,9 @@ evalStep = define "evalStep" $
         _Term_list>>: "terms" ~>
           Eithers.map (lambda "xs" $ Lists.concat (var "xs")) (Eithers.mapList (evalStep @@ var "cx" @@ var "step") (var "terms")),
         _Term_optional>>: "mt" ~>
-          Optionals.cases (var "mt") (right (list ([] :: [TypedTerm Term]))) ("t" ~> evalStep @@ var "cx" @@ var "step" @@ var "t"),
+          Optionals.match (var "mt") (right (list ([] :: [TypedTerm Term]))) ("t" ~> evalStep @@ var "cx" @@ var "step" @@ var "t"),
         _Term_record>>: "rec" ~>
-          Optionals.cases (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))) (left $ Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record") ("t" ~> right (list [var "t"])),
+          Optionals.match (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))) (left $ Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record") ("t" ~> right (list [var "t"])),
         _Term_inject>>: "inj" ~>
           Logic.ifElse (Equality.equal (Core.unName $ Core.fieldName $ Core.injectionField $ var "inj") (var "step"))
             (evalStep @@ var "cx" @@ var "step" @@ (Core.fieldTerm $ Core.injectionField $ var "inj"))
@@ -455,7 +455,7 @@ readField :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> Name ->
 readField = define "readField" $
   doc "Read a field from a map of fields by name" $
   "cx" ~> "fields" ~> "fname" ~> "fun" ~>
-    Optionals.cases (Maps.lookup (var "fname") ((var "fields") :: TypedTerm (M.Map Name Term))) (left $ Error.errorOther $ Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "fun")
+    Optionals.match (Maps.lookup (var "fname") ((var "fields") :: TypedTerm (M.Map Name Term))) (left $ Error.errorOther $ Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "fun")
 
 -- | Read an injection (union value) from a term
 readInjection :: TypedTermDefinition (InferenceContext -> Graph -> [(Name, Term -> Either Error x)] -> Term -> Either Error x)
@@ -465,11 +465,11 @@ readInjection = define "readInjection" $
     Eithers.bind ((ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "encoded") :: TypedTerm (Either Error (M.Map Name Term)))
       ("mp" ~> lets [
         "entries">: Maps.toList ((var "mp") :: TypedTerm (M.Map Name Term))] $
-        Optionals.cases (Lists.head $ var "entries") (left $ Error.errorOther $ Error.otherError $ string "empty injection") (lambda "f" $ lets [
+        Optionals.match (Lists.head $ var "entries") (left $ Error.errorOther $ Error.otherError $ string "empty injection") (lambda "f" $ lets [
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
             "matching">: Lists.filter ("c" ~> Equality.equal (Pairs.first $ var "c") (var "key")) (var "cases")] $
-            Optionals.cases (Lists.head $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ lets ["handler">: Pairs.second $ var "m"] $ var "handler" @@ var "val")))
+            Optionals.match (Lists.head $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ lets ["handler">: Pairs.second $ var "m"] $ var "handler" @@ var "val")))
 
 -- | Read a record from a term as a map of field names to values
 readRecord :: TypedTermDefinition (InferenceContext -> Graph -> (M.Map Name Term -> Either Error x) -> Term -> Either Error x)
@@ -489,7 +489,7 @@ requireUnique = define "requireUnique" $
         Logic.ifElse (Lists.null $ var "results")
           (left $ Error.errorOther $ Error.otherError $ string "No value found: " ++ var "context")
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
-            (Optionals.cases (Lists.head $ var "results") (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (reify right))
+            (Optionals.match (Lists.head $ var "results") (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (reify right))
             (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
@@ -499,7 +499,7 @@ termToElementsAdapter = define "termToElementsAdapter" $
   doc "Create an adapter that maps terms to property graph elements using a mapping specification" $
   "cx" ~> "g" ~> "schema" ~> "typ" ~> lets [
     "key_elements">: Core.name (string "elements")] $
-    Optionals.cases (Annotations.getTypeAnnotation @@ var "key_elements" @@ var "typ") (right $ Coders.adapter false (var "typ") (list ([] :: [TypedTerm PG.Label]))
+    Optionals.match (Annotations.getTypeAnnotation @@ var "key_elements" @@ var "typ") (right $ Coders.adapter false (var "typ") (list ([] :: [TypedTerm PG.Label]))
         (Coders.coder
           ("_t" ~> right (list ([] :: [TypedTerm (PG.Element ())])))
           ("_els" ~> left (Error.errorOther $ Error.otherError $ string "no corresponding element type")))) ("term" ~>
@@ -532,4 +532,4 @@ termToString = define "termToString" $
             cases _FloatValue (var "f") (Just $ PrintCore.term @@ var "term") [
               _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
       _Term_optional>>: "mt" ~>
-        Optionals.cases (var "mt") (string "none") ("t" ~> termToString @@ var "t")]
+        Optionals.match (var "mt") (string "none") ("t" ~> termToString @@ var "t")]

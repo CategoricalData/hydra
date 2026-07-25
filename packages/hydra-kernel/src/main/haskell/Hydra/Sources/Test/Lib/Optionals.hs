@@ -85,13 +85,13 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.lib.optionals primitives" [
       optionalsApply,
       optionalsBind,
-      optionalsCases,
       optionalsCompose,
       optionalsGivens,
       optionalsIsGiven,
       optionalsIsNone,
       optionalsMap,
       optionalsMapOptional,
+      optionalsMatch,
       optionalsPure,
       optionalsToList,
       optionalsWithDefault]
@@ -114,15 +114,6 @@ optionalsBind = subgroup "bind" [
     test name x expected = evalPair name showMaybeInt
       (Optionals.bind x (Phantoms.lambda "x" $ Phantoms.just (Math.mul (Phantoms.var "x") (Phantoms.int32 2))))
       expected
-
-optionalsCases :: TypedTerm TestGroup
-optionalsCases = subgroup "cases" [
-  test "just applies function" (justInt 5) 0 10,
-  test "nothing returns default" nothingInt 99 99]
-  where
-    test name opt def expected = evalPair name showInt32
-      (Optionals.cases opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
-      (Phantoms.int32 expected)
 
 optionalsCompose :: TypedTerm TestGroup
 optionalsCompose = subgroup "compose" [
@@ -201,6 +192,15 @@ optionalsMapOptional = subgroup "mapOptional" [
     test name xs expected = evalPair name showIntList
       (Optionals.mapOptional filterFn (Phantoms.list $ Phantoms.int32 <$> xs))
       (Phantoms.list $ Phantoms.int32 <$> expected)
+
+optionalsMatch :: TypedTerm TestGroup
+optionalsMatch = subgroup "match" [
+  test "just applies function" (justInt 5) 0 10,
+  test "nothing returns default" nothingInt 99 99]
+  where
+    test name opt def expected = evalPair name showInt32
+      (Optionals.match opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+      (Phantoms.int32 expected)
 
 optionalsPure :: TypedTerm TestGroup
 optionalsPure = subgroup "pure" [

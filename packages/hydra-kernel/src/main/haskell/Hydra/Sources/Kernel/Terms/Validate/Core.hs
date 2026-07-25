@@ -137,7 +137,7 @@ appendFinding :: TypedTermDefinition (
 appendFinding = define "appendFinding" $
   doc "Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -167,7 +167,7 @@ appendFindingType :: TypedTermDefinition (
 appendFindingType = define "appendFindingType" $
   doc "Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -211,7 +211,7 @@ checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
   "fields" ~> "mkError" ~>
   "names" <~ Lists.map (reify Core.fieldTypeName) (var "fields") $
   "dup" <~ findDuplicateFieldType @@ var "names" $
-  Optionals.cases (var "dup")
+  Optionals.match (var "dup")
     noTypeError
     ("name" ~> var "mkError" @@ var "name")
 
@@ -251,7 +251,7 @@ checkShadowing = define "checkShadowing" $
   -- Find the first name that is already bound
   "result" <~ Lists.foldl
     ("acc" ~> "name" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         (Logic.ifElse
           (Logic.or
             (Optionals.isGiven $ Maps.lookup (var "name") (Graph.graphBoundTerms $ var "cx"))
@@ -454,7 +454,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTypeVariableInBindingType
           (Logic.ifElse (var "typed")
             (firstError @@ (Lists.map
-              ("b" ~> Optionals.cases (Core.bindingTypeScheme $ var "b")
+              ("b" ~> Optionals.match (Core.bindingTypeScheme $ var "b")
                 noError
                 ("ts" ~> checkUndefinedTypeVariablesInTypeScheme
                   @@ var "path" @@ var "cx" @@ var "ts"
@@ -536,7 +536,7 @@ checkTerm = define "checkTerm" $
         -- T8. UndefinedTypeVariableInLambdaDomainError (typed mode only)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTypeVariableInLambdaDomain
           (Logic.ifElse (var "typed")
-            (Optionals.cases (Core.lambdaDomain $ var "lam")
+            (Optionals.match (Core.lambdaDomain $ var "lam")
               noError
               ("dom" ~> checkUndefinedTypeVariablesInType
                 @@ var "path" @@ var "cx" @@ var "dom"
@@ -640,7 +640,7 @@ checkTerm = define "checkTerm" $
         -- does not resolve to a union (a different validator's concern).
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_missingCaseBranches
           (Logic.ifElse (Optionals.isNone $ var "csDefault")
-            (Optionals.cases (var "unionFields")
+            (Optionals.match (var "unionFields")
               noError
               ("fields" ~>
                 "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
@@ -656,12 +656,12 @@ checkTerm = define "checkTerm" $
         -- T24. UnknownCaseAlternativeError: an alternative naming a variant that
         -- does not exist in the union. Checked regardless of a default branch.
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unknownCaseAlternative
-          (Optionals.cases (var "unionFields")
+          (Optionals.match (var "unionFields")
             noError
             ("fields" ~>
               "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
               "unknown" <~ (Sets.difference (var "altNames") (var "variantNames") :: TypedTerm (S.Set Name)) $
-              Optionals.cases (Lists.head $ Sets.toList (var "unknown" :: TypedTerm (S.Set Name)))
+              Optionals.match (Lists.head $ Sets.toList (var "unknown" :: TypedTerm (S.Set Name)))
                 noError
                 ("firstUnknown" ~> mkJust $ inject _InvalidTermError _InvalidTermError_unknownCaseAlternative $
                   record _UnknownCaseAlternativeError [
@@ -799,7 +799,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
     (Graph.graphTypeVariables $ var "cx")
     (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
   "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
-  Optionals.cases (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  Optionals.match (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
@@ -814,7 +814,7 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
     (Graph.graphTypeVariables $ var "cx")
     (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") :: TypedTerm (S.Set Name)) $
   "undefined" <~ (Sets.difference (var "freeVars") (var "resolvedNames") :: TypedTerm (S.Set Name)) $
-  Optionals.cases (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  Optionals.match (Lists.head $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================
 -- Type validation
@@ -916,7 +916,7 @@ findDuplicate = define "findDuplicate" $
     ("acc" ~> "name" ~>
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "dup")
+      Optionals.match (var "dup")
         (Logic.ifElse (Sets.member (var "name" :: TypedTerm Name) (var "seen"))
           (pair (var "seen") (just $ var "name"))
           (pair (Sets.insert (var "name" :: TypedTerm Name) (var "seen")) nothing))
@@ -936,7 +936,7 @@ findDuplicateFieldType = define "findDuplicateFieldType" $
     ("acc" ~> "name" ~>
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "dup")
+      Optionals.match (var "dup")
         (Logic.ifElse (Sets.member (var "name" :: TypedTerm Name) (var "seen"))
           (pair (var "seen") (just $ var "name"))
           (pair (Sets.insert (var "name" :: TypedTerm Name) (var "seen")) nothing))
@@ -951,7 +951,7 @@ firstError = define "firstError" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         (var "check")
         (constant $ var "acc"))
     noError
@@ -965,7 +965,7 @@ firstFinding = define "firstFinding" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         (var "check")
         (constant $ var "acc"))
     nothing
@@ -978,7 +978,7 @@ firstFindingType = define "firstFindingType" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         (var "check")
         (constant $ var "acc"))
     nothing
@@ -991,7 +991,7 @@ firstTypeError = define "firstTypeError" $
   "checks" ~>
   Lists.foldl
     ("acc" ~> "check" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         (var "check")
         (constant $ var "acc"))
     noTypeError
@@ -1152,8 +1152,8 @@ resolveUnionFields = define "resolveUnionFields" $
     cases _Type (var "stripped") (Just nothing) [
       _Type_union>>: "fields" ~> just (var "fields")]) $
   -- Look up in schema types first, then fall back to bound types
-  Optionals.cases (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
-    (Optionals.cases (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
+  Optionals.match (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
+    (Optionals.match (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
       nothing
       (var "toFields"))
     (var "toFields")
@@ -1427,7 +1427,7 @@ validateTypeNode = define "validateTypeNode" $
         -- adding a second variant is a non-breaking change).
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_singleVariantUnion
           (Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
-            (Optionals.cases (Lists.head $ var "fields") noTypeError ("singleField" ~>
+            (Optionals.match (Lists.head $ var "fields") noTypeError ("singleField" ~>
                 mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
                   record _SingleVariantUnionError [
                     _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),

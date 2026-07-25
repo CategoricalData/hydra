@@ -33,9 +33,9 @@
           (list :none)
           (funcall f (maybe-value m))))))
 
-;; cases :: Maybe a -> b -> (a -> b) -> b
+;; match :: Maybe a -> b -> (a -> b) -> b
 ;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_overlay_emacs_lisp_lib_optionals_cases
+(defvar hydra_overlay_emacs_lisp_lib_optionals_match
   (lambda (m)
     (lambda (def)
       (lambda (f)
