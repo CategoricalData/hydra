@@ -152,7 +152,7 @@ encodeLiteral :: TypedTermDefinition (Literal -> Either String Value)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal to a JSON value" $
   "lit" ~> cases _Literal (var "lit") Nothing [
-    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
+    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToBase64 $ var "b",
     _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
     _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
     _Literal_float>>: "f" ~> encodeFloat @@ var "f",

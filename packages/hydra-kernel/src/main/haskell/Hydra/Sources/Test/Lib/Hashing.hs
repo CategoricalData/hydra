@@ -47,7 +47,7 @@ allTests = definitionInModule module_ "allTests" $
       hashingSha256,
       hashingSha256Hex]
 
--- sha256 : binary -> binary. The raw digest is projected to a string via literals.binaryToString
+-- sha256 : binary -> binary. The raw digest is projected to a string via literals.binaryToBase64
 -- (base64) and compared against the known base64 of the digest. Comparing against a base64 STRING
 -- (rather than a binary literal) keeps the expected value host-portable: a binary literal of the
 -- 32 raw digest bytes would need every host to emit high bytes (128..255) correctly, which the Java
@@ -60,7 +60,7 @@ hashingSha256 = subgroup "sha256" [
       "ungWv48Bz+pBQUDeXa4iI7ADYaOWF3qctBD/YfIAFa0="]
   where
     test name input expected = stringEvalPair name
-      (retype (primitive DefLiterals.binaryToString @@ (primitive DefHashing.sha256 @@ bytes input)))
+      (retype (primitive DefLiterals.binaryToBase64 @@ (primitive DefHashing.sha256 @@ bytes input)))
       (string expected)
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t

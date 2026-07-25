@@ -765,7 +765,7 @@
                                                                 "typeName": "hydra.pg.graphson.syntax.Value",
                                                                 "field": {
                                                                   "name": "binary",
-                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}},
+                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
                                           {

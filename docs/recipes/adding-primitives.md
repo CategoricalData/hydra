@@ -854,7 +854,7 @@ for the matching "untyped bindings" / stale-JSON failure mode see
    The symptom of getting this wrong is not a compile error but a silently empty
    or wrong result at runtime (e.g. a file write that produces no bytes). Confirm
    the representation by reading a generated test that passes a `binary` literal,
-   or that host's `hydra.lib.literals` runtime (`binaryToBytes`/`stringToBinary`).
+   or that host's `hydra.lib.literals` runtime (`binaryToBytes`/`base64ToBinary`).
    The registered *type scheme* still uses the abstract kernel `binary` type; only
    the native impl's parameter/return type changes.
 

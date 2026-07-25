@@ -13,7 +13,7 @@
           hydra_lib_literals_bigint_to_uint16
           hydra_lib_literals_bigint_to_uint32
           hydra_lib_literals_bigint_to_uint64
-          hydra_lib_literals_binary_to_string
+          hydra_lib_literals_binary_to_base64
           hydra_lib_literals_decimal_to_bigint
           hydra_lib_literals_decimal_to_float32
           hydra_lib_literals_decimal_to_float64
@@ -52,7 +52,7 @@
           hydra_lib_literals_show_uint16
           hydra_lib_literals_show_uint32
           hydra_lib_literals_show_uint64
-          hydra_lib_literals_string_to_binary
+          hydra_lib_literals_base64_to_binary
           hydra_lib_literals_uint
           hydra_lib_literals_uint8_to_bigint
           hydra_lib_literals_uint16_to_bigint
@@ -134,8 +134,8 @@
       (lambda (x)
         x))
 
-    ;; binary_to_string :: ByteString -> String (base64 encoding)
-    (define hydra_lib_literals_binary_to_string
+    ;; binary_to_base64 :: ByteString -> String (base64 encoding)
+    (define hydra_lib_literals_binary_to_base64
       (let ((b64-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
         (lambda (bv)
           (let* ((bytes (cond
@@ -518,8 +518,8 @@
       (lambda (x)
         (number->string x)))
 
-    ;; string_to_binary :: String -> [Int8] (base64 decode)
-    (define hydra_lib_literals_string_to_binary
+    ;; base64_to_binary :: String -> [Int8] (base64 decode)
+    (define hydra_lib_literals_base64_to_binary
       (let ((b64-vals (let ((tbl (make-vector 128 -1)))
               (let loop ((i 0) (chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
                 (when (< i (string-length chars))

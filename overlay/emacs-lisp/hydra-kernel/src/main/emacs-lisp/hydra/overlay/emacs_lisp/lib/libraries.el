@@ -695,7 +695,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_literals_bigint_to_uint32)     (prim1 (prim-name hydra_lib_literals_bigint_to_uint32)     hydra_overlay_emacs_lisp_lib_literals_bigint_to_uint32     nil bi u32))
         (cons (prim-name hydra_lib_literals_bigint_to_uint64)     (prim1 (prim-name hydra_lib_literals_bigint_to_uint64)     hydra_overlay_emacs_lisp_lib_literals_bigint_to_uint64     nil bi u64))
         (cons (prim-name hydra_lib_literals_binary_to_bytes)      (prim1 (prim-name hydra_lib_literals_binary_to_bytes)      hydra_overlay_emacs_lisp_lib_literals_binary_to_bytes      nil bin (tc-list i32)))
-        (cons (prim-name hydra_lib_literals_binary_to_string)     (prim1 (prim-name hydra_lib_literals_binary_to_string)     hydra_overlay_emacs_lisp_lib_literals_binary_to_string     nil bin s))
+        (cons (prim-name hydra_lib_literals_binary_to_base64)     (prim1 (prim-name hydra_lib_literals_binary_to_base64)     hydra_overlay_emacs_lisp_lib_literals_binary_to_base64     nil bin s))
         (cons (prim-name hydra_lib_literals_decimal_to_bigint)    (prim1 (prim-name hydra_lib_literals_decimal_to_bigint)    hydra_overlay_emacs_lisp_lib_literals_decimal_to_bigint    nil dec bi))
         (cons (prim-name hydra_lib_literals_decimal_to_float32)   (prim1 (prim-name hydra_lib_literals_decimal_to_float32)   hydra_overlay_emacs_lisp_lib_literals_decimal_to_float32   nil dec f32))
         (cons (prim-name hydra_lib_literals_decimal_to_float64)   (prim1 (prim-name hydra_lib_literals_decimal_to_float64)   hydra_overlay_emacs_lisp_lib_literals_decimal_to_float64   nil dec f64))
@@ -711,7 +711,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_literals_uint16_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint16_to_bigint)     hydra_overlay_emacs_lisp_lib_literals_uint16_to_bigint     nil u16 bi))
         (cons (prim-name hydra_lib_literals_uint32_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint32_to_bigint)     hydra_overlay_emacs_lisp_lib_literals_uint32_to_bigint     nil u32 bi))
         (cons (prim-name hydra_lib_literals_uint64_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint64_to_bigint)     hydra_overlay_emacs_lisp_lib_literals_uint64_to_bigint     nil u64 bi))
-        (cons (prim-name hydra_lib_literals_string_to_binary)     (prim1 (prim-name hydra_lib_literals_string_to_binary)     hydra_overlay_emacs_lisp_lib_literals_string_to_binary     nil s bin)))
+        (cons (prim-name hydra_lib_literals_base64_to_binary)     (prim1 (prim-name hydra_lib_literals_base64_to_binary)     hydra_overlay_emacs_lisp_lib_literals_base64_to_binary     nil s bin)))
       ;; Read primitives
       (list
         (cons (prim-name hydra_lib_literals_read_bigint)   (prim1 (prim-name hydra_lib_literals_read_bigint)   hydra_overlay_emacs_lisp_lib_literals_read_bigint   nil s (tc-optional bi)))

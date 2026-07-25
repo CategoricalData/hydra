@@ -1556,7 +1556,7 @@
                                                         "typeName": "hydra.core.Literal",
                                                         "field": {
                                                           "name": "string",
-                                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}}}]}},
+                                                          "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}}}]}},
                                         "argument": {"variable": "lt"}}}}}},
                               {
                                 "name": "boolean",
@@ -5835,7 +5835,7 @@
                                                                                 "typeName": "hydra.core.Literal",
                                                                                 "field": {
                                                                                   "name": "string",
-                                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}}}]}},
+                                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}}}]}},
                                                                 "argument": {"variable": "v"}}}}},
                                                         "second": {
                                                           "application": {

@@ -34,6 +34,21 @@
   "definitions": [
     {
       "primitive": {
+        "name": "hydra.lib.literals.base64ToBinary",
+        "metadata": {
+          "description": "Decode a base64 ASCII string to binary data.",
+          "comments": [
+            "base64ToBinary(s) decodes the standard base64 (RFC 4648) ASCII string s and returns the resulting bytes as binary data.",
+            "Inverse of binaryToBase64: base64ToBinary(binaryToBase64(b)) is b for every binary value. Behavior on strings which are not valid base64 is host-defined."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the base64 string to decode", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "binary"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.literals.bigintToDecimal",
         "metadata": {
           "description": "Convert a bigint to a decimal.",
@@ -169,6 +184,21 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.literals.binaryToBase64",
+        "metadata": {
+          "description": "Encode binary data as a base64 ASCII string.",
+          "comments": [
+            "binaryToBase64(b) encodes the bytes of b using standard base64 (RFC 4648) and returns the result as an ASCII string.",
+            "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as text, use hydra.lib.text.decodeUtf8 instead."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "b", "description": "the binary data to encode", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.literals.binaryToBytes",
         "metadata": {
           "description": "Convert binary data to a list of byte values.",
@@ -181,22 +211,6 @@
           "typeParameters": [],
           "parameters": [{"name": "b", "description": "the binary data to convert", "type": {"literal": "binary"}, "isLazy": false}],
           "result": {"type": {"list": {"literal": {"integer": "int32"}}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.binaryToString",
-        "metadata": {
-          "description": "Convert binary data to a UTF-8 string.",
-          "comments": [
-            "binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded value.",
-            "The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement character U+FFFD; some may signal an error or truncate.",
-            "Total in the sense that it does not raise from the kernel's perspective, but the result may carry the host's replacement semantics."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "b", "description": "the binary data to decode", "type": {"literal": "binary"}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -772,19 +786,6 @@
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint8 to render", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.literals.stringToBinary",
-        "metadata": {
-          "description": "Convert a UTF-8 string to binary data.",
-          "comments": ["stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data.", "Total."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "s", "description": "the string to encode", "type": {"literal": "string"}, "isLazy": false}],
-          "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}},
     {
