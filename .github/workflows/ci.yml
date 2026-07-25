@@ -71,7 +71,14 @@ jobs:
     # See #494 CI investigation.
     timeout-minutes: 300
     steps:
+      # #617: fetch-depth: 0 (full history) so the #617 Check 2 step below can
+      # resolve `git merge-base HEAD origin/main` — the default fetch-depth: 1
+      # shallow checkout has no local origin/main ref to diff against, which
+      # would silently no-op that check in CI. Same idiom as
+      # release-verify.yml's full-history checkout.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       # #541: cheap, toolchain-free gate that must run before anything else
       # in this job. Guards against the #416 near-miss, where a .gitignore
       # pattern silently untracked kernel JSON that manifest.json declared --
@@ -80,14 +87,17 @@ jobs:
       # bootstrap. Needs only python3 + git, both preinstalled on the runner.
       - name: Check manifest-declared module JSON is tracked in git (#541)
         run: python3 bin/check-manifest-json-tracked.py
-      # #608: cheap, toolchain-free gate. Fails if any published-host driver
-      # (heads/**/package.yaml) links a published hydra-* package while ALSO
-      # source-dirring the matching packages/<pkg>/src/main/haskell HEAD authoring
-      # tree — the oil-and-water violation that reddened main on every new-kernel-
-      # type PR (the #376 cold-seeder linked published hydra-kernel-0.17.1 while
-      # source-dirring HEAD's kernel Terms DSL, phantom-annotated with #598 types
-      # absent from 0.17.1). Needs only python3 + git.
-      - name: Check oil-and-water invariant for published-host drivers (#608)
+      # #608/#617: cheap, toolchain-free gate. Check 1 (#608) fails if any
+      # published-host driver (heads/**/package.yaml) links a published hydra-*
+      # package while ALSO source-dirring the matching
+      # packages/<pkg>/src/main/haskell HEAD authoring tree — the oil-and-water
+      # violation that reddened main on every new-kernel-type PR (the #376
+      # cold-seeder linked published hydra-kernel-0.17.1 while source-dirring
+      # HEAD's kernel Terms DSL, phantom-annotated with #598 types absent from
+      # 0.17.1). Check 2 (#617) fails if the cold-seeder's own generation
+      # modules import a Hydra.Build.* module not yet published at the pinned
+      # hostVersion — the #560/#607 revert shape. Needs only python3 + git.
+      - name: Check oil-and-water invariant for published-host drivers (#608, #617)
         run: python3 bin/check-oil-and-water.py
       # ghc-version pinned: this job's bin/sync.sh cold-start path builds the
       # json-driver (heads/haskell/json-driver/, system-ghc/resolver lts-24.7 =>
