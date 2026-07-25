@@ -3,6 +3,13 @@ name: CI
 on:
   push:
     branches: [main]
+    # Also run on release tags so the tag -> CI -> workflow_run chain reaches
+    # pages.yml (which builds/deploys the combined JavaDoc from CI's dist-java
+    # artifact). Without this, CI never runs on a tag, so pages.yml's
+    # workflow_run trigger never fires and JavaDocs are never published at
+    # release time. Pattern matches release-verify.yml's tag filter.
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
   pull_request:
     branches: [main]
 
