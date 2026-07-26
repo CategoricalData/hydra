@@ -1,5 +1,104 @@
 (ns hydra.overlay.clojure.lib.math)
 
+;; Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate.
+;;
+;; These vars serve two distinct call contracts, both real:
+;;
+;;  1. The interpreter path: registered as `hydra.lib.math.add` etc. via `p/prim2`/`p/prim1` with
+;;     a 'numeric' class constraint and identity (Term) coders (tc-variable) in libraries.clj's
+;;     register-math, so on that path the compute fn receives raw Terms -- list-encoded, e.g.
+;;     (:literal (:integer (:int32 42))) -- and must dispatch on the operand's literal variant.
+;;  2. The generated-kernel-code path: this SAME def is :refer :all-imported directly by Hydra's
+;;     own self-hosted Clojure source (e.g. hydra.names, hydra.lexical, hydra.rewriting) and
+;;     called as ordinary curried arithmetic over raw native numbers (Long, Double, BigInt, ...),
+;;     the same way user Clojure code would call +/-/* directly -- no Term involved at all.
+;;
+;; This mirrors the Haskell host's numericBinary/numericUnary (Hydra.Overlay.Haskell.Lib.Math) and
+;; Java's NumericDispatch, except Java splits the two contracts onto two differently-typed methods
+;; on one class (implementation() vs a generic apply()); Clojure has one flat function namespace,
+;; so both contracts are dispatched here by argument shape instead: a Term literal is a sequential
+;; (a list/seq), a native number is not. No typeclass mechanism is consulted at runtime -- the host
+;; has none. Type inference guarantees both operands of a binary op share one numeric type, so the
+;; Term-path dispatch keys on the first operand and requires the second to match; a mismatch or a
+;; non-numeric operand is an internal invariant violation and fails loudly.
+;;
+;; Fixed-width integer variants are narrowed back to the source width (two's-complement
+;; wraparound, mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision.
+;; The native-value path needs no narrowing: Clojure's own numeric tower (auto-promoting +'/-'/*'
+;; or plain +/-/* on the native types already in play) already gives the right per-type behavior.
+
+(def ^:private int-width-bits
+  {:int8 8 :int16 16 :int32 32 :int64 64
+   :uint8 8 :uint16 16 :uint32 32 :uint64 64})
+
+(def ^:private unsigned-int-widths #{:uint8 :uint16 :uint32 :uint64})
+
+(defn- wrap-int [width-tag r]
+  (if (= width-tag :bigint)
+    r
+    ;; bit-shift-left operates on primitive longs and silently wraps at 64 bits (e.g.
+    ;; (bit-shift-left 1 64) => 1, not 2^64), which is wrong for the int64/uint64 widths here;
+    ;; use BigInteger's arbitrary-precision shiftLeft instead.
+    (let [bits (int-width-bits width-tag)
+          m (bigint (.shiftLeft (biginteger 1) bits))]
+      (if (contains? unsigned-int-widths width-tag)
+        (mod r m)
+        (let [w (mod r m)]
+          (if (>= w (/ m 2)) (- w m) w))))))
+
+(defn- numeric-literal [op-name t]
+  (if (and (sequential? t) (= (first t) :literal))
+    (second t)
+    (throw (ex-info (str "hydra.lib.math." op-name ": expected a numeric literal term") {}))))
+
+(defn- numeric-binary-term [op-name int-op float-op x y]
+  (let [lx (numeric-literal op-name x)
+        ly (numeric-literal op-name y)
+        lx-kind (first lx)
+        ly-kind (first ly)]
+    (when (not= lx-kind ly-kind)
+      (throw (ex-info (str "hydra.lib.math." op-name ": operands are not the same numeric kind") {})))
+    (cond
+      (= lx-kind :integer)
+      (let [vx (second lx) vy (second ly)
+            vx-tag (first vx) vy-tag (first vy)]
+        (when (not= vx-tag vy-tag)
+          (throw (ex-info (str "hydra.lib.math." op-name ": integer operands differ in precision") {})))
+        (list :literal (list :integer (list vx-tag (wrap-int vx-tag (int-op (second vx) (second vy)))))))
+      (= lx-kind :float)
+      (let [vx (second lx) vy (second ly)
+            vx-tag (first vx) vy-tag (first vy)]
+        (when (not= vx-tag vy-tag)
+          (throw (ex-info (str "hydra.lib.math." op-name ": float operands differ in precision") {})))
+        (let [r (float-op (second vx) (second vy))]
+          (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (float r) (double r)))))))
+      :else (throw (ex-info (str "hydra.lib.math." op-name ": operand is not numeric") {})))))
+
+(defn- numeric-unary-term [op-name int-op float-op x]
+  (let [lx (numeric-literal op-name x)
+        lx-kind (first lx)]
+    (cond
+      (= lx-kind :integer)
+      (let [vx (second lx) vx-tag (first vx)]
+        (list :literal (list :integer (list vx-tag (wrap-int vx-tag (int-op (second vx)))))))
+      (= lx-kind :float)
+      (let [vx (second lx) vx-tag (first vx)
+            r (float-op (second vx))]
+        (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (float r) (double r))))))
+      :else (throw (ex-info (str "hydra.lib.math." op-name ": operand is not numeric") {})))))
+
+(defn- numeric-binary [op-name int-op float-op]
+  (fn [x] (fn [y]
+    (if (sequential? x)
+      (numeric-binary-term op-name int-op float-op x y)
+      (int-op x y)))))
+
+(defn- numeric-unary [op-name int-op float-op]
+  (fn [x]
+    (if (sequential? x)
+      (numeric-unary-term op-name int-op float-op x)
+      (int-op x))))
+
 ;; abs :: Int -> Int
 (def hydra_lib_math_abs
   "Return the absolute value."
@@ -15,10 +114,10 @@
   "Return the inverse hyperbolic cosine of x."
   (fn [x] (Math/log (+ x (Math/sqrt (- (* x x) 1.0))))))
 
-;; add :: Int -> Int -> Int
+;; add :: numeric x => x -> x -> x
 (def hydra_lib_math_add
-  "Add two numbers."
-  (fn [a] (fn [b] (+ a b))))
+  "Constraint-polymorphic addition over any type with a 'numeric' instance."
+  (numeric-binary "add" +' +))
 
 ;; addFloat64 :: Double -> Double -> Double
 (def hydra_lib_math_add_float64
@@ -140,20 +239,20 @@
       (list :none)
       (list :given (rem a b))))))
 
-;; mul :: Int -> Int -> Int
+;; mul :: numeric x => x -> x -> x
 (def hydra_lib_math_mul
-  "Multiply two numbers."
-  (fn [a] (fn [b] (* a b))))
+  "Constraint-polymorphic multiplication over any type with a 'numeric' instance."
+  (numeric-binary "mul" *' *))
 
 ;; mulFloat64 :: Double -> Double -> Double
 (def hydra_lib_math_mul_float64
   "Multiply two Float64 numbers."
   (fn [a] (fn [b] (* (double a) (double b)))))
 
-;; negate :: Int -> Int
+;; negate :: numeric x => x -> x
 (def hydra_lib_math_negate
-  "Negate a number."
-  (fn [n] (- n)))
+  "Constraint-polymorphic negation over any type with a 'numeric' instance."
+  (numeric-unary "negate" -' -))
 
 ;; negateFloat64 :: Double -> Double
 (def hydra_lib_math_negate_float64
@@ -237,10 +336,10 @@
   "Return the square root of x."
   (fn [x] (Math/sqrt x)))
 
-;; sub :: Int -> Int -> Int
+;; sub :: numeric x => x -> x -> x
 (def hydra_lib_math_sub
-  "Subtract two numbers."
-  (fn [a] (fn [b] (- a b))))
+  "Constraint-polymorphic subtraction over any type with a 'numeric' instance."
+  (numeric-binary "sub" -' -))
 
 ;; subFloat64 :: Double -> Double -> Double
 (def hydra_lib_math_sub_float64

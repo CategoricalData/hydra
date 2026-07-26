@@ -312,18 +312,20 @@
         f32 (p/tc-float32)
         f64 (p/tc-float64)
         bi  (p/tc-bigint)
-        b   (p/tc-boolean)]
+        b   (p/tc-boolean)
+        x   (p/tc-variable "x")
+        numeric-x {"x" ["numeric"]}]
     (merge
      ;; Int32 primitives
      {(prim-name 'hydra.lib.math/hydra_lib_math_abs)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_abs)    math/hydra_lib_math_abs    [] i32 i32)
-      (prim-name 'hydra.lib.math/hydra_lib_math_add)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_add)    (fn [a b] ((math/hydra_lib_math_add a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_add)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_add)    (fn [a b] ((math/hydra_lib_math_add a) b))    [] x x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_even)   (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_even)   math/hydra_lib_math_even   [] i32 b)
-      (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (fn [a b] ((math/hydra_lib_math_mul a) b))    [] i32 i32 i32)
-      (prim-name 'hydra.lib.math/hydra_lib_math_negate) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_negate) math/hydra_lib_math_negate [] i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (fn [a b] ((math/hydra_lib_math_mul a) b))    [] x x x numeric-x)
+      (prim-name 'hydra.lib.math/hydra_lib_math_negate) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_negate) math/hydra_lib_math_negate [] x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_odd)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_odd)    math/hydra_lib_math_odd    [] i32 b)
       (prim-name 'hydra.lib.math/hydra_lib_math_range)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_range)  (fn [a b] ((math/hydra_lib_math_range a) b))  [] i32 i32 (p/tc-list i32))
       (prim-name 'hydra.lib.math/hydra_lib_math_signum) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_signum) math/hydra_lib_math_signum [] i32 i32)
-      (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (fn [a b] ((math/hydra_lib_math_sub a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (fn [a b] ((math/hydra_lib_math_sub a) b))    [] x x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_div)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_div)  (fn [a b] ((math/hydra_lib_math_div a) b))  [] i32 i32 (p/tc-optional i32))
       (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (fn [a b] ((math/hydra_lib_math_mod a) b))  [] i32 i32 (p/tc-optional i32))
       (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (fn [a b] ((math/hydra_lib_math_rem a) b))  [] i32 i32 (p/tc-optional i32))}
