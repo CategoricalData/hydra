@@ -204,6 +204,74 @@ object Libraries:
     }
 
 
+  // --- Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate ---
+  //
+  // These primitives are registered with a 'numeric' class constraint and identity (Term) coders,
+  // so the runtime numeric type is discovered by dispatching on the operand's literal variant,
+  // mirroring the Haskell host's numericBinary/numericUnary (Hydra.Overlay.Haskell.Lib.Math) and
+  // Java's NumericDispatch. No typeclass mechanism is consulted at runtime — the host has none.
+  // Type inference guarantees both operands of a binary op share one numeric type, so the dispatch
+  // keys on the first operand and requires the second to match; a mismatch or a non-numeric
+  // operand is an internal invariant violation and fails loudly.
+  private def numericBinary(opName: String, opInt: (BigInt, BigInt) => BigInt, opFloat: (Double, Double) => Double)(x: Term, y: Term): Term =
+    (strip(x), strip(y)) match
+      case (Term.literal(Literal.integer(ix)), Term.literal(Literal.integer(iy))) =>
+        Term.literal(Literal.integer(integerBinary(opName, opInt, ix, iy)))
+      case (Term.literal(Literal.float(fx)), Term.literal(Literal.float(fy))) =>
+        Term.literal(Literal.float(floatBinary(opName, opFloat, fx, fy)))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: operands are not the same numeric kind")
+
+  private def numericUnary(opName: String, opInt: BigInt => BigInt, opFloat: Double => Double)(x: Term): Term =
+    strip(x) match
+      case Term.literal(Literal.integer(ix)) => Term.literal(Literal.integer(integerUnary(opInt, ix)))
+      case Term.literal(Literal.float(fx)) => Term.literal(Literal.float(floatUnary(opFloat, fx)))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: operand is not numeric")
+
+  private def integerBinary(opName: String, op: (BigInt, BigInt) => BigInt, ix: IntegerValue, iy: IntegerValue): IntegerValue =
+    (ix, iy) match
+      case (IntegerValue.bigint(a), IntegerValue.bigint(b)) => IntegerValue.bigint(op(a, b))
+      case (IntegerValue.int8(a), IntegerValue.int8(b)) => IntegerValue.int8(wrapSigned(8, op(BigInt(a), BigInt(b))).toByte)
+      case (IntegerValue.int16(a), IntegerValue.int16(b)) => IntegerValue.int16(wrapSigned(16, op(BigInt(a), BigInt(b))).toShort)
+      case (IntegerValue.int32(a), IntegerValue.int32(b)) => IntegerValue.int32(wrapSigned(32, op(BigInt(a), BigInt(b))).toInt)
+      case (IntegerValue.int64(a), IntegerValue.int64(b)) => IntegerValue.int64(wrapSigned(64, op(BigInt(a), BigInt(b))).toLong)
+      case (IntegerValue.uint8(a), IntegerValue.uint8(b)) => IntegerValue.uint8(wrapUnsigned(8, op(BigInt(a & 0xff), BigInt(b & 0xff))).toByte)
+      case (IntegerValue.uint16(a), IntegerValue.uint16(b)) => IntegerValue.uint16(wrapUnsigned(16, op(BigInt(a), BigInt(b))).toInt)
+      case (IntegerValue.uint32(a), IntegerValue.uint32(b)) => IntegerValue.uint32(wrapUnsigned(32, op(BigInt(a), BigInt(b))).toLong)
+      case (IntegerValue.uint64(a), IntegerValue.uint64(b)) => IntegerValue.uint64(wrapUnsigned(64, op(a, b)))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: integer operands differ in precision")
+
+  private def integerUnary(op: BigInt => BigInt, iv: IntegerValue): IntegerValue = iv match
+    case IntegerValue.bigint(a) => IntegerValue.bigint(op(a))
+    case IntegerValue.int8(a) => IntegerValue.int8(wrapSigned(8, op(BigInt(a))).toByte)
+    case IntegerValue.int16(a) => IntegerValue.int16(wrapSigned(16, op(BigInt(a))).toShort)
+    case IntegerValue.int32(a) => IntegerValue.int32(wrapSigned(32, op(BigInt(a))).toInt)
+    case IntegerValue.int64(a) => IntegerValue.int64(wrapSigned(64, op(BigInt(a))).toLong)
+    case IntegerValue.uint8(a) => IntegerValue.uint8(wrapUnsigned(8, op(BigInt(a & 0xff))).toByte)
+    case IntegerValue.uint16(a) => IntegerValue.uint16(wrapUnsigned(16, op(BigInt(a))).toInt)
+    case IntegerValue.uint32(a) => IntegerValue.uint32(wrapUnsigned(32, op(a)).toLong)
+    case IntegerValue.uint64(a) => IntegerValue.uint64(wrapUnsigned(64, op(a)))
+
+  private def floatBinary(opName: String, op: (Double, Double) => Double, fx: FloatValue, fy: FloatValue): FloatValue =
+    (fx, fy) match
+      case (FloatValue.float32(a), FloatValue.float32(b)) => FloatValue.float32(op(a, b).toFloat)
+      case (FloatValue.float64(a), FloatValue.float64(b)) => FloatValue.float64(op(a, b))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: float operands differ in precision")
+
+  private def floatUnary(op: Double => Double, fv: FloatValue): FloatValue = fv match
+    case FloatValue.float32(a) => FloatValue.float32(op(a).toFloat)
+    case FloatValue.float64(a) => FloatValue.float64(op(a))
+
+  // Two's-complement wraparound narrowing back to the source width, mirroring Java's
+  // NumericDispatch.rewrapInteger. Bigint (arbitrary precision) needs no narrowing.
+  private def wrapSigned(bits: Int, r: BigInt): BigInt =
+    val m = BigInt(1) << bits
+    val w = ((r % m) + m) % m
+    if w >= (m / 2) then w - m else w
+
+  private def wrapUnsigned(bits: Int, r: BigInt): BigInt =
+    val m = BigInt(1) << bits
+    ((r % m) + m) % m
+
   private def mkComparison(c: hydra.util.Comparison): Term =
     val fieldName = c match
       case hydra.util.Comparison.lessThan => "lessThan"
@@ -825,26 +893,28 @@ object Libraries:
   // ===== Math primitives =====
 
   private def mathPrimitives(): Map[String, Primitive] =
+    val x = tVar("x")
+    val xNumeric = Seq(("x", Seq("numeric")))
     Map(
       // Int32 primitives
       hydra.lib.math.abs.name -> mkPrimImpl(hydra.lib.math.abs.name, tMono(tFun(tInt32, tInt32)),
         impl1(a => mkInt32(math.abs(exInt32(a))))),
-      hydra.lib.math.add.name -> mkPrimImpl(hydra.lib.math.add.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.add(exInt32(a))(exInt32(b))))),
+      hydra.lib.math.add.name -> mkPrimImpl(hydra.lib.math.add.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
+        impl2(numericBinary("add", (_ + _), (_ + _)))),
       hydra.lib.math.even.name -> mkPrimImpl(hydra.lib.math.even.name, tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(math.even(exInt32(a))))),
-      hydra.lib.math.mul.name -> mkPrimImpl(hydra.lib.math.mul.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.mul(exInt32(a))(exInt32(b))))),
-      hydra.lib.math.negate.name -> mkPrimImpl(hydra.lib.math.negate.name, tMono(tFun(tInt32, tInt32)),
-        impl1(a => mkInt32(math.negate(exInt32(a))))),
+      hydra.lib.math.mul.name -> mkPrimImpl(hydra.lib.math.mul.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
+        impl2(numericBinary("mul", (_ * _), (_ * _)))),
+      hydra.lib.math.negate.name -> mkPrimImpl(hydra.lib.math.negate.name, tSchemeConstrained(xNumeric, tFun(x, x)),
+        impl1(numericUnary("negate", a => -a, a => -a))),
       hydra.lib.math.odd.name -> mkPrimImpl(hydra.lib.math.odd.name, tMono(tFun(tInt32, tBool)),
         impl1(a => mkBool(math.odd(exInt32(a))))),
       hydra.lib.math.range.name -> mkPrimImpl(hydra.lib.math.range.name, tMono(tFun(tInt32, tFun(tInt32, tList(tInt32)))),
         impl2((a, b) => mkList(math.range(exInt32(a))(exInt32(b)).map(mkInt32)))),
       hydra.lib.math.signum.name -> mkPrimImpl(hydra.lib.math.signum.name, tMono(tFun(tInt32, tInt32)),
         impl1(a => mkInt32(math.signum(exInt32(a))))),
-      hydra.lib.math.sub.name -> mkPrimImpl(hydra.lib.math.sub.name, tMono(tFun(tInt32, tFun(tInt32, tInt32))),
-        impl2((a, b) => mkInt32(math.sub(exInt32(a))(exInt32(b))))),
+      hydra.lib.math.sub.name -> mkPrimImpl(hydra.lib.math.sub.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
+        impl2(numericBinary("sub", (_ - _), (_ - _)))),
       hydra.lib.math.div.name -> mkPrimImpl(hydra.lib.math.div.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
         impl2((a, b) => mkMaybe(math.div(exInt32(a))(exInt32(b)).map(mkInt32)))),
       hydra.lib.math.mod.name -> mkPrimImpl(hydra.lib.math.mod.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),

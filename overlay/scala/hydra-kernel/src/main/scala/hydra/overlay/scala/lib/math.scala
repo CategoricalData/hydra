@@ -4,7 +4,12 @@ object math:
   def abs(x: Int): Int = scala.math.abs(x)
   def acos(x: Double): Double = scala.math.acos(x)
   def acosh(x: Double): Double = scala.math.log(x + scala.math.sqrt(x * x - 1))
-  def add(x: Int)(y: Int): Int = x + y
+  // Constraint-polymorphic ('numeric') addition: the type scheme is `numeric x => x -> x -> x`,
+  // so the generated call site is `math.add[A](x)(y)` for whatever concrete numeric type A
+  // inference resolved. No Numeric[A] evidence is threaded from the caller (Hydra's inference
+  // resolves the constraint, not a Scala-level implicit), so A is dispatched at runtime on its
+  // boxed representation, mirroring Java's NumericDispatch.applyNativeBinary.
+  def add[A](x: A)(y: A): A = NumericDispatch.applyNativeBinary("add", x, y)
   def addFloat64(x: Double)(y: Double): Double = x + y
   def asin(x: Double): Double = scala.math.asin(x)
   def asinh(x: Double): Double =
@@ -37,9 +42,9 @@ object math:
   def rem(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(x % y)
   def maybeSucc(x: Int): Option[Int] = if x == 2147483647 then None else Some(x + 1)
   def min(x: Int)(y: Int): Int = scala.math.min(x, y)
-  def mul(x: Int)(y: Int): Int = x * y
+  def mul[A](x: A)(y: A): A = NumericDispatch.applyNativeBinary("mul", x, y)
   def mulFloat64(x: Double)(y: Double): Double = x * y
-  def negate(x: Int): Int = -x
+  def negate[A](x: A): A = NumericDispatch.applyNativeUnary("negate", x)
   def negateFloat64(x: Double): Double = -x
   def odd(x: Int): Boolean = x % 2 != 0
   def pi: Double = scala.math.Pi
@@ -67,7 +72,7 @@ object math:
   def sin(x: Double): Double = scala.math.sin(x)
   def sinh(x: Double): Double = scala.math.sinh(x)
   def sqrt(x: Double): Double = scala.math.sqrt(x)
-  def sub(x: Int)(y: Int): Int = x - y
+  def sub[A](x: A)(y: A): A = NumericDispatch.applyNativeBinary("sub", x, y)
   def subFloat64(x: Double)(y: Double): Double = x - y
   def tan(x: Double): Double = scala.math.tan(x)
   def tanh(x: Double): Double = scala.math.tanh(x)
