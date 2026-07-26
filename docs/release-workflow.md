@@ -518,15 +518,41 @@ The following are Java-specific release steps:
 * Update the JavaDocs.
   * A per-package JavaDoc site (one tree per published Java package: hydra-kernel,
     hydra-rdf, hydra-pg, hydra-java) is automatically generated and deployed to
-    GitHub Pages when a new tag is pushed. The `pages.yml` workflow fires after CI
-    succeeds on the tag, pulls the `dist-java` artifact from that CI run, and
-    javadocs each package separately, linking hydra-rdf/hydra-pg/hydra-java back to
-    hydra-kernel via `-linkoffline` so cross-package `@link`s resolve.
-    No manual steps are needed for JavaDoc publishing.
+    GitHub Pages at `https://categoricaldata.net/hydra/java/javadoc/<package>/`,
+    with an index at `.../java/javadoc/`. **No manual steps are needed** for
+    JavaDoc publishing — but the trigger chain has moving parts worth understanding
+    (see below), because a break anywhere in it silently stops docs from updating.
+  * **The tag → CI → Pages trigger chain (#616):**
+    1. Pushing a release tag (`git push --tags`) triggers **`ci.yml`**, which runs
+       on tags via its `push: tags: ['[0-9]+.[0-9]+.[0-9]+']` filter. This filter is
+       load-bearing: without it CI never runs on a tag, so nothing downstream fires.
+       (This was the gap that kept JavaDocs stale for weeks — CI had no tag trigger,
+       so the `workflow_run` below never fired at release time.)
+    2. On CI success, **`pages.yml`** fires via its `workflow_run` trigger, then its
+       "Resolve CI run and confirm tag" step queries the GitHub API to confirm the
+       triggering run was a *tag* push (not a branch push) before proceeding.
+    3. `pages.yml` pulls the `dist-java` artifact from that CI run and builds the
+       docs. `workflow_dispatch` is also wired for manual re-runs without re-tagging
+       (it falls back to the latest successful CI run on `main`); the `dist-java`
+       artifact has a 1-day retention, so a manual dispatch must target a CI run from
+       within the last day.
+  * **How the docs are built (#616):** rather than a bare `javadoc` over loose
+    sources (which has no classpath and fails on hydra-pg's third-party overlay
+    bridges — TinkerPop/Gremlin, ANTLR, commons-text — and their ANTLR-generated
+    parser classes), `pages.yml` drives **each package's own standalone
+    `dist/java/<pkg>/build.gradle`**: it `publishToMavenLocal`s the internal deps
+    (hydra-kernel, hydra-rdf, hydra-jvm) in dependency order, runs each package's
+    gradle `javadoc` task (which resolves third-party deps from Maven Central and
+    runs `generateGrammarSource` first), and collects each `build/docs/javadoc/`
+    into `java/javadoc/<pkg>/`. An init script injects `-Xdoclint:none` (the #449
+    cosmetic-comment lenience) onto every Javadoc task. Cross-package `@link`
+    hyperlinks between the separate trees are deferred (they render as plain text).
   * Check the updated JavaDocs
-    [here](https://categoricaldata.net/hydra/java/javadoc/hydra-kernel/)
-    (and the sibling `hydra-rdf`, `hydra-pg`, `hydra-java` packages) after the tag
-    is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
+    [here](https://categoricaldata.net/hydra/java/javadoc/)
+    (the index, linking `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-java`) after
+    the tag is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
+  * Scaladoc (Scala) and Python API docs are planned as follow-ups mirroring this
+    layout at `/hydra/scala/scaladoc/<pkg>/` and `/hydra/python/<doctool>/<pkg>/`.
 * Publish each artifact to Maven Central via the [Central Portal](https://central.sonatype.com).
   * **JDK requirement:** the `nmcp` plugin (which the generated `build.gradle` uses to talk
     to the Central Portal publisher API) requires JDK 17+ to *run* Gradle, even though it
