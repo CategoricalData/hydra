@@ -20,6 +20,101 @@
   ;; Infinity is the only nonzero value equal to twice itself.
   (and (numberp x) (realp x) (= x x) (not (= x 0)) (= x (* 2 x))))
 
+;; Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate.
+;;
+;; These vars serve two distinct call contracts, both real:
+;;
+;;  1. The interpreter path: registered as hydra.lib.math.add etc. via prim2/prim1 with a
+;;     'numeric' class constraint and identity (Term) coders (tc-variable) in libraries.lisp's
+;;     register-math, so on that path the compute fn receives raw Terms -- list-encoded, e.g.
+;;     (:literal (:integer (:int32 42))) -- and must dispatch on the operand's literal variant.
+;;  2. The generated-kernel-code path: this SAME var is called directly by Hydra's own
+;;     self-hosted Common Lisp source (e.g. hydra.names, hydra.lexical) as ordinary arithmetic
+;;     over raw native numbers -- no Term involved at all.
+;;
+;; This mirrors the Haskell host's numericBinary/numericUnary (Hydra.Overlay.Haskell.Lib.Math)
+;; and Java's NumericDispatch, except Java splits the two contracts onto two differently-typed
+;; methods on one class; Common Lisp has one flat function namespace, so both contracts are
+;; dispatched here by argument shape instead: a Term literal is a cons (a list), a native number
+;; is not. No typeclass mechanism is consulted at runtime -- the host has none. Type inference
+;; guarantees both operands of a binary op share one numeric type, so the Term-path dispatch keys
+;; on the first operand and requires the second to match; a mismatch or a non-numeric operand is
+;; an internal invariant violation and fails loudly.
+;;
+;; Fixed-width integer variants are narrowed back to the source width (two's-complement
+;; wraparound, mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision.
+;; The native-value path needs no narrowing: Common Lisp's own numeric tower already gives the
+;; right per-type behavior for the native types in play.
+
+(defun hydra-int-width-bits (tag)
+  (case tag
+    (:int8 8) (:int16 16) (:int32 32) (:int64 64)
+    (:uint8 8) (:uint16 16) (:uint32 32) (:uint64 64)
+    (t nil)))
+
+(defun hydra-unsigned-int-width-p (tag)
+  (member tag '(:uint8 :uint16 :uint32 :uint64)))
+
+(defun hydra-wrap-int (width-tag r)
+  (if (eq width-tag :bigint)
+      r
+      (let* ((bits (hydra-int-width-bits width-tag))
+             (m (ash 1 bits)))
+        (if (hydra-unsigned-int-width-p width-tag)
+            (mod r m)
+            (let ((w (mod r m)))
+              (if (>= w (/ m 2)) (- w m) w))))))
+
+(defun hydra-numeric-literal (op-name term)
+  (if (eq (first term) :literal)
+      (second term)
+      (error "hydra.lib.math.~a: expected a numeric literal term" op-name)))
+
+(defun hydra-numeric-binary-term (op-name int-op float-op x y)
+  (let* ((lx (hydra-numeric-literal op-name x))
+         (ly (hydra-numeric-literal op-name y))
+         (lx-kind (first lx))
+         (ly-kind (first ly)))
+    (unless (eq lx-kind ly-kind)
+      (error "hydra.lib.math.~a: operands are not the same numeric kind" op-name))
+    (cond
+      ((eq lx-kind :integer)
+       (let* ((vx (second lx)) (vy (second ly)) (vx-tag (first vx)) (vy-tag (first vy)))
+         (unless (eq vx-tag vy-tag)
+           (error "hydra.lib.math.~a: integer operands differ in precision" op-name))
+         (list :literal (list :integer (list vx-tag (hydra-wrap-int vx-tag (funcall int-op (second vx) (second vy))))))))
+      ((eq lx-kind :float)
+       (let* ((vx (second lx)) (vy (second ly)) (vx-tag (first vx)) (vy-tag (first vy)))
+         (unless (eq vx-tag vy-tag)
+           (error "hydra.lib.math.~a: float operands differ in precision" op-name))
+         (list :literal (list :float (list vx-tag (float (funcall float-op (second vx) (second vy)) 1.0d0))))))
+      (t (error "hydra.lib.math.~a: operand is not numeric" op-name)))))
+
+(defun hydra-numeric-unary-term (op-name int-op float-op x)
+  (let* ((lx (hydra-numeric-literal op-name x))
+         (lx-kind (first lx)))
+    (cond
+      ((eq lx-kind :integer)
+       (let* ((vx (second lx)) (vx-tag (first vx)))
+         (list :literal (list :integer (list vx-tag (hydra-wrap-int vx-tag (funcall int-op (second vx))))))))
+      ((eq lx-kind :float)
+       (let* ((vx (second lx)) (vx-tag (first vx)))
+         (list :literal (list :float (list vx-tag (float (funcall float-op (second vx)) 1.0d0))))))
+      (t (error "hydra.lib.math.~a: operand is not numeric" op-name)))))
+
+(defun hydra-numeric-binary (op-name int-op float-op)
+  (lambda (x)
+    (lambda (y)
+      (if (consp x)
+          (hydra-numeric-binary-term op-name int-op float-op x y)
+          (funcall int-op x y)))))
+
+(defun hydra-numeric-unary (op-name int-op float-op)
+  (lambda (x)
+    (if (consp x)
+        (hydra-numeric-unary-term op-name int-op float-op x)
+        (funcall int-op x))))
+
 ;; abs :: Int -> Int
 (defvar hydra_overlay_common_lisp_lib_math_abs
   (lambda (n) (abs n)))
@@ -41,11 +136,9 @@
             ((and (hydra-inf-p fx) (> fx 0)) +hydra-pos-inf+)
             (t (acosh fx))))))
 
-;; add :: Int -> Int -> Int
+;; add :: numeric x => x -> x -> x
 (defvar hydra_overlay_common_lisp_lib_math_add
-  (lambda (a)
-    (lambda (b)
-      (+ a b))))
+  (hydra-numeric-binary "add" #'+ #'+))
 
 ;; addFloat64 :: Double -> Double -> Double
 (defvar hydra_overlay_common_lisp_lib_math_add_float64
@@ -177,11 +270,9 @@
           (list :none)
           (list :given (rem a b))))))
 
-;; mul :: Int -> Int -> Int
+;; mul :: numeric x => x -> x -> x
 (defvar hydra_overlay_common_lisp_lib_math_mul
-  (lambda (a)
-    (lambda (b)
-      (* a b))))
+  (hydra-numeric-binary "mul" #'* #'*))
 
 ;; mulFloat64 :: Double -> Double -> Double
 (defvar hydra_overlay_common_lisp_lib_math_mul_float64
@@ -189,10 +280,9 @@
     (lambda (b)
       (* (float a 1.0d0) (float b 1.0d0)))))
 
-;; negate :: Int -> Int
+;; negate :: numeric x => x -> x
 (defvar hydra_overlay_common_lisp_lib_math_negate
-  (lambda (a)
-    (- a)))
+  (hydra-numeric-unary "negate" #'- #'-))
 
 ;; negateFloat64 :: Double -> Double
 (defvar hydra_overlay_common_lisp_lib_math_negate_float64
@@ -256,11 +346,9 @@
             ((and (hydra-inf-p fx) (< fx 0)) +hydra-nan+)
             (t (sqrt fx))))))
 
-;; sub :: Int -> Int -> Int
+;; sub :: numeric x => x -> x -> x
 (defvar hydra_overlay_common_lisp_lib_math_sub
-  (lambda (a)
-    (lambda (b)
-      (- a b))))
+  (hydra-numeric-binary "sub" #'- #'-))
 
 ;; subFloat64 :: Double -> Double -> Double
 (defvar hydra_overlay_common_lisp_lib_math_sub_float64
