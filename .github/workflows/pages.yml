@@ -1,19 +1,27 @@
-name: Deploy JavaDocs to GitHub Pages
+name: Deploy API docs to GitHub Pages
 
-# Tag-triggered: build one JavaDoc tree per published Java package from the
-# dist/java/ tree the CI workflow already generated on a tag push, and deploy
-# them as a single Pages artifact at java/javadoc/<package>/. Commits nothing
-# to any branch. workflow_dispatch covers manual re-runs without re-tagging.
+# Tag-triggered: build one JavaDoc tree per published Java package, and one
+# Sphinx tree per published Python package, from the dist/java/ and
+# dist/python/ trees the CI workflow already generated on a tag push, and
+# deploy them as a single Pages artifact at java/javadoc/<package>/ and
+# python/sphinx/<package>/ respectively. Commits nothing to any branch.
+# workflow_dispatch covers manual re-runs without re-tagging.
 #
 # Why workflow_run instead of inlining into ci.yml: keeps Pages-specific
 # logic (permissions: pages/id-token, concurrency: pages, environment:
 # github-pages) isolated from the test matrix. The trade-off is a
 # cross-workflow artifact download, handled below via run-id + github-token.
 #
-# Per-package layout + -linkoffline cross-links: #616. Originally #450.
+# Java: per-package layout + -linkoffline cross-links: #616. Originally #450.
 # Companion: #449 (the strict @link errors absorbed here via -Xdoclint:none).
 # Companion: #451 (restore hydra-ext to the build once it ships to Maven
 # Central).
+#
+# Python: per-package Sphinx layout, mirroring #616: #620. Sphinx (not pdoc)
+# was chosen because the Python coder's docstrings already contain Sphinx/RST
+# cross-reference roles (:class:/:func:) — see hydra.python.serde in
+# packages/hydra-python. Cross-package intersphinx links are a follow-up, same
+# as Java's -linkoffline wiring.
 
 on:
   workflow_run:
@@ -33,7 +41,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build per-package JavaDoc site
+    name: Build per-package JavaDoc + Sphinx site
     runs-on: ubuntu-latest
     # Coarse gate: cheap rejections happen here so the job doesn't even start
     # for non-tag CI runs. The fine-grained tag check (which needs the GitHub
@@ -105,6 +113,15 @@ jobs:
         with:
           name: dist-java
           path: dist/java/
+          run-id: ${{ steps.ci-run.outputs.run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Download dist-python from CI run
+        if: steps.ci-run.outputs.proceed == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-python
+          path: dist/python/
           run-id: ${{ steps.ci-run.outputs.run_id }}
           github-token: ${{ github.token }}
 
@@ -222,6 +239,102 @@ jobs:
             echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
           done
 
+      - uses: actions/setup-python@v5
+        if: steps.ci-run.outputs.proceed == 'true'
+        with:
+          python-version: '3.12'
+
+      # Each dist/python/<pkg> is a standalone pyproject.toml wheel build (unlike
+      # Java, autodoc works by IMPORTING the package, not reading source off disk —
+      # so every documented package, plus its documented siblings it depends on,
+      # must be installed into one venv before Sphinx runs). Install in dependency
+      # order: hydra-kernel first (no internal deps), then hydra-rdf/hydra-pg
+      # (both depend on hydra-kernel). sphinx-apidoc + autodoc + napoleon generate
+      # the .rst stubs and pull docstrings; the Python coder already emits
+      # Sphinx/RST cross-reference roles (:class:/:func:) inside those docstrings
+      # (see hydra.python.serde.pythonDocEntityRef), which is why Sphinx was
+      # chosen over pdoc (#620) — pdoc has no notion of RST roles and would
+      # render them as dead literal text instead of links.
+      #
+      # Two hydra-python-specific wrinkles verified with a real local build
+      # (#620 PR description has the details):
+      #   1. `hydra` is a PEP 420 implicit namespace package (no __init__.py) —
+      #      sphinx-apidoc silently produces flatly-named, unimportable modules
+      #      (e.g. `rewriting` instead of `hydra.rewriting`) without
+      #      --implicit-namespaces. That flag is required, not optional.
+      #   2. hydra-kernel/hydra-rdf/hydra-pg all install INTO THE SAME shared
+      #      hydra.* namespace on disk — there is no per-package directory
+      #      boundary once installed. Pointing sphinx-apidoc at the shared
+      #      site-packages/hydra tree after installing all three would document
+      #      all three merged into one tree, defeating the per-package layout.
+      #      Fixed by staging each package's OWN file list (from `pip show -f`,
+      #      which pip tracks per-package correctly) into a scoped mirror
+      #      directory before running apidoc on it — apidoc reads source, but
+      #      autodoc still imports from the fully-installed venv, so cross-
+      #      package imports inside a package's own modules still resolve.
+      #
+      # Cross-package links (hydra-rdf/hydra-pg -> hydra-kernel) are deferred to
+      # a follow-up, same as JavaDoc's -linkoffline wiring in #616: Sphinx's
+      # intersphinx needs each package's published objects.inv URL, which only
+      # exists once that package's tree is deployed. Undocumented cross-refs
+      # render as styled-but-unlinked code, not broken markup — see #620 PR
+      # description for the local-build verification of this behavior.
+      - name: Build per-package Sphinx docs
+        if: steps.ci-run.outputs.proceed == 'true'
+        run: |
+          set -euo pipefail
+          root=_site/python/sphinx
+          mkdir -p "$root"
+
+          venv=$(mktemp -d)
+          python3 -m venv "$venv"
+          source "$venv/bin/activate"
+          pip install -q --upgrade pip
+          pip install -q sphinx
+
+          for pkg in hydra-kernel hydra-rdf hydra-pg; do
+            echo "::group::pip install ${pkg}"
+            pip install -q "dist/python/${pkg}"
+            echo "::endgroup::"
+          done
+
+          site_packages="$venv"/lib/python*/site-packages
+
+          build_pkg() {
+            local pkg="$1"
+            echo "::group::sphinx ${pkg}"
+
+            # Stage only this package's own files (per pip's per-package file
+            # manifest), preserving their hydra/... path structure, so apidoc
+            # documents just this package even though all three share the
+            # hydra.* namespace on disk.
+            local scoped
+            scoped=$(mktemp -d)
+            pip show -f "$pkg" | sed -n '/^Files:/,$p' | tail -n +2 | sed 's/^  //' | grep '\.py$' \
+              | while read -r f; do
+                  mkdir -p "$scoped/$(dirname "$f")"
+                  cp $site_packages/"$f" "$scoped/$f"
+                done
+
+            local confdir
+            confdir=$(mktemp -d)
+            sphinx-quickstart --quiet -p "$pkg" -a "Hydra" -v "$(python3 -c 'import json; print(json.load(open("hydra.json"))["currentVersion"])')" \
+              --sep --extensions sphinx.ext.autodoc,sphinx.ext.napoleon "$confdir"
+            sphinx-apidoc --implicit-namespaces -o "$confdir/source" "$scoped/hydra"
+            printf '\n.. toctree::\n   :maxdepth: 2\n\n   modules\n' >> "$confdir/source/index.rst"
+            sphinx-build -q -b html "$confdir/source" "${root}/${pkg}"
+            echo "::endgroup::"
+          }
+
+          build_pkg hydra-kernel
+          build_pkg hydra-rdf
+          build_pkg hydra-pg
+
+          echo "Per-package Sphinx trees built:"
+          for pkg in hydra-kernel hydra-rdf hydra-pg; do
+            echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
+          done
+
       - name: Stage landing pages
         if: steps.ci-run.outputs.proceed == 'true'
         run: |
@@ -232,6 +345,10 @@ jobs:
           # (java/javadoc/<pkg>/). The per-package trees are produced by the
           # build step above.
           cp docs/java-javadoc-index.html _site/java/javadoc/index.html
+          # Python API index linking into each per-package Sphinx tree
+          # (python/sphinx/<pkg>/). The per-package trees are produced by the
+          # build step above.
+          cp docs/python-sphinx-index.html _site/python/sphinx/index.html
 
       - if: steps.ci-run.outputs.proceed == 'true'
         uses: actions/upload-pages-artifact@v3

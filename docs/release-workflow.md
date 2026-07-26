@@ -553,8 +553,9 @@ The following are Java-specific release steps:
     [here](https://categoricaldata.net/hydra/java/javadoc/)
     (the index, linking `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-java`) after
     the tag is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
-  * Scaladoc (Scala) and Python API docs are planned as follow-ups mirroring this
-    layout at `/hydra/scala/scaladoc/<pkg>/` and `/hydra/python/<doctool>/<pkg>/`.
+  * Scaladoc (Scala) is planned as a follow-up mirroring this layout at
+    `/hydra/scala/scaladoc/<pkg>/`. Python API docs (Sphinx) are live at
+    `/hydra/python/sphinx/<pkg>/` — see the Python releases section below (#620).
 * Publish each artifact to Maven Central via the [Central Portal](https://central.sonatype.com).
   * **JDK requirement:** the `nmcp` plugin (which the generated `build.gradle` uses to talk
     to the Central Portal publisher API) requires JDK 17+ to *run* Gradle, even though it
@@ -906,6 +907,49 @@ The following are Python-specific release steps:
   conda install -c conda-forge hydra-pg
   # transitive run deps pull hydra-kernel + hydra-rdf automatically
   ```
+* Update the Python API docs.
+  * A per-package Sphinx site (`hydra-kernel`, `hydra-rdf`, `hydra-pg` — the PyPI publish set,
+    minus `hydra-build`/`hydra-python` which are not documented) is automatically generated and
+    deployed to GitHub Pages at `https://categoricaldata.net/hydra/python/sphinx/<package>/`, with
+    an index at `.../python/sphinx/`. This shares the same `pages.yml` job, trigger chain, and
+    `dist-python` CI artifact as the JavaDoc build above (#620; mirrors #616) — **no manual steps
+    are needed**, and the same tag → CI → Pages chain caveats apply.
+  * **Why Sphinx, not pdoc:** the Python coder's docstrings already embed Sphinx/RST
+    cross-reference roles (`` :class:`Name` ``, `` :func:`Name` ``, double-backtick code spans —
+    see `hydra.python.serde.pythonDocEntityRef` in `packages/hydra-python`). pdoc has no notion of
+    RST roles and renders them as dead literal text; Sphinx (`autodoc` + `napoleon`) resolves them
+    as proper cross-reference markup and hyperlinks whatever is resolvable within the build.
+  * **How the docs are built (#620):** unlike Java, Sphinx's `autodoc` documents a package by
+    *importing* it, not reading source off disk, so `hydra-kernel`, `hydra-rdf`, and `hydra-pg` are
+    all `pip install`ed into one venv first (dependency order: kernel, then rdf/pg). Two
+    Python-specific wrinkles this surfaced, both handled in `pages.yml`:
+    1. `hydra` is a [PEP 420 implicit namespace package](https://peps.python.org/pep-0420/) (see
+       the wheel-layout note above) — plain `sphinx-apidoc` silently emits flatly-named,
+       unimportable module stubs (e.g. `rewriting` instead of `hydra.rewriting`) without the
+       `--implicit-namespaces` flag.
+    2. Because all three wheels install into the *same* `hydra.*` namespace on disk, pointing
+       `sphinx-apidoc` at the shared installed tree would merge all three packages' modules into
+       one undifferentiated set. `pages.yml` instead uses `pip show -f <pkg>` (which pip tracks
+       correctly per package) to stage each package's own files into a scoped mirror directory
+       before running `sphinx-apidoc` on it, so the per-package layout is preserved while imports
+       still resolve against the fully-installed venv.
+  * Cross-package Sphinx `intersphinx` links (e.g. `hydra-pg` → `hydra-kernel`) are deferred to a
+    follow-up, same as JavaDoc's `-linkoffline` wiring: it needs each package's published
+    `objects.inv`, which only exists once that package's tree is deployed. Undocumented
+    cross-package refs render as styled-but-unlinked code, not broken markup.
+  * **Docstring coverage caveat:** coverage is bimodal by construction, not randomly uneven.
+    Modules whose content is `def`/`class` statements (records, unions, functions) get real
+    docstrings. Every file under `hydra/lib/*` (the primitive-function implementations — math,
+    strings, lists, etc.) currently has **zero** docstrings, because each primitive is emitted as
+    a module-level variable assignment (`abs = hydra.packaging.PrimitiveDefinition(...)`), which
+    has no docstring slot in Python — the rich hand-authored documentation for each primitive
+    lives only inside the `PrimitiveDefinition`/`EntityMetadata` value, invisible to Sphinx's (or
+    pdoc's) default `autodoc`. This is a real, visible gap in the published docs for that
+    subsystem; a follow-up would need either a custom Sphinx directive that reads
+    `EntityMetadata` text directly, or a coder change to attach real `__doc__` values.
+  * Check the updated Python API docs
+    [here](https://categoricaldata.net/hydra/python/sphinx/)
+    (the index, linking `hydra-kernel`, `hydra-rdf`, `hydra-pg`) after the tag is pushed.
 
 ## TypeScript releases
 
