@@ -4,6 +4,12 @@ Hydra-Scala is a complete Scala 3 implementation of the [Hydra](https://github.c
 kernel. It supports the full code generation pipeline and passes the bootstrapping test suite,
 producing output identical to the Haskell, Java, Python, and Lisp hosts for all target languages.
 
+📖 **API documentation:** Scaladoc for the Scala packages is published at the
+[Hydra Scala API index](https://categoricaldata.net/hydra/scala/scaladoc/)
+(individual packages: [hydra-kernel](https://categoricaldata.net/hydra/scala/scaladoc/hydra-kernel/),
+[hydra-rdf](https://categoricaldata.net/hydra/scala/scaladoc/hydra-rdf/),
+[hydra-pg](https://categoricaldata.net/hydra/scala/scaladoc/hydra-pg/)).
+
 ## Features
 
 - **~260 generated modules** from the Hydra kernel, all compiling cleanly under Scala 3.3.7

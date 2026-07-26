@@ -553,9 +553,32 @@ The following are Java-specific release steps:
     [here](https://categoricaldata.net/hydra/java/javadoc/)
     (the index, linking `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-java`) after
     the tag is pushed. (hydra-ext is excluded until it ships to Maven Central; #451.)
-  * Scaladoc (Scala) is planned as a follow-up mirroring this layout at
-    `/hydra/scala/scaladoc/<pkg>/`. Python API docs (Sphinx) are live at
-    `/hydra/python/sphinx/<pkg>/` — see the Python releases section below (#620).
+  * Python API docs (Sphinx) are live at `/hydra/python/sphinx/<pkg>/` — see the
+    Python releases section below (#620). Scaladoc (Scala) is documented next.
+* Update the Scaladocs.
+  * A per-package Scaladoc site (Scala "core three": hydra-kernel, hydra-rdf, hydra-pg)
+    is automatically generated and deployed to GitHub Pages at
+    `https://categoricaldata.net/hydra/scala/scaladoc/<package>/`, with an index at
+    `.../scala/scaladoc/`. **No manual steps are needed** — it shares the same
+    tag → CI → Pages trigger chain as the JavaDocs above (all three doc systems are
+    built by the same `pages.yml` job, into the same deployed `_site/` tree).
+  * **How the docs are built (#619):** mirrors the JavaDoc approach (#616) with sbt in
+    place of gradle. `pages.yml` pulls the `dist-scala` artifact from the triggering CI
+    run, drives each package's own standalone `dist/scala/<pkg>/build.sbt`:
+    `publishLocal`s the internal deps (hydra-kernel, hydra-rdf) leaves-first, runs each
+    package's sbt `doc` task, and collects each `target/scala-3.3.7/api/` into
+    `scala/scaladoc/<pkg>/`. The Scala core three is dependency-closed on its own — no
+    extra, undocumented package needs publishing first (unlike the Java job, which also
+    publishes `hydra-jvm` for `hydra-java`'s sake). The documented set is narrower than
+    the full sbt publish set (`heads/scala/bin/publish-sbt.sh`'s `PUBLISH_SET`, eleven
+    packages): the rest are coders for other hosts, not what a Scala-API reader is
+    browsing for.
+  * Check the updated Scaladocs
+    [here](https://categoricaldata.net/hydra/scala/scaladoc/)
+    (the index, linking `hydra-kernel`, `hydra-rdf`, `hydra-pg`) after the tag is
+    pushed.
+  * Cross-package links between the deployed per-package trees are deferred, same as
+    the JavaDoc `-linkoffline` follow-up.
 * Publish each artifact to Maven Central via the [Central Portal](https://central.sonatype.com).
   * **JDK requirement:** the `nmcp` plugin (which the generated `build.gradle` uses to talk
     to the Central Portal publisher API) requires JDK 17+ to *run* Gradle, even though it
