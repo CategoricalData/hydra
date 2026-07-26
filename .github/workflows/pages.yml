@@ -206,9 +206,16 @@ jobs:
             echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
           done
 
-      - name: Stage landing page
+      - name: Stage landing pages
         if: steps.ci-run.outputs.proceed == 'true'
-        run: cp docs/index.html _site/index.html
+        run: |
+          set -euo pipefail
+          # Root landing page for the whole site.
+          cp docs/index.html _site/index.html
+          # Java API index linking into each per-package JavaDoc tree
+          # (java/javadoc/<pkg>/). The per-package trees are produced by the
+          # build step above.
+          cp docs/java-javadoc-index.html _site/java/javadoc/index.html
 
       - if: steps.ci-run.outputs.proceed == 'true'
         uses: actions/upload-pages-artifact@v3
