@@ -516,8 +516,10 @@ The following are Java-specific release steps:
 * Set up your Java environment as described in the
   [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md).
 * Update the JavaDocs.
-  * A per-package JavaDoc site (one tree per published Java package: hydra-kernel,
-    hydra-rdf, hydra-pg, hydra-java) is automatically generated and deployed to
+  * A per-package JavaDoc site (one tree for every package Hydra maps into Java —
+    hydra-build, hydra-go, hydra-haskell, hydra-java, hydra-jvm, hydra-kernel,
+    hydra-lisp, hydra-pg, hydra-python, hydra-rdf, hydra-scala, hydra-typescript)
+    is automatically generated and deployed to
     GitHub Pages at `https://categoricaldata.net/hydra/java/javadoc/<package>/`,
     with an index at `.../java/javadoc/`. **No manual steps are needed** for
     JavaDoc publishing — but the trigger chain has moving parts worth understanding

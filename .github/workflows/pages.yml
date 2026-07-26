@@ -157,12 +157,13 @@ jobs:
           # published Maven coordinates (net.fortytwo.hydra.java:<pkg>:<version>).
           # Since this version isn't on Maven Central at build time, publish
           # every internal dependency to the local Maven repo first so the
-          # downstream projects resolve them. Dependency graph among the four
-          # documented packages: hydra-kernel -> {hydra-rdf, hydra-jvm};
-          # {hydra-kernel, hydra-rdf} -> hydra-pg; {hydra-kernel, hydra-jvm} ->
-          # hydra-java. hydra-jvm is not itself documented but is a dependency
-          # of hydra-java, so it is published (not built) here. Publish order
-          # respects the graph: kernel first, then rdf/jvm.
+          # downstream projects resolve them. Only three packages are consumed
+          # as dependencies by others: hydra-kernel (by all), hydra-rdf (by
+          # hydra-pg), and hydra-jvm (by hydra-java and hydra-scala). Publishing
+          # just these three to mavenLocal lets every documented package below
+          # resolve its inter-package deps. Publish order respects the graph:
+          # kernel first (no Hydra deps), then rdf and jvm (which depend only on
+          # kernel).
           for pkg in hydra-kernel hydra-rdf hydra-jvm; do
             echo "::group::publishToMavenLocal ${pkg}"
             ( cd "dist/java/${pkg}" && gradle -q --console=plain \
@@ -189,7 +190,26 @@ jobs:
             echo "::endgroup::"
           }
 
-          build_pkg hydra-kernel
+          # Every package Hydra maps into Java gets its own JavaDoc tree
+          # (alphabetical). hydra-ext is excluded until it ships to Maven
+          # Central (#451).
+          PACKAGES=(
+            hydra-build
+            hydra-go
+            hydra-haskell
+            hydra-java
+            hydra-jvm
+            hydra-kernel
+            hydra-lisp
+            hydra-pg
+            hydra-python
+            hydra-rdf
+            hydra-scala
+            hydra-typescript
+          )
+          for pkg in "${PACKAGES[@]}"; do
+            build_pkg "$pkg"
+          done
 
           # Sanity check: Term.html confirms the kernel sources rendered.
           test -f "${root}/hydra-kernel/hydra/core/Term.html" || {
@@ -197,12 +217,8 @@ jobs:
             exit 1
           }
 
-          build_pkg hydra-rdf
-          build_pkg hydra-java
-          build_pkg hydra-pg
-
           echo "Per-package javadoc trees built:"
-          for pkg in hydra-kernel hydra-rdf hydra-java hydra-pg; do
+          for pkg in "${PACKAGES[@]}"; do
             echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
           done
 
