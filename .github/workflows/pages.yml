@@ -50,7 +50,11 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '11'
+          # Pinned to 11.0.19 to match ci.yml: newer 11.x patches (verified
+          # 11.0.31) regressed generic varargs inference on the deeply-nested
+          # PersistentMap.ofEntries call in hydra/json/Bootstrap.java, which the
+          # javadoc/publish build here also compiles.
+          java-version: '11.0.19'
 
       # Cross-workflow artifact download: pull dist-java from the CI run that
       # triggered us. For workflow_dispatch, fall back to the latest successful
@@ -104,69 +108,88 @@ jobs:
           run-id: ${{ steps.ci-run.outputs.run_id }}
           github-token: ${{ github.token }}
 
-      # One javadoc invocation per published Java package, laid out at
-      # java/javadoc/<package>/ so /hydra/java/ stays free for other Java
-      # artifacts (#616). Build order follows the dependency DAG: hydra-kernel
-      # has no Hydra dependencies and is built first; hydra-rdf, hydra-pg, and
-      # hydra-java each depend only on hydra-kernel (not on each other, per
-      # docs/getting-started.md and their build.gradle/build.json), so each is
-      # linked to the just-built kernel output via -linkoffline. -linkoffline
-      # takes the package's published URL (baked into the emitted links) plus
-      # a local directory to read the element/package list from during the
-      # build — here, kernel's own freshly-built output, since it isn't
-      # published yet at deploy time.
-      #
-      # -Xdoclint:none downgrades all doc-checking errors to warnings. This
-      # absorbs the cosmetic issues covered by #449 (unqualified @link refs
-      # to nested case-classes, @param-name mismatches) plus three
-      # `Map<Name, Term>` doc-comments in overlay/java/hydra-kernel/.../dsl/
-      # (Terms.java, Types.java) that javadoc reads as malformed HTML.
-      # `-Xdoclint:all,-reference,-missing,-html` does NOT suppress the
-      # malformed-HTML error in practice — it surfaces from the parser, not
-      # doclint — so `none` is the only working knob today. Applied per
-      # package (not blanket) now that builds are separate, but every package
-      # still needs it until the underlying comments are fixed.
-      # This lenience is Pages-only; the per-package Maven build keeps the
-      # strict default.
+      # Gradle drives each package's javadoc via that package's OWN standalone
+      # build.gradle (#616). This is the key correctness point: a bare `javadoc`
+      # over loose dist/java/ sources has no classpath, so hydra-pg's overlay
+      # bridges (hydra.overlay.java.{tinkerpop,cypher,gql,tools}) fail to
+      # resolve their third-party dependencies (TinkerPop/Gremlin, ANTLR,
+      # commons-text) and the ANTLR-generated parser classes they import don't
+      # exist yet. Running the package's gradle `javadoc` task instead resolves
+      # those dependencies from Maven Central and runs `generateGrammarSource`
+      # first (javadoc.dependsOn generateGrammarSource), so ALL content —
+      # including the Java-specific overlay integrations — is documented.
+      # The dist/java/<pkg> projects are standalone (no gradle wrapper), so pin
+      # a gradle version to put a `gradle` executable on PATH. 8.x is compatible
+      # with the JDK 11 set up above (validated locally with 8.12.1 + 11.0.19).
+      - name: Set up Gradle
+        if: steps.ci-run.outputs.proceed == 'true'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.12.1'
+
+      # -Xdoclint:none downgrades doc-checking errors to warnings, absorbing the
+      # cosmetic issues covered by #449 (unqualified @link refs to nested
+      # case-classes, @param-name mismatches, and the `\_ -> body` / `Map<Name,
+      # Term>` comments javadoc reads as malformed HTML). Injected via an init
+      # script onto every Javadoc task so it also applies to the javadoc jar
+      # built during publishToMavenLocal. This lenience is Pages-only; each
+      # package's own Maven build keeps the strict default.
       #
       # hydra-ext is excluded until it ships to Maven Central (#451).
-      - name: Run per-package javadoc
+      - name: Build per-package javadoc via each package's gradle build
         if: steps.ci-run.outputs.proceed == 'true'
         env:
           PAGES_BASE_URL: https://categoricaldata.net/hydra/java/javadoc
         run: |
           set -euo pipefail
           root=_site/java/javadoc
+          mkdir -p "$root"
 
-          build_javadoc() {
+          init=$(mktemp --suffix=.gradle)
+          printf '%s\n' \
+            'allprojects {' \
+            '    tasks.withType(Javadoc).configureEach {' \
+            "        options.addStringOption('Xdoclint:none', '-quiet')" \
+            '    }' \
+            '}' > "$init"
+
+          # The documented packages consume their inter-package dependencies as
+          # published Maven coordinates (net.fortytwo.hydra.java:<pkg>:<version>).
+          # Since this version isn't on Maven Central at build time, publish
+          # every internal dependency to the local Maven repo first so the
+          # downstream projects resolve them. Dependency graph among the four
+          # documented packages: hydra-kernel -> {hydra-rdf, hydra-jvm};
+          # {hydra-kernel, hydra-rdf} -> hydra-pg; {hydra-kernel, hydra-jvm} ->
+          # hydra-java. hydra-jvm is not itself documented but is a dependency
+          # of hydra-java, so it is published (not built) here. Publish order
+          # respects the graph: kernel first, then rdf/jvm.
+          for pkg in hydra-kernel hydra-rdf hydra-jvm; do
+            echo "::group::publishToMavenLocal ${pkg}"
+            ( cd "dist/java/${pkg}" && gradle -q --console=plain \
+                --init-script "$init" publishToMavenLocal )
+            echo "::endgroup::"
+          done
+
+          # Build each package's javadoc through its own gradle build, then
+          # collect the output into java/javadoc/<pkg>/. Each package is
+          # documented standalone; cross-package @link/@see references render as
+          # plain text (not hyperlinks) for now. Wiring -linkoffline between the
+          # deployed per-package trees is a follow-up (#616 comment) — it needs
+          # the published element-list URLs, which only exist once each tree is
+          # deployed. This does not affect correctness or completeness of the
+          # per-package docs.
+          build_pkg() {
             local pkg="$1"
-            shift
-            local extra_args=("$@")
-            local src="dist/java/${pkg}/src/main/java"
+            echo "::group::javadoc ${pkg}"
+            ( cd "dist/java/${pkg}" && gradle -q --console=plain \
+                --init-script "$init" javadoc )
             local out="${root}/${pkg}"
             mkdir -p "$out"
-
-            local srcs
-            srcs=$(mktemp)
-            find "$src" -name '*.java' -print > "$srcs"
-            echo "JavaDoc source count for ${pkg}: $(wc -l < "$srcs")"
-
-            javadoc \
-              -d "$out" \
-              -quiet \
-              -Xdoclint:none \
-              -encoding UTF-8 \
-              -charset UTF-8 \
-              -docencoding UTF-8 \
-              -windowtitle "Hydra Java API: ${pkg}" \
-              -doctitle "Hydra Java API: ${pkg}" \
-              -sourcepath "$src" \
-              "${extra_args[@]}" \
-              @"$srcs"
+            cp -R "dist/java/${pkg}/build/docs/javadoc/." "$out/"
+            echo "::endgroup::"
           }
 
-          # hydra-kernel first: base package, no cross-links needed.
-          build_javadoc hydra-kernel
+          build_pkg hydra-kernel
 
           # Sanity check: Term.html confirms the kernel sources rendered.
           test -f "${root}/hydra-kernel/hydra/core/Term.html" || {
@@ -174,12 +197,13 @@ jobs:
             exit 1
           }
 
-          # hydra-rdf, hydra-pg, hydra-java each depend only on hydra-kernel;
-          # link their @link/@see references at hydra.core.* etc. back to the
-          # kernel's published (soon-to-be-published) output.
-          for pkg in hydra-rdf hydra-pg hydra-java; do
-            build_javadoc "$pkg" \
-              -linkoffline "${PAGES_BASE_URL}/hydra-kernel" "${root}/hydra-kernel"
+          build_pkg hydra-rdf
+          build_pkg hydra-java
+          build_pkg hydra-pg
+
+          echo "Per-package javadoc trees built:"
+          for pkg in hydra-kernel hydra-rdf hydra-java hydra-pg; do
+            echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
           done
 
       - name: Stage landing page
