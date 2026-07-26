@@ -409,6 +409,20 @@ public class Bootstrap {
             }
         }
 
+        // #612: line-wrap generated Scala files. Must run AFTER redirectLibCalls, since the
+        // redirect lengthens hydra.lib.<sub> call sites to hydra.overlay.scala.lib.<sub>
+        // (9+ chars longer per occurrence) — wrapping before the redirect breaks at the wrong
+        // column, diverging from the Haskell host (whose driver composes the same two passes
+        // in this order: redirect then wrap; see wrapLongScalaText in
+        // heads/haskell/src/main/haskell/Hydra/ExtGeneration.hs and its call site in
+        // bootstrap-from-json/Main.hs).
+        if (target.equals("scala")) {
+            wrapLongScalaFiles(outMain + File.separator + target);
+            if (includeTests) {
+                wrapLongScalaFiles(outDir + File.separator + "src/test" + File.separator + target);
+            }
+        }
+
         long totalTime = System.currentTimeMillis() - totalStart;
 
         System.out.println("==========================================");
@@ -640,6 +654,128 @@ public class Bootstrap {
         // "'function' object has no attribute 'name'".
         return pSlash.contains("/hydra/lib/")
             || pSlash.matches(".*/hydra/overlay/[^/]+/(.*/)?[Ll]ibraries\\.[^/]+$");
+    }
+
+    /** Soft maximum line length for generated Scala source files. */
+    private static final int SCALA_MAX_LINE_LENGTH = 120;
+
+    /** Once the current segment exceeds this length, the next ',' is a break point. */
+    private static final int SCALA_COMMA_BREAK_THRESHOLD = 80;
+
+    /** Once the current segment exceeds this length, '=&gt;' immediately after ')' becomes a break point. */
+    private static final int SCALA_ARROW_BREAK_THRESHOLD = 60;
+
+    /**
+     * #612: the Scala compiler hits stack/memory limits on extremely long single-line
+     * expressions, so every generated .scala file under langDir is passed through
+     * {@link #wrapLongScalaText}. Mirrors the Haskell host's
+     * {@code Hydra.ExtGeneration.writeScala}/{@code wrapLongScalaText} (see
+     * heads/haskell/src/main/haskell/Hydra/ExtGeneration.hs) — kept in sync by hand, since
+     * it is host-native post-processing of already-rendered text, not a translingual DSL
+     * concern. Must run after {@link #redirectLibCalls}, not before (see call site).
+     * The lib-pass def-modules under hydra/lib/ are excluded: Haskell's driver generates them
+     * from an isolated universe with the identity transform (no wrap, no redirect — see
+     * genForDirLib/genForDirT in bootstrap-from-json/Main.hs), so wrapping them here would be a
+     * new divergence, not a fix.
+     */
+    private static void wrapLongScalaFiles(String langDir) {
+        java.nio.file.Path root = Paths.get(langDir);
+        if (!Files.isDirectory(root)) return;
+        try {
+            List<java.nio.file.Path> files = new ArrayList<>();
+            Files.walk(root).filter(Files::isRegularFile)
+                    .filter(p -> p.toString().endsWith(".scala"))
+                    .filter(p -> !p.toString().replace(File.separatorChar, '/').contains("/hydra/lib/"))
+                    .forEach(files::add);
+            for (java.nio.file.Path p : files) {
+                String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+                String out = wrapLongScalaText(s);
+                if (!out.equals(s)) {
+                    Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Scala line-wrap failed under " + langDir, e);
+        }
+    }
+
+    /** Apply {@link #wrapLongScalaLine} to every line in a Scala source file's content. */
+    private static String wrapLongScalaText(String s) {
+        StringBuilder result = new StringBuilder();
+        String[] lines = s.split("\n", -1);
+        for (int idx = 0; idx < lines.length; idx++) {
+            if (idx > 0) {
+                result.append('\n');
+            }
+            result.append(wrapLongScalaLine(lines[idx]));
+        }
+        return result.toString();
+    }
+
+    /**
+     * Break a single long line at safe break points. If the line is short enough,
+     * returns it unchanged. Otherwise walks character-by-character, tracking
+     * string-literal state, and breaks at:
+     * <ul>
+     *   <li>a ',' after the current segment exceeds {@link #SCALA_COMMA_BREAK_THRESHOLD} chars</li>
+     *   <li>'=&gt;' immediately after ')' (lambda body), after the current segment
+     *       exceeds {@link #SCALA_ARROW_BREAK_THRESHOLD} chars</li>
+     * </ul>
+     */
+    private static String wrapLongScalaLine(String line) {
+        if (line.length() <= SCALA_MAX_LINE_LENGTH) {
+            return line;
+        }
+        int indentLen = 0;
+        while (indentLen < line.length() && line.charAt(indentLen) == ' ') {
+            indentLen++;
+        }
+        String indent = line.substring(0, indentLen);
+        String commaCont = indent + "  ";
+        String arrowCont = indent + "    ";
+
+        List<String> segments = new ArrayList<>();
+        StringBuilder cur = new StringBuilder();
+        boolean inString = false;
+        char prevChar = '\0';
+        int i = 0;
+        int n = line.length();
+        while (i < n) {
+            char c = line.charAt(i);
+            cur.append(c);
+            boolean inStringNext = (c == '"' && prevChar != '\\') ? !inString : inString;
+            boolean isArrowStart = !inStringNext && c == '=' && i + 1 < n && line.charAt(i + 1) == '>';
+            boolean arrowAfterParen = isArrowStart && prevChar == ')' && cur.length() > SCALA_ARROW_BREAK_THRESHOLD;
+            boolean shouldBreakComma = c == ',' && !inStringNext && cur.length() > SCALA_COMMA_BREAK_THRESHOLD;
+            if (arrowAfterParen) {
+                cur.append('>');
+                i += 2;
+                segments.add(cur.toString());
+                cur = new StringBuilder(arrowCont);
+                prevChar = '>';
+                inString = inStringNext;
+            } else if (shouldBreakComma) {
+                segments.add(cur.toString());
+                cur = new StringBuilder(commaCont);
+                prevChar = c;
+                inString = inStringNext;
+                i++;
+            } else {
+                prevChar = c;
+                inString = inStringNext;
+                i++;
+            }
+        }
+        String lastSeg = cur.toString();
+        boolean isWhitespaceOnly = lastSeg.chars().allMatch(ch -> ch == ' ');
+        List<String> allSegments = new ArrayList<>(segments);
+        if (!(lastSeg.isEmpty() || isWhitespaceOnly)) {
+            allSegments.add(lastSeg);
+        }
+        if (allSegments.size() <= 1) {
+            return line;
+        }
+        return String.join("\n", allSegments);
     }
 
     /** Dotted-language redirect (python/scala/clojure): hydra.lib.<sub> -> hydra.<langSeg>.lib.<sub>,
