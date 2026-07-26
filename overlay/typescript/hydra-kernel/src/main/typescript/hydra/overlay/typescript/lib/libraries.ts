@@ -335,16 +335,115 @@ const logicPrimitives = (): readonly Primitive[] => {
 
 // === lib.math ===
 
+// Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate.
+//
+// These primitives are registered with a 'numeric' class constraint and identity (Term) coders,
+// so the runtime numeric type is discovered by dispatching on the operand's literal variant,
+// mirroring the Haskell host's numericBinary/numericUnary (see
+// Hydra.Overlay.Haskell.Lib.Math) and Java's NumericDispatch. No typeclass mechanism is
+// consulted at runtime — the host has none. Type inference guarantees both operands of a binary
+// op share one numeric type, so the dispatch keys on the first operand and requires the second
+// to match; a mismatch or a non-numeric operand is an internal invariant violation and fails
+// loudly.
+//
+// Fixed-width integer variants (int8/16/32/64, uint8/16/32/64) hold a JS `number`/`bigint` with
+// no automatic two's-complement wraparound, so results are narrowed back to the source width here
+// (mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision, no narrowing.
+type NumericOp = "add" | "sub" | "mul" | "negate";
+
+const INT_WIDTH_BITS: Record<string, number> = { int8: 8, int16: 16, int32: 32, int64: 64 };
+const UINT_WIDTH_BITS: Record<string, number> = { uint8: 8, uint16: 16, uint32: 32, uint64: 64 };
+
+const wrapInt = (widthTag: string, r: bigint): number | bigint => {
+  if (widthTag === "bigint") return r;
+  const signedBits = INT_WIDTH_BITS[widthTag];
+  if (signedBits !== undefined) {
+    const m = 1n << BigInt(signedBits);
+    let w = ((r % m) + m) % m;
+    if (w >= m / 2n) w -= m;
+    return signedBits > 32 ? w : Number(w);
+  }
+  const unsignedBits = UINT_WIDTH_BITS[widthTag];
+  const m = 1n << BigInt(unsignedBits);
+  const w = ((r % m) + m) % m;
+  return unsignedBits > 32 ? w : Number(w);
+};
+
+const applyIntegerOp = (op: NumericOp, x: number | bigint, y?: number | bigint): bigint => {
+  const bx = typeof x === "bigint" ? x : BigInt(x);
+  const by = y === undefined ? 0n : (typeof y === "bigint" ? y : BigInt(y));
+  switch (op) {
+    case "add": return bx + by;
+    case "sub": return bx - by;
+    case "mul": return bx * by;
+    case "negate": return -bx;
+  }
+};
+
+const applyFloatOp = (op: NumericOp, x: number, y?: number): number => {
+  switch (op) {
+    case "add": return x + (y as number);
+    case "sub": return x - (y as number);
+    case "mul": return x * (y as number);
+    case "negate": return -x;
+  }
+};
+
+const numericLiteral = (opName: string, t: Term): { tag: string; value: { tag: string; value: unknown } } => {
+  const lit = (t as { tag: string; value?: { tag?: string; value?: { tag?: string; value?: unknown } } });
+  if (lit.tag === "literal" && (lit.value?.tag === "integer" || lit.value?.tag === "float")) {
+    return lit.value as { tag: string; value: { tag: string; value: unknown } };
+  }
+  throw new Error(`hydra.lib.math.${opName}: expected a numeric literal term`);
+};
+
+const numericBinary = (opName: string, op: NumericOp) =>
+  (_g: Graph, args: readonly Term[]): Either<HydraError, Term> => {
+    const a0 = args[0], a1 = args[1];
+    if (a0 === undefined || a1 === undefined) return left({ tag: "other", value: `${opName}: missing argument` } as never);
+    const lx = numericLiteral(opName, a0);
+    const ly = numericLiteral(opName, a1);
+    if (lx.tag !== ly.tag) {
+      return left({ tag: "other", value: `hydra.lib.math.${opName}: operands are not the same numeric kind` } as never);
+    }
+    if (lx.tag === "integer") {
+      const vx = lx.value as { tag: string; value: number | bigint }, vy = ly.value as { tag: string; value: number | bigint };
+      if (vx.tag !== vy.tag) {
+        return left({ tag: "other", value: `hydra.lib.math.${opName}: integer operands differ in precision` } as never);
+      }
+      const r = wrapInt(vx.tag, applyIntegerOp(op, vx.value, vy.value));
+      return right(litTerm({ tag: "integer", value: { tag: vx.tag, value: r } }));
+    }
+    const vx = lx.value as { tag: string; value: number }, vy = ly.value as { tag: string; value: number };
+    if (vx.tag !== vy.tag) {
+      return left({ tag: "other", value: `hydra.lib.math.${opName}: float operands differ in precision` } as never);
+    }
+    const r = applyFloatOp(op, vx.value, vy.value);
+    return right(litTerm({ tag: "float", value: { tag: vx.tag, value: vx.tag === "float32" ? Math.fround(r) : r } }));
+  };
+
+const numericUnary = (opName: string, op: NumericOp) =>
+  (_g: Graph, args: readonly Term[]): Either<HydraError, Term> => {
+    const a0 = args[0];
+    if (a0 === undefined) return left({ tag: "other", value: `${opName}: missing argument` } as never);
+    const l = numericLiteral(opName, a0);
+    if (l.tag === "integer") {
+      const v = l.value as { tag: string; value: number | bigint };
+      const r = wrapInt(v.tag, applyIntegerOp(op, v.value));
+      return right(litTerm({ tag: "integer", value: { tag: v.tag, value: r } }));
+    }
+    const v = l.value as { tag: string; value: number };
+    const r = applyFloatOp(op, v.value);
+    return right(litTerm({ tag: "float", value: { tag: v.tag, value: v.tag === "float32" ? Math.fround(r) : r } }));
+  };
+
 const mathPrimitives = (): readonly Primitive[] => {
-  // Integer arithmetic: accept any integer width, produce int32 (the
-  // kernel's default integer width).
-  const binIntInt = (qname: string, f: (a: number, b: number) => number): Primitive =>
-    prim(qname, scheme(tyFnCurried(tyInt32, tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, qname), (a0) =>
-          bind(need(args, 1, qname), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) => right(tInt(f(x, y))))))));
+  const x = tyVar("x");
+  const xNumeric = [["x", ["numeric"]]] as const;
+  const numericBin = (qname: string, op: NumericOp): Primitive =>
+    prim(qname, schemeC(tyFnCurried(x, x, x), ["x"], xNumeric), numericBinary(qname.split(".").pop()!, op));
+  const numericUn = (qname: string, op: NumericOp): Primitive =>
+    prim(qname, schemeC(tyFn(x, x), ["x"], xNumeric), numericUnary(qname.split(".").pop()!, op));
   const binFloatFloat = (qname: string, f: (a: number, b: number) => number): Primitive =>
     prim(qname, scheme(tyFnCurried(tyFloat64, tyFloat64, tyFloat64)),
       (g, args) =>
@@ -358,26 +457,12 @@ const mathPrimitives = (): readonly Primitive[] => {
         bind(need(args, 0, qname), (a0) =>
           bind(dAnyFloat(g, a0), (x) => right(tFloat(f(x))))));
   return [
-    binIntInt("hydra.lib.math.add", libMath.add),
-    binIntInt("hydra.lib.math.sub", libMath.sub),
-    binIntInt("hydra.lib.math.mul", libMath.mul),
-    binFloatFloat("hydra.lib.math.addFloat", libMath.add),
-    binFloatFloat("hydra.lib.math.subFloat", libMath.sub),
-    binFloatFloat("hydra.lib.math.mulFloat", libMath.mul),
+    numericBin("hydra.lib.math.add", "add"),
+    numericBin("hydra.lib.math.sub", "sub"),
+    numericBin("hydra.lib.math.mul", "mul"),
     binFloatFloat("hydra.lib.math.pow", (a, b) => Math.pow(a, b)),
     binFloatFloat("hydra.lib.math.logBase", (b, x) => Math.log(x) / Math.log(b)),
-    prim("hydra.lib.math.neg", scheme(tyFn(tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "neg"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tInt(-x))))),
-    prim("hydra.lib.math.negate", scheme(tyFn(tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "negate"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tInt(-x))))),
-    prim("hydra.lib.math.negateFloat", scheme(tyFn(tyFloat64, tyFloat64)),
-      (g, args) =>
-        bind(need(args, 0, "negateFloat"), (a0) =>
-          bind(dAnyFloat(g, a0), (x) => right(tFloat(-x))))),
+    numericUn("hydra.lib.math.negate", "negate"),
     prim("hydra.lib.math.abs", scheme(tyFn(tyInt32, tyInt32)),
       (g, args) =>
         bind(need(args, 0, "abs"), (a0) =>
