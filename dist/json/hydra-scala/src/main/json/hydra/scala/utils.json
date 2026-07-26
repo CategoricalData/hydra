@@ -585,7 +585,7 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"variable": "hydra.lib.math.sub"},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "sanitized3"}}}}},
                                                         "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                 "argument": {"variable": "sanitized3"}}}}}}},
