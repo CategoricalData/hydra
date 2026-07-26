@@ -2847,6 +2847,7 @@ public class Coder {
                     var("tparams"),
                     var("elName"),
                     nothing(),
+                    nothing(),
                     var("fields"),
                     var("cx"),
                     var("g"))));
@@ -2854,7 +2855,7 @@ public class Coder {
     public static final Def declarationForRecordType_prime = def("declarationForRecordType'")
         .to(() ->
                 lambda(
-                params("isInner", "isSer", "aliases", "tparams", "elName", "parentName", "fields", "cx", "g"),
+                params("isInner", "isSer", "aliases", "tparams", "elName", "parentName", "ordinal", "fields", "cx", "g"),
                 Eithers.bind(
                     Eithers.mapList(
                         lambda("f",
@@ -3069,14 +3070,16 @@ public class Coder {
                                                                                     lambda("pn",
                                                                                         Logic.ifElse(
                                                                                             var("isSer"),
-                                                                                            list(
-                                                                                                apply(
-                                                                                                    ref(Coder.variantCompareToMethod),
-                                                                                                    var("aliases"),
-                                                                                                    var("tparams"),
-                                                                                                    var("pn"),
-                                                                                                    var("elName"),
-                                                                                                    var("fields"))),
+                                                                                            apply(
+                                                                                                ref(Coder.variantCompareToMethod),
+                                                                                                var("aliases"),
+                                                                                                var("tparams"),
+                                                                                                var("pn"),
+                                                                                                var("elName"),
+                                                                                                Optionals.withDefault(
+                                                                                                    int32(0),
+                                                                                                    var("ordinal")),
+                                                                                                var("fields")),
                                                                                             list())))),
                                                                             field(
                                                                                 "noCommentMethods",
@@ -3134,8 +3137,12 @@ public class Coder {
         .to(() ->
                 Eithers.bind(
                     Eithers.mapList(
-                        lambda("ft",
+                        lambda("ftord",
                             let(
+                                field("ft",
+                                    Pairs.first(var("ftord"))),
+                                field("ordinal",
+                                    Pairs.second(var("ftord"))),
                                 field("fname",
                                     proj(FieldType.TYPE_, FieldType.NAME, "ft")),
                                 field("ftype",
@@ -3169,6 +3176,7 @@ public class Coder {
                                         list(),
                                         var("varName"),
                                         Logic.ifElse(var("isSer"), just(var("elName")), nothing()),
+                                        Logic.ifElse(var("isSer"), just(var("ordinal")), nothing()),
                                         var("rfields"),
                                         var("cx"),
                                         var("g")),
@@ -3180,7 +3188,9 @@ public class Coder {
                                                 var("tparams"),
                                                 var("elName"),
                                                 var("innerDecl"))))))),
-                        var("fields")),
+                        Lists.zip(
+                            var("fields"),
+                            Math_.range(int32(0), Math_.sub(Lists.length(var("fields")), int32(1))))),
                     lambda("variantClasses",
                         let("variantDecls",
                             Lists.map(
@@ -3606,8 +3616,19 @@ public class Coder {
                                                                         string("Partial visitor over {@link "),
                                                                         var("elNameStr"),
                                                                         string("} with a default {@link #otherwise} branch.")))),
+    field("hydraOrdinalAbstractDecls",
+                                                                Logic.ifElse(
+                                                                    var("isSer"),
+                                                                    list(
+                                                                        apply(
+                                                                            ref(Coder.noComment),
+                                                                            apply(
+                                                                                ref(Coder.hydraOrdinalMethod),
+                                                                                nothing()))),
+                                                                    list())),
     field("otherDecls",
-                                                                list(
+                                                                Lists.concat2(
+                                                                    list(
                                                                     apply(
                                                                         ref(Coder.withCommentString),
                                                                         var("privateConstComment"),
@@ -3623,7 +3644,8 @@ public class Coder {
                                                                     apply(
                                                                         ref(Coder.withCommentString),
                                                                         var("partialVisitorIfaceComment"),
-                                                                        var("partialVisitor")))),
+                                                                        var("partialVisitor"))),
+                                                                    var("hydraOrdinalAbstractDecls"))),
     field("bodyDecls",
                                                                 Lists.concat(
                                                                     list(
@@ -10366,6 +10388,57 @@ public class Coder {
                             field(MultiplicativeExpression_Binary.LHS, var("lhs")),
                             field(MultiplicativeExpression_Binary.RHS, var("rhs"))))));
 
+    // #612: Java's generated compareTo for union types must order variants by their DECLARED
+    // ordinal position, matching Haskell's declaration-order `deriving Ord`. Comparing by
+    // getClass().getName() (alphabetical) instead diverges from Haskell for any union whose
+    // meaningful field order isn't coincidentally alphabetical (e.g. hydra.core.IntegerValue:
+    // bigint, int8, int16, int32, int64, uint8, ... is bit-width order, not alphabetical).
+    // hydraOrdinalMethod generates this method once as `abstract` on the union's base class
+    // (ordinal = nothing()) and once as a concrete override on each variant class
+    // (ordinal = just(n)), giving tagCompareExpr a virtual dispatch it can call on both `this`
+    // and `other` without reflection or a lookup table.
+    public static final Def hydraOrdinalMethod = def("hydraOrdinalMethod")
+        .lam("ordinal")
+        .to(() ->
+                let(
+                    field("mods",
+                        Logic.ifElse(
+                            Optionals.isNone(var("ordinal")),
+                            list(
+                                inject(MethodModifier.TYPE_, MethodModifier.PUBLIC, unit()),
+                                inject(MethodModifier.TYPE_, MethodModifier.ABSTRACT, unit())),
+                            list(
+                                inject(MethodModifier.TYPE_, MethodModifier.PUBLIC, unit())))),
+                    field("anns",
+                        Logic.ifElse(
+                            Optionals.isNone(var("ordinal")),
+                            list(),
+                            list(ref(Utils.overrideAnnotation)))),
+                    field("result",
+                        apply(ref(Utils.javaTypeToJavaResult), ref(Utils.javaIntType))),
+                    field("body",
+                        Optionals.map(
+                            lambda("n",
+                                list(
+                                    inject(BlockStatement.TYPE_,
+                                        BlockStatement.STATEMENT,
+                                        apply(
+                                            ref(Utils.javaReturnStatement),
+                                            just(
+                                                apply(
+                                                    ref(Utils.javaIntExpression),
+                                                    Literals.int32ToBigint(var("n")))))))),
+                            var("ordinal"))),
+                    apply(
+                        ref(Utils.methodDeclaration),
+                        var("mods"),
+                        list(),
+                        var("anns"),
+                        ref(Names.hydraOrdinalMethodName),
+                        list(),
+                        var("result"),
+                        var("body"))));
+
     public static final Def innerClassRef = def("innerClassRef")
         .lam("aliases").lam("name").lam("local")
         .to(() ->
@@ -12396,10 +12469,14 @@ public class Coder {
                             field(EqualityExpression_Binary.LHS, var("lhs")),
                             field(EqualityExpression_Binary.RHS, var("rhs")))))));
 
+    // #612: compare variants by their declared ordinal (see hydraOrdinalMethod), not by
+    // getClass().getName() — the latter orders alphabetically by variant name, diverging from
+    // Haskell's declaration-order `deriving Ord` for any union whose meaningful field order
+    // isn't coincidentally alphabetical.
     public static final Def tagCompareExpr = def("tagCompareExpr")
         .to(() ->
                 let(
-                field("thisGetClass",
+                field("thisOrdinal",
                     record(MethodInvocation.TYPE_,
                         field(
                             MethodInvocation.HEADER,
@@ -12418,30 +12495,9 @@ public class Coder {
                                         list()),
                                     field(
                                         MethodInvocation_Complex.IDENTIFIER,
-                                        wrap(Identifier.TYPE_, string("getClass")))))),
+                                        wrap(Identifier.TYPE_, ref(Names.hydraOrdinalMethodName)))))),
                         field(MethodInvocation.ARGUMENTS, list()))),
-                field("thisGetName",
-                    record(MethodInvocation.TYPE_,
-                        field(
-                            MethodInvocation.HEADER,
-                            inject(MethodInvocation_Header.TYPE_,
-                                MethodInvocation_Header.COMPLEX,
-                                record(MethodInvocation_Complex.TYPE_,
-                                    field(
-                                        MethodInvocation_Complex.VARIANT,
-                                        inject(MethodInvocation_Variant.TYPE_,
-                                            MethodInvocation_Variant.PRIMARY,
-                                            apply(
-                                                ref(Utils.javaMethodInvocationToJavaPrimary),
-                                                var("thisGetClass")))),
-                                    field(
-                                        MethodInvocation_Complex.TYPE_ARGUMENTS,
-                                        list()),
-                                    field(
-                                        MethodInvocation_Complex.IDENTIFIER,
-                                        wrap(Identifier.TYPE_, string("getName")))))),
-                        field(MethodInvocation.ARGUMENTS, list()))),
-                field("otherGetClass",
+                field("otherOrdinal",
                     record(MethodInvocation.TYPE_,
                         field(
                             MethodInvocation.HEADER,
@@ -12465,28 +12521,7 @@ public class Coder {
                                         list()),
                                     field(
                                         MethodInvocation_Complex.IDENTIFIER,
-                                        wrap(Identifier.TYPE_, string("getClass")))))),
-                        field(MethodInvocation.ARGUMENTS, list()))),
-                field("otherGetName",
-                    record(MethodInvocation.TYPE_,
-                        field(
-                            MethodInvocation.HEADER,
-                            inject(MethodInvocation_Header.TYPE_,
-                                MethodInvocation_Header.COMPLEX,
-                                record(MethodInvocation_Complex.TYPE_,
-                                    field(
-                                        MethodInvocation_Complex.VARIANT,
-                                        inject(MethodInvocation_Variant.TYPE_,
-                                            MethodInvocation_Variant.PRIMARY,
-                                            apply(
-                                                ref(Utils.javaMethodInvocationToJavaPrimary),
-                                                var("otherGetClass")))),
-                                    field(
-                                        MethodInvocation_Complex.TYPE_ARGUMENTS,
-                                        list()),
-                                    field(
-                                        MethodInvocation_Complex.IDENTIFIER,
-                                        wrap(Identifier.TYPE_, string("getName")))))),
+                                        wrap(Identifier.TYPE_, ref(Names.hydraOrdinalMethodName)))))),
                         field(MethodInvocation.ARGUMENTS, list()))),
                 apply(
                     ref(Utils.javaMethodInvocationToJavaExpression),
@@ -12499,23 +12534,25 @@ public class Coder {
                                     field(
                                         MethodInvocation_Complex.VARIANT,
                                         inject(MethodInvocation_Variant.TYPE_,
-                                            MethodInvocation_Variant.PRIMARY,
+                                            MethodInvocation_Variant.TYPE,
                                             apply(
-                                                ref(Utils.javaMethodInvocationToJavaPrimary),
-                                                var("thisGetName")))),
+                                                ref(Utils.javaTypeName),
+                                                wrap(Identifier.TYPE_, string("Integer"))))),
                                     field(
                                         MethodInvocation_Complex.TYPE_ARGUMENTS,
                                         list()),
                                     field(
                                         MethodInvocation_Complex.IDENTIFIER,
-                                        wrap(Identifier.TYPE_,
-                                            ref(Names.compareToMethodName)))))),
+                                        wrap(Identifier.TYPE_, string("compare")))))),
                         field(
                             MethodInvocation.ARGUMENTS,
                             list(
                                 apply(
                                     ref(Utils.javaMethodInvocationToJavaExpression),
-                                    var("otherGetName"))))))));
+                                    var("thisOrdinal")),
+                                apply(
+                                    ref(Utils.javaMethodInvocationToJavaExpression),
+                                    var("otherOrdinal"))))))));
 
     // Derive the explicit type arguments for a non-empty collection literal
     // (list, set, map, optional). When the caller already has type applications
@@ -13357,7 +13394,7 @@ public class Coder {
                                 proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"))))));
 
     public static final Def variantCompareToMethod = def("variantCompareToMethod")
-        .lam("aliases").lam("tparams").lam("parentName").lam("variantName").lam("fields")
+        .lam("aliases").lam("tparams").lam("parentName").lam("variantName").lam("ordinal").lam("fields")
         .to(() ->
                 let(
                     binds(    field("anns",
@@ -13469,15 +13506,19 @@ public class Coder {
                         Lists.concat2(
                             list(var("tagDeclStmt"), var("tagReturnStmt")),
                             var("valueCompareStmt")))),
-                    apply(
-                        ref(Utils.methodDeclaration),
-                        var("mods"),
-                        list(),
-                        var("anns"),
-                        ref(Names.compareToMethodName),
-                        list(var("param")),
-                        var("result"),
-                        just(var("body")))));
+                    list(
+                        apply(
+                            ref(Utils.methodDeclaration),
+                            var("mods"),
+                            list(),
+                            var("anns"),
+                            ref(Names.compareToMethodName),
+                            list(var("param")),
+                            var("result"),
+                            just(var("body"))),
+                        apply(
+                            ref(Coder.hydraOrdinalMethod),
+                            just(var("ordinal"))))));
 
     public static final Def visitBranch = def("visitBranch")
         .to(() ->
@@ -13872,6 +13913,7 @@ public class Coder {
             groupPairsByFirst,
             hashCodeCompareExpr,
             hashCodeMultPair,
+            hydraOrdinalMethod,
             innerClassRef,
             insertBranchVar,
             interfaceTypes,

@@ -74,6 +74,20 @@
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core package name"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.java.names.hydraOrdinalMethodName",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "hydraOrdinal"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "The name of the generated method returning a union variant's declared ordinal position, used to order variants consistently with Haskell's declaration-order deriving Ord (#612)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.java.names.hydraUtilPackageName",
         "signature": {
           "typeParameters": [],

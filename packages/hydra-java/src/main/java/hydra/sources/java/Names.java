@@ -89,6 +89,12 @@ public class Names {
         .to(() ->
                 just(apply(ref(Names.javaPackageName), list(string("hydra"), string("core")))));
 
+    public static final Def hydraOrdinalMethodName = def("hydraOrdinalMethodName")
+        .doc("The name of the generated method returning a union variant's declared ordinal position, "
+            + "used to order variants consistently with Haskell's declaration-order deriving Ord (#612)")
+        .to(() ->
+                string("hydraOrdinal"));
+
     public static final Def hydraUtilPackageName = def("hydraUtilPackageName")
         .doc("The hydra.overlay.java.util package name")
         .to(() ->
@@ -165,6 +171,7 @@ public class Names {
             getMethodName,
             hashCodeMethodName,
             hydraCorePackageName,
+            hydraOrdinalMethodName,
             hydraUtilPackageName,
             instanceName,
             javaLangPackageName,
