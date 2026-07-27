@@ -762,14 +762,12 @@ Returns the bigint with the same numeric value as `x`; the conversion is exact a
 
 Since: 0.15
 
-#### binaryToBase64
+#### binaryToString — **Deprecated**
 
 `binary → string`
 
-Encode binary data as a base64 (RFC 4648) ASCII string. Total and round-trippable with
-`base64ToBinary`. Use this to embed arbitrary binary in a string context (e.g. a JSON value);
-for interpreting bytes as text, use `hydra.lib.text.decodeUtf8`. Renamed from `binaryToString`
-in 0.18 (the old name misleadingly suggested UTF-8; the operation has always been base64).
+Deprecated since: 0.18. Use: `hydra.lib.text.decodeUtf8`, which returns an either with an
+explicit error instead of host-defined replacement.
 
 #### readBigint — **Deprecated**
 
@@ -939,10 +937,9 @@ Deprecated since: 0.18. Use: `printUint64`.
 
 Deprecated since: 0.18. Use: `printUint8`.
 
-#### base64ToBinary
+#### stringToBinary — **Deprecated**
 
 `string → binary`
 
-Decode a base64 (RFC 4648) ASCII string to binary data. Inverse of `binaryToBase64`. Behavior on
-strings which are not valid base64 is host-defined. Renamed from `stringToBinary` in 0.18 (the old
-name misleadingly suggested UTF-8; the operation has always been base64).
+Deprecated since: 0.18. Use: `hydra.lib.text.encodeUtf8`, which returns an either with an
+explicit error instead of host-defined replacement.

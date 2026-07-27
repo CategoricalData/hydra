@@ -48,8 +48,8 @@
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_uint64
   (lambda (x) x))
 
-;; binary_to_base64 :: ByteString -> String (base64 encoding)
-(defvar hydra_overlay_emacs_lisp_lib_literals_binary_to_base64
+;; binary_to_string :: ByteString -> String (base64 encoding)
+(defvar hydra_overlay_emacs_lisp_lib_literals_binary_to_string
   (let ((b64-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
     (lambda (bv)
       (let* ((bytes (vconcat bv))
@@ -475,8 +475,8 @@
   (lambda (x)
     (if x "true" "false")))
 
-;; base64_to_binary :: String -> ByteString (base64 decoding)
-(defvar hydra_overlay_emacs_lisp_lib_literals_base64_to_binary
+;; string_to_binary :: String -> ByteString (base64 decoding)
+(defvar hydra_overlay_emacs_lisp_lib_literals_string_to_binary
   (let ((b64-decode (make-vector 128 -1)))
     (let ((i 0))
       (dolist (c (append "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" nil))

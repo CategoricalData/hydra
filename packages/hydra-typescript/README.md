@@ -184,8 +184,8 @@ current Hydra kernel (the Flow monad was removed in #245).
 
 Binary literal values are stored as base64-encoded JS strings at the Term level (the
 coder emits `value: "<base64>"`, the runtime decoder accepts either `Uint8Array` or
-base64 strings). `hydra.lib.literals.binaryToBase64` base64-encodes binary to a string;
-`base64ToBinary` decodes it back, preserving round-trip.
+base64 strings). `hydra.lib.literals.binaryToString` is the identity for string inputs;
+`stringToBinary` is also the identity, preserving round-trip without redundant encoding.
 
 ## Future enhancements
 

@@ -285,7 +285,7 @@ adaptLiteral = define "adaptLiteral" $
     Nothing [
     _Literal_binary>>: "b" ~> cases _LiteralType (var "lt")
       Nothing [
-      _LiteralType_string>>: constant $ Core.literalString $ Literals.binaryToBase64 $ var "b"],
+      _LiteralType_string>>: constant $ Core.literalString $ Literals.binaryToString $ var "b"],
     _Literal_boolean>>: "b" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
@@ -837,7 +837,7 @@ prepareLiteralType = define "prepareLiteralType" $
         triple
           (Core.literalTypeString)
           ("v" ~> cases _Literal (var "v") (Just (var "v")) [
-            _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToBase64 (var "b")))])
+            _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
           (Sets.fromList $ list [string "replace binary strings with character strings"])),
       _LiteralType_decimal>>: (constant $
         triple

@@ -254,9 +254,9 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   @@ (lambda "jv" $
                     cases JM._Value (var "jv") Nothing [
                       JM._Value_string>>: lambda "s" $
-                        right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))])
+                        right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
                   @@ (lambda "t" $
-                    Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b")))
+                    Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
                       (ExtractCore.binary @@ Graph.emptyGraph @@ var "t")),
 
               -- Record
@@ -382,9 +382,9 @@ avroHydraAdapter = define "avroHydraAdapter" $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.binary
               @@ (lambda "jv" $
                 cases JM._Value (var "jv") Nothing [
-                  JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))])
+                  JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
               @@ (lambda "t" $
-                Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b")))
+                Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
                   (ExtractCore.binary @@ Graph.emptyGraph @@ var "t")),
           -- String
           Avro._Primitive_string>>: constant $

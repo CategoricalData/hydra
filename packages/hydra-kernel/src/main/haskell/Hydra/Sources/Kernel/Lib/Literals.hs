@@ -20,10 +20,9 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.literals module.")}
   where
-    definitions = [base64ToBinary,
-                   bigintToDecimal, bigintToInt16, bigintToInt32, bigintToInt64, bigintToInt8,
+    definitions = [bigintToDecimal, bigintToInt16, bigintToInt32, bigintToInt64, bigintToInt8,
                    bigintToUint16, bigintToUint32, bigintToUint64, bigintToUint8,
-                   binaryToBase64, binaryToBytes,
+                   binaryToBytes, binaryToString,
                    decimalToBigint, decimalToFloat32, decimalToFloat64,
                    float32ToDecimal, float32ToFloat64,
                    float64ToDecimal, float64ToFloat32,
@@ -36,6 +35,7 @@ module_ = Module {
                    showBigint, showDecimal, showFloat32, showFloat64,
                    showInt16, showInt32, showInt64, showInt8,
                    showUint16, showUint32, showUint64, showUint8,
+                   stringToBinary,
                    uint16ToBigint, uint32ToBigint, uint64ToBigint, uint8ToBigint]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -44,13 +44,6 @@ define = primitiveInModule module_
 -- Build a monomorphic signature `a -> b` with an authored (name, description) pair for the single value parameter.
 fn :: (String, String) -> Type -> Type -> TermSignature
 fn param a b = sigWithParams [param] $ TypeScheme [] (a Types.~> b) Nothing
-
-base64ToBinary :: PrimitiveDefinition
-base64ToBinary = define "base64ToBinary" "Decode a base64 ASCII string to binary data." (fn ("s", "the base64 string to decode") Types.string Types.binary)
-  ["base64ToBinary(s) decodes the standard base64 (RFC 4648) ASCII string s and returns the resulting\
-  \ bytes as binary data.",
-   "Inverse of binaryToBase64: base64ToBinary(binaryToBase64(b)) is b for every binary value. Behavior\
-  \ on strings which are not valid base64 is host-defined."]
 
 bigintToDecimal :: PrimitiveDefinition
 bigintToDecimal = define "bigintToDecimal" "Convert a bigint to a decimal." (fn ("x", "the bigint to convert") Types.bigint Types.decimal)
@@ -106,14 +99,6 @@ bigintToUint8 = define "bigintToUint8" "Convert a bigint to a uint8 (truncating)
   \ silently with no exception.",
    "Total."]
 
-binaryToBase64 :: PrimitiveDefinition
-binaryToBase64 = define "binaryToBase64" "Encode binary data as a base64 ASCII string." (fn ("b", "the binary data to encode") Types.binary Types.string)
-  ["binaryToBase64(b) encodes the bytes of b using standard base64 (RFC 4648) and returns the result\
-  \ as an ASCII string.",
-   "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this\
-  \ to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as\
-  \ text, use hydra.lib.text.decodeUtf8 instead."]
-
 binaryToBytes :: PrimitiveDefinition
 binaryToBytes = define "binaryToBytes" "Convert binary data to a list of byte values."
   (fn ("b", "the binary data to convert") Types.binary (Types.list Types.int32))
@@ -122,6 +107,15 @@ binaryToBytes = define "binaryToBytes" "Convert binary data to a list of byte va
    "The result list element type is int32 rather than uint8 because Hydra's primitive collections work\
   \ most naturally with int32 indices.",
    "Total."]
+
+binaryToString :: PrimitiveDefinition
+binaryToString = define "binaryToString" "Convert binary data to a UTF-8 string." (fn ("b", "the binary data to decode") Types.binary Types.string)
+  ["binaryToString(b) interprets the bytes of b as a UTF-8-encoded string and returns the decoded\
+  \ value.",
+   "The behavior on invalid UTF-8 byte sequences is host-defined: most hosts substitute the replacement\
+  \ character U+FFFD; some may signal an error or truncate.",
+   "Total in the sense that it does not raise from the kernel's perspective, but the result may carry\
+  \ the host's replacement semantics."]
 
 decimalToBigint :: PrimitiveDefinition
 decimalToBigint = define "decimalToBigint" "Convert a decimal to a bigint (truncating)." (fn ("x", "the decimal to convert") Types.decimal Types.bigint)
@@ -385,6 +379,11 @@ showUint8 :: PrimitiveDefinition
 showUint8 = define "showUint8" "Render a uint8 as a string." (fn ("x", "the uint8 to render") Types.uint8 Types.string)
   ["showUint8(x) returns the canonical decimal representation of x.",
    "Total. The inverse of readUint8."]
+
+stringToBinary :: PrimitiveDefinition
+stringToBinary = define "stringToBinary" "Convert a UTF-8 string to binary data." (fn ("s", "the string to encode") Types.string Types.binary)
+  ["stringToBinary(s) encodes s as a UTF-8 byte sequence and returns the result as binary data.",
+   "Total."]
 
 uint16ToBigint :: PrimitiveDefinition
 uint16ToBigint = define "uint16ToBigint" "Convert a uint16 to a bigint." (fn ("x", "the uint16 to convert") Types.uint16 Types.bigint)

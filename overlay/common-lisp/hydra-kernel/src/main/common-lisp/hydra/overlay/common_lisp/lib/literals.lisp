@@ -79,9 +79,9 @@
   (lambda (x)
     (float x 1.0d0)))
 
-;; binary_to_base64 :: ByteString -> String (base64 encoding)
+;; binary_to_string :: ByteString -> String (base64 encoding)
 ;; Convert binary to string by base64 encoding.
-(defvar hydra_overlay_common_lisp_lib_literals_binary_to_base64
+(defvar hydra_overlay_common_lisp_lib_literals_binary_to_string
   (let ((b64-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
     (lambda (bv)
       (let* ((bytes (coerce bv 'vector))
@@ -535,9 +535,9 @@
   (lambda (x)
     (write-to-string x)))
 
-;; base64_to_binary :: String -> ByteString (base64 decoding)
+;; string_to_binary :: String -> ByteString (base64 decoding)
 ;; Convert string to binary by base64 decoding.
-(defvar hydra_overlay_common_lisp_lib_literals_base64_to_binary
+(defvar hydra_overlay_common_lisp_lib_literals_string_to_binary
   (let ((b64-decode (make-array 128 :initial-element -1)))
     (loop for c across "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
           for i from 0 do (setf (aref b64-decode (char-code c)) i))

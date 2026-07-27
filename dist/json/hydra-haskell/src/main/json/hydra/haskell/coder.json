@@ -1965,7 +1965,7 @@
                                                           "application": {
                                                             "function": {"variable": "hydra.haskell.utils.hsapp"},
                                                             "argument": {
-                                                              "application": {"function": {"variable": "hydra.haskell.utils.hsvar"}, "argument": {"literal": {"string": "Literals.base64ToBinary"}}}}}},
+                                                              "application": {"function": {"variable": "hydra.haskell.utils.hsvar"}, "argument": {"literal": {"string": "Literals.stringToBinary"}}}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {"variable": "hydra.haskell.utils.hslit"},
@@ -1974,7 +1974,7 @@
                                                                 "typeName": "hydra.haskell.syntax.Literal",
                                                                 "field": {
                                                                   "name": "string",
-                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "bs"}}}}}}}}}}}},
+                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "bs"}}}}}}}}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.haskell.syntax.Expression"}}}}}},
                                   {

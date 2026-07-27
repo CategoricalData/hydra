@@ -1073,7 +1073,7 @@
                                                         "body": {
                                                           "application": {
                                                             "function": {"variable": "strLit"},
-                                                            "argument": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}},
+                                                            "argument": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}},
                                                   {
                                                     "name": "boolean",
                                                     "handler": {

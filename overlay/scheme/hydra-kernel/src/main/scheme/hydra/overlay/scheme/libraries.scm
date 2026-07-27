@@ -736,7 +736,7 @@
             (cons (prim-name def:hydra_lib_literals_bigint_to_uint32)     (prim1 (prim-name def:hydra_lib_literals_bigint_to_uint32)     hydra_lib_literals_bigint_to_uint32     #f bi u32))
             (cons (prim-name def:hydra_lib_literals_bigint_to_uint64)     (prim1 (prim-name def:hydra_lib_literals_bigint_to_uint64)     hydra_lib_literals_bigint_to_uint64     #f bi u64))
             (cons (prim-name def:hydra_lib_literals_binary_to_bytes)      (prim1 (prim-name def:hydra_lib_literals_binary_to_bytes)      hydra_lib_literals_binary_to_bytes      #f bin (tc-list i32)))
-            (cons (prim-name def:hydra_lib_literals_binary_to_base64)     (prim1 (prim-name def:hydra_lib_literals_binary_to_base64)     hydra_lib_literals_binary_to_base64     #f bin s))
+            (cons (prim-name def:hydra_lib_literals_binary_to_string)     (prim1 (prim-name def:hydra_lib_literals_binary_to_string)     hydra_lib_literals_binary_to_string     #f bin s))
             (cons (prim-name def:hydra_lib_literals_decimal_to_bigint)    (prim1 (prim-name def:hydra_lib_literals_decimal_to_bigint)    hydra_lib_literals_decimal_to_bigint    #f dec bi))
             (cons (prim-name def:hydra_lib_literals_decimal_to_float32)   (prim1 (prim-name def:hydra_lib_literals_decimal_to_float32)   hydra_lib_literals_decimal_to_float32   #f dec f32))
             (cons (prim-name def:hydra_lib_literals_decimal_to_float64)   (prim1 (prim-name def:hydra_lib_literals_decimal_to_float64)   hydra_lib_literals_decimal_to_float64   #f dec f64))
@@ -752,7 +752,7 @@
             (cons (prim-name def:hydra_lib_literals_uint16_to_bigint)     (prim1 (prim-name def:hydra_lib_literals_uint16_to_bigint)     hydra_lib_literals_uint16_to_bigint     #f u16 bi))
             (cons (prim-name def:hydra_lib_literals_uint32_to_bigint)     (prim1 (prim-name def:hydra_lib_literals_uint32_to_bigint)     hydra_lib_literals_uint32_to_bigint     #f u32 bi))
             (cons (prim-name def:hydra_lib_literals_uint64_to_bigint)     (prim1 (prim-name def:hydra_lib_literals_uint64_to_bigint)     hydra_lib_literals_uint64_to_bigint     #f u64 bi))
-            (cons (prim-name def:hydra_lib_literals_base64_to_binary)     (prim1 (prim-name def:hydra_lib_literals_base64_to_binary)     hydra_lib_literals_base64_to_binary     #f s bin)))
+            (cons (prim-name def:hydra_lib_literals_string_to_binary)     (prim1 (prim-name def:hydra_lib_literals_string_to_binary)     hydra_lib_literals_string_to_binary     #f s bin)))
           (list
             (cons (prim-name def:hydra_lib_literals_read_bigint)   (prim1 (prim-name def:hydra_lib_literals_read_bigint)   hydra_lib_literals_read_bigint   #f s (tc-optional bi)))
             (cons (prim-name def:hydra_lib_literals_parse_boolean)  (prim1 (prim-name def:hydra_lib_literals_parse_boolean)  hydra_lib_literals_parse_boolean  #f s (tc-optional b)))

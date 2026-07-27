@@ -429,7 +429,7 @@
                                                     "typeName": "hydra.json.model.Value",
                                                     "field": {
                                                       "name": "string",
-                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToBase64"}, "argument": {"variable": "b"}}}}}}}},
+                                                      "term": {"application": {"function": {"variable": "hydra.lib.literals.binaryToString"}, "argument": {"variable": "b"}}}}}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}}}}},
                               {

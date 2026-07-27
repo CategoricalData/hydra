@@ -49,7 +49,7 @@ object Generation:
   /**
    * Decode binary literals from base64. JSON stores binary as base64 strings.
    * The generic decode/core module extracts the raw string without decoding.
-   * This post-processor walks terms to apply base64ToBinary to binary literals.
+   * This post-processor walks terms to apply stringToBinary to binary literals.
    */
   private def decodeBinaryLiterals(term: Term): Term =
     decodeBinaryLiteralsDepth(term, 100)
@@ -59,7 +59,7 @@ object Generation:
     val d = depth - 1
     term match
       case Term.literal(Literal.binary(b)) =>
-        Term.literal(Literal.binary(hydra.overlay.scala.lib.literals.base64ToBinary(b)))
+        Term.literal(Literal.binary(hydra.overlay.scala.lib.literals.stringToBinary(b)))
       case Term.application(app) =>
         Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
       case Term.lambda(lam) =>

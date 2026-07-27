@@ -43,7 +43,7 @@ Axiom bigintToUint16 : Z -> Z.
 Axiom bigintToUint32 : Z -> Z.
 Axiom bigintToUint64 : Z -> Z.
 Axiom binaryToBytes : string -> list Z.
-Axiom binaryToBase64 : string -> string.
+Axiom binaryToString : string -> string.
 Axiom decimalToBigint : Q -> Z.
 Axiom decimalToFloat32 : Q -> Q.
 Axiom decimalToFloat64 : Q -> Q.
@@ -72,7 +72,7 @@ Axiom readUint64 : string -> option Z.
 Axiom showDecimal : Q -> string.
 Axiom showFloat32 : Q -> string.
 Axiom showFloat64 : Q -> string.
-Axiom base64ToBinary : string -> string.
+Axiom stringToBinary : string -> string.
 Axiom uint8ToBigint : Z -> Z.
 Axiom uint16ToBigint : Z -> Z.
 Axiom uint32ToBigint : Z -> Z.

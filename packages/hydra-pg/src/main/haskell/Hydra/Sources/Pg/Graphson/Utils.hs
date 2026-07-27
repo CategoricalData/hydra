@@ -203,7 +203,7 @@ encodeTermValue = define "encodeTermValue" $
       _Term_literal>>: "lit" ~>
         match _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
           _Literal_binary>>: "b" ~>
-            right $ inject G._Value G._Value_binary (Literals.binaryToBase64 $ var "b"),
+            right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
           _Literal_boolean>>: "b" ~>
             right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>

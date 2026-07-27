@@ -695,7 +695,7 @@ silently produces empty/wrong results (no compile error). Confirmed: Haskell
 vector-of-ints `[65 66]`, Scheme vector `#(65 66)` (not a bytevector), Common
 Lisp `#(65 66)`, Emacs Lisp `[65 66]`. Verify against a generated test that
 passes a `binary` literal, or the host's `hydra.lib.literals` runtime
-(`binaryToBytes`/`base64ToBinary`). Full table + the new-type-constructor
+(`binaryToBytes`/`stringToBinary`). Full table + the new-type-constructor
 checklist (coder `encodeType` case for transparent wrappers, all type-walkers,
 the adapter, `--local-host`, coder cache-busting) live in
 [docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md). This
@@ -738,7 +738,7 @@ crashes loudly rather than emitting a sentinel like `null` or `0`). The
 binary and decimal arms are the easy ones to forget — most test fixtures use
 strings/ints/floats. Symptom: source emission silently drops binary content
 or decimal precision, and the runtime sees `value: null` (or `0`) instead of
-the actual literal. Round-trip tests like `binaryToBase64 (binary "hello")`
+the actual literal. Round-trip tests like `binaryToString (binary "hello")`
 fail with empty output. The TypeScript coder shipped this bug initially —
 see commit `8a91da78e` for the fix template.
 

@@ -90,7 +90,7 @@
                                                                   "function": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}},
                                                                   "argument": {
                                                                     "application": {
-                                                                      "function": {"variable": "hydra.lib.literals.binaryToBase64"},
+                                                                      "function": {"variable": "hydra.lib.literals.binaryToString"},
                                                                       "argument": {
                                                                         "application": {
                                                                           "function": {"variable": "hydra.lib.hashing.sha256"},
@@ -134,7 +134,7 @@
                                                                   "function": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}},
                                                                   "argument": {
                                                                     "application": {
-                                                                      "function": {"variable": "hydra.lib.literals.binaryToBase64"},
+                                                                      "function": {"variable": "hydra.lib.literals.binaryToString"},
                                                                       "argument": {
                                                                         "application": {
                                                                           "function": {"variable": "hydra.lib.hashing.sha256"},

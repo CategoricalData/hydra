@@ -1124,7 +1124,7 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
 binaryTermSpec :: H.Spec
 binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
 
-  -- Note: Hydra's binaryToBase64/base64ToBinary use base64 encoding
+  -- Note: Hydra's binaryToString/stringToBinary use base64 encoding
   H.it "forward: JSON base64 string -> Hydra binary term" $ do
     case AvroCoder.avroHydraAdapter emptyContext (avroPrim Avro.PrimitiveBytes) AvroCoder.emptyAvroEnvironment of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
