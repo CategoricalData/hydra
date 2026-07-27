@@ -37,6 +37,11 @@ if [ -z "$REPO_ROOT" ]; then
 fi
 export HYDRA_ROOT_DIR="$REPO_ROOT"
 
+# Portable in-place sed (BSD/macOS vs GNU). The shim patches below use it so a
+# macOS reseed of dist/haskell works — bare `sed -i -e` is GNU-only and dies on
+# BSD sed (it reads `-e` as the backup suffix). Reported by feature_289_go.
+source "$REPO_ROOT/bin/lib/common.sh"
+
 echo "=== #376 cold-seed dist/haskell ==="
 echo "  repo root:  $REPO_ROOT"
 echo "  driver:     $DRIVER_DIR"
@@ -66,8 +71,7 @@ done
 # the canonical head source already uses the post-#497 Hydra.Print.* names (correct
 # for its own, local-kernel compile context). Patch ONLY this ephemeral copy back to
 # the published name; drop once hydra-kernel republishes with the #497 rename.
-sed -i \
-    -e 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
+sed_inplace 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
     "$HEADMODS/Generation.hs"
 
 # #607 cold-seed shim: writePerPackageManifestsJson's field assembly delegates to
@@ -82,10 +86,11 @@ sed -i \
 # same-pattern extension of the #497 shim above to un-red CI fast, but a growing
 # sed pile here is fragile. Follow-up: make the split STRUCTURAL — a cold-seeder
 # Generation variant that never imports ManifestWriter — so this sed can go away.
-sed -i \
-    -e '/^import qualified Hydra\.Build\.ManifestWriter as GenManifestWriter$/d' \
-    -e 's/GenManifestWriter\.packageManifestJson/error "writePerPackageManifestsJson: unreachable in the cold-seeder (#607\/#608)"/' \
-    -e '/^            pkg mainForPkg dslForPkg encForPkg testForPkg$/d' \
+sed_inplace '/^import qualified Hydra\.Build\.ManifestWriter as GenManifestWriter$/d' \
+    "$HEADMODS/Generation.hs"
+sed_inplace 's/GenManifestWriter\.packageManifestJson/error "writePerPackageManifestsJson: unreachable in the cold-seeder (#607\/#608)"/' \
+    "$HEADMODS/Generation.hs"
+sed_inplace '/^            pkg mainForPkg dslForPkg encForPkg testForPkg$/d' \
     "$HEADMODS/Generation.hs"
 
 # 0b. (#608) Refresh typesmods/ with a build-time copy of the Terms-FREE DSL Types
