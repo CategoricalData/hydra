@@ -77,7 +77,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Json.Schema as JS
+import qualified Hydra.Json.Schema.Model as JS
 import qualified Hydra.Json.Model as J
 
 
@@ -153,7 +153,7 @@ module_ = Module {
 
 
 jsonSchemaSyntaxNs :: ModuleName
-jsonSchemaSyntaxNs = ModuleName "hydra.json.schema"
+jsonSchemaSyntaxNs = ModuleName "hydra.json.schema.model"
 
 jsonWriterNs :: ModuleName
 jsonWriterNs = ModuleName "hydra.json.writer"

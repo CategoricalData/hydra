@@ -1,4 +1,4 @@
-module Hydra.Sources.Json.Schema where
+module Hydra.Sources.Json.Schema.Model where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -17,7 +17,7 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.json.schema"
+ns = ModuleName "hydra.json.schema.model"
 
 module_ :: Module
 module_ = Module {

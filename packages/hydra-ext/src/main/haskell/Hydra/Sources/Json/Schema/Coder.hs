@@ -84,9 +84,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Dsl.Errors as Error
-import qualified Hydra.Json.Schema as JS
+import qualified Hydra.Json.Schema.Model as JS
 import qualified Hydra.Json.Model as JM
-import qualified Hydra.Sources.Json.Schema as JsonSchema
+import qualified Hydra.Sources.Json.Schema.Model as JsonSchema
 import qualified Hydra.Sources.Json.Schema.Serde as JsonSchemaSerde
 
 
@@ -266,7 +266,7 @@ jsonModelNs :: ModuleName
 jsonModelNs = ModuleName "hydra.json.model"
 
 jsonSchemaPhantomNs :: ModuleName
-jsonSchemaPhantomNs = ModuleName "hydra.json.schema"
+jsonSchemaPhantomNs = ModuleName "hydra.json.schema.model"
 
 literalTypeName :: TypedTermDefinition (LiteralType -> JS.TypeName)
 literalTypeName = define "literalTypeName" $

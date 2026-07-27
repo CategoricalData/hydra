@@ -39,9 +39,9 @@ import qualified Hydra.Sources.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Sources.Graphql.Syntax as GraphqlSyntax
-import qualified Hydra.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Sources.Json.Schema.Coder as JsonSchemaCoder
 import qualified Hydra.Sources.Json.Schema.Language as JsonSchemaLanguage
+import qualified Hydra.Sources.Json.Schema.Model as JsonSchema
 import qualified Hydra.Sources.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Sources.Kusto.Kql as Kql
 import qualified Hydra.Sources.Other.Atlas as Atlas
