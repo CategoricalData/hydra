@@ -36,9 +36,13 @@ import java.util.Set;
 public class Bootstrap {
 
     // Coder packages loaded on top of the kernel + Haskell baseline when
-    // --include-coders is set.
+    // --include-coders is set. Mirrors the Haskell driver's coderPackages list
+    // (heads/haskell/src/exec/bootstrap-from-json/Main.hs) — hydra-java and hydra-scala
+    // both reference hydra.jvm.serde helpers, so hydra-jvm must be loaded whenever any
+    // coder package is (#459).
     private static final List<String> CODER_PACKAGES = Arrays.asList(
-            "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp");
+            "hydra-jvm", "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp",
+            "hydra-typescript", "hydra-go");
 
     public static void main(String[] args) throws Exception {
         long totalStart = System.currentTimeMillis();

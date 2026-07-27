@@ -65,6 +65,12 @@ sourceSets {
             // dist/java/hydra-build/src/main/java srcDir (line 33), since
             // copy-overlay.sh merges it onto that dist tree on every assemble.
             include 'hydra/GenerationTargets.java'
+            // hydra.TransformJsonToTarget (#459): the Java-host Layer 1 transform driver,
+            // same shape as Bootstrap.java above. Included here so target-driver's
+            // local-build fallback (heads/java/bin/transform-json-to-target.sh) can run
+            // against this classpath when the published hydra-java artifact isn't
+            // resolvable (e.g. the #417 hostOverrides:local shim).
+            include 'hydra/TransformJsonToTarget.java'
             include 'hydra/HydraTestBase.java'
             include 'hydra/UpdateJavaJson.java'
             include 'hydra/ProfileJavaCoder.java'

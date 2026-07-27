@@ -17,6 +17,15 @@
 #                        emacs-lisp, haskell.
 #
 # Extra flags forwarded: --include-dsls, --include-tests (test source-set implies this).
+#
+# Published-host / local-host fallback (#459, mirrors #370's --local-host shim for the
+# DSL->JSON path): tries target-driver's PUBLISHED-artifact classpath first. If that fails
+# to resolve (e.g. the #417 hostOverrides:local shim blocking a not-yet-republished
+# hydra-java version), falls back AUTOMATICALLY to packages/hydra-java's local headsExtras
+# classpath — the full local dist/java rollup, same shim :hydra-java:compileHeadsExtrasJava
+# already uses for the DSL->JSON path (bin/update-java-json.sh --local-host). Unlike that
+# script, no explicit flag is needed here: sync.sh callers don't know or care which mode
+# is active, so detection is automatic and the fallback is logged to stderr.
 
 set -euo pipefail
 
@@ -61,10 +70,16 @@ fi
 
 cd "$HYDRA_JAVA_HEAD"
 
-# Ensure target-driver's classes are built (fast no-op if already up to date).
-./gradlew --quiet -p target-driver classes >&2
-
-JAVA_CP=$(./gradlew --quiet -p target-driver printRuntimeClasspath | tail -1)
+JAVA_CP=""
+if ./gradlew --quiet -p target-driver classes >/dev/null 2>&1; then
+    JAVA_CP=$(./gradlew --quiet -p target-driver printRuntimeClasspath | tail -1)
+else
+    echo "transform-json-to-target.sh: published-host classpath unresolvable" \
+         "(target-driver); falling back to local headsExtras build" \
+         "(#417 hostOverrides shim or similar — see #459)." >&2
+    ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
+    JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
+fi
 
 # -Xss large for deeply nested type inference; -Xmx large for many bindings. Mirrors
 # update-java-json.sh's JVM flags for the DSL->JSON path.

@@ -350,11 +350,17 @@ assemble_refresh_digest() {
 }
 
 # #459: dispatch a single-package Layer 1 JSON->target transform to either the Haskell or
-# Java generator host, selected by $GENERATOR_HOST (default: haskell). Both generator
+# Java generator host, selected by $GENERATOR_HOST (default: java). Both generator
 # scripts share the identical CLI contract (transform-json-to-target.sh's convention:
 # <target> <pkg> [main|test] [OPTIONS]), so this is a pure dispatch — no target-specific
 # branching lives here. Call sites replace their hardcoded
 # "$HASKELL_BIN/transform-json-to-<lang>.sh" invocation with this function.
+#
+# Default flipped to java (#459): byte-parity confirmed across every target (#612), and
+# the Java host is decisively faster — ~5x on transform time, ~20-30x on setup, measured
+# across small/medium/full-kernel-scale packages (see bin/bench-generator-hosts.sh). Set
+# GENERATOR_HOST=haskell to opt back into the Haskell path (e.g. temporary fallback for a
+# target-specific regression) without reverting this default.
 #
 # GENERATOR_HOST is a per-invocation choice, not a persistent config: it is read fresh on
 # each call, so a caller may run one package via Java and another via Haskell in the same
@@ -363,7 +369,7 @@ assemble_refresh_digest() {
 # Usage: run_layer1_transform <target> <pkg> [main|test] [OPTIONS...]
 run_layer1_transform() {
     local target="$1"
-    case "${GENERATOR_HOST:-haskell}" in
+    case "${GENERATOR_HOST:-java}" in
         java)
             "$HYDRA_ROOT_DIR/heads/java/bin/transform-json-to-target.sh" "$@"
             ;;

@@ -33,9 +33,14 @@ import java.util.Map;
 public class TransformJsonToTarget {
 
     // Coder packages loaded on top of the kernel + Haskell baseline whenever the requested
-    // package needs cross-package coder types in scope. Mirrors Bootstrap.CODER_PACKAGES.
+    // package needs cross-package coder types in scope. Mirrors the Haskell driver's
+    // coderPackages list (heads/haskell/src/exec/bootstrap-from-json/Main.hs) — hydra-java
+    // and hydra-scala both reference hydra.jvm.serde helpers, so hydra-jvm must be loaded
+    // whenever any coder package is (#459: omitting it here threw UntypedTermVariable on
+    // hydra.jvm.serde.javaUnicodeEscape when generating hydra-java standalone).
     private static final List<String> CODER_PACKAGES = java.util.Arrays.asList(
-            "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp");
+            "hydra-jvm", "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp",
+            "hydra-typescript", "hydra-go");
 
     public static void main(String[] args) throws Exception {
         long totalStart = System.currentTimeMillis();
@@ -124,6 +129,16 @@ public class TransformJsonToTarget {
             }
         }
 
+        // Extra package dependencies for ext packages, mirroring bootstrap-from-json/Main.hs's
+        // packageDeps: hydra-pg's own DSL (hydra.dsl.pg.model) references hydra.rdf.utils, and
+        // hydra-ext similarly depends on hydra-rdf, so both need hydra-rdf's main modules in the
+        // universe — otherwise generation fails with "untyped term variable:
+        // hydra.rdf.utils.resourceToNode" (#459: hit generating hydra-pg/main --include-dsls
+        // standalone).
+        if (("hydra-pg".equals(pkg) || "hydra-ext".equals(pkg)) && !"hydra-rdf".equals(pkg)) {
+            universe.addAll(Bootstrap.loadPackageMain(distJsonRoot, "hydra-rdf", schemaMap));
+        }
+
         // The requested package's own main modules (loaded again if it's a baseline/coder
         // package already in the universe — loadPackageMain is idempotent per call, and the
         // small re-load cost keeps this driver's package-scoping logic uniform for every pkg).
@@ -139,6 +154,34 @@ public class TransformJsonToTarget {
 
         List<Module> modsToGenerate;
         if (includeTests) {
+            // #546/#547 (mirrored from bootstrap-from-json/Main.hs): hydra-kernel's always-emitted
+            // hydra.test.testSuite references hydra.test.build.* test modules (which in turn
+            // reference hydra.build.* main modules), so whenever ANY package's tests are generated,
+            // both hydra-build's main AND test modules must be in the universe for those refs to
+            // type — otherwise generation fails with "Unknown variable:
+            // hydra.test.build.modules.allTests" (#459: hit generating hydra-kernel/test standalone,
+            // since hydra-build was never in CODER_PACKAGES/needsCoders for a plain --package
+            // hydra-kernel request).
+            if (!"hydra-build".equals(pkg)) {
+                List<Module> buildUniverseMods = new ArrayList<>(Bootstrap.loadPackageMain(
+                        distJsonRoot, "hydra-build", schemaMap));
+                String buildMainDir = Bootstrap.packageMainDir(distJsonRoot, "hydra-build");
+                String buildTestJsonDir = distJsonRoot + File.separator + "hydra-build"
+                        + File.separator + "src" + File.separator + "test" + File.separator + "json";
+                List<ModuleName> buildTestNs = Bootstrap.readManifestFieldOrEmpty(
+                        buildMainDir, "testModules");
+                if (!buildTestNs.isEmpty()) {
+                    buildUniverseMods.addAll(
+                            Generation.loadModulesFromJson(buildTestJsonDir, schemaMap, buildTestNs));
+                }
+                for (Module m : buildUniverseMods) {
+                    boolean already = false;
+                    for (Module u : universeMods) {
+                        if (u.name.value.equals(m.name.value)) { already = true; break; }
+                    }
+                    if (!already) universeMods.add(m);
+                }
+            }
             String pkgMainDir = Bootstrap.packageMainDir(distJsonRoot, pkg);
             String testJsonDir = distJsonRoot + File.separator + pkg
                     + File.separator + "src" + File.separator + "test" + File.separator + "json";
