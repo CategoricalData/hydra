@@ -109,7 +109,10 @@
              "overlay/common_lisp/lib/regex.lisp"
              "overlay/common_lisp/lib/effects.lisp"
              "overlay/common_lisp/lib/files.lisp"
+             "overlay/common_lisp/lib/functions.lisp"
              "overlay/common_lisp/lib/hashing.lisp"
+             "overlay/common_lisp/lib/ordering.lisp"
+             "overlay/common_lisp/lib/system.lisp"
              "overlay/common_lisp/lib/text.lisp"))
   (load (hydra-dist-main-path f)))
 
