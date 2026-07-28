@@ -3,10 +3,11 @@
 -- Owns Hydra's build-system DSL sources: the build-format type schemas
 -- (hydra.build.format), the manifest-derived module-to-package
 -- router (hydra.build.routing), the kernel/host reconciliation utilities
--- (hydra.build.reconcile), and the pure module-list utilities
--- (hydra.build.modules), plus their test modules. See #546 (extraction from
--- hydra-kernel), #512 (build formats as Hydra types), and #416 (promotion of
--- the build system into Hydra).
+-- (hydra.build.reconcile), the pure module-list utilities
+-- (hydra.build.modules), and the translingual expected-libraries registry
+-- (hydra.build.libraries), plus their test modules. See #546 (extraction from
+-- hydra-kernel), #512 (build formats as Hydra types), #533 (the libraries
+-- registry), and #416 (promotion of the build system into Hydra).
 --
 -- hydra-build is the first non-kernel package to declare non-empty testModules;
 -- the JSON-writing drivers route hydra.test.build.* to this package's test tree
@@ -23,10 +24,12 @@ module Hydra.Sources.Build.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Build.Format as BuildFormat
+import qualified Hydra.Sources.Build.Libraries as BuildLibraries
 import qualified Hydra.Sources.Build.ManifestWriter as BuildManifestWriter
 import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Routing as BuildRouting
+import qualified Hydra.Sources.Build.Test.Libraries as TestBuildLibraries
 import qualified Hydra.Sources.Build.Test.Modules as TestBuildModules
 import qualified Hydra.Sources.Build.Test.Reconcile as TestBuildReconcile
 import qualified Hydra.Sources.Build.Test.Routing as TestBuildRouting
@@ -34,6 +37,7 @@ import qualified Hydra.Sources.Build.Test.Routing as TestBuildRouting
 mainModules :: [Module]
 mainModules = [
   BuildFormat.module_,
+  BuildLibraries.module_,
   BuildManifestWriter.module_,
   BuildModules.module_,
   BuildReconcile.module_,
@@ -53,6 +57,7 @@ mainEncodingModules = [
 
 testModules :: [Module]
 testModules = [
+  TestBuildLibraries.module_,
   TestBuildModules.module_,
   TestBuildReconcile.module_,
   TestBuildRouting.module_]

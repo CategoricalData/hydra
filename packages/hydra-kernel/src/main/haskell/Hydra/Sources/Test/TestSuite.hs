@@ -33,10 +33,11 @@ import qualified Hydra.Sources.Test.Lib.Optionals as Optionals
 import qualified Hydra.Sources.Test.Lib.Ordering as LibOrdering
 import qualified Hydra.Sources.Test.Annotations as Annotations
 -- TODO(#547): move to per-package test aggregation so the kernel no longer
--- references hydra-build's test modules. These three (hydra.test.build.*) live
+-- references hydra-build's test modules. These four (hydra.test.build.*) live
 -- in the hydra-build package (#546); they are referenced here only because
 -- every host runs tests through the single kernel hydra.test.testSuite
 -- aggregate — there is no per-package test-suite mechanism yet.
+import qualified Hydra.Sources.Build.Test.Libraries as BuildLibraries
 import qualified Hydra.Sources.Build.Test.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Test.Routing as BuildRouting
 import qualified Hydra.Sources.Test.Ordering as Ordering
@@ -135,6 +136,7 @@ libPairs = [
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
+  (BuildLibraries.ns, BuildLibraries.allTests),
   (BuildModules.ns, BuildModules.allTests),
   (BuildReconcile.ns, BuildReconcile.allTests),
   (BuildRouting.ns, BuildRouting.allTests),
