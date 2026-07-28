@@ -3,6 +3,7 @@
   "mainEncodingModules": ["hydra.build.format"],
   "mainModules": [
     "hydra.build.format",
+    "hydra.build.libraries",
     "hydra.build.manifestWriter",
     "hydra.build.modules",
     "hydra.build.reconcile",
@@ -12,4 +13,4 @@
   "manifestFormatVersion": 1,
   "moduleFormatVersion": 1,
   "package": "hydra-build",
-  "testModules": ["hydra.test.build.modules", "hydra.test.build.reconcile", "hydra.test.build.routing"]}
+  "testModules": ["hydra.test.build.libraries", "hydra.test.build.modules", "hydra.test.build.reconcile", "hydra.test.build.routing"]}

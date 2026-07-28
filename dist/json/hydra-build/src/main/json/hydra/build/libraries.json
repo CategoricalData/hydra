@@ -1,0 +1,95 @@
+{
+  "name": "hydra.build.libraries",
+  "metadata": {
+    "description": "The translingual expected-libraries registry: every hydra.lib.<sub> module name every self-hosting host must register, load, and test. See https://github.com/CategoricalData/hydra/issues/533",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.libraries.expectedLibraries",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "chars"}},
+                {"literal": {"string": "effects"}},
+                {"literal": {"string": "eithers"}},
+                {"literal": {"string": "equality"}},
+                {"literal": {"string": "files"}},
+                {"literal": {"string": "functions"}},
+                {"literal": {"string": "hashing"}},
+                {"literal": {"string": "lists"}},
+                {"literal": {"string": "literals"}},
+                {"literal": {"string": "logic"}},
+                {"literal": {"string": "maps"}},
+                {"literal": {"string": "math"}},
+                {"literal": {"string": "optionals"}},
+                {"literal": {"string": "ordering"}},
+                {"literal": {"string": "pairs"}},
+                {"literal": {"string": "regex"}},
+                {"literal": {"string": "sets"}},
+                {"literal": {"string": "strings"}},
+                {"literal": {"string": "system"}},
+                {"literal": {"string": "text"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Every hydra.lib.<sub> module name every self-hosting host must register"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.libraries.isExpectedLibrary",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "sub",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"literal": "string"}}},
+                        "argument": {"variable": "sub"}}},
+                    "argument": {"variable": "hydra.build.libraries.expectedLibraries"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a bare sub-namespace name is a member of expectedLibraries"}}}]}}}}}]}
