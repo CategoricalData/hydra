@@ -61,7 +61,7 @@
              "overlay/common_lisp/lib/optionals.lisp" "overlay/common_lisp/lib/ordering.lisp"
              "overlay/common_lisp/lib/pairs.lisp"
              "overlay/common_lisp/lib/regex.lisp" "overlay/common_lisp/lib/sets.lisp"
-             "overlay/common_lisp/lib/strings.lisp" "overlay/common_lisp/lib/system.lisp"
+             "overlay/common_lisp/lib/strings.lisp"
              "overlay/common_lisp/lib/text.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
@@ -69,10 +69,18 @@
 ;; gen-main because prims depends on extract/core and libraries depends on prims
 ;; AND on the generated hydra.lib.* def-modules (it derives primitive names from
 ;; their PrimitiveDefinitions, #473).
+;; overlay/common_lisp/lib/system.lisp must ALSO load after gen-main (#533): its
+;; get_time effect value is a defvar evaluated at load time, and it constructs a
+;; Timespec via make-hydra_time_timespec -- a defstruct constructor defined by the
+;; generated hydra/time.lisp loaded in (hydra-load-gen-main). Loading system.lisp
+;; any earlier (e.g. in the early overlay-lib dolist above) fails with
+;; UNDEFINED-FUNCTION MAKE-HYDRA_TIME_TIMESPEC (mirrors the #498 fix already applied
+;; to run-tests.lisp).
 ;; Call (hydra-load-prims-and-libraries) after (hydra-load-gen-main).
 (defun hydra-load-prims-and-libraries ()
-  "Load prims and libraries (must be called after gen-main)."
+  "Load prims, system, and libraries (must be called after gen-main)."
   (load (merge-pathnames "prims.lisp" *hydra-loader-dir*))
+  (load (merge-pathnames "overlay/common_lisp/lib/system.lisp" *hydra-loader-dir*))
   (load (merge-pathnames "overlay/common_lisp/lib/libraries.lisp" *hydra-loader-dir*)))
 
 (defun hydra-set-function-bindings ()
