@@ -6,7 +6,10 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
 
 📖 **API documentation:** Scaladoc for all Hydra Scala packages is published as a single
 cross-linked reference at the [Hydra Scala API index](https://categoricaldata.net/hydra/scala/scaladoc/)
-([browse the API directly](https://categoricaldata.net/hydra/scala/scaladoc/api/)).
+(entry points per package: [hydra-kernel](https://categoricaldata.net/hydra/scala/scaladoc/hydra-kernel/),
+[hydra-rdf](https://categoricaldata.net/hydra/scala/scaladoc/hydra-rdf/),
+[hydra-pg](https://categoricaldata.net/hydra/scala/scaladoc/hydra-pg/), and the other Scala packages —
+all linked from the index).
 Unlike the per-package [JavaDoc](https://categoricaldata.net/hydra/java/javadoc/) trees, the Scala API
 is documented as one unified site: Scala 3 Scaladoc resolves cross-package links (e.g. a reference to
 `hydra.core.Type` from `hydra-pg`) only when all sources are documented in a single run.

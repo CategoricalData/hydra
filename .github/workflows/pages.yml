@@ -527,6 +527,41 @@ jobs:
           cp -R "$api/." "$root/"
           echo "Unified scaladoc: $(find "$root" -name '*.html' | wc -l) html files across ${#PACKAGES[@]} packages"
 
+          # Backward-compatible redirects: earlier releases published per-package
+          # trees at scala/scaladoc/<pkg>/ (linked from the hydra-scala README and
+          # possibly external sites). The unified build has no per-package roots,
+          # so leave a meta-refresh stub at each old path pointing to that
+          # package's entry page inside the unified api/ tree, so those URLs keep
+          # resolving instead of 404ing. Map: <pkg> -> api-relative entry page.
+          site="${root%/api}"   # _site/scala/scaladoc
+          declare -A ENTRY=(
+            [hydra-kernel]="hydra/core.html"
+            [hydra-jvm]="hydra/jvm/serde.html"
+            [hydra-rdf]="hydra/rdf.html"
+            [hydra-pg]="hydra/pg.html"
+            [hydra-java]="hydra/java.html"
+            [hydra-scala]="hydra/scala.html"
+            [hydra-python]="hydra/python.html"
+            [hydra-haskell]="hydra/haskell.html"
+            [hydra-typescript]="hydra/typeScript.html"
+            [hydra-lisp]="hydra/lisp.html"
+            [hydra-go]="hydra/go.html"
+            [hydra-build]="hydra/build.html"
+          )
+          for pkg in "${!ENTRY[@]}"; do
+            target="../api/${ENTRY[$pkg]}"
+            mkdir -p "${site}/${pkg}"
+            {
+              printf '%s\n' '<!doctype html>'
+              printf '%s\n' '<meta charset="utf-8">'
+              printf '%s\n' "<title>${pkg} — Hydra Scala API</title>"
+              printf '%s\n' "<meta http-equiv=\"refresh\" content=\"0; url=${target}\">"
+              printf '%s\n' "<link rel=\"canonical\" href=\"${target}\">"
+              printf '%s\n' "<p>The Hydra Scala API is now a single unified reference. Redirecting to <a href=\"${target}\">${pkg} in the unified API</a>&hellip;</p>"
+            } > "${site}/${pkg}/index.html"
+          done
+          echo "Wrote ${#ENTRY[@]} per-package redirect stubs under ${site}/"
+
       - name: Stage landing pages
         if: steps.ci-run.outputs.proceed == 'true'
         run: |
