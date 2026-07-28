@@ -175,6 +175,10 @@ jobs:
           set -euo pipefail
           root=_site/java/javadoc
           mkdir -p "$root"
+          # Absolutize: build_pkg runs gradle from inside dist/java/<pkg>/, so the
+          # -linkoffline element-list dir ("$root/<dep>") must be an absolute path
+          # or javadoc resolves it relative to that subdir and can't find element-list.
+          root=$(cd "$root" && pwd)
 
           init=$(mktemp --suffix=.gradle)
           printf '%s\n' \
