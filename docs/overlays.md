@@ -123,6 +123,9 @@ deps, plugins, and (for ANTLR) grammar-generation configuration.
 > format is the canonical encoding of the Hydra build-configuration types, so when the build system is
 > nativized (#416) the hand parse is replaced by the generated `hydra.decode.*` decoders with no change
 > to the on-disk format.
+> The build system's other JSON formats (`hydra.json`, `package.json`, digests, manifests) are
+> specified the same way, by the `hydra.build.format` module (#512); see
+> [build-system.md § Build-format schemas as Hydra types](build-system.md#build-format-schemas-as-hydra-types).
 
 ## How overlays survive regeneration (prune protection)
 

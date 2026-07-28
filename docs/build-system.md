@@ -420,6 +420,19 @@ combined file's freshness check even though no source changed, and every
 source edit would write back metadata it didn't touch. Keeping the
 artifacts separate keeps each one's lifecycle clean.
 
+### Build-format schemas as Hydra types
+
+The build system's JSON formats are specified as Hydra types in the `hydra.build.format`
+module (in the `hydra-build` package; #512):
+`hydra.json` is a `RepositoryDescriptor`, each `packages/<pkg>/package.json` a
+`PackageDescriptor`, the input and output digests `InputDigest` and `OutputDigest`, and
+`manifest.json` a `PackageManifest`.
+Overlay build configuration (`overlay/<lang>/<pkg>/build.json`) is specified separately by
+`hydra.gradle` and `hydra.python.pyproject` (see [docs/overlays.md](overlays.md)).
+The scripts and drivers listed in this document still parse the files by hand; replacing
+those hand parsers with the generated `hydra.decode.build.format` decoders is deferred
+until a published host carries the module (#416).
+
 ### Cache files are not tracked
 
 Every `dist/<lang>/<pkg>/build/` directory holds derived freshness state: input digests,

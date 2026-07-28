@@ -1,10 +1,12 @@
 -- | Package manifest for hydra-build.
 --
--- Owns Hydra's build-system DSL sources: the manifest-derived module-to-package
+-- Owns Hydra's build-system DSL sources: the build-format type schemas
+-- (hydra.build.format), the manifest-derived module-to-package
 -- router (hydra.build.routing), the kernel/host reconciliation utilities
 -- (hydra.build.reconcile), and the pure module-list utilities
 -- (hydra.build.modules), plus their test modules. See #546 (extraction from
--- hydra-kernel) and #416 (promotion of the build system into Hydra).
+-- hydra-kernel), #512 (build formats as Hydra types), and #416 (promotion of
+-- the build system into Hydra).
 --
 -- hydra-build is the first non-kernel package to declare non-empty testModules;
 -- the JSON-writing drivers route hydra.test.build.* to this package's test tree
@@ -20,6 +22,7 @@ module Hydra.Sources.Build.Manifest (
 
 import Hydra.Kernel
 
+import qualified Hydra.Sources.Build.Format as BuildFormat
 import qualified Hydra.Sources.Build.ManifestWriter as BuildManifestWriter
 import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
@@ -30,20 +33,23 @@ import qualified Hydra.Sources.Build.Test.Routing as TestBuildRouting
 
 mainModules :: [Module]
 mainModules = [
+  BuildFormat.module_,
   BuildManifestWriter.module_,
   BuildModules.module_,
   BuildReconcile.module_,
   BuildRouting.module_]
 
--- | The build modules define terms (utilities), not type schemas, so there are
--- no type-defining modules from which to derive DSL wrappers. Empty, like
--- hydra-rdf's encoding list.
+-- | hydra.build.format is the package's one type-defining module (#512); it
+-- gives rise to generated DSL wrappers.
 mainDslModules :: [Module]
-mainDslModules = []
+mainDslModules = [
+  BuildFormat.module_]
 
--- | No type-defining modules to encode/decode. Empty.
+-- | Encoding and decoding modules are generated for the build-format types,
+-- making each on-disk build-format JSON file decodable as its defined type.
 mainEncodingModules :: [Module]
-mainEncodingModules = []
+mainEncodingModules = [
+  BuildFormat.module_]
 
 testModules :: [Module]
 testModules = [
