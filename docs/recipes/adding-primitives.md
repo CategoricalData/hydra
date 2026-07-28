@@ -756,6 +756,63 @@ When adding a new primitive function:
   - [ ] Test group registered in `allTests`
 - [ ] **Tests pass** in all three languages
 
+## Adding a new hydra.lib module
+
+Adding a brand-new `hydra.lib.<sub>` module name (as opposed to a primitive within an existing
+one) is a **much rarer, higher-risk task**: every self-hosting host must register the new
+sub-namespace, or that host's tests fail — often deep into a per-host run, one host at a time,
+rather than immediately and with a named culprit. This is the failure mode #524
+(`hydra.lib.hashing`) hit empirically: missing a registration point compiles cleanly and fails
+only in that host's own test suite.
+
+There is no single registry enumerating "every `hydra.lib.<sub>` module every host must
+register" (tracked as promotion work in #533). Until that exists, treat the following as the
+authoritative checklist — one entry per host or driver location that hardcodes the current set
+of module names:
+
+- [ ] **Haskell driver textual-redirect allow-lists** (only if the new module has a native
+  Haskell overlay to redirect generated non-Java/non-Haskell consumer code to — see
+  [How primitive names flow](#how-primitive-names-flow)):
+  - [ ] `libSubs` in `heads/haskell/src/exec/bootstrap-from-json/Main.hs`
+  - [ ] the identical `libSubs` in `heads/haskell/json-driver/app/ColdSeedMain.hs` (kept in sync
+    by hand with the above — both must change together)
+  - [ ] if the module is effectful, also add it to the relevant per-host variants
+    (`libSubsPython`/`libSubsScala`/`libSubsClojure`/`libSubsScheme`/`libSubsLisp`) in both files
+- [ ] **Java**
+  - [ ] `overlayJavaLibPackageAliases` in `packages/hydra-java/src/main/java/hydra/sources/java/Utils.java`
+  - [ ] a `<sub>Primitives()` function plus its call in `standardPrimitives()`, in
+    `overlay/java/hydra-kernel/.../lib/Libraries.java`
+- [ ] **Python**: a `register_<sub>_primitives()` function plus its call in the aggregator, in
+  `overlay/python/hydra-kernel/.../sources/libraries.py`
+- [ ] **Scala**: the equivalent dispatch entry in `overlay/scala/hydra-kernel/.../Libraries.scala`
+- [ ] **TypeScript**: the equivalent dispatch entry in `overlay/typescript/hydra-kernel/.../lib/libraries.ts`
+- [ ] **Clojure**: a `register-<sub>` function (or equivalent) in
+  `overlay/clojure/hydra-kernel/.../hydra/overlay/clojure/libraries.clj`. No hardcoded file-load
+  list to update — Clojure uses `:require`.
+- [ ] **Scheme**: the equivalent in `overlay/scheme/hydra-kernel/.../hydra/overlay/scheme/libraries.scm`
+  (and `.sld`). No hardcoded file-load list to update — Scheme uses R7RS `import`.
+- [ ] **Common Lisp** (flat namespace — the worst case, four separate lists):
+  - [ ] `register-<sub>` function in
+    `overlay/common-lisp/hydra-kernel/.../overlay/common_lisp/lib/libraries.lisp`
+  - [ ] the "load native overlay lib files" `dolist` in
+    `overlay/common-lisp/hydra-kernel/.../hydra/loader.lisp` (`hydra-load-prims-and-libraries`)
+  - [ ] the *separate* "load test modules" `dolist` further down the same `loader.lisp`
+    (`hydra-load-gen-test`) — this list has already drifted from the one above; do not assume
+    they're kept in sync automatically
+  - [ ] the *third and fourth* lists in `heads/lisp/common-lisp/src/test/common-lisp/run-tests.lisp`
+    (one `dolist` for overlay lib files, a separate one for `lib/<sub>.lisp` test files)
+- [ ] **Emacs Lisp** (same four-list shape as Common Lisp):
+  - [ ] `register-<sub>` function in
+    `overlay/emacs-lisp/hydra-kernel/.../overlay/emacs_lisp/lib/libraries.el`
+  - [ ] the overlay-lib-file list and the separate test-module list in
+    `overlay/emacs-lisp/hydra-kernel/.../hydra/loader.el`
+  - [ ] `heads/lisp/emacs-lisp/run-tests.el` if it maintains its own list rather than reusing
+    `loader.el`'s (verify at the time — this has not been true consistently across dialects)
+- [ ] **Full per-host test sweep.** Because a missed entry above compiles cleanly and only fails
+  at runtime in that host's own test suite, a full sync + per-host `/test` run is the only
+  reliable way to confirm every host picked up the new module — do not rely on Haskell's
+  `stack test` passing as a proxy for the other eight hosts.
+
 ## Renaming or removing a primitive
 
 Modifying an existing primitive — renaming, removing, or changing its signature — is a
