@@ -107,7 +107,8 @@
 (let ((bases (delete-dups
               (delq nil (list hydra-gen-test-dir hydra-build-gen-test-dir)))))
   (dolist (base bases)
-    (dolist (f '("test/build/modules.el"
+    (dolist (f '("test/build/libraries.el"
+                 "test/build/modules.el"
                  "test/build/reconcile.el"
                  "test/build/routing.el"))
       (let ((path (expand-file-name f base)))

@@ -325,7 +325,8 @@
   (load-test-file f))
 
 ;; Build tests (#546: now under the hydra-build package's dist tree)
-(dolist (f '("build/modules.lisp"
+(dolist (f '("build/libraries.lisp"
+             "build/modules.lisp"
              "build/reconcile.lisp"
              "build/routing.lisp"))
   (load-build-test-file f))
