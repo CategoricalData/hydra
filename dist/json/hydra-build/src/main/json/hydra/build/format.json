@@ -1,0 +1,1023 @@
+{
+  "name": "hydra.build.format",
+  "metadata": {
+    "description": "Type-level specifications of the JSON formats used by Hydra's build system: the repository descriptor (hydra.json), per-package descriptors (package.json), per-source-set input and output digests (digest.json), generated-source manifests (manifest.json), and per-package validation configuration. Each on-disk file is the canonical JSON encoding of the corresponding type. Overlay build configuration (overlay/<lang>/<pkg>/build.json) is specified separately, by hydra.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.packaging"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.build.format.DefinitionNameConventionProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "severity",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.Severity"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How a finding of this check is treated"}}}]}}}},
+                  {
+                    "name": "allowUnderscores",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether underscores are permitted in definition names"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Configuration for the definition-name-convention check"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.DefinitionValidationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "hasDescription",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.DocumentationProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Configuration for the definition-documentation check"}}}]}}}},
+                  {
+                    "name": "ordering",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether definitions must appear in alphabetical order"}}}]}}}},
+                  {
+                    "name": "nameConvention",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.DefinitionNameConventionProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Configuration for the definition-name-convention check"}}}]}}}},
+                  {
+                    "name": "notInModuleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether a definition name may duplicate part of its module name"}}}]}}}},
+                  {
+                    "name": "duplicateName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether duplicate definition names within a module are reported"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Validation rules applying to individual definitions within a module. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.DigestEntry",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "kind",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.DigestKind"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of artifact recorded"}}}]}}}},
+                  {
+                    "name": "hash",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.Sha256Hash"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SHA-256 hash of the file content"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One file's classification and content hash within a digest"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.DigestKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "dslSource",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A DSL source file under a package's src/main source tree"}}}]}}}},
+                  {
+                    "name": "jsonFile",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON file under dist/json/"}}}]}}}},
+                  {
+                    "name": "targetFile",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A generated source file under dist/<lang>/"}}}]}}}},
+                  {
+                    "name": "runtimeFile",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A hand-written runtime support file copied into the distribution"}}}]}}}},
+                  {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Anything else (escape hatch; unknown kinds round-trip as this variant)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The kind of artifact recorded in a digest entry. Lets a single digest mix typed entries without losing the discriminator."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.DocumentationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "severity",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.Severity"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How a finding of this check is treated"}}}]}}}},
+                  {
+                    "name": "exemptDeprecated",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether deprecated definitions are exempt from the documentation requirement"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Configuration for the definition-documentation check"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.Generation",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "generatorId",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The gating cache key identifying the generator that produced the outputs"}}}]}}}},
+                  {
+                    "name": "mode",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.GenerationMode"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether the artifact was produced by a published host or a locally-built migration shim"}}}]}}}},
+                  {
+                    "name": "host",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.LanguageName"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The producing host language (informational)"}}}]}}}},
+                  {
+                    "name": "hydraVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The release version of the producing host (informational; omitted for shim builds)"}}}]}}}},
+                  {
+                    "name": "revision",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The producing worktree's revision, as <short-sha> with \"-dirty\" appended when the tree has uncommitted changes (informational; required for shim builds)"}}}]}}}},
+                  {
+                    "name": "timestamp",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The ISO-8601 UTC time of generation (informational; non-deterministic across byte-identical rebuilds)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A structured generation-provenance record for generated artifacts, separating gating identity from informational provenance. Only generatorId gates cache freshness; it is host-independent by design, since self-hosting requires every host to produce byte-identical output. All other fields are informational and must not gate. Invariant: a shim-mode generation has a revision (a shim has no release version, so the working-tree revision is its only precise identity)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.GenerationMode",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "published",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Produced by a published, versioned host"}}}]}}}},
+                  {
+                    "name": "shim",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Produced by a locally-built migration shim, ahead of any published host"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The provenance class of a generated artifact"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.HostOverride",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "local",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Build and consume the host locally from source rather than from the package registry"}}}]}}}},
+                  {
+                    "name": "version",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.Version"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pin the host to a specific published version"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An override of the default published-host consumption for one host language: either force a local from-source build, or pin a specific published version."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.InputDigest",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "digestFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version of this digest file's own schema"}}}]}}}},
+                  {
+                    "name": "moduleFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version of the JSON encoding of the sibling module files"}}}]}}}},
+                  {
+                    "name": "selfHash",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Sha256Hash"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A deterministic hash over all of the package's per-module hashes (absent in legacy digests)"}}}]}}}},
+                  {
+                    "name": "dependencyHashes",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "For each declared dependency package, that package's selfHash as recorded at write time"}}}]}}}},
+                  {
+                    "name": "moduleHashes",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The hash of each module's source, keyed by module name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A per-package, per-source-set input digest (dist/json/<pkg>/build/<set>/digest.json): Merkle-style hashes of the package's DSL sources, recorded when the package's JSON is written and consumed by downstream freshness checks. The selfHash summarizes the package's own module hashes; dependencyHashes captures the selfHash of each declared dependency package at write time, giving transitive invalidation."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.LanguageName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The name of a source or target language in Hydra's build system, e.g. \"haskell\", \"java\", or \"python\""}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.ModuleValidationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "definitions",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.DefinitionValidationProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Validation rules applying to the module's individual definitions"}}}]}}}},
+                  {
+                    "name": "nameConvention",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether module names must follow naming conventions"}}}]}}}},
+                  {
+                    "name": "conflictingVariantName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether union variant names conflicting across the module are reported"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Validation rules applying to a module as a whole. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.OutputDigest",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "digestFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version of this digest file's own schema"}}}]}}}},
+                  {
+                    "name": "moduleFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version of the JSON encoding of the module files this digest governs"}}}]}}}},
+                  {
+                    "name": "generator",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The flat gating generator identity (a compatibility duplicate of generation.generatorId)"}}}]}}}},
+                  {
+                    "name": "generation",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.Generation"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The structured generation-provenance record"}}}]}}}},
+                  {
+                    "name": "selfHash",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Sha256Hash"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The input package's selfHash as recorded at refresh time (absent in legacy digests)"}}}]}}}},
+                  {
+                    "name": "dependencyHashes",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "For each declared dependency package, that package's selfHash as recorded at refresh time"}}}]}}}},
+                  {
+                    "name": "inputs",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.build.format.DigestEntry"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Every input file's kind and hash, keyed by worktree-relative path"}}}]}}}},
+                  {
+                    "name": "outputs",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.build.format.DigestEntry"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Every output file's kind and hash, keyed by path relative to the output directory"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A per-package, per-source-set output digest for one target language (dist/<lang>/<pkg>/build/<set>/digest.json), recording every input file whose content determines the generated output, every output file the generation step is responsible for, and the identity of the generator. A generation step is fresh exactly when all input hashes, all output hashes, the generator identity, and the recorded package and dependency hashes match."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.PackageDescriptor",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "packageFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version of this descriptor file's schema"}}}]}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The unique name of the package, e.g. \"hydra-kernel\""}}}]}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A concise human-readable summary of the package"}}}]}}}},
+                  {
+                    "name": "sourceLanguage",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.format.LanguageName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The language in which the package's DSL sources are authored"}}}]}}}},
+                  {
+                    "name": "targetLanguages",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"list": {"variable": "hydra.build.format.LanguageName"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The target languages for which distributions of this package are generated. When absent, the default target set applies."}}}]}}}},
+                  {
+                    "name": "dependencies",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.PackageName"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The names of the packages this package depends upon"}}}]}}}},
+                  {
+                    "name": "validation",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.PackageValidationConfiguration"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Optional per-package validation configuration. When absent, the validation engine's defaults apply."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A package descriptor (packages/<pkg>/package.json): the source-of-truth declaration of a Hydra package's name, source language, dependencies, and optional per-package configuration."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.PackageManifest",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "manifestFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version of this manifest file's schema"}}}]}}}},
+                  {
+                    "name": "moduleFormatVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version of the JSON encoding of the sibling module files"}}}]}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the package this manifest describes"}}}]}}}},
+                  {
+                    "name": "mainModules",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All main-source-set modules in the package"}}}]}}}},
+                  {
+                    "name": "testModules",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All test-source-set modules in the package"}}}]}}}},
+                  {
+                    "name": "mainDslModules",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The subset of main modules which define type schemas and give rise to generated DSL wrapper modules"}}}]}}}},
+                  {
+                    "name": "mainEncodingModules",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The subset of main modules for which encoding and decoding modules are generated"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A generated-source manifest (dist/<lang>/<pkg>/src/<set>/<lang>/manifest.json): the list of modules generated into a distribution package, partitioned by role."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.PackageValidationConfiguration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.PackageValidationProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Validation rules applying to the package as a whole"}}}]}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.ModuleValidationProfile"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Validation rules applying to each module"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.TypeValidationProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Validation rules applying to type-definition bodies"}}}]}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.TermValidationProfile"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Validation rules applying to term-definition bodies"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The full, opt-in validation configuration for a package, as declared in its package descriptor. Every field cascades optional; an absent field means the corresponding rule family is not configured and the validation engine's defaults apply."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.PackageValidationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "conflictingModuleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether module names conflicting across the package are reported"}}}]}}}},
+                  {
+                    "name": "duplicateModuleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether duplicate module names within the package are reported"}}}]}}}},
+                  {
+                    "name": "nameConvention",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether package names must follow naming conventions"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Validation rules applying to a package as a whole. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.RepositoryDescriptor",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "currentVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.Version"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version currently under development"}}}]}}}},
+                  {
+                    "name": "hostVersion",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.Version"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The published host version consumed by default when generating code"}}}]}}}},
+                  {
+                    "name": "hostOverrides",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.build.format.LanguageName"}, "values": {"variable": "hydra.build.format.HostOverride"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Per-host-language overrides of the default published-host consumption"}}}]}}}},
+                  {
+                    "name": "group",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The group identifier under which artifacts are published, e.g. a Maven group id"}}}]}}}},
+                  {
+                    "name": "author",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The author attribution for published artifacts"}}}]}}}},
+                  {
+                    "name": "url",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The URL of the project"}}}]}}}},
+                  {
+                    "name": "license",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The license identifier for published artifacts, e.g. \"Apache-2.0\""}}}]}}}},
+                  {
+                    "name": "packages",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.PackageName"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The names of the repository's source packages"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The repository descriptor (hydra.json at the repository root): release and host versions, host consumption overrides, publication metadata, and the list of source packages."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.Severity",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "error", "type": "unit"}, {"name": "warning", "type": "unit"}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How a validation finding is treated"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.Sha256Hash",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A SHA-256 hash in lowercase hexadecimal notation"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.TermValidationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "duplicateBinding",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether duplicate let bindings are reported"}}}]}}}},
+                  {
+                    "name": "emptyTermAnnotation",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether empty term annotations are reported"}}}]}}}},
+                  {
+                    "name": "undefinedVariable",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether references to undefined variables are reported"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Validation rules applying to term-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.format.TypeValidationProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "emptyAnnotation",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether empty type annotations are reported"}}}]}}}},
+                  {
+                    "name": "duplicateField",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether duplicate field names within a record or union are reported"}}}]}}}},
+                  {
+                    "name": "singleVariantUnion",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.format.Severity"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether single-variant unions are reported"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Validation rules applying to type-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}}}}}]}

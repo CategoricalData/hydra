@@ -1,7 +1,14 @@
 {
-  "mainDslModules": [],
-  "mainEncodingModules": [],
-  "mainModules": ["hydra.build.manifestWriter", "hydra.build.modules", "hydra.build.reconcile", "hydra.build.routing"],
+  "mainDslModules": ["hydra.build.format"],
+  "mainEncodingModules": ["hydra.build.format"],
+  "mainModules": [
+    "hydra.build.format",
+    "hydra.build.manifestWriter",
+    "hydra.build.modules",
+    "hydra.build.reconcile",
+    "hydra.build.routing",
+    "hydra.decode.build.format",
+    "hydra.encode.build.format"],
   "manifestFormatVersion": 1,
   "moduleFormatVersion": 1,
   "package": "hydra-build",
