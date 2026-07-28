@@ -35,7 +35,7 @@ trait HydraTestGroupSupport {
 
   // ---- Benchmark JSON writer (matches the JSON shape used by other heads) ----
 
-  protected def writeBenchmarkJson(outputPath: String, allTests: TestGroup, benchmarkResults: scala.collection.Map[String, Double]): Unit = {
+  protected def writeBenchmarkJson(outputPath: String, allTests: TestGroup, benchmarkResults: _root_.scala.collection.Map[String, Double]): Unit = {
     val json = buildBenchmarkJson(allTests, benchmarkResults)
     val writer = new _root_.java.io.FileWriter(outputPath)
     try writer.write(json)
@@ -43,7 +43,7 @@ trait HydraTestGroupSupport {
     println("Benchmark results written to " + outputPath)
   }
 
-  private def buildBenchmarkJson(root: TestGroup, benchmarkResults: scala.collection.Map[String, Double]): String = {
+  private def buildBenchmarkJson(root: TestGroup, benchmarkResults: _root_.scala.collection.Map[String, Double]): String = {
     val sb = new StringBuilder
     sb.append("{\n")
     sb.append("  \"metadata\": {\n")
@@ -64,7 +64,7 @@ trait HydraTestGroupSupport {
     sb.toString
   }
 
-  private def renderGroup(indent: String, path: String, g: TestGroup, benchmarkResults: scala.collection.Map[String, Double]): String = {
+  private def renderGroup(indent: String, path: String, g: TestGroup, benchmarkResults: _root_.scala.collection.Map[String, Double]): String = {
     val sb = new StringBuilder
     val timeMs = benchmarkResults.getOrElse(path, 0.0)
     sb.append(indent).append("{\n")
