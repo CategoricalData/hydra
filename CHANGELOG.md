@@ -15,142 +15,125 @@ they are documented here for completeness.
 
 ---
 
-## [0.17.1] - unreleased
+## [0.17.1] - 2026-07-18
 
-Development version. Opens the 0.17.x line — the first release built entirely against
-published 0.17.0 hosts (Hackage / PyPI / Maven Central), with the `hostOverrides` shims
-that were needed while 0.16.1 lacked the effect type and I/O primitives removed.
+Consolidation release on the 0.17.x line, built against published 0.17.0 hosts. Themes:
+generated term-reference DSLs, a translingual package-validation framework, promotion of the
+build system into Hydra (`hydra-build`), and broad TypeScript-host and cross-host hardening.
+
+### Highlights
+
+- **Generated term-reference DSLs** ([#467](https://github.com/CategoricalData/hydra/issues/467)):
+  kernel term modules now emit one typed, rename-safe reference per definition into every target
+  language; the Java and Python coder sources were pivoted onto them, retiring ~700 stringly-typed
+  inline references.
+- **Package validation** ([#574](https://github.com/CategoricalData/hydra/issues/574),
+  [#575](https://github.com/CategoricalData/hydra/issues/575)): a translingual `hydra.validate.*`
+  framework with per-package `ValidationProfile`s (undeclared-dependency gate, naming/ordering/docs
+  checks). See the [Validation](https://github.com/CategoricalData/hydra/wiki/Validation) wiki page.
+- **`hydra-build` package** ([#546](https://github.com/CategoricalData/hydra/issues/546)):
+  build-orchestration logic that lived only in host scripts is now translingual Hydra
+  (`hydra.build.*`), extracted into a dedicated package.
 
 ### New features
 
-- **Generated term-reference DSLs** ([#467](https://github.com/CategoricalData/hydra/issues/467)):
-  kernel *term* modules now project generated DSL surfaces, completing the story begun with
-  type-module DSLs and the generated primitive wrappers (`hydra.dsl.lib.*`, 0.17.0). A
-  signature read-back in the DSL pass reuses the main pass's inference, and a demand-curated
-  set of 19 kernel term modules (plus the json/test/extract modules) emits one typed,
-  rename-safe reference per definition into every target language — e.g. Haskell
-  `Hydra.Dsl.Strip.deannotateType`, Java `hydra.dsl.Strip.deannotateType(...)`, Python
-  `hydra.dsl.strip.deannotate_type(...)`. The Java and Python coder sources were pivoted onto
-  the generated references, retiring ~700 stringly-typed inline `var("hydra....")` references
-  and shrinking Python's hand registry to the non-generatable remainder (byte-identical
-  generated output before and after). Follow-ups:
-  [#555](https://github.com/CategoricalData/hydra/issues/555) (typed references to derived
-  encode/decode/show functions via `TypedName`),
-  [#556](https://github.com/CategoricalData/hydra/issues/556) (non-kernel packages).
-- **Package validation** ([#574](https://github.com/CategoricalData/hydra/issues/574),
-  [#575](https://github.com/CategoricalData/hydra/issues/575)): a translingual `hydra.validate.*`
-  framework carries per-package `ValidationProfile`s (error/warning rules, error/warning caps) and a
-  catalog of checks — undeclared-package-dependency detection (now a fatal gate, #574),
-  definition-name convention (PascalCase), definition ordering, documentation completeness, and
-  conflicting-variant-name detection — layered on the existing core term/type well-formedness rules.
-  A kernel-strict / others-relaxed policy keeps `/sync` green fleet-wide while the documentation
-  backlog drains. See the new [Validation](https://github.com/CategoricalData/hydra/wiki/Validation)
-  wiki page for the full per-package constraint specification.
-- **DSL-authoring registration guards** ([#554](https://github.com/CategoricalData/hydra/issues/554)):
-  fail-fast authoring-time validation for the host-native DSL sources — every DSL-authoring module in
-  Java/`hydra-jvm`, Python, and Scala now asserts its definitions are fully registered
-  (`Defs.checkComplete` / `check_complete`), backed by a Haskell kernel-source registration-completeness
-  scanner, so a definition added to a source file but omitted from its `definitions` list fails loudly
-  instead of silently vanishing from the generated output.
-- **`hydra-build` package** ([#546](https://github.com/CategoricalData/hydra/issues/546),
-  [#529](https://github.com/CategoricalData/hydra/issues/529),
-  [#530](https://github.com/CategoricalData/hydra/issues/530)): the build-orchestration logic that had
-  lived only in host scripts is now translingual Hydra. Pure module-list utilities became
-  `hydra.build.modules` (#529) and the orphan-reconcile decision became `hydra.build.reconcile` (#530),
-  each with a translingual test suite; the `hydra.build.*` modules were then extracted into a dedicated
-  `hydra-build` package (#546), separate from the kernel.
-- **Metadata sidecar + content/version-addressed freshness**
-  ([#415](https://github.com/CategoricalData/hydra/issues/415)): dist manifests now carry a
-  `moduleFormatVersion` field, and the generator's freshness basis is content/version-addressed — the
-  groundwork for reproducible, cache-correct incremental generation.
-- **Structured generation-provenance record**
-  ([#523](https://github.com/CategoricalData/hydra/issues/523)): each generation run now records a
-  structured `Generation` provenance entry (digest v2), replacing the ad-hoc shell threading of
-  generation metadata.
-- **Worker + issue hierarchy** ([#557](https://github.com/CategoricalData/hydra/issues/557)): a
-  principled agent/worker framework — roles and parentage mirroring the GitHub issue tree, a
-  cross-worktree message transport with a verify-after-copy protocol, a blocking-aware design-question
-  (`decisions/`) channel, an issue-proposal queue with the `/issues` command, an autonomy-dial banner,
-  and cross-machine staging coordination. Contributor-facing process only; no change to generated code.
+- Generated term-reference DSLs ([#467](https://github.com/CategoricalData/hydra/issues/467));
+  follow-ups: `TypedName` refs to derived encode/decode/show
+  ([#555](https://github.com/CategoricalData/hydra/issues/555)), non-kernel packages
+  ([#556](https://github.com/CategoricalData/hydra/issues/556)).
+- Translingual package-validation framework ([#574](https://github.com/CategoricalData/hydra/issues/574),
+  [#575](https://github.com/CategoricalData/hydra/issues/575)).
+- DSL-authoring registration guards: fail-fast completeness checks for the Java/Python/Scala DSL sources
+  ([#554](https://github.com/CategoricalData/hydra/issues/554)).
+- `hydra-build` package: `hydra.build.modules`
+  ([#529](https://github.com/CategoricalData/hydra/issues/529)), `hydra.build.reconcile`
+  ([#530](https://github.com/CategoricalData/hydra/issues/530)), extracted from the kernel
+  ([#546](https://github.com/CategoricalData/hydra/issues/546)).
+- Effectful `hydra.lib.system` primitive library ([#498](https://github.com/CategoricalData/hydra/issues/498)).
+- SHA-256 cryptographic hash primitive in `hydra.lib` ([#524](https://github.com/CategoricalData/hydra/issues/524)).
+- `hydra-jvm` package: shared JVM serde helpers relocated out of `hydra.java.serde`
+  ([#505](https://github.com/CategoricalData/hydra/issues/505)).
+- Internalized the Hydra-TinkerPop bindings (formerly HydraPop)
+  ([#442](https://github.com/CategoricalData/hydra/issues/442)).
+- Compact unit-valued variants in the JSON encoding ([#520](https://github.com/CategoricalData/hydra/issues/520)).
+- Structured generation-provenance record (digest v2) ([#413](https://github.com/CategoricalData/hydra/issues/413),
+  [#523](https://github.com/CategoricalData/hydra/issues/523)).
+- Metadata sidecar + content/version-addressed freshness (`moduleFormatVersion`)
+  ([#415](https://github.com/CategoricalData/hydra/issues/415)).
+- Worker + issue hierarchy: agent/worker framework, cross-worktree messaging, issue-proposal queue
+  (contributor process only) ([#557](https://github.com/CategoricalData/hydra/issues/557)).
 
-### API and usability
+### Improvements
 
-- **DSL usability passes** ([#430](https://github.com/CategoricalData/hydra/issues/430),
-  [#553](https://github.com/CategoricalData/hydra/issues/553)): reviewed the host-native Java, Python,
-  and Scala DSL surfaces for ergonomics and cross-host parity (documented def shapes, added a Scala
-  projection helper), bringing the three authoring dialects into closer alignment.
+- Type inference for annotations ([#229](https://github.com/CategoricalData/hydra/issues/229)).
+- Fixed the signature / definition split in primitive definitions
+  ([#502](https://github.com/CategoricalData/hydra/issues/502)).
+- DSL usability passes across the host-native Java/Python/Scala surfaces
+  ([#430](https://github.com/CategoricalData/hydra/issues/430),
+  [#553](https://github.com/CategoricalData/hydra/issues/553)).
+- Audited the Scala and Lisp-family coders for the unconditional `hydra.lib.*` overlay-import rewrite
+  ([#569](https://github.com/CategoricalData/hydra/issues/569)).
 
-### Fixed
+### Bug fixes
 
-Bug fixes landed this cycle, grouped by area (see each issue for detail):
-
-- **TypeScript** — reactivated `hydra.lib.*` primitive tests surfaced encoder gaps: lazy show-calling
-  let bindings and compact bare-string `LiteralType` expansion in the test converter
-  ([#564](https://github.com/CategoricalData/hydra/issues/564)),
-  `binaryToBytes` registration + base64 binary decode in `decodeUtf8`
-  ([#561](https://github.com/CategoricalData/hydra/issues/561)),
+- **TypeScript host** — V8 stack budget on ts→Java ([#390](https://github.com/CategoricalData/hydra/issues/390));
+  effectful libs not generated / 484 tsc errors ([#503](https://github.com/CategoricalData/hydra/issues/503));
+  15 effect/file inference cases ([#504](https://github.com/CategoricalData/hydra/issues/504));
+  ts→ts self-host regression ([#507](https://github.com/CategoricalData/hydra/issues/507)); npm packages
+  bundling a duplicate kernel ([#584](https://github.com/CategoricalData/hydra/issues/584)); broken npm
+  entry points ([#587](https://github.com/CategoricalData/hydra/issues/587));
+  `hydra.test.build.modules.allTests` gen-universe gap ([#588](https://github.com/CategoricalData/hydra/issues/588)).
+- **TypeScript coder** — reactivated `hydra.lib.*` tests: lazy show-calling let bindings + compact
+  `LiteralType` expansion ([#564](https://github.com/CategoricalData/hydra/issues/564)); `binaryToBytes`
+  registration + base64 decode in `decodeUtf8` ([#561](https://github.com/CategoricalData/hydra/issues/561));
   `hydra.test.build.*` emission after the #546 split
-  ([#570](https://github.com/CategoricalData/hydra/issues/570)), and `HYDRA_DEFAULT_IMPLS` support in
-  the test runner ([#536](https://github.com/CategoricalData/hydra/issues/536)).
-- **Tests and CI** — restored the default-primitive-implementation testing solution
-  ([#388](https://github.com/CategoricalData/hydra/issues/388),
-  [#549](https://github.com/CategoricalData/hydra/issues/549)), reactivated previously-ignored kernel
-  test cases ([#513](https://github.com/CategoricalData/hydra/issues/513),
-  [#550](https://github.com/CategoricalData/hydra/issues/550)), wired the regression harnesses into CI
-  and split them out of the monolithic Haskell job for timeout headroom
-  ([#535](https://github.com/CategoricalData/hydra/issues/535),
-  [#563](https://github.com/CategoricalData/hydra/issues/563)), added Scala/Go/Lisp
-  self-containment gates to `verify-distribution.sh`
-  ([#537](https://github.com/CategoricalData/hydra/issues/537)), a manifest-JSON-tracked CI check
-  ([#541](https://github.com/CategoricalData/hydra/issues/541)), a per-package test-digest freshness
-  fix ([#551](https://github.com/CategoricalData/hydra/issues/551)), overlay-file restoration in
-  `test-stale-output-prune.sh` ([#558](https://github.com/CategoricalData/hydra/issues/558)), and a
-  sync-freshness fingerprint that now sees host-native DSL sources
-  ([#562](https://github.com/CategoricalData/hydra/issues/562)).
+  ([#570](https://github.com/CategoricalData/hydra/issues/570)); `HYDRA_DEFAULT_IMPLS` in the test runner
+  ([#536](https://github.com/CategoricalData/hydra/issues/536)); overlay-import rewrite no longer captures
+  `hydra.lib.defaults` ([#565](https://github.com/CategoricalData/hydra/issues/565)).
+- **Lisp family** — clj→clj bootstrap hang in `generate_source_files`
+  ([#479](https://github.com/CategoricalData/hydra/issues/479)); Common Lisp `test_graph.lisp` loader
+  forward-reference ([#496](https://github.com/CategoricalData/hydra/issues/496)); Scheme maps
+  last-writer-wins in `union` ([#545](https://github.com/CategoricalData/hydra/issues/545)); Emacs Lisp
+  bootstrap `wrong-type-argument (listp :string)` ([#586](https://github.com/CategoricalData/hydra/issues/586));
+  `hydra.build.*` regeneration into the Lisp dialects ([#544](https://github.com/CategoricalData/hydra/issues/544)).
 - **Kernel and coders** — Java binary-literal signed-byte emission
-  ([#528](https://github.com/CategoricalData/hydra/issues/528)), `hydra.json.Decode.fromJson`
-  parametric-type (Application/Forall) support
-  ([#531](https://github.com/CategoricalData/hydra/issues/531)), stale 2-param `Coder` shape in
-  Java/Scala test bootstrap ([#552](https://github.com/CategoricalData/hydra/issues/552)), and a
-  kernel dead-code/TODO cleanup ([#538](https://github.com/CategoricalData/hydra/issues/538)).
+  ([#528](https://github.com/CategoricalData/hydra/issues/528)); `hydra.json.Decode.fromJson`
+  parametric-type support ([#531](https://github.com/CategoricalData/hydra/issues/531)); stale 2-param
+  `Coder` shape in Java/Scala test bootstrap ([#552](https://github.com/CategoricalData/hydra/issues/552));
+  Java Javadoc ampersand escaping ([#493](https://github.com/CategoricalData/hydra/issues/493)); Scala
+  coder over-generalizing `Schema[S,T,V,E]` args, breaking `hydra-pg`
+  ([#589](https://github.com/CategoricalData/hydra/issues/589)); kernel dead-code/TODO cleanup
+  ([#538](https://github.com/CategoricalData/hydra/issues/538)).
+- **Publishing and packaging** — self-broken 0.16.0 `hydra-kernel`/`hydra-python` wheels
+  ([#472](https://github.com/CategoricalData/hydra/issues/472)).
 - **Lib and build** — `hydra.lib.files` copy/removeDirectory/status overlays across all nine hosts
-  ([#525](https://github.com/CategoricalData/hydra/issues/525)), `hydra.build.*` regeneration into the
-  Lisp dialects ([#544](https://github.com/CategoricalData/hydra/issues/544)), Scheme maps
-  last-writer-wins in `union` ([#545](https://github.com/CategoricalData/hydra/issues/545)),
-  standalone-kernel SHA dependency ([#542](https://github.com/CategoricalData/hydra/issues/542)),
-  the lexicon's empty Types section ([#539](https://github.com/CategoricalData/hydra/issues/539)), and
-  a duplicated generated-file header in `generate-head-haskell-build.py`
-  ([#540](https://github.com/CategoricalData/hydra/issues/540)).
-
-- **TypeScript overlay-import rewrite** ([#565](https://github.com/CategoricalData/hydra/issues/565)):
-  the TypeScript coder's lib overlay-import rewrite no longer captures `hydra.lib.defaults`, which is a
-  generated (not overlaid) module; excluding it fixes spurious import references in generated TypeScript.
-
-- **Lexicon generation** (`bin/regenerate-lexicon.sh`): the generator had been failing
-  silently since the encoder/decoder modules moved to in-memory synthesis
-  ([#448](https://github.com/CategoricalData/hydra/issues/448)) — the script masked the
-  failure and left a stale `docs/hydra-lexicon.txt` missing the four effectful primitive
-  libraries (`hydra.lib.{effects,files,system,text}`). The synthesized coder modules are
-  now included in the lexicon universe, the script fails loudly, and the regenerated
-  lexicon covers all 267 primitives across 17 library modules.
-- **`bin/prepare-release.sh`**: the non-blocking Java quality check invoked Gradle
-  subprojects (`:hydra-rdf4j:test` etc.) that were removed in
-  [#511](https://github.com/CategoricalData/hydra/issues/511), so it always warned without
-  checking anything; it now runs the `dist/java/hydra-pg` package tests (the current home
-  of the former binding tests).
-- **`.gitignore`**: the ignore rules for the overlaid hand-written Haskell runtime still
-  named pre-[#501](https://github.com/CategoricalData/hydra/issues/501) paths, so 41
-  duplicate copies under `dist/haskell/` had become tracked; the rules now match the
-  `Hydra/Overlay/` location and the duplicates are untracked.
+  ([#525](https://github.com/CategoricalData/hydra/issues/525)); standalone-kernel SHA dependency
+  ([#542](https://github.com/CategoricalData/hydra/issues/542)); lexicon's empty Types section
+  ([#539](https://github.com/CategoricalData/hydra/issues/539)); silent lexicon-generation failure since
+  the coders moved to in-memory synthesis ([#448](https://github.com/CategoricalData/hydra/issues/448));
+  duplicated generated-file header in `generate-head-haskell-build.py`
+  ([#540](https://github.com/CategoricalData/hydra/issues/540)); `.gitignore` untracking 41 duplicate
+  overlaid-runtime copies under `dist/haskell/` ([#501](https://github.com/CategoricalData/hydra/issues/501));
+  `bin/prepare-release.sh` Java quality check repointed to `dist/java/hydra-pg` tests after
+  ([#511](https://github.com/CategoricalData/hydra/issues/511)).
+- **Tests and CI** — restored default-primitive-implementation testing
+  ([#388](https://github.com/CategoricalData/hydra/issues/388),
+  [#549](https://github.com/CategoricalData/hydra/issues/549)); reactivated ignored kernel test cases
+  ([#513](https://github.com/CategoricalData/hydra/issues/513),
+  [#550](https://github.com/CategoricalData/hydra/issues/550)); wired + split out the regression harnesses
+  ([#535](https://github.com/CategoricalData/hydra/issues/535),
+  [#563](https://github.com/CategoricalData/hydra/issues/563)); Scala/Go/Lisp self-containment gates
+  ([#537](https://github.com/CategoricalData/hydra/issues/537)); manifest-JSON-tracked CI check
+  ([#541](https://github.com/CategoricalData/hydra/issues/541)); per-package test-digest freshness
+  ([#551](https://github.com/CategoricalData/hydra/issues/551)); overlay-file restoration in
+  `test-stale-output-prune.sh` ([#558](https://github.com/CategoricalData/hydra/issues/558)); DSL-aware
+  sync-freshness fingerprint ([#562](https://github.com/CategoricalData/hydra/issues/562)).
 
 ### Documentation
 
-- Corrected the 0.17.0 Maven coordinates throughout (Java artifacts publish under group
-  `net.fortytwo.hydra.java`, Scala under `net.fortytwo.hydra.scala`,
-  [#519](https://github.com/CategoricalData/hydra/issues/519)); added the npm and Scala
-  release channels to the README; added TypeScript/Scala/Lisp sections to Getting started;
-  repointed stale pre-#418/#501 DSL paths in the architecture docs; added GitHub issue and
-  PR templates.
+- Corrected 0.17.0 Maven coordinates and added npm/Scala release channels, TypeScript/Scala/Lisp
+  Getting-started sections, and issue/PR templates
+  ([#519](https://github.com/CategoricalData/hydra/issues/519)).
 
 ---
 
