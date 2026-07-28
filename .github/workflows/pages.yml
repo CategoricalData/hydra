@@ -203,38 +203,78 @@ jobs:
           done
 
           # Build each package's javadoc through its own gradle build, then
-          # collect the output into java/javadoc/<pkg>/. Each package is
-          # documented standalone; cross-package @link/@see references render as
-          # plain text (not hyperlinks) for now. Wiring -linkoffline between the
-          # deployed per-package trees is a follow-up (#616 comment) — it needs
-          # the published element-list URLs, which only exist once each tree is
-          # deployed. This does not affect correctness or completeness of the
-          # per-package docs.
+          # collect the output into java/javadoc/<pkg>/. Cross-package @link/@see
+          # references (e.g. hydra-pg -> hydra.core.Type) are wired as real
+          # hyperlinks via -linkoffline: the emitted href points at the
+          # dependency's published Pages URL, while the element-list is read from
+          # the dependency's just-built local output tree. This requires building
+          # in dependency order so a dependency's tree exists before its
+          # dependents build (kernel first; then rdf/jvm; then the rest).
+          #
+          # Inter-package dependency graph among the 12 documented packages
+          # (from each dist/java/<pkg>/build.gradle):
+          #   hydra-kernel: (none)
+          #   hydra-rdf, hydra-jvm: hydra-kernel
+          #   hydra-pg: hydra-kernel hydra-rdf
+          #   hydra-java, hydra-scala: hydra-kernel hydra-jvm
+          #   everything else (build/go/haskell/lisp/python/typescript): hydra-kernel
+          declare -A DEPS=(
+            [hydra-kernel]=""
+            [hydra-rdf]="hydra-kernel"
+            [hydra-jvm]="hydra-kernel"
+            [hydra-pg]="hydra-kernel hydra-rdf"
+            [hydra-java]="hydra-kernel hydra-jvm"
+            [hydra-scala]="hydra-kernel hydra-jvm"
+            [hydra-build]="hydra-kernel"
+            [hydra-go]="hydra-kernel"
+            [hydra-haskell]="hydra-kernel"
+            [hydra-lisp]="hydra-kernel"
+            [hydra-python]="hydra-kernel"
+            [hydra-typescript]="hydra-kernel"
+          )
+
           build_pkg() {
             local pkg="$1"
+            # One -linkoffline per Hydra dependency: published URL + local
+            # element-list dir (the dependency's already-built output tree).
+            local link_init
+            link_init=$(mktemp --suffix=.gradle)
+            {
+              echo 'allprojects {'
+              echo '    tasks.withType(Javadoc).configureEach {'
+              echo "        options.addStringOption('Xdoclint:none', '-quiet')"
+              local dep
+              for dep in ${DEPS[$pkg]}; do
+                echo "        options.linksOffline('${PAGES_BASE_URL}/${dep}', '${root}/${dep}')"
+              done
+              echo '    }'
+              echo '}'
+            } > "$link_init"
+
             echo "::group::javadoc ${pkg}"
             ( cd "dist/java/${pkg}" && gradle -q --console=plain \
-                --init-script "$init" javadoc )
+                --init-script "$link_init" javadoc )
             local out="${root}/${pkg}"
             mkdir -p "$out"
             cp -R "dist/java/${pkg}/build/docs/javadoc/." "$out/"
             echo "::endgroup::"
           }
 
-          # Every package Hydra maps into Java gets its own JavaDoc tree
-          # (alphabetical). hydra-ext is excluded until it ships to Maven
-          # Central (#451).
+          # Every package Hydra maps into Java gets its own JavaDoc tree.
+          # Dependency order (kernel -> rdf/jvm -> the rest) so -linkoffline can
+          # read each dependency's element-list from its just-built tree.
+          # hydra-ext is excluded until it ships to Maven Central (#451).
           PACKAGES=(
+            hydra-kernel
+            hydra-rdf
+            hydra-jvm
             hydra-build
             hydra-go
             hydra-haskell
             hydra-java
-            hydra-jvm
-            hydra-kernel
             hydra-lisp
             hydra-pg
             hydra-python
-            hydra-rdf
             hydra-scala
             hydra-typescript
           )
