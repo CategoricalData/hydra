@@ -188,6 +188,37 @@ for pkg in $(python3 "$REPO_ROOT/bin/lib/hydra-packages.py" list); do
     fi
 done
 
+# 3b. X3 published-host-prefix-helper-rename shim (0.17.2 release).
+#
+# Binary literals store a VALUE, not a primitive name; the Haskell CODER injects
+# the helper wrapper name at emission time (Sources/Haskell/Coder.hs). The 0.17.2
+# kernel renames that wrapper: Literals.stringToBinary -> Literals.base64ToBinary
+# and Literals.binaryToString -> Literals.binaryToBase64 (X3). But this seeder is
+# built against the PUBLISHED 0.17.1 coder, which hardcodes the OLD wrapper names,
+# so the seeded test tree emits `Literals.stringToBinary`/`binaryToString` — names
+# the 0.17.2 overlay Literals module no longer exports. That breaks the very next
+# `stack build` of exe:bootstrap-from-json (its source-dirs include the kernel test
+# tree, #546), which is the compile that PRODUCES the source-built, new-name coder —
+# a bootstrap circularity: the coder that would regenerate the tree with correct
+# names cannot be built until the tree compiles.
+#
+# The rename is pure (both wrappers base64-decode/-encode identically — the seeded
+# literal values are already base64, e.g. "QUI="), so rewriting the name in the
+# seeded output is semantics-preserving. Patch the seeded test tree back to the
+# new names so exe:bootstrap-from-json compiles; sync-haskell.sh Step 4 then
+# regenerates the whole tree with the source-built coder, overwriting these files
+# with byte-identical output. This is a bootstrap patch (overwritten by the next
+# regeneration), same shape as the #497/#607 shims above — NOT a persistent
+# post-generation patch. Drop it once the 0.17.2 kernel is the published host.
+echo ""
+echo "[3b/4] X3 shim: rewriting stale binary-literal wrapper names in seeded test tree..."
+grep -rl 'Literals\.stringToBinary\|Literals\.binaryToString' \
+    "$REPO_ROOT/dist/haskell"/*/src/test/haskell 2>/dev/null \
+    | while IFS= read -r f; do
+        sed_inplace 's/Literals\.stringToBinary/Literals.base64ToBinary/g; s/Literals\.binaryToString/Literals.binaryToBase64/g' "$f"
+        echo "  shimmed: ${f#$REPO_ROOT/}"
+    done
+
 # 4. Emit each package's package.yaml manifest so every dist/haskell/<pkg>/ is a
 #    self-contained buildable package (Default A). Covers all 16, including the
 #    5 unpublished ones — the generator already supports them.
