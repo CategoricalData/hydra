@@ -671,7 +671,7 @@ for H in $HOSTS; do
             STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         scala)
-            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
+            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
             ;;
         typescript)
             STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
