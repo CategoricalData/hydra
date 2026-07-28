@@ -420,60 +420,108 @@ jobs:
           # matches the `scala` job in ci.yml.
           java-version: '17'
 
-      # sbt drives each package's Scaladoc via that package's OWN standalone
-      # build.sbt (#619, mirroring #616's per-package gradle approach). The
-      # documented packages consume their inter-package Hydra dependencies as
-      # published Maven coordinates (net.fortytwo.hydra.scala:<pkg>_3:<version>),
-      # which don't exist on Maven Central yet at build time, so publish each
-      # dependency to the local ivy cache first, leaves-first. Dependency graph
-      # among the three documented packages: hydra-kernel has no Hydra deps;
-      # hydra-rdf -> hydra-kernel; hydra-pg -> hydra-kernel, hydra-rdf. Unlike
-      # the Java job, no non-documented package (like hydra-jvm there) needs to
-      # be pulled in for dependency closure — the Scala core three is already
-      # closed.
-      - name: Build per-package scaladoc via each package's sbt build
+      # Scala 3 scaladoc cannot cross-link SEPARATE per-package trees: a
+      # reference to a type from a binary-jar dependency (e.g. hydra.core.Type
+      # seen from hydra-pg) renders as an unresolved link, and scaladoc's
+      # -external-mappings only rewrites references it already RESOLVED to an
+      # external symbol — so it has no effect on jar-dependency references,
+      # even with TASTy present. Cross-links resolve ONLY when all sources are
+      # documented in a SINGLE scaladoc run. So — unlike the Java job's 12
+      # standalone -linkoffline trees — Scala is documented as ONE unified
+      # scaladoc site covering all 12 packages compiled together, at
+      # scala/scaladoc/. Every intra-Hydra reference then resolves as a real
+      # internal hyperlink (verified: ~5900 resolved hydra.core.Type links vs
+      # 0 in a standalone per-package build).
+      #
+      # The unified doc project aggregates each package's generated sources
+      # (dist/scala/<pkg>/src/main/scala, which already include the copied
+      # kernel overlay) plus their third-party libraryDependencies. No
+      # inter-package publishLocal is needed: the sources are compiled together
+      # in one project, so there are no Maven coordinates to resolve between them.
+      - name: Build unified scaladoc over all packages
         if: steps.ci-run.outputs.proceed == 'true'
         run: |
           set -euo pipefail
-          root=_site/scala/scaladoc
+          # The unified scaladoc tree lands under scala/scaladoc/api/ so the
+          # custom landing page (docs/scala-scaladoc-index.html, staged to
+          # scala/scaladoc/index.html) does not collide with scaladoc's own
+          # generated root index.html.
+          root=_site/scala/scaladoc/api
           mkdir -p "$root"
 
-          for pkg in hydra-kernel hydra-rdf hydra-pg; do
-            echo "::group::publishLocal ${pkg}"
-            ( cd "dist/scala/${pkg}" && sbt publishLocal )
-            echo "::endgroup::"
-          done
+          # All dist/scala/<pkg>/ packages (dependency order is irrelevant for a
+          # single compile; listed alphabetically). hydra-ext is excluded (#451).
+          PACKAGES=(
+            hydra-build hydra-go hydra-haskell hydra-java hydra-jvm
+            hydra-kernel hydra-lisp hydra-pg hydra-python hydra-rdf
+            hydra-scala hydra-typescript
+          )
 
-          # Build each package's Scaladoc through its own sbt build, then
-          # collect the output into scala/scaladoc/<pkg>/. Each package is
-          # documented standalone; cross-package links between the deployed
-          # per-package trees are deferred, same as #616's JavaDoc
-          # -linkoffline follow-up.
-          build_pkg() {
-            local pkg="$1"
-            echo "::group::scaladoc ${pkg}"
-            ( cd "dist/scala/${pkg}" && sbt doc )
-            local out="${root}/${pkg}"
-            mkdir -p "$out"
-            cp -R "dist/scala/${pkg}/target/scala-3.3.7/api/." "$out/"
-            echo "::endgroup::"
+          # Collect third-party dependency coordinates from every package's
+          # build.sbt (the "net.fortytwo.hydra.scala" inter-package deps are
+          # dropped — those are provided as source here, not as artifacts).
+          repo="$(pwd)"
+          proj="${repo}/_scaladoc-unified"
+          rm -rf "$proj"; mkdir -p "$proj/project"
+          echo 'sbt.version=1.10.7' > "$proj/project/build.properties"
+
+          # Emit the aggregation build.sbt: all package source dirs as unmanaged
+          # sources, external (non-Hydra) libraryDependencies unioned, and a doc
+          # title. scalaVersion matches the generated packages (3.3.7).
+          {
+            echo 'ThisBuild / scalaVersion := "3.3.7"'
+            echo 'lazy val root = (project in file(".")).settings('
+            echo '  name := "hydra",'
+            echo '  Compile / unmanagedSourceDirectories := Seq('
+            first=1
+            for pkg in "${PACKAGES[@]}"; do
+              [ "$first" -eq 1 ] && first=0 || echo ','
+              printf '    file("%s/dist/scala/%s/src/main/scala")' "$repo" "$pkg"
+            done
+            echo ''
+            echo '  ),'
+            # Union of external libraryDependencies across all packages. Grep the
+            # generated build.sbt files for `"group" % "artifact" % "version"`
+            # lines that are NOT net.fortytwo.hydra.scala (those are our sources).
+            echo '  libraryDependencies ++= Seq('
+            grep -rhoE '"[a-zA-Z0-9._-]+" +%%? +"[a-zA-Z0-9._-]+" +% +"[a-zA-Z0-9._-]+"' \
+              dist/scala/*/build.sbt 2>/dev/null \
+              | grep -v 'net.fortytwo.hydra.scala' \
+              | sort -u \
+              | sed 's/^/    /; s/$/,/' \
+              | sed '$ s/,$//'
+            echo '  ),'
+            echo '  Test / unmanagedSourceDirectories := Seq.empty,'
+            echo '  test := {},'
+            echo '  Compile / doc / scalacOptions ++= Seq("-project", "Hydra")'
+            echo ')'
+          } > "$proj/build.sbt"
+
+          echo "::group::generated unified build.sbt"
+          cat "$proj/build.sbt"
+          echo "::endgroup::"
+
+          echo "::group::sbt doc (unified, all ${#PACKAGES[@]} packages)"
+          ( cd "$proj" && sbt -batch doc )
+          echo "::endgroup::"
+
+          api="$proj/target/scala-3.3.7/api"
+          test -f "$api/index.html" || {
+            echo "::error::index.html missing from unified scaladoc"
+            exit 1
           }
-
-          build_pkg hydra-kernel
-
-          # Sanity check: confirm kernel sources actually rendered.
-          test -f "${root}/hydra-kernel/index.html" || {
-            echo "::error::index.html missing from generated scaladoc"
+          # Sanity check: cross-package links must resolve (regression guard for
+          # the whole reason this is a unified build). hydra.core.Type is
+          # referenced from many packages; require it to be linked.
+          links=$(grep -rhoE 'href="[^"]*core/Type\.html"' "$api" 2>/dev/null | wc -l | tr -d ' ')
+          echo "resolved hydra.core.Type cross-links: ${links}"
+          [ "${links}" -gt 0 ] || {
+            echo "::error::no resolved hydra.core.Type cross-links — unified build regressed"
             exit 1
           }
 
-          build_pkg hydra-rdf
-          build_pkg hydra-pg
-
-          echo "Per-package scaladoc trees built:"
-          for pkg in hydra-kernel hydra-rdf hydra-pg; do
-            echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
-          done
+          cp -R "$api/." "$root/"
+          echo "Unified scaladoc: $(find "$root" -name '*.html' | wc -l) html files across ${#PACKAGES[@]} packages"
 
       - name: Stage landing pages
         if: steps.ci-run.outputs.proceed == 'true'

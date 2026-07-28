@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Hydra Scala API — Scaladoc</title>
-  <meta name="description" content="Scaladoc API documentation for the Hydra Scala packages: hydra-kernel, hydra-rdf, hydra-pg">
+  <meta name="description" content="Unified Scaladoc API documentation for all Hydra Scala packages, cross-linked in a single reference.">
   <meta name="author" content="Joshua Shinavier et al.">
 
   <style>
@@ -26,6 +26,17 @@
     li { margin-bottom: 0.4em; }
     a { color: #0366d6; }
     a:hover { text-decoration: underline; }
+    .browse {
+      display: inline-block;
+      margin: 0.6em 0 0.2em;
+      padding: 0.6em 1.2em;
+      background: #0366d6;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .browse:hover { background: #024ea2; text-decoration: none; }
     .pkg-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -52,28 +63,79 @@
 <body>
 
 <h1><a href="https://github.com/CategoricalData/hydra">Hydra</a> Scala API</h1>
-<p class="tagline">Scaladoc reference for the published Hydra Scala packages.</p>
+<p class="tagline">Unified Scaladoc reference for the Hydra Scala packages.</p>
 
 <p>
-  Each package below is documented separately. See also the
-  <a href="../../">Hydra home page</a> and the
+  All Hydra Scala packages are documented together in a single, cross-linked
+  Scaladoc site: a reference to a type in one package (for example
+  <code>hydra.core.Type</code>) links directly to its documentation wherever it
+  appears. Scala 3 Scaladoc resolves cross-package links only when the sources
+  are documented in one run, so — unlike the per-package
+  <a href="../../java/javadoc/">JavaDoc</a> trees — the Scala API is presented as
+  one unified reference rather than one tree per package.
+</p>
+
+<p>
+  <a class="browse" href="api/">Browse the API &rarr;</a>
+</p>
+
+<p>
+  See also the <a href="../../">Hydra home page</a> and the
   <a href="https://central.sonatype.com/search?q=g:net.fortytwo.hydra.scala">Maven Central artifacts</a>.
 </p>
 
-<h2>Packages</h2>
+<h2>Packages covered</h2>
+
+<p>The unified API documents every package that Hydra maps into Scala:</p>
 
 <div class="pkg-grid">
   <div class="pkg-card">
-    <h3><a href="hydra-kernel/"><code>hydra-kernel</code></a></h3>
+    <h3><code>hydra-kernel</code></h3>
     <p>The Hydra kernel: core types and terms, the type system, coders, and the DSL runtime.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-rdf/"><code>hydra-rdf</code></a></h3>
+    <h3><code>hydra-jvm</code></h3>
+    <p>Shared JVM support used by the Java and Scala coders.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-rdf</code></h3>
     <p>RDF and SHACL support: the RDF syntax model and mappings to and from Hydra.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-pg/"><code>hydra-pg</code></a></h3>
+    <h3><code>hydra-pg</code></h3>
     <p>Property graphs: the PG model plus TinkerPop/Gremlin, Cypher, and GQL integrations.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-java</code></h3>
+    <p>The Java coder and Java-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-scala</code></h3>
+    <p>The Scala coder and Scala-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-python</code></h3>
+    <p>The Python coder and Python-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-haskell</code></h3>
+    <p>The Haskell coder and Haskell-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-typescript</code></h3>
+    <p>The TypeScript coder and TypeScript-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-lisp</code></h3>
+    <p>The shared Lisp coder (Clojure, Common Lisp, Emacs Lisp, Scheme).</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-go</code></h3>
+    <p>The Go coder and Go-language DSL support.</p>
+  </div>
+  <div class="pkg-card">
+    <h3><code>hydra-build</code></h3>
+    <p>Build-configuration model and code generation for package build files.</p>
   </div>
 </div>
 
