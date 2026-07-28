@@ -348,6 +348,10 @@ jobs:
           set -euo pipefail
           root=_site/python/sphinx
           mkdir -p "$root"
+          # Absolute, so a dependent's intersphinx_mapping can reference a
+          # dependency's objects.inv regardless of the build's working directory.
+          root=$(cd "$root" && pwd)
+          PAGES_BASE_URL="https://categoricaldata.net/hydra/python/sphinx"
 
           venv=$(mktemp -d)
           python3 -m venv "$venv"
@@ -355,13 +359,39 @@ jobs:
           pip install -q --upgrade pip
           pip install -q sphinx
 
-          for pkg in hydra-kernel hydra-rdf hydra-pg; do
+          # The 12 documented packages (hydra-ext excluded, #451 — it has no
+          # Python modules). Install every package up front so autodoc can import
+          # cross-package references from the shared venv.
+          PACKAGES=(
+            hydra-kernel hydra-rdf hydra-jvm hydra-build hydra-go hydra-haskell
+            hydra-java hydra-lisp hydra-pg hydra-python hydra-scala hydra-typescript
+          )
+          for pkg in "${PACKAGES[@]}"; do
             echo "::group::pip install ${pkg}"
             pip install -q "dist/python/${pkg}"
             echo "::endgroup::"
           done
 
+          # Inter-package dependency graph (same shape as the Java job): each
+          # package's own modules reference kernel types; pg also references rdf;
+          # java/scala also reference jvm.
+          declare -A DEPS=(
+            [hydra-kernel]=""
+            [hydra-rdf]="hydra-kernel"
+            [hydra-jvm]="hydra-kernel"
+            [hydra-pg]="hydra-kernel hydra-rdf"
+            [hydra-java]="hydra-kernel hydra-jvm"
+            [hydra-scala]="hydra-kernel hydra-jvm"
+            [hydra-build]="hydra-kernel"
+            [hydra-go]="hydra-kernel"
+            [hydra-haskell]="hydra-kernel"
+            [hydra-lisp]="hydra-kernel"
+            [hydra-python]="hydra-kernel"
+            [hydra-typescript]="hydra-kernel"
+          )
+
           site_packages="$venv"/lib/python*/site-packages
+          ver=$(python3 -c 'import json; print(json.load(open("hydra.json"))["currentVersion"])')
 
           build_pkg() {
             local pkg="$1"
@@ -369,8 +399,8 @@ jobs:
 
             # Stage only this package's own files (per pip's per-package file
             # manifest), preserving their hydra/... path structure, so apidoc
-            # documents just this package even though all three share the
-            # hydra.* namespace on disk.
+            # documents just this package even though packages share the hydra.*
+            # namespace on disk.
             local scoped
             scoped=$(mktemp -d)
             pip show -f "$pkg" | sed -n '/^Files:/,$p' | tail -n +2 | sed 's/^  //' | grep '\.py$' \
@@ -381,20 +411,36 @@ jobs:
 
             local confdir
             confdir=$(mktemp -d)
-            sphinx-quickstart --quiet -p "$pkg" -a "Hydra" -v "$(python3 -c 'import json; print(json.load(open("hydra.json"))["currentVersion"])')" \
-              --sep --extensions sphinx.ext.autodoc,sphinx.ext.napoleon "$confdir"
+            sphinx-quickstart --quiet -p "$pkg" -a "Hydra" -v "$ver" \
+              --sep --extensions sphinx.ext.autodoc,sphinx.ext.napoleon,sphinx.ext.intersphinx "$confdir"
+
+            # One intersphinx entry per Hydra dependency: (published URL, local
+            # objects.inv from the dependency's already-built tree).
+            {
+              echo ''
+              echo 'intersphinx_mapping = {'
+              local dep
+              for dep in ${DEPS[$pkg]}; do
+                echo "    '${dep}': ('${PAGES_BASE_URL}/${dep}/', r'${root}/${dep}/objects.inv'),"
+              done
+              echo '}'
+            } >> "$confdir/source/conf.py"
+
             sphinx-apidoc --implicit-namespaces -o "$confdir/source" "$scoped/hydra"
             printf '\n.. toctree::\n   :maxdepth: 2\n\n   modules\n' >> "$confdir/source/index.rst"
             sphinx-build -q -b html "$confdir/source" "${root}/${pkg}"
             echo "::endgroup::"
           }
 
-          build_pkg hydra-kernel
-          build_pkg hydra-rdf
-          build_pkg hydra-pg
+          # Build in dependency order: kernel, then rdf/jvm, then the rest.
+          for pkg in hydra-kernel hydra-rdf hydra-jvm hydra-build hydra-go \
+                     hydra-haskell hydra-java hydra-lisp hydra-pg hydra-python \
+                     hydra-scala hydra-typescript; do
+            build_pkg "$pkg"
+          done
 
           echo "Per-package Sphinx trees built:"
-          for pkg in hydra-kernel hydra-rdf hydra-pg; do
+          for pkg in "${PACKAGES[@]}"; do
             echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
           done
 
