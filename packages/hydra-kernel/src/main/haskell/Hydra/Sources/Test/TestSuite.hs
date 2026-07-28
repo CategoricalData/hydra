@@ -32,14 +32,6 @@ import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Optionals as Optionals
 import qualified Hydra.Sources.Test.Lib.Ordering as LibOrdering
 import qualified Hydra.Sources.Test.Annotations as Annotations
--- TODO(#547): move to per-package test aggregation so the kernel no longer
--- references hydra-build's test modules. These four (hydra.test.build.*) live
--- in the hydra-build package (#546); they are referenced here only because
--- every host runs tests through the single kernel hydra.test.testSuite
--- aggregate — there is no per-package test-suite mechanism yet.
-import qualified Hydra.Sources.Build.Test.Libraries as BuildLibraries
-import qualified Hydra.Sources.Build.Test.Reconcile as BuildReconcile
-import qualified Hydra.Sources.Build.Test.Routing as BuildRouting
 import qualified Hydra.Sources.Test.Ordering as Ordering
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Regex as Regex
@@ -73,7 +65,6 @@ import qualified Hydra.Sources.Test.Json.Yaml as JsonYaml
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
-import qualified Hydra.Sources.Build.Test.Modules as BuildModules  -- TODO(#547): hydra-build test module (see note above)
 import qualified Hydra.Sources.Test.Dependencies as Dependencies
 import qualified Hydra.Sources.Test.Differentiation as Differentiation
 import qualified Hydra.Sources.Test.Reduction as Reduction
@@ -136,10 +127,6 @@ libPairs = [
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
-  (BuildLibraries.ns, BuildLibraries.allTests),
-  (BuildModules.ns, BuildModules.allTests),
-  (BuildReconcile.ns, BuildReconcile.allTests),
-  (BuildRouting.ns, BuildRouting.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
   (Dependencies.ns, Dependencies.allTests),
   (Differentiation.ns, Differentiation.allTests),
@@ -178,11 +165,6 @@ testSuiteModules =
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   -- NOTE(#546/#547): the hydra.test.build.* MODULES are owned by hydra-build
-   -- (routed there, declared in hydra-build's Manifest) and so are intentionally
-   -- ABSENT from testSuiteModules (which feeds Test.All.testModules → the kernel's
-   -- routing/ownership row). Their test GROUPS are still referenced from testPairs
-   -- above so the kernel hydra.test.testSuite aggregate runs them cross-package.
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,

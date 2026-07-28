@@ -13,6 +13,13 @@
 -- the JSON-writing drivers route hydra.test.build.* to this package's test tree
 -- via each package's Manifest.testModules (see Hydra.Sources.Ext.extRoutingInput
 -- and heads/haskell/src/exec/transform-haskell-dsl-to-json packageTestModules).
+--
+-- testModules includes its own generated test-aggregate module
+-- (hydra.test.build.testSuite, from Hydra.Sources.Build.Test.Suite), combining
+-- hydra-build's test groups (#547). Each host runs it via its own runner file
+-- (independent of hydra-kernel's hydra.test.testSuite runner), replacing the
+-- #546 "Option A" arrangement where the kernel's test suite imported
+-- hydra-build's test groups directly.
 
 module Hydra.Sources.Build.Manifest (
   mainModules,
@@ -33,6 +40,7 @@ import qualified Hydra.Sources.Build.Test.Libraries as TestBuildLibraries
 import qualified Hydra.Sources.Build.Test.Modules as TestBuildModules
 import qualified Hydra.Sources.Build.Test.Reconcile as TestBuildReconcile
 import qualified Hydra.Sources.Build.Test.Routing as TestBuildRouting
+import qualified Hydra.Sources.Build.Test.Suite as BuildTestSuite
 
 mainModules :: [Module]
 mainModules = [
@@ -60,4 +68,5 @@ testModules = [
   TestBuildLibraries.module_,
   TestBuildModules.module_,
   TestBuildReconcile.module_,
-  TestBuildRouting.module_]
+  TestBuildRouting.module_,
+  BuildTestSuite.module_]

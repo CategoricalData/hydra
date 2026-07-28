@@ -11,26 +11,13 @@ import hydra.overlay.java.tools.PrimitiveFunction;
 import hydra.overlay.java.util.ConsList;
 import hydra.overlay.java.util.Optional;
 
-import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static hydra.overlay.java.dsl.Terms.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -38,15 +25,14 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * Handles both UniversalTestCase instances (pure string comparison) and
  * EffectfulTestCase instances (interpret an effect, e.g. file I/O, then string comparison).
- * Legacy per-type handlers have been removed.
+ * Legacy per-type handlers have been removed. The generic TestGroup walker (test-case
+ * dispatch, skip tags, timeouts, benchmark output) lives in HydraTestGroupWalker,
+ * shared with hydra-build's BuildTestSuiteRunner (#547).
  */
 public class TestSuiteRunner {
 
     // Benchmark output support
     private static final String BENCHMARK_OUTPUT = System.getenv("HYDRA_BENCHMARK_OUTPUT");
-    private static final Map<String, Long> benchmarkTimers = new ConcurrentHashMap<>();
-    private static final Map<String, Double> benchmarkResults = new ConcurrentHashMap<>();
-    private static TestGroup rootTestGroup;
 
     // When true, use primitiveDefinitionDefaultImplementation instead of native implementations.
     // Activated via -Dhydra.defaultImpls=true (Gradle: -PhydraDefaultImpls) or HYDRA_DEFAULT_IMPLS=1 env var.
@@ -482,283 +468,17 @@ public class TestSuiteRunner {
         return types;
     }
 
-    private static boolean shouldSkip(TestCaseWithMetadata tc) {
-        Tag disabledTag = new Tag("disabled");
-        Tag disabledForPythonTag = new Tag("disabledForPython");
-        // Note: disabledForPython tests are also skipped in Java because the same beta-reduction
-        // term explosion occurs (e.g. deeply nested withTrace/mutateTrace). The Haskell evaluator
-        // handles these efficiently via lazy evaluation, but Java's eager reducer cannot.
-        return tc.tags.contains(disabledTag)
-            || tc.tags.contains(disabledForPythonTag);
-    }
-
     @TestFactory
     Stream<DynamicNode> kernelTests() {
         TestGroup allTests = TestSuite.allTests();
-        rootTestGroup = allTests;
 
         // Eagerly initialize test infrastructure and measure time.
         // This ensures startup cost is not attributed to the first test group.
         long initStart = System.nanoTime();
         getTestGraph();
         double initMs = (System.nanoTime() - initStart) / 1_000_000.0;
-        if (BENCHMARK_OUTPUT != null) {
-            benchmarkResults.put(allTests.name + "/_initialization", initMs);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> writeBenchmarkJson(BENCHMARK_OUTPUT, allTests)));
-        }
 
-        return collectTests(allTests, allTests.name);
-    }
-
-    private static Stream<DynamicNode> collectTests(TestGroup group, String hydraPath) {
-        List<DynamicNode> nodes = new ArrayList<>();
-
-        // Timer start sentinel
-        if (BENCHMARK_OUTPUT != null) {
-            final String path = hydraPath;
-            nodes.add(DynamicTest.dynamicTest("000_TIMER_START", () -> {
-                benchmarkTimers.put(path, System.nanoTime());
-            }));
-        }
-
-        // Test cases
-        for (TestCaseWithMetadata tc : group.cases) {
-            String name = tc.name + tc.description.map(d -> ": " + d).orElse("");
-            if (shouldSkip(tc)) {
-                continue;
-            }
-            DynamicTest test = runTestCase(name, tc);
-            if (test != null) {
-                nodes.add(test);
-            }
-        }
-
-        // Subgroups
-        for (TestGroup subgroup : group.subgroups) {
-            String subName = subgroup.name + subgroup.description.map(d -> " (" + d + ")").orElse("");
-            String subPath = hydraPath + "/" + subgroup.name;
-            nodes.add(DynamicContainer.dynamicContainer(subName, collectTests(subgroup, subPath)));
-        }
-
-        // Timer stop sentinel
-        if (BENCHMARK_OUTPUT != null) {
-            final String path = hydraPath;
-            nodes.add(DynamicTest.dynamicTest("999_TIMER_END", () -> {
-                Long startTime = benchmarkTimers.get(path);
-                if (startTime != null) {
-                    double elapsedMs = (System.nanoTime() - startTime) / 1_000_000.0;
-                    benchmarkResults.put(path, elapsedMs);
-                }
-            }));
-        }
-
-        return nodes.stream();
-    }
-
-    private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
-
-    // Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant
-    // in Hydra.Sources.Test.Lib.Files and the effectfulTestDir in the Haskell runner. Hard-coded
-    // *nix path for now (configurable later, #494).
-    private static final String EFFECTFUL_TEST_DIR = "/tmp/hydra-testing";
-
-    private static DynamicTest runTestCase(String name, TestCaseWithMetadata tc) {
-        return tc.case_.accept(new TestCase.Visitor<>() {
-            @Override
-            public DynamicTest visit(TestCase.Universal instance) {
-                UniversalTestCase utc = instance.value;
-                // For #311: utc.expected and utc.actual are unit-thunks; force them
-                // inside the withTimeout lambda so JUnit's per-test timer covers
-                // expression evaluation.
-                return withTimeout(name, () ->
-                    assertEquals(utc.expected.apply(null), utc.actual.apply(null)));
-            }
-
-            @Override
-            public DynamicTest visit(TestCase.Effectful instance) {
-                EffectfulTestCase eutc = instance.value;
-                // For #494: in Java the effect type is transparent (effect<t> = t), so the
-                // 'actual' thunk eagerly performs the effect (e.g. file I/O) and returns the
-                // resulting string. Prepare a guaranteed-empty canonical temp directory first,
-                // then force both thunks inside the per-test timer.
-                return withTimeout(name, () -> {
-                    prepareEffectfulTempDir();
-                    assertEquals(eutc.expected.apply(null), eutc.actual.apply(null));
-                });
-            }
-        });
-    }
-
-    // Prepare a guaranteed-empty canonical temp directory before an effectful test case.
-    // Mirrors prepareEffectfulTempDir in the Haskell runner: recursively remove the directory
-    // if it exists, then recreate it empty. For #494.
-    private static void prepareEffectfulTempDir() throws IOException {
-        Path dir = Paths.get(EFFECTFUL_TEST_DIR);
-        if (Files.exists(dir)) {
-            try (Stream<Path> walk = Files.walk(dir)) {
-                walk.sorted(java.util.Comparator.reverseOrder())
-                    .forEach(p -> {
-                        try {
-                            Files.delete(p);
-                        } catch (IOException e) {
-                            throw new RuntimeException("Failed to delete " + p, e);
-                        }
-                    });
-            }
-        }
-        Files.createDirectories(dir);
-    }
-
-    private static DynamicTest withTimeout(String name, org.junit.jupiter.api.function.Executable executable) {
-        return DynamicTest.dynamicTest(name, () -> assertTimeoutPreemptively(TEST_TIMEOUT, executable));
-    }
-
-    // ---- Benchmark output ----
-
-    private static void writeBenchmarkJson(String outputPath, TestGroup root) {
-        try {
-            String json = buildBenchmarkJson(root);
-            try (FileWriter writer = new FileWriter(outputPath)) {
-                writer.write(json);
-            }
-            System.out.println("Benchmark results written to " + outputPath);
-        } catch (IOException e) {
-            System.err.println("Failed to write benchmark JSON: " + e.getMessage());
-        }
-    }
-
-    private static String buildBenchmarkJson(TestGroup root) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
-
-        // Metadata
-        sb.append("  \"metadata\": {\n");
-        sb.append("    \"timestamp\": \"").append(Instant.now().atOffset(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))).append("\",\n");
-        sb.append("    \"language\": \"java\",\n");
-        sb.append("    \"branch\": ").append(jsonString(gitOutput("git", "rev-parse", "--abbrev-ref", "HEAD"))).append(",\n");
-        sb.append("    \"commit\": ").append(jsonString(gitOutput("git", "rev-parse", "--short", "HEAD"))).append(",\n");
-        sb.append("    \"commitMessage\": ").append(jsonString(gitOutput("git", "log", "-1", "--format=%s"))).append("\n");
-        sb.append("  },\n");
-
-        // Groups (children of root)
-        String rootPath = root.name;
-        sb.append("  \"groups\": [\n");
-        List<TestGroup> subgroups = root.subgroups;
-        int totalPassed = 0, totalFailed = 0, totalSkipped = 0;
-        double totalTimeMs = 0;
-
-        // Add initialization group if present
-        double initTime = benchmarkResults.getOrDefault(rootPath + "/_initialization", 0.0);
-        if (initTime > 0) {
-            totalTimeMs += initTime;
-            sb.append("    {\n");
-            sb.append("      \"failed\": 0,\n");
-            sb.append("      \"passed\": 0,\n");
-            sb.append("      \"path\": ").append(jsonString(rootPath + "/_initialization")).append(",\n");
-            sb.append("      \"skipped\": 0,\n");
-            sb.append("      \"totalTimeMs\": ").append(round1(initTime)).append("}");
-            if (!subgroups.isEmpty()) sb.append(",");
-            sb.append("\n");
-        }
-
-        for (int i = 0; i < subgroups.size(); i++) {
-            TestGroup group = subgroups.get(i);
-            String groupPath = rootPath + "/" + group.name;
-            int[] counts = countTests(group);
-            double groupTime = benchmarkResults.getOrDefault(groupPath, 0.0);
-            totalPassed += counts[0];
-            totalFailed += counts[1];
-            totalSkipped += counts[2];
-            totalTimeMs += groupTime;
-
-            sb.append("    {\n");
-            sb.append("      \"failed\": ").append(counts[1]).append(",\n");
-            sb.append("      \"passed\": ").append(counts[0]).append(",\n");
-            sb.append("      \"path\": ").append(jsonString(groupPath)).append(",\n");
-            sb.append("      \"skipped\": ").append(counts[2]).append(",\n");
-
-            // Subgroups
-            if (!group.subgroups.isEmpty()) {
-                sb.append("      \"subgroups\": [\n");
-                for (int j = 0; j < group.subgroups.size(); j++) {
-                    TestGroup sub = group.subgroups.get(j);
-                    String subPath = groupPath + "/" + sub.name;
-                    int[] subCounts = countTests(sub);
-                    double subTime = benchmarkResults.getOrDefault(subPath, 0.0);
-
-                    sb.append("        {\n");
-                    sb.append("          \"failed\": ").append(subCounts[1]).append(",\n");
-                    sb.append("          \"passed\": ").append(subCounts[0]).append(",\n");
-                    sb.append("          \"path\": ").append(jsonString(subPath)).append(",\n");
-                    sb.append("          \"skipped\": ").append(subCounts[2]).append(",\n");
-                    sb.append("          \"totalTimeMs\": ").append(round1(subTime)).append("}");
-                    if (j < group.subgroups.size() - 1) sb.append(",");
-                    sb.append("\n");
-                }
-                sb.append("      ],\n");
-            }
-
-            sb.append("      \"totalTimeMs\": ").append(round1(groupTime)).append("}");
-            if (i < subgroups.size() - 1) sb.append(",");
-            sb.append("\n");
-        }
-        sb.append("  ],\n");
-
-        // Summary
-        sb.append("  \"summary\": {\n");
-        sb.append("    \"totalPassed\": ").append(totalPassed).append(",\n");
-        sb.append("    \"totalFailed\": ").append(totalFailed).append(",\n");
-        sb.append("    \"totalSkipped\": ").append(totalSkipped).append(",\n");
-        sb.append("    \"totalTimeMs\": ").append(round1(totalTimeMs)).append("\n");
-        sb.append("  }\n");
-
-        sb.append("}\n");
-        return sb.toString();
-    }
-
-    /**
-     * Count [passed, failed, skipped] tests in a group (recursive).
-     * "passed" = runnable (not skipped) tests; "failed" = 0 (we can't know at generation time).
-     */
-    private static int[] countTests(TestGroup group) {
-        int runnable = 0;
-        int skipped = 0;
-        for (TestCaseWithMetadata tc : group.cases) {
-            if (shouldSkip(tc)) {
-                skipped++;
-            } else {
-                runnable++;
-            }
-        }
-        for (TestGroup sub : group.subgroups) {
-            int[] subCounts = countTests(sub);
-            runnable += subCounts[0];
-            skipped += subCounts[2];
-        }
-        return new int[]{runnable, 0, skipped};
-    }
-
-    private static String round1(double value) {
-        return String.format("%.1f", value);
-    }
-
-    private static String jsonString(String value) {
-        if (value == null) return "\"\"";
-        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "").trim() + "\"";
-    }
-
-    private static String gitOutput(String... command) {
-        try {
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.redirectErrorStream(true);
-            Process p = pb.start();
-            String output = new String(p.getInputStream().readAllBytes()).trim();
-            p.waitFor();
-            return output;
-        } catch (Exception e) {
-            return "unknown";
-        }
+        return new HydraTestGroupWalker("java", BENCHMARK_OUTPUT).walk(allTests, initMs);
     }
 
 }

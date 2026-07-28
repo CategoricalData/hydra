@@ -11,9 +11,12 @@ import org.scalatest.funsuite.AnyFunSuite
  * Scala executor for Hydra's language-agnostic test suite.
  *
  * All test cases are now UniversalTestCase instances (string comparison).
- * Legacy per-type handlers have been removed.
+ * Legacy per-type handlers have been removed. Skip-tag checking, the effectful-test temp
+ * dir, and benchmark JSON rendering are shared with hydra-build's BuildTestSuiteRunner via
+ * HydraTestGroupSupport (#547); test(...) registration stays here (tied to ScalaTest's
+ * AnyFunSuite construction-time DSL).
  */
-class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
+class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll with HydraTestGroupSupport {
 
   private val allTests: TestGroup = hydra.test.testSuite.allTests
 
@@ -29,7 +32,7 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
   registerTests(allTests, allTests.name)
 
   override def afterAll(): Unit = {
-    benchmarkOutput.foreach(writeBenchmarkJson)
+    benchmarkOutput.foreach(path => writeBenchmarkJson(path, allTests, benchmarkResults))
     super.afterAll()
   }
 
@@ -57,9 +60,6 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
     }
   }
 
-  private def shouldSkip(tc: TestCaseWithMetadata): Boolean =
-    tc.tags.contains("disabled") || tc.tags.contains("disabledForPython") || tc.tags.contains("disabledForScala")
-
   private def registerTestCase(name: String, tc: TestCaseWithMetadata): Unit = {
     tc.`case` match {
       case TestCase.universal(uc) =>
@@ -79,93 +79,6 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
       case _ =>
         test(name) { cancel("Unhandled test case type") }
     }
-  }
-
-  // Canonical root directory for effectful (file I/O) test cases. Must match the testDir
-  // constant in Hydra.Sources.Test.Lib.Files and the per-host runners (Haskell, Java).
-  // Hard-coded *nix path for now (configurable later, #494).
-  private val EffectfulTestDir: String = "/tmp/hydra-testing"
-
-  // Prepare a guaranteed-empty canonical temp directory before an effectful test case:
-  // recursively remove it if it exists, then recreate it empty. Mirrors the Haskell/Java
-  // runners' prepareEffectfulTempDir. For #494.
-  private def prepareEffectfulTempDir(): Unit = {
-    val dir = _root_.java.nio.file.Paths.get(EffectfulTestDir)
-    if (_root_.java.nio.file.Files.exists(dir)) {
-      val walk = _root_.java.nio.file.Files.walk(dir)
-      try {
-        walk.sorted(_root_.java.util.Comparator.reverseOrder())
-          .forEach(p => _root_.java.nio.file.Files.delete(p))
-      } finally walk.close()
-    }
-    _root_.java.nio.file.Files.createDirectories(dir)
-  }
-
-  // ---- Benchmark JSON writer (matches the JSON shape used by other heads) ----
-
-  private def writeBenchmarkJson(outputPath: String): Unit = {
-    val json = buildBenchmarkJson(allTests)
-    val writer = new _root_.java.io.FileWriter(outputPath)
-    try writer.write(json)
-    finally writer.close()
-    println("Benchmark results written to " + outputPath)
-  }
-
-  private def buildBenchmarkJson(root: TestGroup): String = {
-    val sb = new StringBuilder
-    sb.append("{\n")
-    sb.append("  \"metadata\": {\n")
-    sb.append("    \"language\": \"scala\"\n")
-    sb.append("  },\n")
-    sb.append("  \"groups\": [\n")
-    sb.append(renderGroup("    ", root.name, root))
-    sb.append("\n  ],\n")
-    val (passed, skipped) = countCases(root)
-    val totalTime = benchmarkResults.getOrElse(root.name, 0.0)
-    sb.append("  \"summary\": {\n")
-    sb.append(s"""    "totalPassed": $passed,\n""")
-    sb.append("    \"totalFailed\": 0,\n")
-    sb.append(s"""    "totalSkipped": $skipped,\n""")
-    sb.append(s"""    "totalTimeMs": $totalTime\n""")
-    sb.append("  }\n")
-    sb.append("}\n")
-    sb.toString
-  }
-
-  private def renderGroup(indent: String, path: String, g: TestGroup): String = {
-    val sb = new StringBuilder
-    val timeMs = benchmarkResults.getOrElse(path, 0.0)
-    sb.append(indent).append("{\n")
-    sb.append(indent).append("  \"name\": ").append("\"").append(g.name).append("\",\n")
-    sb.append(indent).append("  \"time_ms\": ").append(timeMs).append(",\n")
-    sb.append(indent).append("  \"subgroups\": [")
-    if (g.subgroups.isEmpty) {
-      sb.append("]")
-    } else {
-      sb.append("\n")
-      val parts = g.subgroups.map { sub =>
-        renderGroup(indent + "    ", path + "/" + sub.name, sub)
-      }
-      sb.append(parts.mkString(",\n"))
-      sb.append("\n").append(indent).append("  ]")
-    }
-    sb.append("\n").append(indent).append("}")
-    sb.toString
-  }
-
-  private def countCases(g: TestGroup): (Int, Int) = {
-    var passed = 0
-    var skipped = 0
-    for (c <- g.cases) {
-      if (c.tags.contains("disabled") || c.tags.contains("disabledForPython") || c.tags.contains("disabledForScala")) skipped += 1
-      else passed += 1
-    }
-    for (sub <- g.subgroups) {
-      val (p, s) = countCases(sub)
-      passed += p
-      skipped += s
-    }
-    (passed, skipped)
   }
 }
 

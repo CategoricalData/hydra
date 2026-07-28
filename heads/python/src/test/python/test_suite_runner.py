@@ -7,7 +7,6 @@ All test cases are now UniversalTestCase instances (string comparison).
 
 from __future__ import annotations
 
-import shutil
 import sys
 from pathlib import Path
 
@@ -24,8 +23,7 @@ for _p in [str(_gen_test_path), str(_gen_main_path), str(_main_path)]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from typing import Callable, Optional
-import pytest
+from typing import Optional
 
 import hydra.core
 import hydra.graph
@@ -41,9 +39,11 @@ import hydra.test.test_types
 import hydra.test.test_suite as test_suite
 import hydra.test.test_graph as test_graph
 
-
-# Type alias for test runner functions
-TestRunner = Callable[[str, hydra.testing.TestCaseWithMetadata], Optional[Callable[[], None]]]
+from hydra_test_group_walker import (
+    default_test_runner,
+    generate_pytest_tests,
+    write_benchmark_json,
+)
 
 
 def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
@@ -146,16 +146,9 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     return FrozenDict(result)
 
 
-def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    """Check if a test case is marked as disabled."""
-    disabled_tag = hydra.testing.Tag("disabled")
-    return disabled_tag in tcase.tags
-
 import os
 import time
-import subprocess
 import atexit
-from decimal import Decimal
 
 # Benchmark output path. When set, the test runner records group-level
 # wall-clock timing and writes a JSON benchmark file after all tests complete.
@@ -165,14 +158,6 @@ BENCHMARK_OUTPUT = os.environ.get("HYDRA_BENCHMARK_OUTPUT", "")
 _benchmark_timers: dict[str, int] = {}  # path -> start time (perf_counter_ns)
 _benchmark_results: dict[str, float] = {}  # path -> elapsed ms
 _init_start_ns: int = 0  # start time for test infrastructure initialization
-
-def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    """Check if a test case should be skipped.
-
-    Skip tests that are:
-    - disabled: explicitly marked as not working
-    """
-    return is_disabled(tcase)
 
 
 def _empty_context() -> hydra.typing.InferenceContext:
@@ -303,354 +288,11 @@ def get_test_graph() -> hydra.graph.Graph:
     return _test_graph
 
 
-# Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant in
-# Hydra.Sources.Test.Lib.Files and the effectfulTestDir constant in the Haskell test runner
-# (heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs). Hard-coded *nix path for now (#494).
-EFFECTFUL_TEST_DIR = "/tmp/hydra-testing"
-
-
-def prepare_effectful_temp_dir() -> None:
-    """Prepare a guaranteed-empty canonical temp directory before an effectful test case.
-
-    Mirrors prepareEffectfulTempDir in the Haskell test runner: currently prepares
-    unconditionally for every effectful case (never for universal cases). A future refinement
-    (#494) is to skip preparation for pure-effect cases whose term references no hydra.lib.files
-    primitive.
-    """
-    if os.path.isdir(EFFECTFUL_TEST_DIR):
-        shutil.rmtree(EFFECTFUL_TEST_DIR)
-    os.makedirs(EFFECTFUL_TEST_DIR, exist_ok=True)
-
-
-def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
-    """
-    Default test runner that handles all test case types.
-
-    All test cases are now UniversalTestCase (string comparison).
-
-    Args:
-        desc: Full description of the test case (includes parent descriptions)
-        tcase: The test case metadata and data
-
-    Returns:
-        Optional test function to execute, or None if test should be skipped
-    """
-    if should_skip_test(tcase):
-        return None
-
-    case = tcase.case
-
-    match case:
-        case hydra.testing.TestCaseUniversal(value=tc):
-            # For #311: tc.actual and tc.expected are unit-thunks (Callable[[Unit], str]);
-            # force them inside run_universal so expression cost is paid inside the
-            # pytest test timer rather than at test-data load time. The Python coder
-            # emits Hydra's `λ_. body` as Python `lambda _: body`, so we pass a unit
-            # argument (None is fine since the lambda ignores it).
-            def run_universal():
-                actual = tc.actual(None)
-                expected = tc.expected(None)
-                if actual != expected:
-                    raise AssertionError(f"expected {expected!r} but got {actual!r}")
-            return run_universal
-
-        case hydra.testing.TestCaseEffectful(value=tc):
-            # For #494: an effectful test case. In Python the effect type is transparent
-            # (effect<t> = t), so the actual thunk is eager native code and forcing it *is* running
-            # the effect. tc.actual and tc.expected are unit-thunks (Callable[[None], str]); the
-            # Python coder emits Hydra's `λ_. body` as `lambda _: body`, so we pass a unit argument
-            # (None is fine since the lambda ignores it). Prepare the canonical temp directory before
-            # forcing the effect (mirrors prepareEffectfulTempDir in the Haskell runner).
-            def run_effectful():
-                prepare_effectful_temp_dir()
-                actual = tc.actual(None)
-                expected = tc.expected(None)
-                if actual != expected:
-                    raise AssertionError(f"expected {expected!r} but got {actual!r}")
-            return run_effectful
-
-        case _:
-            # Fail on unhandled test case types to catch missing implementations
-            case_type = type(tcase.case).__name__
-            def fail_unhandled():
-                pytest.fail(f"Unhandled test case type: {case_type}")
-            return fail_unhandled
-
-
-def _start_timer(path: str) -> None:
-    """Record the start time for a benchmark group."""
-    _benchmark_timers[path] = time.perf_counter_ns()
-
-def _stop_timer(path: str) -> None:
-    """Record the end time for a benchmark group and compute elapsed ms."""
-    if path in _benchmark_timers:
-        elapsed_ns = time.perf_counter_ns() - _benchmark_timers[path]
-        _benchmark_results[path] = elapsed_ns / 1_000_000.0  # convert to ms
-
-
-def _count_test_cases(group: hydra.testing.TestGroup, runner: TestRunner) -> tuple[int, int]:
-    """Count (runnable, skipped) test cases in a group and all subgroups."""
-    runnable = 0
-    skipped = 0
-    for tcase in group.cases:
-        if should_skip_test(tcase):
-            skipped += 1
-        elif runner(group.name, tcase) is not None:
-            runnable += 1
-        else:
-            skipped += 1
-    for subgroup_item in group.subgroups:
-        if isinstance(subgroup_item, str):
-            sg = getattr(test_suite, subgroup_item)
-        elif callable(subgroup_item):
-            sg = subgroup_item()
-        else:
-            sg = subgroup_item
-        r, s = _count_test_cases(sg, runner)
-        runnable += r
-        skipped += s
-    return runnable, skipped
-
-
-def _group_to_json_value(
-    group: hydra.testing.TestGroup,
-    parent_path: str,
-    runner: TestRunner,
-    results: dict[str, float]
-) -> "hydra.json.model.ValueObject":
-    """Convert a test group to a Hydra JSON value for benchmark output."""
-    import hydra.json.model as json
-
-    path = f"{parent_path}/{group.name}" if parent_path else group.name
-    runnable, skipped = _count_test_cases(group, runner)
-    time_ms = results.get(path, 0.0)
-
-    fields = {
-        "path": json.ValueString(path),
-        "passed": json.ValueNumber(Decimal(runnable)),
-        "failed": json.ValueNumber(Decimal(0)),
-        "skipped": json.ValueNumber(Decimal(skipped)),
-        "totalTimeMs": json.ValueNumber(Decimal(str(round(time_ms, 1)))),
-    }
-
-    subgroups = []
-    for subgroup_item in group.subgroups:
-        if isinstance(subgroup_item, str):
-            sg = getattr(test_suite, subgroup_item)
-        elif callable(subgroup_item):
-            sg = subgroup_item()
-        else:
-            sg = subgroup_item
-        subgroups.append(_group_to_json_value(sg, path, runner, results))
-
-    if subgroups:
-        fields["subgroups"] = json.ValueArray(tuple(subgroups))
-
-    return json.ValueObject(tuple(fields.items()))
-
-
-def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
-    """Write benchmark results as JSON using Hydra's JSON writer."""
-    import hydra.json.model as json
-    import hydra.json.writer as json_writer
-
-    root_group = test_suite.all_tests()
-    root_path = root_group.name
-
-    # Collect git metadata
-    def git_output(args: list[str]) -> str:
-        try:
-            result = subprocess.run(
-                ["git"] + args, capture_output=True, text=True, timeout=5)
-            return result.stdout.strip()
-        except Exception:
-            return ""
-
-    timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    branch = git_output(["rev-parse", "--abbrev-ref", "HEAD"])
-    commit = git_output(["rev-parse", "--short", "HEAD"])
-    commit_msg = git_output(["log", "-1", "--format=%s"])
-
-    total_runnable, total_skipped = _count_test_cases(root_group, runner)
-    root_time = _benchmark_results.get(root_path, 0.0)
-
-    # Add initialization time as a separate group (not attributed to any test group)
-    init_time_ms = _benchmark_results.get("common/_initialization", 0.0)
-
-    # Build group JSON values for children of root
-    group_values = []
-    if init_time_ms > 0:
-        group_values.append(json.ValueObject((
-            ("path", json.ValueString("common/_initialization")),
-            ("passed", json.ValueNumber(Decimal(0))),
-            ("failed", json.ValueNumber(Decimal(0))),
-            ("skipped", json.ValueNumber(Decimal(0))),
-            ("totalTimeMs", json.ValueNumber(Decimal(str(round(init_time_ms, 1))))),
-        )))
-    for subgroup_item in root_group.subgroups:
-        if isinstance(subgroup_item, str):
-            sg = getattr(test_suite, subgroup_item)
-        elif callable(subgroup_item):
-            sg = subgroup_item()
-        else:
-            sg = subgroup_item
-        group_values.append(_group_to_json_value(sg, root_path, runner, _benchmark_results))
-
-    json_value = json.ValueObject((
-        ("metadata", json.ValueObject((
-            ("timestamp", json.ValueString(timestamp)),
-            ("language", json.ValueString("python")),
-            ("branch", json.ValueString(branch)),
-            ("commit", json.ValueString(commit)),
-            ("commitMessage", json.ValueString(commit_msg)),
-        ))),
-        ("groups", json.ValueArray(tuple(group_values))),
-        ("summary", json.ValueObject((
-            ("totalPassed", json.ValueNumber(Decimal(total_runnable))),
-            ("totalFailed", json.ValueNumber(Decimal(0))),
-            ("totalSkipped", json.ValueNumber(Decimal(total_skipped))),
-            ("totalTimeMs", json.ValueNumber(Decimal(str(round(root_time, 1))))),
-        ))),
-    ))
-
-    json_str = json_writer.print_json(json_value)
-    with open(output_path, "w") as f:
-        f.write(json_str)
-    print(f"Benchmark written to: {output_path}")
-
-
-def run_test_case(parent_desc: str, runner: TestRunner, tcase: hydra.testing.TestCaseWithMetadata) -> None:
-    """
-    Run a single test case using the provided runner.
-
-    Args:
-        parent_desc: Description from parent test groups
-        runner: The test runner function to use
-        tcase: The test case to run
-    """
-    name = tcase.name
-    desc_suffix = f": {tcase.description}" if tcase.description else ""
-    desc = name + desc_suffix
-    full_desc = f"{parent_desc}, {desc}" if parent_desc else desc
-
-    test_fn = runner(full_desc, tcase)
-
-    if test_fn:
-        test_fn()
-
-
-def run_test_group(parent_desc: str, runner: TestRunner, tgroup: hydra.testing.TestGroup) -> None:
-    """
-    Recursively run all tests in a test group.
-
-    Args:
-        parent_desc: Description from parent test groups
-        runner: The test runner function to use
-        tgroup: The test group to run
-    """
-    name = tgroup.name
-    desc_suffix = f" ({tgroup.description})" if tgroup.description else ""
-    desc = name + desc_suffix
-    full_desc = f"{parent_desc}, {desc}" if parent_desc else desc
-
-    # Run test cases in this group
-    for tcase in tgroup.cases:
-        run_test_case(full_desc, runner, tcase)
-
-    # Recursively run subgroups
-    for subgroup in tgroup.subgroups:
-        run_test_group(full_desc, runner, subgroup)
-
-
-def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, prefix: str = "", hydra_path: str = "") -> list:
-    """
-    Generate pytest test functions from a test group.
-
-    This function generates individual pytest test functions for each test case,
-    properly organized by test group hierarchy.
-
-    When HYDRA_BENCHMARK_OUTPUT is set, sentinel timer functions are inserted at
-    the start and end of each group to measure wall-clock time.
-
-    Args:
-        group: The test group to generate tests from
-        runner: The test runner function
-        prefix: Prefix for test names (built up from parent groups)
-        hydra_path: The Hydra path (preserving original names for cross-language correlation)
-
-    Returns:
-        List of (test_name, hydra_path, test_function) tuples
-    """
-    tests = []
-
-    # Generate a safe test name from the group name (for Python)
-    safe_group_name = group.name.replace(" ", "_").replace("-", "_").lower()
-    new_prefix = f"{prefix}{safe_group_name}_" if prefix else f"{safe_group_name}_"
-
-    # Build the Hydra path (preserving original names with spaces/caps)
-    new_hydra_path = f"{hydra_path}/{group.name}" if hydra_path else group.name
-
-    # Insert timer start sentinel for benchmark mode
-    if BENCHMARK_OUTPUT:
-        timer_start_name = f"{new_prefix}000_TIMER_START"
-        def make_start(p=new_hydra_path):
-            _start_timer(p)
-        tests.append((timer_start_name, new_hydra_path, make_start))
-
-    # Generate tests for cases in this group
-    for i, tcase in enumerate(group.cases, 1):
-        test_name = f"{new_prefix}case_{i}"
-        case_hydra_path = f"{new_hydra_path}/{tcase.name}"
-        desc = f"{group.name}, {tcase.name}"
-
-        # Check if test should be skipped based on tags
-        if should_skip_test(tcase):
-            def make_skip_test():
-                """Create a skip test for slow/disabled tests"""
-                def test_fn():
-                    pytest.skip("Test is disabled or too slow")
-                return test_fn
-            tests.append((test_name, case_hydra_path, make_skip_test()))
-            continue
-
-        def make_test(test_desc: str, test_case: hydra.testing.TestCaseWithMetadata):
-            """Closure to capture test_desc and test_case"""
-            def test_fn():
-                test_func = runner(test_desc, test_case)
-                if test_func:
-                    test_func()
-                else:
-                    pytest.skip("Test is disabled or not supported")
-            return test_fn
-
-        tests.append((test_name, case_hydra_path, make_test(desc, tcase)))
-
-    # Recursively generate tests for subgroups
-    # Note: subgroups can be strings (names to look up), TestGroup objects directly, or functions that return TestGroups
-    for subgroup_item in group.subgroups:
-        if isinstance(subgroup_item, str):
-            # It's a string name, look it up in test_suite module
-            subgroup_obj = getattr(test_suite, subgroup_item)
-        elif callable(subgroup_item):
-            # It's a function that returns a TestGroup - call it
-            subgroup_obj = subgroup_item()
-        else:
-            # It's already a TestGroup object
-            subgroup_obj = subgroup_item
-        tests.extend(generate_pytest_tests(subgroup_obj, runner, new_prefix, new_hydra_path))
-
-    # Insert timer stop sentinel for benchmark mode
-    if BENCHMARK_OUTPUT:
-        timer_stop_name = f"{new_prefix}999_TIMER_END"
-        def make_stop(p=new_hydra_path):
-            _stop_timer(p)
-        tests.append((timer_stop_name, new_hydra_path, make_stop))
-
-    return tests
-
-
 # Generate all test functions from the test suite
-_all_tests = generate_pytest_tests(test_suite.all_tests(), default_test_runner)
+_all_tests = generate_pytest_tests(
+    test_suite.all_tests(), default_test_runner, test_suite,
+    benchmark_output=BENCHMARK_OUTPUT, benchmark_timers=_benchmark_timers,
+    benchmark_results=_benchmark_results)
 
 # Eagerly initialize test infrastructure so that JSON module loading
 # and graph construction are not counted inside the first test group's timer.
@@ -668,4 +310,6 @@ for test_name, hydra_path, test_fn in _all_tests:
 # Register benchmark output writing if HYDRA_BENCHMARK_OUTPUT is set.
 # Uses atexit to write JSON after all tests complete.
 if BENCHMARK_OUTPUT:
-    atexit.register(_write_benchmark_json, BENCHMARK_OUTPUT, default_test_runner)
+    atexit.register(
+        write_benchmark_json, BENCHMARK_OUTPUT, default_test_runner,
+        test_suite.all_tests(), test_suite, "python", _benchmark_results)
