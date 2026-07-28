@@ -4,15 +4,16 @@ Hydra-Scala is a complete Scala 3 implementation of the [Hydra](https://github.c
 kernel. It supports the full code generation pipeline and passes the bootstrapping test suite,
 producing output identical to the Haskell, Java, Python, and Lisp hosts for all target languages.
 
-📖 **API documentation:** Scaladoc for all Hydra Scala packages is published as a single
-cross-linked reference at the [Hydra Scala API index](https://categoricaldata.net/hydra/scala/scaladoc/)
-(entry points per package: [hydra-kernel](https://categoricaldata.net/hydra/scala/scaladoc/hydra-kernel/),
+📖 **API documentation:** Scaladoc for all Hydra Scala packages is published, one tree per package, at the
+[Hydra Scala API index](https://categoricaldata.net/hydra/scala/scaladoc/)
+(individual packages: [hydra-kernel](https://categoricaldata.net/hydra/scala/scaladoc/hydra-kernel/),
 [hydra-rdf](https://categoricaldata.net/hydra/scala/scaladoc/hydra-rdf/),
 [hydra-pg](https://categoricaldata.net/hydra/scala/scaladoc/hydra-pg/), and the other Scala packages —
 all linked from the index).
-Unlike the per-package [JavaDoc](https://categoricaldata.net/hydra/java/javadoc/) trees, the Scala API
-is documented as one unified site: Scala 3 Scaladoc resolves cross-package links (e.g. a reference to
-`hydra.core.Type` from `hydra-pg`) only when all sources are documented in a single run.
+Cross-package references (e.g. a reference to `hydra.core.Type` from `hydra-pg`) are not hyperlinked:
+Scala 3 Scaladoc renders types from a binary-package dependency as unresolved links, and its
+`-external-mappings` option only rewrites already-resolved external symbols, so there is no working
+cross-tree link mechanism (unlike JavaDoc's `-linkoffline` or Sphinx's intersphinx).
 
 ## Features
 
