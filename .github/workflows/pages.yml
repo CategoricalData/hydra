@@ -483,13 +483,17 @@ jobs:
             # Union of external libraryDependencies across all packages. Grep the
             # generated build.sbt files for `"group" % "artifact" % "version"`
             # lines that are NOT net.fortytwo.hydra.scala (those are our sources).
+            # The `|| true` is required: the generated packages currently declare
+            # NO external deps, so the grep matches nothing and (under
+            # `set -o pipefail`) would otherwise abort the whole script with a
+            # non-zero pipe status, leaving an empty Seq().
             echo '  libraryDependencies ++= Seq('
-            grep -rhoE '"[a-zA-Z0-9._-]+" +%%? +"[a-zA-Z0-9._-]+" +% +"[a-zA-Z0-9._-]+"' \
-              dist/scala/*/build.sbt 2>/dev/null \
-              | grep -v 'net.fortytwo.hydra.scala' \
-              | sort -u \
-              | sed 's/^/    /; s/$/,/' \
-              | sed '$ s/,$//'
+            { grep -rhoE '"[a-zA-Z0-9._-]+" +%%? +"[a-zA-Z0-9._-]+" +% +"[a-zA-Z0-9._-]+"' \
+                dist/scala/*/build.sbt 2>/dev/null \
+                | grep -v 'net.fortytwo.hydra.scala' \
+                | sort -u \
+                | sed 's/^/    /; s/$/,/' \
+                | sed '$ s/,$//' ; } || true
             echo '  ),'
             echo '  Test / unmanagedSourceDirectories := Seq.empty,'
             echo '  test := {},'
