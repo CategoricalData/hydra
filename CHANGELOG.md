@@ -15,6 +15,78 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.2] - 2026-07-28
+
+Point release on the 0.17.x line. Themes: promotion of the generator's routing and manifest
+logic into Hydra (`hydra.build.*`), per-package API-doc publishing across Java/Scala/Python,
+constraint-polymorphic arithmetic, and new effectful stream/file primitives. Includes the base64
+binary-literal rename `literals.binaryToString`/`stringToBinary` → `binaryToBase64`/`base64ToBinary`,
+a step toward [#417](https://github.com/CategoricalData/hydra/issues/417) (which remains in progress).
+
+### Highlights
+
+- **Build system promoted into Hydra**: the three generator drivers now consume `hydra.build.routing`
+  ([#560](https://github.com/CategoricalData/hydra/issues/560)) and `hydra.build.manifest`
+  ([#607](https://github.com/CategoricalData/hydra/issues/607)), retiring the legacy static prefix
+  tables; the cold-seeder oil-and-water violation is fixed
+  ([#608](https://github.com/CategoricalData/hydra/issues/608)) and guarded
+  ([#617](https://github.com/CategoricalData/hydra/issues/617)).
+- **Per-package API docs** for all doc-bearing hosts: JavaDoc restructured with cross-links and a fixed
+  tag→CI→Pages chain ([#616](https://github.com/CategoricalData/hydra/issues/616)), plus mirrored
+  Scaladoc ([#619](https://github.com/CategoricalData/hydra/issues/619)) and Python API docs
+  ([#620](https://github.com/CategoricalData/hydra/issues/620)).
+- **Constraint-polymorphic arithmetic**: a `numeric` type class with enforcement and value-level dispatch
+  ([#566](https://github.com/CategoricalData/hydra/issues/566)), reflected on the target hosts
+  ([#618](https://github.com/CategoricalData/hydra/issues/618)).
+
+### New features
+
+- Standard-stream primitives: `stdin`/`stdout`/`stderr` ([#526](https://github.com/CategoricalData/hydra/issues/526)).
+- Recursive flag for `hydra.lib.files.listDirectory` ([#527](https://github.com/CategoricalData/hydra/issues/527)).
+- Hydra-specific regex syntax with per-target translation (`hydra.read.regex` / `hydra.show.regex`)
+  ([#567](https://github.com/CategoricalData/hydra/issues/567)).
+- Constraint-polymorphic arithmetic: `numeric` type class + value-level dispatch
+  ([#566](https://github.com/CategoricalData/hydra/issues/566)).
+- Aggregated Java + Scala Maven publishing into a single Central Portal deployment
+  ([#591](https://github.com/CategoricalData/hydra/issues/591)).
+
+### Improvements
+
+- Generator drivers consume `hydra.build.routing` ([#560](https://github.com/CategoricalData/hydra/issues/560))
+  and `hydra.build.manifest` ([#607](https://github.com/CategoricalData/hydra/issues/607)).
+- Fixed the cold-seeder oil-and-water violation ([#608](https://github.com/CategoricalData/hydra/issues/608))
+  and extended `check-oil-and-water.py` to catch cold-seeder imports of unpublished `Hydra.Build.*`
+  ([#617](https://github.com/CategoricalData/hydra/issues/617)).
+- Moved non-kernel packages to strict validation, clearing the #575 backlog
+  ([#580](https://github.com/CategoricalData/hydra/issues/580)).
+- Decoupled `Hydra.Sources.Test.All` from `Hydra.Sources.All`'s re-export list
+  ([#601](https://github.com/CategoricalData/hydra/issues/601)).
+- Renamed `hydra.json.schema` to resolve the module-vs-namespace-prefix conflict that broke
+  file-per-module hosts ([#532](https://github.com/CategoricalData/hydra/issues/532)).
+- Coders route `hydra.lib.*` overlay imports by overlay-module existence, not name-matching
+  `hydra.lib.defaults` ([#568](https://github.com/CategoricalData/hydra/issues/568)).
+- Per-package JavaDoc/Scaladoc/Python-doc publishing
+  ([#616](https://github.com/CategoricalData/hydra/issues/616),
+  [#619](https://github.com/CategoricalData/hydra/issues/619),
+  [#620](https://github.com/CategoricalData/hydra/issues/620)).
+- Aligned Java-host Scala/TypeScript generation with Haskell on expression layout (line-wrapping,
+  declaration order) ([#612](https://github.com/CategoricalData/hydra/issues/612)).
+
+### Bug fixes
+
+- **TypeScript** — added the missing CI job (zero prior coverage)
+  ([#571](https://github.com/CategoricalData/hydra/issues/571)); fixed the
+  `verify-distribution.sh` smoke-test import so the gate actually gates
+  ([#578](https://github.com/CategoricalData/hydra/issues/578)); emit `hydra.parse.regex`'s
+  `regexSequence` before its alternation use (TS2448)
+  ([#604](https://github.com/CategoricalData/hydra/issues/604)).
+- **Build and sync** — `sync.sh` Phase 3 digest-cache now sees cross-package deps on moved kernel
+  symbols, fixing stale downstream output ([#606](https://github.com/CategoricalData/hydra/issues/606)).
+- **Numeric constraints** — `#566` polymorphism now reflected on the target hosts (targets were
+  monomorphizing `int32->int32->int32`) ([#618](https://github.com/CategoricalData/hydra/issues/618)).
+
+---
+
 ## [0.17.1] - 2026-07-18
 
 Consolidation release on the 0.17.x line, built against published 0.17.0 hosts. Themes:
