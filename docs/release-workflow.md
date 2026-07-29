@@ -34,6 +34,11 @@ Releases are currently performed from the `main` branch and involve the followin
    This verifies that all implementations are consistent and passing,
    and produces upload-ready release artifacts in `release-artifacts/`
    (see "Release preparation" below).
+1. Run the cross-host test suites with `/test all` (or `bin/test.sh all`) — `prepare-release.sh`'s
+   per-target gates overlap this, but `/test all` is the dedicated target-language validation and
+   must be green before releasing.
+1. Run the bootstrap host×target coverage (see "Bootstrap coverage" below): the triad plus enough
+   individual cells to demonstrate every supported language works **both as a host and as a target**.
 1. Update `CHANGELOG.md` (see "Updating the changelog" below).
 1. Commit all changes and tag the release
    (e.g. `git tag 0.13.0 -m '0.13.0 release' HEAD`, then `git push && git push --tags`).
@@ -277,6 +282,50 @@ privileged — all five registry channels are peers, each publishing its own pac
 format from `dist/<lang>/`.
 
 Per-step logs land in `verify-logs/`. All checks must pass before proceeding with the release.
+
+## Bootstrap coverage
+
+Beyond `prepare-release.sh` and `/test all`, a release must demonstrate — via the bootstrapping demo
+(`bin/run-bootstrapping-demo.sh`, a.k.a. `/bootstrap`) — that every supported language works both **as a
+target** and **as a host**. These are two distinct things; keep them separate to avoid over-scoping (see
+the note at the end):
+
+- **As a target** (the kernel is generated *into* the language and its tests pass): covered by `/test all`
+  and the per-target bootstrap cells. Every language must pass here.
+- **As a host** (the language runs its own generated kernel — i.e. it *self-hosts*): also covered by
+  `/test all`, which runs each host's generated kernel against the suite. A language "works as a host" in
+  this sense when it self-hosts and passes.
+- **As a cross-generation build host** (the language's coder generates the kernel *into a different
+  language*): demonstrated with **Python as the target** — the canonical "this host can generate into
+  another language" check. (Haskell is deliberately *not* the pivot: the project is moving away from
+  Haskell-as-default, and a Haskell-target run exercises Haskell-specific paths rather than the general
+  cross-gen capability.)
+
+Run at least:
+
+- **The triad** — `/bootstrap` (default: `haskell,java,python × haskell,java,python`). This already proves
+  haskell/java/python generate into Python (and each other), so they need no separate Python-target cell.
+- **A `L → python` cell for every other host**, one at a time (fail-fast; fix the root cause before
+  continuing — a red bootstrap cell blocks the release exactly as a red test does):
+
+  ```bash
+  bin/run-bootstrapping-demo.sh --hosts <L> --targets python --tag pytgt_<L>
+  ```
+
+  As of 0.17 the hosts beyond the triad are `scala`, `typescript`, `clojure`, `common-lisp`, `scheme`,
+  `emacs-lisp`. Use a fresh `--tag` per cell and confirm the cell actually **generated files** (a cached
+  no-op can exit 0 having written nothing — that is not a pass).
+
+- **Targets:** `haskell → L` for each remaining target, plus `haskell → go` (`go` is a head bud — target
+  only, tolerated if it fails; tracked by #289).
+
+**Scope note (learned the hard way, 0.17.2):** "works as a host" means **self-hosting**, which `/test all`
+already proves. It does **not** require every language to cross-generate every *other* language. Per the
+README status table, only Haskell, Java, Scala, and Python are full cross-generation build hosts; the
+self-host-only dialects (TypeScript, Clojure, Common Lisp, Scheme) and Emacs Lisp (maturing as a host) are
+**not** expected to generate arbitrary other languages. Do not treat a failing `self-host-only-dialect →
+some-other-language` cell as a release blocker; that is a future enhancement, not a regression. Demonstrate
+cross-gen with the `L → python` cells above and stop there.
 
 ## Verifying a release
 
