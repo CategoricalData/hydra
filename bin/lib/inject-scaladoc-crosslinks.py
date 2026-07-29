@@ -24,10 +24,16 @@ Inputs:
 import argparse, json, re, collections, pathlib, sys
 
 SPAN_RE = re.compile(r'<span data-unresolved-link="" t="t">([A-Za-z][A-Za-z0-9_]*)</span>')
-# The lone "API" tab switcher at the top of the sidebar column. href depth varies
-# by page nesting, so match on the stable anchor id/class and label only.
-SWITCHER_RE = re.compile(
-    r'<a id="api-nav-button" class="switcher h100 selected" href="[^"]*">API</a>')
+# The top-bar project-name title. Each page's title is static HTML (no JS ever
+# rewrites it — verified) and scaladoc does a full browser navigation on link
+# clicks (no client-side page swap), so every freshly-loaded page shows its own
+# correct package name. We keep the title but reword it to "<pkg> package" for
+# clarity. The project name inside varies (it's the sbt module name, which equals
+# our --package), so capture and replace just the inner text. Depth-varying href
+# is preserved untouched.
+TITLE_RE = re.compile(
+    r'(<a href="[^"]*" class="logo-container">'
+    r'<span class="project-name[^"]*">)[^<]*(</span></a>)')
 TYPELIKE = {"type", "class", "trait", "object", "enum", "case class"}
 
 
@@ -112,21 +118,26 @@ def main():
 
         new = SPAN_RE.sub(repl, txt)
 
-        # Show which package this tree belongs to, at the top of the sidebar
-        # column. The top-bar project name is a persistent shell element that
-        # scaladoc does NOT refresh on in-page navigation, so after a cross-tree
-        # click (e.g. hydra-jvm -> hydra-kernel) it stays stale. The sidebar,
-        # by contrast, is per-page content that always reflects the page you are
-        # on. Scaladoc's "API" tab switcher (top of the sidebar column) is a dead
-        # control here — there is no companion "Docs" tab because we ship no
-        # static _docs site — so repurpose that slot as a per-package label:
-        # it removes the useless button AND surfaces the correct package name
-        # right beside the module tree.
-        new, n = SWITCHER_RE.subn(
-            f'<span id="api-nav-button" class="switcher h100 selected" '
-            f'title="package">{a.package}</span>',
-            new)
+        # Reword the top-bar title to "<pkg> package" for clarity. The title is
+        # static per-page HTML that always shows the correct package on a full
+        # page load (scaladoc navigates normally on link clicks and never rewrites
+        # the title via JS), so the top bar is the right home for the package
+        # identity — no sidebar label needed.
+        new, n = TITLE_RE.subn(rf'\g<1>{a.package} package\g<2>', new)
         labels += n
+
+        # Hide the "API" tab switcher at the top of the sidebar. It is scaladoc's
+        # API/Docs tab control, but we ship no static _docs site, so it is a lone
+        # always-selected tab that switches to nothing. ux.js re-renders that
+        # element from a menu config on load, so removing it from the static HTML
+        # would not stick (and querying a removed node risks a JS error); hiding
+        # it with CSS is robust against the re-render. Injected once per page.
+        if "</head>" in new and "hydra-hide-switcher" not in new:
+            new = new.replace(
+                "</head>",
+                '<style id="hydra-hide-switcher">'
+                '#leftColumn .switcher-container{display:none}</style></head>',
+                1)
 
         if new != txt:
             files += 1
@@ -134,7 +145,7 @@ def main():
                 hp.write_text(new, encoding="utf-8")
 
     print(f"[{a.package}] linkable dep symbols={len(linkmap)} "
-          f"pkg-labels={labels} "
+          f"title-rewords={labels} "
           f"rewrote={rewrites} across {files} files"
           f"{' (dry-run)' if a.dry_run else ''}")
 
