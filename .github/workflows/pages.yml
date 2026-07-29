@@ -357,7 +357,10 @@ jobs:
           python3 -m venv "$venv"
           source "$venv/bin/activate"
           pip install -q --upgrade pip
-          pip install -q sphinx
+          # sphinx_rtd_theme gives a real navigable module tree in the sidebar
+          # plus a working search box; sphinx's default theme renders only a flat,
+          # near-useless "hydra namespace" entry for the whole package.
+          pip install -q sphinx sphinx_rtd_theme
 
           # The 12 documented packages (hydra-ext excluded, #451 — it has no
           # Python modules). Install every package up front so autodoc can import
@@ -426,8 +429,13 @@ jobs:
               echo '}'
             } >> "$confdir/source/conf.py"
 
+            # Use the Read the Docs theme for a proper navigable sidebar tree.
+            echo "html_theme = 'sphinx_rtd_theme'" >> "$confdir/source/conf.py"
+
             sphinx-apidoc --implicit-namespaces -o "$confdir/source" "$scoped/hydra"
-            printf '\n.. toctree::\n   :maxdepth: 2\n\n   modules\n' >> "$confdir/source/index.rst"
+            # maxdepth 4 so the sidebar expands namespaces -> subpackages -> modules
+            # (depth 2 collapsed everything under a single top-level entry).
+            printf '\n.. toctree::\n   :maxdepth: 4\n\n   modules\n' >> "$confdir/source/index.rst"
             sphinx-build -q -b html "$confdir/source" "${root}/${pkg}"
             echo "::endgroup::"
           }
