@@ -52,63 +52,79 @@
 <body>
 
 <h1><a href="https://github.com/CategoricalData/hydra">Hydra</a> Scala API</h1>
-<p class="tagline">Scaladoc reference for the Hydra Scala packages.</p>
+<p class="tagline">Unified Scaladoc reference for the Hydra Scala packages.</p>
 
 <p>
-  Each package below is documented separately, with its own module listing. See also the
-  <a href="../../">Hydra home page</a> and the
+  All Hydra Scala packages are documented together in a single, cross-linked
+  Scaladoc site: a reference to a type in one package (for example
+  <code>hydra.core.Type</code>) links directly to its documentation wherever it
+  appears. Scala 3 Scaladoc resolves cross-package links only when the sources
+  are documented in one run, so — unlike the per-package
+  <a href="../../java/javadoc/">JavaDoc</a> trees — the Scala API is presented as
+  one unified reference rather than one tree per package.
+</p>
+
+<p>
+  <a href="api/">Browse the full API &rarr;</a>, or jump to a specific package below.
+  See also the <a href="../../">Hydra home page</a> and the
   <a href="https://central.sonatype.com/search?q=g:net.fortytwo.hydra.scala">Maven Central artifacts</a>.
 </p>
 
-<h2>Packages</h2>
+<h2>Packages covered</h2>
+
+<p>The unified API documents every package that Hydra maps into Scala:</p>
+
+<p>
+  Each card links to that package's entry point within the unified API.
+</p>
 
 <div class="pkg-grid">
   <div class="pkg-card">
-    <h3><a href="hydra-kernel/"><code>hydra-kernel</code></a></h3>
+    <h3><a href="api/hydra/core.html"><code>hydra-kernel</code></a></h3>
     <p>The Hydra kernel: core types and terms, the type system, coders, and the DSL runtime.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-jvm/"><code>hydra-jvm</code></a></h3>
+    <h3><a href="api/hydra/jvm/serde.html"><code>hydra-jvm</code></a></h3>
     <p>Shared JVM support used by the Java and Scala coders.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-rdf/"><code>hydra-rdf</code></a></h3>
+    <h3><a href="api/hydra/rdf.html"><code>hydra-rdf</code></a></h3>
     <p>RDF and SHACL support: the RDF syntax model and mappings to and from Hydra.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-pg/"><code>hydra-pg</code></a></h3>
+    <h3><a href="api/hydra/pg.html"><code>hydra-pg</code></a></h3>
     <p>Property graphs: the PG model plus TinkerPop/Gremlin, Cypher, and GQL integrations.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-java/"><code>hydra-java</code></a></h3>
+    <h3><a href="api/hydra/java.html"><code>hydra-java</code></a></h3>
     <p>The Java coder and Java-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-scala/"><code>hydra-scala</code></a></h3>
+    <h3><a href="api/hydra/scala.html"><code>hydra-scala</code></a></h3>
     <p>The Scala coder and Scala-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-python/"><code>hydra-python</code></a></h3>
+    <h3><a href="api/hydra/python.html"><code>hydra-python</code></a></h3>
     <p>The Python coder and Python-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-haskell/"><code>hydra-haskell</code></a></h3>
+    <h3><a href="api/hydra/haskell.html"><code>hydra-haskell</code></a></h3>
     <p>The Haskell coder and Haskell-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-typescript/"><code>hydra-typescript</code></a></h3>
+    <h3><a href="api/hydra/typeScript.html"><code>hydra-typescript</code></a></h3>
     <p>The TypeScript coder and TypeScript-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-lisp/"><code>hydra-lisp</code></a></h3>
+    <h3><a href="api/hydra/lisp.html"><code>hydra-lisp</code></a></h3>
     <p>The shared Lisp coder (Clojure, Common Lisp, Emacs Lisp, Scheme).</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-go/"><code>hydra-go</code></a></h3>
+    <h3><a href="api/hydra/go.html"><code>hydra-go</code></a></h3>
     <p>The Go coder and Go-language DSL support.</p>
   </div>
   <div class="pkg-card">
-    <h3><a href="hydra-build/"><code>hydra-build</code></a></h3>
+    <h3><a href="api/hydra/build.html"><code>hydra-build</code></a></h3>
     <p>Build-configuration model and code generation for package build files.</p>
   </div>
 </div>
