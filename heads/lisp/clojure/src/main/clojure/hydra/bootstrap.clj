@@ -31,8 +31,8 @@
 (def ^:private lib-subs-fallback
   ;; Fallback hydra.lib.* sub-namespaces, used only if lib-subs-for-target's overlay-directory
   ;; existence check can't reach the source tree (e.g. a relocated/packaged invocation).
-  ["chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
-   "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"])
+  ["chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals" "logic" "maps"
+   "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"])
 
 (defn- overlay-dir-segment [target]
   (case target

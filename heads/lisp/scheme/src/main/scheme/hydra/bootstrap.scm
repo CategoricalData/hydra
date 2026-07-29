@@ -342,8 +342,8 @@
 (for-each
   (lambda (sub)
     (hydra-load-def-module (string-append *gen-main-base* "lib/" sub ".scm")))
-  '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
-    "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
+  '("chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals" "logic" "maps"
+    "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"))
 (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
@@ -653,8 +653,8 @@
 (define lib-subs-fallback
   ;; Fallback hydra.lib.* sub-namespaces, used only if lib-subs-for-target's overlay-directory
   ;; existence check can't reach the source tree (e.g. a relocated/packaged invocation).
-  '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
-    "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
+  '("chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals" "logic" "maps"
+    "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"))
 
 (define (overlay-dir-segment target)
   (cond ((string=? target "common-lisp") "common_lisp")
