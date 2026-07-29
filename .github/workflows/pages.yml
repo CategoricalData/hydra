@@ -471,58 +471,73 @@ jobs:
           # matches the `scala` job in ci.yml.
           java-version: '17'
 
-      # Per-package Scaladoc, mirroring the Java job's per-package JavaDoc trees:
-      # each package's Scaladoc is built standalone via its OWN dist/scala/<pkg>/
-      # build.sbt and collected into scala/scaladoc/<pkg>/. The documented
-      # packages consume their inter-package Hydra dependencies as published
-      # Maven coordinates (net.fortytwo.hydra.scala:<pkg>_3:<version>), which are
-      # not on Maven Central at build time, so publish each internal dependency
-      # to the local ivy cache first, leaves-first (kernel; then rdf/jvm; then
-      # the rest resolve).
-      #
-      # NOTE: cross-package links are NOT wired here, and cannot be with this
-      # toolchain. Scala 3.3.7 scaladoc emits references to types from a binary
-      # jar dependency (e.g. hydra.core.Type seen from hydra-pg) as
-      # `data-unresolved-link` BEFORE any linking option runs, and
-      # `-external-mappings` only rewrites references scaladoc already RESOLVED
-      # to an external symbol — so it produces zero links regardless of the
-      # regex/URL/packageList arguments (verified three ways: 3-part mapping,
-      # the full 4-part form with a packageListUrl, and mapping the Scala
-      # stdlib — all 0 links). Cross-refs therefore render as readable-but-
-      # unclickable text, exactly like Java's would without -linkoffline. Java
-      # and Python get cross-links because javadoc (element-list) and Sphinx
-      # (objects.inv) support external symbol inventories; scaladoc has no
-      # equivalent. If a future scaladoc gains one, wire it here.
-      - name: Build unified scaladoc over all packages
+      # Per-package Scaladoc WITH cross-package links (hybrid, #619). Two facts
+      # force this design:
+      #   1. Scala 3.3.7 scaladoc cannot cross-link SEPARATE per-package trees: a
+      #      reference to a type from a binary-jar dependency (e.g. hydra.core.Type
+      #      from hydra-pg) renders as `data-unresolved-link` before any linking
+      #      option runs, and `-external-mappings` only rewrites already-resolved
+      #      external symbols (verified 0 links three ways). So per-package builds
+      #      alone give clean per-package left-nav but dead cross-refs.
+      #   2. A single UNIFIED build (all sources one doc run) DOES resolve every
+      #      cross-ref, but produces ONE combined tree whose left-nav lists all 12
+      #      packages' modules everywhere — poor for browsing a single package.
+      # Hybrid: build the per-package trees (clean nav) AND, from a throwaway
+      # unified build, harvest scaladoc's own symbol index (scripts/searchData.js:
+      # simpleName -> owner-namespace -> URL). Then post-process each per-package
+      # tree, rewriting each `data-unresolved-link` span into a real <a href> into
+      # the owning dependency's published tree — but ONLY when the simple name
+      # resolves to a UNIQUE symbol owned by one of that package's DEPENDENCY
+      # packages (bin/lib/inject-scaladoc-crosslinks.py). Within-package and
+      # ambiguous names are left untouched, so there are no mislinks. Result:
+      # per-package trees with working cross-package hyperlinks.
+      - name: Build per-package scaladoc with injected cross-links
         if: steps.ci-run.outputs.proceed == 'true'
+        env:
+          PAGES_BASE_URL: https://categoricaldata.net/hydra/scala/scaladoc
         run: |
           set -euo pipefail
-          # The unified scaladoc tree lands under scala/scaladoc/api/ so the
-          # custom landing page (docs/scala-scaladoc-index.html, staged to
-          # scala/scaladoc/index.html) does not collide with scaladoc's own
-          # generated root index.html.
-          root=_site/scala/scaladoc/api
+          root=_site/scala/scaladoc
           mkdir -p "$root"
-
-          # All dist/scala/<pkg>/ packages (dependency order is irrelevant for a
-          # single compile; listed alphabetically). hydra-ext is excluded (#451).
-          PACKAGES=(
-            hydra-build hydra-go hydra-haskell hydra-java hydra-jvm
-            hydra-kernel hydra-lisp hydra-pg hydra-python hydra-rdf
-            hydra-scala hydra-typescript
-          )
-
-          # Collect third-party dependency coordinates from every package's
-          # build.sbt (the "net.fortytwo.hydra.scala" inter-package deps are
-          # dropped — those are provided as source here, not as artifacts).
+          root=$(cd "$root" && pwd)
           repo="$(pwd)"
-          proj="${repo}/_scaladoc-unified"
-          rm -rf "$proj"; mkdir -p "$proj/project"
-          echo 'sbt.version=1.10.7' > "$proj/project/build.properties"
 
-          # Emit the aggregation build.sbt: all package source dirs as unmanaged
-          # sources, external (non-Hydra) libraryDependencies unioned, and a doc
-          # title. scalaVersion matches the generated packages (3.3.7).
+          # The 12 documented packages (hydra-ext excluded, #451). Only three are
+          # consumed as dependencies by others — hydra-kernel (by all), hydra-rdf
+          # (by hydra-pg), hydra-jvm (by hydra-java and hydra-scala) — so publish
+          # just those to the local ivy cache, leaves-first, for resolution.
+          PACKAGES=(
+            hydra-kernel hydra-rdf hydra-jvm hydra-build hydra-go hydra-haskell
+            hydra-java hydra-lisp hydra-pg hydra-python hydra-scala hydra-typescript
+          )
+          declare -A DEPS=(
+            [hydra-kernel]=""
+            [hydra-rdf]="hydra-kernel"
+            [hydra-jvm]="hydra-kernel"
+            [hydra-pg]="hydra-kernel hydra-rdf"
+            [hydra-java]="hydra-kernel hydra-jvm"
+            [hydra-scala]="hydra-kernel hydra-jvm"
+            [hydra-build]="hydra-kernel"
+            [hydra-go]="hydra-kernel"
+            [hydra-haskell]="hydra-kernel"
+            [hydra-lisp]="hydra-kernel"
+            [hydra-python]="hydra-kernel"
+            [hydra-typescript]="hydra-kernel"
+          )
+          for pkg in hydra-kernel hydra-rdf hydra-jvm; do
+            echo "::group::publishLocal ${pkg}"
+            ( cd "dist/scala/${pkg}" && sbt -batch publishLocal )
+            echo "::endgroup::"
+          done
+
+          # --- Harvest the symbol index from a throwaway unified doc build. ---
+          # All package sources compiled in one run so scaladoc resolves every
+          # symbol; we keep ONLY its scripts/searchData.js (the FQN -> URL index),
+          # never publishing the unified HTML.
+          echo "::group::unified index build (for searchData.js)"
+          uni="${repo}/_scaladoc-index"
+          rm -rf "$uni"; mkdir -p "$uni/project"
+          echo 'sbt.version=1.10.7' > "$uni/project/build.properties"
           {
             echo 'ThisBuild / scalaVersion := "3.3.7"'
             echo 'lazy val root = (project in file(".")).settings('
@@ -535,87 +550,58 @@ jobs:
             done
             echo ''
             echo '  ),'
-            # Union of external libraryDependencies across all packages. Grep the
-            # generated build.sbt files for `"group" % "artifact" % "version"`
-            # lines that are NOT net.fortytwo.hydra.scala (those are our sources).
-            # The `|| true` is required: the generated packages currently declare
-            # NO external deps, so the grep matches nothing and (under
-            # `set -o pipefail`) would otherwise abort the whole script with a
-            # non-zero pipe status, leaving an empty Seq().
-            echo '  libraryDependencies ++= Seq('
-            { grep -rhoE '"[a-zA-Z0-9._-]+" +%%? +"[a-zA-Z0-9._-]+" +% +"[a-zA-Z0-9._-]+"' \
-                dist/scala/*/build.sbt 2>/dev/null \
-                | grep -v 'net.fortytwo.hydra.scala' \
-                | sort -u \
-                | sed 's/^/    /; s/$/,/' \
-                | sed '$ s/,$//' ; } || true
-            echo '  ),'
             echo '  Test / unmanagedSourceDirectories := Seq.empty,'
-            echo '  test := {},'
-            echo '  Compile / doc / scalacOptions ++= Seq("-project", "Hydra")'
+            echo '  test := {}'
             echo ')'
-          } > "$proj/build.sbt"
-
-          echo "::group::generated unified build.sbt"
-          cat "$proj/build.sbt"
+          } > "$uni/build.sbt"
+          ( cd "$uni" && sbt -batch doc )
+          search_data="$uni/target/scala-3.3.7/api/scripts/searchData.js"
+          test -f "$search_data" || { echo "::error::searchData.js missing"; exit 1; }
           echo "::endgroup::"
 
-          echo "::group::sbt doc (unified, all ${#PACKAGES[@]} packages)"
-          ( cd "$proj" && sbt -batch doc )
-          echo "::endgroup::"
+          # --- Build each per-package tree (clean nav) then inject cross-links. ---
+          # `clean` before `doc` avoids sbt's incremental-doc cache returning a
+          # stale/empty api/ dir after a prior build.
+          build_pkg() {
+            local pkg="$1"
+            echo "::group::scaladoc ${pkg}"
+            ( cd "dist/scala/${pkg}" && sbt -batch clean doc )
+            local out="${root}/${pkg}"
+            mkdir -p "$out"
+            cp -R "dist/scala/${pkg}/target/scala-3.3.7/api/." "$out/"
+            python3 "${repo}/bin/lib/inject-scaladoc-crosslinks.py" \
+              --search-data "$search_data" \
+              --tree "$out" \
+              --package "$pkg" \
+              --deps "${DEPS[$pkg]}" \
+              --pages-base "$PAGES_BASE_URL" \
+              --dist-root "${repo}/dist/scala"
+            echo "::endgroup::"
+          }
 
-          api="$proj/target/scala-3.3.7/api"
-          test -f "$api/index.html" || {
-            echo "::error::index.html missing from unified scaladoc"
+          build_pkg hydra-kernel
+          test -f "${root}/hydra-kernel/index.html" || {
+            echo "::error::index.html missing from generated scaladoc"
             exit 1
           }
-          # Sanity check: cross-package links must resolve (regression guard for
-          # the whole reason this is a unified build). hydra.core.Type is
-          # referenced from many packages; require it to be linked.
-          links=$(grep -rhoE 'href="[^"]*core/Type\.html"' "$api" 2>/dev/null | wc -l | tr -d ' ')
-          echo "resolved hydra.core.Type cross-links: ${links}"
-          [ "${links}" -gt 0 ] || {
-            echo "::error::no resolved hydra.core.Type cross-links — unified build regressed"
-            exit 1
-          }
-
-          cp -R "$api/." "$root/"
-          echo "Unified scaladoc: $(find "$root" -name '*.html' | wc -l) html files across ${#PACKAGES[@]} packages"
-
-          # Backward-compatible redirects: earlier releases published per-package
-          # trees at scala/scaladoc/<pkg>/ (linked from the hydra-scala README and
-          # possibly external sites). The unified build has no per-package roots,
-          # so leave a meta-refresh stub at each old path pointing to that
-          # package's entry page inside the unified api/ tree, so those URLs keep
-          # resolving instead of 404ing. Map: <pkg> -> api-relative entry page.
-          site="${root%/api}"   # _site/scala/scaladoc
-          declare -A ENTRY=(
-            [hydra-kernel]="hydra/core.html"
-            [hydra-jvm]="hydra/jvm/serde.html"
-            [hydra-rdf]="hydra/rdf.html"
-            [hydra-pg]="hydra/pg.html"
-            [hydra-java]="hydra/java.html"
-            [hydra-scala]="hydra/scala.html"
-            [hydra-python]="hydra/python.html"
-            [hydra-haskell]="hydra/haskell.html"
-            [hydra-typescript]="hydra/typeScript.html"
-            [hydra-lisp]="hydra/lisp.html"
-            [hydra-go]="hydra/go.html"
-            [hydra-build]="hydra/build.html"
-          )
-          for pkg in "${!ENTRY[@]}"; do
-            target="../api/${ENTRY[$pkg]}"
-            mkdir -p "${site}/${pkg}"
-            {
-              printf '%s\n' '<!doctype html>'
-              printf '%s\n' '<meta charset="utf-8">'
-              printf '%s\n' "<title>${pkg} — Hydra Scala API</title>"
-              printf '%s\n' "<meta http-equiv=\"refresh\" content=\"0; url=${target}\">"
-              printf '%s\n' "<link rel=\"canonical\" href=\"${target}\">"
-              printf '%s\n' "<p>The Hydra Scala API is now a single unified reference. Redirecting to <a href=\"${target}\">${pkg} in the unified API</a>&hellip;</p>"
-            } > "${site}/${pkg}/index.html"
+          for pkg in "${PACKAGES[@]}"; do
+            [ "$pkg" = "hydra-kernel" ] && continue
+            build_pkg "$pkg"
           done
-          echo "Wrote ${#ENTRY[@]} per-package redirect stubs under ${site}/"
+
+          # Sanity check: cross-package injection must have produced links (guard
+          # against a searchData.js/URL-scheme drift silently disabling the hybrid).
+          links=$(grep -rhoE "href=\"${PAGES_BASE_URL}/hydra-kernel/[^\"]*\"" "${root}/hydra-pg" 2>/dev/null | wc -l | tr -d ' ')
+          echo "hydra-pg -> hydra-kernel injected links: ${links}"
+          [ "${links}" -gt 0 ] || {
+            echo "::error::no cross-package links injected into hydra-pg — hybrid regressed"
+            exit 1
+          }
+
+          echo "Per-package scaladoc trees (with injected cross-links):"
+          for pkg in "${PACKAGES[@]}"; do
+            echo "  ${pkg}: $(find "${root}/${pkg}" -name '*.html' | wc -l) html files"
+          done
 
       - name: Stage landing pages
         if: steps.ci-run.outputs.proceed == 'true'
