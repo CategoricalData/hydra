@@ -158,6 +158,48 @@ if [ "$DO_SDIST" = false ]; then
     exit 0
 fi
 
+# Pre-publish sdist resolution fix: the generated stack.yaml pins this package's
+# transitive Hydra siblings as HACKAGE extra-deps at $VERSION (correct for a
+# standalone build-on-demand, #376 Default A). But `stack sdist` builds a snapshot
+# plan and therefore tries to RESOLVE those pins — and $VERSION is not yet on
+# Hackage during a release (that is precisely what we are about to publish). So the
+# sdist ASSEMBLY of any dependent (e.g. hydra-build → hydra-kernel) failed with
+# "Could not find hydra-kernel-$VERSION on Hackage" before the tarball was produced.
+#
+# publish-hackage.sh assembles LEAVES-FIRST, so every sibling tarball this package
+# depends on already exists in $OUT_DIR by the time we get here. Repoint the staged
+# stack.yaml's extra-deps at those LOCAL sibling archives so `stack sdist` resolves
+# them without touching Hackage. This affects ONLY the assembly-time resolution:
+# stack.yaml is not a Cabal-tracked file, so it is NOT bundled into the sdist — the
+# shipped tarball still carries only the .cabal + sources, and the published package's
+# own stack.yaml (in dist/haskell/<pkg>/) keeps its Hackage pins for standalone builds.
+if [ -f "$STAGE/stack.yaml" ]; then
+    LOCAL_DEPS=""
+    for dep in $(HYDRA_ROOT_DIR="$HYDRA_ROOT" python3 -c "
+import sys; sys.path.insert(0, '$HYDRA_ROOT/bin/lib')
+from importlib import import_module
+m = import_module('generate-haskell-package-build')
+print(' '.join(m.transitive_hydra_deps('$HYDRA_ROOT', '$PKG')))
+" 2>/dev/null); do
+        sib="$OUT_DIR/$dep-$VERSION.tar.gz"
+        if [ -f "$sib" ]; then
+            LOCAL_DEPS="$LOCAL_DEPS  - archive: $sib\n"
+        else
+            echo "  ERROR: sibling sdist not staged yet: $sib (assembly order bug?)" >&2
+            exit 1
+        fi
+    done
+    if [ -n "$LOCAL_DEPS" ]; then
+        # Replace the Hackage-pinned extra-deps block with local-archive deps for
+        # the sdist run only. The generated block is the file tail after 'extra-deps:'.
+        sed_stage="$STAGE/stack.sdist.yaml"
+        awk '/^extra-deps:/{print; exit} {print}' "$STAGE/stack.yaml" > "$sed_stage"
+        printf "%b" "$LOCAL_DEPS" >> "$sed_stage"
+        mv "$sed_stage" "$STAGE/stack.yaml"
+        echo "  (sdist resolution: repointed $PKG's Hydra deps at local staged archives in $OUT_DIR)"
+    fi
+fi
+
 echo "Running stack sdist..."
 cd "$STAGE"
 export STACK_WORK_DIR="$STAGE/.stack-work"
