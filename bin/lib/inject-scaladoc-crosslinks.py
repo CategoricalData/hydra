@@ -24,6 +24,10 @@ Inputs:
 import argparse, json, re, collections, pathlib, sys
 
 SPAN_RE = re.compile(r'<span data-unresolved-link="" t="t">([A-Za-z][A-Za-z0-9_]*)</span>')
+# The lone "API" tab switcher at the top of the sidebar column. href depth varies
+# by page nesting, so match on the stable anchor id/class and label only.
+SWITCHER_RE = re.compile(
+    r'<a id="api-nav-button" class="switcher h100 selected" href="[^"]*">API</a>')
 TYPELIKE = {"type", "class", "trait", "object", "enum", "case class"}
 
 
@@ -93,7 +97,7 @@ def main():
     arr = load_index(a.search_data)
     linkmap = build_linkmap(arr, owner, depset)
 
-    rewrites, files = 0, 0
+    rewrites, files, labels = 0, 0, 0
     for hp in pathlib.Path(a.tree).rglob("*.html"):
         txt = hp.read_text(encoding="utf-8")
 
@@ -107,12 +111,30 @@ def main():
             return m.group(0)
 
         new = SPAN_RE.sub(repl, txt)
+
+        # Show which package this tree belongs to, at the top of the sidebar
+        # column. The top-bar project name is a persistent shell element that
+        # scaladoc does NOT refresh on in-page navigation, so after a cross-tree
+        # click (e.g. hydra-jvm -> hydra-kernel) it stays stale. The sidebar,
+        # by contrast, is per-page content that always reflects the page you are
+        # on. Scaladoc's "API" tab switcher (top of the sidebar column) is a dead
+        # control here — there is no companion "Docs" tab because we ship no
+        # static _docs site — so repurpose that slot as a per-package label:
+        # it removes the useless button AND surfaces the correct package name
+        # right beside the module tree.
+        new, n = SWITCHER_RE.subn(
+            f'<span id="api-nav-button" class="switcher h100 selected" '
+            f'title="package">{a.package}</span>',
+            new)
+        labels += n
+
         if new != txt:
             files += 1
             if not a.dry_run:
                 hp.write_text(new, encoding="utf-8")
 
     print(f"[{a.package}] linkable dep symbols={len(linkmap)} "
+          f"pkg-labels={labels} "
           f"rewrote={rewrites} across {files} files"
           f"{' (dry-run)' if a.dry_run else ''}")
 
