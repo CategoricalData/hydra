@@ -43,7 +43,12 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 # Languages whose test-distribution.sh we know how to call. Order is the
 # default-triad-first convention used by /bootstrap.
-ALL_TARGETS="haskell java python scala go typescript clojure scheme common-lisp emacs-lisp"
+# Go is intentionally excluded: it is a "head bud" whose runtime is still mostly
+# placeholder and which does not yet host the hydra-kernel test suite (see CLAUDE.md
+# and #289). CI runs no Go test job either, so including it here made `/test all`
+# report a spurious FAIL that the actual release/CI bar never sees. Re-add `go` once
+# the Go head hosts the suite.
+ALL_TARGETS="haskell java python scala typescript clojure scheme common-lisp emacs-lisp"
 
 usage() {
     sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
