@@ -118,11 +118,10 @@ def main():
 
         new = SPAN_RE.sub(repl, txt)
 
-        # Reword the top-bar title to "<pkg> package" for clarity. The title is
-        # static per-page HTML that always shows the correct package on a full
-        # page load (scaladoc navigates normally on link clicks and never rewrites
-        # the title via JS), so the top bar is the right home for the package
-        # identity — no sidebar label needed.
+        # Reword the top-bar title to "<pkg> package" for clarity. Each page's
+        # title is static HTML naming its own package; the SPA-disable script
+        # below guarantees a full page load on cross-tree clicks, so the title
+        # (and search index, and sidebar) always match the page you land on.
         new, n = TITLE_RE.subn(rf'\g<1>{a.package} package\g<2>', new)
         labels += n
 
@@ -138,6 +137,36 @@ def main():
                 '<style id="hydra-hide-switcher">'
                 '#leftColumn .switcher-container{display:none}</style></head>',
                 1)
+
+        # Force a full page load when navigating BETWEEN package trees. Scaladoc's
+        # ux.js turns every same-origin link click into an SPA transition: it
+        # fetches the target, swaps #main + #leftColumn and the document title, but
+        # leaves the top-bar project name AND the per-page scripts (crucially the
+        # per-package searchData.js) belonging to the ORIGIN tree. That is fine for
+        # a single unified site, but here each package is a SEPARATE tree with its
+        # own header, search index and assets — so an SPA hop into another tree
+        # leaves a stale title and a search box that still searches the origin
+        # package. We install a capture-phase click listener (runs before ux.js's
+        # bubble-phase handler) that, for any link pointing into a DIFFERENT
+        # /<...>/scaladoc/<pkg>/ tree, stops the SPA handler and lets the browser
+        # navigate normally — reloading the correct tree whole. Same-tree links
+        # keep the fast SPA behavior.
+        if "</body>" in new and "hydra-full-nav" not in new:
+            script = (
+                '<script id="hydra-full-nav">(function(){'
+                'function pkg(p){var m=p.match(/\\/scaladoc\\/([^\\/]+)\\//);'
+                'return m?m[1]:null;}'
+                'document.addEventListener("click",function(e){'
+                'var a=e.target.closest&&e.target.closest("a");'
+                'if(!a||!a.href)return;'
+                'var u;try{u=new URL(a.href);}catch(_){return;}'
+                'if(u.origin!==location.origin)return;'
+                'var to=pkg(u.pathname),here=pkg(location.pathname);'
+                'if(to&&here&&to!==here){e.stopImmediatePropagation();'
+                'location.href=a.href;}'
+                '},true);})();</script></body>'
+            )
+            new = new.replace("</body>", script, 1)
 
         if new != txt:
             files += 1
