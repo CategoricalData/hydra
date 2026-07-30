@@ -356,6 +356,24 @@ echo ""
 cd "$HYDRA_ROOT"
 SDIST_LOG="$LOG_DIR/hackage-sdist.log"
 SDIST_OK=true
+
+# Resolve the GHC the sdist dry-run/haddock (Steps 10-11) compile with from Stack's
+# own toolchain rather than a hardcoded `ghc-9.10.2`: Stack installs GHC under
+# ~/.stack/programs/ (not on PATH), and its exact patch version tracks the resolver
+# (currently lts-24.7 -> ghc-9.10.3), so a hardcoded name breaks with `[Cabal-5490]
+# Cannot find the program 'ghc'` whenever the resolver's GHC differs or isn't PATH-
+# exposed. `stack path --compiler-exe` gives the absolute path to the right compiler.
+SDIST_GHC="$( ( cd "$HYDRA_ROOT/heads/haskell" && stack path --compiler-exe ) 2>/dev/null )"
+if [ -z "$SDIST_GHC" ] || [ ! -x "$SDIST_GHC" ]; then
+    echo "  FAIL: could not resolve Stack's GHC for the sdist dry-run (stack path --compiler-exe)"
+    ERRORS=$((ERRORS + 1)); SDIST_OK=false
+fi
+# The v2-build/v2-haddock dry-run resolves each sdist's NON-Hydra deps (base, aeson,
+# containers, ...) against the Hackage package index; ensure it exists so a machine
+# that has never run `cabal update` doesn't fail with `[Cabal-7160] The package list
+# ... does not exist`. Refresh is cheap and idempotent; failure here is non-fatal
+# (the build step surfaces any real resolution problem).
+cabal update >>"$SDIST_LOG" 2>&1 || true
 SDIST_WORK=""
 
 # The Hackage publish set is the SINGLE SOURCE OF TRUTH curated in
@@ -432,7 +450,7 @@ if [ "$SDIST_OK" = true ]; then
     done
     if [ "$SDIST_OK" = true ]; then
         printf "packages:\n%b" "$PROJECT_PKG_LINES" > "$PROJECT_DIR/cabal.project"
-        if ( cd "$PROJECT_DIR" && cabal v2-build --dry-run all -w ghc-9.10.2 ) >>"$SDIST_LOG" 2>&1; then
+        if ( cd "$PROJECT_DIR" && cabal v2-build --dry-run all -w "$SDIST_GHC" ) >>"$SDIST_LOG" 2>&1; then
             echo "  OK: all ${#HACKAGE_PKGS[@]} per-package sdists resolve cleanly on case-sensitive filesystem"
             for pkg in "${HACKAGE_PKGS[@]}"; do
                 cp "$SDIST_WORK/$pkg-${EXPECTED}.tar.gz" "$HACKAGE_OUT/$pkg-${EXPECTED}.tar.gz"
@@ -462,7 +480,7 @@ if [ "$SDIST_OK" = true ]; then
         PKG_EXTRACT="$SDIST_WORK/$pkg-${EXPECTED}"
         if ( cd "$SDIST_WORK/project" \
              && cabal v2-haddock --haddock-for-hackage --enable-doc \
-                -w ghc-9.10.2 "$pkg" ) >>"$DOC_LOG" 2>&1; then
+                -w "$SDIST_GHC" "$pkg" ) >>"$DOC_LOG" 2>&1; then
             DOC_TARBALL="$(find "$SDIST_WORK/project/dist-newstyle" \
                 -name "$pkg-${EXPECTED}-docs.tar.gz" | head -n 1)"
             if [ -n "$DOC_TARBALL" ] && [ -f "$DOC_TARBALL" ]; then
