@@ -21,13 +21,23 @@
 # (bin/lib/generate-scala-package-build.py; default
 # dist/scala/.central-portal-bundle). This is sbt-sonatype's documented
 # mechanism for staging a multi-module bundle: per-package `publishSigned`
-# only WRITES into that shared directory (fast, no network validation); a
-# single trailing `sonatypeBundleRelease` then uploads the combined bundle as
-# ONE Central Portal deployment — one ~8 min validation cycle total, not one
-# per package (#591). Credentials are read from ~/.sbt/1.0/sonatype.sbt or the
-# environment:
+# only WRITES into that shared directory (fast, no network validation). This
+# script then zips that shared directory and POSTs it to the Central Portal
+# publisher API as ONE deployment — one ~8 min validation cycle total, not one
+# per package (#591).
+#
+# NOTE: we do NOT use sbt-sonatype's `sonatypeBundleRelease` for the upload.
+# In 3.12.2, run from a single-package session (the only option, since each
+# dist/scala/<pkg>/ is a standalone build), it zips from the plugin's in-session
+# staging state — which is EMPTY, because each publishSigned ran in its own sbt
+# process — producing a 22-byte empty bundle that Central rejects with "Bundle
+# has no files". We zip the on-disk shared bundle dir directly instead.
+#
+# Credentials are read from ~/.sbt/1.0/sonatype.sbt or the environment:
 #   SONATYPE_USERNAME / SONATYPE_PASSWORD
 #   PGP_PASSPHRASE (or interactive prompt)
+# Set HYDRA_SCALA_PUBLISH_HOLD=1 to upload as USER_MANAGED (validate + hold for
+# review) instead of AUTOMATIC (validate + auto-publish).
 #
 # Two safety properties (mirroring the Java script):
 #   1. DEPENDENCY CLOSURE: every Hydra package any published package depends on
@@ -36,25 +46,24 @@
 #      dependents, so downstream builds resolve fresh siblings. (The final
 #      aggregated release itself has no "order" — it is one release.)
 #
-# Sonatype Central Portal note: sbt-sonatype defaults to publishingType =
-# AUTOMATIC, so the single aggregated `sonatypeBundleRelease` auto-publishes
+# Sonatype Central Portal note: the direct upload uses publishingType=AUTOMATIC
+# by default, so the single aggregated deployment validates then auto-publishes
 # with no manual Central Portal UI step — this is the entire point of
-# aggregating (#591). `sonatypeBundleRelease` (sbt-sonatype 3.12.2) is the
-# ONLY task that targets the Central Portal API — `sonatypeBundleUpload`
-# talks to the decommissioned legacy OSSRH Nexus (/service/local) and 404s,
-# so do NOT use it. The single trailing release call uploads the combined
-# bundle and blocks polling for validation (a few minutes total, not per
-# package); on a rare client timeout mid-poll the deployment is left locked
-# (drop the stuck deployment in the Portal UI and re-run).
+# aggregating (#591). The upload endpoint is the Central Portal publisher API
+# (`/api/v1/publisher/upload`); the legacy OSSRH Nexus (`sonatypeBundleUpload`,
+# /service/local) is decommissioned and 404s — do NOT use it. This script POSTs
+# the zipped bundle, then polls the status endpoint for validation (a few
+# minutes total, not per package). On a client timeout mid-poll the deployment
+# is left in the Portal (check its state in the UI and re-run or release there).
 #
 # Usage:
 #   publish-sbt.sh [--upload] [--package <pkg>] [--skip <pkg[,pkg...]>]
 #
 #   (default)       dry run: check deps + build jars locally; NO upload.
 #   --upload        run `sbt publishSigned` per package (staging only, fast),
-#                   then ONE `sbt sonatypeBundleRelease` against the shared
-#                   bundle directory (uploads + auto-publishes every package
-#                   as a single Central Portal deployment).
+#                   then zip the shared bundle directory and POST it to the
+#                   Central Portal as one deployment (uploads + auto-publishes
+#                   every package). HYDRA_SCALA_PUBLISH_HOLD=1 holds at VALIDATED.
 #   --package <pkg> restrict the BUILD/STAGE step to a single package (must be
 #                   in the set). The final release always covers the full
 #                   PUBLISH_SET — a single-package Central Portal deployment
@@ -151,6 +160,38 @@ if [ "$DO_UPLOAD" = true ]; then
     echo "  Credentials OK"
 fi
 
+# --- Guard: PGP signing works (upload only) ----------------------------------
+# sbt-pgp shells out to gpg (useGpg default), which delegates to gpg-agent.
+# Verify the agent can actually PRODUCE A SIGNATURE before we stage 11 packages
+# and start an aggregated Central Portal deployment: a signing failure partway
+# through publishSigned leaves a locked/partial deployment that must be dropped
+# in the Portal UI. Fail fast here instead. (Set HYDRA_PGP_KEY to pin the key;
+# otherwise gpg's default signing key is used.)
+if [ "$DO_UPLOAD" = true ]; then
+    echo "=== Preflight: verifying PGP signing (gpg-agent) ==="
+    if ! command -v gpg >/dev/null 2>&1; then
+        echo "ERROR: gpg not found on PATH — required for publishSigned." >&2
+        exit 1
+    fi
+    _sign_probe="$(mktemp)"; printf 'hydra-release-signing-probe\n' > "$_sign_probe"
+    _sign_key_flag=()
+    [ -n "${HYDRA_PGP_KEY:-}" ] && _sign_key_flag=(--local-user "$HYDRA_PGP_KEY")
+    if gpg --batch --yes "${_sign_key_flag[@]}" --detach-sign --armor \
+           -o "$_sign_probe.asc" "$_sign_probe" 2>"$_sign_probe.err" \
+       && gpg --verify "$_sign_probe.asc" "$_sign_probe" 2>/dev/null; then
+        echo "  PGP signing OK (gpg-agent produced and verified a signature)"
+        rm -f "$_sign_probe" "$_sign_probe.asc" "$_sign_probe.err"
+    else
+        echo "ERROR: gpg could not sign — publishSigned would fail mid-bundle." >&2
+        echo "       Diagnostic output:" >&2
+        sed 's/^/         /' "$_sign_probe.err" >&2 2>/dev/null
+        echo "       Common fix: restart the agent (gpgconf --kill gpg-agent)," >&2
+        echo "       or use a stable gpg if a dev build (2.5.x) is active." >&2
+        rm -f "$_sign_probe" "$_sign_probe.asc" "$_sign_probe.err"
+        exit 1
+    fi
+fi
+
 # --- Guard: dependency closure -----------------------------------------------
 echo "=== Checking dependency closure of Scala publish set ==="
 in_set() {
@@ -224,20 +265,80 @@ if [ "$DO_UPLOAD" = true ]; then
         echo ""
     done
 
-    # sonatypeBundleRelease is the ONLY sbt-sonatype 3.12.2 task that targets
-    # the Central Portal API (sonatypeBundleUpload 404s against the
-    # decommissioned legacy OSSRH Nexus — do not use it). Called ONCE here,
-    # against the shared bundle directory, instead of once per package: it
-    # uploads the combined bundle and blocks polling for validation (a few
-    # minutes total, not per package); on a rare client timeout mid-poll the
-    # deployment is left locked (drop the stuck deployment in the Portal UI
-    # and re-run).
-    echo "=== sbt sonatypeBundleRelease  (aggregated: ${#PUBLISH_SET[@]} packages @ $VERSION) ==="
-    ( cd "$HYDRA_ROOT/dist/scala/${PUBLISH_SET[0]}" && sbt sonatypeBundleRelease )
-    echo ""
-    echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as ONE aggregated deployment. ==="
-    echo "sbt-sonatype's default publishingType = AUTOMATIC: validates once (~8 min) then"
-    echo "auto-publishes — no manual Central Portal UI step required. Packages in the deployment:"
+    # Upload the aggregated bundle to the Central Portal DIRECTLY, not via
+    # sbt-sonatype's `sonatypeBundleRelease`.
+    #
+    # Why not sonatypeBundleRelease: with sbt-sonatype 3.12.2, running it from a
+    # single package session (the only way, since each dist/scala/<pkg>/ is a
+    # standalone build) zips from the plugin's IN-SESSION staging state rather
+    # than the shared on-disk $BUNDLE_DIR. Because each publishSigned above ran
+    # in its OWN sbt process, that session has staged NOTHING, so the task builds
+    # an EMPTY 22-byte bundle.zip and the Central Portal rejects the deployment
+    # with "Bundle has no files" — even though $BUNDLE_DIR holds every signed
+    # artifact + checksum in correct Maven layout. (Observed on 0.17.2.)
+    #
+    # Instead we zip $BUNDLE_DIR (which already has the maven layout at its root:
+    # net/fortytwo/hydra/scala/...) and POST it to the Central Portal publisher
+    # API — the same endpoint sonatypeBundleRelease targets, minus the broken
+    # zip step. publishingType=AUTOMATIC preserves the "validate then auto-publish,
+    # no manual UI step" behavior; set HYDRA_SCALA_PUBLISH_HOLD=1 to upload as
+    # USER_MANAGED (validate + HOLD) for a review checkpoint before releasing.
+    echo "=== Building aggregated bundle zip from $BUNDLE_DIR ==="
+    _bundle_zip="$HYDRA_ROOT/dist/scala/hydra-scala-$VERSION-central-bundle.zip"
+    rm -f "$_bundle_zip"
+    ( cd "$BUNDLE_DIR" && zip -qr "$_bundle_zip" net )
+    _nfiles=$(unzip -l "$_bundle_zip" 2>/dev/null | tail -1 | awk '{print $2}')
+    echo "  $_bundle_zip ($_nfiles files)"
+    if [ "${_nfiles:-0}" -lt 1 ]; then
+        echo "ERROR: bundle zip is empty — nothing was staged into $BUNDLE_DIR." >&2
+        exit 1
+    fi
+
+    # Central Portal auth: Bearer base64(user:pass), from env or ~/.sbt sonatype.sbt.
+    _cp_user="${SONATYPE_USERNAME:-}"; _cp_pass="${SONATYPE_PASSWORD:-}"
+    if [ -z "$_cp_user" ] || [ -z "$_cp_pass" ]; then
+        read -r _cp_user _cp_pass < <(python3 - "$SBT_SONATYPE_CONF" <<'PY'
+import re,sys
+try:
+    t=open(sys.argv[1]).read()
+    m=re.search(r'Credentials\(\s*"[^"]*",\s*"[^"]*",\s*"([^"]*)",\s*"([^"]*)"\s*\)',t)
+    if m: print(m.group(1), m.group(2))
+except Exception: pass
+PY
+)
+    fi
+    if [ -z "$_cp_user" ] || [ -z "$_cp_pass" ]; then
+        echo "ERROR: no Central Portal credentials (SONATYPE_USERNAME/PASSWORD or $SBT_SONATYPE_CONF)." >&2
+        exit 1
+    fi
+    _cp_bearer=$(printf '%s:%s' "$_cp_user" "$_cp_pass" | base64 | tr -d '\n')
+    _pub_type="AUTOMATIC"; [ "${HYDRA_SCALA_PUBLISH_HOLD:-}" = "1" ] && _pub_type="USER_MANAGED"
+
+    echo "=== Uploading bundle to Central Portal (publishingType=$_pub_type) ==="
+    _dep_id=$(curl -s -X POST \
+        "https://central.sonatype.com/api/v1/publisher/upload?publishingType=$_pub_type&name=net.fortytwo.hydra.scala-$VERSION" \
+        -H "Authorization: Bearer $_cp_bearer" -F "bundle=@$_bundle_zip" 2>/dev/null)
+    echo "  deployment id: $_dep_id"
+    case "$_dep_id" in
+        *[!0-9a-fA-F-]*|"") echo "ERROR: upload did not return a deployment id: $_dep_id" >&2; exit 1 ;;
+    esac
+
+    echo "=== Polling deployment $_dep_id for validation ==="
+    _state=""
+    for _i in $(seq 1 60); do
+        _state=$(curl -s -X POST "https://central.sonatype.com/api/v1/publisher/status?id=$_dep_id" \
+            -H "Authorization: Bearer $_cp_bearer" 2>/dev/null \
+            | python3 -c "import json,sys
+try: print(json.load(sys.stdin).get('deploymentState','?'))
+except: print('poll-error')" 2>/dev/null)
+        echo "  [$_i] state=$_state"
+        case "$_state" in
+            PUBLISHED) echo "=== PUBLISHED: ${#PUBLISH_SET[@]} packages at $VERSION ==="; break ;;
+            VALIDATED) [ "$_pub_type" = "USER_MANAGED" ] && { echo "=== VALIDATED and HELD (USER_MANAGED). Release from the Portal UI or re-run without HYDRA_SCALA_PUBLISH_HOLD. ==="; break; } ;;
+            FAILED) echo "ERROR: Central Portal deployment FAILED. Query the status API / Portal UI for details." >&2; exit 1 ;;
+        esac
+        sleep 20
+    done
     printf '  %s\n' "${PUBLISH_SET[@]}"
 else
     # Dry run: publishLocal leaves-first (so each package can resolve its
