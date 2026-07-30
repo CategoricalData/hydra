@@ -93,7 +93,7 @@ declared the same way as first-order primitives, via `primDef`/`primNoDef` in
 their `Hydra/Sources/Kernel/Lib/<Sub>.hs` registry. Their higher-orderness is
 expressed in the `TermSignature` (function-typed value parameters) rather than
 via a separate registration path. On the Haskell host, the same `prim*` family
-in `Hydra.Dsl.Prims` pairs each name with its native implementation; the
+in `Hydra.Overlay.Haskell.Dsl.Prims` pairs each name with its native implementation; the
 native implementation must accept and apply its function arguments correctly.
 
 ### Key files for Java debugging

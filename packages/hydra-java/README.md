@@ -139,12 +139,12 @@ Hydra's Java code is split across three locations
   — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
   by `heads/java/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
   is self-contained
-  - `hydra/lib/` — primitive function implementations
-  - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)
-  - `hydra/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
+  - `hydra/overlay/java/lib/` — primitive function implementations
+  - `hydra/overlay/java/dsl/` — Java DSL (Terms, Types, Expect, ...)
+  - `hydra/overlay/java/util/` — core utilities (Either, Optional, Pair, Lazy) plus the
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
-  - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
+  - `hydra/overlay/java/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
 - **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
   — bootstrap and driver layer above the kernel
   - `hydra/Bootstrap.java`, `hydra/Generation.java` — code-generation drivers

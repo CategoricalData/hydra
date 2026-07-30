@@ -62,7 +62,7 @@ Each category has a canonical comment tag placed above its import block.
   `Data.Set` is `S`, `Data.Maybe` is `Y`, `Data.Int` is `I`, `Data.ByteString` is `B`,
   `Data.ByteString.Char8` is `BC`, `Data.Scientific` is `Sci`.
 - **`T` is overloaded by category** — see the per-category blocks below. In categories
-  1–5 (term-/type-level production), `T = Hydra.Dsl.Types`. In categories 6–8 (tests
+  1–5 (term-/type-level production), `T = Hydra.Overlay.Haskell.Dsl.Types`. In categories 6–8 (tests
   and fixtures), `T = Hydra.Overlay.Haskell.Dsl.Typed.Types`. The full alias
   `MetaTypes = Hydra.Overlay.Haskell.Dsl.Typed.Types` is used when both are needed in the same file.
 
@@ -90,14 +90,14 @@ binPrim = reify2 (\x y -> Maths.add x (Maths.mul x y))
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Dsl.Annotations` (for `doc`)
-- `Hydra.Dsl.Bootstrap`
-- `Hydra.Dsl.Types` operators only — `(>:)`, `(@@)`, `(~>)` and helpers like
+- `Hydra.Overlay.Haskell.Dsl.Annotations` (for `doc`)
+- `Hydra.Overlay.Haskell.Bootstrap`
+- `Hydra.Overlay.Haskell.Dsl.Types` operators only — `(>:)`, `(@@)`, `(~>)` and helpers like
   `record`, `union`, `enum`
 - `Hydra.Sources.Kernel.Types.All`
 
 **Qualified**:
-- `T = Hydra.Dsl.Types`
+- `T = Hydra.Overlay.Haskell.Dsl.Types`
 - `M = Data.Map`, `L = Data.List`, `S = Data.Set`, `Y = Data.Maybe`
 
 ```haskell
@@ -105,10 +105,10 @@ module Hydra.Sources.Kernel.Types.<X> where
 
 -- Standard imports for kernel type modules
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Dsl.Types as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 import           Hydra.Sources.Kernel.Types.All
 
 import qualified Data.List as L
@@ -137,10 +137,10 @@ module Hydra.Sources.<Lang>.<X> where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Dsl.Types                 as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.All  as KernelTypes
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
@@ -158,7 +158,7 @@ import qualified Data.Set   as S
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Dsl.Prims as Prims` and the generated `Hydra.Lib.*` def-modules — DSL builders take a
+- `Hydra.Overlay.Haskell.Dsl.Prims as Prims` and the generated `Hydra.Lib.*` def-modules — DSL builders take a
   `PrimitiveDefinition` directly (`primitive DefLists.length`, `prim1 DefLists.length ...`) via the
   `ToPrimName` class, so the name flows from that one definition (the old `Hydra.Sources.Libraries`
   `_strings_toUpper`/`_lists_length` name constants were removed in #473). `Prims.primName Def...` still
@@ -170,7 +170,7 @@ import qualified Data.Set   as S
 - `Prelude hiding ((++))` — Hydra redefines `(++)` for string concatenation
 
 **Qualified**:
-- `T = Hydra.Dsl.Types` (use `T.` for type signatures and type expressions)
+- `T = Hydra.Overlay.Haskell.Dsl.Types` (use `T.` for type signatures and type expressions)
 - Library DSLs: `Strings`, `Lists`, `Maps`, `Math`, `Maybes`, `Sets`, `Eithers`,
   `Equality`, `Pairs`, `Logic`, `Literals` (= `Hydra.Dsl.Lib.Literals`),
   `Chars`
@@ -222,10 +222,10 @@ import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants   as Variants
 import qualified Hydra.Dsl.Packaging            as Packaging
 import qualified Hydra.Dsl.Parsing              as Parsing
 import qualified Hydra.Dsl.Paths                as Paths
-import qualified Hydra.Dsl.Prims                as Prims
-import qualified Hydra.Dsl.Tests                as Tests
+import qualified Hydra.Overlay.Haskell.Dsl.Prims                as Prims
+import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology             as Topology
-import qualified Hydra.Dsl.Types                as T
+import qualified Hydra.Overlay.Haskell.Dsl.Types                as T
 import qualified Hydra.Dsl.Util                 as Util
 
 import qualified Data.Int                       as I

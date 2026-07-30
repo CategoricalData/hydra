@@ -678,7 +678,7 @@ sbt build (no published-host probe yet — Scala always runs in `--local-host` m
   `hydra.json`), then the default published-host path picks it up. See
   [hostOverrides](#consuming-published-hosts).
 
-**The output is identical.** The published host (currently 0.17.0) and a freshly-built local host produce
+**The output is identical.** The published host (currently 0.17.1) and a freshly-built local host produce
 byte-for-byte identical `dist/json/hydra-{java,python}` from the same DSL sources — this is the
 forward-compatibility contract (#369) that makes consuming a *previous* release's host safe.
 See [Self-bootstrapping and forward-compatibility](https://github.com/CategoricalData/hydra/wiki/Packaging#self-bootstrapping-and-forward-compatibility)

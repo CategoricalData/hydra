@@ -308,12 +308,12 @@ which is unavailable to effects.)
 
 Understanding the distinction between meta-level and term-level DSLs is crucial for writing tests:
 
-### Term-Level DSL (`Hydra.Dsl.Terms`, `Hydra.Dsl.Tests`)
+### Term-Level DSL (`Hydra.Overlay.Haskell.Dsl.Terms`, `Hydra.Overlay.Haskell.Dsl.Tests`)
 
 Used for constructing **Haskell `Term` values** representing Hydra terms:
 
 ```haskell
-import Hydra.Dsl.Tests
+import Hydra.Overlay.Haskell.Dsl.Tests
 
 -- These create Term values (Haskell data)
 lambda "x" $ var "x"                    -- Term

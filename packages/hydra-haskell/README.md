@@ -30,10 +30,10 @@ for the full picture.
 - **Haskell kernel overlay** ([`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra))
   — hand-written Haskell kernel runtime, overlaid onto `dist/haskell/hydra-kernel/`
   so the published `hydra` Hackage package is self-contained
-  - `Haskell/Lib/` — native primitive implementations for the Haskell host
-  - `Dsl/Libraries.hs` — host-side primitive registration (the `hydraLib*` library definitions;
+  - `Overlay/Haskell/Lib/` — native primitive implementations for the Haskell host
+  - `Overlay/Haskell/Libraries.hs` — host-side primitive registration (the `hydraLib*` library definitions;
     names derive from the generated `PrimitiveDefinition`s, #473)
-  - `Dsl/Terms.hs`, `Dsl/Literals.hs`, `Dsl/Meta/Common.hs` — DSL syntax definitions
+  - `Overlay/Haskell/Dsl/Terms.hs`, `Overlay/Haskell/Dsl/Literals.hs`, `Overlay/Haskell/Dsl/Typed/Common.hs` — DSL syntax definitions
     used by the generated kernel
   - `Kernel.hs`, `Settings.hs` — runtime helpers
 - **Haskell head** ([`heads/haskell/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra))
@@ -280,11 +280,11 @@ for details.
 Hydra provides multiple domain-specific languages for constructing types and terms:
 
 **Untyped DSLs**
-([Hydra/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Types.hs),
-[Hydra/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Terms.hs)):
+([Hydra/Overlay/Haskell/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Types.hs),
+[Hydra/Overlay/Haskell/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Terms.hs)):
 ```haskell
-import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 
 personType = Types.record [
   "name" >: string,

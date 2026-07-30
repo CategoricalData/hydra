@@ -473,11 +473,10 @@ overlaid/copied in by a sync script (principle 2).
   Haskell, Java, and Python these are overlaid from the top-level
   `overlay/<lang>/hydra-kernel/` tree (#418) so the published `hydra-kernel`
   artifact is self-contained for foreign builds (Stack/cabal / Gradle / pip);
-  for Haskell by `sync-haskell.sh`, for Java/Python by
-  `heads/<lang>/bin/copy-kernel-runtime.sh`. TypeScript still copies from
-  `heads/typescript/src` pending migration. They are not generated, so they don't
+  for Haskell by `sync-haskell.sh`, for Java/Python/TypeScript by
+  `heads/<lang>/bin/copy-kernel-runtime.sh`. They are not generated, so they don't
   carry the generated-file header — that's correct. The canonical edit point is
-  `overlay/<lang>/` (TypeScript: `heads/typescript/src`). Note: every `dist/<lang>/` tree is
+  `overlay/<lang>/`. Note: every `dist/<lang>/` tree is
   gitignored, so the scan above won't see any of these overlaid copies in a clean tree. See
   [build-system.md §Hand-written runtime in hydra-kernel](../build-system.md#hand-written-runtime-in-hydra-kernel)
   for the catalog of paths.
@@ -763,15 +762,15 @@ Each host pairs canonical primitive names with native implementations in a regis
 
 | Host | Binding registry |
 |------|------------------|
-| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` |
-| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
-| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418) |
-| Scala      | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
-| TypeScript | `heads/typescript/src/test/typescript/hydra/test/libraries.ts` |
-| Clojure    | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` |
+| Java       | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
+| Python     | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` |
+| Scala      | `overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/Libraries.scala` |
+| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/libraries.ts` |
+| Clojure    | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/libraries.clj` |
 
 These registries call host-side helpers (`prim0`/`prim1`/`prim2` in Haskell's
-`Hydra.Dsl.Prims`, equivalents in each other host) to pair a name with a native
+`Hydra.Overlay.Haskell.Dsl.Prims`, equivalents in each other host) to pair a name with a native
 function. The host helper re-derives a `PrimitiveDefinition` from the host-side
 argument types via `defaultPrimitiveDefinition`; the canonical kernel-side
 registry is the authority, and the host re-derivation must agree. On the Haskell

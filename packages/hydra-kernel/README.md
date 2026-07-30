@@ -73,9 +73,10 @@ declaring every primitive in that namespace as a `PrimitiveDefinition`
 (name, description, signature, isPure / isTotal flags, and an optional
 cross-compilable default implementation in Hydra terms).
 
-The 18 namespaces — `Chars`, `Effects`, `Eithers`, `Equality`, `Files`,
-`Hashing`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Optionals`, `Pairs`,
-`Regex`, `Sets`, `Strings`, `System`, `Text` — together declare ~269 primitives
+The 21 namespaces — `Chars`, `Defaults`, `Effects`, `Eithers`, `Equality`,
+`Files`, `Functions`, `Hashing`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`,
+`Optionals`, `Ordering`, `Pairs`, `Regex`, `Sets`, `Strings`, `System`, `Text` —
+together declare ~290 primitives
 (see the lexicon for the authoritative count). See
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
 for the full signature list, and

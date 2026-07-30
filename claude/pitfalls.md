@@ -602,10 +602,10 @@ content hash otherwise (the migration shim). See `docs/build-system.md`.
 
 ### The full-matrix `/bootstrap all` has expected-fail cells — don't read them as regressions
 
-`bin/run-bootstrapping-demo.sh --hosts all --targets all` is a **4 hosts × 9 targets = 36** matrix
-(hosts: haskell, java, scala, python; targets add typescript + the four Lisp dialects). There are no
-Lisp-host or TypeScript-host rows — those languages are targets only, so e.g. "clojure-to-clojure"
-is not a cell. As of 2026-05, roughly a third of the cells fail **by design**, for reasons unrelated
+`bin/run-bootstrapping-demo.sh --hosts all --targets all` is a **9 hosts × 9 targets** matrix
+(every language ships an `invoke-<host>-host.sh`: haskell, java, python, scala, typescript, and the
+four Lisp dialects — clojure, common-lisp, emacs-lisp, scheme; Emacs Lisp is still maturing as a
+host). As of 2026-05, roughly a third of the cells fail **by design**, for reasons unrelated
 to whatever change you are verifying:
 
 - **Common-Lisp column (every host → common-lisp):** the `validate.packaging` cluster (~32 fails, all
@@ -839,17 +839,6 @@ description is a required field on the type but the validator treats `""` as
 "undocumented". When using `toPrimitive` or `primNoDef`, always pass a
 non-empty description.
 
-### `unary_function` is shallow — it only extracts the outer call
-
-In `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `unary_function f` builds a TTerm representing
-a unary lambda by calling `f (var "x")` and pattern-matching the result as
-`TermApplication (lhs, _)`, then returning `lhs`. If `f` does more than a
-single application (e.g. composes two operations), only the outer-most
-function survives; the inner one is silently discarded. The bug manifests
-as a type-inference failure that says "unify `<inner-output-type>` with
-`<outer-input-type>`" downstream. Use `lam "x" (...)` directly to build a
-real lambda body containing nested calls.
-
 ### Definition.primitive arm: every Definition consumer needs updating
 
 When adding `DefinitionPrimitive` to the `Definition` union, every site
@@ -963,25 +952,26 @@ alist accessors still key the old field, so a `Maybe` value reaches list-typed c
 `EXCEPTION: The value :JUST is not of type LIST` in the `validate.packaging` tests.
 Always run `bin/test.sh --no-sync clojure,common-lisp,scheme,emacs-lisp` after a
 `PrimitiveDefinition`/`Module`/`Package` field-shape change. The same change must also
-hand-update the per-dialect `prims.*` and `test_runner.*` registries under `heads/lisp/`,
-which construct these records positionally and break the same way.
+hand-update the per-dialect `prims.*` registries (now under
+`overlay/<dialect>/hydra-kernel/`) and the `test_runner.*` registries (still under
+`heads/lisp/`), which construct these records positionally and break the same way.
 
 ### Emacs Lisp regex needs `case-fold-search` bound to nil
 
 Emacs' default `case-fold-search` is `t` in batch mode, which makes
 character classes like `[a-z]` case-insensitive — `[a-z]` then matches `H`.
 Hydra follows POSIX-ERE case-sensitive semantics. Every regex primitive
-in `heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/lib/regex.el` binds
+in `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib/regex.el` binds
 `case-fold-search` to `nil` in its `let*`. New EL regex primitives must
 do the same.
 
-### Hand-written runtime files in `heads/<lang>/` clobber generated kernel
+### Hand-written overlay runtime files clobber generated kernel
 ### modules with the same name
 
-`bin/sync-typescript.sh` (and `bin/copy-kernel-runtime.sh` more generally)
-copies `heads/typescript/src/main/typescript/hydra/*.ts` into
-`dist/typescript/hydra-kernel/src/main/typescript/hydra/`. If the
-hand-written tree contains a file whose name matches a generated kernel
+`heads/typescript/bin/copy-kernel-runtime.sh` copies the hand-written
+overlay runtime `overlay/typescript/hydra-kernel/src/main/typescript/hydra/*.ts`
+into `dist/typescript/hydra-kernel/src/main/typescript/hydra/`. If the
+overlay tree contains a file whose name matches a generated kernel
 module (e.g. `core.ts`), the copy SILENTLY OVERWRITES the generated
 file. Symptoms: cascading TS2305 "Module 'X' has no exported member
 'Term'/'Type'/…" at every site that imports kernel types from
@@ -989,8 +979,9 @@ file. Symptoms: cascading TS2305 "Module 'X' has no exported member
 runtime's structural shape no longer matches what the kernel emits.
 
 Fix: rename the hand-written file. In #126 the hand-written
-`heads/typescript/src/main/typescript/hydra/core.ts` was renamed to
-`runtime.ts`; the corresponding `copy-kernel-runtime.sh` loop was
+`hydra/core.ts` was renamed to `runtime.ts`
+(now `overlay/typescript/hydra-kernel/src/main/typescript/hydra/runtime.ts`);
+the corresponding `copy-kernel-runtime.sh` loop was
 updated. Any future head should pick a name that cannot collide with
 the kernel's namespace (e.g. `hydra.<lang>.core`, `hydra.<lang>.context`,
 etc.).

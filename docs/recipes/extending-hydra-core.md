@@ -1099,7 +1099,7 @@ def "TypeContext" $
 
 #### Step 2: Update the DSL Helper Module
 
-**File:** `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Typing.hs` (or the appropriate `Hydra.Dsl.Meta.*` module)
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Typing.hs` (or the appropriate `Hydra.Overlay.Haskell.Dsl.Typed.*` module)
 
 This is the **critical step** that is often missed.
 The DSL helper module provides functions used by all `Hydra.Sources.*` files to construct records.
@@ -1133,12 +1133,12 @@ typeContextLetVariables tc = Phantoms.project _TypeContext _TypeContext_letVaria
 ```haskell
 typeContextWithLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name) -> TypedTerm TypeContext
 typeContextWithLetVariables ctx letVariables = typeContext
-  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypes ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextMetadata ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypeVariables ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLambdaVariables ctx)
   letVariables
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextInferenceContext ctx)
 ```
 
 **2.4: Update ALL existing "with" helpers** to pass through the new field:
@@ -1147,11 +1147,11 @@ typeContextWithLetVariables ctx letVariables = typeContext
 typeContextWithTypes :: TypedTerm TypeContext -> TypedTerm (M.Map Name Type) -> TypedTerm TypeContext
 typeContextWithTypes ctx types = typeContext
   types
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLetVariables ctx)  -- ← ADD THIS LINE
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextMetadata ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypeVariables ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLambdaVariables ctx)
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLetVariables ctx)  -- ← ADD THIS LINE
+  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextInferenceContext ctx)
 
 -- Similarly update typeContextWithMetadata, typeContextWithTypeVariables, etc.
 ```
@@ -1374,7 +1374,7 @@ one mid-build is much harder than finding it up front.
 7. **Hand-written heads.** Java `Generation.java`, Python `generation.py`,
    Scala `Generation.scala`, the Haskell `Hydra.Generation` (which provides
    `moduleAsBindings` / `definitionAsBinding` for the `Definition → Binding`
-   conversion) / `Hydra.Dsl.Bootstrap` / `verify-json-kernel/Main.hs`,
+   conversion) / `Hydra.Overlay.Haskell.Bootstrap` / `verify-json-kernel/Main.hs`,
    the auto-generated `Hydra.Sources.Json.Bootstrap` source. Each language
    uses its native field-name convention (`type_scheme` in Python,
    `typeScheme` in Java/Scala, `:typeScheme` keyword in Common Lisp).

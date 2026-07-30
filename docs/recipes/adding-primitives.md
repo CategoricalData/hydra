@@ -454,7 +454,7 @@ registry, **not** from the DSL sources or JSON:
 
 1. the kernel DSL signature in `Hydra.Sources.Kernel.Lib.*` (e.g. via `lazySig [positions]`);
 2. the regenerated `dist/json/hydra-kernel/.../lib/*.json` (produced from 1);
-3. the `prim*` call site in `Hydra.Sources.Libraries` — wrap it to attach the metadata
+3. the `prim*` call site in `Hydra.Overlay.Haskell.Libraries` — wrap it to attach the metadata
    (e.g. `Prims.lazyArgs [0,1] $ prim3 ...`). This is what reaches `bootstrapGraph`.
 
 One further subtlety: the kernel adapts each primitive's signature to the target language
@@ -884,7 +884,7 @@ for the matching "untyped bindings" / stale-JSON failure mode see
    `logic.ifElse`), use `define` (no default) rather than `defineWithDefault`.
 
 5. **Type-variable naming.** The canonical type-variable names come from
-   `Hydra.Sources.Libraries` (`_x`, `_xOrd`, `_xEq`, etc., resolving to `TypeVar`
+   `Hydra.Overlay.Haskell.Libraries` (`_x`, `_xOrd`, `_xEq`, etc., resolving to `TypeVar`
    values). Use the same names in your `TermSignature` to keep host signatures
    in sync.
 

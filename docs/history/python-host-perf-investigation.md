@@ -320,8 +320,13 @@ Things this investigation noticed but didn't pursue:
 
 ## Pointers to the actual code
 
-- Lazy class: `heads/python/src/main/python/hydra/python/util/lazy.py`
-- Persistent collection facades: `heads/python/src/main/python/hydra/python/util/{cons_list,persistent_map,persistent_set}.py`
-- Lazy emission in coder: `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs::encodeTermAssignment`
-- comparisonToExpr serde fix: `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Serde.hs::comparisonToExpr`
-- `encodeUnionEliminationInline` enum-attr fix: `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs:1969+`
+> Note: the paths below have been updated to the current layout. The runtime
+> util classes moved to the `overlay/python/` tree (#418), and the Python coder
+> is now authored host-native in Python (the Haskell-DSL Python coder was deleted
+> in #346), so the coder/serde symbol references are approximate.
+
+- Lazy class: `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/util/lazy.py`
+- Persistent collection facades: `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/util/{cons_list,persistent_map,persistent_set}.py`
+- Lazy emission in coder: `packages/hydra-python/src/main/python/hydra/sources/python/coder.py` (term-assignment encoding)
+- comparisonToExpr serde fix: `packages/hydra-python/src/main/python/hydra/sources/python/serde.py`
+- union-elimination enum-attr fix: `packages/hydra-python/src/main/python/hydra/sources/python/coder.py`

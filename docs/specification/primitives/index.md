@@ -24,7 +24,7 @@ library is referenced normatively.
 Where shared semantic ground is needed (structural equality, the total order over values,
 floating-point behavior), it is defined once in a supplementary specification and linked.
 
-For the flat names-and-signatures view of the same definitions, see [lexicon.txt](../lexicon.txt).
+For the flat names-and-signatures view of the same definitions, see [hydra-lexicon.txt](../../hydra-lexicon.txt).
 For the conformance meaning of this catalog, see the specification index.
 <!-- [PENDING #579]: link target for the conformance statement (index.md §3). -->
 

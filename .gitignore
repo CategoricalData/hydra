@@ -147,3 +147,6 @@ claude-hydra-messages/
 # survey/ff/bootstrap watchers). These are dot-prefixed .sh under claude/;
 # the tracked claude/ content is the .md protocol docs, never dot-.sh scripts.
 claude/.*.sh
+
+# Backed-up branch plan documents (not release content)
+finalized-task-plans/

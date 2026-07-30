@@ -59,7 +59,7 @@ module Hydra.Sources.Kernel.Terms.MyModule where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Sources.Libraries
+import Hydra.Overlay.Haskell.Libraries
 -- ... other standard imports (copy from an existing module)
 
 -- Define the module name
@@ -1033,7 +1033,7 @@ Adding a primitive requires updates to **six files**:
    _lists_find = qname _hydra_lib_lists "find" :: Name
    ```
 
-3. **`Hydra.Sources.Libraries`** - The primitive registration:
+3. **`Hydra.Overlay.Haskell.Libraries`** - The primitive registration:
    ```haskell
    prim2Eval _lists_find EvalLists.find [_x] (function x_ boolean) (list x_) (optional x_),
    ```

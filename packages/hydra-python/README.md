@@ -126,10 +126,10 @@ Hydra's Python code is split across three locations
 - **Python kernel overlay** ([`overlay/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python))
   — hand-written Python kernel runtime, overlaid onto `dist/python/hydra-kernel/`
   by `heads/python/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
-  - `hydra/lib/` — primitive function implementations
-  - `hydra/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
-  - `hydra/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
-  - `hydra/sources/libraries.py` — primitive registration
+  - `hydra/overlay/python/lib/` — primitive function implementations
+  - `hydra/overlay/python/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
+  - `hydra/overlay/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
+  - `hydra/overlay/python/sources/libraries.py` — primitive registration
 - **Python head** ([`heads/python/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python))
   — bootstrap layer above the kernel (`bootstrap.py`, `generation.py`, the `hydra.python` coder
   package). `pyproject.toml` lives in `heads/python/`.

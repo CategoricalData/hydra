@@ -298,7 +298,7 @@ Core (hydra.core) - Foundation
   ├─ Variants   - Supplements with variants and introspection types
   ├─ Classes    - Typeclass metadata (Ord, Eq)
   ├─ Typing     - Type system support (inference results, schemes)
-  ├─ Phantoms   - DSL phantom types
+  ├─ Typed      - Phantom-typed terms (TypedTerm; hydra.typed)
   ├─ Tabular    - Tabular data
   ├─ Query      - Graph queries
   ├─ Testing    - Test framework
@@ -538,32 +538,35 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 ### Organization
 
-Primitives are organized into **18 library modules** by category. Each module
+Primitives are organized into **21 library modules** by category. Each module
 lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
 and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
-| **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
-| **hydra.lib.effects** | 8 | `pure`, `bind`, `map`, `mapList` |
-| **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
-| **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
-| **hydra.lib.files** | 11 | `readFile`, `writeFile`, `status` (effectful) |
+| **hydra.lib.chars** | 8 | `isAlpha`, `isAlphaNum`, `isDigit`, `isLower` |
+| **hydra.lib.defaults** | 1 | `defaultImplementations` |
+| **hydra.lib.effects** | 9 | `apply`, `bind`, `compose`, `foldList` |
+| **hydra.lib.eithers** | 16 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
+| **hydra.lib.equality** | 2 | `equal`, `notEqual` |
+| **hydra.lib.files** | 11 | `readFile`, `writeFile`, `exists` (effectful) |
+| **hydra.lib.functions** | 4 | `compose`, `const`, `flip`, `identity` |
 | **hydra.lib.hashing** | 2 | `sha256`, `sha256Hex` |
-| **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
+| **hydra.lib.lists** | 43 | `map`, `filter`, `foldl`, `concat`, `sort` |
 | **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
-| **hydra.lib.maps** | 20 | `lookup`, `insert`, `keys`, `toList` |
-| **hydra.lib.math** | 46 | `add`, `mul`, `sin`, `sqrt`, `abs` |
-| **hydra.lib.optionals** | 12 | `fromOptional`, `cases`, `isGiven` |
+| **hydra.lib.maps** | 23 | `lookup`, `insert`, `keys`, `toList` |
+| **hydra.lib.math** | 42 | `add`, `mul`, `acos`, `abs` |
+| **hydra.lib.optionals** | 15 | `fromOptional`, `cases`, `bind` |
+| **hydra.lib.ordering** | 7 | `compare`, `gt`, `lt`, `max`, `min` |
 | **hydra.lib.pairs** | 3 | `first`, `second`, `bimap` |
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
-| **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
-| **hydra.lib.strings** | 13 | `cat`, `splitOn`, `length`, `lines` |
-| **hydra.lib.system** | 6 | `execute`, `getEnvironment` (effectful) |
+| **hydra.lib.sets** | 15 | `union`, `difference`, `member`, `filter` |
+| **hydra.lib.strings** | 13 | `concat`, `splitOn`, `charAt`, `fromList` |
+| **hydra.lib.system** | 9 | `execute`, `getEnvironment` (effectful) |
 | **hydra.lib.text** | 2 | `decodeUtf8`, `encodeUtf8` |
 
-**Total: 269 primitive functions.**
+**Total: 290 primitive functions.**
 
 ### Three-level definition structure
 
@@ -645,10 +648,11 @@ carrier in #446, leaving the graph; this was sequenced with the `defaultImplemen
 
 The kernel modules `Hydra/Sources/Kernel/Lib/<Sub>.hs` declare every primitive
 as a `PrimitiveDefinition` (an arm of `Definition` alongside `term` and `type`),
-collectively forming **the** primitive registry. The 17 modules — `Chars`,
-`Effects`, `Eithers`, `Equality`, `Files`, `Lists`, `Literals`, `Logic`, `Maps`,
-`Math`, `Optionals`, `Pairs`, `Regex`, `Sets`, `Strings`, `System`, `Text` —
-declare 267 primitives total.
+collectively forming **the** primitive registry. The 21 modules — `Chars`,
+`Defaults`, `Effects`, `Eithers`, `Equality`, `Files`, `Functions`, `Hashing`,
+`Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Optionals`, `Ordering`, `Pairs`,
+`Regex`, `Sets`, `Strings`, `System`, `Text` —
+declare ~290 primitives total.
 
 Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
@@ -752,7 +756,7 @@ were merged into the canonical `Lib/<Sub>.hs` registries' inline
 
 ### TermCoder system
 
-The `Hydra.Dsl.Prims` module provides type coding:
+The `Hydra.Overlay.Haskell.Dsl.Prims` module provides type coding:
 
 ```haskell
 -- Literal types
@@ -874,7 +878,7 @@ registry declares each primitive with one of two helpers:
   `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g.
   arithmetic, char predicates, regex matching).
 
-On the Haskell host, the `prim*` family in `Hydra.Dsl.Prims` pairs each name
+On the Haskell host, the `prim*` family in `Hydra.Overlay.Haskell.Dsl.Prims` pairs each name
 with its native implementation regardless of which kernel helper declared the
 primitive.
 
@@ -953,7 +957,7 @@ This enables:
 - **Language implementers** to override kernel primitives with optimized host-language versions.
 - **Users** to provide domain-specific primitive functions alongside the standard library.
 
-The bootstrap graph (`Hydra.Dsl.Bootstrap.bootstrapGraph` in Haskell) uses the standard
+The bootstrap graph (`Hydra.Overlay.Haskell.Bootstrap.bootstrapGraph` in Haskell) uses the standard
 libraries directly.
 Test runners and custom applications can use `graphWithPrimitives` to inject additional primitives.
 

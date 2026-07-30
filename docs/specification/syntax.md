@@ -318,13 +318,10 @@ specification land.
 
 ## Appendix: migration deltas (temporary)
 
-This appendix is the implementation checklist for bringing `hydra.show.core` /
-`hydra.print.core` into conformance with this specification; delete it once the
-migration lands.
+This appendix is the implementation checklist for bringing `hydra.print.core`
+into conformance with this specification; delete it once the migration lands.
 The current implementation differs as follows:
 
-- The implementation namespace is still `hydra.show.*`;
-  it is renamed to `hydra.print.*` (with `hydra.parse.*` for the parser side).
 - Term and type application print with an `@` separator inside full parentheses;
   this specification uses adjacency.
 - `@` becomes the annotation marker; annotations are currently not printed at all.

@@ -110,10 +110,10 @@ Copy it from an existing source module such as the
 [Haskell Coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs).
 The block has these sections:
 
-1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`,
+1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Overlay.Haskell.Libraries`, `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`,
    `Hydra.Dsl.Lib.Strings`
-2. **Qualified DSL imports** — `Hydra.Dsl.*` modules (Bootstrap, Annotations, Grammars, LiteralTypes, Literals, Types,
-   Terms, etc.)
+2. **Qualified DSL imports** — `Hydra.Overlay.Haskell.*` modules (`Bootstrap`; and under
+   `Hydra.Overlay.Haskell.Dsl.*`: Annotations, LiteralTypes, Literals, Types, Terms, etc.)
 3. **Qualified generated DSL imports** —
    `Hydra.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.).
    These provide constructors, accessors, and updaters for all Hydra types.
@@ -1005,7 +1005,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
    ```
 
 3. **Parameterize Haskell-specific values.** Some values exist only in Haskell (e.g.,
-   `bootstrapGraph` from `Hydra.Dsl.Bootstrap`).
+   `bootstrapGraph` from `Hydra.Overlay.Haskell.Bootstrap`).
    Instead of importing them in the pure code, pass them as explicit parameters.
    This makes the pure code language-independent — each language's I/O layer provides its own version:
    ```haskell
@@ -1047,7 +1047,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
 - Error handling: inspecting `Either` results, formatting error messages
 - Library-specific code: Aeson JSON parsing, ByteString processing
 - Haskell-specific encoders/decoders: `EncodeModule.module_`, `DecodeCore.type_`
-- Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Dsl.Bootstrap`)
+- Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Overlay.Haskell.Bootstrap`)
 
 ## Promoting type definitions
 
@@ -1076,7 +1076,7 @@ universalTestCase = define "UniversalTestCase" $
 Key differences from promoting terms:
 
 - Use `define` (or `defineType`) instead of `definitionInModule`
-- Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Dsl.Types` for type constructors
+- Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Overlay.Haskell.Dsl.Types` for type constructors
 - Use `>:` for field definitions (name `>:` type)
 - Reference other type bindings via their qualified module alias (e.g.,
   `Core.name`, `Module.module_`)

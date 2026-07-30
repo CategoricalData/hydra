@@ -78,7 +78,7 @@ typed parameters. Inner lambdas peel the same way (matching Python's
 `makeUncurriedLambda`).
 
 Consequence: every site that consumes a Hydra function value must
-agree on this ABI. The hand-written `heads/typescript/src/main/typescript/hydra/lib/*.ts`
+agree on this ABI. The hand-written `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/*.ts`
 primitives use flat positional signatures; the test runtime's
 `testGraph` is flat (`(testTypes, testTerms) => Graph`); HOF primitives
 that re-enter the reducer call `reduceTerm(cx, g, true, term)` flat.

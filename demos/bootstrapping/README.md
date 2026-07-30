@@ -2,11 +2,12 @@
 
 Hydra's bootstrapping system validates that all implementations can independently
 regenerate each other from a language-independent JSON representation.
-Each of Hydra's five bootstrapping hosts (Haskell, Java, Python, Scala, and TypeScript)
-can load Hydra modules from JSON and generate code for any target language, producing a
-matrix of generation paths — all of which produce functionally equivalent output that
-passes the hydra-kernel test suite. The Lisp dialects (Clojure, Common Lisp, Emacs Lisp, and
-Scheme) are supported as targets only.
+Each of Hydra's bootstrapping hosts — Haskell, Java, Python, Scala, TypeScript, and the
+Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme), each with its own
+`invoke-<host>-host.sh` — can load Hydra modules from JSON and generate code for any target
+language, producing a matrix of generation paths, all of which produce functionally
+equivalent output that passes the hydra-kernel test suite. (Emacs Lisp is still maturing as
+a host; see the README implementation-status table.)
 
 This is a core part of Hydra's build and verification system, not just a demo.
 It ensures that changes to one implementation do not silently break cross-language
@@ -24,9 +25,10 @@ Each bootstrapping path proceeds as follows:
 4. Build and test the generated project
 
 By default, the bootstrapping system runs the 3×3 matrix of Haskell, Java, and Python
-as both hosts and targets. Additional hosts (Scala, TypeScript) and targets (Scala, TypeScript,
-Clojure, Common Lisp, Emacs Lisp, Scheme) can be included with `--hosts` and `--targets`
-flags; passing `--hosts all --targets all` exercises every supported combination.
+as both hosts and targets. Additional hosts (Scala, TypeScript, and the Lisp dialects) and
+targets (Scala, TypeScript, Go, Clojure, Common Lisp, Emacs Lisp, Scheme) can be included
+with `--hosts` and `--targets` flags; passing `--hosts all --targets all` exercises every
+supported combination.
 All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 
 ```
@@ -227,7 +229,7 @@ All three bootstrap executables accept the same options:
 
 | Option | Description |
 |--------|-------------|
-| `--target <haskell\|java\|python\|scala\|go\|clojure\|scheme\|common-lisp\|emacs-lisp>` | Target language (required) |
+| `--target <haskell\|java\|python\|scala\|typescript\|go\|clojure\|scheme\|common-lisp\|emacs-lisp>` | Target language (required) |
 | `--output <dir>` | Output directory (default: `/tmp/hydra-bootstrapping-demo`) |
 | `--include-coders` | Include extension coder modules |
 | `--include-tests` | Include test modules |
@@ -249,6 +251,7 @@ generated `hydra.codeGeneration` module:
 | Haskell  | `Hydra.Generation` (heads/haskell) | `bootstrap-from-json` (heads/haskell) |
 | Java     | `hydra.Generation` (heads/java) | `hydra.Bootstrap` (heads/java) |
 | Python   | `hydra.generation` (heads/python) | `hydra.bootstrap` (heads/python) |
+| Scala    | `hydra.Generation` (heads/scala) | `hydra.Bootstrap` (heads/scala) |
 
 Each I/O wrapper provides:
 - `bootstrapGraph()` — create an empty graph with standard primitives

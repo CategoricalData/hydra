@@ -18,7 +18,7 @@ language-independent JSON representation and regenerate code for any of the targ
 Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all six
 languages is semantically equivalent.
 
-A sixth implementation, [Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go),
+A seventh implementation, [Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go),
 is in early development. It can act as a generation target (`bin/sync-go.sh` produces
 Go source under `dist/go/`), but the Go coder still has emission bugs, the head's
 hand-written runtime is largely placeholder, and it does not yet pass the test suite.
@@ -343,7 +343,7 @@ though their behavior must be the same across implementations.
 
 **Haskell**:
 - Metadata:
-  [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) (DSL)
+  [Hydra/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) (DSL)
 - Implementations:
   [Hydra/Overlay/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) (native Haskell)
 
@@ -376,7 +376,7 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 each primitive must also be *registered* in a central registry (e.g.
 `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in
-[Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) to catch any missing registrations.
+[Hydra/Overlay/Haskell/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) to catch any missing registrations.
 
 ### Lazy evaluation and thunking
 

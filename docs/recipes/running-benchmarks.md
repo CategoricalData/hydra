@@ -94,11 +94,12 @@ an artificially sublinear exponent.
 
 ### Series
 
-Each series lives under `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Bench/`
-and is registered in `Hydra.Sources.Kernel.Manifest`. To extend the
+Each series lives under `packages/hydra-bench/src/main/haskell/Hydra/Sources/Bench/`
+and is registered in `Hydra.Sources.Bench.Manifest`. To extend the
 maximum N supported by a series, edit its source file's `numWalkers`
-constant and re-run `/sync-haskell` to regenerate the JSON. All hosts
-read the same kernel JSON, so a single sync propagates the new size.
+constant and re-run `/sync-bench` (`bin/sync-bench.sh`) to regenerate the
+JSON. `hydra-bench` is opt-in and is not touched by the default sync. All
+hosts read the same benchmark JSON, so a single sync propagates the new size.
 
 | Series             | Shape                                                         |
 |--------------------|---------------------------------------------------------------|

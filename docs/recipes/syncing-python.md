@@ -177,7 +177,7 @@ Check the output for "Skipping" messages to identify problematic modules.
 ### Test failures after sync
 
 1. Ensure Haskell tests pass first
-2. Check for missing primitive implementations in `overlay/python/hydra-kernel/src/main/python/hydra/lib/`
+2. Check for missing primitive implementations in `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/`
 3. See [troubleshooting.md](../troubleshooting.md) for known failure modes
 
 ## Related Documentation

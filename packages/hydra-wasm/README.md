@@ -79,10 +79,12 @@ traversal of `hydra.test.TestSuite` from Wasm memory.
 
 In brief:
 
-- **M1** (here): harness + manifest + a handful of zero-arg constants run.
+- **M1**: harness + manifest + a handful of zero-arg constants run.
 - **M2**: ~20 first-order kernel functions run, first primitive library
   implementations added.
 - **M3**: simple `hydra.test.lib.*` tests run.
-- **M4**: closures (the wall).
+- **M4**: closures (the wall). Exploratory work through M4a (closure
+  arity/survey/demo probes: `m2-arity-test.mjs`, `m3-survey.mjs`,
+  `m4a-closure-{test.mjs,demo.wat}`) is present in `heads/wasm/`.
 - **M5**: remaining primitives, polymorphism details.
 - **M6**: full kernel test suite passes.
