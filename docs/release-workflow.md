@@ -435,17 +435,22 @@ sbt) sign artifacts with PGP. **Hackage** authenticates with a `HACKAGE_TOKEN` (
 signing key blocks *only* the two JVM registries; you can publish Hackage/PyPI/npm without it.
 
 **The convention used here: signing key on disk, gpg-agent does the signing.**
-- The signing tools **delegate to `gpg` (and thus gpg-agent)** rather than embedding key material.
-  sbt-pgp defaults to `useGpg = true`, so `publishSigned` shells out to `gpg`; the Gradle `signing`
-  plugin can be pointed the same way with `useGpgCmd()`. Delegating means no passphrase and no exported
-  secret keyring live in a build file — the agent holds the passphrase for the session (entered once via
-  pinentry) and the private key never leaves `~/.gnupg`.
+- **Both JVM registries delegate to `gpg` (and thus gpg-agent)** rather than embedding key material.
+  sbt-pgp defaults to `useGpg = true`, so Scala's `publishSigned` shells out to `gpg`; the Java build's
+  generated `signing {}` block calls **`useGpgCmd()`** (emitted by
+  `bin/lib/generate-java-package-build.py`), so Gradle signs the same way. Delegating means no passphrase
+  and no exported secret keyring live in a build file or `gradle.properties` — the agent holds the
+  passphrase for the session (entered once via pinentry) and the private key never leaves `~/.gnupg`.
+  With `useGpgCmd()`, `~/.gradle/gradle.properties` needs only `sonatypeUsername`/`sonatypePassword`
+  (and optionally `signing.keyId`); the old `signing.password` + `signing.secretKeyRingFile` plaintext
+  properties are no longer used and should be removed.
 - Prefer a **dedicated signing-only subkey** for releases so the primary key can stay offline; only the
   subkey needs to be on the publishing machine.
-- Historical note / cleanup target: the Java path here has previously read `signing.password` +
-  `signing.secretKeyRingFile` from `~/.gradle/gradle.properties` — a plaintext passphrase and an
-  exported keyring on disk. That works but is weaker than agent delegation; migrating the Gradle build
-  to `useGpgCmd()` and deleting those properties is the intended direction.
+- **Cache the passphrase for the whole run.** `useGpgCmd()` signing fails (`gpg: signing failed:
+  Operation cancelled`) if the agent's passphrase cache lapses mid-publish and pinentry can't prompt in
+  Gradle's headless subprocess. Warm it first (`echo x | gpg --local-user <key> --clearsign`), and set a
+  generous TTL in `~/.gnupg/gpg-agent.conf` (`default-cache-ttl 7200` / `max-cache-ttl 14400`) so it
+  outlasts a full multi-package publish.
 
 **Verify signing BEFORE an upload run.** A signing failure partway through an aggregated Maven Central
 deployment can leave a locked/partial deployment you must drop in the Central Portal UI. Confirm the
@@ -693,9 +698,11 @@ The following are Java-specific release steps:
     sonatypeUsername=<token-username>
     sonatypePassword=<token-password>
     signing.keyId=<short key id>
-    signing.password=<key passphrase>
-    signing.secretKeyRingFile=/Users/<you>/.gnupg/secring.gpg
     ```
+    Signing goes through `gpg`/gpg-agent (`useGpgCmd()` in the generated build), so do NOT put
+    `signing.password` or `signing.secretKeyRingFile` here — they are unused and would be a plaintext
+    passphrase + exported keyring on disk. See
+    [PGP signing for Maven Central](#pgp-signing-for-maven-central-one-publishers-local-convention).
   * **Use the orchestrator** `heads/java/bin/publish-maven.sh` (analogous to
     `publish-hackage.sh`). It checks the JDK + credentials + dependency closure, refreshes
     each package into `~/.m2` leaves-first, then regenerates a **root aggregator** Gradle build
