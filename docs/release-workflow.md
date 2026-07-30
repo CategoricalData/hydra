@@ -421,6 +421,51 @@ are **convenience binaries**: downstream of, and secondary to, the canonical sig
 The source archive is the release of record; the registry artifacts are how consumers obtain usable
 packages without running the codegen toolchain themselves.
 
+### PGP signing for Maven Central (one publisher's local convention)
+
+> This subsection describes **how the current maintainer's machine is set up**, not a requirement of
+> Hydra. A future publisher may keep their signing key differently (hardware token, in-memory key,
+> CI secret, a plaintext keyring they accept the risk of). What Maven Central *requires* is only that
+> every uploaded artifact carry a valid detached PGP signature from a key whose public half is on a
+> public keyserver. Everything below is one way to satisfy that; adapt it to your own key hygiene.
+
+**Which registries need PGP at all.** Only the two **Maven Central** paths (Java via Gradle, Scala via
+sbt) sign artifacts with PGP. **Hackage** authenticates with a `HACKAGE_TOKEN` (no PGP), **PyPI** with a
+`~/.pypirc` API token, and **npm** with an `NPM_TOKEN` — none of those touch your GPG key. So a broken
+signing key blocks *only* the two JVM registries; you can publish Hackage/PyPI/npm without it.
+
+**The convention used here: signing key on disk, gpg-agent does the signing.**
+- The signing tools **delegate to `gpg` (and thus gpg-agent)** rather than embedding key material.
+  sbt-pgp defaults to `useGpg = true`, so `publishSigned` shells out to `gpg`; the Gradle `signing`
+  plugin can be pointed the same way with `useGpgCmd()`. Delegating means no passphrase and no exported
+  secret keyring live in a build file — the agent holds the passphrase for the session (entered once via
+  pinentry) and the private key never leaves `~/.gnupg`.
+- Prefer a **dedicated signing-only subkey** for releases so the primary key can stay offline; only the
+  subkey needs to be on the publishing machine.
+- Historical note / cleanup target: the Java path here has previously read `signing.password` +
+  `signing.secretKeyRingFile` from `~/.gradle/gradle.properties` — a plaintext passphrase and an
+  exported keyring on disk. That works but is weaker than agent delegation; migrating the Gradle build
+  to `useGpgCmd()` and deleting those properties is the intended direction.
+
+**Verify signing BEFORE an upload run.** A signing failure partway through an aggregated Maven Central
+deployment can leave a locked/partial deployment you must drop in the Central Portal UI. Confirm the
+agent can actually produce a signature first:
+
+```bash
+echo probe | gpg --local-user <your-key-id> --clearsign >/dev/null && echo "signing OK"
+```
+
+If that prints `signing OK`, `publishSigned`/Gradle signing will work. If it errors, fix the agent
+before uploading.
+
+**Known pitfall — a development-build gpg breaks signing.** A `gpg` **2.5.x** dev build has been observed
+to fail with `Invalid length specifier in S-expression` / `problem with fast path key listing: IPC
+parameter error` even though the private key is present on disk — the agent can't parse its own
+`private-keys-v1.d` entry. Fixes, in order: restart the agent
+(`gpgconf --kill gpg-agent && gpgconf --launch gpg-agent`), then re-run the probe above; if it persists,
+use a **stable gpg 2.4.x** instead of the dev build. This is a toolchain issue, not key corruption —
+the key file under `~/.gnupg/private-keys-v1.d/<keygrip>.key` is intact.
+
 ## Haskell releases
 
 We have Haskell code in `packages/hydra-kernel/` (kernel DSL sources),
