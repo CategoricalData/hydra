@@ -158,6 +158,7 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
     # base only — hydra-jvm's generated tree has no non-Hydra imports:
     "hydra-jvm": [
         "base                          >= 4.19.0 && < 4.22",
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific (Hydra.Jvm.Serde)
     ],
     # The umbrella ships only re-export modules; it needs `base` and whatever
     # its re-export imports pull (transitively via the Hydra deps). base only.
