@@ -175,6 +175,7 @@ fi
 # own stack.yaml (in dist/haskell/<pkg>/) keeps its Hackage pins for standalone builds.
 if [ -f "$STAGE/stack.yaml" ]; then
     LOCAL_DEPS=""
+    HACKAGE_BASE="https://hackage.haskell.org/package"
     for dep in $(HYDRA_ROOT_DIR="$HYDRA_ROOT" python3 -c "
 import sys; sys.path.insert(0, '$HYDRA_ROOT/bin/lib')
 from importlib import import_module
@@ -185,8 +186,22 @@ print(' '.join(m.transitive_hydra_deps('$HYDRA_ROOT', '$PKG')))
         if [ -f "$sib" ]; then
             LOCAL_DEPS="$LOCAL_DEPS  - archive: $sib\n"
         else
-            echo "  ERROR: sibling sdist not staged yet: $sib (assembly order bug?)" >&2
-            exit 1
+            # No local sibling tarball. This is a genuine ordering bug ONLY if the sibling
+            # is also not yet on Hackage. In an incremental / resumed publish (#376) a
+            # sibling can be already-live at VERSION and therefore SKIPPED by
+            # publish-hackage.sh, so its local tarball is never produced — yet it resolves
+            # fine from Hackage via its original pin. Keep the pin in that case; abort only
+            # when it is neither local nor published.
+            hcode="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+                "$HACKAGE_BASE/$dep-$VERSION" 2>/dev/null || echo 000)"
+            if [ "$hcode" = "200" ]; then
+                LOCAL_DEPS="$LOCAL_DEPS  - $dep-$VERSION\n"
+                echo "  (sdist resolution: $dep-$VERSION not staged locally but already on Hackage — keeping pin)"
+            else
+                echo "  ERROR: sibling sdist not staged yet: $sib" >&2
+                echo "         and $dep-$VERSION is not published on Hackage (HTTP $hcode) — assembly order bug." >&2
+                exit 1
+            fi
         fi
     done
     if [ -n "$LOCAL_DEPS" ]; then
