@@ -281,7 +281,15 @@ publishing {{
 // path; a bare name (no leading ':') never matches a task belonging to a
 // different project, including the root, so the leading ':' here is load
 // bearing, not stylistic.
+// Sign via the gpg command (and thus gpg-agent), NOT Gradle's in-JVM Bouncy
+// Castle signer. useGpgCmd() delegates to `gpg`, matching how the Scala publish
+// signs (sbt-pgp's useGpg default) — one uniform signing path across both JVM
+// registries, with no plaintext `signing.password` or exported
+// `signing.secretKeyRingFile` on disk (the agent holds the passphrase for the
+// session; the private key never leaves ~/.gnupg). See docs/release-workflow.md
+// "PGP signing for Maven Central".
 signing {{
+    useGpgCmd()
     required {{ gradle.taskGraph.hasTask(':publishAggregationToCentralPortal') ||
                 gradle.taskGraph.hasTask(':publishToCentralPortal') }}
     sign publishing.publications.mavenJava
