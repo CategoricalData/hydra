@@ -37,9 +37,9 @@ _CODER_PACKAGES = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
 
 # Fallback hydra.lib.* sub-namespaces, used only if _lib_subs_for_target()'s overlay-directory
 # existence check can't reach the source tree (e.g. a relocated/packaged invocation).
-_LIB_SUBS_FALLBACK = ["chars", "effects", "eithers", "equality", "files", "hashing", "lists",
-                      "literals", "logic", "maps", "math", "optionals", "pairs", "regex", "sets",
-                      "strings", "system", "text"]
+_LIB_SUBS_FALLBACK = ["chars", "effects", "eithers", "equality", "files", "functions", "hashing",
+                      "lists", "literals", "logic", "maps", "math", "optionals", "ordering", "pairs",
+                      "regex", "sets", "strings", "system", "text"]
 
 _OVERLAY_DIR_SEGMENT = {"common-lisp": "common_lisp", "emacs-lisp": "emacs_lisp"}
 
