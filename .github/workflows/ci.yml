@@ -141,6 +141,17 @@ jobs:
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
+      # 0.17.2 hydra-build defect guard: assert every module a package's
+      # manifest.json declares in mainModules is actually EMITTED into the
+      # assembled dist/haskell tree. The 0.17.2 hydra-build sdist shipped 3 of
+      # its 8 declared modules — the manifest + JSON were complete (so #541's
+      # check passed) but the assembled output the sdist was built from was
+      # truncated, and no existing gate caught it. Runs against the dist/haskell
+      # populated by the sync step above (Phase 3 assembles hydra-kernel /
+      # hydra-build / hydra-pg / hydra-rdf into each language); the check skips
+      # any package with no dist/haskell/<pkg> tree, so it needs no re-assembly.
+      - name: Check manifest mainModules are all emitted into dist/haskell
+        run: python3 bin/check-emitted-modules-complete.py
       # #469/#376: pointed guard for the native-coder JSON->Haskell render gate.
       # Forces a cache miss by deleting the per-package output digest, re-runs
       # the assembler against committed JSON, and fails on any diff FROM A
