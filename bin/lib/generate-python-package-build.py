@@ -81,9 +81,39 @@ def _pyproject_requirement(dep: dict) -> str:
     return dep["name"] + _pep440(dep.get("version", {}))
 
 
+def discover_wheel_package_roots(out_dir: str) -> list[str]:
+    """Top-level package roots to ship, discovered from the emitted main tree.
+
+    Previously the wheel hardcoded `packages = ["src/main/python/hydra"]`, which
+    silently truncated any package whose mainModules live outside the hydra.*
+    namespace: hydra-pg emits `com/gdblab/pathAlgebra/*`, `openGql/grammar`, so
+    those declared modules never reached the published wheel (the #621-class
+    defect). Scan src/main/python/ for every top-level package directory instead,
+    so the wheel ships exactly what was generated. `hydra` is listed first (the
+    namespace root); the rest follow in sorted order for determinism.
+    """
+    main_root = os.path.join(out_dir, "src", "main", "python")
+    roots: list[str] = []
+    if os.path.isdir(main_root):
+        for entry in sorted(os.listdir(main_root)):
+            full = os.path.join(main_root, entry)
+            if os.path.isdir(full) and not entry.startswith(("_", ".")):
+                roots.append(entry)
+    if not roots:
+        # Assembler always emits at least the hydra tree before this runs; fall
+        # back to it rather than an empty packages list (which ships nothing).
+        roots = ["hydra"]
+    # Keep the hydra namespace root first for readability.
+    ordered = (["hydra"] if "hydra" in roots else []) + [r for r in roots if r != "hydra"]
+    return [f"src/main/python/{r}" for r in ordered]
+
+
 def render_pyproject(name: str, description: str, version: str, deps: list[str],
-                     readme_rel: str | None, overlay: dict | None = None) -> str:
+                     readme_rel: str | None, overlay: dict | None = None,
+                     wheel_package_roots: list[str] | None = None) -> str:
     overlay = overlay or {}
+    wheel_package_roots = wheel_package_roots or ["src/main/python/hydra"]
+    packages_toml = "[" + ", ".join(f'"{r}"' for r in wheel_package_roots) + "]"
     # Partition overlay deps by scope: api/runtime -> [project.dependencies];
     # test -> [project.optional-dependencies] test extra (#511).
     # A dep flagged "optional": true is a host-specific optional integration
@@ -179,7 +209,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/main/python/hydra"]
+packages = {packages_toml}
 
 # Bundle LICENSE + NOTICE into the published wheel + sdist so the artifact
 # carries the Apache-2.0 license text and project NOTICE, not just the metadata
@@ -254,9 +284,16 @@ def main() -> int:
 
     overlay = load_overlay_build_config(args.repo_root, args.package)
 
+    # Ship every top-level package root that was actually emitted into
+    # src/main/python/ (not just hydra/), so non-hydra namespaces like hydra-pg's
+    # com.gdblab.* and openGql.* reach the wheel. The main tree is generated
+    # before this step (assemble-distribution.sh Step 1 precedes Step 4).
+    wheel_package_roots = discover_wheel_package_roots(out_dir)
+
     pyproject_path = os.path.join(out_dir, "pyproject.toml")
     with open(pyproject_path, "w") as f:
-        f.write(render_pyproject(pkg_name, description, version, deps, readme_rel, overlay))
+        f.write(render_pyproject(pkg_name, description, version, deps, readme_rel, overlay,
+                                 wheel_package_roots))
 
     print(f"  wrote {pyproject_path}")
     return 0
