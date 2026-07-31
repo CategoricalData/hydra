@@ -180,7 +180,7 @@ post-0.17 state of `main`; evidence is cited by file path.
 |------|-------|----------|
 | Signed source archive (`.asc`) | ⚠️ Registry-specific | Maven Central path **does** GPG-sign via the Gradle `signing` plugin (`heads/java/build.gradle:22`, generated `signing { sign … }` in `generate-java-package-build.py:169`). Hackage and PyPI paths produce **no** signatures: no `gpg`/`sign`/`.asc` in `bin/prepare-release.sh`, `heads/haskell/bin/publish-hackage.sh`, `heads/python/bin/publish-pypi.sh` |
 | Checksums (`.sha256`/`.sha512`) | ✅ Present | `bin/prepare-release.sh` Step 12 emits a `.sha512` alongside the canonical source archive (see P0 #2) |
-| Single canonical signed source archive | ✅ Present | `bin/prepare-release.sh` Step 12 builds `hydra-<version>-src.tar.gz` via `git archive` with a detached `.asc` signature; this is the release of record (see P0 #2) |
+| Single canonical signed source archive | ✅ Present | `bin/prepare-release.sh` Step 12 builds `hydra-<version>-src.tar.gz` (distributed) + `hydra-<version>-src.tar` (reproducible) via `git archive`, with a detached `.asc` over the **`.tar`** (gzip is not byte-reproducible across git/gzip versions); this is the release of record (see P0 #2) |
 | `KEYS` file (release-manager signing keys) | ✅ Present, populated | [`KEYS`](https://github.com/CategoricalData/hydra/blob/main/KEYS) carries the release manager's rsa4096 signing key (`FC93F19114D72013`) plus the import/verify/append procedure |
 
 ### Dependency surface (license compatibility)

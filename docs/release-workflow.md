@@ -255,9 +255,15 @@ On success the script writes the **canonical source release** — the polyglot,
 language-neutral release of record (a `git archive` of the whole repo, so it
 contains every host's sources: Haskell, Java, Python, Scala, TypeScript, Lisp):
 
-- `release-artifacts/hydra-<version>-src.tar.gz`        — the source archive (release of record)
+- `release-artifacts/hydra-<version>-src.tar.gz`        — the distributed source archive (release of record)
 - `release-artifacts/hydra-<version>-src.tar.gz.sha512` — its SHA-512 checksum
-- `release-artifacts/hydra-<version>-src.tar.gz.asc`    — its detached GPG signature (if signed)
+- `release-artifacts/hydra-<version>-src.tar`           — the uncompressed archive the signature covers
+- `release-artifacts/hydra-<version>-src.tar.asc`       — its detached GPG signature (if signed).
+  The signature covers the **uncompressed** `.tar`, not the `.tar.gz`, because `git archive`'s gzip
+  layer is not byte-reproducible across git/gzip versions (so a `.tar.gz` signature could never
+  re-verify on another machine); the `.tar` is content-deterministic. Attach the `.asc` to the GitHub
+  Release for the tag — the `release-verify` workflow downloads it and verifies against its own
+  freshly-rebuilt `.tar`.
 
 plus, for each package in the curated Hackage set (`publish-hackage.sh --list`),
 staged under `dist/haskell/` (the Haskell channel's own dist tree, NOT
@@ -333,8 +339,9 @@ download is authentic and untampered. The public signing keys live in the repo-r
 # Import the project signing keys (once)
 gpg --import KEYS
 
-# Verify the detached signature and the checksum
-gpg --verify hydra-<version>-src.tar.gz.asc hydra-<version>-src.tar.gz
+# Verify the detached signature (over the uncompressed .tar) and the checksum
+gunzip -k hydra-<version>-src.tar.gz                  # produces hydra-<version>-src.tar
+gpg --verify hydra-<version>-src.tar.asc hydra-<version>-src.tar
 shasum -a 512 -c hydra-<version>-src.tar.gz.sha512   # or sha512sum -c on Linux
 ```
 

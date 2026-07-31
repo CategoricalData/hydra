@@ -526,6 +526,7 @@ SRC_LOG="$LOG_DIR/source-archive.log"
 : > "$SRC_LOG"
 
 SRC_ARCHIVE="$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz"
+SRC_TAR="$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar"
 SRC_PREFIX="hydra-${EXPECTED}/"
 
 # Apache requires LICENSE + NOTICE in the source release. Assert both are tracked
@@ -541,10 +542,21 @@ done
 if [ "$SRC_META_OK" != true ]; then
     ERRORS=$((ERRORS + 1))
 else
-    if git archive --format=tar.gz --prefix="$SRC_PREFIX" -o "$SRC_ARCHIVE" HEAD 2>>"$SRC_LOG"; then
-        echo "  OK: source archive built -> release-artifacts/hydra-${EXPECTED}-src.tar.gz"
+    # Build BOTH forms from the same tree object at HEAD:
+    #  - the uncompressed .tar is what the GPG signature covers, because
+    #    `git archive`'s gzip layer embeds a timestamp/OS byte and is NOT
+    #    byte-reproducible across git/gzip versions — a signature over the .tar.gz
+    #    would never re-verify on a different machine (e.g. the release-verify CI
+    #    runner rebuilding the archive). The uncompressed tar IS content-
+    #    deterministic, so its signature verifies anywhere.
+    #  - the .tar.gz + .sha512 remain the distributed convenience artifact.
+    # The .asc therefore signs hydra-<version>-src.tar (not the .tar.gz), matching
+    # .github/workflows/release-verify.yml. Attach the .asc to the GitHub Release.
+    if git archive --format=tar --prefix="$SRC_PREFIX" -o "$SRC_TAR" HEAD 2>>"$SRC_LOG" \
+       && gzip -n -k -f "$SRC_TAR"; then
+        echo "  OK: source archive built -> release-artifacts/hydra-${EXPECTED}-src.tar(.gz)"
 
-        # SHA-512 checksum (portable: shasum on macOS, sha512sum on Linux).
+        # SHA-512 checksum of the distributed .tar.gz (portable: shasum on macOS, sha512sum on Linux).
         if command -v sha512sum >/dev/null 2>&1; then
             ( cd "$ARTIFACT_DIR" && sha512sum "hydra-${EXPECTED}-src.tar.gz" > "hydra-${EXPECTED}-src.tar.gz.sha512" )
         else
@@ -552,7 +564,7 @@ else
         fi
         echo "  OK: SHA-512 checksum written -> hydra-${EXPECTED}-src.tar.gz.sha512"
 
-        # Detached GPG signature. Missing key / gpg => WARNING, not a gate.
+        # Detached GPG signature over the REPRODUCIBLE .tar. Missing key / gpg => WARNING, not a gate.
         if ! command -v gpg >/dev/null 2>&1; then
             echo "  WARNING: gpg not found — source archive is unsigned (install gpg and re-run to sign)"
             WARNINGS=$((WARNINGS + 1))
@@ -566,8 +578,8 @@ else
             # which would abort the whole script mid-Step-11 when no signing key is
             # set. The ${arr[@]+...} guard yields nothing for an empty array.
             if gpg ${GPG_KEY_ARGS[@]+"${GPG_KEY_ARGS[@]}"} --armor --detach-sign --yes \
-                 --output "$SRC_ARCHIVE.asc" "$SRC_ARCHIVE" 2>>"$SRC_LOG"; then
-                echo "  OK: detached signature written -> hydra-${EXPECTED}-src.tar.gz.asc"
+                 --output "$SRC_TAR.asc" "$SRC_TAR" 2>>"$SRC_LOG"; then
+                echo "  OK: detached signature written -> hydra-${EXPECTED}-src.tar.asc"
             else
                 echo "  WARNING: gpg signing failed (no key configured? see verify-logs/source-archive.log)"
                 echo "           Set HYDRA_RELEASE_SIGNING_KEY or configure a gpg default key; the"

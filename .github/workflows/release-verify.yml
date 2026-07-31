@@ -69,9 +69,19 @@ jobs:
         run: |
           version="${{ steps.version.outputs.version }}"
           archive="hydra-${version}-src.tar.gz"
-          git archive --format=tar.gz --prefix="hydra-${version}/" -o "$archive" HEAD
-          echo "archive=$archive" >> "$GITHUB_OUTPUT"
-          echo "Built $archive ($(du -h "$archive" | cut -f1))"
+          # Build BOTH forms from the same tree object:
+          #  - the .tar.gz is the distributed convenience artifact (checksummed),
+          #  - the uncompressed .tar is what the GPG signature covers, because
+          #    `git archive`'s gzip layer embeds a timestamp/OS byte and is NOT
+          #    byte-reproducible across git/gzip versions, so a signature over the
+          #    .tar.gz can never verify on a different runner. The uncompressed
+          #    tar IS content-deterministic, so its signature verifies anywhere.
+          git archive --format=tar    --prefix="hydra-${version}/" -o "hydra-${version}-src.tar" HEAD
+          gzip -n -k -f "hydra-${version}-src.tar"
+          mv "hydra-${version}-src.tar.gz" "$archive"
+          echo "archive=$archive"        >> "$GITHUB_OUTPUT"
+          echo "tar=hydra-${version}-src.tar" >> "$GITHUB_OUTPUT"
+          echo "Built $archive ($(du -h "$archive" | cut -f1)) + uncompressed .tar for signing"
 
       - name: Assert LICENSE + NOTICE are inside the archive
         run: |
@@ -95,27 +105,37 @@ jobs:
           sha512sum -c "$archive.sha512"
           echo "OK: checksum verifies"
 
-      - name: Verify the GPG signature (if a signing key is registered)
+      - name: Verify the GPG signature (from the release assets)
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          archive="${{ steps.archive.outputs.archive }}"
+          tar="${{ steps.archive.outputs.tar }}"
+          version="${{ steps.version.outputs.version }}"
           # KEYS holds the public signing keys. Until a release manager registers
-          # one (see KEYS), there is no key to verify against and no .asc is
-          # produced — so this step reports and skips rather than failing.
+          # one (see KEYS), there is nothing to verify against — report and skip.
           if ! grep -q "BEGIN PGP PUBLIC KEY BLOCK" KEYS; then
-            echo "NOTE: no signing key registered in KEYS yet — skipping signature"
-            echo "      verification. Register a release manager's key in KEYS and"
-            echo "      sign the archive (bin/prepare-release.sh Step 11) before the"
-            echo "      first real release."
+            echo "NOTE: no signing key registered in KEYS yet — skipping signature verification."
             exit 0
           fi
-          if [ ! -f "$archive.asc" ]; then
-            echo "FAIL: KEYS contains a signing key but no $archive.asc was found."
-            echo "      A signed release must ship a detached signature."
-            exit 1
+          # The detached signature is NOT a committed file: it signs a git-archive
+          # of the tagged tree, so committing it would be self-referential (the
+          # commit changes HEAD, changing the archive). It is published as an ASSET
+          # on the GitHub Release for the tag (bin/prepare-release.sh Step 12 builds
+          # hydra-<version>-src.tar[.gz]+.sha512+.asc into release-artifacts/; the
+          # release manager attaches the .asc to the release). We verify against the
+          # reproducible uncompressed .tar.
+          sig="hydra-${version}-src.tar.asc"
+          if [ "${{ github.ref_type }}" = "tag" ] && \
+             gh release download "$version" --pattern "$sig" --output "$sig" 2>/dev/null; then
+            gpg --import KEYS
+            gpg --verify "$sig" "$tar"
+            echo "OK: signature verifies against the uncompressed source tar"
+          else
+            echo "NOTE: no detached signature ($sig) attached to the '$version' GitHub Release yet."
+            echo "      A signed release should attach it (see docs/release-workflow.md, prepare-release Step 12)."
+            echo "      Not failing: the signature is a release ASSET, added when the release is finalized,"
+            echo "      not a committed file. Re-run this workflow after attaching the .asc to hard-verify."
           fi
-          gpg --import KEYS
-          gpg --verify "$archive.asc" "$archive"
-          echo "OK: signature verifies"
 
       - name: Upload the verified source archive
         uses: actions/upload-artifact@v4
