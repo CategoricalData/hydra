@@ -288,11 +288,26 @@ publishing {{
 // `signing.secretKeyRingFile` on disk (the agent holds the passphrase for the
 // session; the private key never leaves ~/.gnupg). See docs/release-workflow.md
 // "PGP signing for Maven Central".
+//
+// useGpgCmd() configures a signatory that shells out to `gpg` unconditionally,
+// so the Sign task, once wired, RUNS gpg for any publish — including
+// `publishToMavenLocal`, which `heads/java/bin/verify-distribution.sh` runs in
+// CI where there is no signing key. gpg then fails hard ("No secret key"), and
+// `required { ... }` does NOT rescue it (it governs whether a MISSING signature
+// is an error, not whether the gpg process may fail). Fix: keep signing wired
+// at configuration time, but gate the Sign task's EXECUTION with onlyIf so gpg
+// is invoked only for a real Central Portal publish. Local publishes
+// (publishToMavenLocal) and tests skip the Sign task entirely — no gpg, no key
+// needed.
 signing {{
     useGpgCmd()
-    required {{ gradle.taskGraph.hasTask(':publishAggregationToCentralPortal') ||
-                gradle.taskGraph.hasTask(':publishToCentralPortal') }}
     sign publishing.publications.mavenJava
+}}
+tasks.withType(Sign).configureEach {{
+    onlyIf {{
+        gradle.taskGraph.hasTask(':publishAggregationToCentralPortal')
+            || gradle.taskGraph.hasTask(':publishToCentralPortal')
+    }}
 }}
 
 // sourcesJar may see a file via multiple sourceSet srcDirs. Skip duplicates;
