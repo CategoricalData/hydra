@@ -1,0 +1,7 @@
+{
+  "__doc__": "Curated post-#417 class basenames that a CORRECT hydra-kernel Java jar MUST contain. Passed to bin/check-artifact-complete.py --required-symbols for the java-jar gate (#621). This catches the 0.17.2 defect where the published Java host was a whole #417 rename behind: the stale jar still had the namespace DIRECTORIES (so the directory-level check passed) but held the OLD classes (strings/Cat,Cat2,Intercalate) instead of the #417-renamed ones (strings/Concat,Concat2,Join; dsl/lib/Ordering; optionals/WithDefault; math/Mod). Keyed by the jar's package directory as a dotted namespace; values are class basenames that must appear as <basename>.class. Maintain this list as the primitive set evolves (long-term: derive from the lexicon).",
+  "hydra.overlay.java.lib.strings": ["Concat", "Concat2", "Join"],
+  "hydra.overlay.java.lib.optionals": ["WithDefault"],
+  "hydra.overlay.java.lib.math": ["Mod"],
+  "hydra.dsl.lib": ["Ordering"]
+}
