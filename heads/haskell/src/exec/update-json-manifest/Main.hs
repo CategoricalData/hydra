@@ -7,7 +7,8 @@
 
 module Main where
 
-import Hydra.Generation (writePerPackageManifestsJson, generateEncoderModules, generateDecoderModules)
+import Hydra.Generation (generateEncoderModules, generateDecoderModules)
+import Hydra.ManifestGeneration (writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
