@@ -86,6 +86,13 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# Normalize OUT_DIR to an absolute path. `npm pack --pack-destination "$OUT_DIR"`
+# runs inside `( cd "$pkgdir" && ... )`, so a RELATIVE --out would be resolved
+# against $pkgdir and the tarballs would silently land under dist/typescript/<pkg>/,
+# leaving the listing + #621 gate to see an empty $OUT_DIR. Anchor it first.
+mkdir -p "$OUT_DIR"
+OUT_DIR="$(cd "$OUT_DIR" && pwd)"
+
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
 # Leaves-first publish order (dependency-ordered).
@@ -187,7 +194,36 @@ done
 echo ""
 
 echo "=== Tarballs in $OUT_DIR ==="
-ls -1 "$OUT_DIR"/*.tgz 2>/dev/null | sed 's/^/  /'
+# Guard against an unmatched glob aborting the script under `set -euo pipefail`
+# before the #621 gate runs (see the same fix in publish-pypi.sh).
+( ls -1 "$OUT_DIR"/*.tgz 2>/dev/null | sed 's/^/  /' ) || true
+echo ""
+
+# --- #621 Layer A: artifact-content completeness gate ------------------------
+# HARD-FAIL if a packed tarball is missing a module its manifest declares. The
+# 0.17.2 defects (hydra-build 3/8; the Java host a whole #417 rename behind)
+# shipped because the publishing machine's dist/ was stale and only the dist/
+# TREE was ever checked — never the packaged artifact. This inspects the actual
+# .tgz that would be published, so a truncated tarball can never reach npm.
+# Complements the import smoke-gate below (content presence vs. resolution).
+echo "=== Verifying tarball completeness (#621: manifest mainModules present in each .tgz) ==="
+gate_fail=0
+for pkg in "${PUBLISH_SET[@]}"; do
+    manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
+    tgz="$OUT_DIR/${pkg}-${VERSION}.tgz"
+    if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+    if [ ! -f "$tgz" ]; then echo "  ERROR: no tarball for $pkg at $VERSION" >&2; gate_fail=1; continue; fi
+    if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
+          --manifest "$manifest" --artifact "$tgz" --kind npm-tgz; then :; else
+        echo "  ARTIFACT INCOMPLETE: ${pkg}-${VERSION}.tgz missing declared modules — refusing to publish" >&2
+        gate_fail=1
+    fi
+done
+if [ "$gate_fail" != 0 ]; then
+    echo "FAIL: one or more npm tarballs are content-incomplete (#621) — re-sync from a clean dist and rebuild." >&2
+    exit 1
+fi
+echo "  OK: every npm tarball contains all its manifest-declared modules."
 echo ""
 
 # --- Smoke-gate: verify packed tarballs resolve imports ----------------------

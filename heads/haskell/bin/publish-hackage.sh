@@ -57,6 +57,14 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# Normalize OUT_DIR to an absolute path so a relative --out can't be reinterpreted
+# by any later `cd` into a package directory (see the same fix in publish-pypi.sh
+# / publish-npm.sh). --list exits before OUT_DIR is used, so skip it there.
+if [ "$DO_LIST" != true ]; then
+    mkdir -p "$OUT_DIR"
+    OUT_DIR="$(cd "$OUT_DIR" && pwd)"
+fi
+
 # --list defers to after PUBLISH_SET is defined (below); it prints the curated set
 # and exits before the version lookup / network guards.
 if [ "$DO_LIST" != true ]; then
@@ -201,6 +209,37 @@ for pkg in "${TO_PUBLISH[@]}"; do
         exit 1
     fi
 done
+echo ""
+
+# --- #621 Layer A: artifact-level completeness gate --------------------------
+# HARD-FAIL if any assembled sdist is missing a module its manifest declares.
+# The 0.17.2 hydra-build sdist shipped 3 of 8 modules from a stale publishing
+# dist that every dist/-TREE check passed; this inspects the ACTUAL .tar.gz that
+# would be uploaded. Runs on every path (assemble-only too) so a truncated
+# artifact is caught before it can ever reach Hackage.
+echo "=== Verifying sdist completeness (#621: manifest mainModules present in each .tar.gz) ==="
+gate_fail=0
+for pkg in "${TO_PUBLISH[@]}"; do
+    manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
+    tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
+    if [ ! -f "$manifest" ]; then
+        echo "  -- $pkg: no manifest.json (skipped)"
+        continue
+    fi
+    if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
+          --manifest "$manifest" --artifact "$tarball" --kind haskell-sdist; then
+        :
+    else
+        echo "  ARTIFACT INCOMPLETE: $pkg-$VERSION.tar.gz is missing declared modules — refusing to publish" >&2
+        gate_fail=1
+    fi
+done
+if [ "$gate_fail" != 0 ]; then
+    echo "FAIL: one or more sdists are content-incomplete (#621) — the 0.17.2 hydra-build 3/8" >&2
+    echo "      defect shape. Re-assemble from a clean/cold-synced dist and retry." >&2
+    exit 1
+fi
+echo "  OK: every sdist contains all its manifest-declared modules."
 echo ""
 
 if [ "$DO_UPLOAD" != true ]; then

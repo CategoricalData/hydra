@@ -191,6 +191,45 @@ for pkg in "${PUBLISH_SET[@]}"; do
     echo ""
 done
 
+# --- #621 Layer A: artifact-content completeness gate ------------------------
+# HARD-FAIL if a built jar is missing content its manifest declares. This is the
+# channel where the 0.17.2 defect actually SHIPPED: the published Java host was a
+# whole #417 rename behind (jar had strings/Cat,Cat2,Intercalate instead of the
+# #417 strings/Concat,Join; no dsl/lib/Ordering; no optionals/WithDefault) — from
+# a stale publishing-machine dist that every dist/-TREE check passed. Two checks:
+#   (1) directory-level: every manifest mainModules namespace is represented by a
+#       .class in the jar (catches whole-module truncation, e.g. hydra-build).
+#   (2) #417 required-symbols (hydra-kernel only): the specific post-#417 class
+#       basenames must exist — catches the stale-rename defect the directory-level
+#       check cannot see (the stale jar still had the namespace directories).
+REQ_SYMS="$HYDRA_ROOT/bin/lib/java-417-required-symbols.json"
+echo "=== Verifying jar completeness (#621: manifest mainModules + #417 symbols) ==="
+gate_fail=0
+for pkg in "${PUBLISH_SET[@]}"; do
+    [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+    manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
+    jar=$(ls "$HYDRA_ROOT/dist/java/$pkg/build/libs/$pkg-$VERSION.jar" 2>/dev/null | head -1)
+    if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+    if [ -z "$jar" ] || [ ! -f "$jar" ]; then
+        echo "  ERROR: no jar for $pkg at $VERSION (dist/java/$pkg/build/libs/)" >&2; gate_fail=1; continue
+    fi
+    # hydra-kernel additionally gets the #417 required-symbols check.
+    req_args=()
+    [ "$pkg" = "hydra-kernel" ] && [ -f "$REQ_SYMS" ] && req_args=(--required-symbols "$REQ_SYMS")
+    if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
+          --manifest "$manifest" --artifact "$jar" --kind java-jar "${req_args[@]}"; then :; else
+        echo "  ARTIFACT INCOMPLETE: $pkg-$VERSION.jar missing declared modules/#417 symbols — refusing to publish" >&2
+        gate_fail=1
+    fi
+done
+if [ "$gate_fail" != 0 ]; then
+    echo "FAIL: one or more jars are content-incomplete (#621) — the 0.17.2 shape (stale dist →" >&2
+    echo "      truncated / pre-#417 jar). Re-sync from a clean dist and rebuild." >&2
+    exit 1
+fi
+echo "  OK: every jar contains all its manifest-declared modules and required #417 symbols."
+echo ""
+
 if [ "$DO_UPLOAD" = true ]; then
     # --- Generate the root aggregator build (#591) ---------------------------
     # Regenerated fresh on every --upload run so it always reflects the current

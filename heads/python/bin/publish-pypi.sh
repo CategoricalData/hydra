@@ -43,6 +43,14 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# Normalize OUT_DIR to an absolute path. The per-package build runs inside
+# `( cd "$pkgdir" && uv build --out-dir "$OUT_DIR" )`, so a RELATIVE --out (e.g.
+# release-artifacts/pypi) would be resolved against $pkgdir and the wheels would
+# silently land under dist/python/<pkg>/, leaving the listing + #621 gate to see
+# an empty $OUT_DIR. Anchor it to the repo root before any cd happens.
+mkdir -p "$OUT_DIR"
+OUT_DIR="$(cd "$OUT_DIR" && pwd)"
+
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-python)
 
@@ -107,7 +115,39 @@ done
 echo ""
 
 echo "=== Artifacts in $OUT_DIR ==="
-ls -1 "$OUT_DIR"/*.whl "$OUT_DIR"/*.tar.gz 2>/dev/null | sed 's/^/  /'
+# `ls` on an unmatched glob exits non-zero; under `set -euo pipefail` that would
+# abort the script here (silently, thanks to 2>/dev/null) before the gate ever
+# runs. Guard it so a listing convenience can never kill the publish flow.
+( ls -1 "$OUT_DIR"/*.whl "$OUT_DIR"/*.tar.gz 2>/dev/null | sed 's/^/  /' ) || true
+echo ""
+
+# --- #621 Layer A: artifact-content completeness gate ------------------------
+# HARD-FAIL if a built wheel is missing a module its manifest declares. The
+# 0.17.2 defects (hydra-build 3/8; the Java host a whole #417 rename behind)
+# shipped because the publishing machine's dist/ was stale and only the dist/
+# TREE was ever checked — never the packaged artifact. This inspects the actual
+# .whl that would be uploaded, so a truncated wheel can never reach PyPI.
+# Complements the #472 runtime-import gate below (content presence vs. import).
+echo "=== Verifying wheel completeness (#621: manifest mainModules present in each .whl) ==="
+gate_fail=0
+for pkg in "${PUBLISH_SET[@]}"; do
+    manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
+    whl=$(ls "$OUT_DIR/$(echo "$pkg" | tr '-' '_')"-"$VERSION"-*.whl 2>/dev/null | head -1)
+    if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+    if [ -z "$whl" ] || [ ! -f "$whl" ]; then
+        echo "  ERROR: no wheel found for $pkg at $VERSION" >&2; gate_fail=1; continue
+    fi
+    if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
+          --manifest "$manifest" --artifact "$whl" --kind python-wheel; then :; else
+        echo "  ARTIFACT INCOMPLETE: $(basename "$whl") missing declared modules — refusing to publish" >&2
+        gate_fail=1
+    fi
+done
+if [ "$gate_fail" != 0 ]; then
+    echo "FAIL: one or more wheels are content-incomplete (#621) — re-sync from a clean dist and rebuild." >&2
+    exit 1
+fi
+echo "  OK: every wheel contains all its manifest-declared modules."
 echo ""
 
 # --- Packaging-boundary gate (#472) ------------------------------------------
