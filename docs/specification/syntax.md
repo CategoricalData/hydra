@@ -97,7 +97,7 @@ Inside nested delimiters — `<…>`, `(…)`, or backticks — dotted names rea
 ### 2.5 Strings
 
 String literals use the JSON string syntax and escape rules,
-exactly as specified in the [JSON wire format](../json-format.md#string-escapes):
+exactly as specified in the [JSON wire format](json-format.md#string-escapes):
 `\"` and `\\` always escaped; the five shortcut escapes `\b` `\f` `\n` `\r` `\t`;
 `\u00xx` (lowercase hex) for remaining control characters;
 all other characters emitted as literal UTF-8, with no `\/` and no surrogate pairs.
@@ -139,7 +139,7 @@ The same kernel code SHOULD serve JSON and textual printing and parsing of strin
   `1.2e9` is one decimal literal, while `1.2 e9` is the application of `1.2` to the name `e9`.
 - **Binary**: a base64 string with the `binary` suffix — `"aGVsbG8=":binary`.
   Standard base64 alphabet with padding, exactly as specified by the
-  [JSON wire format](../json-format.md)'s binary encoding.
+  [JSON wire format](json-format.md)'s binary encoding.
 - The character `-` occurs only inside numeric literals (there are no infix operators),
   so a form such as `f -1:int32` lexes unambiguously.
 

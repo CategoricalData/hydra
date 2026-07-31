@@ -338,7 +338,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~270 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, and the published-host consume model (#370) for all three hosts |
 | Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostOverrides` pinning vs `--local-host`; the per-host shims |
-| Understand the JSON wire format | [docs/json-format.md](docs/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |
+| Understand the JSON wire format | [docs/specification/json-format.md](docs/specification/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |
 | Understand type inference (HM + class constraints) | [Inference wiki](https://github.com/CategoricalData/hydra/wiki/Inference) |

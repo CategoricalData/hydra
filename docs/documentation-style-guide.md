@@ -203,7 +203,7 @@ docs/
 ├── hydra-lexicon.txt                # Kernel types + ~270 primitive signatures (generated)
 ├── implementation.md                # Architecture and internals
 ├── import-conventions.md            # Haskell DSL import block conventions
-├── json-format.md                   # JSON wire-format spec + stability guarantees
+├── json-format.md                   # redirect stub (moved to specification/json-format.md)
 ├── tco-implementation.md            # Tail-call optimization in Python/Java coders
 ├── test-suite-architecture.md       # Test kernel details
 ├── troubleshooting.md               # Diagnostic checklist

@@ -128,7 +128,7 @@ Part III — The library:
 
 Part IV — Interchange:
 
-- [JSON format](json-format.md) — the wire format *(moving from docs/)*
+- [JSON format](json-format.md) — the wire format
 
 Planned (deferred beyond the current release): effects · graphs and modules ·
 reduction semantics · standard mappings (property graphs, RDF) ·

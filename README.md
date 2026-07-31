@@ -192,7 +192,7 @@ or [open a GitHub issue](https://github.com/CategoricalData/hydra/issues).
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** — core type system, terms, modules, and design principles.
 - **[Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs)** — Hydra's hypergraph foundation and its relationship to TinkerPop-style property graphs.
 - **[RDF support](https://github.com/CategoricalData/hydra/wiki/RDF)** — modeling, validation, and emission for RDF, SHACL, and related semantic-web formats.
-- **[JSON format](docs/json-format.md)** — the language-neutral interchange format for kernel modules.
+- **[JSON format](docs/specification/json-format.md)** — the language-neutral interchange format for kernel modules.
 
 ### For contributors
 

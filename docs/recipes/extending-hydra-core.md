@@ -1508,7 +1508,7 @@ layer. Implementing one would require either:
 - a fork in the encode/decode logic that emits both old and new keys and
   accepts either on read, or
 - a wholesale schema-versioning mechanism (bumping `moduleFormatVersion` from
-  `docs/json-format.md` and producing both wire formats during a transition).
+  `docs/specification/json-format.md` and producing both wire formats during a transition).
 
 Both are larger changes than the rename itself. For an in-place schema rename,
 land it as a single transition.
