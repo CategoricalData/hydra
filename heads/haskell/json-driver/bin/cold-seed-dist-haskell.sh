@@ -74,24 +74,41 @@ done
 sed_inplace 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
     "$HEADMODS/Generation.hs"
 
-# #607 cold-seed shim: writePerPackageManifestsJson's field assembly delegates to
-# hydra.build.manifestWriter (Hydra.Build.ManifestWriter), a hydra-build module not
-# yet published to Hackage (unlike #560's Hydra.Build.Routing, which was already in
-# the published 0.17.1 release the seeder links against). ColdSeedMain never calls
-# writePerPackageManifestsJson (it only seeds source trees + emits package.yaml, not
-# Hydra's manifest.json), so the import is dead weight in this ephemeral copy — drop
-# it and stub the one call site so the copy compiles without the unpublished module.
-# Drop this patch once hydra-build republishes with ManifestWriter included.
-# Intentional-but-provisional (staging-gce, #607 revert triage): accepted as a
-# same-pattern extension of the #497 shim above to un-red CI fast, but a growing
-# sed pile here is fragile. Follow-up: make the split STRUCTURAL — a cold-seeder
-# Generation variant that never imports ManifestWriter — so this sed can go away.
-sed_inplace '/^import qualified Hydra\.Build\.ManifestWriter as GenManifestWriter$/d' \
-    "$HEADMODS/Generation.hs"
-sed_inplace 's/GenManifestWriter\.packageManifestJson/error "writePerPackageManifestsJson: unreachable in the cold-seeder (#607\/#608)"/' \
-    "$HEADMODS/Generation.hs"
-sed_inplace '/^            pkg mainForPkg dslForPkg encForPkg testForPkg$/d' \
-    "$HEADMODS/Generation.hs"
+# #622: writePerPackageManifestsJson (the #607 shim's target) has been moved
+# structurally out of Generation.hs into Hydra.ManifestGeneration, a module used
+# only by the update-json-manifest driver (which always runs against a local,
+# non-cold-seed build with the full hydra-build available). Generation.hs no
+# longer imports Hydra.Build.ManifestWriter at all, so the #607 sed patches are
+# gone — not stubbed, structurally absent. ManifestGeneration.hs is deliberately
+# NOT among the headmods copied below: ColdSeedMain never calls
+# writePerPackageManifestsJson, so the cold seeder has no need of it, and copying
+# it in would reintroduce the unpublished-module coupling this split removes.
+
+# No-new-Build.*-imports invariant check (#622): the four cold-seeder headmods may
+# only import the Hydra.Build.* modules already known to compile against the
+# PUBLISHED hydra-build version this script pins (stack.yaml extra-deps, currently
+# hydra-build-0.17.1) — today, only Hydra.Build.Routing (via PackageRouting.hs,
+# #560's precedent: consumed from the published package, no shim needed). Any OTHER
+# Hydra.Build.* import is exactly the dependency that breaks a cold-clone when a new
+# hydra-build module lands in source before it is published (the #560/#607 revert
+# class). This is a fast local tripwire so a future change (e.g. a Digest.hs
+# repoint onto Hydra.Build.Format) fails here instead of surfacing only via a
+# cold-clone CI run. Update ALLOWED_BUILD_IMPORTS when a new Build.* module is
+# confirmed present in the pinned published hydra-build version.
+ALLOWED_BUILD_IMPORTS='Hydra\.Build\.Routing'
+for m in Generation PackageRouting TargetFilePaths Digest; do
+    disallowed=$(grep -E '^import qualified Hydra\.Build\.' "$HEADMODS/$m.hs" | grep -vE "$ALLOWED_BUILD_IMPORTS" || true)
+    if [ -n "$disallowed" ]; then
+        echo "ERROR: $HEADMODS/$m.hs imports a Hydra.Build.* module not in the allow-list:" >&2
+        echo "$disallowed" >&2
+        echo "  Cold-seeder headmods must not depend on hydra-build modules beyond what is" >&2
+        echo "  confirmed published at the pinned version (#560/#607 revert class). If this" >&2
+        echo "  module IS published at the pinned hydra-build version, add it to" >&2
+        echo "  ALLOWED_BUILD_IMPORTS above. Otherwise, extract the coupled logic into a" >&2
+        echo "  module used only outside the cold-seed path (see Hydra.ManifestGeneration, #622)." >&2
+        exit 1
+    fi
+done
 
 # 0b. (#608) Refresh typesmods/ with a build-time copy of the Terms-FREE DSL Types
 #     subtree the cold seeder compiles as its JSON decode-universe context:
