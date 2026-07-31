@@ -20,6 +20,7 @@ import qualified Hydra.Sources.Test.Inference.Annotations as Annotations
 import qualified Hydra.Sources.Test.Inference.Classes as Classes
 import qualified Hydra.Sources.Test.Inference.Failures as Failures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as Fundamentals
+import qualified Hydra.Sources.Test.Inference.Idempotence as Idempotence
 import qualified Hydra.Sources.Test.Inference.KernelExamples as KernelExamples
 import qualified Hydra.Sources.Test.Inference.NominalTypes as NominalTypes
 
@@ -42,6 +43,7 @@ module_ = Module {
       Classes.ns,
       Failures.ns,
       Fundamentals.ns,
+      Idempotence.ns,
       KernelExamples.ns,
       NominalTypes.ns]
 
@@ -57,5 +59,6 @@ allTests = definitionInModule module_ "allTests" $
       Classes.allTests,
       Failures.allTests,
       Fundamentals.allTests,
+      Idempotence.allTests,
       KernelExamples.allTests,
       NominalTypes.allTests]

@@ -182,6 +182,39 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 
+-- | Idempotence test: infer the type of a term twice in succession (infer . infer), and assert that
+--   the second pass reproduces the same elaborated term and type as the first. Both passes are already
+--   normalized by 'inferTypeOf' (via 'finalizeInferredTerm'), so a plain string comparison of the two
+--   (term, type scheme) pairs is sufficient -- no additional alpha-equivalence step is needed.
+idempotenceCase :: AsTerm t Term => String -> [Tag] -> t -> TypedTerm TestCaseWithMetadata
+idempotenceCase name tags term = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase (retype secondPassDescription) (retype firstPassDescription))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+    infer1 = inferTypeOfRef @@ testContextRef @@ testGraphRef @@ (asTerm term)
+
+    describeResult = Phantoms.lambda "result" (describeInferenceOutput
+      (Pairs.first (Pairs.first (Phantoms.var "result")))
+      (Pairs.second (Pairs.first (Phantoms.var "result"))))
+
+    onFailure msg = Phantoms.lambda "e" (Strings.concat2 (Phantoms.string msg) (Phantoms.string "failed"))
+
+    firstPassDescription = Eithers.either (onFailure "INFERENCE ERROR (pass 1): ") describeResult infer1
+
+    secondPassDescription = Eithers.either (onFailure "INFERENCE ERROR (pass 1): ") (Phantoms.lambda "result"
+      (Eithers.either (onFailure "INFERENCE ERROR (pass 2): ") describeResult
+        (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ Pairs.first (Pairs.first (Phantoms.var "result")))))
+      infer1
+
+    describeInferenceOutput :: TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm String
+    describeInferenceOutput t ts = Strings.concat $ Phantoms.list [
+      showTermRef @@ t,
+      Phantoms.string " :: ",
+      showTypeSchemeRef @@ ts]
+
 inferTypeOfRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error ((Term, TypeScheme), InferenceContext))
 inferTypeOfRef = TypedTerm $ TermVariable $ Name "hydra.inference.inferTypeOf"
 
