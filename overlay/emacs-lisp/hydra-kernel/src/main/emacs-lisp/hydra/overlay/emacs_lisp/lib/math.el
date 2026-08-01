@@ -10,6 +10,37 @@
   "Non-nil if X is +Inf or -Inf."
   (or (= x 1.0e+INF) (= x -1.0e+INF)))
 
+;; Emacs Lisp has only double-precision floats (no native single-precision type), so float32 is
+;; represented as a double throughout, narrowed to what's representable at single precision by
+;; explicitly rounding the mantissa to 24 bits and clamping magnitudes beyond float32's finite
+;; range to +-Infinity (IEEE 754 overflow-to-infinity) -- without this, a double-precision result
+;; like f32(0.1)+f32(0.2) or an overflowing f32 add would carry double-precision bits/magnitude
+;; instead of the value an actual float32 computation would produce.
+(defconst hydra--float32-max 3.4028234663852886e+38
+  "The largest finite value representable in IEEE 754 binary32.")
+(defconst hydra--float32-min-exponent -126
+  "The minimum normal binary exponent for IEEE 754 binary32 (subnormals go below this).")
+(defun hydra--to-float32 (x)
+  "Snap a double to IEEE 754 float32 precision (24-bit mantissa), saturating overflow to
+Infinity and flushing underflow (magnitudes below the smallest subnormal) to zero."
+  (cond ((isnan x) x)
+        ((hydra--infinitep x) x)
+        ((= x 0.0) x)
+        ((> (abs x) hydra--float32-max) (if (< x 0) -1.0e+INF 1.0e+INF))
+        (t (let* ((sign (if (< x 0) -1.0 1.0))
+                  (ax (abs x))
+                  ;; Clamp the exponent at the subnormal floor: below hydra--float32-min-exponent,
+                  ;; the mantissa scale must stop shrinking (matching IEEE 754's fixed subnormal
+                  ;; step of 2^-149), or the naive (floor (log ax 2.0)) computation keeps scaling
+                  ;; down and never rounds tiny-but-nonzero values to 0.0.
+                  (e (max hydra--float32-min-exponent (floor (log ax 2.0))))
+                  (scale (expt 2.0 (- 23 e)))
+                  (mantissa (round (* ax scale)))
+                  (snapped (* sign (/ mantissa scale))))
+             ;; Rounding the mantissa up can itself push a near-max value past
+             ;; hydra--float32-max (e.g. mantissa overflow at the top of the exponent range).
+             (if (> (abs snapped) hydra--float32-max) (if (< x 0) -1.0e+INF 1.0e+INF) snapped)))))
+
 ;; Constraint-polymorphic ('numeric') dispatch for add/sub/mul/negate.
 ;;
 ;; These vars serve two distinct call contracts, both real:
@@ -76,7 +107,8 @@
        (let* ((vx (cadr lx)) (vy (cadr ly)) (vx-tag (car vx)) (vy-tag (car vy)))
          (unless (eq vx-tag vy-tag)
            (error "hydra.lib.math.%s: float operands differ in precision" op-name))
-         (list :literal (list :float (list vx-tag (float (funcall float-op (cadr vx) (cadr vy))))))))
+         (let ((r (funcall float-op (cadr vx) (cadr vy))))
+           (list :literal (list :float (list vx-tag (if (eq vx-tag :float32) (hydra--to-float32 r) (float r))))))))
       (t (error "hydra.lib.math.%s: operand is not numeric" op-name)))))
 
 (defun hydra--numeric-unary-term (op-name int-op float-op x)
@@ -88,7 +120,8 @@
          (list :literal (list :integer (list vx-tag (hydra--wrap-int vx-tag (funcall int-op (cadr vx))))))))
       ((eq lx-kind :float)
        (let* ((vx (cadr lx)) (vx-tag (car vx)))
-         (list :literal (list :float (list vx-tag (float (funcall float-op (cadr vx))))))))
+         (let ((r (funcall float-op (cadr vx))))
+           (list :literal (list :float (list vx-tag (if (eq vx-tag :float32) (hydra--to-float32 r) (float r))))))))
       (t (error "hydra.lib.math.%s: operand is not numeric" op-name)))))
 
 (defun hydra--numeric-binary (op-name int-op float-op)
@@ -104,9 +137,85 @@
         (hydra--numeric-unary-term op-name int-op float-op x)
       (funcall int-op x))))
 
-;; abs :: Int -> Int
+;; --- Constraint-polymorphic ('integral') dispatch for div/mod/rem/even/odd ---
+;;
+;; div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows the
+;; dividend) -- mirroring the Haskell/Java/Python/Scala/TypeScript hosts' div/mod vs rem split.
+;; Emacs Lisp's builtins match this directly: `floor'/`mod' are floor-based (like Python's //
+;; and %), while `%' is truncated (like C). All three guard the zero-divisor case (returning
+;; :none) before computing. The (minBound, -1) boundary needs an explicit wrap-to-minBound on div
+;; only; mod/rem have no overflow there. Both call contracts (Term-path vs native-value path) are
+;; supported, same dispatch-by-shape convention as numeric-binary/numeric-unary above.
+
+(defun hydra--integral-literal (op-name term)
+  (if (and (eq (car term) :literal) (eq (car (cadr term)) :integer))
+      (cadr (cadr term))
+    (error "hydra.lib.math.%s: expected an integer literal term" op-name)))
+
+(defun hydra--integral-binary-term (op-name int-op wrap-min-boundary-on-div x y)
+  (let* ((vx (hydra--integral-literal op-name x))
+         (vy (hydra--integral-literal op-name y))
+         (vx-tag (car vx)) (vy-tag (car vy)))
+    (unless (eq vx-tag vy-tag)
+      (error "hydra.lib.math.%s: integer operands differ in precision" op-name))
+    (let ((a (cadr vx)) (b (cadr vy)))
+      (if (= b 0)
+          (list :none)
+        (let* ((bits (hydra--int-width-bits vx-tag))
+               (r (if (and wrap-min-boundary-on-div bits)
+                      (let ((min-bound (- (ash 1 (1- bits)))))
+                        (if (and (= a min-bound) (= b -1)) min-bound (funcall int-op a b)))
+                    (funcall int-op a b))))
+          (list :given (list :literal (list :integer (list vx-tag (hydra--wrap-int vx-tag r))))))))))
+
+(defun hydra--integral-binary-native (op-name int-op wrap-min-boundary-on-div a b)
+  (if (= b 0)
+      (list :none)
+    (list :given (funcall int-op a b))))
+
+(defun hydra--integral-binary (op-name int-op wrap-min-boundary-on-div)
+  (lambda (x)
+    (lambda (y)
+      (if (consp x)
+          (hydra--integral-binary-term op-name int-op wrap-min-boundary-on-div x y)
+        (hydra--integral-binary-native op-name int-op wrap-min-boundary-on-div x y)))))
+
+(defun hydra--integral-to-bigint (v)
+  (let ((tag (car v)) (n (cadr v)))
+    (if (eq tag :uint8) (logand n #xff) n)))
+
+(defun hydra--even-or-odd (op-name want-even)
+  (lambda (x)
+    (let ((n (if (consp x) (hydra--integral-to-bigint (hydra--integral-literal op-name x)) x)))
+      (eq (cl-evenp n) want-even))))
+
+;; --- Constraint-polymorphic ('fractional') dispatch for divide ---
+;;
+;; float32/float64 only, IEEE-total: division by zero yields ±Infinity/NaN, not an error.
+;; Emacs Lisp's own `/' on floats already gives these sentinels for free (verified:
+;; (/ 1.0 0.0) => 1.0e+INF, (/ 0.0 0.0) => NaN). Emacs Lisp has only double-precision
+;; floats, so float32 is represented as a double, narrowed via hydra--to-float32.
+
+(defun hydra--divide-term (x y)
+  (let ((lx (hydra--numeric-literal "divide" x))
+        (ly (hydra--numeric-literal "divide" y)))
+    (unless (and (eq (car lx) :float) (eq (car ly) :float))
+      (error "hydra.lib.math.divide: operands are not the same fractional kind"))
+    (let* ((vx (cadr lx)) (vy (cadr ly)) (vx-tag (car vx)) (vy-tag (car vy)))
+      (unless (eq vx-tag vy-tag)
+        (error "hydra.lib.math.divide: float operands differ in precision"))
+      (let ((r (/ (float (cadr vx)) (float (cadr vy)))))
+        (list :literal (list :float (list vx-tag (if (eq vx-tag :float32) (hydra--to-float32 r) r))))))))
+
+(defun hydra--divide-dispatch (x)
+  (lambda (y)
+    (if (consp x)
+        (hydra--divide-term x y)
+      (/ (float x) (float y)))))
+
+;; abs :: numeric x => x -> x
 (defvar hydra_overlay_emacs_lisp_lib_math_abs
-  (lambda (n) (abs n)))
+  (hydra--numeric-unary "abs" (lambda (a) (abs a)) (lambda (a) (abs (float a)))))
 
 ;; acos :: Double -> Double
 (defvar hydra_overlay_emacs_lisp_lib_math_acos
@@ -188,9 +297,9 @@
 ;; e :: Double
 (defvar hydra_overlay_emacs_lisp_lib_math_e (exp 1.0))
 
-;; even :: Int -> Bool
+;; even :: integral x => x -> Bool
 (defvar hydra_overlay_emacs_lisp_lib_math_even
-  (lambda (n) (cl-evenp n)))
+  (hydra--even-or-odd "even" t))
 
 ;; exp :: Double -> Double
 (defvar hydra_overlay_emacs_lisp_lib_math_exp
@@ -218,29 +327,24 @@
 ;; log_base alias
 (defvar hydra_overlay_emacs_lisp_lib_math_log_base hydra_overlay_emacs_lisp_lib_math_logBase)
 
-;; div :: Int -> Int -> Maybe Int
+;; div :: integral x => x -> x -> optional x
+;; Floor division (`floor'); the (minBound, -1) boundary wraps to minBound (two's-complement).
 (defvar hydra_overlay_emacs_lisp_lib_math_div
-  (lambda (a)
-    (lambda (b)
-      (if (= b 0)
-          (list :none)
-          (list :given (floor a b))))))
+  (hydra--integral-binary "div" (lambda (a b) (floor a b)) t))
 
-;; mod :: Int -> Int -> Maybe Int
+;; mod :: integral x => x -> x -> optional x
+;; Floor modulus (`mod'; sign follows the divisor).
 (defvar hydra_overlay_emacs_lisp_lib_math_mod
-  (lambda (a)
-    (lambda (b)
-      (if (= b 0)
-          (list :none)
-          (list :given (mod a b))))))
+  (hydra--integral-binary "mod" (lambda (a b) (mod a b)) nil))
 
-;; rem :: Int -> Int -> Maybe Int
+;; rem :: integral x => x -> x -> optional x
+;; Truncated remainder (`%'; sign follows the dividend).
 (defvar hydra_overlay_emacs_lisp_lib_math_rem
-  (lambda (a)
-    (lambda (b)
-      (if (= b 0)
-          (list :none)
-          (list :given (% a b))))))
+  (hydra--integral-binary "rem" (lambda (a b) (% a b)) nil))
+
+;; divide :: fractional x => x -> x -> x
+(defvar hydra_overlay_emacs_lisp_lib_math_divide
+  #'hydra--divide-dispatch)
 
 ;; mul :: numeric x => x -> x -> x
 (defvar hydra_overlay_emacs_lisp_lib_math_mul
@@ -261,9 +365,9 @@
   (lambda (a)
     (- (float a))))
 
-;; odd :: Int -> Bool
+;; odd :: integral x => x -> Bool
 (defvar hydra_overlay_emacs_lisp_lib_math_odd
-  (lambda (n) (cl-oddp n)))
+  (hydra--even-or-odd "odd" nil))
 
 ;; pi :: Double
 (defvar hydra_overlay_emacs_lisp_lib_math_pi float-pi)
@@ -294,10 +398,14 @@
             ((hydra--infinitep fx) fx)
             (t (float (round fx)))))))
 
-;; signum :: Int -> Int
+;; signum :: numeric x => x -> x
+;; Returns -1/0/1 for integers; for floats, preserves the sign of zero (signum(-0.0) = -0.0)
+;; and propagates NaN (signum(NaN) = NaN), matching Math/signum. `copysign' preserves -0.0;
+;; the (= a 0.0) branch returns the operand itself, so a signed zero flows through unchanged.
 (defvar hydra_overlay_emacs_lisp_lib_math_signum
-  (lambda (n)
-    (cond ((> n 0) 1) ((< n 0) -1) (t 0))))
+  (hydra--numeric-unary "signum"
+                        (lambda (a) (cond ((> a 0) 1) ((< a 0) -1) (t 0)))
+                        (lambda (a) (cond ((isnan a) a) ((= a 0.0) a) (t (copysign 1.0 a))))))
 
 ;; sin :: Double -> Double
 (defvar hydra_overlay_emacs_lisp_lib_math_sin
@@ -362,20 +470,9 @@
 
 ;; roundFloat32 :: Int -> Float -> Float
 ;; Rounds to N significant digits, then snaps through IEEE float32
-(defun snap-to-float32 (x)
-  "Snap a double to IEEE 754 float32 precision (24-bit mantissa)."
-  (cond ((isnan x) x)
-        ((hydra--infinitep x) x)
-        ((= x 0.0) 0.0)
-        (t (let* ((sign (if (< x 0) -1.0 1.0))
-                  (ax (abs x))
-                  (e (floor (log ax 2.0)))
-                  (scale (expt 2.0 (- 23 e)))
-                  (mantissa (round (* ax scale))))
-             (* sign (/ mantissa scale))))))
 (defvar hydra_overlay_emacs_lisp_lib_math_round_float32
   (lambda (n)
     (lambda (x)
-      (snap-to-float32 (funcall (funcall hydra_overlay_emacs_lisp_lib_math_round_float64 n) x)))))
+      (hydra--to-float32 (funcall (funcall hydra_overlay_emacs_lisp_lib_math_round_float64 n) x)))))
 
 (provide 'hydra.lib.math)

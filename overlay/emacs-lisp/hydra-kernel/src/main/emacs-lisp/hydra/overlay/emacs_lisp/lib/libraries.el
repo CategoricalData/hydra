@@ -460,22 +460,27 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (bi  (tc-bigint))
         (b   (tc-boolean))
         (x   (tc-variable "x"))
-        (numeric-x '(("x" . ("numeric")))))
+        (numeric-x '(("x" . ("numeric"))))
+        (integral-x '(("x" . ("integral"))))
+        (fractional-x '(("x" . ("fractional")))))
     (append
-      ;; Int32 primitives
+      ;; Constraint-polymorphic ('numeric') primitives
       (list
-        (cons (prim-name hydra_lib_math_abs)    (prim1 (prim-name hydra_lib_math_abs)    hydra_overlay_emacs_lisp_lib_math_abs    nil i32 i32))
+        (cons (prim-name hydra_lib_math_abs)    (prim1 (prim-name hydra_lib_math_abs)    hydra_overlay_emacs_lisp_lib_math_abs    nil x x numeric-x))
         (cons (prim-name hydra_lib_math_add)    (prim2 (prim-name hydra_lib_math_add)    hydra_overlay_emacs_lisp_lib_math_add    nil x x x numeric-x))
-        (cons (prim-name hydra_lib_math_even)   (prim1 (prim-name hydra_lib_math_even)   hydra_overlay_emacs_lisp_lib_math_even   nil i32 b))
         (cons (prim-name hydra_lib_math_mul)    (prim2 (prim-name hydra_lib_math_mul)    hydra_overlay_emacs_lisp_lib_math_mul    nil x x x numeric-x))
         (cons (prim-name hydra_lib_math_negate) (prim1 (prim-name hydra_lib_math_negate) hydra_overlay_emacs_lisp_lib_math_negate nil x x numeric-x))
-        (cons (prim-name hydra_lib_math_odd)    (prim1 (prim-name hydra_lib_math_odd)    hydra_overlay_emacs_lisp_lib_math_odd    nil i32 b))
         (cons (prim-name hydra_lib_math_range)  (prim2 (prim-name hydra_lib_math_range)  hydra_overlay_emacs_lisp_lib_math_range  nil i32 i32 (tc-list i32)))
-        (cons (prim-name hydra_lib_math_signum) (prim1 (prim-name hydra_lib_math_signum) hydra_overlay_emacs_lisp_lib_math_signum nil i32 i32))
+        (cons (prim-name hydra_lib_math_signum) (prim1 (prim-name hydra_lib_math_signum) hydra_overlay_emacs_lisp_lib_math_signum nil x x numeric-x))
         (cons (prim-name hydra_lib_math_sub)    (prim2 (prim-name hydra_lib_math_sub)    hydra_overlay_emacs_lisp_lib_math_sub    nil x x x numeric-x))
-        (cons (prim-name hydra_lib_math_div)  (prim2 (prim-name hydra_lib_math_div)  hydra_overlay_emacs_lisp_lib_math_div  nil i32 i32 (tc-optional i32)))
-        (cons (prim-name hydra_lib_math_mod)  (prim2 (prim-name hydra_lib_math_mod)  hydra_overlay_emacs_lisp_lib_math_mod  nil i32 i32 (tc-optional i32)))
-        (cons (prim-name hydra_lib_math_rem)  (prim2 (prim-name hydra_lib_math_rem)  hydra_overlay_emacs_lisp_lib_math_rem  nil i32 i32 (tc-optional i32))))
+        ;; Constraint-polymorphic ('integral') primitives
+        (cons (prim-name hydra_lib_math_even)   (prim1 (prim-name hydra_lib_math_even)   hydra_overlay_emacs_lisp_lib_math_even   nil x b integral-x))
+        (cons (prim-name hydra_lib_math_odd)    (prim1 (prim-name hydra_lib_math_odd)    hydra_overlay_emacs_lisp_lib_math_odd    nil x b integral-x))
+        (cons (prim-name hydra_lib_math_div)  (prim2 (prim-name hydra_lib_math_div)  hydra_overlay_emacs_lisp_lib_math_div  nil x x (tc-optional x) integral-x))
+        (cons (prim-name hydra_lib_math_mod)  (prim2 (prim-name hydra_lib_math_mod)  hydra_overlay_emacs_lisp_lib_math_mod  nil x x (tc-optional x) integral-x))
+        (cons (prim-name hydra_lib_math_rem)  (prim2 (prim-name hydra_lib_math_rem)  hydra_overlay_emacs_lisp_lib_math_rem  nil x x (tc-optional x) integral-x))
+        ;; Constraint-polymorphic ('fractional') primitives
+        (cons (prim-name hydra_lib_math_divide) (prim2 (prim-name hydra_lib_math_divide) hydra_overlay_emacs_lisp_lib_math_divide nil x x x fractional-x)))
       ;; Float64 primitives
       (list
         (cons (prim-name hydra_lib_math_acos)     (prim1 (prim-name hydra_lib_math_acos)     hydra_overlay_emacs_lisp_lib_math_acos     nil f64 f64))
