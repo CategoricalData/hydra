@@ -112,6 +112,43 @@ fi
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
+# --- #621 Layer A: artifact-content completeness gate ------------------------
+# HARD-FAIL if a built Scala jar is missing a module its manifest declares. The
+# 0.17.2 defects (hydra-build 3/8; the Java host a whole #417 rename behind)
+# shipped because the publishing machine's dist/ was stale and only the dist/
+# TREE was ever checked — never the packaged artifact. This inspects the actual
+# per-package .jar sbt produced, so a truncated jar can never reach Sonatype.
+# Scala jars sit at dist/scala/<pkg>/target/scala-<v>/<pkg>_<binv>-<version>.jar.
+# Call AFTER the jars are built (publishLocal / sbt package) in either path.
+run_621_scala_gate() {
+    echo "=== Verifying Scala jar completeness (#621: manifest mainModules present in each jar) ==="
+    local gate_fail=0 pkg jar manifest
+    for pkg in "${PUBLISH_SET[@]}"; do
+        [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
+        manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
+        # Newest matching jar (excludes sources/javadoc); the _N Scala binary-version
+        # suffix (e.g. _3) is part of the sbt artifact name.
+        jar=$(ls -t "$HYDRA_ROOT/dist/scala/$pkg"/target/scala-*/"$pkg"_*-"$VERSION".jar 2>/dev/null \
+              | grep -viE 'sources|javadoc' | head -1)
+        if [ ! -f "$manifest" ]; then echo "  -- $pkg: no manifest.json (skipped)"; continue; fi
+        if [ -z "$jar" ] || [ ! -f "$jar" ]; then
+            echo "  ERROR: no Scala jar found for $pkg at $VERSION" >&2; gate_fail=1; continue
+        fi
+        if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
+              --manifest "$manifest" --artifact "$jar" --kind scala-jar; then :; else
+            echo "  ARTIFACT INCOMPLETE: $(basename "$jar") missing declared modules — refusing to publish" >&2
+            gate_fail=1
+        fi
+    done
+    if [ "$gate_fail" -ne 0 ]; then
+        echo "FAIL: one or more Scala jars are content-incomplete (#621) — re-sync from a clean dist and rebuild." >&2
+        exit 1
+    fi
+    echo "  OK: every Scala jar contains all its manifest-declared modules."
+    echo ""
+}
+
 # Shared sonatypeBundleDirectory (#591). Must match the default in
 # bin/lib/generate-scala-package-build.py (--bundle-dir override), since every
 # per-package build.sbt was generated pointing at this same path.
@@ -248,6 +285,10 @@ if [ "$DO_UPLOAD" = true ]; then
     done
     echo ""
 
+    # #621 Layer A: gate the built jars BEFORE signing/staging/upload. publishLocal
+    # produces the per-package jar under target/scala-*/; a truncated one dies here.
+    run_621_scala_gate
+
     # Clear any bundle left by a prior (possibly failed) run. sbt-sonatype
     # refuses to overwrite non-SNAPSHOT artifacts in the staging dir, which
     # surfaces as "Attempting to overwrite" warnings and a BUNDLE_ZIP_ERROR; a
@@ -359,5 +400,7 @@ else
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt package )
         echo ""
     done
+    # #621 Layer A: verify each freshly-packaged jar's content against its manifest.
+    run_621_scala_gate
     echo "=== Dry run complete (no upload). Re-run with --upload to push to the Central Portal. ==="
 fi

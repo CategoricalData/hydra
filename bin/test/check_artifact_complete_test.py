@@ -266,6 +266,39 @@ def case_npm_lib_overlay(tmp: Path) -> None:
     expect(r.returncode == 0, f"exit 0 (got {r.returncode})")
 
 
+def case_scala_good(tmp: Path) -> None:
+    print("Case 8: complete scala-jar -> exit 0 (dir-based, companions + $package holders)")
+    manifest = tmp / "scala-good-manifest.json"
+    write_manifest(manifest, "hydra-build", HYDRA_BUILD_MAIN_MODULES)
+    artifact = tmp / "hydra-build_3-0.17.3.jar"
+    # Scala maps every namespace to a hydra/<dir>/ package of .class files: a
+    # type + its companion, or a Scala-3 top-level-defs holder <leaf>$package.class.
+    members = []
+    for ns in HYDRA_BUILD_MAIN_MODULES:
+        d = "/".join(ns.split("."))
+        leaf = ns.split(".")[-1]
+        members += [f"{d}/{leaf}$package.class", f"{d}/{leaf}$package$.class", f"{d}/{leaf}$package.tasty"]
+    make_jar(artifact, members)
+    r = run_check("--manifest", str(manifest), "--artifact", str(artifact), "--kind", "scala-jar")
+    expect(r.returncode == 0, f"exit 0 (got {r.returncode})")
+
+
+def case_scala_truncated(tmp: Path) -> None:
+    print("Case 9: truncated scala-jar -> exit 1, names missing module")
+    manifest = tmp / "scala-manifest.json"
+    write_manifest(manifest, "hydra-build", HYDRA_BUILD_MAIN_MODULES)
+    present = ["hydra.build.modules", "hydra.build.reconcile", "hydra.build.routing"]
+    artifact = tmp / "hydra-build_3-0.17.3-trunc.jar"
+    members = []
+    for ns in present:
+        d = "/".join(ns.split("."))
+        members.append(f"{d}/{ns.split('.')[-1]}$package.class")
+    make_jar(artifact, members)
+    r = run_check("--manifest", str(manifest), "--artifact", str(artifact), "--kind", "scala-jar")
+    expect(r.returncode == 1, f"exit 1 (got {r.returncode})")
+    expect("hydra.build.format" in r.stderr, "names missing module 'hydra.build.format'")
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
@@ -276,12 +309,14 @@ def main() -> int:
         case_python_good(tmp)
         case_npm_truncated(tmp)
         case_npm_lib_overlay(tmp)
+        case_scala_good(tmp)
+        case_scala_truncated(tmp)
 
     print()
     if FAILURES:
         print(f"TEST FAILED: {len(FAILURES)} assertion(s) failed")
         return 1
-    print("ALL TESTS PASSED (7/7 cases)")
+    print("ALL TESTS PASSED (9/9 cases)")
     return 0
 
 

@@ -166,8 +166,8 @@ def list_archive_members(artifact: Path, kind: str) -> list[str]:
     tarfile/zipfile both read the central index in-memory; no member content is
     read and nothing is written to disk.
     """
-    # zip-based artifacts: .jar and .whl
-    if kind in ("java-jar", "python-wheel"):
+    # zip-based artifacts: .jar (java + scala) and .whl
+    if kind in ("java-jar", "scala-jar", "python-wheel"):
         with zipfile.ZipFile(artifact, mode="r") as zf:
             return zf.namelist()
     # tar-based artifacts: haskell sdist, python sdist, npm tarball
@@ -351,6 +351,36 @@ def check_java_jar(
     return errors
 
 
+def check_scala_jar(members: list[str], main_modules: list[str]) -> list[str]:
+    """Each declared namespace must have >=1 .class under its hydra/<dir>/ directory.
+
+    Scala maps every namespace to a package directory of .class files, exactly like
+    Java, so the directory-presence check is shared with check_java_jar. The Scala
+    specifics the check tolerates automatically: companion objects (X$.class),
+    Scala-3 top-level-definition holders (hydra/lib/strings/strings$package.class),
+    and .tasty sidecars (ignored — only .class counts). No leaf-as-class-prefix case
+    (Scala never hoists the leaf to a PascalCase class in the parent dir) and no
+    #417 required-symbols machinery (that is Java-host-specific). hydra.lib.* land
+    directly at hydra/lib/<leaf>/ here (NOT an overlay path as in the TS host).
+    """
+    errors: list[str] = []
+    for ns in main_modules:
+        java_dir = namespace_to_java_dir(ns)  # dotted -> slashed, casing preserved
+        hits = [
+            m for m in members
+            if m.endswith(".class") and m.startswith(f"{java_dir}/")
+        ]
+        if hits:
+            print(f"  OK   {ns} -> {len(hits)} class(es) under {java_dir}/")
+        else:
+            errors.append(
+                f"manifest mainModules declares '{ns}' but the scala jar has no "
+                f".class under directory '{java_dir}/'"
+            )
+            print(f"  MISS {ns} -> (no .class under {java_dir}/)")
+    return errors
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -359,7 +389,7 @@ def main() -> int:
     ap.add_argument("--artifact", required=True, help="built .tar.gz sdist or .jar")
     ap.add_argument(
         "--kind",
-        choices=["haskell-sdist", "java-jar", "python-wheel", "python-sdist", "npm-tgz"],
+        choices=["haskell-sdist", "java-jar", "scala-jar", "python-wheel", "python-sdist", "npm-tgz"],
         default=None,
         help="artifact kind; inferred from extension for .jar/.whl, else required "
         "(.tar.gz/.tgz are ambiguous across haskell/python/npm)",
@@ -413,6 +443,8 @@ def main() -> int:
         errors = check_python(members, main_modules, "sdist")
     elif kind == "npm-tgz":
         errors = check_npm(members, main_modules)
+    elif kind == "scala-jar":
+        errors = check_scala_jar(members, main_modules)
     else:  # java-jar
         errors = check_java_jar(members, main_modules, required_symbols)
 
