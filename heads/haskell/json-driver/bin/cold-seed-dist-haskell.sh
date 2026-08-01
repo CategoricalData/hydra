@@ -66,13 +66,10 @@ mkdir -p "$HEADMODS"
 for m in Generation PackageRouting TargetFilePaths Digest; do
     cp "$HEAD_SRC/$m.hs" "$HEADMODS/$m.hs"
 done
-# #497 published-host shim: this copy compiles against the PUBLISHED hydra-kernel
-# (stack.yaml extra-deps, pinned below 0.17.2), which still exports Hydra.Show.* —
-# the canonical head source already uses the post-#497 Hydra.Print.* names (correct
-# for its own, local-kernel compile context). Patch ONLY this ephemeral copy back to
-# the published name; drop once hydra-kernel republishes with the #497 rename.
-sed_inplace 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
-    "$HEADMODS/Generation.hs"
+# #497 published-host shim removed: stack.yaml now pins hydra-kernel-0.17.3, which
+# publishes the post-#497 Hydra.Print.Errors name natively (verified present at
+# 0.17.2, confirmed still true at 0.17.3), so the canonical head source (already
+# using Hydra.Print.Errors) needs no patching for this ephemeral copy.
 
 # #622: writePerPackageManifestsJson (the #607 shim's target) has been moved
 # structurally out of Generation.hs into Hydra.ManifestGeneration, a module used
@@ -87,7 +84,7 @@ sed_inplace 's/Hydra\.Print\.Errors/Hydra.Show.Errors/g' \
 # No-new-Build.*-imports invariant check (#622): the four cold-seeder headmods may
 # only import the Hydra.Build.* modules already known to compile against the
 # PUBLISHED hydra-build version this script pins (stack.yaml extra-deps, currently
-# hydra-build-0.17.1) — today, only Hydra.Build.Routing (via PackageRouting.hs,
+# hydra-build-0.17.3) — today, only Hydra.Build.Routing (via PackageRouting.hs,
 # #560's precedent: consumed from the published package, no shim needed). Any OTHER
 # Hydra.Build.* import is exactly the dependency that breaks a cold-clone when a new
 # hydra-build module lands in source before it is published (the #560/#607 revert
@@ -205,36 +202,14 @@ for pkg in $(python3 "$REPO_ROOT/bin/lib/hydra-packages.py" list); do
     fi
 done
 
-# 3b. X3 published-host-prefix-helper-rename shim (0.17.2 release).
-#
-# Binary literals store a VALUE, not a primitive name; the Haskell CODER injects
-# the helper wrapper name at emission time (Sources/Haskell/Coder.hs). The 0.17.2
-# kernel renames that wrapper: Literals.stringToBinary -> Literals.base64ToBinary
-# and Literals.binaryToString -> Literals.binaryToBase64 (X3). But this seeder is
-# built against the PUBLISHED 0.17.1 coder, which hardcodes the OLD wrapper names,
-# so the seeded test tree emits `Literals.stringToBinary`/`binaryToString` — names
-# the 0.17.2 overlay Literals module no longer exports. That breaks the very next
-# `stack build` of exe:bootstrap-from-json (its source-dirs include the kernel test
-# tree, #546), which is the compile that PRODUCES the source-built, new-name coder —
-# a bootstrap circularity: the coder that would regenerate the tree with correct
-# names cannot be built until the tree compiles.
-#
-# The rename is pure (both wrappers base64-decode/-encode identically — the seeded
-# literal values are already base64, e.g. "QUI="), so rewriting the name in the
-# seeded output is semantics-preserving. Patch the seeded test tree back to the
-# new names so exe:bootstrap-from-json compiles; sync-haskell.sh Step 4 then
-# regenerates the whole tree with the source-built coder, overwriting these files
-# with byte-identical output. This is a bootstrap patch (overwritten by the next
-# regeneration), same shape as the #497/#607 shims above — NOT a persistent
-# post-generation patch. Drop it once the 0.17.2 kernel is the published host.
-echo ""
-echo "[3b/4] X3 shim: rewriting stale binary-literal wrapper names in seeded test tree..."
-grep -rl 'Literals\.stringToBinary\|Literals\.binaryToString' \
-    "$REPO_ROOT/dist/haskell"/*/src/test/haskell 2>/dev/null \
-    | while IFS= read -r f; do
-        sed_inplace 's/Literals\.stringToBinary/Literals.base64ToBinary/g; s/Literals\.binaryToString/Literals.binaryToBase64/g' "$f"
-        echo "  shimmed: ${f#$REPO_ROOT/}"
-    done
+# X3 published-host-prefix-helper-rename shim removed: it patched the seeded test
+# tree's binary-literal wrapper names (Literals.stringToBinary/binaryToString ->
+# base64ToBinary/binaryToBase64) because the seeder's coder, pinned at 0.17.1, still
+# hardcoded the old names. Its own comment said "drop it once the 0.17.2 kernel is
+# the published host" — stack.yaml now pins 0.17.3, so the seeder's coder emits the
+# new names natively and the shim's grep finds zero matches (which, piped into
+# `while read` under `set -euo pipefail`, killed the script — the shim itself broke
+# on its own now-unneeded condition).
 
 # 4. Emit each package's package.yaml manifest so every dist/haskell/<pkg>/ is a
 #    self-contained buildable package (Default A). Covers all 16, including the
