@@ -46,6 +46,13 @@
         (let [w (mod r m)]
           (if (>= w (/ m 2)) (- w m) w))))))
 
+;; Clojure's `(float x)` coercion THROWS ArithmeticException for any double outside float32's
+;; finite range (including actual infinities), instead of saturating to +-Infinity per IEEE 754 --
+;; e.g. (float 6.8e38) or (float ##Inf) both throw "Value out of range for float". `.floatValue`
+;; (widening-narrowing via the boxed Double's own method) correctly saturates instead.
+(defn- to-float32 [^double r]
+  (.floatValue ^Double (Double/valueOf r)))
+
 (defn- numeric-literal [op-name t]
   (if (and (sequential? t) (= (first t) :literal))
     (second t)
@@ -71,7 +78,7 @@
         (when (not= vx-tag vy-tag)
           (throw (ex-info (str "hydra.lib.math." op-name ": float operands differ in precision") {})))
         (let [r (float-op (second vx) (second vy))]
-          (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (float r) (double r)))))))
+          (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (to-float32 r) (double r)))))))
       :else (throw (ex-info (str "hydra.lib.math." op-name ": operand is not numeric") {})))))
 
 (defn- numeric-unary-term [op-name int-op float-op x]
@@ -84,7 +91,7 @@
       (= lx-kind :float)
       (let [vx (second lx) vx-tag (first vx)
             r (float-op (second vx))]
-        (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (float r) (double r))))))
+        (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (to-float32 r) (double r))))))
       :else (throw (ex-info (str "hydra.lib.math." op-name ": operand is not numeric") {})))))
 
 (defn- numeric-binary [op-name int-op float-op]
@@ -99,10 +106,95 @@
       (numeric-unary-term op-name int-op float-op x)
       (int-op x))))
 
-;; abs :: Int -> Int
+;; --- Constraint-polymorphic ('integral') dispatch for div/mod/rem/even/odd ---
+;;
+;; div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows the
+;; dividend) -- mirroring the Haskell/Java/Python/Scala/TypeScript hosts' div/mod vs rem split.
+;; All three guard the zero-divisor case (returning :none) before computing. The (minBound, -1)
+;; boundary needs an explicit wrap-to-minBound on div only; mod/rem have no overflow there.
+;; Both call contracts (Term-path vs native-value path) are supported, same dispatch-by-shape
+;; convention as numeric-binary/numeric-unary above.
+
+(defn- floor-div [a b]
+  (let [q (quot a b)]
+    (if (and (not= (rem a b) 0) (not= (< a 0) (< b 0))) (dec q) q)))
+
+(defn- floor-mod [a b]
+  (let [r (rem a b)]
+    (if (and (not= r 0) (not= (< r 0) (< b 0))) (+ r b) r)))
+
+(defn- integral-literal [op-name t]
+  (if (and (sequential? t) (= (first t) :literal) (= (first (second t)) :integer))
+    (second (second t))
+    (throw (ex-info (str "hydra.lib.math." op-name ": expected an integer literal term") {}))))
+
+(defn- integral-binary-term [op-name int-op wrap-min-boundary-on-div x y]
+  (let [vx (integral-literal op-name x)
+        vy (integral-literal op-name y)
+        vx-tag (first vx) vy-tag (first vy)]
+    (when (not= vx-tag vy-tag)
+      (throw (ex-info (str "hydra.lib.math." op-name ": integer operands differ in precision") {})))
+    (let [a (second vx) b (second vy)]
+      (if (= b 0)
+        (list :none)
+        (let [signed (contains? int-width-bits vx-tag)
+              r (if (and wrap-min-boundary-on-div signed (not= vx-tag :bigint))
+                  (let [bits (int-width-bits vx-tag)
+                        min-bound (- (bigint (.shiftLeft (biginteger 1) (dec bits))))]
+                    (if (and (= a min-bound) (= b -1)) min-bound (int-op a b)))
+                  (int-op a b))]
+          (list :given (list :literal (list :integer (list vx-tag (wrap-int vx-tag r))))))))))
+
+(defn- integral-binary-native [op-name int-op wrap-min-boundary-on-div a b]
+  (if (= b 0)
+    (list :none)
+    (list :given (int-op a b))))
+
+(defn- integral-binary [op-name int-op wrap-min-boundary-on-div]
+  (fn [x] (fn [y]
+    (if (sequential? x)
+      (integral-binary-term op-name int-op wrap-min-boundary-on-div x y)
+      (integral-binary-native op-name int-op wrap-min-boundary-on-div x y)))))
+
+(defn- integral-to-bigint [v]
+  (let [tag (first v) n (second v)]
+    (if (= tag :uint8) (bit-and n 0xff) n)))
+
+(defn- even-or-odd [op-name want-even]
+  (fn [x]
+    (let [n (if (sequential? x) (integral-to-bigint (integral-literal op-name x)) x)]
+      (= (even? n) want-even))))
+
+;; --- Constraint-polymorphic ('fractional') dispatch for divide ---
+;;
+;; float32/float64 only, IEEE-total (division by zero yields ±Infinity/NaN, not an exception --
+;; the JVM's own `/` on doubles/floats already gives these sentinels for free).
+
+(defn- divide-term [x y]
+  (let [lx (numeric-literal "divide" x)
+        ly (numeric-literal "divide" y)]
+    (when (or (not= (first lx) :float) (not= (first ly) :float))
+      (throw (ex-info "hydra.lib.math.divide: operands are not the same fractional kind" {})))
+    (let [vx (second lx) vy (second ly)
+          vx-tag (first vx) vy-tag (first vy)]
+      (when (not= vx-tag vy-tag)
+        (throw (ex-info "hydra.lib.math.divide: float operands differ in precision" {})))
+      (let [r (/ (double (second vx)) (double (second vy)))]
+        (list :literal (list :float (list vx-tag (if (= vx-tag :float32) (to-float32 r) r))))))))
+
+(defn- divide-dispatch [x]
+  (fn [y]
+    (if (sequential? x)
+      (divide-term x y)
+      (/ (double x) (double y)))))
+
+;; abs :: numeric x => x -> x
+;; Uses -' (auto-promoting subtract, like negate below) rather than unchecked -: at
+;; Long/MIN_VALUE, -a overflows a primitive long (Math/negateExact throws "long overflow"); -'
+;; promotes to BigInteger instead, which wrap-int then correctly narrows back to minBound.
 (def hydra_lib_math_abs
-  "Return the absolute value."
-  (fn [n] (Math/abs (long n))))
+  "Constraint-polymorphic absolute value over any type with a 'numeric' instance."
+  (numeric-unary "abs" (fn [a] (if (< a 0) (-' a) a)) (fn [a] (Math/abs (double a)))))
 
 ;; acos :: Double -> Double
 (def hydra_lib_math_acos
@@ -183,10 +275,10 @@
   "Euler's number (e = 2.71828...)."
   Math/E)
 
-;; even :: Int -> Bool
+;; even :: integral x => x -> Bool
 (def hydra_lib_math_even
-  "Check if an integer is even."
-  (fn [n] (even? n)))
+  "Check if an integer is even (constraint-polymorphic over any 'integral' type)."
+  (even-or-odd "even" true))
 
 ;; exp :: Double -> Double
 (def hydra_lib_math_exp
@@ -215,29 +307,25 @@
   "Return the logarithm of x to the given base."
   hydra_lib_math_logBase)
 
-;; div :: Int -> Int -> Maybe Int
+;; div :: integral x => x -> x -> optional x
 (def hydra_lib_math_div
-  "Divide two integers, returning Nothing if the divisor is zero."
-  (fn [a] (fn [b]
-    (if (= b 0)
-      (list :none)
-      (list :given (Math/floorDiv (long a) (long b)))))))
+  "Constraint-polymorphic floor division over any type with an 'integral' instance."
+  (integral-binary "div" floor-div true))
 
-;; mod :: Int -> Int -> Maybe Int
+;; mod :: integral x => x -> x -> optional x
 (def hydra_lib_math_mod
-  "Mathematical modulo, returning Nothing if the divisor is zero."
-  (fn [a] (fn [b]
-    (if (= b 0)
-      (list :none)
-      (list :given (Math/floorMod (long a) (long b)))))))
+  "Constraint-polymorphic floor modulus over any type with an 'integral' instance."
+  (integral-binary "mod" floor-mod false))
 
-;; rem :: Int -> Int -> Maybe Int
+;; rem :: integral x => x -> x -> optional x
 (def hydra_lib_math_rem
-  "Integer remainder, returning Nothing if the divisor is zero."
-  (fn [a] (fn [b]
-    (if (= b 0)
-      (list :none)
-      (list :given (rem a b))))))
+  "Constraint-polymorphic truncated remainder over any type with an 'integral' instance."
+  (integral-binary "rem" rem false))
+
+;; divide :: fractional x => x -> x -> x
+(def hydra_lib_math_divide
+  "Constraint-polymorphic IEEE-total division over any type with a 'fractional' instance."
+  divide-dispatch)
 
 ;; mul :: numeric x => x -> x -> x
 (def hydra_lib_math_mul
@@ -259,10 +347,10 @@
   "Negate a Float64 number."
   (fn [n] (- (double n))))
 
-;; odd :: Int -> Bool
+;; odd :: integral x => x -> Bool
 (def hydra_lib_math_odd
-  "Check if an integer is odd."
-  (fn [n] (odd? n)))
+  "Check if an integer is odd (constraint-polymorphic over any 'integral' type)."
+  (even-or-odd "odd" false))
 
 ;; pi :: Double
 (def hydra_lib_math_pi
@@ -316,10 +404,12 @@
         (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs x)))))]
           (/ (Math/round (* x factor)) factor))))))
 
-;; signum :: Int -> Int
+;; signum :: numeric x => x -> x
 (def hydra_lib_math_signum
-  "Return the sign of a number (-1, 0, or 1)."
-  (fn [n] (cond (pos? n) 1 (neg? n) -1 :else 0)))
+  "Constraint-polymorphic sign function over any type with a 'numeric' instance.
+  Returns -1/0/1 for integers; for floats, preserves the sign of zero (signum(-0.0) = -0.0)
+  and propagates NaN, matching Math/signum."
+  (numeric-unary "signum" (fn [a] (cond (pos? a) 1 (neg? a) -1 :else 0)) (fn [a] (Math/signum (double a)))))
 
 ;; sin :: Double -> Double
 (def hydra_lib_math_sin

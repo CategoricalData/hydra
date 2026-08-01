@@ -314,21 +314,26 @@
         bi  (p/tc-bigint)
         b   (p/tc-boolean)
         x   (p/tc-variable "x")
-        numeric-x {"x" ["numeric"]}]
+        numeric-x {"x" ["numeric"]}
+        integral-x {"x" ["integral"]}
+        fractional-x {"x" ["fractional"]}]
     (merge
-     ;; Int32 primitives
-     {(prim-name 'hydra.lib.math/hydra_lib_math_abs)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_abs)    math/hydra_lib_math_abs    [] i32 i32)
+     ;; Constraint-polymorphic ('numeric') primitives
+     {(prim-name 'hydra.lib.math/hydra_lib_math_abs)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_abs)    math/hydra_lib_math_abs    [] x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_add)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_add)    (fn [a b] ((math/hydra_lib_math_add a) b))    [] x x x numeric-x)
-      (prim-name 'hydra.lib.math/hydra_lib_math_even)   (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_even)   math/hydra_lib_math_even   [] i32 b)
       (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (fn [a b] ((math/hydra_lib_math_mul a) b))    [] x x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_negate) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_negate) math/hydra_lib_math_negate [] x x numeric-x)
-      (prim-name 'hydra.lib.math/hydra_lib_math_odd)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_odd)    math/hydra_lib_math_odd    [] i32 b)
-      (prim-name 'hydra.lib.math/hydra_lib_math_range)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_range)  (fn [a b] ((math/hydra_lib_math_range a) b))  [] i32 i32 (p/tc-list i32))
-      (prim-name 'hydra.lib.math/hydra_lib_math_signum) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_signum) math/hydra_lib_math_signum [] i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_signum) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_signum) math/hydra_lib_math_signum [] x x numeric-x)
       (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (fn [a b] ((math/hydra_lib_math_sub a) b))    [] x x x numeric-x)
-      (prim-name 'hydra.lib.math/hydra_lib_math_div)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_div)  (fn [a b] ((math/hydra_lib_math_div a) b))  [] i32 i32 (p/tc-optional i32))
-      (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (fn [a b] ((math/hydra_lib_math_mod a) b))  [] i32 i32 (p/tc-optional i32))
-      (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (fn [a b] ((math/hydra_lib_math_rem a) b))  [] i32 i32 (p/tc-optional i32))}
+      (prim-name 'hydra.lib.math/hydra_lib_math_range)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_range)  (fn [a b] ((math/hydra_lib_math_range a) b))  [] i32 i32 (p/tc-list i32))}
+     ;; Constraint-polymorphic ('integral') primitives
+     {(prim-name 'hydra.lib.math/hydra_lib_math_even)   (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_even)   math/hydra_lib_math_even   [] x b integral-x)
+      (prim-name 'hydra.lib.math/hydra_lib_math_odd)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_odd)    math/hydra_lib_math_odd    [] x b integral-x)
+      (prim-name 'hydra.lib.math/hydra_lib_math_div)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_div)  (fn [a b] ((math/hydra_lib_math_div a) b))  [] x x (p/tc-optional x) integral-x)
+      (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mod)  (fn [a b] ((math/hydra_lib_math_mod a) b))  [] x x (p/tc-optional x) integral-x)
+      (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_rem)  (fn [a b] ((math/hydra_lib_math_rem a) b))  [] x x (p/tc-optional x) integral-x)}
+     ;; Constraint-polymorphic ('fractional') primitives
+     {(prim-name 'hydra.lib.math/hydra_lib_math_divide) (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_divide) (fn [a b] ((math/hydra_lib_math_divide a) b)) [] x x x fractional-x)}
      ;; Float64 primitives
      {(prim-name 'hydra.lib.math/hydra_lib_math_acos)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_acos)     math/hydra_lib_math_acos     [] f64 f64)
       (prim-name 'hydra.lib.math/hydra_lib_math_acosh)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_acosh)    math/hydra_lib_math_acosh    [] f64 f64)
