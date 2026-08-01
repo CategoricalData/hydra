@@ -5,12 +5,32 @@ from decimal import Decimal
 from hydra.overlay.python.dsl.python import Optional, Given, NONE_
 
 
-def _format_float_like_haskell(x: float) -> str:
-    """Format a float to match Haskell's show behavior.
+def _shortest_round_trip_digits(x: float, pack_fmt: str) -> str:
+    """Return the shortest %g-style digit string that round-trips to the same bit pattern as x
+    under the given struct format ('d' for float64, 'f' for float32). For float64, repr(x)
+    already gives this (Python's float repr is defined as shortest-round-trip), so this is only
+    exercised for float32 -- repr(x) on a float32-narrowed Python float can carry up to 17
+    significant digits (full double precision) when only up to 9 are needed to round-trip at
+    float32 precision, e.g. 281474943156225.0 round-trips at float32 as "2.8147494e14", not
+    "2.81474943156225e14"."""
+    import struct
+    target = struct.pack(pack_fmt, x)
+    max_sig = 9 if pack_fmt == 'f' else 17
+    for sig in range(1, max_sig):
+        s = f'{x:.{sig}g}'
+        if struct.pack(pack_fmt, float(s)) == target:
+            return s
+    return f'{x:.{max_sig}g}'
 
-    Haskell uses exponential notation for small numbers (abs < 0.1, except 0).
-    Uses repr() for full round-trip precision in all cases.
-    """
+
+def _format_float_like_haskell(x: float, pack_fmt: str = 'd') -> str:
+    """Format a float to match Haskell's `show` behavior for RealFloat: decimal notation for
+    0.1 <= abs(x) < 10^7, exponential notation outside that range (verified empirically against
+    GHC: `show (16777216.0 :: Double)` = "1.6777216e7", not "16777216.0"). `pack_fmt` selects the
+    round-trip precision to target ('d' for float64, 'f' for float32) -- both bounds matter:
+    this function's absence of an upper bound (fixed here) was a real, previously-untriggered
+    bug, only caught by #317's land-gate bootstrap (the first test suite run to exercise a
+    float64 value >= 10^7)."""
     import math
     if math.isnan(x):
         return "NaN"
@@ -20,31 +40,36 @@ def _format_float_like_haskell(x: float) -> str:
         return "-0.0" if math.copysign(1.0, x) < 0 else "0.0"
 
     abs_x = abs(x)
+    g = _shortest_round_trip_digits(x, pack_fmt)
 
-    if abs_x < 0.1:
-        # Haskell uses exponential notation for small numbers
-        r = repr(x)
-        if 'e' in r or 'E' in r:
-            # Already exponential; normalize Python's e-05 to Haskell's e-5
-            r = r.replace('e-0', 'e-').replace('e+0', 'e+').replace('e+', 'e')
+    if abs_x < 0.1 or abs_x >= 1e7:
+        # Haskell uses exponential notation outside [0.1, 10^7)
+        if 'e' in g or 'E' in g:
+            # Already exponential; normalize Python's e-05/e+16 to Haskell's e-5/e16
+            r = g.replace('e-0', 'e-').replace('e+0', 'e+').replace('e+', 'e')
             parts = r.split('e')
             if '.' not in parts[0]:
                 parts[0] += '.0'
             return 'e'.join(parts)
         else:
-            # repr gave non-exponential (e.g. 0.05), convert to exponential
-            import math
-            exp = math.floor(math.log10(abs_x))
-            mantissa = x / (10 ** exp)
-            m_str = repr(mantissa)
-            if '.' not in m_str:
-                m_str += '.0'
-            return f'{m_str}e{exp}'
+            # g gave plain decimal (e.g. 0.05 or 16777216.0); convert to exponential
+            neg = g.startswith('-')
+            gg = g[1:] if neg else g
+            int_part, _, frac_part = gg.partition('.')
+            if int_part.lstrip('0'):
+                exp = len(int_part) - 1
+                digits = (int_part + frac_part).lstrip('0')
+            else:
+                stripped = frac_part.lstrip('0')
+                exp = -(len(frac_part) - len(stripped) + 1)
+                digits = stripped
+            digits = digits.rstrip('0') or '0'
+            mantissa = digits[0] + '.' + (digits[1:] or '0')
+            return f'{"-" if neg else ""}{mantissa}e{exp}'
     else:
-        result = repr(x)
-        if '.' not in result and 'e' not in result:
-            result += '.0'
-        return result
+        if '.' not in g and 'e' not in g:
+            g += '.0'
+        return g
 
 
 def bigint_to_decimal(x: int) -> Decimal:
@@ -367,51 +392,34 @@ def show_decimal(x: Decimal) -> str:
 
 
 def show_float32(x: float) -> str:
-    """Convert a float32 (Float) to string."""
+    """Convert a float32 (Float) to string, matching Haskell's show behavior.
+
+    Three bugs fixed here (found via the #317 land-gate's python-to-haskell bootstrap path,
+    which is the only path that actually exercises this Python-hosted Haskell-literal-printing
+    logic, first run to touch a float32 magnitude >= 10^7, a -0.0/+0.0 case, or an exponential-
+    notation value here): (1) the zero case collapsed BOTH +0.0 and -0.0 to the string "0.0",
+    losing the sign bit; (2) the general case hand-rounded to a hardcoded 6 significant figures,
+    but float32's shortest-round-trip representation needs up to 9 (e.g. 16777201.0, not a
+    truncated 16777200.0); (3) the exponential-notation mantissa was computed at full float64
+    precision (e.g. "2.81474943156224e14"), rather than the shortest string that round-trips at
+    float32 precision (the correct "2.8147494e14", verified against GHC's `show :: Float`).
+    Narrows to float32 precision via struct round-trip, then delegates to
+    _format_float_like_haskell (shared with float64) for notation rules, passing pack_fmt='f'
+    so the round-trip search targets float32 precision rather than float64.
+    """
     import struct, math
     if math.isnan(x):
         return "NaN"
     if math.isinf(x):
         return "-Infinity" if x < 0 else "Infinity"
-    # Round-trip through float32 to get proper precision
     f32_bytes = struct.pack('f', x)
     f32 = struct.unpack('f', f32_bytes)[0]
-    # Format with limited precision (6 significant digits for float32)
-    # Use 'g' format which removes trailing zeros and uses exponential for small numbers
-    if f32 == 0.0:
-        return "0.0"
-    abs_f32 = abs(f32)
-    if abs_f32 < 0.1:
-        # Exponential notation for small numbers
-        formatted = f"{f32:.1e}"
-        if 'e-0' in formatted:
-            formatted = formatted.replace('e-0', 'e-')
-        elif 'e+0' in formatted:
-            formatted = formatted.replace('e+0', 'e')
-        return formatted
-    else:
-        # Use float32's natural precision (about 6-7 digits)
-        # Round to 6 significant figures
-        from math import log10, floor, isfinite
-        log_val = log10(abs_f32)
-        if not isfinite(log_val):
-            # abs_f32 is too small for log10 to produce a finite result
-            # (subnormal underflow). Fall back to repr.
-            result = repr(f32)
-            if '.' not in result and 'e' not in result:
-                result += '.0'
-            return result
-        magnitude = floor(log_val)
-        rounded = round(f32, -int(magnitude) + 5)  # 6 significant figures
-        result = repr(rounded)
-        if '.' not in result and 'e' not in result:
-            result += '.0'
-        return result
+    return _format_float_like_haskell(f32, pack_fmt='f')
 
 
 def show_float64(x: float) -> str:
     """Convert a float64 (Double) to string."""
-    return _format_float_like_haskell(x)
+    return _format_float_like_haskell(x, pack_fmt='d')
 
 
 def show_int8(x: int) -> str:
