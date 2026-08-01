@@ -837,7 +837,41 @@ main = do
   let redirectSchemeTestEnv langSeg s =
         replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
           $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+  -- #568 (missed at the time, fixed here): the cold-seeder is a fourth driver-level
+  -- choke point that must apply the hydra.lib.* overlay-redirect existence
+  -- correction, alongside Hydra.Haskell.Generation.writeHaskell,
+  -- Hydra.ExtGeneration.writeTypeScript, and bootstrap-from-json/Main.hs's dispatch
+  -- (see the #568 block in Hydra.Generation). Without it, the DSL coder's
+  -- unconditional hydra.lib.<sub> -> Hydra.Overlay.Haskell.Lib.<Sub> redirect leaks
+  -- into the cold-seeded tree for any sub with no overlay module (e.g.
+  -- hydra.lib.defaults, #549), producing a dangling import GHC can't resolve.
+  --
+  -- NOT Hydra.Generation.haskellOverlayLibDir (a "../../overlay/..." RELATIVE
+  -- path documented as relative to the heads/haskell/ working directory every
+  -- OTHER driver runs from) and NOT a fixed relative-depth guess either: this
+  -- executable's actual runtime cwd is whatever cold-seed-dist-haskell.sh's own
+  -- cwd was when it invoked $SEEDER_BIN directly (no cd first) -- i.e. wherever
+  -- the CALLER of the wrapper script happened to be, not a location fixed
+  -- relative to this binary or its source tree. A first attempt hardcoded
+  -- "../../../overlay/..." (right when invoked from heads/haskell/json-driver/,
+  -- e.g. during `stack build`'s own working dir) but wrong when the wrapper
+  -- script (and therefore $SEEDER_BIN) runs from the repo root, as it normally
+  -- does -- silently resolving to nothing there instead, so overlayLibSubs
+  -- returned an EMPTY set and every sub (not just overlay-less ones) got
+  -- stripped of its overlay redirect, breaking real overlay functions like
+  -- Strings.concat2. Caught by output-level verification (grepping the
+  -- generated import, not just checking for a clean compile).
+  --
+  -- The robust fix: anchor off HYDRA_ROOT_DIR, which cold-seed-dist-haskell.sh
+  -- always computes and exports (repo root, independent of invocation cwd) --
+  -- not any relative path guess.
+  hydraRootDir <- lookupEnv "HYDRA_ROOT_DIR"
+  let coldSeedHaskellOverlayLibDir = case hydraRootDir of
+        Just root -> root FP.</> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+        Nothing   -> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+  haskellKnownLibSubs <- overlayLibSubs coldSeedHaskellOverlayLibDir
   let consumerTransform = case target of
+        "haskell"     -> correctHaskellLibRedirect haskellKnownLibSubs
         "java"        -> redirectForSubs libSubsJava "java"
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
