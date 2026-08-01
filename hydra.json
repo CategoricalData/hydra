@@ -1,6 +1,6 @@
 {
-  "currentVersion": "0.17.3",
-  "hostVersion": "0.17.2",
+  "currentVersion": "0.17.4",
+  "hostVersion": "0.17.3",
   "hostOverrides": {
     "java": "local",
     "python": "local"
