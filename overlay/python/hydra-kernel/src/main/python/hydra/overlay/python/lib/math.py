@@ -99,8 +99,138 @@ def _rewrap_integer(like, value):
 
 
 def _rewrap_float(like, value):
-    """Reconstruct the same FloatValue variant as `like` around a new native float value."""
+    """Reconstruct the same FloatValue variant as `like` around a new native float value.
+    Float64 keeps Python's native double precision (a direct match). Float32 needs narrowing:
+    Python has no native single-precision float type, so a float32 op computed here (e.g.
+    divide) produces a full double-precision result that must be rounded down to the nearest
+    representable float32 — including rounding an out-of-float32-range magnitude to +-Infinity
+    (IEEE 754 overflow-to-infinity), which struct.pack('f', ...) raises OverflowError on
+    instead of doing (confirmed empirically: divide(3.4028235e38, 1e-10) overflows float32's
+    range in the exact double-precision quotient, 3.4e48, well before struct.pack sees it)."""
+    if type(like).__name__ == "FloatValueFloat32":
+        if math.isnan(value):
+            return type(like)(value)
+        if math.isinf(value):
+            return type(like)(value)
+        import struct
+        try:
+            return type(like)(struct.unpack('f', struct.pack('f', value))[0])
+        except OverflowError:
+            return type(like)(math.copysign(float('inf'), value))
     return type(like)(value)
+
+
+# ===== Constraint-polymorphic ('integral') dispatch for div/mod/rem/even/odd =====
+#
+# div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows the
+# dividend) — mirrors Hydra.Overlay.Haskell.Lib.Math's divTerm/modTerm/remTerm split (GHC's
+# own div/mod vs quot/rem). Both div/mod/rem guard the zero-divisor case, returning None_()
+# (interpreter path) or raising the same TypeError the dual-mode dispatch expects (native
+# path never reaches a raw ZeroDivisionError from Python's own // or % because the guard
+# runs first).
+#
+# The (minBound, -1) boundary needs NO explicit guard on the interpreter path: Python ints
+# are arbitrary-precision, so div(minBound, -1) computes the exact (unwrapped) result, which
+# _rewrap_integer then narrows via two's-complement truncation — same mechanism as every
+# other fixed-width result, and it produces minBound automatically (matching the design
+# contract and the Java/Haskell hosts). The native path (bare Python int, no width tag) is a
+# documented boundary case: Python's own int is arbitrary-precision and carries no width, so
+# wrap-to-width is inherently impossible there (see round-4/#566 findings) — native-path
+# div/mod/rem on Python ints outside int32 range are correct as bigint, not as a fixed width.
+
+def _integral_binary(x, y, op):
+    """Apply a binary integral operation (div/mod/rem), dispatching Terms on their literal
+    variant when needed. Returns an Optional on the interpreter path (None_() on zero divisor);
+    on the native path, returns plain Optional too (both call contracts return Optional for
+    these three primitives, unlike add/sub/mul which return the operand type directly)."""
+    try:
+        if y == 0:
+            return None_()
+        return Given(op(x, y))
+    except TypeError:
+        return _integral_binary_terms(x, y, op)
+
+
+def _integral_unary_bool(x, op):
+    """Apply a unary integral predicate (even/odd), dispatching a Term on its literal variant
+    when needed."""
+    try:
+        return op(x)
+    except TypeError:
+        return _integral_unary_bool_terms(x, op)
+
+
+def _integral_binary_terms(x, y, op):
+    import hydra.core
+    lx = _numeric_literal(x)
+    ly = _numeric_literal(y)
+    if not (isinstance(lx, hydra.core.LiteralInteger) and isinstance(ly, hydra.core.LiteralInteger)):
+        raise TypeError("hydra.lib.math: operands are not the same integral kind")
+    if ly.value.value == 0:
+        return None_()
+    return Given(hydra.core.TermLiteral(hydra.core.LiteralInteger(
+        _rewrap_integer(lx.value, op(lx.value.value, ly.value.value)))))
+
+
+def _integral_unary_bool_terms(x, op):
+    import hydra.core
+    lx = _numeric_literal(x)
+    if isinstance(lx, hydra.core.LiteralInteger):
+        return op(lx.value.value)
+    raise TypeError("hydra.lib.math: operand is not integral")
+
+
+def _floor_div(x, y):
+    # Python's // on ints is already floor division (rounds toward negative infinity).
+    return x // y
+
+
+def _floor_mod(x, y):
+    # Python's % on ints already follows the sign of the divisor (floor/Knuth convention).
+    return x % y
+
+
+def _trunc_rem(x, y):
+    # Truncated remainder (sign follows the dividend, C-style) — Python's own % floors instead,
+    # so it cannot be reused here; compute via truncating quotient * divisor subtracted from x.
+    q = abs(x) // abs(y)
+    if (x < 0) != (y < 0):
+        q = -q
+    return x - q * y
+
+
+# ===== Constraint-polymorphic ('fractional') dispatch for divide =====
+#
+# IEEE 754 division, total: Python's native float / raises ZeroDivisionError on x/0.0 (and on
+# 0.0/0.0) instead of returning the IEEE sentinel (confirmed empirically, round4 §12.3 probe)
+# — the only host, along with SBCL, that diverges here. The guard below supplies the IEEE
+# result directly; every other case is Python's native (and already-IEEE-conformant) division.
+
+def _divide_guarded(x, y):
+    if y == 0.0:
+        if x == 0.0:
+            return float('nan')
+        # Sign of the result is the XOR of the operand signs (IEEE 754 §5.4.1).
+        result_sign = math.copysign(1.0, x) * math.copysign(1.0, y)
+        return math.copysign(float('inf'), result_sign)
+    return x / y
+
+
+def _divide_binary(x, y, op):
+    try:
+        return op(x, y)
+    except TypeError:
+        return _divide_binary_terms(x, y, op)
+
+
+def _divide_binary_terms(x, y, op):
+    import hydra.core
+    lx = _numeric_literal(x)
+    ly = _numeric_literal(y)
+    if isinstance(lx, hydra.core.LiteralFloat) and isinstance(ly, hydra.core.LiteralFloat):
+        return hydra.core.TermLiteral(hydra.core.LiteralFloat(
+            _rewrap_float(lx.value, op(lx.value.value, ly.value.value))))
+    raise TypeError("hydra.lib.math.divide: operands are not the same fractional kind")
 
 
 def _safe(f, x):
@@ -114,9 +244,9 @@ def _safe(f, x):
     except OverflowError:
         return float('inf')
 
-def abs_(x: int) -> int:
-    """Return the absolute value."""
-    return _builtins.abs(x)
+def abs_(x):
+    """Return the absolute value. Constraint-polymorphic ('numeric')."""
+    return _numeric_unary(x, _builtins.abs)
 
 # Alias for Hydra compatibility (abs is a Python builtin)
 abs = abs_
@@ -192,14 +322,20 @@ def cosh(x: float) -> float:
     return math.cosh(x)
 
 
+def divide(x, y):
+    """Floating-point division. Constraint-polymorphic ('fractional'); IEEE 754 total (the
+    Python native / raises ZeroDivisionError at x/0.0, so the zero-divisor case is guarded)."""
+    return _divide_binary(x, y, _divide_guarded)
+
+
 def e() -> float:
     """Euler's number (e ≈ 2.71828)."""
     return math.e
 
 
-def even(x: int) -> bool:
-    """Check if an integer is even."""
-    return x % 2 == 0
+def even(x) -> bool:
+    """Check if an integer is even. Constraint-polymorphic ('integral')."""
+    return _integral_unary_bool(x, lambda a: a % 2 == 0)
 
 
 def exp(x: float) -> float:
@@ -232,14 +368,16 @@ def log_base(base: float, x: float) -> float:
         return float('nan')
 
 
-def div(x: int, y: int) -> Optional[int]:
-    """Divide two integers, returning none if the divisor is zero."""
-    return None_() if y == 0 else Given(x // y)
+def div(x, y) -> Optional:
+    """Divide two integers (floor division), returning none if the divisor is zero.
+    Constraint-polymorphic ('integral')."""
+    return _integral_binary(x, y, _floor_div)
 
 
-def mod(x: int, y: int) -> Optional[int]:
-    """Mathematical modulo, returning none if the divisor is zero."""
-    return None_() if y == 0 else Given(x % y)
+def mod(x, y) -> Optional:
+    """Mathematical modulo (floor-based, sign follows the divisor), returning none if the
+    divisor is zero. Constraint-polymorphic ('integral')."""
+    return _integral_binary(x, y, _floor_mod)
 
 
 def maybe_pred(x: int) -> Optional[int]:
@@ -247,12 +385,10 @@ def maybe_pred(x: int) -> Optional[int]:
     return None_() if x == -2147483648 else Given(x - 1)
 
 
-def rem(x: int, y: int) -> Optional[int]:
-    """Integer remainder, returning none if the divisor is zero."""
-    if y == 0:
-        return None_()
-    q = int(x / y)
-    return Given(x - q * y)
+def rem(x, y) -> Optional:
+    """Integer remainder (truncated, sign follows the dividend), returning none if the divisor
+    is zero. Constraint-polymorphic ('integral')."""
+    return _integral_binary(x, y, _trunc_rem)
 
 
 def maybe_succ(x: int) -> Optional[int]:
@@ -296,9 +432,9 @@ def negate_float64(x: float) -> float:
     return -x
 
 
-def odd(x: int) -> bool:
-    """Check if an integer is odd."""
-    return x % 2 != 0
+def odd(x) -> bool:
+    """Check if an integer is odd. Constraint-polymorphic ('integral')."""
+    return _integral_unary_bool(x, lambda a: a % 2 != 0)
 
 
 def pi() -> float:
@@ -371,8 +507,23 @@ def round_float64(n: int, x: float) -> float:
     return _builtins.round(x * factor) / factor
 
 
-def signum(x: int) -> int:
-    """Return the sign of a number (-1, 0, or 1)."""
+def signum(x):
+    """Return the sign of a number. Constraint-polymorphic ('numeric').
+
+    For integers: -1, 0, or 1. For floats: IEEE 754 §5.5.1 semantics — signum(NaN) is NaN,
+    signum(+-0.0) preserves the input's sign (returns +-0.0, not a bare 0), and nonzero finite
+    or infinite x returns +-1.0 via math.copysign. A naive three-branch (x<0/x>0/else 0)
+    implementation gets both of these float cases wrong (round4 finding)."""
+    return _numeric_unary(x, _signum_op)
+
+
+def _signum_op(x):
+    if isinstance(x, float):
+        if math.isnan(x):
+            return x
+        if x == 0.0:
+            return x
+        return math.copysign(1.0, x)
     if x < 0:
         return -1
     elif x > 0:

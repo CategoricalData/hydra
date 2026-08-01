@@ -668,15 +668,20 @@ def register_math_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    # Constraint-polymorphic ('numeric') arithmetic: registered with identity (Term) coders and a
-    # 'numeric' class constraint, so the runtime numeric type is discovered by dispatching on the
-    # operand's literal variant (see math.add/sub/mul/negate). Mirrors equality.compare.
+    # Constraint-polymorphic ('numeric'/'integral'/'fractional') arithmetic: registered with
+    # identity (Term) coders and the relevant class constraint, so the runtime type is
+    # discovered by dispatching on the operand's literal variant (see math.add/sub/mul/negate/
+    # abs/signum for 'numeric'; math.div/mod/rem/even/odd for 'integral'; math.divide for
+    # 'fractional'). Mirrors equality.compare.
     x_num = prims.variable("x")
     _x_num = prims.v_num("x")
+    x_integral = prims.variable("x")
+    _x_integral = prims.v_integral("x")
+    x_frac = prims.variable("x")
+    _x_frac = prims.v_frac("x")
 
-    # Int32 primitives
     primitives[def_math.abs.name] = prims.prim1(
-        def_math.abs.name, math.abs_, [], prims.int32(), prims.int32()
+        def_math.abs.name, math.abs_, [_x_num], x_num, x_num
     )
     primitives[def_math.add.name] = prims.prim2(
         def_math.add.name, math.add, [_x_num], x_num, x_num, x_num
@@ -684,8 +689,11 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[def_math.add_float64.name] = prims.prim2(
         def_math.add_float64.name, math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
+    primitives[def_math.divide.name] = prims.prim2(
+        def_math.divide.name, math.divide, [_x_frac], x_frac, x_frac, x_frac
+    )
     primitives[def_math.even.name] = prims.prim1(
-        def_math.even.name, math.even, [], prims.int32(), prims.boolean()
+        def_math.even.name, math.even, [_x_integral], x_integral, prims.boolean()
     )
     primitives[def_math.mul.name] = prims.prim2(
         def_math.mul.name, math.mul, [_x_num], x_num, x_num, x_num
@@ -700,13 +708,13 @@ def register_math_primitives() -> dict[Name, Primitive]:
         def_math.negate_float64.name, math.negate_float64, [], prims.float64(), prims.float64()
     )
     primitives[def_math.odd.name] = prims.prim1(
-        def_math.odd.name, math.odd, [], prims.int32(), prims.boolean()
+        def_math.odd.name, math.odd, [_x_integral], x_integral, prims.boolean()
     )
     primitives[def_math.range_.name] = prims.prim2(
         def_math.range_.name, math.range_, [], prims.int32(), prims.int32(), prims.list_(prims.int32())
     )
     primitives[def_math.signum.name] = prims.prim1(
-        def_math.signum.name, math.signum, [], prims.int32(), prims.int32()
+        def_math.signum.name, math.signum, [_x_num], x_num, x_num
     )
     primitives[def_math.sub.name] = prims.prim2(
         def_math.sub.name, math.sub, [_x_num], x_num, x_num, x_num
@@ -715,13 +723,13 @@ def register_math_primitives() -> dict[Name, Primitive]:
         def_math.sub_float64.name, math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
     primitives[def_math.div.name] = prims.prim2(
-        def_math.div.name, math.div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+        def_math.div.name, math.div, [_x_integral], x_integral, x_integral, prims.optional(x_integral)
     )
     primitives[def_math.mod.name] = prims.prim2(
-        def_math.mod.name, math.mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+        def_math.mod.name, math.mod, [_x_integral], x_integral, x_integral, prims.optional(x_integral)
     )
     primitives[def_math.rem.name] = prims.prim2(
-        def_math.rem.name, math.rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+        def_math.rem.name, math.rem, [_x_integral], x_integral, x_integral, prims.optional(x_integral)
     )
 
     # Float64 primitives

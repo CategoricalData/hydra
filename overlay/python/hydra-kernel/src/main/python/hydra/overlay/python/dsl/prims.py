@@ -75,6 +75,14 @@ def v_num(name: str) -> TypeVar_:
     return TypeVar_(name, [Name("numeric")])
 
 
+def v_frac(name: str) -> TypeVar_:
+    return TypeVar_(name, [Name("fractional")])
+
+
+def v_integral(name: str) -> TypeVar_:
+    return TypeVar_(name, [Name("integral")])
+
+
 def build_type_scheme(vars: list[TypeVar_], typ: Type):
     constraints = [(tv.name, tv.classes) for tv in vars if tv.classes]
     if not constraints:
