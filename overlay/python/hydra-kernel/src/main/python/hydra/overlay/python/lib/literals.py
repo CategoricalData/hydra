@@ -23,6 +23,27 @@ def _shortest_round_trip_digits(x: float, pack_fmt: str) -> str:
     return f'{x:.{max_sig}g}'
 
 
+def _digits_and_exponent(g: str) -> tuple[bool, str, int]:
+    """Decompose a %g-style digit string (decimal or exponential, e.g. '1e+01', '16777216',
+    '0.05') into (is_negative, significant_digits, decimal_exponent), where the value equals
+    +/-0.d1d2...dN * 10^(exponent+1) -- i.e. exponent is the power of ten of the leading digit.
+    Trailing/leading zeros are stripped from the digit string (a bare '0' if the value is zero)."""
+    neg = g.startswith('-')
+    gg = g[1:] if neg else g
+    mantissa, _, exp_str = gg.partition('e')
+    exp = int(exp_str) if exp_str else 0
+    int_part, _, frac_part = mantissa.partition('.')
+    if int_part.lstrip('0'):
+        exponent = exp + len(int_part) - 1
+        digits = (int_part + frac_part).lstrip('0')
+    else:
+        stripped = frac_part.lstrip('0')
+        exponent = exp - (len(frac_part) - len(stripped) + 1)
+        digits = stripped
+    digits = digits.rstrip('0') or '0'
+    return neg, digits, exponent
+
+
 def _format_float_like_haskell(x: float, pack_fmt: str = 'd') -> str:
     """Format a float to match Haskell's `show` behavior for RealFloat: decimal notation for
     0.1 <= abs(x) < 10^7, exponential notation outside that range (verified empirically against
@@ -30,7 +51,10 @@ def _format_float_like_haskell(x: float, pack_fmt: str = 'd') -> str:
     round-trip precision to target ('d' for float64, 'f' for float32) -- both bounds matter:
     this function's absence of an upper bound (fixed here) was a real, previously-untriggered
     bug, only caught by #317's land-gate bootstrap (the first test suite run to exercise a
-    float64 value >= 10^7)."""
+    float64 value >= 10^7). Always decomposes the shortest-round-trip digit string into
+    (sign, digits, exponent) via _digits_and_exponent before choosing notation -- Python's %g
+    can return exponential form (e.g. '1e+01' for 10.0 at 1 significant digit) even when
+    Haskell's notation rule calls for decimal, so the digit string can't be used verbatim."""
     import math
     if math.isnan(x):
         return "NaN"
@@ -41,35 +65,22 @@ def _format_float_like_haskell(x: float, pack_fmt: str = 'd') -> str:
 
     abs_x = abs(x)
     g = _shortest_round_trip_digits(x, pack_fmt)
+    neg, digits, exponent = _digits_and_exponent(g)
+    sign = "-" if neg else ""
 
     if abs_x < 0.1 or abs_x >= 1e7:
         # Haskell uses exponential notation outside [0.1, 10^7)
-        if 'e' in g or 'E' in g:
-            # Already exponential; normalize Python's e-05/e+16 to Haskell's e-5/e16
-            r = g.replace('e-0', 'e-').replace('e+0', 'e+').replace('e+', 'e')
-            parts = r.split('e')
-            if '.' not in parts[0]:
-                parts[0] += '.0'
-            return 'e'.join(parts)
-        else:
-            # g gave plain decimal (e.g. 0.05 or 16777216.0); convert to exponential
-            neg = g.startswith('-')
-            gg = g[1:] if neg else g
-            int_part, _, frac_part = gg.partition('.')
-            if int_part.lstrip('0'):
-                exp = len(int_part) - 1
-                digits = (int_part + frac_part).lstrip('0')
-            else:
-                stripped = frac_part.lstrip('0')
-                exp = -(len(frac_part) - len(stripped) + 1)
-                digits = stripped
-            digits = digits.rstrip('0') or '0'
-            mantissa = digits[0] + '.' + (digits[1:] or '0')
-            return f'{"-" if neg else ""}{mantissa}e{exp}'
+        mantissa = digits[0] + '.' + (digits[1:] or '0')
+        return f'{sign}{mantissa}e{exponent}'
     else:
-        if '.' not in g and 'e' not in g:
-            g += '.0'
-        return g
+        # Decimal notation
+        if exponent >= 0:
+            int_part = digits[:exponent + 1].ljust(exponent + 1, '0')
+            frac_part = digits[exponent + 1:] or '0'
+        else:
+            int_part = '0'
+            frac_part = '0' * (-exponent - 1) + digits
+        return f'{sign}{int_part}.{frac_part}'
 
 
 def bigint_to_decimal(x: int) -> Decimal:
