@@ -349,7 +349,7 @@ const logicPrimitives = (): readonly Primitive[] => {
 // Fixed-width integer variants (int8/16/32/64, uint8/16/32/64) hold a JS `number`/`bigint` with
 // no automatic two's-complement wraparound, so results are narrowed back to the source width here
 // (mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision, no narrowing.
-type NumericOp = "add" | "sub" | "mul" | "negate";
+type NumericOp = "add" | "sub" | "mul" | "negate" | "abs" | "signum";
 
 const INT_WIDTH_BITS: Record<string, number> = { int8: 8, int16: 16, int32: 32, int64: 64 };
 const UINT_WIDTH_BITS: Record<string, number> = { uint8: 8, uint16: 16, uint32: 32, uint64: 64 };
@@ -377,6 +377,8 @@ const applyIntegerOp = (op: NumericOp, x: number | bigint, y?: number | bigint):
     case "sub": return bx - by;
     case "mul": return bx * by;
     case "negate": return -bx;
+    case "abs": return bx < 0n ? -bx : bx;
+    case "signum": return bx < 0n ? -1n : (bx > 0n ? 1n : 0n);
   }
 };
 
@@ -386,6 +388,9 @@ const applyFloatOp = (op: NumericOp, x: number, y?: number): number => {
     case "sub": return x - (y as number);
     case "mul": return x * (y as number);
     case "negate": return -x;
+    case "abs": return Math.abs(x);
+    // Math.sign already gives IEEE-correct results for ±0/NaN (sign(-0)=-0, sign(NaN)=NaN).
+    case "signum": return Math.sign(x);
   }
 };
 
@@ -437,13 +442,101 @@ const numericUnary = (opName: string, op: NumericOp) =>
     return right(litTerm({ tag: "float", value: { tag: v.tag, value: v.tag === "float32" ? Math.fround(r) : r } }));
   };
 
+// --- Constraint-polymorphic ('integral') dispatch for div/mod/rem/even/odd ---
+//
+// div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows the
+// dividend) — mirroring the Haskell/Java/Python/Scala hosts' div/mod vs rem split. All three
+// guard the zero-divisor case (returning None) before computing. The (minBound, -1) boundary
+// needs an explicit wrap-to-minBound on div only (mirroring the other hosts); mod/rem have no
+// overflow there. Computed in bigint throughout (unlike the pre-#317 int32-only primitives,
+// which used dAnyInt's lossy number coercion) so int64/uint64 stay exact.
+
+type IntegralOp = "div" | "mod" | "rem";
+
+const floorDivBig = (a: bigint, b: bigint): bigint => {
+  const q = a / b;
+  return (a % b !== 0n) && ((a < 0n) !== (b < 0n)) ? q - 1n : q;
+};
+
+const floorModBig = (a: bigint, b: bigint): bigint => {
+  const r = a % b;
+  return r !== 0n && ((r < 0n) !== (b < 0n)) ? r + b : r;
+};
+
+const integralLiteral = (opName: string, t: Term): { tag: string; value: number | bigint } => {
+  const lit = (t as { tag: string; value?: { tag?: string; value?: { tag?: string; value?: unknown } } });
+  if (lit.tag === "literal" && lit.value?.tag === "integer") {
+    return lit.value.value as { tag: string; value: number | bigint };
+  }
+  throw new Error(`hydra.lib.math.${opName}: expected an integer literal term`);
+};
+
+const integralBinary = (opName: string, op: IntegralOp) =>
+  (_g: Graph, args: readonly Term[]): Either<HydraError, Term> => {
+    const a0 = args[0], a1 = args[1];
+    if (a0 === undefined || a1 === undefined) return left({ tag: "other", value: `${opName}: missing argument` } as never);
+    const vx = integralLiteral(opName, a0), vy = integralLiteral(opName, a1);
+    if (vx.tag !== vy.tag) {
+      return left({ tag: "other", value: `hydra.lib.math.${opName}: integer operands differ in precision` } as never);
+    }
+    const bx = typeof vx.value === "bigint" ? vx.value : BigInt(vx.value);
+    const by = typeof vy.value === "bigint" ? vy.value : BigInt(vy.value);
+    if (by === 0n) return right(tOptionalNone);
+    let r: bigint;
+    if (op === "div") {
+      const signedBits = INT_WIDTH_BITS[vx.tag];
+      const minBound = signedBits !== undefined ? -(1n << BigInt(signedBits - 1)) : undefined;
+      r = (minBound !== undefined && bx === minBound && by === -1n) ? minBound : floorDivBig(bx, by);
+    } else if (op === "mod") {
+      r = floorModBig(bx, by);
+    } else {
+      r = bx % by;
+    }
+    return right(tOptionalGiven(litTerm({ tag: "integer", value: { tag: vx.tag, value: wrapInt(vx.tag, r) } })));
+  };
+
+const evenOrOdd = (opName: string, wantEven: boolean) =>
+  (_g: Graph, args: readonly Term[]): Either<HydraError, Term> => {
+    const a0 = args[0];
+    if (a0 === undefined) return left({ tag: "other", value: `${opName}: missing argument` } as never);
+    const v = integralLiteral(opName, a0);
+    const b = typeof v.value === "bigint" ? v.value : BigInt(v.value);
+    const isEven = (b % 2n === 0n);
+    return right(tBool(isEven === wantEven));
+  };
+
+// --- Constraint-polymorphic ('fractional') dispatch for divide ---
+//
+// float32/float64 only, unambiguous (no width-collision issue). Native `/` already gives IEEE
+// 754 sentinels (±Infinity, NaN) for free per the ECMAScript spec.
+
+const divideBinary = (opName: string) =>
+  (_g: Graph, args: readonly Term[]): Either<HydraError, Term> => {
+    const a0 = args[0], a1 = args[1];
+    if (a0 === undefined || a1 === undefined) return left({ tag: "other", value: `${opName}: missing argument` } as never);
+    const lx = numericLiteral(opName, a0), ly = numericLiteral(opName, a1);
+    if (lx.tag !== "float" || ly.tag !== "float") {
+      return left({ tag: "other", value: `hydra.lib.math.${opName}: operands are not the same fractional kind` } as never);
+    }
+    const vx = lx.value as { tag: string; value: number }, vy = ly.value as { tag: string; value: number };
+    if (vx.tag !== vy.tag) {
+      return left({ tag: "other", value: `hydra.lib.math.${opName}: float operands differ in precision` } as never);
+    }
+    const r = vx.value / vy.value;
+    return right(litTerm({ tag: "float", value: { tag: vx.tag, value: vx.tag === "float32" ? Math.fround(r) : r } }));
+  };
+
 const mathPrimitives = (): readonly Primitive[] => {
   const x = tyVar("x");
   const xNumeric = [["x", ["numeric"]]] as const;
+  const xIntegral = [["x", ["integral"]]] as const;
+  const xFractional = [["x", ["fractional"]]] as const;
   const numericBin = (qname: string, op: NumericOp): Primitive =>
     prim(qname, schemeC(tyFnCurried(x, x, x), ["x"], xNumeric), numericBinary(qname.split(".").pop()!, op));
   const numericUn = (qname: string, op: NumericOp): Primitive =>
     prim(qname, schemeC(tyFn(x, x), ["x"], xNumeric), numericUnary(qname.split(".").pop()!, op));
+  const integralBin = (qname: string, op: IntegralOp): Primitive =>
+    prim(qname, schemeC(tyFnCurried(x, x, tyOptional(x)), ["x"], xIntegral), integralBinary(qname.split(".").pop()!, op));
   const binFloatFloat = (qname: string, f: (a: number, b: number) => number): Primitive =>
     prim(qname, scheme(tyFnCurried(tyFloat64, tyFloat64, tyFloat64)),
       (g, args) =>
@@ -463,50 +556,17 @@ const mathPrimitives = (): readonly Primitive[] => {
     binFloatFloat("hydra.lib.math.pow", (a, b) => Math.pow(a, b)),
     binFloatFloat("hydra.lib.math.logBase", (b, x) => Math.log(x) / Math.log(b)),
     numericUn("hydra.lib.math.negate", "negate"),
-    prim("hydra.lib.math.abs", scheme(tyFn(tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "abs"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tInt(Math.abs(x)))))),
-    prim("hydra.lib.math.signum", scheme(tyFn(tyInt32, tyInt32)),
-      (g, args) =>
-        bind(need(args, 0, "signum"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tInt(Math.sign(x)))))),
-    prim("hydra.lib.math.even", scheme(tyFn(tyInt32, tyBool)),
-      (g, args) =>
-        bind(need(args, 0, "even"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tBool(x % 2 === 0))))),
-    prim("hydra.lib.math.odd", scheme(tyFn(tyInt32, tyBool)),
-      (g, args) =>
-        bind(need(args, 0, "odd"), (a0) =>
-          bind(dAnyInt(g, a0), (x) => right(tBool(x % 2 !== 0))))),
-    prim("hydra.lib.math.div", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
-      (g, args) =>
-        bind(need(args, 0, "maybeDiv"), (a0) =>
-          bind(need(args, 1, "maybeDiv"), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) =>
-                // Floor division (Haskell `div` semantics): rounds toward -∞.
-                right(y === 0 ? tOptionalNone : tOptionalGiven(tInt(Math.floor(x / y))))))))),
-    prim("hydra.lib.math.mod", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
-      (g, args) =>
-        bind(need(args, 0, "maybeMod"), (a0) =>
-          bind(need(args, 1, "maybeMod"), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) => {
-                // Haskell `mod` matches floor division (`div`): result has
-                // the same sign as the divisor.
-                if (y === 0) return right(tOptionalNone);
-                const r = ((x % y) + y) % y;
-                return right(tOptionalGiven(tInt(r)));
-              }))))),
-
-    prim("hydra.lib.math.rem", scheme(tyFnCurried(tyInt32, tyInt32, tyOptional(tyInt32))),
-      (g, args) =>
-        bind(need(args, 0, "maybeRem"), (a0) =>
-          bind(need(args, 1, "maybeRem"), (a1) =>
-            bind(dAnyInt(g, a0), (x) =>
-              bind(dAnyInt(g, a1), (y) =>
-                right(y === 0 ? tOptionalNone : tOptionalGiven(tInt(x - Math.trunc(x / y) * y)))))))),
+    numericUn("hydra.lib.math.abs", "abs"),
+    numericUn("hydra.lib.math.signum", "signum"),
+    prim("hydra.lib.math.even", schemeC(tyFn(x, tyBool), ["x"], xIntegral),
+      evenOrOdd("even", true)),
+    prim("hydra.lib.math.odd", schemeC(tyFn(x, tyBool), ["x"], xIntegral),
+      evenOrOdd("odd", false)),
+    integralBin("hydra.lib.math.div", "div"),
+    integralBin("hydra.lib.math.mod", "mod"),
+    integralBin("hydra.lib.math.rem", "rem"),
+    prim("hydra.lib.math.divide", schemeC(tyFnCurried(x, x, x), ["x"], xFractional),
+      divideBinary("divide")),
     prim("hydra.lib.math.range", scheme(tyFnCurried(tyInt32, tyInt32, tyList(tyInt32))),
       (g, args) =>
         bind(need(args, 0, "range"), (a0) =>
