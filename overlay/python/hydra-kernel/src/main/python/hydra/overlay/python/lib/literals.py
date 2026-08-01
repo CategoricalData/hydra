@@ -12,14 +12,20 @@ def _shortest_round_trip_digits(x: float, pack_fmt: str) -> str:
     exercised for float32 -- repr(x) on a float32-narrowed Python float can carry up to 17
     significant digits (full double precision) when only up to 9 are needed to round-trip at
     float32 precision, e.g. 281474943156225.0 round-trips at float32 as "2.8147494e14", not
-    "2.81474943156225e14"."""
+    "2.81474943156225e14". Near FLT_MAX, rounding x to a low significant-digit count can round
+    UP past FLT_MAX (e.g. 3.4028234663852886e38 rounds to '3.403e+38' at 4 significant figures,
+    which exceeds FLT_MAX) -- struct.pack raises OverflowError for such a candidate, which just
+    means it doesn't round-trip, so the search should continue rather than propagate."""
     import struct
     target = struct.pack(pack_fmt, x)
     max_sig = 9 if pack_fmt == 'f' else 17
     for sig in range(1, max_sig):
         s = f'{x:.{sig}g}'
-        if struct.pack(pack_fmt, float(s)) == target:
-            return s
+        try:
+            if struct.pack(pack_fmt, float(s)) == target:
+                return s
+        except OverflowError:
+            continue
     return f'{x:.{max_sig}g}'
 
 
