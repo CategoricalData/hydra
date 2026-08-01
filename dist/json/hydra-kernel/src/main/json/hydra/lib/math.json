@@ -36,21 +36,16 @@
       "primitive": {
         "name": "hydra.lib.math.abs",
         "metadata": {
-          "description": "The absolute value of an integer.",
+          "description": "Numeric absolute value.",
           "comments": [
-            "Absolute value of a signed 32-bit two's-complement integer. For non-negative inputs the result equals the input; for negative inputs the result is the arithmetic negation.",
-            "The function is total but not injective at the boundary: abs(minBound) = minBound (i.e. abs(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
-            "Corresponds to Haskell's abs :: Int32 -> Int32."],
+            "Constraint-polymorphic absolute value over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width signed integers the result is total but not injective at the boundary (abs(minBound) = minBound, e.g. abs(-2147483648) = -2147483648 for int32, because +2147483648 is not representable); for unsigned integers and bigint the result is the input itself or its arithmetic negation, whichever is non-negative; for floating-point it clears the sign bit per IEEE 754 ੵ.5.1 (abs(ଐ) = +0, abs(NaN) is NaN).",
+            "Requires a 'numeric' type-class constraint on the argument type.",
+            "Corresponds to Haskell's abs :: Num a => a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "x",
-              "description": "the integer whose absolute value is taken",
-              "type": {"literal": {"integer": "int32"}},
-              "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -290,19 +285,39 @@
       "primitive": {
         "name": "hydra.lib.math.div",
         "metadata": {
-          "description": "Integer division, or Nothing if dividing by zero.",
+          "description": "Integral division, or Nothing if dividing by zero.",
           "comments": [
-            "Total integer division: div(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.",
+            "Constraint-polymorphic total integer division over any type with an 'integral' instance: div(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero, and Nothing when y = 0.",
             "The division rounds toward negative infinity (floor), so for example div(-7, 2) = Just(-4).",
-            "The boundary case div(minBound, -1), whose mathematical result +2147483648 is not representable in int32, wraps to minBound (the two's-complement overflow).",
-            "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+            "For fixed-width signed integers, the boundary case div(minBound, -1) wraps to minBound (the two's-complement overflow), since the mathematical result is not representable at that width.",
+            "Requires an 'integral' type-class constraint on the argument type.",
+            "Corresponds to Haskell's div :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
-            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
+            {"name": "x", "description": "the dividend", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.math.divide",
+        "metadata": {
+          "description": "Floating-point division.",
+          "comments": [
+            "Constraint-polymorphic division over any type with a 'fractional' instance (float32, float64). IEEE 754 division: the result is x / y correctly rounded (roundTiesToEven) for finite y ≠ 0.",
+            "The operation is total via IEEE sentinels rather than an optional codomain: for finite nonzero x, x / ଐ = ±∞ (sign = XOR of the operand signs); ଐ / ଐ and ±∞ / ±∞ are NaN; ±∞ / finite = ±∞ (sign XOR); finite / ±∞ = ଐ (sign XOR); NaN propagates unconditionally.",
+            "Requires a 'fractional' type-class constraint on the argument type.",
+            "Corresponds to Haskell's (/) :: Fractional a => a -> a -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "fractional"}]}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -321,39 +336,19 @@
       "primitive": {
         "name": "hydra.lib.math.even",
         "metadata": {
-          "description": "Test whether an integer is even.",
+          "description": "Test whether a value is even.",
           "comments": [
-            "True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
-            "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's even :: Int32 -> Bool."],
+            "Constraint-polymorphic parity test over any type with an 'integral' instance: true if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
+            "Total on all integral inputs including negative numbers and signed minBound (parity is preserved by two's-complement wraparound).",
+            "Requires an 'integral' type-class constraint on the argument type.",
+            "Corresponds to Haskell's even :: Integral a => a -> Bool."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "x",
-              "description": "the integer to test for evenness",
-              "type": {"literal": {"integer": "int32"}},
-              "isLazy": false}],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
+          "parameters": [{"name": "x", "description": "the value to test for evenness", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {
-          "lambda": {
-            "parameter": "x",
-            "body": {
-              "application": {
-                "function": {
-                  "application": {
-                    "function": {"variable": "hydra.lib.equality.equal"},
-                    "argument": {
-                      "application": {
-                        "function": {
-                          "application": {"function": {"variable": "hydra.lib.optionals.withDefault"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
-                        "argument": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.math.mod"}, "argument": {"variable": "x"}}},
-                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
-                "argument": {"literal": {"integer": {"int32": 0}}}}}}}}},
+        "isTotal": true}},
     {
       "primitive": {
         "name": "hydra.lib.math.exp",
@@ -436,18 +431,19 @@
       "primitive": {
         "name": "hydra.lib.math.mod",
         "metadata": {
-          "description": "Integer modulus, or Nothing if dividing by zero.",
+          "description": "Integral modulus, or Nothing if dividing by zero.",
           "comments": [
-            "Total integer modulus: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
+            "Constraint-polymorphic total integer modulus over any type with an 'integral' instance: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
             "The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2) = Just(1).",
-            "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+            "Requires an 'integral' type-class constraint on the argument type.",
+            "Corresponds to Haskell's mod :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
-            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
+            {"name": "x", "description": "the dividend", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -521,19 +517,15 @@
       "primitive": {
         "name": "hydra.lib.math.odd",
         "metadata": {
-          "description": "Test whether an integer is odd.",
+          "description": "Test whether a value is odd.",
           "comments": [
-            "True if the argument is not divisible by 2 (i.e. x mod 2 ≠ 0), false otherwise.",
-            "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's odd :: Int32 -> Bool."],
+            "Constraint-polymorphic parity test over any type with an 'integral' instance: true if the argument is not divisible by 2 (i.e. x mod 2 ≠ 0), false otherwise.",
+            "Total on all integral inputs including negative numbers and signed minBound. Requires an 'integral' type-class constraint on the argument type.",
+            "Corresponds to Haskell's odd :: Integral a => a -> Bool."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "x",
-              "description": "the integer to test for oddness",
-              "type": {"literal": {"integer": "int32"}},
-              "isLazy": false}],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
+          "parameters": [{"name": "x", "description": "the value to test for oddness", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
@@ -603,19 +595,20 @@
       "primitive": {
         "name": "hydra.lib.math.rem",
         "metadata": {
-          "description": "Integer remainder, or Nothing if dividing by zero.",
+          "description": "Integral remainder, or Nothing if dividing by zero.",
           "comments": [
-            "Total integer remainder: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
+            "Constraint-polymorphic total integer remainder over any type with an 'integral' instance: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
             "The result satisfies x = (truncate(x / y)) * y + (rem(x, y) result), so the sign of the result matches the sign of x (truncated division, C-style remainder). For example rem(-7, 2) = Just(-1).",
-            "The boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed).",
-            "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor case total."],
+            "For fixed-width signed integers, the boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed by div, not rem).",
+            "Requires an 'integral' type-class constraint on the argument type.",
+            "Corresponds to Haskell's rem :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
-            {"name": "x", "description": "the dividend", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
-            {"name": "y", "description": "the divisor", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
+            {"name": "x", "description": "the dividend", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the divisor", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -687,21 +680,17 @@
       "primitive": {
         "name": "hydra.lib.math.signum",
         "metadata": {
-          "description": "Return the sign of an integer as -1, 0, or 1.",
+          "description": "Numeric sign.",
           "comments": [
-            "signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0.",
-            "The function is total and satisfies the identity abs(x) * signum(x) = x for all int32 except minBound (where abs(minBound) * (-1) wraps to minBound rather than equalling -minBound, since +2147483648 is not representable).",
-            "Corresponds to Haskell's signum :: Int32 -> Int32."],
+            "Constraint-polymorphic sign function over any type with a 'numeric' instance. For integer types, signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0 (same width as the argument); unsigned integers return only 0 or 1. The function satisfies abs(x) * signum(x) = x for all integer instances except signed minBound (where the identity fails because +maxBound+1 is not representable).",
+            "For floating-point, signum(x) returns ଑.0 for nonzero finite or infinite x (per IEEE 754 ੵ.5.1); signum(ଐ) = ଐ (the sign of the input zero is preserved, not collapsed to a single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else- zero) gets both of these float cases wrong and must not be used.",
+            "Requires a 'numeric' type-class constraint on the argument type.",
+            "Corresponds to Haskell's signum :: Num a => a -> a."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "x",
-              "description": "the integer whose sign is returned",
-              "type": {"literal": {"integer": "int32"}},
-              "isLazy": false}],
-          "result": {"type": {"literal": {"integer": "int32"}}}},
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true}},
     {

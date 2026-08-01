@@ -10404,7 +10404,13 @@
                                                                                     "typeName": "hydra.core.Term",
                                                                                     "field": {
                                                                                       "name": "literal",
-                                                                                      "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "boolean", "term": {"literal": {"boolean": false}}}}}}}}}]}}}}}}}}}}}},
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                     {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "FAIL"}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},

@@ -49,6 +49,40 @@
                   "value": {"literal": {"string": "The equality type class: instances support structural equality."}}}]}}}}},
     {
       "term": {
+        "name": "hydra.classes.fractional",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.typing.TypeClass",
+                "fields": [
+                  {"name": "description", "term": {"literal": {"string": "Fractional: instances support total floating-point division."}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The fractional type class: instances support total floating-point division."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.classes.integral",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.typing.TypeClass",
+                "fields": [
+                  {
+                    "name": "description",
+                    "term": {"literal": {"string": "Integral: instances support integer division, modulus, remainder, and parity."}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The integral type class: instances support integer division, modulus, remainder, and parity."}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.classes.numeric",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.typing.TypeClass"}}},
         "body": {
