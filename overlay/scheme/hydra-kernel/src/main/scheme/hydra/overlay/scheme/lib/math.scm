@@ -23,6 +23,7 @@
           hydra_lib_math_logBase
           hydra_lib_math_log_base
           hydra_lib_math_div
+          hydra_lib_math_divide
           hydra_lib_math_mod
           hydra_lib_math_rem
           hydra_lib_math_mul
@@ -126,7 +127,8 @@
            (let* ((vx (cadr lx)) (vy (cadr ly)) (vx-tag (car vx)) (vy-tag (car vy)))
              (if (not (eq? vx-tag vy-tag))
                  (error (string-append "hydra.lib.math." op-name ": float operands differ in precision")))
-             (list 'literal (list 'float (list vx-tag (float-op (cadr vx) (cadr vy)))))))
+             (let ((r (float-op (cadr vx) (cadr vy))))
+               (list 'literal (list 'float (list vx-tag (if (eq? vx-tag 'float32) (snap-to-float32 r) r)))))))
           (else (error (string-append "hydra.lib.math." op-name ": operand is not numeric"))))))
 
     (define (numeric-unary-term op-name int-op float-op x)
@@ -138,7 +140,8 @@
              (list 'literal (list 'integer (list vx-tag (wrap-int vx-tag (int-op (cadr vx))))))))
           ((eq? lx-kind 'float)
            (let* ((vx (cadr lx)) (vx-tag (car vx)))
-             (list 'literal (list 'float (list vx-tag (float-op (cadr vx)))))))
+             (let ((r (float-op (cadr vx))))
+               (list 'literal (list 'float (list vx-tag (if (eq? vx-tag 'float32) (snap-to-float32 r) r)))))))
           (else (error (string-append "hydra.lib.math." op-name ": operand is not numeric"))))))
 
     (define (numeric-binary op-name int-op float-op)
@@ -154,9 +157,79 @@
             (numeric-unary-term op-name int-op float-op x)
             (int-op x))))
 
-    ;; abs :: Int -> Int
+    ;; --- Constraint-polymorphic ('integral') dispatch for div/mod/rem/even/odd ---
+    ;;
+    ;; div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows the
+    ;; dividend) -- mirroring the Haskell/Java/Python/Scala/TypeScript/Clojure hosts' div/mod vs rem
+    ;; split. The int-op is one of R7RS's floor-quotient/floor-remainder/truncate-remainder, which
+    ;; already give exactly these semantics. All three guard the zero-divisor case (returning 'none)
+    ;; before computing. The (minBound, -1) boundary needs an explicit wrap-to-minBound on div only;
+    ;; mod/rem have no overflow there. Both call contracts (Term-path vs native-value path) are
+    ;; supported, same dispatch-by-shape convention as numeric-binary/numeric-unary above.
+
+    (define (integral-literal op-name t)
+      (if (and (eq? (car t) 'literal) (eq? (car (cadr t)) 'integer))
+          (cadr (cadr t))
+          (error (string-append "hydra.lib.math." op-name ": expected an integer literal term"))))
+
+    (define (integral-binary-term op-name int-op wrap-min-boundary-on-div x y)
+      (let* ((vx (integral-literal op-name x))
+             (vy (integral-literal op-name y))
+             (vx-tag (car vx)) (vy-tag (car vy)))
+        (if (not (eq? vx-tag vy-tag))
+            (error (string-append "hydra.lib.math." op-name ": integer operands differ in precision")))
+        (let ((a (cadr vx)) (b (cadr vy)))
+          (if (= b 0)
+              (list 'none)
+              (let* ((signed (int-width-bits vx-tag))
+                     (r (if (and wrap-min-boundary-on-div signed)
+                            (let ((min-bound (- (expt 2 (- (int-width-bits vx-tag) 1)))))
+                              (if (and (= a min-bound) (= b -1)) min-bound (int-op a b)))
+                            (int-op a b))))
+                (list 'given (list 'literal (list 'integer (list vx-tag (wrap-int vx-tag r))))))))))
+
+    (define (integral-binary-native op-name int-op wrap-min-boundary-on-div a b)
+      (if (= b 0)
+          (list 'none)
+          (list 'given (int-op a b))))
+
+    (define (integral-binary op-name int-op wrap-min-boundary-on-div)
+      (lambda (x)
+        (lambda (y)
+          (if (pair? x)
+              (integral-binary-term op-name int-op wrap-min-boundary-on-div x y)
+              (integral-binary-native op-name int-op wrap-min-boundary-on-div x y)))))
+
+    (define (even-or-odd op-name want-even)
+      (lambda (x)
+        (let ((n (if (pair? x) (cadr (integral-literal op-name x)) x)))
+          (eq? (even? n) want-even))))
+
+    ;; --- Constraint-polymorphic ('fractional') dispatch for divide ---
+    ;;
+    ;; float32/float64 only, IEEE-total (division by zero yields ±Infinity/NaN, not an exception --
+    ;; Scheme's own inexact `/` already gives these sentinels for free, e.g. (/ 1.0 0.0) => +inf.0).
+
+    (define (divide-term x y)
+      (let* ((lx (numeric-literal "divide" x))
+             (ly (numeric-literal "divide" y)))
+        (if (or (not (eq? (car lx) 'float)) (not (eq? (car ly) 'float)))
+            (error "hydra.lib.math.divide: operands are not the same fractional kind"))
+        (let* ((vx (cadr lx)) (vy (cadr ly)) (vx-tag (car vx)) (vy-tag (car vy)))
+          (if (not (eq? vx-tag vy-tag))
+              (error "hydra.lib.math.divide: float operands differ in precision"))
+          (let ((r (/ (* 1.0 (cadr vx)) (* 1.0 (cadr vy)))))
+            (list 'literal (list 'float (list vx-tag (if (eq? vx-tag 'float32) (snap-to-float32 r) r))))))))
+
+    (define (divide-dispatch x)
+      (lambda (y)
+        (if (pair? x)
+            (divide-term x y)
+            (/ (* 1.0 x) (* 1.0 y)))))
+
+    ;; abs :: numeric x => x -> x
     (define hydra_lib_math_abs
-      (lambda (n) (abs n)))
+      (numeric-unary "abs" (lambda (a) (abs a)) (lambda (a) (abs a))))
 
     ;; acos :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
     (define hydra_lib_math_acos
@@ -242,9 +315,9 @@
     ;; e :: Double
     (define hydra_lib_math_e (exp 1))
 
-    ;; even :: Int -> Bool
+    ;; even :: integral x => x -> Bool
     (define hydra_lib_math_even
-      (lambda (n) (even? n)))
+      (even-or-odd "even" #t))
 
     ;; exp :: Double -> Double
     (define hydra_lib_math_exp
@@ -276,29 +349,21 @@
 
     (define hydra_lib_math_log_base hydra_lib_math_logBase)
 
-    ;; maybe_div :: Int -> Int -> Maybe Int
+    ;; div :: integral x => x -> x -> optional x
     (define hydra_lib_math_div
-      (lambda (a)
-        (lambda (b)
-          (if (= b 0)
-              (list 'none)
-              (list 'given (floor-quotient a b))))))
+      (integral-binary "div" floor-quotient #t))
 
-    ;; maybe_mod :: Int -> Int -> Maybe Int
+    ;; divide :: fractional x => x -> x -> x
+    (define hydra_lib_math_divide
+      divide-dispatch)
+
+    ;; mod :: integral x => x -> x -> optional x
     (define hydra_lib_math_mod
-      (lambda (a)
-        (lambda (b)
-          (if (= b 0)
-              (list 'none)
-              (list 'given (floor-remainder a b))))))
+      (integral-binary "mod" floor-remainder #f))
 
-    ;; maybe_rem :: Int -> Int -> Maybe Int
+    ;; rem :: integral x => x -> x -> optional x
     (define hydra_lib_math_rem
-      (lambda (a)
-        (lambda (b)
-          (if (= b 0)
-              (list 'none)
-              (list 'given (truncate-remainder a b))))))
+      (integral-binary "rem" truncate-remainder #f))
 
     ;; mul :: numeric x => x -> x -> x
     (define hydra_lib_math_mul
@@ -319,9 +384,9 @@
       (lambda (a)
         (- (* 1.0 a))))
 
-    ;; odd :: Int -> Bool
+    ;; odd :: integral x => x -> Bool
     (define hydra_lib_math_odd
-      (lambda (n) (odd? n)))
+      (even-or-odd "odd" #f))
 
     ;; pi :: Double
     (define hydra_lib_math_pi (* 4 (atan 1)))
@@ -379,9 +444,18 @@
         (lambda (x)
           (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
 
-    ;; signum :: Int -> Int
+    ;; signum :: numeric x => x -> x
+    ;; Returns -1/0/1 for integers; for floats, preserves the sign of zero (signum(-0.0) = -0.0)
+    ;; and propagates NaN, matching the other hosts' float signum.
     (define hydra_lib_math_signum
-      (lambda (n) (cond ((positive? n) 1) ((negative? n) -1) (else 0))))
+      (numeric-unary "signum"
+        (lambda (a) (cond ((positive? a) 1) ((negative? a) -1) (else 0)))
+        (lambda (a)
+          (cond ((nan? a) a)
+                ((> a 0.0) 1.0)
+                ((< a 0.0) -1.0)
+                ;; a is ±0.0: preserve the sign of zero
+                (else a)))))
 
     ;; sin :: Double -> Double
     (define hydra_lib_math_sin

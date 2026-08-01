@@ -500,21 +500,29 @@
             (bi  (tc-bigint))
             (b   (tc-boolean))
             (x   (tc-variable "x"))
-            (numeric-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "numeric"))))))
+            (numeric-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "numeric")))))
+            (integral-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "integral")))))
+            (fractional-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "fractional"))))))
         (append
+          ;; Constraint-polymorphic ('numeric') primitives
           (list
-            (cons (prim-name def:hydra_lib_math_abs)    (prim1 (prim-name def:hydra_lib_math_abs)    hydra_lib_math_abs    #f i32 i32))
+            (cons (prim-name def:hydra_lib_math_abs)    (prim1 (prim-name def:hydra_lib_math_abs)    hydra_lib_math_abs    #f x x numeric-x))
             (cons (prim-name def:hydra_lib_math_add)    (prim2 (prim-name def:hydra_lib_math_add)    hydra_lib_math_add    #f x x x numeric-x))
-            (cons (prim-name def:hydra_lib_math_even)   (prim1 (prim-name def:hydra_lib_math_even)   hydra_lib_math_even   #f i32 b))
             (cons (prim-name def:hydra_lib_math_mul)    (prim2 (prim-name def:hydra_lib_math_mul)    hydra_lib_math_mul    #f x x x numeric-x))
             (cons (prim-name def:hydra_lib_math_negate) (prim1 (prim-name def:hydra_lib_math_negate) hydra_lib_math_negate #f x x numeric-x))
-            (cons (prim-name def:hydra_lib_math_odd)    (prim1 (prim-name def:hydra_lib_math_odd)    hydra_lib_math_odd    #f i32 b))
-            (cons (prim-name def:hydra_lib_math_range)  (prim2 (prim-name def:hydra_lib_math_range)  hydra_lib_math_range  #f i32 i32 (tc-list i32)))
-            (cons (prim-name def:hydra_lib_math_signum) (prim1 (prim-name def:hydra_lib_math_signum) hydra_lib_math_signum #f i32 i32))
+            (cons (prim-name def:hydra_lib_math_signum) (prim1 (prim-name def:hydra_lib_math_signum) hydra_lib_math_signum #f x x numeric-x))
             (cons (prim-name def:hydra_lib_math_sub)    (prim2 (prim-name def:hydra_lib_math_sub)    hydra_lib_math_sub    #f x x x numeric-x))
-            (cons (prim-name def:hydra_lib_math_div)  (prim2 (prim-name def:hydra_lib_math_div)  hydra_lib_math_div  #f i32 i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_mod)  (prim2 (prim-name def:hydra_lib_math_mod)  hydra_lib_math_mod  #f i32 i32 (tc-optional i32)))
-            (cons (prim-name def:hydra_lib_math_rem)  (prim2 (prim-name def:hydra_lib_math_rem)  hydra_lib_math_rem  #f i32 i32 (tc-optional i32))))
+            (cons (prim-name def:hydra_lib_math_range)  (prim2 (prim-name def:hydra_lib_math_range)  hydra_lib_math_range  #f i32 i32 (tc-list i32))))
+          ;; Constraint-polymorphic ('integral') primitives
+          (list
+            (cons (prim-name def:hydra_lib_math_even)   (prim1 (prim-name def:hydra_lib_math_even)   hydra_lib_math_even   #f x b integral-x))
+            (cons (prim-name def:hydra_lib_math_odd)    (prim1 (prim-name def:hydra_lib_math_odd)    hydra_lib_math_odd    #f x b integral-x))
+            (cons (prim-name def:hydra_lib_math_div)  (prim2 (prim-name def:hydra_lib_math_div)  hydra_lib_math_div  #f x x (tc-optional x) integral-x))
+            (cons (prim-name def:hydra_lib_math_mod)  (prim2 (prim-name def:hydra_lib_math_mod)  hydra_lib_math_mod  #f x x (tc-optional x) integral-x))
+            (cons (prim-name def:hydra_lib_math_rem)  (prim2 (prim-name def:hydra_lib_math_rem)  hydra_lib_math_rem  #f x x (tc-optional x) integral-x)))
+          ;; Constraint-polymorphic ('fractional') primitives
+          (list
+            (cons (prim-name def:hydra_lib_math_divide) (prim2 (prim-name def:hydra_lib_math_divide) hydra_lib_math_divide #f x x x fractional-x)))
           (list
             (cons (prim-name def:hydra_lib_math_acos)     (prim1 (prim-name def:hydra_lib_math_acos)     hydra_lib_math_acos     #f f64 f64))
             (cons (prim-name def:hydra_lib_math_acosh)    (prim1 (prim-name def:hydra_lib_math_acosh)    hydra_lib_math_acosh    #f f64 f64))
