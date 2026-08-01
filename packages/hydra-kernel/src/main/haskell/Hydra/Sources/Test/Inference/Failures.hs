@@ -418,8 +418,13 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
       (primitive DefMath.sub @@ string "not a number" @@ int32 42),
     expectFailure 3 []
       (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
+    -- Note: div's operands are the SAME type (Bool = Bool), so this is a genuine type
+    -- mismatch (Bool vs int32), not a constraint violation (div is now integral-constrained,
+    -- and inference does not verify the 'integral' constraint against a concrete type — a
+    -- shared, deliberately-deferred gap; see #317 design doc §3.5). A same-type-but-wrong
+    -- example (e.g. Bool @@ Bool) would type-check under the current constraint model.
     expectFailure 4 []
-      (primitive DefMath.div @@ true @@ false)]]
+      (primitive DefMath.div @@ true @@ int32 42)]]
 
 undefinedVariableTests :: TypedTermDefinition TestGroup
 undefinedVariableTests = define "undefinedVariableTests" $

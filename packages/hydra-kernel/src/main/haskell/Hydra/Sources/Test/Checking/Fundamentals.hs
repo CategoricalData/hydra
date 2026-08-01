@@ -681,13 +681,14 @@ higherOrderPrimitivesTests = define "higherOrderPrimitivesTests" $
 monomorphicVsPolymorphicTests :: TypedTermDefinition TestGroup
 monomorphicVsPolymorphicTests = define "monomorphicVsPolymorphicTests" $
   subgroup "Monomorphic vs polymorphic" [
-  -- math.add is now constraint-polymorphic (forall x. numeric x => x -> x -> x),
-  -- so it no longer serves as the "monomorphic" contrast here. math.abs
-  -- (int32 -> int32) is genuinely monomorphic, preserving the pedagogical
-  -- monomorphic-vs-polymorphic split of this group.
+  -- math.add and math.abs are now constraint-polymorphic (forall x. numeric x =>
+  -- ...), so neither serves as the "monomorphic" contrast here (#317 generalized
+  -- abs/signum alongside the integral class). math.sqrt (float64 -> float64) is
+  -- genuinely and permanently monomorphic (transcendental, float64-only per
+  -- design), preserving the pedagogical monomorphic-vs-polymorphic split.
   noChange "monomorphic math"
-    (primitive DefMath.abs)
-    (T.function T.int32 T.int32),
+    (primitive DefMath.sqrt)
+    (T.function T.float64 T.float64),
   checkTest "polymorphic identity" []
     (primitive DefFunctions.identity)
     (tylam "t0" $ tyapp (primitive DefFunctions.identity) (T.var "t0"))

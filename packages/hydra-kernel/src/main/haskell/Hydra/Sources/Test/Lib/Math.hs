@@ -41,6 +41,12 @@ optionalInt32 :: Maybe Int -> TypedTerm Term
 optionalInt32 Nothing = Core.termOptional nothing
 optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 
+-- | Generic optional-of-integer-literal builder, parameterized by the literal constructor
+-- (int8, int16, ..., bigint), for conformance-matrix transcription across all 9 integral types.
+optionalOf :: (a -> TypedTerm Term) -> Maybe a -> TypedTerm Term
+optionalOf _ Nothing = Core.termOptional nothing
+optionalOf ctor (Just x) = Core.termOptional $ just (ctor x)
+
 -- Test groups for hydra.lib.math primitives
 
 allTests :: TypedTermDefinition TestGroup
@@ -76,6 +82,7 @@ allTests = definitionInModule module_ "allTests" $
       mathAtan2,
       mathSinh,
       mathCosh,
+      mathDivide,
       mathTanh,
       mathAsinh,
       mathAcosh,
@@ -95,13 +102,57 @@ allTests = definitionInModule module_ "allTests" $
       -- other than int32, exercising value-level dispatch on the runtime literal variant (#566).
       mathNumericDispatch]
 
+-- | Cases sourced from round3-317-conformance-matrix.md §5 (numeric class, all 11 types),
+-- machine-verified against an independent implementation (round4-317-matrix-attack.md §1).
 mathAbs :: TypedTerm TestGroup
 mathAbs = subgroup "abs" [
-  test "positive" 5 5,
-  test "negative" (-5) 5,
-  test "zero" 0 0]
+  test8  "i8 nominal" 5 5,
+  test8  "i8 neg" (-1) 1,
+  test8  "i8 min" (-128) (-128),
+  test8  "i8 min+1" (-127) 127,
+  test16 "i16 nominal" 5 5,
+  test16 "i16 neg" (-1) 1,
+  test16 "i16 min" (-32768) (-32768),
+  test16 "i16 min+1" (-32767) 32767,
+  test32 "i32 nominal" 5 5,
+  test32 "i32 neg" (-1) 1,
+  test32 "i32 min" (-2147483648) (-2147483648),
+  test32 "i32 min+1" (-2147483647) 2147483647,
+  test64 "i64 nominal" 5 5,
+  test64 "i64 neg" (-1) 1,
+  test64 "i64 min" (-9223372036854775808) (-9223372036854775808),
+  test64 "i64 min+1" (-9223372036854775807) 9223372036854775807,
+  testU8  "u8 zero" 0 0,
+  testU8  "u8 max" 255 255,
+  testU16 "u16 zero" 0 0,
+  testU16 "u16 max" 65535 65535,
+  testU32 "u32 zero" 0 0,
+  testU32 "u32 max" 4294967295 4294967295,
+  testU64 "u64 zero" 0 0,
+  testU64 "u64 max" 18446744073709551615 18446744073709551615,
+  testBig "big nominal" 7 7,
+  testBig "big neg large" (-1267650600228229401496703205376) 1267650600228229401496703205376,
+  testF64 "f64 nominal" (-1.5) 1.5,
+  testF64 "f64 negzero" (-0.0) 0.0,
+  testF64 "f64 neginf" negInf64 posInf64,
+  testF64 "f64 nan" nan64 nan64,
+  testF64 "f64 subnormal" 5e-324 5e-324,
+  testF32 "f32 nominal" (-1.5) 1.5,
+  testF32 "f32 negzero" (-0.0) 0.0,
+  testF32 "f32 neginf" negInf32 posInf32,
+  testF32 "f32 nan" nan32 nan32]
   where
-    test name x result = primCase name DefMath.abs [int32 x] (int32 result)
+    test8   name x r = primCase name DefMath.abs [int8 x] (int8 r)
+    test16  name x r = primCase name DefMath.abs [int16 x] (int16 r)
+    test32  name x r = primCase name DefMath.abs [int32 x] (int32 r)
+    test64  name x r = primCase name DefMath.abs [int64 x] (int64 r)
+    testU8  name x r = primCase name DefMath.abs [uint8 x] (uint8 r)
+    testU16 name x r = primCase name DefMath.abs [uint16 x] (uint16 r)
+    testU32 name x r = primCase name DefMath.abs [uint32 x] (uint32 r)
+    testU64 name x r = primCase name DefMath.abs [uint64 x] (uint64 r)
+    testBig name x r = primCase name DefMath.abs [bigint x] (bigint r)
+    testF64 name x r = primCase name DefMath.abs [float64 x] (float64 r)
+    testF32 name x r = primCase name DefMath.abs [float32 x] (float32 r)
 
 mathAcos :: TypedTerm TestGroup
 mathAcos = subgroup "acos" [
@@ -134,14 +185,86 @@ mathAcosh = subgroup "acosh" [
   where
     test name x result = primCase name DefMath.acosh [float64 x] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §1 (numeric class, all 11 instance
+-- types), machine-verified against an independent implementation (round4-317-matrix-attack.md
+-- §1). Covers wraparound at both bounds of every fixed-width type, exact bigint arithmetic
+-- beyond int64/uint64 range, and IEEE 754 special values (ties-to-even in both directions,
+-- signed zeros, NaN/Inf propagation) at float64 and float32.
 mathAdd :: TypedTerm TestGroup
 mathAdd = subgroup "add" [
-  test "positive numbers" 3 5 8,
-  test "negative numbers" (-3) (-5) (-8),
-  test "mixed sign" 10 (-3) 7,
-  test "with zero" 42 0 42]
+  -- S(n)
+  test8  "i8 nominal" 3 4 7,
+  test8  "i8 wrap max" 127 1 (-128),
+  test8  "i8 wrap min" (-128) (-1) 127,
+  test8  "i8 max+max" 127 127 (-2),
+  test8  "i8 min+min" (-128) (-128) 0,
+  test16 "i16 nominal" 3 4 7,
+  test16 "i16 wrap max" 32767 1 (-32768),
+  test16 "i16 wrap min" (-32768) (-1) 32767,
+  test16 "i16 max+max" 32767 32767 (-2),
+  test16 "i16 min+min" (-32768) (-32768) 0,
+  test32 "i32 nominal" 3 4 7,
+  test32 "i32 wrap max" 2147483647 1 (-2147483648),
+  test32 "i32 wrap min" (-2147483648) (-1) 2147483647,
+  test32 "i32 max+max" 2147483647 2147483647 (-2),
+  test32 "i32 min+min" (-2147483648) (-2147483648) 0,
+  test64 "i64 nominal" 3 4 7,
+  test64 "i64 wrap max" 9223372036854775807 1 (-9223372036854775808),
+  test64 "i64 wrap min" (-9223372036854775808) (-1) 9223372036854775807,
+  test64 "i64 max+max" 9223372036854775807 9223372036854775807 (-2),
+  test64 "i64 min+min" (-9223372036854775808) (-9223372036854775808) 0,
+  -- U(n)
+  testU8  "u8 nominal" 3 4 7,
+  testU8  "u8 wrap max" 255 1 0,
+  testU8  "u8 max+max" 255 255 254,
+  testU8  "u8 zero identity" 0 255 255,
+  testU16 "u16 nominal" 3 4 7,
+  testU16 "u16 wrap max" 65535 1 0,
+  testU16 "u16 max+max" 65535 65535 65534,
+  testU16 "u16 zero identity" 0 65535 65535,
+  testU32 "u32 nominal" 3 4 7,
+  testU32 "u32 wrap max" 4294967295 1 0,
+  testU32 "u32 max+max" 4294967295 4294967295 4294967294,
+  testU32 "u32 zero identity" 0 4294967295 4294967295,
+  testU64 "u64 nominal" 3 4 7,
+  testU64 "u64 wrap max" 18446744073709551615 1 0,
+  testU64 "u64 max+max" 18446744073709551615 18446744073709551615 18446744073709551614,
+  testU64 "u64 zero identity" 0 18446744073709551615 18446744073709551615,
+  -- B (bigint)
+  testBig "big nominal" 3 4 7,
+  testBig "big past i64" 9223372036854775807 1 9223372036854775808,
+  testBig "big past u64" 18446744073709551615 1 18446744073709551616,
+  testBig "big cancel" (-1267650600228229401496703205376) 1267650600228229401496703205376 0,
+  -- float64
+  testF64 "f64 nominal" 1.5 2.25 3.75,
+  testF64 "f64 classic" 0.1 0.2 0.30000000000000004,
+  testF64 "f64 tie-even down" 9007199254740992.0 1.0 9007199254740992.0,
+  testF64 "f64 tie-even up" 9007199254740994.0 1.0 9007199254740996.0,
+  testF64 "f64 overflow" 1.7976931348623157e308 1.7976931348623157e308 posInf64,
+  testF64 "f64 inf+neginf" posInf64 negInf64 nan64,
+  testF64 "f64 nan" nan64 1.0 nan64,
+  testF64 "f64 zeros mixed" (-0.0) 0.0 0.0,
+  testF64 "f64 zeros neg" (-0.0) (-0.0) (-0.0),
+  -- float32
+  testF32 "f32 nominal" 1.5 2.25 3.75,
+  testF32 "f32 tie-even" 16777216.0 1.0 16777216.0,
+  testF32 "f32 exact step" 16777216.0 2.0 16777218.0,
+  testF32 "f32 classic" 0.1 0.2 0.30000001192092896,
+  testF32 "f32 overflow" 3.4028235e38 3.4028235e38 posInf32,
+  testF32 "f32 inf+neginf" posInf32 negInf32 nan32,
+  testF32 "f32 zeros mixed" (-0.0) 0.0 0.0]
   where
-    test name x y result = primCase name DefMath.add [int32 x, int32 y] (int32 result)
+    test8   name x y r = primCase name DefMath.add [int8 x, int8 y] (int8 r)
+    test16  name x y r = primCase name DefMath.add [int16 x, int16 y] (int16 r)
+    test32  name x y r = primCase name DefMath.add [int32 x, int32 y] (int32 r)
+    test64  name x y r = primCase name DefMath.add [int64 x, int64 y] (int64 r)
+    testU8  name x y r = primCase name DefMath.add [uint8 x, uint8 y] (uint8 r)
+    testU16 name x y r = primCase name DefMath.add [uint16 x, uint16 y] (uint16 r)
+    testU32 name x y r = primCase name DefMath.add [uint32 x, uint32 y] (uint32 r)
+    testU64 name x y r = primCase name DefMath.add [uint64 x, uint64 y] (uint64 r)
+    testBig name x y r = primCase name DefMath.add [bigint x, bigint y] (bigint r)
+    testF64 name x y r = primCase name DefMath.add [float64 x, float64 y] (float64 r)
+    testF32 name x y r = primCase name DefMath.add [float32 x, float32 y] (float32 r)
 
 mathAddFloat64 :: TypedTerm TestGroup
 mathAddFloat64 = subgroup "addFloat64" [
@@ -273,21 +396,95 @@ mathCosh = subgroup "cosh" [
   where
     test name x result = primCase name DefMath.cosh [float64 x] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §12, machine-verified against an
+-- independent IEEE-754 implementation (round4-317-matrix-attack.md §1). Includes the seven
+-- -0.0-bearing rows originally withheld pending confirmation that the -0.0 literal round-trips
+-- through code generation — CONFIRMED (see the plan doc's "-0.0 blocker resolved" note): the
+-- JSON string sentinel survives the full DSL->JSON->Haskell pipeline intact.
+mathDivide :: TypedTerm TestGroup
+mathDivide = subgroup "divide" [
+  test64 "f64 nominal" 7.0 2.0 3.5,
+  test64 "f64 round" 1.0 3.0 (1.0 / 3.0),
+  test64 "f64 pos over pos zero" 1.0 0.0 posInf64,
+  test64 "f64 pos over neg zero" 1.0 (-0.0) negInf64,
+  test64 "f64 neg over pos zero" (-1.0) 0.0 negInf64,
+  test64 "f64 neg over neg zero" (-1.0) (-0.0) posInf64,
+  test64 "f64 zero over zero" 0.0 0.0 nan64,
+  test64 "f64 negzero over zero" (-0.0) 0.0 nan64,
+  test64 "f64 inf over inf" posInf64 posInf64 nan64,
+  test64 "f64 inf over finite" posInf64 2.0 posInf64,
+  test64 "f64 inf over neg finite" posInf64 (-2.0) negInf64,
+  test64 "f64 finite over inf" 1.0 posInf64 0.0,
+  test64 "f64 finite over neg inf" 1.0 negInf64 (-0.0),
+  test64 "f64 NaN dividend" nan64 1.0 nan64,
+  test64 "f64 overflow" 1e308 1e-10 posInf64,
+  test64 "f64 subnormal" 2.2250738585072014e-308 2.0 1.1125369292536007e-308,
+  test64 "f64 underflow" 5e-324 2.0 0.0,
+  test32 "f32 nominal" 7.0 2.0 3.5,
+  test32 "f32 round" 1.0 3.0 (1.0 / 3.0),
+  test32 "f32 pos over pos zero" 1.0 0.0 posInf32,
+  test32 "f32 neg over pos zero" (-1.0) 0.0 negInf32,
+  test32 "f32 pos over neg zero" 1.0 (-0.0) negInf32,
+  test32 "f32 zero over zero" 0.0 0.0 nan32,
+  test32 "f32 inf over inf" posInf32 posInf32 nan32,
+  test32 "f32 finite over inf" 1.0 posInf32 0.0,
+  test32 "f32 overflow" 3.4028235e38 1e-10 posInf32,
+  test32 "f32 subnormal" 1.1754943508222875e-38 2.0 5.877471754111438e-39,
+  test32 "f32 underflow" 1.401298464324817e-45 2.0 0.0]
+  where
+    test64 name x y result = primCase name DefMath.divide [float64 x, float64 y] (float64 result)
+    test32 name x y result = primCase name DefMath.divide [float32 x, float32 y] (float32 result)
+
 mathE :: TypedTerm TestGroup
 mathE = subgroup "e" [
   evalCase "Euler's number"
     (Terms.primitive DefMath.roundFloat64 @@ int32 roundDigits @@ Terms.primitive DefMath.e)
     (float64 (Math.roundFloat64 roundDigits (exp 1)))]
 
+-- | Cases sourced from round3-317-conformance-matrix.md §10 (integral class, all 9 int types).
 mathEven :: TypedTerm TestGroup
 mathEven = subgroup "even" [
-  test "even positive" 4 true,
-  test "odd positive" 5 false,
-  test "even negative" (-4) true,
-  test "odd negative" (-5) false,
-  test "zero" 0 true]
+  test8  "i8 min" (-128) true,
+  test8  "i8 max" 127 false,
+  test8  "i8 zero" 0 true,
+  test8  "i8 neg" (-1) false,
+  test16 "i16 min" (-32768) true,
+  test16 "i16 max" 32767 false,
+  test16 "i16 zero" 0 true,
+  test16 "i16 neg" (-1) false,
+  test32 "i32 min" (-2147483648) true,
+  test32 "i32 max" 2147483647 false,
+  test32 "i32 zero" 0 true,
+  test32 "i32 neg" (-1) false,
+  test64 "i64 min" (-9223372036854775808) true,
+  test64 "i64 max" 9223372036854775807 false,
+  test64 "i64 zero" 0 true,
+  test64 "i64 neg" (-1) false,
+  testU8  "u8 zero" 0 true,
+  testU8  "u8 max" 255 false,
+  testU8  "u8 two" 2 true,
+  testU16 "u16 zero" 0 true,
+  testU16 "u16 max" 65535 false,
+  testU16 "u16 two" 2 true,
+  testU32 "u32 zero" 0 true,
+  testU32 "u32 max" 4294967295 false,
+  testU32 "u32 two" 2 true,
+  testU64 "u64 zero" 0 true,
+  testU64 "u64 max" 18446744073709551615 false,
+  testU64 "u64 two" 2 true,
+  testBig "big large" 1267650600228229401496703205376 true,
+  testBig "big large1" 1267650600228229401496703205377 false,
+  testBig "big neg" (-2) true]
   where
-    test name x result = primCase name DefMath.even [int32 x] result
+    test8   name x r = primCase name DefMath.even [int8 x] r
+    test16  name x r = primCase name DefMath.even [int16 x] r
+    test32  name x r = primCase name DefMath.even [int32 x] r
+    test64  name x r = primCase name DefMath.even [int64 x] r
+    testU8  name x r = primCase name DefMath.even [uint8 x] r
+    testU16 name x r = primCase name DefMath.even [uint16 x] r
+    testU32 name x r = primCase name DefMath.even [uint32 x] r
+    testU64 name x r = primCase name DefMath.even [uint64 x] r
+    testBig name x r = primCase name DefMath.even [bigint x] r
 
 mathExp :: TypedTerm TestGroup
 mathExp = subgroup "exp" [
@@ -356,38 +553,187 @@ mathLogBase = subgroup "logBase" [
   where
     test name base x result = primCase name DefMath.logBase [float64 base, float64 x] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §7 (integral class, all 9 int types)
+-- plus round4-317-matrix-attack.md §3.1's exact-negative-division addition (div(-6,2)=just -3,
+-- the floor-adjust bug detector — no quadrant row above has a zero remainder to catch an
+-- unconditional truncate-then-adjust bug). Machine-verified against an independent
+-- implementation (round4 §1).
 mathDiv :: TypedTerm TestGroup
 mathDiv = subgroup "div" [
-  test "basic division" 10 3 (Just 3),
-  test "exact division" 10 2 (Just 5),
-  test "division by zero" 10 0 Nothing,
-  test "zero divided" 0 5 (Just 0),
-  test "negative dividend" (-10) 3 (Just (-4)),
-  test "negative divisor" 10 (-3) (Just (-4))]
+  test8  "i8 pp" 7 2 (Just 3),
+  test8  "i8 np" (-7) 2 (Just (-4)),
+  test8  "i8 pn" 7 (-2) (Just (-4)),
+  test8  "i8 nn" (-7) (-2) (Just 3),
+  test8  "i8 zero" 7 0 Nothing,
+  test8  "i8 min-neg1" (-128) (-1) (Just (-128)),
+  test8  "i8 np-exact" (-6) 2 (Just (-3)),
+  test16 "i16 pp" 7 2 (Just 3),
+  test16 "i16 np" (-7) 2 (Just (-4)),
+  test16 "i16 pn" 7 (-2) (Just (-4)),
+  test16 "i16 nn" (-7) (-2) (Just 3),
+  test16 "i16 zero" 7 0 Nothing,
+  test16 "i16 min-neg1" (-32768) (-1) (Just (-32768)),
+  test16 "i16 np-exact" (-6) 2 (Just (-3)),
+  test32 "i32 pp" 7 2 (Just 3),
+  test32 "i32 np" (-7) 2 (Just (-4)),
+  test32 "i32 pn" 7 (-2) (Just (-4)),
+  test32 "i32 nn" (-7) (-2) (Just 3),
+  test32 "i32 zero" 7 0 Nothing,
+  test32 "i32 min-neg1" (-2147483648) (-1) (Just (-2147483648)),
+  test32 "i32 np-exact" (-6) 2 (Just (-3)),
+  test32 "i32 pn-exact" 6 (-2) (Just (-3)),
+  test64 "i64 pp" 7 2 (Just 3),
+  test64 "i64 np" (-7) 2 (Just (-4)),
+  test64 "i64 pn" 7 (-2) (Just (-4)),
+  test64 "i64 nn" (-7) (-2) (Just 3),
+  test64 "i64 zero" 7 0 Nothing,
+  test64 "i64 min-neg1" (-9223372036854775808) (-1) (Just (-9223372036854775808)),
+  test64 "i64 np-exact" (-6) 2 (Just (-3)),
+  testU8  "u8 nominal" 7 2 (Just 3),
+  testU8  "u8 zero" 7 0 Nothing,
+  testU8  "u8 max" 255 1 (Just 255),
+  testU16 "u16 nominal" 7 2 (Just 3),
+  testU16 "u16 zero" 7 0 Nothing,
+  testU16 "u16 max" 65535 1 (Just 65535),
+  testU32 "u32 nominal" 7 2 (Just 3),
+  testU32 "u32 zero" 7 0 Nothing,
+  testU32 "u32 max" 4294967295 1 (Just 4294967295),
+  testU64 "u64 nominal" 7 2 (Just 3),
+  testU64 "u64 zero" 7 0 Nothing,
+  testU64 "u64 max" 18446744073709551615 1 (Just 18446744073709551615),
+  testBig "big pp" 7 2 (Just 3),
+  testBig "big np" (-7) 2 (Just (-4)),
+  testBig "big nn" (-7) (-2) (Just 3),
+  testBig "big large" 1267650600228229401496703205376 1125899906842624 (Just 1125899906842624),
+  testBig "big zero" 7 0 Nothing]
   where
-    test name x y result = primCase name DefMath.div [int32 x, int32 y] (optionalInt32 result)
+    test8   name x y r = primCase name DefMath.div [int8 x, int8 y] (optionalOf int8 r)
+    test16  name x y r = primCase name DefMath.div [int16 x, int16 y] (optionalOf int16 r)
+    test32  name x y r = primCase name DefMath.div [int32 x, int32 y] (optionalOf int32 r)
+    test64  name x y r = primCase name DefMath.div [int64 x, int64 y] (optionalOf int64 r)
+    testU8  name x y r = primCase name DefMath.div [uint8 x, uint8 y] (optionalOf uint8 r)
+    testU16 name x y r = primCase name DefMath.div [uint16 x, uint16 y] (optionalOf uint16 r)
+    testU32 name x y r = primCase name DefMath.div [uint32 x, uint32 y] (optionalOf uint32 r)
+    testU64 name x y r = primCase name DefMath.div [uint64 x, uint64 y] (optionalOf uint64 r)
+    testBig name x y r = primCase name DefMath.div [bigint x, bigint y] (optionalOf bigint r)
 
 
+-- | Cases sourced from round3-317-conformance-matrix.md §8 (integral class, all 9 int types;
+-- sign of result follows the divisor) plus round4-317-matrix-attack.md §3.1's exact-negative
+-- addition (mod(-6,2)=just 0, the floor-adjust bug detector for mod).
 mathMod :: TypedTerm TestGroup
 mathMod = subgroup "mod" [
-  test "basic modulo" 10 3 (Just 1),
-  test "exact division" 10 2 (Just 0),
-  test "division by zero" 10 0 Nothing,
-  test "negative dividend" (-10) 3 (Just 2),
-  test "negative divisor" 10 (-3) (Just (-2))]
+  test8  "i8 pp" 7 2 (Just 1),
+  test8  "i8 np" (-7) 2 (Just 1),
+  test8  "i8 pn" 7 (-2) (Just (-1)),
+  test8  "i8 nn" (-7) (-2) (Just (-1)),
+  test8  "i8 zero" 7 0 Nothing,
+  test8  "i8 min-neg1" (-128) (-1) (Just 0),
+  test8  "i8 np-exact" (-6) 2 (Just 0),
+  test16 "i16 pp" 7 2 (Just 1),
+  test16 "i16 np" (-7) 2 (Just 1),
+  test16 "i16 pn" 7 (-2) (Just (-1)),
+  test16 "i16 nn" (-7) (-2) (Just (-1)),
+  test16 "i16 zero" 7 0 Nothing,
+  test16 "i16 min-neg1" (-32768) (-1) (Just 0),
+  test16 "i16 np-exact" (-6) 2 (Just 0),
+  test32 "i32 pp" 7 2 (Just 1),
+  test32 "i32 np" (-7) 2 (Just 1),
+  test32 "i32 pn" 7 (-2) (Just (-1)),
+  test32 "i32 nn" (-7) (-2) (Just (-1)),
+  test32 "i32 zero" 7 0 Nothing,
+  test32 "i32 min-neg1" (-2147483648) (-1) (Just 0),
+  test32 "i32 np-exact" (-6) 2 (Just 0),
+  test64 "i64 pp" 7 2 (Just 1),
+  test64 "i64 np" (-7) 2 (Just 1),
+  test64 "i64 pn" 7 (-2) (Just (-1)),
+  test64 "i64 nn" (-7) (-2) (Just (-1)),
+  test64 "i64 zero" 7 0 Nothing,
+  test64 "i64 min-neg1" (-9223372036854775808) (-1) (Just 0),
+  test64 "i64 np-exact" (-6) 2 (Just 0),
+  testU8  "u8 nominal" 7 2 (Just 1),
+  testU8  "u8 zero" 7 0 Nothing,
+  testU8  "u8 max" 255 2 (Just 1),
+  testU16 "u16 nominal" 7 2 (Just 1),
+  testU16 "u16 zero" 7 0 Nothing,
+  testU16 "u16 max" 65535 2 (Just 1),
+  testU32 "u32 nominal" 7 2 (Just 1),
+  testU32 "u32 zero" 7 0 Nothing,
+  testU32 "u32 max" 4294967295 2 (Just 1),
+  testU64 "u64 nominal" 7 2 (Just 1),
+  testU64 "u64 zero" 7 0 Nothing,
+  testU64 "u64 max" 18446744073709551615 2 (Just 1),
+  testBig "big pp" 7 2 (Just 1),
+  testBig "big np" (-7) 2 (Just 1),
+  testBig "big pn" 7 (-2) (Just (-1)),
+  testBig "big large" 1267650600228229401496703205381 1125899906842624 (Just 5),
+  testBig "big zero" 7 0 Nothing]
   where
-    test name x y result = primCase name DefMath.mod [int32 x, int32 y] (optionalInt32 result)
+    test8   name x y r = primCase name DefMath.mod [int8 x, int8 y] (optionalOf int8 r)
+    test16  name x y r = primCase name DefMath.mod [int16 x, int16 y] (optionalOf int16 r)
+    test32  name x y r = primCase name DefMath.mod [int32 x, int32 y] (optionalOf int32 r)
+    test64  name x y r = primCase name DefMath.mod [int64 x, int64 y] (optionalOf int64 r)
+    testU8  name x y r = primCase name DefMath.mod [uint8 x, uint8 y] (optionalOf uint8 r)
+    testU16 name x y r = primCase name DefMath.mod [uint16 x, uint16 y] (optionalOf uint16 r)
+    testU32 name x y r = primCase name DefMath.mod [uint32 x, uint32 y] (optionalOf uint32 r)
+    testU64 name x y r = primCase name DefMath.mod [uint64 x, uint64 y] (optionalOf uint64 r)
+    testBig name x y r = primCase name DefMath.mod [bigint x, bigint y] (optionalOf bigint r)
 
 
+-- | Cases sourced from round3-317-conformance-matrix.md §9 (integral class; sign of result
+-- follows the dividend — the §8/§9 pairs share inputs but differ in expected sign, catching
+-- any host that wires both names to the same native operator) plus round4-317-matrix-attack.md
+-- §3.1's exact-negative addition (rem(-6,2)=just 0).
 mathRem :: TypedTerm TestGroup
 mathRem = subgroup "rem" [
-  test "basic remainder" 10 3 (Just 1),
-  test "exact division" 10 2 (Just 0),
-  test "division by zero" 10 0 Nothing,
-  test "negative dividend" (-10) 3 (Just (-1)),
-  test "negative divisor" 10 (-3) (Just 1)]
+  test8  "i8 pp" 7 2 (Just 1),
+  test8  "i8 np" (-7) 2 (Just (-1)),
+  test8  "i8 pn" 7 (-2) (Just 1),
+  test8  "i8 nn" (-7) (-2) (Just (-1)),
+  test8  "i8 zero" 7 0 Nothing,
+  test8  "i8 min-neg1" (-128) (-1) (Just 0),
+  test16 "i16 pp" 7 2 (Just 1),
+  test16 "i16 np" (-7) 2 (Just (-1)),
+  test16 "i16 pn" 7 (-2) (Just 1),
+  test16 "i16 nn" (-7) (-2) (Just (-1)),
+  test16 "i16 zero" 7 0 Nothing,
+  test16 "i16 min-neg1" (-32768) (-1) (Just 0),
+  test32 "i32 pp" 7 2 (Just 1),
+  test32 "i32 np" (-7) 2 (Just (-1)),
+  test32 "i32 pn" 7 (-2) (Just 1),
+  test32 "i32 nn" (-7) (-2) (Just (-1)),
+  test32 "i32 zero" 7 0 Nothing,
+  test32 "i32 min-neg1" (-2147483648) (-1) (Just 0),
+  test32 "i32 np-exact" (-6) 2 (Just 0),
+  test64 "i64 pp" 7 2 (Just 1),
+  test64 "i64 np" (-7) 2 (Just (-1)),
+  test64 "i64 pn" 7 (-2) (Just 1),
+  test64 "i64 nn" (-7) (-2) (Just (-1)),
+  test64 "i64 zero" 7 0 Nothing,
+  test64 "i64 min-neg1" (-9223372036854775808) (-1) (Just 0),
+  testU8  "u8 nominal" 7 2 (Just 1),
+  testU8  "u8 zero" 7 0 Nothing,
+  testU16 "u16 nominal" 7 2 (Just 1),
+  testU16 "u16 zero" 7 0 Nothing,
+  testU32 "u32 nominal" 7 2 (Just 1),
+  testU32 "u32 zero" 7 0 Nothing,
+  testU64 "u64 nominal" 7 2 (Just 1),
+  testU64 "u64 zero" 7 0 Nothing,
+  testBig "big pp" 7 2 (Just 1),
+  testBig "big np" (-7) 2 (Just (-1)),
+  testBig "big pn" 7 (-2) (Just 1),
+  testBig "big nn" (-7) (-2) (Just (-1)),
+  testBig "big zero" 7 0 Nothing]
   where
-    test name x y result = primCase name DefMath.rem [int32 x, int32 y] (optionalInt32 result)
+    test8   name x y r = primCase name DefMath.rem [int8 x, int8 y] (optionalOf int8 r)
+    test16  name x y r = primCase name DefMath.rem [int16 x, int16 y] (optionalOf int16 r)
+    test32  name x y r = primCase name DefMath.rem [int32 x, int32 y] (optionalOf int32 r)
+    test64  name x y r = primCase name DefMath.rem [int64 x, int64 y] (optionalOf int64 r)
+    testU8  name x y r = primCase name DefMath.rem [uint8 x, uint8 y] (optionalOf uint8 r)
+    testU16 name x y r = primCase name DefMath.rem [uint16 x, uint16 y] (optionalOf uint16 r)
+    testU32 name x y r = primCase name DefMath.rem [uint32 x, uint32 y] (optionalOf uint32 r)
+    testU64 name x y r = primCase name DefMath.rem [uint64 x, uint64 y] (optionalOf uint64 r)
+    testBig name x y r = primCase name DefMath.rem [bigint x, bigint y] (optionalOf bigint r)
 
 
 -- Float64 tests
@@ -404,15 +750,74 @@ mathRem = subgroup "rem" [
 --     on both the expected value and the test input's expected result to eliminate
 --     platform-dependent rounding in the last digit.
 
+-- | Cases sourced from round3-317-conformance-matrix.md §3 (numeric class, all 11 types),
+-- machine-verified against an independent implementation (round4-317-matrix-attack.md §1).
 mathMul :: TypedTerm TestGroup
 mathMul = subgroup "mul" [
-  test "positive numbers" 3 5 15,
-  test "negative numbers" (-3) (-5) 15,
-  test "mixed sign" 3 (-5) (-15),
-  test "with zero" 42 0 0,
-  test "with one" 42 1 42]
+  test8  "i8 nominal" 6 7 42,
+  test8  "i8 min*neg1" (-128) (-1) (-128),
+  test8  "i8 max*2" 127 2 (-2),
+  test8  "i8 min*2" (-128) 2 0,
+  test8  "i8 max*max" 127 127 1,
+  test16 "i16 nominal" 6 7 42,
+  test16 "i16 min*neg1" (-32768) (-1) (-32768),
+  test16 "i16 max*2" 32767 2 (-2),
+  test16 "i16 min*2" (-32768) 2 0,
+  test16 "i16 max*max" 32767 32767 1,
+  test32 "i32 nominal" 6 7 42,
+  test32 "i32 min*neg1" (-2147483648) (-1) (-2147483648),
+  test32 "i32 max*2" 2147483647 2 (-2),
+  test32 "i32 min*2" (-2147483648) 2 0,
+  test32 "i32 max*max" 2147483647 2147483647 1,
+  test64 "i64 nominal" 6 7 42,
+  test64 "i64 min*neg1" (-9223372036854775808) (-1) (-9223372036854775808),
+  test64 "i64 max*2" 9223372036854775807 2 (-2),
+  test64 "i64 min*2" (-9223372036854775808) 2 0,
+  test64 "i64 max*max" 9223372036854775807 9223372036854775807 1,
+  testU8  "u8 nominal" 6 7 42,
+  testU8  "u8 max*2" 255 2 254,
+  testU8  "u8 max*max" 255 255 1,
+  testU8  "u8 half*half" 16 16 0,
+  testU16 "u16 nominal" 6 7 42,
+  testU16 "u16 max*2" 65535 2 65534,
+  testU16 "u16 max*max" 65535 65535 1,
+  testU16 "u16 half*half" 256 256 0,
+  testU32 "u32 nominal" 6 7 42,
+  testU32 "u32 max*2" 4294967295 2 4294967294,
+  testU32 "u32 max*max" 4294967295 4294967295 1,
+  testU32 "u32 half*half" 65536 65536 0,
+  testU64 "u64 nominal" 6 7 42,
+  testU64 "u64 max*2" 18446744073709551615 2 18446744073709551614,
+  testU64 "u64 max*max" 18446744073709551615 18446744073709551615 1,
+  testU64 "u64 half*half" 4294967296 4294967296 0,
+  testBig "big nominal" 6 7 42,
+  testBig "big exact 2^64" 4294967296 4294967296 18446744073709551616,
+  testBig "big neg large" (-1125899906842624) 1125899906842624 (-1267650600228229401496703205376),
+  testF64 "f64 nominal" 1.5 2.0 3.0,
+  testF64 "f64 round" 0.1 0.1 0.010000000000000002,
+  testF64 "f64 overflow" 1e200 1e200 posInf64,
+  testF64 "f64 underflow" 1e-200 1e-200 0.0,
+  testF64 "f64 underflow neg" (-1e-200) 1e-200 (-0.0),
+  testF64 "f64 inf*zero" posInf64 0.0 nan64,
+  testF64 "f64 negzero" (-1.0) 0.0 (-0.0),
+  testF64 "f64 nan" nan64 0.0 nan64,
+  testF32 "f32 nominal" 1.5 2.0 3.0,
+  testF32 "f32 round down" 16777215.0 16777215.0 281474943156224.0,
+  testF32 "f32 overflow" 1e20 1e20 posInf32,
+  testF32 "f32 underflow" 1e-30 1e-30 0.0,
+  testF32 "f32 negzero" (-1.0) 0.0 (-0.0)]
   where
-    test name x y result = primCase name DefMath.mul [int32 x, int32 y] (int32 result)
+    test8   name x y r = primCase name DefMath.mul [int8 x, int8 y] (int8 r)
+    test16  name x y r = primCase name DefMath.mul [int16 x, int16 y] (int16 r)
+    test32  name x y r = primCase name DefMath.mul [int32 x, int32 y] (int32 r)
+    test64  name x y r = primCase name DefMath.mul [int64 x, int64 y] (int64 r)
+    testU8  name x y r = primCase name DefMath.mul [uint8 x, uint8 y] (uint8 r)
+    testU16 name x y r = primCase name DefMath.mul [uint16 x, uint16 y] (uint16 r)
+    testU32 name x y r = primCase name DefMath.mul [uint32 x, uint32 y] (uint32 r)
+    testU64 name x y r = primCase name DefMath.mul [uint64 x, uint64 y] (uint64 r)
+    testBig name x y r = primCase name DefMath.mul [bigint x, bigint y] (bigint r)
+    testF64 name x y r = primCase name DefMath.mul [float64 x, float64 y] (float64 r)
+    testF32 name x y r = primCase name DefMath.mul [float32 x, float32 y] (float32 r)
 
 mathMulFloat64 :: TypedTerm TestGroup
 mathMulFloat64 = subgroup "mulFloat64" [
@@ -425,22 +830,67 @@ mathMulFloat64 = subgroup "mulFloat64" [
   where
     test name x y result = primCase name DefMath.mulFloat64 [float64 x, float64 y] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §4 (numeric class, all 11 types),
+-- machine-verified against an independent implementation (round4-317-matrix-attack.md §1).
 mathNegate :: TypedTerm TestGroup
 mathNegate = subgroup "negate" [
-  test "positive" 5 (-5),
-  test "negative" (-5) 5,
-  test "zero" 0 0]
+  test8  "i8 nominal" 5 (-5),
+  test8  "i8 min" (-128) (-128),
+  test8  "i8 max" 127 (-127),
+  test16 "i16 nominal" 5 (-5),
+  test16 "i16 min" (-32768) (-32768),
+  test16 "i16 max" 32767 (-32767),
+  test32 "i32 nominal" 5 (-5),
+  test32 "i32 min" (-2147483648) (-2147483648),
+  test32 "i32 max" 2147483647 (-2147483647),
+  test64 "i64 nominal" 5 (-5),
+  test64 "i64 min" (-9223372036854775808) (-9223372036854775808),
+  test64 "i64 max" 9223372036854775807 (-9223372036854775807),
+  testU8  "u8 zero" 0 0,
+  testU8  "u8 one" 1 255,
+  testU8  "u8 max" 255 1,
+  testU8  "u8 nominal" 100 156,
+  testU16 "u16 zero" 0 0,
+  testU16 "u16 one" 1 65535,
+  testU16 "u16 max" 65535 1,
+  testU16 "u16 nominal" 100 65436,
+  testU32 "u32 zero" 0 0,
+  testU32 "u32 one" 1 4294967295,
+  testU32 "u32 max" 4294967295 1,
+  testU32 "u32 nominal" 100 4294967196,
+  testU64 "u64 zero" 0 0,
+  testU64 "u64 one" 1 18446744073709551615,
+  testU64 "u64 max" 18446744073709551615 1,
+  testU64 "u64 nominal" 100 18446744073709551516,
+  testBig "big nominal" (-5) 5,
+  testBig "big large" 1267650600228229401496703205376 (-1267650600228229401496703205376),
+  testF64 "f64 nominal" 1.5 (-1.5),
+  testF64 "f64 poszero" 0.0 (-0.0),
+  testF64 "f64 negzero" (-0.0) 0.0,
+  testF64 "f64 inf" posInf64 negInf64,
+  testF64 "f64 nan" nan64 nan64,
+  testF32 "f32 nominal" 1.5 (-1.5),
+  testF32 "f32 poszero" 0.0 (-0.0),
+  testF32 "f32 negzero" (-0.0) 0.0,
+  testF32 "f32 neginf" negInf32 posInf32]
   where
-    test name x result = primCase name DefMath.negate [int32 x] (int32 result)
+    test8   name x r = primCase name DefMath.negate [int8 x] (int8 r)
+    test16  name x r = primCase name DefMath.negate [int16 x] (int16 r)
+    test32  name x r = primCase name DefMath.negate [int32 x] (int32 r)
+    test64  name x r = primCase name DefMath.negate [int64 x] (int64 r)
+    testU8  name x r = primCase name DefMath.negate [uint8 x] (uint8 r)
+    testU16 name x r = primCase name DefMath.negate [uint16 x] (uint16 r)
+    testU32 name x r = primCase name DefMath.negate [uint32 x] (uint32 r)
+    testU64 name x r = primCase name DefMath.negate [uint64 x] (uint64 r)
+    testBig name x r = primCase name DefMath.negate [bigint x] (bigint r)
+    testF64 name x r = primCase name DefMath.negate [float64 x] (float64 r)
+    testF32 name x r = primCase name DefMath.negate [float32 x] (float32 r)
 
 mathNegateFloat64 :: TypedTerm TestGroup
 mathNegateFloat64 = subgroup "negateFloat64" [
   test "positive" 5.0 (-5.0),
   test "negative" (-5.0) 5.0,
-  -- "zero" case (negate 0.0 = -0.0) is intentionally omitted:
-  -- the Haskell coder normalizes the literal -0.0 to 0.0 when regenerating
-  -- the test file, so the expected side drifts away from the actual side.
-  -- Tracking: follow-up to #340 on IEEE negative zero preservation.
+  test "zero" 0.0 (-0.0),
   test "fractional" 1.5 (-1.5)]
   where
     test name x result = primCase name DefMath.negateFloat64 [float64 x] (float64 result)
@@ -469,15 +919,50 @@ mathNumericDispatch = supergroup "polymorphic numeric dispatch" [
     primCase "int64"   DefMath.negate [int64 1000000000000] (int64 (-1000000000000)),
     primCase "bigint"  DefMath.negate [bigint 100000000000000000000] (bigint (-100000000000000000000))]]
 
+-- | Cases sourced from round3-317-conformance-matrix.md §11 (integral class, all 9 int types).
 mathOdd :: TypedTerm TestGroup
 mathOdd = subgroup "odd" [
-  test "odd positive" 5 true,
-  test "even positive" 4 false,
-  test "odd negative" (-5) true,
-  test "even negative" (-4) false,
-  test "zero" 0 false]
+  test8  "i8 min" (-128) false,
+  test8  "i8 max" 127 true,
+  test8  "i8 zero" 0 false,
+  test8  "i8 neg" (-1) true,
+  test16 "i16 min" (-32768) false,
+  test16 "i16 max" 32767 true,
+  test16 "i16 zero" 0 false,
+  test16 "i16 neg" (-1) true,
+  test32 "i32 min" (-2147483648) false,
+  test32 "i32 max" 2147483647 true,
+  test32 "i32 zero" 0 false,
+  test32 "i32 neg" (-1) true,
+  test64 "i64 min" (-9223372036854775808) false,
+  test64 "i64 max" 9223372036854775807 true,
+  test64 "i64 zero" 0 false,
+  test64 "i64 neg" (-1) true,
+  testU8  "u8 zero" 0 false,
+  testU8  "u8 one" 1 true,
+  testU8  "u8 max" 255 true,
+  testU16 "u16 zero" 0 false,
+  testU16 "u16 one" 1 true,
+  testU16 "u16 max" 65535 true,
+  testU32 "u32 zero" 0 false,
+  testU32 "u32 one" 1 true,
+  testU32 "u32 max" 4294967295 true,
+  testU64 "u64 zero" 0 false,
+  testU64 "u64 one" 1 true,
+  testU64 "u64 max" 18446744073709551615 true,
+  testBig "big large" 1267650600228229401496703205376 false,
+  testBig "big large1" 1267650600228229401496703205377 true,
+  testBig "big neg" (-3) true]
   where
-    test name x result = primCase name DefMath.odd [int32 x] result
+    test8   name x r = primCase name DefMath.odd [int8 x] r
+    test16  name x r = primCase name DefMath.odd [int16 x] r
+    test32  name x r = primCase name DefMath.odd [int32 x] r
+    test64  name x r = primCase name DefMath.odd [int64 x] r
+    testU8  name x r = primCase name DefMath.odd [uint8 x] r
+    testU16 name x r = primCase name DefMath.odd [uint16 x] r
+    testU32 name x r = primCase name DefMath.odd [uint32 x] r
+    testU64 name x r = primCase name DefMath.odd [uint64 x] r
+    testBig name x r = primCase name DefMath.odd [bigint x] r
 
 mathPi :: TypedTerm TestGroup
 mathPi = subgroup "pi" [
@@ -559,13 +1044,65 @@ mathRoundFloat64 = subgroup "roundFloat64" [
   where
     test name n x result = primCase name DefMath.roundFloat64 [int32 n, float64 x] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §6 (numeric class, all 11 types),
+-- machine-verified against an independent implementation (round4-317-matrix-attack.md §1).
+-- The float rows are the design's §4.3 pin: a naive if x>0/elif x<0/else 0 implementation
+-- fails signum(-0.0) and signum(NaN).
 mathSignum :: TypedTerm TestGroup
 mathSignum = subgroup "signum" [
-  test "positive" 5 1,
-  test "negative" (-5) (-1),
-  test "zero" 0 0]
+  test8  "i8 min" (-128) (-1),
+  test8  "i8 zero" 0 0,
+  test8  "i8 max" 127 1,
+  test16 "i16 min" (-32768) (-1),
+  test16 "i16 zero" 0 0,
+  test16 "i16 max" 32767 1,
+  test32 "i32 min" (-2147483648) (-1),
+  test32 "i32 zero" 0 0,
+  test32 "i32 max" 2147483647 1,
+  test64 "i64 min" (-9223372036854775808) (-1),
+  test64 "i64 zero" 0 0,
+  test64 "i64 max" 9223372036854775807 1,
+  testU8  "u8 zero" 0 0,
+  testU8  "u8 one" 1 1,
+  testU8  "u8 max" 255 1,
+  testU16 "u16 zero" 0 0,
+  testU16 "u16 one" 1 1,
+  testU16 "u16 max" 65535 1,
+  testU32 "u32 zero" 0 0,
+  testU32 "u32 one" 1 1,
+  testU32 "u32 max" 4294967295 1,
+  testU64 "u64 zero" 0 0,
+  testU64 "u64 one" 1 1,
+  testU64 "u64 max" 18446744073709551615 1,
+  testBig "big neg" (-1267650600228229401496703205376) (-1),
+  testBig "big zero" 0 0,
+  testBig "big pos" 1267650600228229401496703205376 1,
+  testF64 "f64 pos" 3.5 1.0,
+  testF64 "f64 neg" (-3.5) (-1.0),
+  testF64 "f64 poszero" 0.0 0.0,
+  testF64 "f64 negzero" (-0.0) (-0.0),
+  testF64 "f64 posinf" posInf64 1.0,
+  testF64 "f64 neginf" negInf64 (-1.0),
+  testF64 "f64 nan" nan64 nan64,
+  testF32 "f32 pos" 3.5 1.0,
+  testF32 "f32 neg" (-3.5) (-1.0),
+  testF32 "f32 poszero" 0.0 0.0,
+  testF32 "f32 negzero" (-0.0) (-0.0),
+  testF32 "f32 posinf" posInf32 1.0,
+  testF32 "f32 neginf" negInf32 (-1.0),
+  testF32 "f32 nan" nan32 nan32]
   where
-    test name x result = primCase name DefMath.signum [int32 x] (int32 result)
+    test8   name x r = primCase name DefMath.signum [int8 x] (int8 r)
+    test16  name x r = primCase name DefMath.signum [int16 x] (int16 r)
+    test32  name x r = primCase name DefMath.signum [int32 x] (int32 r)
+    test64  name x r = primCase name DefMath.signum [int64 x] (int64 r)
+    testU8  name x r = primCase name DefMath.signum [uint8 x] (uint8 r)
+    testU16 name x r = primCase name DefMath.signum [uint16 x] (uint16 r)
+    testU32 name x r = primCase name DefMath.signum [uint32 x] (uint32 r)
+    testU64 name x r = primCase name DefMath.signum [uint64 x] (uint64 r)
+    testBig name x r = primCase name DefMath.signum [bigint x] (bigint r)
+    testF64 name x r = primCase name DefMath.signum [float64 x] (float64 r)
+    testF32 name x r = primCase name DefMath.signum [float32 x] (float32 r)
 
 mathSin :: TypedTerm TestGroup
 mathSin = subgroup "sin" [
@@ -609,14 +1146,63 @@ mathSqrt = subgroup "sqrt" [
   where
     test name x result = primCase name DefMath.sqrt [float64 x] (float64 result)
 
+-- | Cases sourced from round3-317-conformance-matrix.md §2 (numeric class, all 11 types),
+-- machine-verified against an independent implementation (round4-317-matrix-attack.md §1).
 mathSub :: TypedTerm TestGroup
 mathSub = subgroup "sub" [
-  test "positive numbers" 10 3 7,
-  test "negative numbers" (-10) (-3) (-7),
-  test "mixed sign" 10 (-3) 13,
-  test "with zero" 42 0 42]
+  test8  "i8 nominal" 10 3 7,
+  test8  "i8 wrap min" (-128) 1 127,
+  test8  "i8 neg min" 0 (-128) (-128),
+  test8  "i8 wrap max" 127 (-1) (-128),
+  test16 "i16 nominal" 10 3 7,
+  test16 "i16 wrap min" (-32768) 1 32767,
+  test16 "i16 neg min" 0 (-32768) (-32768),
+  test16 "i16 wrap max" 32767 (-1) (-32768),
+  test32 "i32 nominal" 10 3 7,
+  test32 "i32 wrap min" (-2147483648) 1 2147483647,
+  test32 "i32 neg min" 0 (-2147483648) (-2147483648),
+  test32 "i32 wrap max" 2147483647 (-1) (-2147483648),
+  test64 "i64 nominal" 10 3 7,
+  test64 "i64 wrap min" (-9223372036854775808) 1 9223372036854775807,
+  test64 "i64 neg min" 0 (-9223372036854775808) (-9223372036854775808),
+  test64 "i64 wrap max" 9223372036854775807 (-1) (-9223372036854775808),
+  testU8  "u8 nominal" 10 3 7,
+  testU8  "u8 wrap zero" 0 1 255,
+  testU8  "u8 wrap below" 3 5 254,
+  testU16 "u16 nominal" 10 3 7,
+  testU16 "u16 wrap zero" 0 1 65535,
+  testU16 "u16 wrap below" 3 5 65534,
+  testU32 "u32 nominal" 10 3 7,
+  testU32 "u32 wrap zero" 0 1 4294967295,
+  testU32 "u32 wrap below" 3 5 4294967294,
+  testU64 "u64 nominal" 10 3 7,
+  testU64 "u64 wrap zero" 0 1 18446744073709551615,
+  testU64 "u64 wrap below" 3 5 18446744073709551614,
+  testBig "big nominal" 10 3 7,
+  testBig "big negative" 0 18446744073709551616 (-18446744073709551616),
+  testBig "big large" 1267650600228229401496703205376 1 1267650600228229401496703205375,
+  testF64 "f64 nominal" 5.5 2.25 3.25,
+  testF64 "f64 inf-inf" posInf64 posInf64 nan64,
+  testF64 "f64 x minus x" 1.0 1.0 0.0,
+  testF64 "f64 negzero" (-0.0) 0.0 (-0.0),
+  testF64 "f64 poszero" 0.0 (-0.0) 0.0,
+  testF64 "f64 nan" nan64 nan64 nan64,
+  testF32 "f32 nominal" 5.5 2.25 3.25,
+  testF32 "f32 tie-even" 16777218.0 1.0 16777216.0,
+  testF32 "f32 inf-inf" posInf32 posInf32 nan32,
+  testF32 "f32 x minus x" 1.0 1.0 0.0]
   where
-    test name x y result = primCase name DefMath.sub [int32 x, int32 y] (int32 result)
+    test8   name x y r = primCase name DefMath.sub [int8 x, int8 y] (int8 r)
+    test16  name x y r = primCase name DefMath.sub [int16 x, int16 y] (int16 r)
+    test32  name x y r = primCase name DefMath.sub [int32 x, int32 y] (int32 r)
+    test64  name x y r = primCase name DefMath.sub [int64 x, int64 y] (int64 r)
+    testU8  name x y r = primCase name DefMath.sub [uint8 x, uint8 y] (uint8 r)
+    testU16 name x y r = primCase name DefMath.sub [uint16 x, uint16 y] (uint16 r)
+    testU32 name x y r = primCase name DefMath.sub [uint32 x, uint32 y] (uint32 r)
+    testU64 name x y r = primCase name DefMath.sub [uint64 x, uint64 y] (uint64 r)
+    testBig name x y r = primCase name DefMath.sub [bigint x, bigint y] (bigint r)
+    testF64 name x y r = primCase name DefMath.sub [float64 x, float64 y] (float64 r)
+    testF32 name x y r = primCase name DefMath.sub [float32 x, float32 y] (float32 r)
 
 mathSubFloat64 :: TypedTerm TestGroup
 mathSubFloat64 = subgroup "subFloat64" [
@@ -679,6 +1265,16 @@ negInf64 = -1/0
 
 posInf64 :: Double
 posInf64 = 1/0
+
+-- | Special float32 values: positive infinity, negative infinity, and NaN.
+nan32 :: Float
+nan32 = 0/0
+
+negInf32 :: Float
+negInf32 = -1/0
+
+posInf32 :: Float
+posInf32 = 1/0
 
 -- | Number of significant digits to use when rounding transcendental results
 -- for platform-independent comparison. 12 digits is well within float64 precision
