@@ -1,7 +1,7 @@
 package hydra.overlay.scala.lib
 
 /** Runtime dispatch for the constraint-polymorphic ('numeric') arithmetic primitives
-  * (add/sub/mul/negate).
+  * (add/sub/mul/negate/abs/signum).
   *
   * These primitives are registered with a `numeric x => x -> x -> x` type scheme (the constraint
   * is carried in the type for inference only), so generated code calls them as a generic
@@ -34,13 +34,13 @@ object NumericDispatch:
 
   def applyNativeUnary[A](opName: String, x: A): A =
     x.asInstanceOf[Any] match
-      case a: Double => (-a).asInstanceOf[A]
-      case a: Float => (-a).asInstanceOf[A]
-      case a: BigInt => (-a).asInstanceOf[A]
-      case a: Byte => wrapSigned(8, -BigInt(a)).toByte.asInstanceOf[A]
-      case a: Short => wrapSigned(16, -BigInt(a)).toShort.asInstanceOf[A]
-      case a: Int => wrapSigned(32, -BigInt(a)).toInt.asInstanceOf[A]
-      case a: Long => wrapSigned(64, -BigInt(a)).toLong.asInstanceOf[A]
+      case a: Double => applyFloatUnaryOp(opName, a).asInstanceOf[A]
+      case a: Float => applyFloat32UnaryOp(opName, a).asInstanceOf[A]
+      case a: BigInt => applyIntegerUnaryOp(opName, a).asInstanceOf[A]
+      case a: Byte => wrapSigned(8, applyIntegerUnaryOp(opName, BigInt(a))).toByte.asInstanceOf[A]
+      case a: Short => wrapSigned(16, applyIntegerUnaryOp(opName, BigInt(a))).toShort.asInstanceOf[A]
+      case a: Int => wrapSigned(32, applyIntegerUnaryOp(opName, BigInt(a))).toInt.asInstanceOf[A]
+      case a: Long => wrapSigned(64, applyIntegerUnaryOp(opName, BigInt(a))).toLong.asInstanceOf[A]
       case a => throw new RuntimeException(s"hydra.lib.math.$opName: operand is not numeric: $a")
 
   private def applyIntegerOp(opName: String, a: BigInt, b: BigInt): BigInt = opName match
@@ -59,6 +59,24 @@ object NumericDispatch:
     case "add" => a + b
     case "sub" => a - b
     case "mul" => a * b
+    case _ => throw new RuntimeException(s"hydra.lib.math.$opName: unsupported float op")
+
+  private def applyIntegerUnaryOp(opName: String, a: BigInt): BigInt = opName match
+    case "negate" => -a
+    case "abs" => a.abs
+    case "signum" => a.signum
+    case _ => throw new RuntimeException(s"hydra.lib.math.$opName: unsupported integer op")
+
+  private def applyFloatUnaryOp(opName: String, a: Double): Double = opName match
+    case "negate" => -a
+    case "abs" => scala.math.abs(a)
+    case "signum" => scala.math.signum(a)
+    case _ => throw new RuntimeException(s"hydra.lib.math.$opName: unsupported float op")
+
+  private def applyFloat32UnaryOp(opName: String, a: Float): Float = opName match
+    case "negate" => -a
+    case "abs" => scala.math.abs(a)
+    case "signum" => scala.math.signum(a)
     case _ => throw new RuntimeException(s"hydra.lib.math.$opName: unsupported float op")
 
   // Two's-complement wraparound narrowing back to the source width, mirroring Java's

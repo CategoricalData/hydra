@@ -272,6 +272,78 @@ object Libraries:
     val m = BigInt(1) << bits
     ((r % m) + m) % m
 
+  // --- Constraint-polymorphic ('fractional') division and ('integral') div/mod/rem/even/odd ---
+  //
+  // Mirror the numeric dispatch above: identity (Term) coders, dispatch on the operand's literal
+  // variant. div/mod are floor-based (sign follows the divisor); rem is truncated (sign follows
+  // the dividend) — matching the Haskell/Java/Python hosts' div/mod vs rem split. All three guard
+  // the zero-divisor case (returning None) before computing. The (minBound, -1) boundary needs an
+  // explicit wrap-to-minBound on div only (mirroring the Haskell/Java hosts); mod/rem have no
+  // overflow there (the remainder is always representable).
+
+  private def divideTerm(x: Term, y: Term): Term =
+    (strip(x), strip(y)) match
+      case (Term.literal(Literal.float(fx)), Term.literal(Literal.float(fy))) =>
+        Term.literal(Literal.float(floatBinary("divide", (_ / _), fx, fy)))
+      case _ => throw new RuntimeException("hydra.lib.math.divide: operands are not the same fractional kind")
+
+  private def integralBinaryMaybe(opName: String, op: (BigInt, BigInt) => BigInt, wrapMinBoundaryOnDiv: Boolean)(x: Term, y: Term): Option[Term] =
+    (strip(x), strip(y)) match
+      case (Term.literal(Literal.integer(ix)), Term.literal(Literal.integer(iy))) =>
+        integralBinary(opName, op, wrapMinBoundaryOnDiv, ix, iy).map(iv => Term.literal(Literal.integer(iv)))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: operands are not the same integral kind")
+
+  private def integralBinary(opName: String, op: (BigInt, BigInt) => BigInt, wrapMinBoundaryOnDiv: Boolean, ix: IntegerValue, iy: IntegerValue): Option[IntegerValue] =
+    def guarded(bits: Int, signed: Boolean, a: BigInt, b: BigInt): Option[BigInt] =
+      if b == 0 then None
+      else if wrapMinBoundaryOnDiv && signed then
+        val m = BigInt(1) << bits
+        val minBound = -(m / 2)
+        if a == minBound && b == -1 then Some(minBound) else Some(op(a, b))
+      else Some(op(a, b))
+    (ix, iy) match
+      case (IntegerValue.bigint(a), IntegerValue.bigint(b)) => guarded(0, false, a, b).map(IntegerValue.bigint(_))
+      case (IntegerValue.int8(a), IntegerValue.int8(b)) => guarded(8, true, BigInt(a), BigInt(b)).map(r => IntegerValue.int8(wrapSigned(8, r).toByte))
+      case (IntegerValue.int16(a), IntegerValue.int16(b)) => guarded(16, true, BigInt(a), BigInt(b)).map(r => IntegerValue.int16(wrapSigned(16, r).toShort))
+      case (IntegerValue.int32(a), IntegerValue.int32(b)) => guarded(32, true, BigInt(a), BigInt(b)).map(r => IntegerValue.int32(wrapSigned(32, r).toInt))
+      case (IntegerValue.int64(a), IntegerValue.int64(b)) => guarded(64, true, BigInt(a), BigInt(b)).map(r => IntegerValue.int64(wrapSigned(64, r).toLong))
+      case (IntegerValue.uint8(a), IntegerValue.uint8(b)) => guarded(8, false, BigInt(a & 0xff), BigInt(b & 0xff)).map(r => IntegerValue.uint8(wrapUnsigned(8, r).toByte))
+      case (IntegerValue.uint16(a), IntegerValue.uint16(b)) => guarded(16, false, BigInt(a), BigInt(b)).map(r => IntegerValue.uint16(wrapUnsigned(16, r).toInt))
+      case (IntegerValue.uint32(a), IntegerValue.uint32(b)) => guarded(32, false, BigInt(a), BigInt(b)).map(r => IntegerValue.uint32(wrapUnsigned(32, r).toLong))
+      case (IntegerValue.uint64(a), IntegerValue.uint64(b)) => guarded(64, false, a, b).map(r => IntegerValue.uint64(wrapUnsigned(64, r)))
+      case _ => throw new RuntimeException(s"hydra.lib.math.$opName: integer operands differ in precision")
+
+  private def floorDiv(a: BigInt, b: BigInt): BigInt =
+    val q = a / b
+    if (a % b != 0) && ((a < 0) != (b < 0)) then q - 1 else q
+
+  private def floorMod(a: BigInt, b: BigInt): BigInt =
+    val r = a % b
+    if r != 0 && ((r < 0) != (b < 0)) then r + b else r
+
+  private def divTerm(x: Term, y: Term): Option[Term] = integralBinaryMaybe("div", floorDiv, wrapMinBoundaryOnDiv = true)(x, y)
+  private def modTerm(x: Term, y: Term): Option[Term] = integralBinaryMaybe("mod", floorMod, wrapMinBoundaryOnDiv = false)(x, y)
+  private def remTerm(x: Term, y: Term): Option[Term] = integralBinaryMaybe("rem", (_ % _), wrapMinBoundaryOnDiv = false)(x, y)
+
+  private def integralToBigInt(v: IntegerValue): BigInt = v match
+    case IntegerValue.bigint(a) => a
+    case IntegerValue.int8(a) => BigInt(a)
+    case IntegerValue.int16(a) => BigInt(a)
+    case IntegerValue.int32(a) => BigInt(a)
+    case IntegerValue.int64(a) => BigInt(a)
+    case IntegerValue.uint8(a) => BigInt(a & 0xff)
+    case IntegerValue.uint16(a) => BigInt(a)
+    case IntegerValue.uint32(a) => BigInt(a)
+    case IntegerValue.uint64(a) => a
+
+  private def evenTerm(x: Term): Boolean = strip(x) match
+    case Term.literal(Literal.integer(iv)) => integralToBigInt(iv) % 2 == 0
+    case _ => throw new RuntimeException("hydra.lib.math.even: operand is not integral")
+
+  private def oddTerm(x: Term): Boolean = strip(x) match
+    case Term.literal(Literal.integer(iv)) => integralToBigInt(iv) % 2 != 0
+    case _ => throw new RuntimeException("hydra.lib.math.odd: operand is not integral")
+
   private def mkComparison(c: hydra.util.Comparison): Term =
     val fieldName = c match
       case hydra.util.Comparison.lessThan => "lessThan"
@@ -895,32 +967,39 @@ object Libraries:
   private def mathPrimitives(): Map[String, Primitive] =
     val x = tVar("x")
     val xNumeric = Seq(("x", Seq("numeric")))
+    val xIntegral = Seq(("x", Seq("integral")))
+    val xFractional = Seq(("x", Seq("fractional")))
     Map(
-      // Int32 primitives
-      hydra.lib.math.abs.name -> mkPrimImpl(hydra.lib.math.abs.name, tMono(tFun(tInt32, tInt32)),
-        impl1(a => mkInt32(math.abs(exInt32(a))))),
+      // Constraint-polymorphic ('numeric') primitives
+      hydra.lib.math.abs.name -> mkPrimImpl(hydra.lib.math.abs.name, tSchemeConstrained(xNumeric, tFun(x, x)),
+        impl1(numericUnary("abs", (a: BigInt) => a.abs, (a: Double) => scala.math.abs(a)))),
       hydra.lib.math.add.name -> mkPrimImpl(hydra.lib.math.add.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
         impl2(numericBinary("add", (_ + _), (_ + _)))),
-      hydra.lib.math.even.name -> mkPrimImpl(hydra.lib.math.even.name, tMono(tFun(tInt32, tBool)),
-        impl1(a => mkBool(math.even(exInt32(a))))),
       hydra.lib.math.mul.name -> mkPrimImpl(hydra.lib.math.mul.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
         impl2(numericBinary("mul", (_ * _), (_ * _)))),
       hydra.lib.math.negate.name -> mkPrimImpl(hydra.lib.math.negate.name, tSchemeConstrained(xNumeric, tFun(x, x)),
         impl1(numericUnary("negate", a => -a, a => -a))),
-      hydra.lib.math.odd.name -> mkPrimImpl(hydra.lib.math.odd.name, tMono(tFun(tInt32, tBool)),
-        impl1(a => mkBool(math.odd(exInt32(a))))),
-      hydra.lib.math.range.name -> mkPrimImpl(hydra.lib.math.range.name, tMono(tFun(tInt32, tFun(tInt32, tList(tInt32)))),
-        impl2((a, b) => mkList(math.range(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.signum.name -> mkPrimImpl(hydra.lib.math.signum.name, tMono(tFun(tInt32, tInt32)),
-        impl1(a => mkInt32(math.signum(exInt32(a))))),
+      hydra.lib.math.signum.name -> mkPrimImpl(hydra.lib.math.signum.name, tSchemeConstrained(xNumeric, tFun(x, x)),
+        impl1(numericUnary("signum", (a: BigInt) => a.signum, (a: Double) => scala.math.signum(a)))),
       hydra.lib.math.sub.name -> mkPrimImpl(hydra.lib.math.sub.name, tSchemeConstrained(xNumeric, tFun(x, tFun(x, x))),
         impl2(numericBinary("sub", (_ - _), (_ - _)))),
-      hydra.lib.math.div.name -> mkPrimImpl(hydra.lib.math.div.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.div(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.mod.name -> mkPrimImpl(hydra.lib.math.mod.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.mod(exInt32(a))(exInt32(b)).map(mkInt32)))),
-      hydra.lib.math.rem.name -> mkPrimImpl(hydra.lib.math.rem.name, tMono(tFun(tInt32, tFun(tInt32, tOpt(tInt32)))),
-        impl2((a, b) => mkMaybe(math.rem(exInt32(a))(exInt32(b)).map(mkInt32)))),
+      // Constraint-polymorphic ('integral') primitives
+      hydra.lib.math.div.name -> mkPrimImpl(hydra.lib.math.div.name, tSchemeConstrained(xIntegral, tFun(x, tFun(x, tOpt(x)))),
+        impl2((a, b) => mkMaybe(divTerm(a, b)))),
+      hydra.lib.math.mod.name -> mkPrimImpl(hydra.lib.math.mod.name, tSchemeConstrained(xIntegral, tFun(x, tFun(x, tOpt(x)))),
+        impl2((a, b) => mkMaybe(modTerm(a, b)))),
+      hydra.lib.math.rem.name -> mkPrimImpl(hydra.lib.math.rem.name, tSchemeConstrained(xIntegral, tFun(x, tFun(x, tOpt(x)))),
+        impl2((a, b) => mkMaybe(remTerm(a, b)))),
+      hydra.lib.math.even.name -> mkPrimImpl(hydra.lib.math.even.name, tSchemeConstrained(xIntegral, tFun(x, tBool)),
+        impl1(a => mkBool(evenTerm(a)))),
+      hydra.lib.math.odd.name -> mkPrimImpl(hydra.lib.math.odd.name, tSchemeConstrained(xIntegral, tFun(x, tBool)),
+        impl1(a => mkBool(oddTerm(a)))),
+      // Constraint-polymorphic ('fractional') primitives
+      hydra.lib.math.divide.name -> mkPrimImpl(hydra.lib.math.divide.name, tSchemeConstrained(xFractional, tFun(x, tFun(x, x))),
+        impl2(divideTerm)),
+      // Int32 primitives
+      hydra.lib.math.range.name -> mkPrimImpl(hydra.lib.math.range.name, tMono(tFun(tInt32, tFun(tInt32, tList(tInt32)))),
+        impl2((a, b) => mkList(math.range(exInt32(a))(exInt32(b)).map(mkInt32)))),
       // Float64 primitives
       hydra.lib.math.addFloat64.name -> mkPrimImpl(hydra.lib.math.addFloat64.name, tMono(tFun(tFloat64, tFun(tFloat64, tFloat64))),
         impl2((a, b) => mkFloat64(math.addFloat64(exFloat64(a))(exFloat64(b))))),

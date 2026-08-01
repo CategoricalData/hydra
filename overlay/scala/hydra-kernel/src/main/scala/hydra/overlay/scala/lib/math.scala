@@ -1,14 +1,28 @@
 package hydra.overlay.scala.lib
 
 object math:
-  def abs(x: Int): Int = scala.math.abs(x)
+  // Constraint-polymorphic ('numeric'/'integral'/'fractional') primitives: the type scheme
+  // carries the class constraint (`numeric x => x -> x -> x`, `integral x => x -> x -> optional
+  // x`, `fractional x => x -> x -> x`) for inference only, so the generated call site is generic
+  // (e.g. `math.add[A](x)(y)`) with no evidence threaded from the caller. numeric (add/sub/mul/
+  // negate/abs/signum) dispatches on the boxed representation via NumericDispatch, mirroring
+  // Java's NumericDispatch.applyNativeBinary. fractional (divide) is unambiguous (float32/
+  // float64 only) and implemented directly below.
+  //
+  // integral (div/mod/rem/even/odd) dispatches via IntegralDispatch, EXCEPT for a known
+  // structural gap: uint8/16/32/64's boxed representation collides with a narrower signed type
+  // (uint8->Byte collides with int8, uint16->Int collides with int32, uint32->Long collides with
+  // int64), so a generic instanceof-style dispatch cannot recover the intended width/signedness
+  // for THOSE FOUR TYPES once erased -- the same structural gap documented in Java's
+  // NumericDispatch for uint64/bigint. This IS exercised by generated code (confirmed the hard
+  // way: json/writer.scala's hex-nibble encoder calls math.div/math.mod on plain Int, i.e.
+  // int32, which is unambiguous), so div/mod/rem/even/odd must exist and work correctly for the
+  // unambiguous cases (int8/16/32/64, bigint); IntegralDispatch throws loudly if it ever receives
+  // an ambiguous uint8/16/32 value rather than silently misinterpreting it as the colliding
+  // signed type.
+  def abs[A](x: A): A = NumericDispatch.applyNativeUnary("abs", x)
   def acos(x: Double): Double = scala.math.acos(x)
   def acosh(x: Double): Double = scala.math.log(x + scala.math.sqrt(x * x - 1))
-  // Constraint-polymorphic ('numeric') addition: the type scheme is `numeric x => x -> x -> x`,
-  // so the generated call site is `math.add[A](x)(y)` for whatever concrete numeric type A
-  // inference resolved. No Numeric[A] evidence is threaded from the caller (Hydra's inference
-  // resolves the constraint, not a Scala-level implicit), so A is dispatched at runtime on its
-  // boxed representation, mirroring Java's NumericDispatch.applyNativeBinary.
   def add[A](x: A)(y: A): A = NumericDispatch.applyNativeBinary("add", x, y)
   def addFloat64(x: Double)(y: Double): Double = x + y
   def asin(x: Double): Double = scala.math.asin(x)
@@ -27,8 +41,14 @@ object math:
     if x.isNaN || x.isInfinite then x else scala.math.ceil(x)
   def cos(x: Double): Double = scala.math.cos(x)
   def cosh(x: Double): Double = scala.math.cosh(x)
+  def div[A](x: A)(y: A): Option[A] = IntegralDispatch.applyNativeDiv(x, y)
+  def divide[A](x: A)(y: A): A =
+    (x.asInstanceOf[Any], y.asInstanceOf[Any]) match
+      case (a: Double, b: Double) => (a / b).asInstanceOf[A]
+      case (a: Float, b: Float) => (a / b).asInstanceOf[A]
+      case (a, _) => throw new RuntimeException(s"hydra.lib.math.divide: operand is not fractional: $a")
   def e: Double = scala.math.E
-  def even(x: Int): Boolean = x % 2 == 0
+  def even[A](x: A): Boolean = IntegralDispatch.applyNativeEven(x)
   def exp(x: Double): Double = scala.math.exp(x)
   // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
   def floor(x: Double): Double =
@@ -36,20 +56,19 @@ object math:
   def log(x: Double): Double = scala.math.log(x)
   def logBase(base: Double)(x: Double): Double = scala.math.log(x) / scala.math.log(base)
   def max(x: Int)(y: Int): Int = scala.math.max(x, y)
-  def div(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(Math.floorDiv(x, y))
-  def mod(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(Math.floorMod(x, y))
   def maybePred(x: Int): Option[Int] = if x == -2147483648 then None else Some(x - 1)
-  def rem(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(x % y)
   def maybeSucc(x: Int): Option[Int] = if x == 2147483647 then None else Some(x + 1)
   def min(x: Int)(y: Int): Int = scala.math.min(x, y)
+  def mod[A](x: A)(y: A): Option[A] = IntegralDispatch.applyNativeMod(x, y)
   def mul[A](x: A)(y: A): A = NumericDispatch.applyNativeBinary("mul", x, y)
   def mulFloat64(x: Double)(y: Double): Double = x * y
   def negate[A](x: A): A = NumericDispatch.applyNativeUnary("negate", x)
   def negateFloat64(x: Double): Double = -x
-  def odd(x: Int): Boolean = x % 2 != 0
+  def odd[A](x: A): Boolean = IntegralDispatch.applyNativeOdd(x)
   def pi: Double = scala.math.Pi
   def pow(base: Double)(exp: Double): Double = scala.math.pow(base, exp)
   def range(start: Int)(end: Int): Seq[Int] = (start to end).toSeq
+  def rem[A](x: A)(y: A): Option[A] = IntegralDispatch.applyNativeRem(x, y)
   // Haskell uses half-even (banker's) rounding
   // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
   def round(x: Double): Double =
@@ -68,7 +87,7 @@ object math:
     else roundFloat(precision)(x.toDouble).toFloat
   def roundFloat64(precision: Int)(x: Double): Double =
     roundFloat(precision)(x)
-  def signum(x: Int): Int = x.sign
+  def signum[A](x: A): A = NumericDispatch.applyNativeUnary("signum", x)
   def sin(x: Double): Double = scala.math.sin(x)
   def sinh(x: Double): Double = scala.math.sinh(x)
   def sqrt(x: Double): Double = scala.math.sqrt(x)
