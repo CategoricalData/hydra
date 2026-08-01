@@ -283,6 +283,7 @@ public class Libraries {
                 new hydra.overlay.java.lib.math.Cos(),
                 new hydra.overlay.java.lib.math.Cosh(),
                 new hydra.overlay.java.lib.math.Div(),
+                new hydra.overlay.java.lib.math.Divide(),
                 new hydra.overlay.java.lib.math.E(),
                 new hydra.overlay.java.lib.math.Even(),
                 new hydra.overlay.java.lib.math.Exp(),

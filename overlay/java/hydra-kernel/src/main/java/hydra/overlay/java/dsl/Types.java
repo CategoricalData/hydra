@@ -492,6 +492,8 @@ public interface Types {
     Set<Name> ORD = PersistentSet.singleton(name("ordering"));
     Set<Name> EQ = PersistentSet.singleton(name("equality"));
     Set<Name> NUMERIC = PersistentSet.singleton(name("numeric"));
+    Set<Name> FRACTIONAL = PersistentSet.singleton(name("fractional"));
+    Set<Name> INTEGRAL = PersistentSet.singleton(name("integral"));
     Set<Name> NONE = PersistentSet.empty();
 
     /**
@@ -513,6 +515,20 @@ public interface Types {
      */
     static TypeScheme schemeNum(String var, Type body) {
         return constrained1(var, NUMERIC, body);
+    }
+
+    /**
+     * Create a type scheme with one Fractional-constrained type variable.
+     */
+    static TypeScheme schemeFrac(String var, Type body) {
+        return constrained1(var, FRACTIONAL, body);
+    }
+
+    /**
+     * Create a type scheme with one Integral-constrained type variable.
+     */
+    static TypeScheme schemeIntegral(String var, Type body) {
+        return constrained1(var, INTEGRAL, body);
     }
 
     /**

@@ -132,6 +132,17 @@ public final class NumericDispatch {
         return rewrapInteger(ix, r);
     }
 
+    private static final BigInteger UINT64_MODULUS = BigInteger.ONE.shiftLeft(64);
+
+    // uint64's representation type is BigInteger (unbounded), unlike the other fixed-width
+    // variants whose narrowing comes for free from a Java primitive cast (int/long overflow
+    // truncates automatically). uint64 needs an explicit mask to 2^64, or an operation like
+    // maxUint64 * 2 silently escapes the nominal range instead of wrapping. BigInteger.mod
+    // (unlike remainder) always returns a non-negative result for a positive modulus.
+    private static BigInteger wrapUint64(BigInteger r) {
+        return r.mod(UINT64_MODULUS);
+    }
+
     // Narrow the arbitrary-precision result back to the source variant's width, giving
     // two's-complement wraparound for the fixed-width types and full precision for bigint.
     private static IntegerValue rewrapInteger(IntegerValue like, BigInteger r) {
@@ -142,7 +153,7 @@ public final class NumericDispatch {
         if (like instanceof IntegerValue.Uint8) return new IntegerValue.Uint8((short) (r.intValue() & 0xFF));
         if (like instanceof IntegerValue.Uint16) return new IntegerValue.Uint16((char) r.intValue());
         if (like instanceof IntegerValue.Uint32) return new IntegerValue.Uint32(r.longValue() & 0xFFFFFFFFL);
-        if (like instanceof IntegerValue.Uint64) return new IntegerValue.Uint64(r);
+        if (like instanceof IntegerValue.Uint64) return new IntegerValue.Uint64(wrapUint64(r));
         if (like instanceof IntegerValue.Bigint) return new IntegerValue.Bigint(r);
         throw new IllegalStateException("unexpected IntegerValue variant: " + like);
     }
@@ -158,6 +169,16 @@ public final class NumericDispatch {
     // at runtime); numeric has no java.lang.Addable analogue, so an instanceof ladder over the boxed
     // Number subtypes selects the per-type arithmetic. Native fixed-width results are NOT re-narrowed
     // (the boxed type is the width); bigint uses BigInteger for full precision.
+    //
+    // KNOWN GAP: uint64's native boxed representation is also BigInteger (see ReadUint64 etc.),
+    // identical to bigint's box — the `a instanceof BigInteger` branch below cannot distinguish
+    // the two and skips narrowing for both. A native-path uint64 op can therefore escape the
+    // 0..2^64-1 range the same way the Term-path bug (fixed at rewrapInteger/wrapUint64 above)
+    // did, but unlike that bug this one has no fix available at this layer: the erased-generic
+    // apply(A,A) signature has no type tag to recover uint64-ness from a bare BigInteger operand.
+    // Not currently exercised by the kernel test suite (which calls through the Term-path
+    // interpreter, not generated native code), so left undocumented-but-unfixed pending a design
+    // decision (e.g. a dedicated boxed uint64 wrapper type) rather than a guess under time pressure.
 
     /**
      * Apply a numeric binary operation to two boxed native operands, dispatching on their runtime

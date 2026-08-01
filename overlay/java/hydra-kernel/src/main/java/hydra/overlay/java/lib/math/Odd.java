@@ -12,14 +12,18 @@ import java.util.function.Function;
 
 import static hydra.overlay.java.dsl.Types.boolean_;
 import static hydra.overlay.java.dsl.Types.function;
-import static hydra.overlay.java.dsl.Types.int32;
-import static hydra.overlay.java.dsl.Types.scheme;
+import static hydra.overlay.java.dsl.Types.schemeIntegral;
+import static hydra.overlay.java.dsl.Types.var;
 import hydra.errors.Error_;
 import hydra.overlay.java.util.Either;
 
 
 /**
  * Determines whether an integer is odd.
+ *
+ * <p>Constraint-polymorphic ('integral') parity test: the type scheme is {@code integral x => x
+ * -> boolean} and the implementation dispatches on the operand's runtime integer variant via
+ * {@link IntegralDispatch}. No typeclass is consulted at runtime.
  */
 public class Odd extends PrimitiveFunction {
     /**
@@ -36,7 +40,7 @@ public class Odd extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme(function(int32(), boolean_()));
+        return schemeIntegral("x", function(var("x"), boolean_()));
     }
 
     /**
@@ -45,15 +49,17 @@ public class Odd extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply((arg0) -> Terms.boolean_(apply(arg0)), hydra.extract.Core.int32(graph, args.get(0)));
+        return args -> graph -> Either.right(Terms.boolean_(IntegralDispatch.odd(args.get(0))));
     }
 
     /**
-     * Checks if the number is odd.
+     * Checks if the number is odd. This is the statically-typed entry point emitted by
+     * generated code, generic and erased over the {@code integral} type variable (see
+     * {@link IntegralDispatch#applyNativeOdd}).
      * @param num the number
      * @return true if odd, false otherwise
      */
-    public static Boolean apply(Integer num) {
-        return num % 2 != 0;
+    public static <A> Boolean apply(A num) {
+        return IntegralDispatch.applyNativeOdd(num);
     }
 }
