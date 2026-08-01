@@ -15,6 +15,46 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.3] - 2026-08-01
+
+Point release on the 0.17.x line, focused on **release-artifact integrity**. The 0.17.2 release shipped
+two defects that every existing check missed because they validated only the generated `dist/` tree, never
+the packaged artifact: the `hydra-build` sdist shipped 3 of 8 modules, and the published Java `hydra-kernel`
+jar was a whole [#417](https://github.com/CategoricalData/hydra/issues/417) rename behind. This release adds
+an artifact-level publish-completeness gate that inspects the actual uploaded archive, closing that class of
+defect across all five registries.
+
+### Highlights
+
+- **Artifact-content completeness gate** ([#621](https://github.com/CategoricalData/hydra/issues/621)):
+  every publish path (Hackage sdist, Maven-Java jar, Maven-Scala jar, PyPI wheel, npm tarball) now inspects
+  the *packaged* archive and hard-fails if any module a package's manifest declares is missing. The gate also
+  asserts the post-#417 class names are present in the Java kernel jar.
+
+### Bug fixes
+
+- **PyPI wheels dropped non-`hydra.*` roots** ([#621](https://github.com/CategoricalData/hydra/issues/621)):
+  the wheel packaging hardcoded `packages = ["src/main/python/hydra"]`, silently omitting `hydra-pg`'s
+  `com.gdblab.*` and `openGql.*` modules. The generator now ships every emitted top-level root.
+
+### Improvements
+
+- **CI guard for dist-tree completeness** ([#524](https://github.com/CategoricalData/hydra/issues/524)):
+  asserts every manifest `mainModules` namespace is emitted into `dist/haskell`, catching the 0.17.2
+  `hydra-build` truncation at the tree level (the artifact gate is the packaged-archive counterpart).
+- **Manifest generation extracted** into `Hydra.ManifestGeneration`, and the structurally-unneeded #607
+  sed shims dropped ([#622](https://github.com/CategoricalData/hydra/issues/622)).
+- **Release-verification signing fix** ([#441](https://github.com/CategoricalData/hydra/issues/441)):
+  sign the reproducible uncompressed `.tar` and verify the `.asc` against the GitHub Release asset.
+- **Java CI signing gate** ([#591](https://github.com/CategoricalData/hydra/issues/591)): `publishToMavenLocal`
+  skips gpg signing when no key is present.
+
+### Internal
+
+- Version bump to 0.17.3; `hostVersion` advanced to 0.17.2 and the temporary #417 Java/Python local-host
+  shims removed now that 0.17.2 is published on the registries
+  ([#417](https://github.com/CategoricalData/hydra/issues/417)).
+
 ## [0.17.2] - 2026-07-28
 
 Point release on the 0.17.x line. Themes: promotion of the generator's routing and manifest
