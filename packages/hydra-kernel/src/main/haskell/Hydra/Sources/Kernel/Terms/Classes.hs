@@ -32,6 +32,8 @@ module_ = Module {
   where
     definitions = [
       toDefinition equality,
+      toDefinition fractional,
+      toDefinition integral,
       toDefinition numeric,
       toDefinition ordering]
 
@@ -42,6 +44,16 @@ equality :: TypedTermDefinition TypeClass
 equality = define "equality" $
   doc "The equality type class: instances support structural equality." $
   Typing.typeClass (string "Equality: instances support structural equality.")
+
+fractional :: TypedTermDefinition TypeClass
+fractional = define "fractional" $
+  doc "The fractional type class: instances support total floating-point division." $
+  Typing.typeClass (string "Fractional: instances support total floating-point division.")
+
+integral :: TypedTermDefinition TypeClass
+integral = define "integral" $
+  doc "The integral type class: instances support integer division, modulus, remainder, and parity." $
+  Typing.typeClass (string "Integral: instances support integer division, modulus, remainder, and parity.")
 
 numeric :: TypedTermDefinition TypeClass
 numeric = define "numeric" $

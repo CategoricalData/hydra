@@ -5,10 +5,8 @@ module Hydra.Sources.Kernel.Lib.Math where
 
 import Hydra.Kernel
 import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -16,7 +14,6 @@ import           Prelude hiding ((++), abs, acos, acosh, asin, asinh, atan, atan
                                ceiling, cos, cosh, div, even, exp, floor, log, logBase,
                                max, min, mod, negate, odd, pi, rem, round, signum, sin, sinh,
                                sqrt, tan, tanh, truncate)
-import qualified Data.Int                    as I
 
 
 ns :: ModuleName
@@ -30,7 +27,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.math module.")}
   where
     definitions = [abs, acos, acosh, add, addFloat64, asin, asinh, atan, atan2, atanh,
-                   ceiling, cos, cosh, div, e, even, exp, floor, log, logBase, mod,
+                   ceiling, cos, cosh, div, divide, e, even, exp, floor, log, logBase, mod,
                    mul, mulFloat64, negate,
                    negateFloat64, odd, pi, pow, range, rem, round, roundFloat32, roundFloat64,
                    signum, sin, sinh, sqrt, sub, subFloat64, tan, tanh, truncate]
@@ -89,13 +86,29 @@ int32ToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> 
 int32ToMaybe :: [(String, String)] -> TermSignature
 int32ToMaybe params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) Nothing
 
+fractionalTo2 :: TermSignature
+fractionalTo2 = sig $ Types.polyConstrained [("x", [Name "fractional"])]
+  (tx Types.~> tx Types.~> tx)
+
+-- Constraint-polymorphic 'integral' signatures (integral x => ...).
+integralTo2Maybe :: [(String, String)] -> TermSignature
+integralTo2Maybe params = sigWithParams params $ Types.polyConstrained [("x", [Name "integral"])]
+  (tx Types.~> tx Types.~> Types.optional tx)
+
+integralToBool :: [(String, String)] -> TermSignature
+integralToBool params = sigWithParams params $ Types.polyConstrained [("x", [Name "integral"])]
+  (tx Types.~> Types.boolean)
+
 abs :: PrimitiveDefinition
-abs = define "abs" "The absolute value of an integer." (int32To [("x", "the integer whose absolute value is taken")])
-  ["Absolute value of a signed 32-bit two's-complement integer. For non-negative inputs the result\
-  \ equals the input; for negative inputs the result is the arithmetic negation.",
-   "The function is total but not injective at the boundary: abs(minBound) = minBound (i.e.\
-  \ abs(-2147483648) = -2147483648), because +2147483648 is not representable in int32.",
-   "Corresponds to Haskell's abs :: Int32 -> Int32."]
+abs = define "abs" "Numeric absolute value." numericTo
+  ["Constraint-polymorphic absolute value over any type with a 'numeric' instance. The per-type\
+  \ semantics live in the instance: for fixed-width signed integers the result is total but not\
+  \ injective at the boundary (abs(minBound) = minBound, e.g. abs(-2147483648) = -2147483648 for\
+  \ int32, because +2147483648 is not representable); for unsigned integers and bigint the result\
+  \ is the input itself or its arithmetic negation, whichever is non-negative; for floating-point\
+  \ it clears the sign bit per IEEE 754 \xA75.5.1 (abs(\xB10) = +0, abs(NaN) is NaN).",
+   "Requires a 'numeric' type-class constraint on the argument type.",
+   "Corresponds to Haskell's abs :: Num a => a -> a."]
 
 acos :: PrimitiveDefinition
 acos = define "acos" "The arc cosine of a floating-point number." (f64To [("x", "the cosine value whose arc cosine is computed")])
@@ -188,6 +201,18 @@ cosh = define "cosh" "The hyperbolic cosine of a floating-point number." (f64To 
   \ cosh(NaN) is NaN. Large-magnitude arguments overflow to +\x221E.",
    "Corresponds to the IEEE 754 \xA79.2 cosh operation and to Haskell's cosh :: Double -> Double."]
 
+divide :: PrimitiveDefinition
+divide = define "divide" "Floating-point division." fractionalTo2
+  ["Constraint-polymorphic division over any type with a 'fractional' instance (float32,\
+  \ float64). IEEE 754 division: the result is x / y correctly rounded (roundTiesToEven) for\
+  \ finite y \x2260 0.",
+   "The operation is total via IEEE sentinels rather than an optional codomain: for finite\
+  \ nonzero x, x / \xB10 = \xB1\x221E (sign = XOR of the operand signs); \xB10 / \xB10 and\
+  \ \xB1\x221E / \xB1\x221E are NaN; \xB1\x221E / finite = \xB1\x221E (sign XOR); finite /\
+  \ \xB1\x221E = \xB10 (sign XOR); NaN propagates unconditionally.",
+   "Requires a 'fractional' type-class constraint on the argument type.",
+   "Corresponds to Haskell's (/) :: Fractional a => a -> a -> a."]
+
 e :: PrimitiveDefinition
 e = define "e" "Euler's constant (the base of the natural logarithm)." f64Const
   ["The mathematical constant e \x2248 2.718281828459045, the base of the natural logarithm, as the\
@@ -195,13 +220,13 @@ e = define "e" "Euler's constant (the base of the natural logarithm)." f64Const
    "Corresponds to Haskell's exp 1 :: Double."]
 
 even :: PrimitiveDefinition
-even = defineWithDefault "even" "Test whether an integer is even." (int32ToBool [("x", "the integer to test for evenness")])
-  ["True if the argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
-   "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's\
-  \ even :: Int32 -> Bool."]
-  (("x" ~> Equality.equal
-    (Optionals.withDefault (int32 0) (Math.mod (var "x") (int32 2)))
-    (int32 0)) :: TypedTerm (I.Int32 -> Bool))
+even = define "even" "Test whether a value is even." (integralToBool [("x", "the value to test for evenness")])
+  ["Constraint-polymorphic parity test over any type with an 'integral' instance: true if the\
+  \ argument is divisible by 2 (i.e. x mod 2 = 0), false otherwise.",
+   "Total on all integral inputs including negative numbers and signed minBound (parity is\
+  \ preserved by two's-complement wraparound).",
+   "Requires an 'integral' type-class constraint on the argument type.",
+   "Corresponds to Haskell's even :: Integral a => a -> Bool."]
 
 exp :: PrimitiveDefinition
 exp = define "exp" "The exponential function." (f64To [("x", "the exponent")])
@@ -234,36 +259,40 @@ logBase = define "logBase" "Logarithm of the second argument in the base of the 
    "Corresponds to Haskell's logBase :: Double -> Double -> Double."]
 
 div :: PrimitiveDefinition
-div = define "div" "Integer division, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
-  ["Total integer division: div(x, y) returns Just(x divided by y, rounded toward negative\
-  \ infinity) when y is non-zero, and Nothing when y = 0.",
+div = define "div" "Integral division, or Nothing if dividing by zero." (integralTo2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Constraint-polymorphic total integer division over any type with an 'integral' instance:\
+  \ div(x, y) returns Just(x divided by y, rounded toward negative infinity) when y is non-zero,\
+  \ and Nothing when y = 0.",
    "The division rounds toward negative infinity (floor), so for example div(-7, 2) = Just(-4).",
-   "The boundary case div(minBound, -1), whose mathematical result +2147483648 is not representable\
-  \ in int32, wraps to minBound (the two's-complement overflow).",
-   "Corresponds to Haskell's div :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
-  \ case total."]
+   "For fixed-width signed integers, the boundary case div(minBound, -1) wraps to minBound (the\
+  \ two's-complement overflow), since the mathematical result is not representable at that width.",
+   "Requires an 'integral' type-class constraint on the argument type.",
+   "Corresponds to Haskell's div :: Integral a => a -> a -> a, wrapped in maybe to make the\
+  \ zero-divisor case total."]
 
 mod :: PrimitiveDefinition
-mod = define "mod" "Integer modulus, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
-  ["Total integer modulus: mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y =\
-  \ 0.",
+mod = define "mod" "Integral modulus, or Nothing if dividing by zero." (integralTo2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Constraint-polymorphic total integer modulus over any type with an 'integral' instance:\
+  \ mod(x, y) returns Just(x mod y) when y is non-zero, and Nothing when y = 0.",
    "The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the\
   \ sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2)\
   \ = Just(1).",
-   "Corresponds to Haskell's mod :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
-  \ case total."]
+   "Requires an 'integral' type-class constraint on the argument type.",
+   "Corresponds to Haskell's mod :: Integral a => a -> a -> a, wrapped in maybe to make the\
+  \ zero-divisor case total."]
 
 rem :: PrimitiveDefinition
-rem = define "rem" "Integer remainder, or Nothing if dividing by zero." (int32To2Maybe [("x", "the dividend"), ("y", "the divisor")])
-  ["Total integer remainder: rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y\
-  \ = 0.",
+rem = define "rem" "Integral remainder, or Nothing if dividing by zero." (integralTo2Maybe [("x", "the dividend"), ("y", "the divisor")])
+  ["Constraint-polymorphic total integer remainder over any type with an 'integral' instance:\
+  \ rem(x, y) returns Just(x rem y) when y is non-zero, and Nothing when y = 0.",
    "The result satisfies x = (truncate(x / y)) * y + (rem(x, y) result), so the sign of the result\
   \ matches the sign of x (truncated division, C-style remainder). For example rem(-7, 2) =\
   \ Just(-1).",
-   "The boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is\
-  \ absorbed).",
-   "Corresponds to Haskell's rem :: Int32 -> Int32 -> Int32, wrapped in maybe to make the zero-divisor\
-  \ case total."]
+   "For fixed-width signed integers, the boundary case rem(minBound, -1) is 0 (no overflow, since\
+  \ the quotient overflow is absorbed by div, not rem).",
+   "Requires an 'integral' type-class constraint on the argument type.",
+   "Corresponds to Haskell's rem :: Integral a => a -> a -> a, wrapped in maybe to make the\
+  \ zero-divisor case total."]
 
 mul :: PrimitiveDefinition
 mul = define "mul" "Numeric multiplication." numericTo2
@@ -303,11 +332,13 @@ negateFloat64 = define "negateFloat64" "Negate a floating-point number." (f64To 
   \ Haskell's negate :: Double -> Double."]
 
 odd :: PrimitiveDefinition
-odd = defineWithDefault "odd" "Test whether an integer is odd." (int32ToBool [("x", "the integer to test for oddness")])
-  ["True if the argument is not divisible by 2 (i.e. x mod 2 \x2260 0), false otherwise.",
-   "Total on all int32 inputs including negative numbers and minBound. Corresponds to Haskell's\
-  \ odd :: Int32 -> Bool."]
-  (("x" ~> Logic.not (Math.even (var "x"))) :: TypedTerm (I.Int32 -> Bool))
+odd = defineWithDefault "odd" "Test whether a value is odd." (integralToBool [("x", "the value to test for oddness")])
+  ["Constraint-polymorphic parity test over any type with an 'integral' instance: true if the\
+  \ argument is not divisible by 2 (i.e. x mod 2 \x2260 0), false otherwise.",
+   "Total on all integral inputs including negative numbers and signed minBound. Requires an\
+  \ 'integral' type-class constraint on the argument type.",
+   "Corresponds to Haskell's odd :: Integral a => a -> Bool."]
+  ("x" ~> Logic.not (Math.even (var "x")))
 
 pi :: PrimitiveDefinition
 pi = define "pi" "The mathematical constant pi." f64Const
@@ -366,12 +397,18 @@ roundFloat64 = define "roundFloat64" "Round a float64 to the given number of dec
   \ differ on out-of-range n."]
 
 signum :: PrimitiveDefinition
-signum = define "signum" "Return the sign of an integer as -1, 0, or 1." (int32To [("x", "the integer whose sign is returned")])
-  ["signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0.",
-   "The function is total and satisfies the identity abs(x) * signum(x) = x for all int32 except\
-  \ minBound (where abs(minBound) * (-1) wraps to minBound rather than equalling -minBound, since\
-  \ +2147483648 is not representable).",
-   "Corresponds to Haskell's signum :: Int32 -> Int32."]
+signum = define "signum" "Numeric sign." numericTo
+  ["Constraint-polymorphic sign function over any type with a 'numeric' instance. For integer\
+  \ types, signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0 (same width as the argument);\
+  \ unsigned integers return only 0 or 1. The function satisfies abs(x) * signum(x) = x for all\
+  \ integer instances except signed minBound (where the identity fails because +maxBound+1 is not\
+  \ representable).",
+   "For floating-point, signum(x) returns \xB11.0 for nonzero finite or infinite x (per IEEE 754\
+  \ \xA75.5.1); signum(\xB10) = \xB10 (the sign of the input zero is preserved, not collapsed to a\
+  \ single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else-\
+  \ zero) gets both of these float cases wrong and must not be used.",
+   "Requires a 'numeric' type-class constraint on the argument type.",
+   "Corresponds to Haskell's signum :: Num a => a -> a."]
 
 sin :: PrimitiveDefinition
 sin = define "sin" "The sine of a floating-point number." (f64To [("x", "the angle in radians")])

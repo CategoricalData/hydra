@@ -326,6 +326,10 @@ hydraLibMathFloat64 = standardLibrary [
   prim1 DefMath.ceiling  Math.ceiling  float64 float64,
   prim1 DefMath.cos      Math.cos      float64 float64,
   prim1 DefMath.cosh     Math.cosh     float64 float64,
+  -- Constraint-polymorphic ('fractional') division: registered once with identity (Term)
+  -- coders so the implementation dispatches on the argument's runtime float type (float32
+  -- or float64; see Math.divideTerm). Mirrors #566's numeric-class registration pattern.
+  prim2 DefMath.divide   Math.divideTerm x_ x_ x_,
   prim0 DefMath.e        Math.e        float64,
   prim1 DefMath.exp      Math.exp      float64 float64,
   prim1 DefMath.floor    Math.floor    float64 float64,
@@ -348,17 +352,20 @@ hydraLibMathFloat64 = standardLibrary [
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary [
-  prim1 DefMath.abs    Math.abs    int32 int32,
+  -- Constraint-polymorphic ('numeric'/'integral') primitives: registered once with identity
+  -- (Term) coders so the implementation dispatches on the argument's runtime type (see
+  -- Math.*Term). Mirrors #566's numeric-class registration pattern.
+  prim1 DefMath.abs    Math.absTerm    x_ x_,
   prim2 DefMath.add    Math.addTerm    x_ x_ x_,
-  prim1 DefMath.even   Math.even   int32 boolean,
-  prim2 DefMath.div Math.div int32 int32 (optional int32),
-  prim2 DefMath.mod Math.mod int32 int32 (optional int32),
+  prim1 DefMath.even   Math.evenTerm   x_ boolean,
+  prim2 DefMath.div Math.divTerm x_ x_ (optional x_),
+  prim2 DefMath.mod Math.modTerm x_ x_ (optional x_),
   prim2 DefMath.mul    Math.mulTerm    x_ x_ x_,
   prim1 DefMath.negate Math.negateTerm x_ x_,
-  prim1 DefMath.odd    Math.odd    int32 boolean,
+  prim1 DefMath.odd    Math.oddTerm x_ boolean,
   prim2 DefMath.range  Math.range  int32 int32 (list int32),
-  prim2 DefMath.rem Math.rem int32 int32 (optional int32),
-  prim1 DefMath.signum Math.signum int32 int32,
+  prim2 DefMath.rem Math.remTerm x_ x_ (optional x_),
+  prim1 DefMath.signum Math.signumTerm x_ x_,
   prim2 DefMath.sub    Math.subTerm    x_ x_ x_]
 
 hydraLibOptionals :: Library
