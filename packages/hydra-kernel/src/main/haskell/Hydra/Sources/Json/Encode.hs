@@ -63,6 +63,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Resolution      as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
@@ -96,7 +97,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Resolution.ns, Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.")}
   where
     definitions = [
@@ -343,28 +344,49 @@ toJson = define "toJson" $
         _Term_wrap>>: "wt" ~>
           toJson @@ var "types" @@ var "tname" @@ var "wn" @@ (Core.wrappedTermBody $ var "wt")],
 
-    -- Maps -> array of {\"key\": k, \"value\": v}
+    -- Maps -> compact JSON object {k: v, ...} if the key type resolves to string,
+    -- else array of {\"key\": k, \"value\": v} (see docs/specification/json-format.md #Maps)
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
+      "compact" <~ (Resolution.mapKeyResolvesToString @@ var "types" @@ var "keyType") $
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected map term") [
         _Term_map>>: "m" ~>
-          "encodeEntry" <~ ("kv" ~>
-            "k" <~ (Pairs.first $ var "kv") $
-            "v" <~ (Pairs.second $ var "kv") $
-            "encodedK" <~ (toJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "k") $
-            "encodedV" <~ (toJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "v") $
-            Eithers.either
-              ("err" ~> left $ var "err")
-              ("ek" ~> Eithers.map
-                ("ev" ~> Json.valueObject $ list [
-                  pair (string "key") (var "ek"),
-                  pair (string "value") (var "ev")])
-                (var "encodedV"))
-              (var "encodedK")) $
-          "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
-          Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries")],
+          Logic.ifElse (var "compact")
+            ("encodeCompactEntry" <~ ("kv" ~>
+                "k" <~ (Pairs.first $ var "kv") $
+                "v" <~ (Pairs.second $ var "kv") $
+                "encodedK" <~ (toJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "k") $
+                "encodedV" <~ (toJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "v") $
+                Eithers.either
+                  ("err" ~> left $ var "err")
+                  ("ek" ~>
+                    "keyStrResult" <~ (cases _Value (var "ek")
+                      (Just $ left $ string "internal error: string-resolving map key did not encode to a JSON string")
+                      [_Value_string>>: "s" ~> right $ var "s"]) $
+                    Eithers.either
+                      ("err" ~> left $ var "err")
+                      ("ks" ~> Eithers.map ("ev" ~> pair (var "ks") (var "ev")) (var "encodedV"))
+                      (var "keyStrResult"))
+                  (var "encodedK")) $
+              "entries" <~ (Eithers.mapList (var "encodeCompactEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
+              Eithers.map ("es" ~> Json.valueObject $ var "es") (var "entries"))
+            ("encodeEntry" <~ ("kv" ~>
+                "k" <~ (Pairs.first $ var "kv") $
+                "v" <~ (Pairs.second $ var "kv") $
+                "encodedK" <~ (toJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "k") $
+                "encodedV" <~ (toJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "v") $
+                Eithers.either
+                  ("err" ~> left $ var "err")
+                  ("ek" ~> Eithers.map
+                    ("ev" ~> Json.valueObject $ list [
+                      pair (string "key") (var "ek"),
+                      pair (string "value") (var "ev")])
+                    (var "encodedV"))
+                  (var "encodedK")) $
+              "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
+              Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries"))],
 
     -- Pairs -> {\"first\": ..., \"second\": ...}
     _Type_pair>>: "pt" ~>
