@@ -66,7 +66,10 @@ cp -r "$JAVA_OVERLAY/." "$JAVA_DST/"
 # Hand-written test files
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/java/hydra"
-for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java; do
+# HydraTestGroupWalker.java (#547): shared per-group dispatch/skip-tag/timeout/benchmark
+# logic that TestSuiteRunner.java delegates to. Without it: "cannot find symbol:
+# class HydraTestGroupWalker".
+for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java HydraTestGroupWalker.java; do
     if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/$f" ]; then
         cp "$HYDRA_JAVA_DIR/src/test/java/hydra/$f" "$OUTPUT_DIR/src/test/java/hydra/"
     fi

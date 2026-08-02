@@ -63,6 +63,8 @@ PREP_HASH=$(
              "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl" \
              "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell/Hydra/Dsl" \
              "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Build" \
+             "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Decode/Build" \
+             "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Encode/Build" \
              "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell" \
              "$HASKELL_RESOURCES" \
              -type f 2>/dev/null
@@ -153,6 +155,18 @@ if [ -d "$HS_BUILD_BASELINE/Hydra/Build" ]; then
     cp -r "$HS_BUILD_BASELINE/Hydra/Build/." "$HS_GEN/Hydra/Build/"
     echo "    Copied Hydra/Build from hydra-build baseline"
 fi
+# #512: Hydra.DigestFormat (in hydra-haskell's baseline copy above) imports the typed
+# digest codec's generated Decode/Encode modules, which — like Hydra.Build.* above —
+# live in the hydra-build baseline, not hydra-kernel's Sources/{Decode,Encode} copied
+# below. Without this, the cell fails with "Could not find module
+# 'Hydra.Decode.Build.Format'".
+for build_codec_dir in Decode Encode; do
+    if [ -d "$HS_BUILD_BASELINE/Hydra/$build_codec_dir/Build" ]; then
+        mkdir -p "$HS_GEN/Hydra/$build_codec_dir/Build"
+        cp -r "$HS_BUILD_BASELINE/Hydra/$build_codec_dir/Build/." "$HS_GEN/Hydra/$build_codec_dir/Build/"
+        echo "    Copied Hydra/$build_codec_dir/Build from hydra-build baseline"
+    fi
+done
 # Copy Sources/Decode and Sources/Encode (generated DSL source modules imported by
 # hand-written Sources modules like Templates.hs and Annotations.hs)
 for src_dir in Decode Encode; do

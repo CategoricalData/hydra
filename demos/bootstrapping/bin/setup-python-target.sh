@@ -103,7 +103,10 @@ find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null |
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/python"
 cp "$HYDRA_PYTHON_DIR/src/test/python/conftest.py" "$OUTPUT_DIR/src/test/python/" 2>/dev/null || true
-for f in test_suite_runner.py test_python.py test_generated_code.py test_grammar.py test_json.py test_lazy_flow_evaluation.py kernel_bindings.py test_summary_report.py; do
+# hydra_test_group_walker.py (#547): shared per-group dispatch/skip-tag/timeout/benchmark
+# logic imported by test_suite_runner.py. Without it: "ModuleNotFoundError: No module
+# named 'hydra_test_group_walker'".
+for f in test_suite_runner.py test_python.py test_generated_code.py test_grammar.py test_json.py test_lazy_flow_evaluation.py kernel_bindings.py test_summary_report.py hydra_test_group_walker.py; do
     if [ -f "$HYDRA_PYTHON_DIR/src/test/python/$f" ]; then
         cp "$HYDRA_PYTHON_DIR/src/test/python/$f" "$OUTPUT_DIR/src/test/python/"
     fi
