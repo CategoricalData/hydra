@@ -123,7 +123,15 @@ jobs:
       # and dist/<lang>/ for every target from the JSON (Phase 2,
       # per-package). Any drift from the committed dist/json/ or
       # dist/haskell/ tree fails the job.
+      # GENERATOR_HOST pinned to haskell (#459): this job's default Gradle heap is too
+      # small for :hydra-java:compileJava under the all-hosts x all-targets cross
+      # product (OutOfMemoryError on run 30748429237). GENERATOR_HOST=java is the
+      # default for normal/local use — pin back to haskell here until CI's Gradle heap
+      # is sized for the Java generator (see assemble-common.sh's own comment on this
+      # exact fallback).
       - name: Regenerate JSON and all target dists from DSL sources
+        env:
+          GENERATOR_HOST: haskell
         run: |
           bin/sync.sh --hosts all --targets all --no-tests
       # The bootstrapping matrix above intentionally skips the "on-
@@ -400,7 +408,13 @@ jobs:
       # sentinel check is satisfied and the rest of the pipeline runs exactly
       # as it would on a warm tree — proving the seeded output is not just
       # present but actually consumable by the full head build + test suite.
+      # GENERATOR_HOST pinned to haskell (#459): run_layer1_transform dispatches on
+      # GENERATOR_HOST regardless of --hosts/--targets, so even a haskell-only sync
+      # would route through the Java generator under this job's default (too-small)
+      # Gradle heap. See the "Regenerate JSON and all target dists" step above.
       - name: Full sync + stack test from the seeded tree
+        env:
+          GENERATOR_HOST: haskell
         run: bin/sync.sh --hosts haskell --targets haskell
       # Regression check: a full sync must never leave dist/haskell/ tracked
       # or trackable again. Checked AFTER the full sync above (not just after
