@@ -64,6 +64,7 @@ module Main where
 
 import Hydra.Digest
 import qualified Hydra.Digest as Digest
+import qualified Hydra.DigestFormat as DF
 import Hydra.Packaging (ModuleName(..))
 import qualified Hydra.PackageRouting as PackageRouting
 import Hydra.PackageRouting (buildRoutingMap)
@@ -79,6 +80,11 @@ import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
 import qualified System.FilePath as FP
 import System.IO (hPutStrLn, stderr)
+
+-- | Schema context for the typed digest codec (#512); the shared CAF from
+-- DigestFormat, so this exec and the head pipeline use one context.
+formatContext :: DF.FormatContext
+formatContext = DF.defaultFormatContext
 
 data Mode = Fresh | Refresh | RefreshInput deriving (Eq, Show)
 
@@ -161,28 +167,24 @@ main = do
 
 doFresh :: Options -> IO ()
 doFresh opts = do
-  -- Input digest: must exist. Absent means we have no record of what
-  -- was used, so always treat as cache miss.
-  inputExists <- doesFileExist (optInputDigest opts)
-  if not inputExists
-    then do
-      putStrLn $ "  digest-check: input digest absent ("
-        ++ optInputDigest opts ++ "); cache miss"
+  -- Both digests are read through the typed codec (#512). Any Left —
+  -- absent file, pre-#512 legacy format, corrupt content — means we have
+  -- no usable record, so always treat as cache miss (never an error).
+  inputRead <- DF.readInputDigestFile formatContext (optInputDigest opts)
+  inputPpd <- case inputRead of
+    Left err -> do
+      putStrLn $ "  digest-check: input digest unreadable ("
+        ++ err ++ "); cache miss"
       exitFailure
-    else return ()
+    Right d -> return (DF.toPerPackageDigest d)
 
-  -- Output digest: must exist. Absent means we have no record of
-  -- what was produced previously.
-  outputExists <- doesFileExist (optOutputDigest opts)
-  if not outputExists
-    then do
-      putStrLn $ "  digest-check: output digest absent ("
-        ++ optOutputDigest opts ++ "); cache miss"
+  outputRead <- DF.readOutputDigestFile formatContext (optOutputDigest opts)
+  outputDigest <- case outputRead of
+    Left err -> do
+      putStrLn $ "  digest-check: output digest unreadable ("
+        ++ err ++ "); cache miss"
       exitFailure
-    else return ()
-
-  inputPpd     <- Hydra.Digest.readPerPackageDigest (optInputDigest opts)
-  outputDigest <- Hydra.Digest.readDigestV2 (optOutputDigest opts)
+    Right d -> return (DF.toDigestV2 d)
   let inputDigest = Hydra.Digest.ppHashes inputPpd
 
   -- Compare: each input hash from the v1 input digest must appear,
@@ -308,10 +310,13 @@ doRefresh opts = do
   -- aren't cached yet; that's OK, we'll just record an empty inputs
   -- map and the next 'fresh' check will miss until inputs settle.
   --
-  -- We read the full PerPackageDigest (not just the v1 map) so the
-  -- per-package selfHash and depHash:<pkg> entries get copied into the
+  -- We read the full input digest (not just the module-hash map) so the
+  -- per-package selfHash and dependency hashes get copied into the
   -- output digest's recorded-* slots for #347 transitive comparison.
-  inputPpd <- Hydra.Digest.readPerPackageDigest (optInputDigest opts)
+  -- Typed read (#512); an unreadable input degrades to empty, matching
+  -- the tolerant legacy behavior described above.
+  inputPpd <- either (const Digest.emptyPerPackageDigest) DF.toPerPackageDigest
+    <$> DF.readInputDigestFile formatContext (optInputDigest opts)
   let inputDigest = Hydra.Digest.ppHashes inputPpd
       inputsAsMap = M.fromList
         [ (k, DigestEntry KindOther v)
@@ -348,7 +353,7 @@ doRefresh opts = do
         , digestRecordedDeps     = Hydra.Digest.ppDeps inputPpd
         }
 
-  Hydra.Digest.writeDigestV2 (optOutputDigest opts) d
+  DF.writeOutputDigestFile formatContext (optOutputDigest opts) (DF.fromDigestV2 d)
   putStrLn $ "  digest-check: wrote " ++ optOutputDigest opts
     ++ " (" ++ show (M.size inputsAsMap) ++ " inputs, "
     ++ show (M.size outputs) ++ " outputs, "
@@ -420,13 +425,14 @@ doRefreshInput opts = do
       -- Preserve existing depHash:<pkg> entries; we only updated
       -- the hashes + selfHash. Cross-package deps are unchanged by
       -- a single-package input refresh.
-  existingPpd <- Digest.readPerPackageDigest dpath
+  existingPpd <- either (const Digest.emptyPerPackageDigest) DF.toPerPackageDigest
+    <$> DF.readInputDigestFile formatContext dpath
   let newPpd = PerPackageDigest
         { ppHashes   = pkgDigest
         , ppSelfHash = selfH
         , ppDeps     = ppDeps existingPpd
         }
-  Digest.writePerPackageDigest dpath newPpd
+  DF.writeInputDigestFile formatContext dpath (DF.fromPerPackageDigest newPpd)
   putStrLn $ "  digest-check refresh-input: wrote " ++ dpath
     ++ " (" ++ show (M.size srcDigest) ++ " src + "
     ++ show (M.size jsonDigest) ++ " json = "

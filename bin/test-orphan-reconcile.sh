@@ -62,15 +62,18 @@ mkdir -p "$OUT_DIR/hydra/lib/defaults" "$OUT_DIR/hydra/dsl" "$BUILD_DIR"
 echo "renamed-to generated content" > "$OUT_DIR/hydra/lib/defaults/Lists.txt"
 echo "hand-written runtime content" > "$OUT_DIR/hydra/dsl/Runtime.txt"
 
-# Minimal but valid input digest (per Hydra.Digest serializePerPackageDigest).
+# Minimal but valid input digest: the canonical typed encoding of
+# hydra.build.format.InputDigest (#512) — maps are arrays of key/value
+# entries, per docs/specification/json-format.md.
 cat > "$INPUT_DIGEST" <<'EOF'
 {
-  "digestFormatVersion": 1,
+  "digestFormatVersion": 2,
   "moduleFormatVersion": 1,
   "selfHash": "deadbeef",
-  "hashes": {
-    "hydra.lib.defaults.lists": "aaaa1111"
-  }
+  "dependencyHashes": [],
+  "moduleHashes": [
+    {"key": "hydra.lib.defaults.lists", "value": "aaaa1111"}
+  ]
 }
 EOF
 

@@ -16,6 +16,7 @@ import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Digest as Digest
+import qualified Hydra.DigestFormat as DigestFormat
 import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
@@ -1296,7 +1297,7 @@ finalizePerPackageDigests distJsonRoot = do
     -- Pass 1: read each package's digest, compute selfHash.
     pkgPpds <- CM.forM pkgs $ \pkg -> do
       let dpath = perPackageDigestPath distJsonRoot pkg
-      ppd <- Digest.readPerPackageDigest dpath
+      ppd <- DigestFormat.readPerPackageDigestFile dpath
       let selfH = Digest.computeSelfHash (Digest.ppHashes ppd)
       return (pkg, ppd { Digest.ppSelfHash = selfH })
     let selfHashMap = M.fromList [(pkg, Digest.ppSelfHash ppd) | (pkg, ppd) <- pkgPpds]
@@ -1310,7 +1311,7 @@ finalizePerPackageDigests distJsonRoot = do
             ]
           finalPpd = ppd { Digest.ppDeps = depHashes }
           dpath = perPackageDigestPath distJsonRoot pkg
-      Digest.writePerPackageDigest dpath finalPpd
+      DigestFormat.writePerPackageDigestFile dpath finalPpd
 
 -- | Enumerate packages that have a main-source-set digest on disk.
 -- Walks dist/json/hydra-*/build/main/digest.json.
@@ -1366,7 +1367,7 @@ refreshPerPackageDigests routingMap distJsonRoot universeMods _targetMods = do
       jsonDigest <- Digest.hashPackageJsonContent distJsonRoot pkg
       let pkgDigest = M.union srcDigest jsonDigest
           dpath = perPackageDigestPath distJsonRoot pkg
-      Digest.writeDigest dpath pkgDigest
+      DigestFormat.writeDigestMapFile dpath pkgDigest
       putStrLn $ "  Per-package digest: " ++ dpath
         ++ " (" ++ show (M.size srcDigest) ++ " src + "
         ++ show (M.size jsonDigest) ++ " json = "
@@ -1402,9 +1403,9 @@ ensurePerPackageDigests routingMap distJsonRoot universeMods = do
       let pkgDigest = M.union srcDigest jsonDigest
           dpath = perPackageDigestPath distJsonRoot pkg
       exists <- SD.doesFileExist dpath
-      stored <- if exists then Digest.readDigest dpath else return M.empty
+      stored <- if exists then DigestFormat.readDigestMapFile dpath else return M.empty
       CM.when (stored /= pkgDigest) $ do
-        Digest.writeDigest dpath pkgDigest
+        DigestFormat.writeDigestMapFile dpath pkgDigest
         putStrLn $ "  Per-package digest refreshed: " ++ dpath
           ++ " (" ++ show (M.size srcDigest) ++ " src + "
           ++ show (M.size jsonDigest) ++ " json = "
@@ -1461,7 +1462,7 @@ tryIncrementalInference routingMap distJsonRoot universeMods targetMods = do
   -- Read the universe-wide digest to learn which sources were clean
   -- as of the last successful regen.
   let digestFile = packageSplitDigestAnchor distJsonRoot
-  stored <- Digest.readDigest digestFile
+  stored <- DigestFormat.readDigestMapFile digestFile
   if M.null stored
     then return Nothing
     else do
@@ -1669,7 +1670,7 @@ checkCacheHit digestFile universeMods targetPaths = do
   if M.null currentDigest
     then return Nothing  -- nothing to verify against; always recompute
     else do
-      stored <- Digest.readDigest digestFile
+      stored <- DigestFormat.readDigestMapFile digestFile
       if stored /= currentDigest
         then return Nothing
         else do
@@ -1695,7 +1696,7 @@ checkCacheHitAll digestFiles universeMods targetPaths = do
   if M.null currentDigest
     then return Nothing  -- nothing to verify against; always recompute
     else do
-      storedDigests <- mapM Digest.readDigest digestFiles
+      storedDigests <- mapM DigestFormat.readDigestMapFile digestFiles
       if any (/= currentDigest) storedDigests
         then return Nothing
         else do
@@ -1710,7 +1711,7 @@ refreshDigestAt :: FilePath -> [Module] -> IO ()
 refreshDigestAt digestFile universeMods = do
   nsFiles <- Digest.discoverModuleNameFiles
   current <- Digest.hashUniverse nsFiles universeMods
-  Digest.writeDigest digestFile current
+  DigestFormat.writeDigestMapFile digestFile current
   putStrLn $ "  Digest refreshed: " ++ digestFile ++ " (" ++ show (M.size current) ++ " entries)"
 
 -- | Write DSL modules to JSON files.
@@ -1878,10 +1879,10 @@ mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot dslMods = do
         let dpath = perPackageDigestPath distJsonRoot pkg
         existing <- do
           dExists <- SD.doesFileExist dpath
-          if dExists then Digest.readDigest dpath else return M.empty
+          if dExists then DigestFormat.readDigestMapFile dpath else return M.empty
         let merged = M.union newEntries existing
         CM.when (merged /= existing) $ do
-          Digest.writeDigest dpath merged
+          DigestFormat.writeDigestMapFile dpath merged
           putStrLn $ "  Per-package digest augmented with DSL entries: " ++ dpath
             ++ " (+" ++ show (M.size newEntries - M.size (M.intersection existing newEntries))
             ++ " new, " ++ show (M.size newEntries) ++ " total DSL)"

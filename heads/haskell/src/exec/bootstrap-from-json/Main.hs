@@ -36,6 +36,7 @@ import Hydra.Encoding (encodeModuleName)
 import Hydra.Decoding (decodeModuleName)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
+import qualified Hydra.DigestFormat as DigestFormat
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
 import Hydra.Haskell.Coder (moduleToHaskell)
@@ -1176,7 +1177,7 @@ filterByTargetDigest outBase pkg sourceSet mods = do
         ++ "; keeping all " ++ show (length mods) ++ " modules"
       return mods
     else do
-      stored <- Digest.readDigestV2 digestPath
+      stored <- DigestFormat.readDigestV2File digestPath
       let recordedInputs = Digest.digestInputs stored
       if M.null recordedInputs
         then do

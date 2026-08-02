@@ -14,6 +14,7 @@
 module Hydra.DigestSpec where
 
 import qualified Hydra.Digest as Digest
+import qualified Hydra.DigestFormat as DigestFormat
 import Hydra.Digest
   ( Digest(..), DigestEntry(..), DigestKind(..)
   , Generation(..), GenerationMode(..)
@@ -121,51 +122,40 @@ spec = do
           , digestGenerator  = genGeneratorId g
           , digestGeneration = g }
 
-    H.it "round-trips a published-mode generation record through v2 serialize/parse" $ do
+    -- #512: the on-disk codec is the typed hydra.build.format encoding
+    -- (DigestFormat); a round-trip goes value → canonical JSON string →
+    -- parsed value. The legacy hand-rolled parse/serialize is gone; legacy
+    -- files simply fail the typed decode and cache-miss.
+    let typedRoundTrip d =
+          either error id $ do
+            s <- DigestFormat.outputDigestToJsonString DigestFormat.defaultFormatContext (DigestFormat.fromDigestV2 d)
+            v <- DigestFormat.parseJsonString s
+            DigestFormat.toDigestV2 <$> DigestFormat.outputDigestFromJsonString DigestFormat.defaultFormatContext v
+
+    H.it "round-trips a published-mode generation record through the typed codec" $ do
       let d = withGen publishedGen
-          d' = Digest.parseDigestV2 (Digest.serializeDigestV2 d)
+          d' = typedRoundTrip d
       digestGeneration d' `H.shouldBe` publishedGen
 
     H.it "round-trips a shim-mode record (hydraVersion omitted, revision present)" $ do
       let d = withGen shimGen
-          d' = Digest.parseDigestV2 (Digest.serializeDigestV2 d)
+          d' = typedRoundTrip d
       digestGeneration d' `H.shouldBe` shimGen
 
-    -- Compat window: a digest written by the PRE-#523 version has only the
-    -- flat "generator" string and NO "generation" object. The new parser must
-    -- recover the gating id from the flat field so on-disk digests stay green.
-    H.it "parses a legacy flat-generator digest (no generation object) — gating id recovered" $ do
-      let legacy = unlines
-            [ "{"
-            , "  \"digestFormatVersion\": 1,"
-            , "  \"moduleFormatVersion\": 1,"
-            , "  \"generator\": \"legacy-stamp-xyz\","
-            , "  \"inputs\": {"
-            , "    \"in/a.hs\": { \"kind\": \"DslSource\", \"hash\": \"h1\" }"
-            , "  },"
-            , "  \"outputs\": {"
-            , "    \"out/A.hs\": { \"kind\": \"TargetFile\", \"hash\": \"h2\" }"
-            , "  }"
-            , "}" ]
-          d = Digest.parseDigestV2 legacy
-      digestGenerator d `H.shouldBe` "legacy-stamp-xyz"
-      genGeneratorId (digestGeneration d) `H.shouldBe` "legacy-stamp-xyz"
-      genMode (digestGeneration d) `H.shouldBe` ModePublished  -- default when absent
+    -- (Legacy-format tolerance tests retired with the legacy parser, #512:
+    -- a pre-#512 on-disk digest fails the typed decode and degrades to a
+    -- cache miss — the digest contract for any unreadable state.)
 
-    -- The compat contract that keeps digest-check green over a previously-written
-    -- tree: a legacy flat digest and a new-format digest carrying the SAME gating
-    -- id must compare equal under digestsMatch (which gates on generatorId only).
-    H.it "digestsMatch treats legacy flat and new-format digests with same gating id as equal" $ do
-      let legacy = Digest.parseDigestV2 $ unlines
-            [ "{", "  \"generator\": \"same-stamp\","
-            , "  \"inputs\": {", "    \"in/a.hs\": { \"kind\": \"DslSource\", \"hash\": \"h1\" }", "  },"
-            , "  \"outputs\": {", "    \"out/A.hs\": { \"kind\": \"TargetFile\", \"hash\": \"h2\" }", "  }", "}" ]
-          modern = legacy
-            { digestGeneration = (digestGeneration legacy)
+    -- The gating contract survives the codec change: two digests with the
+    -- same gating id but different INFORMATIONAL provenance compare equal
+    -- under digestsMatch (which gates on generatorId only).
+    H.it "digestsMatch ignores informational provenance differences with same gating id" $ do
+      let a = withGen publishedGen
+          b = a
+            { digestGeneration = (digestGeneration a)
                 { genMode = ModeShim, genHost = "java"
                 , genRevision = Just "deadbee-dirty", genTimestamp = Just "2026-07-03T00:00:00Z" } }
-      -- Same inputs/outputs/generator; differing ONLY in informational fields.
-      Digest.digestsMatch legacy modern `H.shouldBe` True
+      Digest.digestsMatch a b `H.shouldBe` True
 
     -- digestsMatch must still MISS when the gating id differs.
     H.it "digestsMatch misses when the gating generatorId differs" $ do
@@ -173,69 +163,32 @@ spec = do
           b = a { digestGenerator = "gid-different", digestGeneration = publishedGen { genGeneratorId = "gid-different" } }
       Digest.digestsMatch a b `H.shouldBe` False
 
-    -- (gap a) Precedence: when BOTH a flat "generator" and a "generation" object
-    -- with a DIFFERENT generatorId are present, the STRUCTURED id must win. This
-    -- pins the orElse order in parseDigestV2 (Digest.hs) — a silent flip would
-    -- otherwise regress the gating id to the stale flat value on any digest that
-    -- carries both (i.e. every digest this version writes).
-    H.it "prefers generation.generatorId over the flat generator when both are present" $ do
-      let both = Digest.parseDigestV2 $ unlines
-            [ "{"
-            , "  \"generator\": \"flat-stale\","
-            , "  \"generation\": {"
-            , "    \"generatorId\": \"object-wins\","
-            , "    \"mode\": \"published\","
-            , "    \"host\": \"haskell\""
-            , "  },"
-            , "  \"inputs\": {}, \"outputs\": {}"
-            , "}" ]
-      digestGenerator both `H.shouldBe` "object-wins"
-      genGeneratorId (digestGeneration both) `H.shouldBe` "object-wins"
-
-    -- (gap b) Fallback + floor: a "generation" object present but WITHOUT a
-    -- generatorId falls back to the flat "generator"; with neither, the gating
-    -- id floors to "".
-    H.it "falls back to flat generator when the generation object omits generatorId" $ do
-      let noId = Digest.parseDigestV2 $ unlines
-            [ "{"
-            , "  \"generator\": \"flat-fallback\","
-            , "  \"generation\": { \"mode\": \"shim\", \"host\": \"java\", \"revision\": \"beef-dirty\" },"
-            , "  \"inputs\": {}, \"outputs\": {}"
-            , "}" ]
-      digestGenerator noId `H.shouldBe` "flat-fallback"
-      genMode (digestGeneration noId) `H.shouldBe` ModeShim  -- object's other fields still read
-
-    H.it "floors the gating id to empty when neither flat nor object id is present" $ do
-      let neither = Digest.parseDigestV2 "{ \"inputs\": {}, \"outputs\": {} }"
-      digestGenerator neither `H.shouldBe` ""
-      genGeneratorId (digestGeneration neither) `H.shouldBe` ""
-
-    -- (gap c) THE compat guarantee, at the string level: serializeDigestV2 must
-    -- still emit the flat "generator" line so a digest written by THIS version
-    -- remains parseable by the PREVIOUS (flat-only) reader. A round-trip test
-    -- cannot catch removal of the flat line (the new reader would still recover
-    -- the id from the object), so assert the literal line is present.
-    H.it "serializeDigestV2 still emits the flat \"generator\" line (compat guarantee)" $ do
-      let out = Digest.serializeDigestV2 (withGen publishedGen)
-          hasFlatGenerator = any (\ln -> L.isInfixOf "\"generator\":" ln
+    -- The flat "generator" field survives in the TYPED schema (an explicit
+    -- OutputDigest field, canonically always emitted) — the gating id remains
+    -- readable without descending into the generation object. String-level
+    -- assert, mirroring the old compat test: the encoded JSON carries a
+    -- "generator" member distinct from generation.generatorId.
+    H.it "typed encoding emits the flat \"generator\" member (gating id at top level)" $ do
+      let out = either error id $ DigestFormat.outputDigestToJsonString
+            DigestFormat.defaultFormatContext (DigestFormat.fromDigestV2 (withGen publishedGen))
+          hasFlatGenerator = any (\ln -> L.isInfixOf "\"generator\"" ln
                                          && not (L.isInfixOf "\"generatorId\"" ln))
                                  (lines out)
       hasFlatGenerator `H.shouldBe` True
 
-    -- (gap d) Optional-field semantics through the public parser: an absent
-    -- optional reads as Nothing; the mode defaults to published when unset. This
-    -- exercises the same nonEmpty/mode-default logic generationRecord relies on.
-    H.it "absent optionals parse as Nothing and mode defaults to published" $ do
-      let minimal = Digest.parseDigestV2 $ unlines
-            [ "{"
-            , "  \"generation\": { \"generatorId\": \"g\", \"host\": \"haskell\" },"
-            , "  \"inputs\": {}, \"outputs\": {}"
-            , "}" ]
-          g = digestGeneration minimal
-      genMode g `H.shouldBe` ModePublished
+    -- Optional-field semantics through the typed codec: absent optionals
+    -- (hydraVersion/revision/timestamp all Nothing) are omitted on encode and
+    -- decode back to Nothing. (The legacy mode-defaults-to-published rule
+    -- retired with the legacy parser; mode is a required field of the typed
+    -- schema.)
+    H.it "absent optionals round-trip as Nothing through the typed codec" $ do
+      let bare = publishedGen { genHydraVersion = Nothing, genRevision = Nothing, genTimestamp = Nothing }
+          d' = typedRoundTrip (withGen bare)
+          g = digestGeneration d'
       genHydraVersion g `H.shouldBe` Nothing
       genRevision g `H.shouldBe` Nothing
       genTimestamp g `H.shouldBe` Nothing
+      genMode g `H.shouldBe` ModePublished
 
   -- #606: a native-driver JSON change (e.g. #398's coder-runtime field
   -- reorder, which touches no .java/.py SOURCE) updates a native-owned
@@ -275,7 +228,7 @@ spec = do
             let dpath = perPackageDigestPath tmpRoot pkg
                 selfH = Digest.computeSelfHash hmap
             SD.createDirectoryIfMissing True (takeDirectory dpath)
-            Digest.writePerPackageDigest dpath (PerPackageDigest hmap selfH (M.fromList deps))
+            DigestFormat.writePerPackageDigestFile dpath (PerPackageDigest hmap selfH (M.fromList deps))
           writeFinalized pkg hashes deps =
             writeFinalizedMap pkg (M.fromList [(ModuleName k, v) | (k, v) <- hashes]) deps
           -- The REAL native-driver JSON file 'hashPackageJsonContent' reads
@@ -285,8 +238,8 @@ spec = do
 
       writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-1")] []
       writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-1")] []
-      kernelBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
-      jvmBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      kernelBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-jvm")
       SD.createDirectoryIfMissing True (takeDirectory javaJsonPath)
       writeFile javaJsonPath "{\"v\": \"old\"}"
       oldJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
@@ -308,7 +261,7 @@ spec = do
           universeMods = [nameOnly "hydra.java.coder"]
       ensurePerPackageDigests routingMap tmpRoot universeMods
 
-      after <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      after <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-java")
       newJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
       let jsonKey = ModuleName "jsonContent:hydra/java/coder.json"
       -- Confirm the mismatch really was a jsonContent-only change, not some
@@ -335,7 +288,7 @@ spec = do
             let dpath = perPackageDigestPath tmpRoot pkg
                 selfH = Digest.computeSelfHash hmap
             SD.createDirectoryIfMissing True (takeDirectory dpath)
-            Digest.writePerPackageDigest dpath (PerPackageDigest hmap selfH (M.fromList deps))
+            DigestFormat.writePerPackageDigestFile dpath (PerPackageDigest hmap selfH (M.fromList deps))
           writeFinalized pkg hashes deps =
             writeFinalizedMap pkg (M.fromList [(ModuleName k, v) | (k, v) <- hashes]) deps
           -- The REAL native-driver JSON file that hashPackageJsonContent
@@ -348,8 +301,8 @@ spec = do
 
       writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-2")] []
       writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")] []
-      kernelBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
-      jvmBefore <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      kernelBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-jvm")
       SD.createDirectoryIfMissing True (takeDirectory javaJsonPath)
       writeFile javaJsonPath "{\"v\": \"old\"}"
       oldJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
@@ -367,9 +320,9 @@ spec = do
       ensurePerPackageDigests routingMap tmpRoot universeMods
       finalizePerPackageDigests tmpRoot
 
-      after <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
-      kernelAfter <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-kernel")
-      jvmAfter <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-jvm")
+      after <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-java")
+      kernelAfter <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-kernel")
+      jvmAfter <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-jvm")
       newJsonDigest <- Digest.hashPackageJsonContent tmpRoot "hydra-java"
 
       -- selfHash is populated and correctly derived from the (updated)
@@ -395,15 +348,15 @@ spec = do
       let writeHashesOnly pkg hashes = do
             let dpath = perPackageDigestPath tmpRoot pkg
             SD.createDirectoryIfMissing True (takeDirectory dpath)
-            Digest.writeDigest dpath (M.fromList [(ModuleName k, v) | (k, v) <- hashes])
+            DigestFormat.writeDigestMapFile dpath (M.fromList [(ModuleName k, v) | (k, v) <- hashes])
       writeHashesOnly "hydra-kernel" [("hydra.core", "kernel-hash-2")]
       writeHashesOnly "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")]
       writeHashesOnly "hydra-java"   [("jsonContent:hydra/java/coder.json", "java-json-hash-2")]
 
       finalizePerPackageDigests tmpRoot
-      once <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      once <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-java")
       finalizePerPackageDigests tmpRoot
-      twice <- Digest.readPerPackageDigest (perPackageDigestPath tmpRoot "hydra-java")
+      twice <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-java")
 
       twice `H.shouldBe` once
       SD.removePathForcibly tmpRoot

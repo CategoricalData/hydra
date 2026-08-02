@@ -47,26 +47,30 @@ for entry in sorted(os.listdir(dist_root)):
             in_d = json.load(open(in_digest_path))
         except Exception:
             sys.exit(1)
+        # #512 typed digests: files are the canonical JSON encoding of
+        # hydra.build.format.{Input,Output}Digest. Hydra maps encode as
+        # arrays of {"key","value"} entries; a pre-#512 digest lacks the
+        # typed fields, decodes to empty maps here, and misses cleanly.
+        def entries(d, field):
+            return {e["key"]: e["value"] for e in d.get(field, [])
+                    if isinstance(e, dict) and "key" in e}
         recorded = {k: v.get("hash") if isinstance(v, dict) else v
-                    for k, v in out_d.get("inputs", {}).items()}
-        current = in_d.get("hashes", in_d)
-        if recorded != current:
+                    for k, v in entries(out_d, "inputs").items()}
+        current = entries(in_d, "moduleHashes")
+        if not current or recorded != current:
             sys.exit(1)
         recorded_gen = out_d.get("generator", "v0-unstamped")
         if recorded_gen != expected_gen:
             sys.exit(1)
         # #347 transitive invalidation: compare package selfHash and the
-        # depHash:<pkg> entries. Both live as top-level fields on the
-        # input digest (PerPackageDigest format) and as recorded-* slots
-        # in the output digest's flat top-level (alongside generator).
+        # dependencyHashes maps between input digest and the output
+        # digest's recorded slots.
         input_self = in_d.get("selfHash", "")
         recorded_self = out_d.get("selfHash", "")
         if input_self != recorded_self:
             sys.exit(1)
-        input_deps = {k[len("depHash:"):]: v for k, v in in_d.items()
-                      if isinstance(v, str) and k.startswith("depHash:")}
-        recorded_deps = {k[len("depHash:"):]: v for k, v in out_d.items()
-                         if isinstance(v, str) and k.startswith("depHash:")}
+        input_deps = entries(in_d, "dependencyHashes")
+        recorded_deps = entries(out_d, "dependencyHashes")
         if input_deps != recorded_deps:
             sys.exit(1)
         any_set = True

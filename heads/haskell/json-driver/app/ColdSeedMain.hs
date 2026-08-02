@@ -36,6 +36,7 @@ import Hydra.Encoding (encodeModuleName)
 import Hydra.Decoding (decodeModuleName)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
+import qualified Hydra.DigestFormat as DigestFormat
 -- #608 oil-and-water fix: the decode-universe context is the Terms-FREE
 -- Hydra.Sources.Kernel.Types.All (kernelTypesModules), NOT Hydra.Sources.All
 -- (kernelModules). decodeModuleFromJson uses this context only to build a schema
@@ -1226,7 +1227,7 @@ filterByTargetDigest outBase pkg sourceSet mods = do
         ++ "; keeping all " ++ show (length mods) ++ " modules"
       return mods
     else do
-      stored <- Digest.readDigestV2 digestPath
+      stored <- DigestFormat.readDigestV2File digestPath
       let recordedInputs = Digest.digestInputs stored
       if M.null recordedInputs
         then do
