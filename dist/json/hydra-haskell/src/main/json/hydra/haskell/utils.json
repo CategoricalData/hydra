@@ -897,7 +897,7 @@
                                                                                                             "function": {
                                                                                                               "domain": {"map": {"keys": {"variable": "t1"}, "values": {"literal": {"integer": "int32"}}}},
                                                                                                               "codomain": {"function": {"domain": {"variable": "t1"}, "codomain": {"literal": {"integer": "int32"}}}}}},
-                                                                                                          "constraints": [{"key": "t1", "value": {"classes": [{"simple": "ordering"}]}}]}}],
+                                                                                                          "constraints": {"t1": {"classes": [{"simple": "ordering"}]}}}}],
                                                                                                     "body": {
                                                                                                       "let": {
                                                                                                         "bindings": [

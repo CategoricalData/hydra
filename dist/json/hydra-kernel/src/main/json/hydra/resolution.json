@@ -1332,6 +1332,61 @@
                   "value": {"literal": {"string": "Instantiate a type scheme with fresh variables, threading InferenceContext"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.resolution.mapKeyResolvesToString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "types",
+                "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "keyType",
+                    "domain": {"variable": "hydra.core.Type"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.core.Type",
+                            "default": {"literal": {"boolean": false}},
+                            "cases": [
+                              {
+                                "name": "literal",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "lt",
+                                    "domain": {"variable": "hydra.core.LiteralType"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "cases": {
+                                            "typeName": "hydra.core.LiteralType",
+                                            "default": {"literal": {"boolean": false}},
+                                            "cases": [
+                                              {"name": "string", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"boolean": true}}}}}]}},
+                                        "argument": {"variable": "lt"}}}}}}]}},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.resolution.resolveBaseType"}, "argument": {"variable": "types"}}},
+                            "argument": {"variable": "keyType"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Test whether a map's key type resolves to string, following aliases and wrappers. Used to decide whether a map may use the compact JSON object encoding."}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.resolution.nominalApplication",
         "signature": {
           "typeParameters": [],
@@ -2058,6 +2113,95 @@
                                     "argument": {"variable": "name"}}}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Require a name to resolve to a union type"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.resolution.resolveBaseType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "types",
+                "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "typ",
+                    "domain": {"variable": "hydra.core.Type"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "stripped",
+                            "term": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "cases": {
+                                "typeName": "hydra.core.Type",
+                                "default": {"variable": "stripped"},
+                                "cases": [
+                                  {
+                                    "name": "variable",
+                                    "handler": {
+                                      "lambda": {
+                                        "parameter": "name",
+                                        "domain": {"variable": "hydra.core.Name"},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Type"}}},
+                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                            "argument": {"variable": "name"}}},
+                                                        "argument": {"variable": "types"}}}}},
+                                                "argument": {"variable": "stripped"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "resolved",
+                                                "domain": {"variable": "hydra.core.Type"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.resolution.resolveBaseType"}, "argument": {"variable": "types"}}},
+                                                    "argument": {"variable": "resolved"}}}}}}}}}},
+                                  {
+                                    "name": "wrap",
+                                    "handler": {
+                                      "lambda": {
+                                        "parameter": "inner",
+                                        "domain": {"variable": "hydra.core.Type"},
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.resolution.resolveBaseType"}, "argument": {"variable": "types"}}},
+                                            "argument": {"variable": "inner"}}}}}}]}},
+                            "argument": {"variable": "stripped"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Resolve a type to its base, following annotations, type aliases (Type.variable dereferenced against the given type map), and Type.wrap bodies, transitively. An unresolvable variable name (not found in the map) is returned as-is, since the caller is in the best position to decide whether that is an error. As with hydra.sources.kernel.terms.lexical.dereferenceSchemaType, this assumes type aliases form an acyclic reference graph, as guaranteed by schema construction; a genuinely self-referential alias is not a supported input and would not terminate."}}}]}}}}},
     {
       "term": {
         "name": "hydra.resolution.resolveType",
