@@ -60,10 +60,13 @@ echo ""
 #    artifact, gitignored) — never hand-edited, so there is no content drift.
 HEAD_SRC="$REPO_ROOT/heads/haskell/src/main/haskell/Hydra"
 HEADMODS="$DRIVER_DIR/headmods/Hydra"
-echo "[0/4] Refreshing headmods/ (4 head gen modules) from canonical head source..."
+echo "[0/4] Refreshing headmods/ (5 head gen modules) from canonical head source..."
 rm -rf "$DRIVER_DIR/headmods"
 mkdir -p "$HEADMODS"
-for m in Generation PackageRouting TargetFilePaths Digest; do
+# DigestFormat (#512) carries the typed digest codec and is the ONE headmod
+# permitted to import the published Hydra.Build.Format family (see the
+# allow-list check below); Digest.hs itself stays Build-free.
+for m in Generation PackageRouting TargetFilePaths Digest DigestFormat; do
     cp "$HEAD_SRC/$m.hs" "$HEADMODS/$m.hs"
 done
 # #497 published-host shim removed: stack.yaml now pins hydra-kernel-0.17.3, which
@@ -81,20 +84,24 @@ done
 # writePerPackageManifestsJson, so the cold seeder has no need of it, and copying
 # it in would reintroduce the unpublished-module coupling this split removes.
 
-# No-new-Build.*-imports invariant check (#622): the four cold-seeder headmods may
-# only import the Hydra.Build.* modules already known to compile against the
+# No-new-Build.*-imports invariant check (#622): the cold-seeder headmods may
+# only import the hydra-build modules already known to compile against the
 # PUBLISHED hydra-build version this script pins (stack.yaml extra-deps, currently
-# hydra-build-0.17.3) — today, only Hydra.Build.Routing (via PackageRouting.hs,
-# #560's precedent: consumed from the published package, no shim needed). Any OTHER
-# Hydra.Build.* import is exactly the dependency that breaks a cold-clone when a new
-# hydra-build module lands in source before it is published (the #560/#607 revert
-# class). This is a fast local tripwire so a future change (e.g. a Digest.hs
-# repoint onto Hydra.Build.Format) fails here instead of surfacing only via a
-# cold-clone CI run. Update ALLOWED_BUILD_IMPORTS when a new Build.* module is
-# confirmed present in the pinned published hydra-build version.
-ALLOWED_BUILD_IMPORTS='Hydra\.Build\.Routing'
-for m in Generation PackageRouting TargetFilePaths Digest; do
-    disallowed=$(grep -E '^import qualified Hydra\.Build\.' "$HEADMODS/$m.hs" | grep -vE "$ALLOWED_BUILD_IMPORTS" || true)
+# hydra-build-0.17.3): Hydra.Build.Routing (via PackageRouting.hs, #560's
+# precedent) and the Hydra.Build.Format codec family (via DigestFormat.hs, #512 —
+# Format + Encode/Decode.Build.Format all verified exposed by the published
+# 0.17.3 cabal). Any OTHER import from the hydra-build package is exactly the
+# dependency that breaks a cold-clone when a new hydra-build module lands in
+# source before it is published (the #560/#607 revert class). This is a fast
+# local tripwire so such a change fails here instead of surfacing only via a
+# cold-clone CI run. Update ALLOWED_BUILD_IMPORTS when a new module is confirmed
+# present in the pinned published hydra-build version.
+# #512 widened the grep: the original pattern matched only Hydra.Build.*, letting
+# Hydra.{Encode,Decode,Dsl}.Build.* imports (equally hydra-build-owned) sail past
+# unchecked.
+ALLOWED_BUILD_IMPORTS='Hydra\.Build\.Routing|Hydra\.Build\.Format|Hydra\.Encode\.Build\.Format|Hydra\.Decode\.Build\.Format'
+for m in Generation PackageRouting TargetFilePaths Digest DigestFormat; do
+    disallowed=$(grep -E '^import qualified Hydra\.(Build|Encode\.Build|Decode\.Build|Dsl\.Build)\.' "$HEADMODS/$m.hs" | grep -vE "$ALLOWED_BUILD_IMPORTS" || true)
     if [ -n "$disallowed" ]; then
         echo "ERROR: $HEADMODS/$m.hs imports a Hydra.Build.* module not in the allow-list:" >&2
         echo "$disallowed" >&2
@@ -124,6 +131,12 @@ rm -rf "$TYPESMODS"
 mkdir -p "$TYPESMODS/Hydra/Sources/Kernel/Types" "$TYPESMODS/Hydra/Sources/Json"
 cp -R "$KERNEL_SRC/Hydra/Sources/Kernel/Types/." "$TYPESMODS/Hydra/Sources/Kernel/Types/"
 cp "$KERNEL_SRC/Hydra/Sources/Json/Model.hs" "$TYPESMODS/Hydra/Sources/Json/Model.hs"
+# #512: the typed digest codec (DigestFormat headmod) builds its schema context
+# from the hydra.build.format DSL source; copy it (and only it) from
+# packages/hydra-build — a type-level module, Terms-free like Kernel/Types.
+BUILD_SRC="$REPO_ROOT/packages/hydra-build/src/main/haskell"
+mkdir -p "$TYPESMODS/Hydra/Sources/Build"
+cp "$BUILD_SRC/Hydra/Sources/Build/Format.hs" "$TYPESMODS/Hydra/Sources/Build/Format.hs"
 
 # 2. Build the cold-only seeder against the published Hackage packages.
 echo "[2/4] Building cold-only seeder (published 0.17.1 deps)..."
