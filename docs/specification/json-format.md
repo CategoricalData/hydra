@@ -211,7 +211,8 @@ elsewhere), and the omission is more compact than encoding `null`.
 - `Type.unit` (a standalone unit value, not as a union variant) encodes as `{}`.
 - A unit-typed union variant encodes as a bare string (see [Tagged unions](#tagged-unions)).
 - An empty list, set, or array of records encodes as `[]`.
-- An empty map encodes as `[]` (a map is encoded as an array of entries; see [Maps](#maps)).
+- An empty map with a non-string-resolving key type encodes as `[]` (see [Maps](#maps)).
+- An empty map with a string-resolving key type encodes as `{}` (compact form; see [Maps](#maps)).
 
 ## Maps
 
@@ -225,6 +226,48 @@ The `key` / `value` envelope is required because JSON object keys must be string
 and Hydra map keys may be any term (`Name`, structured key, etc.).
 Entry order is the iteration order of the source `Map` (by `Ord` on the key type for the
 reference Haskell encoder; equivalent total order for other encoders).
+
+**Compact object form for string-resolving key types.**
+When the map's key type *resolves to* `string` (see below), the encoder emits a native JSON
+object instead of the entry-array form:
+
+```json
+{"<encoded k1>": <encoded v1>, "<encoded k2>": <encoded v2>, ...}
+```
+
+This is backwards-compatible: decoders accept both forms.
+A decoder that sees a JSON object in a map position (for a string-resolving key type) decodes
+each object key via the key type and each value via the value type.
+A decoder that sees a JSON array in a map position always decodes it via the entry-array rule,
+regardless of the key type — so the old `[{"key": ..., "value": ...}]` form is still valid on
+input for string-resolving key types and decodes identically. Duplicate keys in the compact
+object form are rejected as invalid input.
+
+**The trigger: the key type resolves to `string`.**
+"Resolves to" means: strip annotations, then follow the key type transitively through type
+aliases (a named type whose schema definition is itself checked) and `Type.wrap` bodies, down
+to a base type; the compact form applies iff that base type is `string`.
+
+- `string` itself → compact.
+- An alias to string, e.g. `EmailAddress = string` → compact (dereference the alias).
+- `Type.wrap` of string, transitively — e.g. `wrap(string)`, `wrap(wrap(string))`, or
+  `wrap(alias-to-string)` (real kernel examples: `hydra.core.Name`, `hydra.ast.Symbol`,
+  `hydra.coders.LanguageName`, all `wrap(string)`) → compact.
+- Anything else (a record — even a single-field record, a union, a list, another map, an
+  optional, etc.) → entry array, unchanged.
+
+Example — given a map type with a `hydra.core.Name`-typed key (`wrap(string)`) and int values:
+
+- `{Name "java": 1, Name "python": 2}` → `{"java": 1, "python": 2}` (compact form;
+  previously `[{"key": "java", "value": 1}, {"key": "python", "value": 2}]`)
+
+A map whose key type is a record, even one with a single string field, is unaffected and
+continues to use the entry-array form — a record is a conjunction of fields (however few), not
+a string, and the JSON object shape as such carries no information about which field the key
+came from.
+
+This scope is limited to the **typed (schema-directed)** coders, where the map position's key
+type is known; untyped/term-level map serialization is unaffected.
 
 ## Pairs
 
