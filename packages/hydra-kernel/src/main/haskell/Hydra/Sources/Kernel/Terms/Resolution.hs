@@ -14,7 +14,6 @@ import Hydra.Kernel hiding (
   fullyStripType,
   instantiateType,
   instantiateTypeScheme,
-  mapKeyResolvesToString,
   nominalApplication,
   requireRecordType,
   requireRowType,
@@ -22,7 +21,6 @@ import Hydra.Kernel hiding (
   requireType,
   requireUnionField_,
   requireUnionType,
-  resolveBaseType,
   resolveType,
   typeToTypeScheme)
 import qualified Hydra.Dsl.Paths    as Paths
@@ -105,7 +103,6 @@ module_ = Module {
       toDefinition fullyStripType,
       toDefinition instantiateType,
       toDefinition instantiateTypeScheme,
-      toDefinition mapKeyResolvesToString,
       toDefinition nominalApplication,
       toDefinition requireRecordType,
       toDefinition requireRowType,
@@ -113,7 +110,6 @@ module_ = Module {
       toDefinition requireType,
       toDefinition requireUnionField_,
       toDefinition requireUnionType,
-      toDefinition resolveBaseType,
       toDefinition resolveType,
       toDefinition typeToTypeScheme]
 
@@ -245,15 +241,6 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
       (var "renamedConstraints"))
     (var "cx2")
 
-mapKeyResolvesToString :: TypedTermDefinition (M.Map Name Type -> Type -> Bool)
-mapKeyResolvesToString = define "mapKeyResolvesToString" $
-  doc ("Test whether a map's key type resolves to string, following aliases and wrappers."
-    <> " Used to decide whether a map may use the compact JSON object encoding.") $
-  "types" ~> "keyType" ~>
-  cases _Type (resolveBaseType @@ var "types" @@ var "keyType") (Just false) [
-    _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
-      _LiteralType_string>>: constant true]]
-
 nominalApplication :: TypedTermDefinition (Name -> [Type] -> Type)
 nominalApplication = define "nominalApplication" $
   doc "Apply type arguments to a nominal type" $
@@ -317,24 +304,6 @@ requireUnionType = define "requireUnionType" $
     (Just nothing) [
     _Type_union>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "union" @@ var "toUnion" @@ var "graph" @@ var "name"
-
-resolveBaseType :: TypedTermDefinition (M.Map Name Type -> Type -> Type)
-resolveBaseType = define "resolveBaseType" $
-  doc ("Resolve a type to its base, following annotations, type aliases (Type.variable"
-    <> " dereferenced against the given type map), and Type.wrap bodies, transitively. An"
-    <> " unresolvable variable name (not found in the map) is returned as-is, since the caller"
-    <> " is in the best position to decide whether that is an error. As with"
-    <> " hydra.sources.kernel.terms.lexical.dereferenceSchemaType, this assumes type aliases"
-    <> " form an acyclic reference graph, as guaranteed by schema construction; a genuinely"
-    <> " self-referential alias is not a supported input and would not terminate.") $
-  "types" ~> "typ" ~>
-  "stripped" <~ (Strip.deannotateType @@ var "typ") $
-  cases _Type (var "stripped") (Just (var "stripped")) [
-    _Type_variable>>: "name" ~>
-      Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
-        (var "stripped")
-        ("resolved" ~> resolveBaseType @@ var "types" @@ var "resolved"),
-    _Type_wrap>>: "inner" ~> resolveBaseType @@ var "types" @@ var "inner"]
 
 resolveType :: TypedTermDefinition (Graph -> Type -> Maybe Type)
 resolveType = define "resolveType" $

@@ -5366,7 +5366,7 @@
                                                     "function": {
                                                       "domain": {"pair": {"first": {"variable": "t2"}, "second": {"set": {"variable": "t3"}}}},
                                                       "codomain": {"list": {"pair": {"first": {"variable": "t2"}, "second": {"variable": "t3"}}}}}},
-                                                  "constraints": {"t3": {"classes": [{"simple": "ordering"}]}}}}],
+                                                  "constraints": [{"key": "t3", "value": {"classes": [{"simple": "ordering"}]}}]}}],
                                             "body": {
                                               "application": {
                                                 "function": {

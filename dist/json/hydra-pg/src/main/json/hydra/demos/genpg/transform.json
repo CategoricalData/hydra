@@ -1227,7 +1227,10 @@
                                                             "map": {
                                                               "keys": {"variable": "t0"},
                                                               "values": {"pair": {"first": {"list": {"variable": "t1"}}, "second": {"list": {"variable": "t2"}}}}}}}}}},
-                                                  "constraints": {"t0": {"classes": [{"simple": "ordering"}]}, "t1": {"classes": []}, "t2": {"classes": []}}}}],
+                                                  "constraints": [
+                                                    {"key": "t0", "value": {"classes": [{"simple": "ordering"}]}},
+                                                    {"key": "t1", "value": {"classes": []}},
+                                                    {"key": "t2", "value": {"classes": []}}]}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -1377,7 +1380,10 @@
                                                                 "map": {
                                                                   "keys": {"variable": "t0"},
                                                                   "values": {"pair": {"first": {"list": {"variable": "t1"}}, "second": {"list": {"variable": "t2"}}}}}}}}}},
-                                                      "constraints": {"t0": {"classes": [{"simple": "ordering"}]}, "t1": {"classes": []}, "t2": {"classes": []}}}}],
+                                                      "constraints": [
+                                                        {"key": "t0", "value": {"classes": [{"simple": "ordering"}]}},
+                                                        {"key": "t1", "value": {"classes": []}},
+                                                        {"key": "t2", "value": {"classes": []}}]}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -1435,7 +1441,7 @@
                                                                   "first": {
                                                                     "list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "hydra.core.Term"}}}},
                                                                   "second": {"list": {"variable": "t0"}}}}}},
-                                                          "constraints": {"t0": {"classes": []}}}}],
+                                                          "constraints": [{"key": "t0", "value": {"classes": []}}]}}],
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
