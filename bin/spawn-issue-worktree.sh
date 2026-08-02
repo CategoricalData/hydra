@@ -77,6 +77,17 @@ esac
 # briefing; every non-release issue should declare one. Empty for release roots.
 PARENT="${PARENT:-}"
 
+# Mandatory-parent gate (#557/#625): every non-release issue must declare a
+# parent, so the agent tree mirrors the GitHub issue tree and no non-release
+# issue is left orphaned (see claude/agent-hierarchy.md § Mandatory parent).
+# release_* roots are the only parentless issues; they omit PARENT by design.
+if [ "$TYPE" != "release" ] && [ -z "$PARENT" ]; then
+    echo "error: PARENT is required for TYPE=$TYPE (only TYPE=release may omit it)." >&2
+    echo "       Pass PARENT=<issue-number> — the issue this one is a child of." >&2
+    echo "       If this issue genuinely has no parent, it is a release root: use TYPE=release." >&2
+    exit 2
+fi
+
 # Build the parent paragraph for the briefing as a PLAIN variable, never as an
 # inline ${PARENT:+...} brace-expansion inside the heredoc. Rationale (this bit
 # them once, #557 review C1): an apostrophe inside a ${var:+...} alternate value
