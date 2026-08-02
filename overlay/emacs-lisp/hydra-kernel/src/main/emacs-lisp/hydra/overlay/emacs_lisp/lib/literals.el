@@ -182,7 +182,7 @@
       ((string= s "-Infinity") (list :given -1.0e+INF))
       (t (condition-case nil
              (let ((n (string-to-number s)))
-               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
+               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0") (string= s "-0") (string= s "-0.0")))
                    (list :given (round-to-float32 (float n)))
                    (list :none)))
            (error (list :none)))))))
@@ -533,7 +533,7 @@
       ((string= s "-Infinity") (list :given -1.0e+INF))
       (t (condition-case nil
              (let ((n (string-to-number s)))
-               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
+               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0") (string= s "-0") (string= s "-0.0")))
                    (list :given (float n))
                    (list :none)))
            (error (list :none)))))))
