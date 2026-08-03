@@ -228,7 +228,10 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.json.decode.fromJson"}, "argument": {"variable": "schemaMap"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.json.decode.fromJson"}, "argument": {"variable": "schemaMap"}}},
+                                                        "argument": {"literal": {"boolean": false}}}},
                                                     "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Module"}}}}}},
                                                 "argument": {"variable": "modType"}}},
                                             "argument": {"variable": "jsonVal"}}}}}}}}}}}}}}}}},
@@ -5174,7 +5177,10 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.json.encode.toJson"}, "argument": {"variable": "schemaMap"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.json.encode.toJson"}, "argument": {"variable": "schemaMap"}}},
+                                                    "argument": {"literal": {"boolean": false}}}},
                                                 "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Module"}}}}}},
                                             "argument": {"variable": "modType"}}},
                                         "argument": {"variable": "term"}}}}}}}}}}}}}}},

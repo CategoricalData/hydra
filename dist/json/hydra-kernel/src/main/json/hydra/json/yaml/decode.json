@@ -108,7 +108,10 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.json.decode.fromJson"}, "argument": {"variable": "types"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.json.decode.fromJson"}, "argument": {"variable": "types"}}},
+                                                            "argument": {"literal": {"boolean": false}}}},
                                                         "argument": {"variable": "tname"}}},
                                                     "argument": {"variable": "typ"}}},
                                                 "argument": {"variable": "json"}}}}}}},
