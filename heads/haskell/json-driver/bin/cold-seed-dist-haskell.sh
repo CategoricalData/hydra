@@ -74,6 +74,19 @@ done
 # 0.17.2, confirmed still true at 0.17.3), so the canonical head source (already
 # using Hydra.Print.Errors) needs no patching for this ephemeral copy.
 
+# #624 cold-seed shim: DigestFormat.hs's canonical source calls the LOCAL dist/haskell
+# kernel's 5-arg hydra.json.{encode.toJson,decode.fromJson} (added a `Bool` compactMaps
+# parameter, second position), but published hydra-kernel-0.17.3 (pinned above) still
+# exposes the pre-#624 4-arg signature (verified directly against the Hackage source).
+# Drop the extra `False` argument in this ephemeral headmods/ copy only -- the canonical
+# head source and the local build both keep the real 5-arg call unchanged. Remove this
+# patch once hydra-kernel republishes with the 5-arg signature and stack.yaml's pin is
+# bumped past it.
+sed -i \
+    -e 's/JsonEncode\.toJson (fcSchemaMap ctx) False /JsonEncode.toJson (fcSchemaMap ctx) /' \
+    -e 's/JsonDecode\.fromJson (fcSchemaMap ctx) False /JsonDecode.fromJson (fcSchemaMap ctx) /' \
+    "$HEADMODS/DigestFormat.hs"
+
 # #622: writePerPackageManifestsJson (the #607 shim's target) has been moved
 # structurally out of Generation.hs into Hydra.ManifestGeneration, a module used
 # only by the update-json-manifest driver (which always runs against a local,
