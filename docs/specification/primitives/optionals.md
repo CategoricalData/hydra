@@ -9,8 +9,8 @@
 The optional type is Hydra's presence/absence type: a value of `optional<t>` is either `given x`,
 carrying a value `x` of type `t`, or `none`, carrying nothing.
 The optional type is a monad, and this module provides the full monad row — `pure`, `map`,
-`apply`, `bind`, and `compose` — together with elimination (`cases`), predicates, and traversal.
-The fundamental eliminator is `cases`; every other primitive in this module can be derived
+`apply`, `bind`, and `compose` — together with elimination (`match`), predicates, and traversal.
+The fundamental eliminator is `match`; every other primitive in this module can be derived
 from it.
 
 #### apply — **Draft**
@@ -37,25 +37,8 @@ Usage: `bind m f`
 Monadic bind for optionals.
 Returns `f x` when `m` is `given x`, and `none` when `m` is `none`.
 Used to chain computations that may be absent.
-`bind m f` is `cases m none f`; this defining equation is the specification, and the default
+`bind m f` is `match m none f`; this defining equation is the specification, and the default
 implementation.
-
-Since: 0.15
-
-#### cases — **Draft**
-
-`∀t1,t2. optional<t1> → t2 → (t1 → t2) → t2`
-
-Usage: `cases m default f`
-
-Case analysis on an optional value.
-Returns `f x` when `m` is `given x`, and `default` when `m` is `none`.
-This is the fundamental eliminator for the optional type; every other primitive in this module
-can be derived from it.
-The optional value is the first argument, matching the convention for case-statement-like
-elimination.
-
-Lazy: `default` — evaluated only when `m` is `none`.
 
 Since: 0.15
 
@@ -163,6 +146,23 @@ The result is `none` as soon as any application yields `none`.
 
 Since: 0.18
 
+#### match — **Draft**
+
+`∀t1,t2. optional<t1> → t2 → (t1 → t2) → t2`
+
+Usage: `match m default f`
+
+Case analysis on an optional value.
+Returns `f x` when `m` is `given x`, and `default` when `m` is `none`.
+This is the fundamental eliminator for the optional type; every other primitive in this module
+can be derived from it.
+The optional value is the first argument, matching the convention for case-statement-like
+elimination.
+
+Lazy: `default` — evaluated only when `m` is `none`.
+
+Since: 0.15
+
 #### pure — **Draft**
 
 `∀t. t → optional<t>`
@@ -196,7 +196,7 @@ Usage: `withDefault default m`
 
 Return the value contained in an optional, falling back to a default if absent.
 Returns `x` when `m` is `given x`, and `default` when `m` is `none`.
-`withDefault default m` is `cases m default (λx → x)`; this defining equation is the
+`withDefault default m` is `match m default (λx → x)`; this defining equation is the
 specification, and the default implementation.
 The default comes first — a documented exception to the standard parameter order.
 

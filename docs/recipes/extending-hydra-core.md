@@ -873,7 +873,7 @@ ulimit -n 4096; stack test
 4. **Understand the distinction:**
    - **Hydra union types** (defined with `union` combinator in DSL) → use `cases`
    - **Haskell built-in types** (like `Prelude.Either`, `Prelude.Maybe`) →
-     use library functions (`Eithers.either_`, `Optionals.cases`)
+     use library functions (`Eithers.either_`, `Optionals.match`)
 
 5. **Don't skip bootstrap patching** - Manual patching is necessary to break the circular dependency
 

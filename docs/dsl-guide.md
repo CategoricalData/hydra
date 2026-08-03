@@ -943,7 +943,7 @@ expr =
 
 ```haskell
 -- Match on an optional value (hydra.lib.optionals)
-handleOptional = Optionals.cases optValue
+handleOptional = Optionals.match optValue
   defaultValue                          -- the `nothing` case
   ("val" ~> processValue (var "val"))   -- the `just` case
 
@@ -1283,7 +1283,7 @@ import Hydra.Dsl.Lib.Optionals as Optionals
 Optionals.isGiven optionalValue
 Optionals.isNone optionalValue
 Optionals.fromOptional defaultValue optionalValue              -- extract with fallback
-Optionals.cases optionalValue defaultValue (lambda "x" ...)    -- fold over the two branches (subject-first)
+Optionals.match optionalValue defaultValue (lambda "x" ...)    -- fold over the two branches (subject-first)
 Optionals.map (lambda "x" (Math.add (var "x") (int32 1))) optionalValue
 ```
 
@@ -1589,7 +1589,7 @@ import Hydra.Dsl.Lib.Eithers as Eithers
 
 safeDivide :: TypedTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
-  Optionals.cases
+  Optionals.match
     (Math.maybeDiv (var "x") (var "y"))
     (left (string "Division by zero"))
     ("q" ~> right (var "q"))
@@ -1613,7 +1613,7 @@ a common source of errors.
 Functions from `Hydra.Dsl.Lib.*` and `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms` are Haskell functions
 on `TypedTerm` values. They take arguments directly via Haskell function application -- no `@@`
 needed. This includes all primitive function wrappers (`Lists.concat`, `Strings.cat`,
-`Optionals.cases`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
+`Optionals.match`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
 `project`, `lets`, etc.).
 
 ```haskell

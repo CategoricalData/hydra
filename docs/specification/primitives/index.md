@@ -77,7 +77,7 @@ primitives that perform no comparison themselves.
 
 1. Function and configuration arguments come first; the principal data argument comes last
    (`lists.map f xs`, `lists.foldl f acc xs`, `maps.insert k v m`).
-2. Eliminators take the scrutinee first (`optionals.cases m default f`, `eithers.bind m f`).
+2. Eliminators take the scrutinee first (`optionals.match m default f`, `eithers.match e f g`).
 
 Documented exceptions (`math.atan2 y x`, `math.logBase b x`, default-first
 `optionals.withDefault default m`) are noted in their entries.

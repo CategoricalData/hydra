@@ -13,8 +13,8 @@ The either type is a right-biased monad: `pure`, `map`, `apply`, and `bind` oper
 `right` side, and the `left` type is held fixed through a computation, so a chain of steps
 shares a common error type.
 This module provides the full monad row — `pure`, `map`, `apply`, `bind`, and `compose` —
-together with elimination (`cases`), predicates, and traversal.
-The fundamental eliminator is `cases`; every other primitive in this module can be derived
+together with elimination (`match`), predicates, and traversal.
+The fundamental eliminator is `match`; every other primitive in this module can be derived
 from it.
 
 #### apply — **Draft**
@@ -57,22 +57,6 @@ Returns `f y` when `e` is `right y`; when `e` is `left x`, the result is `left x
 Used to chain computations that may fail with a common error type.
 
 Since: 0.15
-
-#### cases — **Draft**
-
-`∀t1,t2,t3. either<t1, t2> → (t1 → t3) → (t2 → t3) → t3`
-
-Usage: `cases e f g`
-
-Case analysis on an either value.
-Applies the first function to a `left` value and the second to a `right` value: returns `f x`
-when `e` is `left x`, and `g y` when `e` is `right y`.
-This is the fundamental eliminator for the either type; every other primitive in this module
-can be derived from it.
-The either value is the first argument, matching `hydra.lib.optionals.cases` and the convention
-for case-statement-like elimination.
-
-Since: 0.18 (renamed from `either`, with the scrutinee moved first)
 
 #### compose — **Draft**
 
@@ -194,6 +178,22 @@ to a `left` is also unspecified.
 
 Since: 0.15
 
+#### match — **Draft**
+
+`∀t1,t2,t3. either<t1, t2> → (t1 → t3) → (t2 → t3) → t3`
+
+Usage: `match e f g`
+
+Case analysis on an either value.
+Applies the first function to a `left` value and the second to a `right` value: returns `f x`
+when `e` is `left x`, and `g y` when `e` is `right y`.
+This is the fundamental eliminator for the either type; every other primitive in this module
+can be derived from it.
+The either value is the first argument, matching `hydra.lib.optionals.match` and the convention
+for case-statement-like elimination.
+
+Since: 0.18 (renamed from `either`, with the scrutinee moved first)
+
 #### partition — **Draft**
 
 `∀t1,t2. list<either<t1, t2>> → pair<list<t1>, list<t2>>`
@@ -237,22 +237,22 @@ Since: 0.15
 
 `∀t1,t2,t3. (t1 → t3) → (t2 → t3) → either<t1, t2> → t3`
 
-Deprecated since: 0.18. Use: `cases`.
-Note that the argument order also changed: `cases` takes the scrutinee first.
+Deprecated since: 0.18. Use: `match`.
+Note that the argument order also changed: `match` takes the scrutinee first.
 
 #### fromLeft — **Deprecated**
 
 `∀t1,t2. t1 → either<t1, t2> → t1`
 
-Deprecated since: 0.18. Use: `cases`.
-This was a default-extractor; `cases` expresses it directly.
+Deprecated since: 0.18. Use: `match`.
+This was a default-extractor; `match` expresses it directly.
 
 #### fromRight — **Deprecated**
 
 `∀t1,t2. t2 → either<t1, t2> → t2`
 
-Deprecated since: 0.18. Use: `cases`.
-This was a default-extractor; `cases` expresses it directly.
+Deprecated since: 0.18. Use: `match`.
+This was a default-extractor; `match` expresses it directly.
 
 #### foldl — **Deprecated**
 
