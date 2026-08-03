@@ -4,7 +4,7 @@
     "description": "A model for Hydra's translingual regular-expression syntax: the abstract syntax tree (AST) into which hydra.parse.regex parses a pattern and from which hydra.print.regex (and the per-dialect hydra.print.<dialect>.regex renderers) emit target syntax. Covers the minimal core defined in docs/specification/regex.md (literals, character classes, ., quantifiers, alternation, anchors, grouping). See issue #567.",
     "comments": [],
     "seeAlso": []},
-  "dependencies": [],
+  "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
       "type": {

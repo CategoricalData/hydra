@@ -5,7 +5,9 @@
     {"module": "hydra.regex"},
     {"module": "hydra.typed"},
     {"module": "hydra.encode.regex"},
-    {"module": "hydra.decode.regex"}],
+    {"module": "hydra.decode.regex"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
     {
       "term": {

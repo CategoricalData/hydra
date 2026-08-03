@@ -6,6 +6,7 @@ import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
 import           Hydra.Overlay.Haskell.Bootstrap
 import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
@@ -18,7 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleMetadata = descriptionMetadata (Just $
               "A model for Hydra's translingual regular-expression syntax: the abstract syntax tree"
               ++ " (AST) into which hydra.parse.regex parses a pattern and from which hydra.print.regex"
