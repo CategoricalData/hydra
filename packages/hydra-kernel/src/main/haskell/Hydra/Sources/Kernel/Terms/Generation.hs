@@ -153,7 +153,9 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
         ("decErr" ~> left (Error.errorDecoding $ var "decErr"))
         ("mod" ~> right (var "mod"))
         (decoderFor _Module @@ var "graph" @@ var "term"))
-    (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")
+    -- compactMaps = False: dist/json module files are read by the published-host cold-seeder,
+    -- which must be able to decode them without #624's compact-map support (see toJson's doc).
+    (JsonDecode.fromJson @@ var "schemaMap" @@ false @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
 -- Operates on a list of int32 character codes (bytes).
 -- Walks through the list tracking whether we're inside a string and
@@ -673,7 +675,9 @@ moduleToJson = define "moduleToJson" $
   "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
   Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
     (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
-      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
+      -- compactMaps = False: dist/json module files are read by the published-host
+      -- cold-seeder, which must be able to decode them without #624's compact-map support.
+      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ false @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
 
 -- | Rebuild a module's term definitions using freshly inferred bindings.
 -- Type-only modules (containing only native type definitions) are returned unchanged.

@@ -115,17 +115,21 @@ outputDigestName = Core.Name "hydra.build.format.OutputDigest"
 ----------------------------------------------------------------------
 -- Pure value ⇄ JSON-string codec
 
+-- compactMaps = False: digest.json files are compared byte-for-byte across builds/commits for
+-- change detection, so flipping to the #624 compact-map form would read as a spurious digest
+-- change even when the underlying data is identical. Enabling it is a deliberate follow-up
+-- decision (not made here), not something to pick up incidentally via this bug fix.
 typedToJsonString :: FormatContext -> Core.Name -> (a -> Core.Term) -> a -> Either String String
 typedToJsonString ctx name encode value =
   JsonWriter.printJson
-    <$> JsonEncode.toJson (fcSchemaMap ctx) name (Core.TypeVariable name) (encode value)
+    <$> JsonEncode.toJson (fcSchemaMap ctx) False name (Core.TypeVariable name) (encode value)
 
 typedFromJsonString
   :: FormatContext -> Core.Name
   -> (Graph.Graph -> Core.Term -> Either err a) -> (err -> String)
   -> Json.Value -> Either String a
 typedFromJsonString ctx name decode showErr jsonVal = do
-  term <- JsonDecode.fromJson (fcSchemaMap ctx) name (Core.TypeVariable name) jsonVal
+  term <- JsonDecode.fromJson (fcSchemaMap ctx) False name (Core.TypeVariable name) jsonVal
   either (Left . showErr) Right (decode (fcGraph ctx) term)
 
 inputDigestToJsonString :: FormatContext -> Format.InputDigest -> Either String String

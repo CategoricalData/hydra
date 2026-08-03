@@ -102,6 +102,7 @@ module_ = Module {
       toDefinition yamlToJson]
 
 -- | Decode a YAML Node to a Hydra Term via JSON.
+-- compactMaps = False: mirrors toYaml's choice to keep the array-of-entries map shape stable.
 fromYaml :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> YM.Node -> Either String Term)
 fromYaml = define "fromYaml" $
   doc "Decode a YAML node to a Hydra term via JSON decoding." $
@@ -109,7 +110,7 @@ fromYaml = define "fromYaml" $
   "jsonResult" <~ (yamlToJson @@ var "node") $
   Eithers.either
     ("err" ~> left $ var "err")
-    ("json" ~> JsonDecode.fromJson @@ var "types" @@ var "tname" @@ var "typ" @@ var "json")
+    ("json" ~> JsonDecode.fromJson @@ var "types" @@ false @@ var "tname" @@ var "typ" @@ var "json")
     (var "jsonResult")
 -- | Convert a YAML Node to a JSON Value. Fails if the YAML uses non-JSON features
 -- (e.g. non-string mapping keys, integer scalars without a JSON number equivalent).

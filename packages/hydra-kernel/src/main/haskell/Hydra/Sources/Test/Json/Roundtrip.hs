@@ -14,6 +14,7 @@ import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
 import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Literals      as Literals
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
 import qualified Hydra.Dsl.Lib.Eithers   as Eithers
@@ -67,6 +68,7 @@ allTests = define "allTests" $
       recordRoundtripGroup,
       parametricTypeRoundtripGroup,
       unionRoundtripGroup,
+      mapRoundtripGroup,
       wireShapeGroup]
 
 -- Helper for creating JSON round-trip test cases (universal)
@@ -79,8 +81,8 @@ roundtripTest testName typ term = universalCase testName
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-        (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
-    (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+        (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
+    (EncodeModule.toJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (PrintCore.term @@ term)
 
 -- Helper that pins the encoder's exact wire shape: encodes a term to JSON, serializes
@@ -92,7 +94,20 @@ wireShapeTest testName typ term expectedJson = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
-    (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+    (EncodeModule.toJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+  (Phantoms.string expectedJson)
+
+-- Like wireShapeTest, but with an explicit compactMaps flag instead of always True. Used to
+-- prove that compactMaps=False (the setting required for callers reading/writing the
+-- checked-in dist/json module-bootstrapping representation) suppresses the #624 compact
+-- object form even for a string-resolving key type -- regression coverage for the bug where
+-- the compact form leaked into dist/json and broke the published-host cold-seeder's decoder.
+wireShapeTestWithCompactMaps :: String -> TypedTerm Bool -> TypedTerm Type -> TypedTerm Term -> String -> TypedTerm TestCaseWithMetadata
+wireShapeTestWithCompactMaps testName compactMaps typ term expectedJson = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
+    (EncodeModule.toJson @@ Maps.empty @@ compactMaps @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (Phantoms.string expectedJson)
 
 -- Like roundtripTest, but with a caller-supplied type lookup table instead of an empty
@@ -106,8 +121,8 @@ roundtripTestWithTypes testName types typ term = universalCase testName
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-        (JsonDecode.fromJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
-    (EncodeModule.toJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+        (JsonDecode.fromJson @@ types @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
+    (EncodeModule.toJson @@ types @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (PrintCore.term @@ term)
 
 ----------------------------------------
@@ -326,7 +341,7 @@ decodeTest testName typ jsonVal expectedTerm = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-    (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
+    (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
   (PrintCore.term @@ expectedTerm)
 
 unionType :: TypedTerm Type
@@ -366,6 +381,143 @@ unionRoundtripGroup = subgroup "union types" [
       unionType
       (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueObject [("unit", Model.ValueObject [])])))
       (inject (name "test") "unit" unit)]
+
+----------------------------------------
+-- Map types (compact object form for string-resolving key types) -- #624
+----------------------------------------
+
+-- | EmailAddress = string (a plain alias, dereferenced via the type lookup table)
+emailAliasName :: TypedTerm Name
+emailAliasName = name "EmailAddress"
+
+emailAliasTypes :: TypedTerm (M.Map Name Type)
+emailAliasTypes = Maps.fromList $ Phantoms.list [
+  Phantoms.pair emailAliasName T.string]
+
+-- | hydra.core.Name-style wrapper: wrap(string)
+wrappedStringType :: TypedTerm Type
+wrappedStringType = T.wrap (name "WrappedString") T.string
+
+-- | A transitive double wrapper: wrap(wrap(string))
+doubleWrappedStringType :: TypedTerm Type
+doubleWrappedStringType = T.wrap (name "DoubleWrappedString") wrappedStringType
+
+-- | wrap(alias-to-string): combines both resolution axes
+wrappedAliasType :: TypedTerm Type
+wrappedAliasType = T.wrap (name "WrappedEmail") (T.variable "EmailAddress")
+
+-- | A single-field record whose only field is a string -- must NOT collapse to compact form
+recordKeyType :: TypedTerm Type
+recordKeyType = T.record (name "RecordKey") ["value">: T.string]
+
+stringKeyedMap :: TypedTerm Term
+stringKeyedMap = Terms.map (Maps.fromList $ Phantoms.list [
+  Phantoms.pair (string "a") (int32 1),
+  Phantoms.pair (string "b") (int32 2)])
+
+mapRoundtripGroup :: TypedTerm TestGroup
+mapRoundtripGroup = subgroup "map types" [
+    ------------------------------------
+    -- Positive: string-resolving keys use the compact object form
+    ------------------------------------
+
+    roundtripTest "map with plain string keys"
+      (T.map T.string T.int32)
+      stringKeyedMap,
+
+    wireShapeTest "map with plain string keys wire shape"
+      (T.map T.string T.int32)
+      stringKeyedMap
+      "{\"a\": 1, \"b\": 2}",
+
+    wireShapeTest "empty string-keyed map wire shape"
+      (T.map T.string T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list ([] :: [TypedTerm (Term, Term)])))
+      "{}",
+
+    -- Regression coverage: compactMaps=False must suppress the compact form even for a
+    -- string-resolving key type -- this is the setting required by callers reading/writing
+    -- dist/json's module-bootstrapping representation (moduleToJson, decodeModuleFromJson,
+    -- verify-json-kernel), which broke main when the compact form leaked into it.
+    wireShapeTestWithCompactMaps "map with plain string keys, compactMaps=False stays entry-array"
+      Literals.false
+      (T.map T.string T.int32)
+      stringKeyedMap
+      "[{\"key\": \"a\", \"value\": 1}, {\"key\": \"b\", \"value\": 2}]",
+
+    roundtripTestWithTypes "map with alias-to-string keys"
+      emailAliasTypes
+      (T.map (T.variable "EmailAddress") T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [Phantoms.pair (string "alice@example.com") (int32 1)])),
+
+    wireShapeTest "map with alias-to-string keys wire shape (direct string type, same shape)"
+      (T.map T.string T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [Phantoms.pair (string "alice@example.com") (int32 1)]))
+      "{\"alice@example.com\": 1}",
+
+    -- Note: the wrap tag is "test" (the harness's fixed root type name, not the type's own
+    -- name "WrappedString") because the encoder/decoder always re-stamp a decoded WrappedTerm
+    -- with the ambient tname threaded through toJson/fromJson (see roundtripTest / the record
+    -- group's comment above on parametricTypeRoundtripGroup for the same harness quirk).
+    roundtripTest "map with wrap(string) keys"
+      (T.map wrappedStringType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [Phantoms.pair (wrap (name "test") (string "k1")) (int32 1)])),
+
+    wireShapeTest "map with wrap(string) keys wire shape"
+      (T.map wrappedStringType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [Phantoms.pair (wrap (name "test") (string "k1")) (int32 1)]))
+      "{\"k1\": 1}",
+
+    roundtripTest "map with wrap(wrap(string)) keys (transitive)"
+      (T.map doubleWrappedStringType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (wrap (name "test") (wrap (name "test") (string "k1"))) (int32 1)])),
+
+    roundtripTestWithTypes "map with wrap(alias-to-string) keys"
+      emailAliasTypes
+      (T.map wrappedAliasType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (wrap (name "test") (string "alice@example.com")) (int32 1)])),
+
+    -- Backward compatibility: legacy entry-array form must still decode for string-keyed maps
+    decodeTest "map with plain string keys legacy array form"
+      (T.map T.string T.int32)
+      (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueArray [
+        Model.ValueObject [("key", Model.ValueString "a"), ("value", Model.ValueNumber 1)],
+        Model.ValueObject [("key", Model.ValueString "b"), ("value", Model.ValueNumber 2)]])))
+      stringKeyedMap,
+
+    ------------------------------------
+    -- Negative: non-string-resolving keys stay entry-array, unchanged
+    ------------------------------------
+
+    -- Note: the record's tag is "test" (the harness's fixed root type name), matching the same
+    -- decode-retagging quirk as the wrap-keyed tests above.
+    roundtripTest "map with record keys stays entry-array (even single-field record)"
+      (T.map recordKeyType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (record (name "test") ["value">: string "k1"]) (int32 1)])),
+
+    wireShapeTest "map with record keys wire shape (unchanged array form)"
+      (T.map recordKeyType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (record (name "RecordKey") ["value">: string "k1"]) (int32 1)]))
+      "[{\"key\": {\"value\": \"k1\"}, \"value\": 1}]",
+
+    roundtripTest "map with union keys stays entry-array"
+      (T.map unionType T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (inject (name "test") "string" (string "k1")) (int32 1)])),
+
+    roundtripTest "map with list keys stays entry-array"
+      (T.map (T.list T.string) T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (list [string "k1"]) (int32 1)])),
+
+    roundtripTest "map with optional keys stays entry-array"
+      (T.map (T.optional T.string) T.int32)
+      (Terms.map (Maps.fromList $ Phantoms.list [
+        Phantoms.pair (optional (just $ string "k1")) (int32 1)]))]
 
 ----------------------------------------
 -- Wire shape (encoder output)

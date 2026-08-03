@@ -172,7 +172,9 @@ main = do
                 return (False, nsStr ++ ": JSON parse error", "")
               Right jsonVal -> do
                 flushPut $ "    JSON parsed successfully"
-                case JsonDecode.fromJson schemaMap _Module modType jsonVal of
+                -- compactMaps = False: this verifies the checked-in dist/json module files,
+                -- which the published-host cold-seeder must also be able to decode.
+                case JsonDecode.fromJson schemaMap False _Module modType jsonVal of
                   Left err -> do
                     flushPut $ "  ✗ " ++ nsStr ++ " (JSON decode error)"
                     flushPut $ "    " ++ err

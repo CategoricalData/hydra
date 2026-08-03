@@ -61,6 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Resolution      as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
@@ -95,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Resolution.ns, Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.")}
   where
     definitions = [
@@ -281,10 +282,13 @@ expectString = define "expectString" $
 -- | Extract an array from a JSON value
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
-fromJson :: TypedTermDefinition (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
+fromJson :: TypedTermDefinition (M.Map Name Type -> Bool -> Name -> Type -> Value -> Either String Term)
 fromJson = define "fromJson" $
-  doc "Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches." $
-  "types" ~> "tname" ~> "typ" ~> "value" ~>
+  doc ("Decode a JSON value to a Hydra term given a type and type name. Returns Left for type"
+    <> " mismatches. The compactMaps flag mirrors toJson's: it must be False for any caller"
+    <> " reading the checked-in dist/json module-bootstrapping representation, since a"
+    <> " byte-stable published-host decoder must be able to read that data unmodified.") $
+  "types" ~> "compactMaps" ~> "tname" ~> "typ" ~> "value" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   -- Beta-reduce a type application by resolving the function side down to a Forall
   -- (following Variable lookups and nested Applications as needed), then substituting
@@ -319,21 +323,21 @@ fromJson = define "fromJson" $
     _Type_application>>: "at" ~>
       Eithers.either
         ("err" ~> left $ var "err")
-        ("reducedType" ~> fromJson @@ var "types" @@ var "tname" @@ var "reducedType" @@ var "value")
+        ("reducedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "reducedType" @@ var "value")
         (var "reduceApp" @@ var "at"),
 
     -- Forall reached directly (not via an enclosing Application): decode the body.
     -- This covers a type parameter already fully instantiated by an outer Application;
     -- a genuinely-unbound parameter surfaces as an "unknown type variable" error when
     -- the body is decoded, rather than being special-cased here.
-    _Type_forall>>: "ft" ~> fromJson @@ var "types" @@ var "tname" @@ (Core.forallTypeBody $ var "ft") @@ var "value",
+    _Type_forall>>: "ft" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ (Core.forallTypeBody $ var "ft") @@ var "value",
 
     -- Literals
     _Type_literal>>: "lt" ~> decodeLiteral @@ var "lt" @@ var "value",
 
     -- Lists
     _Type_list>>: "elemType" ~>
-      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
+      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
       Eithers.either
         ("err" ~> left $ var "err")
@@ -344,7 +348,7 @@ fromJson = define "fromJson" $
 
     -- Sets
     _Type_set>>: "elemType" ~>
-      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
+      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
       Eithers.either
         ("err" ~> left $ var "err")
@@ -365,7 +369,7 @@ fromJson = define "fromJson" $
         ("decodeJust" <~ ("arr" ~>
           Optionals.cases (Lists.head $ var "arr") (left $ string "expected single-element array for Just") ("firstVal" ~>
               Eithers.map ("v" ~> Core.termOptional $ just $ var "v")
-                (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "firstVal"))) $
+                (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "innerType" @@ var "firstVal"))) $
         "decodeMaybeArray" <~ ("arr" ~>
           "len" <~ (Lists.length $ var "arr") $
           Logic.ifElse (Equality.equal (var "len") (int32 0))
@@ -381,7 +385,7 @@ fromJson = define "fromJson" $
         (cases _Value (var "value")
           (Just $
             Eithers.map ("v" ~> Core.termOptional $ just $ var "v")
-              (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "value")) [
+              (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "innerType" @@ var "value")) [
           _Value_null>>: constant $ right $ Core.termOptional nothing]),
 
     -- Records
@@ -397,7 +401,7 @@ fromJson = define "fromJson" $
             -- Use empty object as default for missing optional fields
             "defaultVal" <~ Json.valueNull $
             "jsonVal" <~ (Optionals.withDefault (var "defaultVal") (var "mval")) $
-            "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
+            "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
             Eithers.map ("v" ~> Core.field (var "fname") (var "v")) (var "decoded")) $
           "decodedFields" <~ (Eithers.mapList (var "decodeField") (var "rt")) $
           Eithers.map
@@ -410,7 +414,7 @@ fromJson = define "fromJson" $
       -- Helper to decode a field once found
       "decodeVariant" <~ ("key" ~> "val" ~> "ftype" ~>
         "jsonVal" <~ (Optionals.withDefault Json.valueNull (var "val")) $
-        "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
+        "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
         Eithers.map
           ("v" ~> Core.termInject $ Core.injection
             (var "tname")
@@ -459,37 +463,58 @@ fromJson = define "fromJson" $
     -- Wrapped types (look up in type table and extract inner type if needed)
     _Type_wrap>>: "wn" ~>
       -- TypeWrap now directly holds the inner Type; decode with it and wrap the result
-      "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "wn" @@ var "value") $
+      "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "wn" @@ var "value") $
       Eithers.map
         ("v" ~> Core.termWrap $ Core.wrappedTerm (var "tname") (var "v"))
         (var "decoded"),
 
-    -- Map -> array of {key, value}
+    -- Map -> compact JSON object {k: v, ...} for string-resolving key types (also accepted:
+    -- legacy array of {key, value}, for backward compatibility), else array of {key, value} only
+    -- (see docs/specification/json-format.md #Maps)
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
-      "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either
-        ("err" ~> left $ var "err")
-        ("arr" ~>
-          "decodeEntry" <~ ("entryJson" ~>
-            "objResult" <~ (expectObject @@ var "entryJson") $
-            Eithers.either
-              ("err" ~> left $ var "err")
-              ("entryObj" ~>
-                "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
-                "valJson" <~ (Maps.lookup (string "value") (var "entryObj")) $
-                Optionals.cases (var "keyJson") (left $ string "missing key in map entry") ("kj" ~> Optionals.cases (var "valJson") (left $ string "missing value in map entry") ("vj" ~>
-                      "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
-                      "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
-                      Eithers.either
-                        ("err" ~> left $ var "err")
-                        ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "decodedVal"))
-                        (var "decodedKey"))))
-              (var "objResult")) $
-          "entries" <~ (Eithers.mapList (var "decodeEntry") (var "arr")) $
-          Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries"))
-        (var "arrResult"),
+      "compact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ var "keyType")) $
+      "decodeArrayEntry" <~ ("entryJson" ~>
+        "objResult" <~ (expectObject @@ var "entryJson") $
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("entryObj" ~>
+            "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
+            "valJson" <~ (Maps.lookup (string "value") (var "entryObj")) $
+            Optionals.cases (var "keyJson") (left $ string "missing key in map entry") ("kj" ~> Optionals.cases (var "valJson") (left $ string "missing value in map entry") ("vj" ~>
+                  "decodedKey" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "keyType" @@ var "kj") $
+                  "decodedVal" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "valType" @@ var "vj") $
+                  Eithers.either
+                    ("err" ~> left $ var "err")
+                    ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "decodedVal"))
+                    (var "decodedKey"))))
+          (var "objResult")) $
+      "decodeArrayForm" <~ ("arr" ~>
+        "entries" <~ (Eithers.mapList (var "decodeArrayEntry") (var "arr")) $
+        Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries")) $
+      "decodeCompactForm" <~ ("obj" ~>
+        "rawKeys" <~ (Lists.map (reify Pairs.first) (var "obj" :: TypedTerm [(String, Value)])) $
+        Logic.ifElse (Equality.equal (Lists.length $ var "rawKeys") (Lists.length $ Lists.distinct $ var "rawKeys"))
+          ("decodeCompactEntry" <~ ("kv" ~>
+              "kStr" <~ (Pairs.first $ var "kv") $
+              "vJson" <~ (Pairs.second $ var "kv") $
+              "decodedKey" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "keyType" @@ (Json.valueString $ var "kStr")) $
+              "decodedVal" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "valType" @@ var "vJson") $
+              Eithers.either
+                ("err" ~> left $ var "err")
+                ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "decodedVal"))
+                (var "decodedKey")) $
+            "entries" <~ (Eithers.mapList (var "decodeCompactEntry") (var "obj")) $
+            Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries"))
+          (left $ string "duplicate key in compact map object")) $
+      cases _Value (var "value")
+        (Just $ left $ string "expected object or array for map") [
+        _Value_array>>: "arr" ~> var "decodeArrayForm" @@ var "arr",
+        _Value_object>>: "obj" ~>
+          Logic.ifElse (var "compact")
+            (var "decodeCompactForm" @@ var "obj")
+            (left $ string "expected array for map with non-string-resolving key type")],
 
     -- Pair -> {first, second}
     _Type_pair>>: "pt" ~>
@@ -502,8 +527,8 @@ fromJson = define "fromJson" $
           "firstJson" <~ (Maps.lookup (string "first") (var "obj")) $
           "secondJson" <~ (Maps.lookup (string "second") (var "obj")) $
           Optionals.cases (var "firstJson") (left $ string "missing first in pair") ("fj" ~> Optionals.cases (var "secondJson") (left $ string "missing second in pair") ("sj" ~>
-                "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
-                "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
+                "decodedFirst" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "firstType" @@ var "fj") $
+                "decodedSecond" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "secondType" @@ var "sj") $
                 Eithers.either
                   ("err" ~> left $ var "err")
                   ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "decodedSecond"))
@@ -521,9 +546,9 @@ fromJson = define "fromJson" $
           "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
           "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
           Optionals.cases (var "leftJson") (Optionals.cases (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
-                "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "rj") $
+                "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "rightType" @@ var "rj") $
                 Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))) ("lj" ~>
-              "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "lj") $
+              "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "leftType" @@ var "lj") $
               Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "decoded")))
         (var "objResult"),
 
@@ -532,7 +557,7 @@ fromJson = define "fromJson" $
       "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
       Optionals.cases (var "lookedUp") (left $ Strings.concat $ list [
           string "unknown type variable: ",
-          Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "value")]
+          Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "value")]
 
 -- | Decode a JSON value to a literal term given a literal type
 -- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
