@@ -40,8 +40,8 @@ package's jar via the overlay system (see [docs/overlays.md](overlays.md) and th
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.17.2'
-    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.2'
+    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.17.3'
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.3'
 }
 ```
 
@@ -52,12 +52,12 @@ dependencies {
   <dependency>
     <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-kernel</artifactId>
-    <version>0.17.2</version>
+    <version>0.17.3</version>
   </dependency>
   <dependency>
     <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-pg</artifactId>
-    <version>0.17.2</version>
+    <version>0.17.3</version>
   </dependency>
 </dependencies>
 ```
@@ -194,7 +194,7 @@ Hydra-Haskell is on Hackage as `hydra`. From a stack project:
 ```yaml
 # stack.yaml
 extra-deps:
-  - hydra-0.17.2
+  - hydra-0.17.3
 ```
 
 ```yaml
@@ -260,7 +260,7 @@ Hydra publishes per-package Maven artifacts for Scala 3 under group `net.fortytw
 (artifact ids carry sbt's `_3` cross-version suffix). In an sbt project:
 
 ```scala
-libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.2"
+libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.3"
 ```
 
 The kernel modules have the same `hydra.*` shape as on the other hosts (`hydra.core`,
