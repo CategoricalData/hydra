@@ -137,7 +137,7 @@ tasks.register('printHeadsExtrasRuntimeClasspath') {
 // excludes were removed. For #409 / #421.
 compileJava {
     options.fork = true
-    options.forkOptions.memoryMaximumSize = '6g'
+    options.forkOptions.memoryMaximumSize = '10g'
 }
 
 // Test-side excludes: tests that imported the cypher/rdf/pg code now living as
