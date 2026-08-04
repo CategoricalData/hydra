@@ -34,6 +34,7 @@ import qualified Hydra.Sources.Build.Format as BuildFormat
 import qualified Hydra.Sources.Build.Libraries as BuildLibraries
 import qualified Hydra.Sources.Build.ManifestWriter as BuildManifestWriter
 import qualified Hydra.Sources.Build.Modules as BuildModules
+import qualified Hydra.Sources.Build.PackagingProfile as BuildPackagingProfile
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Routing as BuildRouting
 import qualified Hydra.Sources.Build.Test.Libraries as TestBuildLibraries
@@ -48,6 +49,7 @@ mainModules = [
   BuildLibraries.module_,
   BuildManifestWriter.module_,
   BuildModules.module_,
+  BuildPackagingProfile.module_,
   BuildReconcile.module_,
   BuildRouting.module_]
 

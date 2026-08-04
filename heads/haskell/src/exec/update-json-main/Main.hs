@@ -21,8 +21,13 @@ module Main where
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
   loadModulesFromJson, readManifestField, loadNativePackageModulesTagged,
   generateEncoderModules, generateDecoderModules,
-  isDerivedModule, packagesFromRouting, validatePackagesStructural, validatePackagesSemantic,
+  isDerivedModule, packagesFromRouting, validatePackagesSemantic,
   ValidationFindings(..), validationFindingsNull)
+-- #559 Step E: validatePackagesStructural (and its packaging-profile policy) moved
+-- out of Hydra.Generation into Hydra.PackagingGeneration so Hydra.Generation stays
+-- free of the newly-promoted, not-yet-published hydra.build.packagingProfile import
+-- on the cold-seed path (#560/#607 class). update-json-main is its sole consumer.
+import Hydra.PackagingGeneration (validatePackagesStructural)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap, groupByPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,

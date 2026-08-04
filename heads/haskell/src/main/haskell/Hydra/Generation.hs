@@ -306,77 +306,19 @@ validationFindingsNull :: ValidationFindings -> Bool
 validationFindingsNull (ValidationFindings pkgs types terms) =
   null pkgs && null types && null terms
 
--- | Packages held to the full 'ValidatePackaging.kernelDefaultPackagingProfile'
--- (every rule, including documentation completeness, is fatal). Every other
--- package uses 'ValidatePackaging.kernelPackagingProfileWithDocWarnings'
--- instead (#575): re-enabling comprehensive validation surfaced a large,
--- pre-existing documentation-completeness backlog outside the kernel, and
--- treating it as fatal everywhere at once would turn every sync fleet-wide
--- red until fully remediated. hydra-kernel is held to the full bar from the
--- start per policy; other packages are added here as their own backlogs are
--- remediated, expanding the fully-fatal set incrementally rather than
--- gating the whole fleet on the total backlog at once.
---
--- This is an INTERIM mechanism. The intended long-term home for per-package
--- validation configuration is a typed 'PackageValidationConfiguration' (see
--- issue #512) declared in each package's package.json -- richer than a
--- strict/relaxed toggle, supporting per-rule severities and parameters
--- (e.g. "allow underscores in names", "exempt deprecated definitions from
--- documentation"). This hardcoded list is deliberately the simplest thing
--- that implements today's actual policy without blocking on that design.
-strictPackagingPackages :: [PackageName]
-strictPackagingPackages = PackageName <$> ["hydra-kernel", "hydra-build", "hydra-haskell", "hydra-go", "hydra-lisp", "hydra-wasm", "hydra-typescript", "hydra-rdf", "hydra-pg", "hydra-ext"]
-
--- | Packages whose dist/json is written by a separate NATIVE driver
--- (bin/generate-hydra-java-from-java.sh, -python-from-python.sh), not by
--- this driver's own write pass (see 'isNativeOwned' in update-json-main's
--- Main.hs). Their on-disk JSON is loaded here only to seed the inference
--- universe ('loadNativePackageModulesTagged') and is legitimately stale at
--- this point in the pipeline: sync.sh's Phase 1.5 (auto-heal, #406) runs
--- AFTER this driver and is what brings their JSON current. Structurally
--- validating that stale JSON here would fail on staleness the pipeline
--- itself hasn't resolved yet, not on a real defect — so these packages are
--- excluded from 'validatePackagesStructural' entirely. Their own DSL
--- source's structural shape is a legitimate concern, but needs a hook in
--- the native drivers themselves (out of #575's scope; see #580).
-nativeOwnedPackagingPackages :: [PackageName]
-nativeOwnedPackagingPackages = PackageName <$> ["hydra-jvm", "hydra-java", "hydra-python"]
-
--- | Select the packaging 'ValidationProfile' for a package: the full,
--- fatal-on-everything profile for packages in 'strictPackagingPackages',
--- the documentation-relaxed profile for every other package.
-packagingProfileFor :: Package -> ValidationProfile
-packagingProfileFor pkg
-  | packageName pkg `elem` strictPackagingPackages = ValidatePackaging.kernelDefaultPackagingProfile
-  | otherwise = ValidatePackaging.kernelPackagingProfileWithDocWarnings
-
--- | Structural (packaging) validation against a list of packages. Runs
--- PRE-INFERENCE ONLY: module shape (definition names, ordering, docs,
--- conflicts) is authored and does not change across inference, so there is
--- no post-inference call for this — running it twice would be pure
--- redundant work with zero additional signal. Derived modules
--- (hydra.dsl.*/encode.*/decode.*) are exempted per 'isDerivedModule': their
--- definitions are synthesizer-ordered, not alphabetical, so packaging
--- convention rules would spuriously fail on them. Native-owned packages
--- ('nativeOwnedPackagingPackages') are excluded entirely — their JSON is
--- stale-by-design at this pipeline point, see that binding's doc comment.
---
--- Each package is validated under its OWN profile via 'packagingProfileFor'
--- rather than one profile shared by every package -- see
--- 'strictPackagingPackages' for the current fatal-vs-warning policy.
-validatePackagesStructural :: [Package] -> ValidationFindings
-validatePackagesStructural pkgs =
-  ValidationFindings pkgFailures [] []
-  where
-    emptyPkgResult :: ValidationResult InvalidPackageError
-    emptyPkgResult = ValidationResult [] []
-    pkgFailures =
-      [ (pkg, e)
-      | pkg <- pkgs
-      , packageName pkg `notElem` nativeOwnedPackagingPackages
-      , let structuralPkg = pkg { packageModules = filter (not . isDerivedModule) (packageModules pkg) }
-      , e <- validationResultErrors
-               (ValidatePackaging.package (packagingProfileFor pkg) emptyPkgResult structuralPkg) ]
+-- #559 Step E: the packaging-validation policy consumers
+-- ('strictPackagingPackages', 'nativeOwnedPackagingPackages',
+-- 'packagingProfileFor') and the 'validatePackagesStructural' entry point that
+-- applies them were MOVED to "Hydra.PackagingGeneration". They delegate to the
+-- promoted, translingual @hydra.build.packagingProfile@ module, so keeping them
+-- here would put a dependency on that generated hydra-build module onto this file
+-- — and this module is copied into the cold-seeder's headmods and compiled against the
+-- PUBLISHED hydra lib, which does not yet carry that module (the #560/#607
+-- cold-seed-from-json revert class, enforced by cold-seed-dist-haskell.sh's
+-- ALLOWED_BUILD_IMPORTS invariant). Only update-json-main consumes structural
+-- validation, and the cold-seed path does not run it, so the coupled cluster
+-- lives on the full-sync-only side of the seam (mirroring how 'Hydra.ExtGeneration'
+-- is kept out of the cold-seeder's import graph). See "Hydra.PackagingGeneration".
 
 -- | Semantic (core) type/term-tree validation against a list of packages,
 -- INCLUDING derived modules (hydra.dsl.*/encode.*/decode.*) — a broken
