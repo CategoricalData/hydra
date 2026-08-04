@@ -7,8 +7,10 @@ import hydra.packaging.ModuleName;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * #459 Layer 1 transform: JSON -&gt; target language, scoped to a single (package, source-set)
@@ -189,6 +191,22 @@ public class TransformJsonToTarget {
             modsToGenerate = testNs.isEmpty() ? new ArrayList<>()
                     : Generation.loadModulesFromJson(testJsonDir, schemaMap, testNs);
             universeMods.addAll(modsToGenerate);
+            // Filter skip-emit test namespaces (e.g. hydra.test.testEnv) from what gets WRITTEN:
+            // these are type-only stubs in the DSL whose hand-written per-language counterparts
+            // are the source of truth. Emitting them collides with (or overwrites) hand-written
+            // code that registers primitives for the test graph. The universe above still needs
+            // the stub for type-checking, so this filters modsToGenerate only, after the
+            // universe add. Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All and
+            // Bootstrap.java's equivalent filter.
+            Set<String> testSkipEmit = new HashSet<>();
+            testSkipEmit.add("hydra.test.testEnv");
+            List<Module> testModsFiltered = new ArrayList<>();
+            for (Module m : modsToGenerate) {
+                if (!testSkipEmit.contains(m.name.value)) {
+                    testModsFiltered.add(m);
+                }
+            }
+            modsToGenerate = testModsFiltered;
         } else if (includeDsls) {
             // mainDslModules lists the SOURCE type-module names (e.g. hydra.jvm.serde), not the
             // derived DSL wrapper module names — the wrapper's own JSON lives at the name
