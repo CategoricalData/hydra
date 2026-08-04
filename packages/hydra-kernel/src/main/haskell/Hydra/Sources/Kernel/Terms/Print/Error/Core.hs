@@ -79,6 +79,7 @@ module_ = Module {
      toDefinition emptyTypeAnnotationError,
      toDefinition emptyTypeNameInTermError,
      toDefinition emptyUnionTypeError,
+     toDefinition extraRecordFieldsError,
      toDefinition invalidForallParameterNameError,
      toDefinition invalidLambdaParameterNameError,
      toDefinition invalidLetBindingNameError,
@@ -87,8 +88,10 @@ module_ = Module {
      toDefinition invalidTypeLambdaParameterNameError,
      toDefinition invalidTypeSchemeVariableNameError,
      toDefinition missingCaseBranchesError,
+     toDefinition missingRecordFieldsError,
      toDefinition nestedTermAnnotationError,
      toDefinition nestedTypeAnnotationError,
+     toDefinition nominalTypeKindMismatchError,
      toDefinition nonComparableMapKeyTypeError,
      toDefinition nonComparableSetElementTypeError,
      toDefinition redundantWrapUnwrapError,
@@ -97,6 +100,7 @@ module_ = Module {
      toDefinition termVariableShadowingError,
      toDefinition typeVariableShadowingInForallError,
      toDefinition typeVariableShadowingInTypeLambdaError,
+     toDefinition undeclaredVariantError,
      toDefinition undefinedFieldError,
      toDefinition undefinedTermVariableError,
      toDefinition undefinedTypeVariableError,
@@ -107,7 +111,9 @@ module_ = Module {
      toDefinition unexpectedTypeVariantError,
      toDefinition unknownCaseAlternativeError,
      toDefinition unknownPrimitiveNameError,
+     toDefinition unknownProjectedFieldError,
      toDefinition unnecessaryIdentityApplicationError,
+     toDefinition unresolvedNominalTypeError,
      toDefinition untypedTermVariableError,
      toDefinition voidInNonBottomPositionError]
 
@@ -190,6 +196,18 @@ emptyUnionTypeError = define "emptyUnionTypeError" $
   doc "Show an empty union type error as a string" $
   "e" ~> string "union type with no alternatives (use TypeVoid instead)"
 
+extraRecordFieldsError :: TypedTermDefinition (ExtraRecordFieldsError -> String)
+extraRecordFieldsError = define "extraRecordFieldsError" $
+  doc "Show an extra record fields error as a string" $
+  "e" ~>
+  "tname" <~ project _ExtraRecordFieldsError _ExtraRecordFieldsError_typeName @@ var "e" $
+  "fieldNames" <~ project _ExtraRecordFieldsError _ExtraRecordFieldsError_fieldNames @@ var "e" $
+  Strings.concat $ list [
+    string "record term for type ",
+    Core.unName $ var "tname",
+    string " supplies undeclared field(s): ",
+    Strings.join (string ", ") (Lists.map (reify Core.unName) (var "fieldNames"))]
+
 invalidForallParameterNameError :: TypedTermDefinition (InvalidForallParameterNameError -> String)
 invalidForallParameterNameError = define "invalidForallParameterNameError" $
   doc "Show an invalid forall parameter name error as a string" $
@@ -223,22 +241,28 @@ invalidTermError = define "invalidTermError" $
       _InvalidTermError_emptyLetBindings>>: emptyLetBindingsError,
       _InvalidTermError_emptyTermAnnotation>>: emptyTermAnnotationError,
       _InvalidTermError_emptyTypeNameInTerm>>: emptyTypeNameInTermError,
+      _InvalidTermError_extraRecordFields>>: extraRecordFieldsError,
       _InvalidTermError_invalidLambdaParameterName>>: invalidLambdaParameterNameError,
       _InvalidTermError_invalidLetBindingName>>: invalidLetBindingNameError,
       _InvalidTermError_invalidTypeLambdaParameterName>>: invalidTypeLambdaParameterNameError,
       _InvalidTermError_missingCaseBranches>>: missingCaseBranchesError,
+      _InvalidTermError_missingRecordFields>>: missingRecordFieldsError,
       _InvalidTermError_nestedTermAnnotation>>: nestedTermAnnotationError,
+      _InvalidTermError_nominalTypeKindMismatch>>: nominalTypeKindMismatchError,
       _InvalidTermError_redundantWrapUnwrap>>: redundantWrapUnwrapError,
       _InvalidTermError_selfApplication>>: selfApplicationError,
       _InvalidTermError_termVariableShadowing>>: termVariableShadowingError,
       _InvalidTermError_typeVariableShadowingInTypeLambda>>: typeVariableShadowingInTypeLambdaError,
+      _InvalidTermError_undeclaredVariant>>: undeclaredVariantError,
       _InvalidTermError_undefinedTermVariable>>: undefinedTermVariableError,
       _InvalidTermError_undefinedTypeVariableInBindingType>>: undefinedTypeVariableInBindingTypeError,
       _InvalidTermError_undefinedTypeVariableInLambdaDomain>>: undefinedTypeVariableInLambdaDomainError,
       _InvalidTermError_undefinedTypeVariableInTypeApplication>>: undefinedTypeVariableInTypeApplicationError,
       _InvalidTermError_unknownCaseAlternative>>: unknownCaseAlternativeError,
       _InvalidTermError_unknownPrimitiveName>>: unknownPrimitiveNameError,
+      _InvalidTermError_unknownProjectedField>>: unknownProjectedFieldError,
       _InvalidTermError_unnecessaryIdentityApplication>>: unnecessaryIdentityApplicationError,
+      _InvalidTermError_unresolvedNominalType>>: unresolvedNominalTypeError,
       _InvalidTermError_untypedTermVariable>>: untypedTermVariableError]
 
 -- ============================================================================
@@ -291,6 +315,18 @@ missingCaseBranchesError = define "missingCaseBranchesError" $
     string " does not cover variant(s): ",
     Strings.join (string ", ") (Lists.map (reify Core.unName) (var "variantNames"))]
 
+missingRecordFieldsError :: TypedTermDefinition (MissingRecordFieldsError -> String)
+missingRecordFieldsError = define "missingRecordFieldsError" $
+  doc "Show a missing record fields error as a string" $
+  "e" ~>
+  "tname" <~ project _MissingRecordFieldsError _MissingRecordFieldsError_typeName @@ var "e" $
+  "fieldNames" <~ project _MissingRecordFieldsError _MissingRecordFieldsError_fieldNames @@ var "e" $
+  Strings.concat $ list [
+    string "record term for type ",
+    Core.unName $ var "tname",
+    string " is missing declared field(s): ",
+    Strings.join (string ", ") (Lists.map (reify Core.unName) (var "fieldNames"))]
+
 nestedTermAnnotationError :: TypedTermDefinition (NestedTermAnnotationError -> String)
 nestedTermAnnotationError = define "nestedTermAnnotationError" $
   doc "Show a nested term annotation error as a string" $
@@ -300,6 +336,22 @@ nestedTypeAnnotationError :: TypedTermDefinition (NestedTypeAnnotationError -> S
 nestedTypeAnnotationError = define "nestedTypeAnnotationError" $
   doc "Show a nested type annotation error as a string" $
   "e" ~> string "nested type annotations should be merged"
+
+nominalTypeKindMismatchError :: TypedTermDefinition (NominalTypeKindMismatchError -> String)
+nominalTypeKindMismatchError = define "nominalTypeKindMismatchError" $
+  doc "Show a nominal type kind mismatch error as a string" $
+  "e" ~>
+  "tname" <~ project _NominalTypeKindMismatchError _NominalTypeKindMismatchError_typeName @@ var "e" $
+  "expected" <~ project _NominalTypeKindMismatchError _NominalTypeKindMismatchError_expectedVariant @@ var "e" $
+  "actual" <~ project _NominalTypeKindMismatchError _NominalTypeKindMismatchError_actualVariant @@ var "e" $
+  Strings.concat $ list [
+    string "type name ",
+    Core.unName $ var "tname",
+    string " is expected to be a ",
+    PrintVariants.typeVariant @@ var "expected",
+    string " type, but resolves to a ",
+    PrintVariants.typeVariant @@ var "actual",
+    string " type"]
 
 nonComparableMapKeyTypeError :: TypedTermDefinition (NonComparableMapKeyTypeError -> String)
 nonComparableMapKeyTypeError = define "nonComparableMapKeyTypeError" $
@@ -356,6 +408,18 @@ typeVariableShadowingInTypeLambdaError = define "typeVariableShadowingInTypeLamb
   "e" ~> Strings.concat $ list [
     string "type variable shadowing in type lambda: ",
     Core.unName $ project _TypeVariableShadowingInTypeLambdaError _TypeVariableShadowingInTypeLambdaError_name @@ var "e"]
+
+undeclaredVariantError :: TypedTermDefinition (UndeclaredVariantError -> String)
+undeclaredVariantError = define "undeclaredVariantError" $
+  doc "Show an undeclared variant error as a string" $
+  "e" ~>
+  "tname" <~ project _UndeclaredVariantError _UndeclaredVariantError_typeName @@ var "e" $
+  "vname" <~ project _UndeclaredVariantError _UndeclaredVariantError_variantName @@ var "e" $
+  Strings.concat $ list [
+    string "injected variant ",
+    Core.unName $ var "vname",
+    string " is not declared by union type ",
+    Core.unName $ var "tname"]
 
 undefinedFieldError :: TypedTermDefinition (UndefinedFieldError -> String)
 undefinedFieldError = define "undefinedFieldError" $
@@ -452,10 +516,29 @@ unknownPrimitiveNameError = define "unknownPrimitiveNameError" $
     string "unknown primitive: ",
     Core.unName $ project _UnknownPrimitiveNameError _UnknownPrimitiveNameError_name @@ var "e"]
 
+unknownProjectedFieldError :: TypedTermDefinition (UnknownProjectedFieldError -> String)
+unknownProjectedFieldError = define "unknownProjectedFieldError" $
+  doc "Show an unknown projected field error as a string" $
+  "e" ~>
+  "tname" <~ project _UnknownProjectedFieldError _UnknownProjectedFieldError_typeName @@ var "e" $
+  "fname" <~ project _UnknownProjectedFieldError _UnknownProjectedFieldError_fieldName @@ var "e" $
+  Strings.concat $ list [
+    string "projected field ",
+    Core.unName $ var "fname",
+    string " is not declared by record type ",
+    Core.unName $ var "tname"]
+
 unnecessaryIdentityApplicationError :: TypedTermDefinition (UnnecessaryIdentityApplicationError -> String)
 unnecessaryIdentityApplicationError = define "unnecessaryIdentityApplicationError" $
   doc "Show an unnecessary identity application error as a string" $
   "e" ~> string "unnecessary application of identity lambda"
+
+unresolvedNominalTypeError :: TypedTermDefinition (UnresolvedNominalTypeError -> String)
+unresolvedNominalTypeError = define "unresolvedNominalTypeError" $
+  doc "Show an unresolved nominal type error as a string" $
+  "e" ~> Strings.concat $ list [
+    string "type name does not resolve to any declared type: ",
+    Core.unName $ project _UnresolvedNominalTypeError _UnresolvedNominalTypeError_typeName @@ var "e"]
 
 untypedTermVariableError :: TypedTermDefinition (UntypedTermVariableError -> String)
 untypedTermVariableError = define "untypedTermVariableError" $

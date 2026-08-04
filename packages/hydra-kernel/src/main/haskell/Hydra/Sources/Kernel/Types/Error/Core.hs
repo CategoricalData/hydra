@@ -36,6 +36,7 @@ module_ = Module {
       emptyTypeAnnotationError,
       emptyTypeNameInTermError,
       emptyUnionTypeError,
+      extraRecordFieldsError,
       invalidForallParameterNameError,
       invalidLambdaParameterNameError,
       invalidLetBindingNameError,
@@ -46,8 +47,10 @@ module_ = Module {
       invalidTypeSchemeVariableNameError,
       literalTypeMismatchError,
       missingCaseBranchesError,
+      missingRecordFieldsError,
       nestedTermAnnotationError,
       nestedTypeAnnotationError,
+      nominalTypeKindMismatchError,
       nonComparableMapKeyTypeError,
       nonComparableSetElementTypeError,
       redundantWrapUnwrapError,
@@ -56,6 +59,7 @@ module_ = Module {
       termVariableShadowingError,
       typeVariableShadowingInForallError,
       typeVariableShadowingInTypeLambdaError,
+      undeclaredVariantError,
       undefinedFieldError,
       undefinedTermVariableError,
       undefinedTypeVariableError,
@@ -66,7 +70,9 @@ module_ = Module {
       unexpectedTypeVariantError,
       unknownCaseAlternativeError,
       unknownPrimitiveNameError,
+      unknownProjectedFieldError,
       unnecessaryIdentityApplicationError,
+      unresolvedNominalTypeError,
       untypedTermVariableError,
       voidInNonBottomPositionError]
 
@@ -215,6 +221,21 @@ emptyUnionTypeError = define "EmptyUnionTypeError" $
       doc "The path to the empty union type" $
       Paths.subtermPath]
 
+-- T25. ExtraRecordFieldsError
+extraRecordFieldsError :: TypeDefinition
+extraRecordFieldsError = define "ExtraRecordFieldsError" $
+  doc "A record term supplying a field that its record type does not declare" $
+  T.record [
+    "location">:
+      doc "The path to the record term within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the record type" $
+      Core.name,
+    "fieldNames">:
+      doc "The names of the undeclared fields supplied by the record term" $
+      T.list Core.name]
+
 -- Y3. SingleVariantUnionError (optional)
 -- Y13. InvalidForallParameterNameError (optional)
 invalidForallParameterNameError :: TypeDefinition
@@ -290,6 +311,9 @@ invalidTermError = define "InvalidTermError" $
     "emptyTypeNameInTerm">:
       doc "A term with an empty type name (optional)" $
       emptyTypeNameInTermError,
+    "extraRecordFields">:
+      doc "A record term supplying a field not declared by its record type" $
+      extraRecordFieldsError,
     "invalidLambdaParameterName">:
       doc "A lambda parameter name violating naming conventions (optional)" $
       invalidLambdaParameterNameError,
@@ -302,9 +326,15 @@ invalidTermError = define "InvalidTermError" $
     "missingCaseBranches">:
       doc "A case statement that does not cover every variant of the union it matches" $
       missingCaseBranchesError,
+    "missingRecordFields">:
+      doc "A record term omitting a field declared by its record type" $
+      missingRecordFieldsError,
     "nestedTermAnnotation">:
       doc "Nested term annotations that should be merged (optional)" $
       nestedTermAnnotationError,
+    "nominalTypeKindMismatch">:
+      doc "A nominal type reference resolving to a type of the wrong kind (e.g. a record term naming a union type)" $
+      nominalTypeKindMismatchError,
     "redundantWrapUnwrap">:
       doc "A no-op unwrap-of-wrap round-trip (optional)" $
       redundantWrapUnwrapError,
@@ -317,6 +347,9 @@ invalidTermError = define "InvalidTermError" $
     "typeVariableShadowingInTypeLambda">:
       doc "A type lambda parameter that shadows a type variable in scope (optional)" $
       typeVariableShadowingInTypeLambdaError,
+    "undeclaredVariant">:
+      doc "An injection naming a variant that is not declared by its union type" $
+      undeclaredVariantError,
     "undefinedTermVariable">:
       doc "A variable reference to an unbound term name" $
       undefinedTermVariableError,
@@ -335,9 +368,15 @@ invalidTermError = define "InvalidTermError" $
     "unknownPrimitiveName">:
       doc "A reference to an unknown primitive function" $
       unknownPrimitiveNameError,
+    "unknownProjectedField">:
+      doc "A projection naming a field that is not declared by its record type" $
+      unknownProjectedFieldError,
     "unnecessaryIdentityApplication">:
       doc "An identity lambda applied to an argument (optional)" $
       unnecessaryIdentityApplicationError,
+    "unresolvedNominalType">:
+      doc "A nominal type reference that does not resolve to any declared type in scope" $
+      unresolvedNominalTypeError,
     "untypedTermVariable">:
       doc "A term variable whose type is not known" $
       untypedTermVariableError]
@@ -475,6 +514,21 @@ missingCaseBranchesError = define "MissingCaseBranchesError" $
       doc "The names of the uncovered variants" $
       T.list Core.name]
 
+-- T26. MissingRecordFieldsError
+missingRecordFieldsError :: TypeDefinition
+missingRecordFieldsError = define "MissingRecordFieldsError" $
+  doc "A record term omitting a field declared by its record type" $
+  T.record [
+    "location">:
+      doc "The path to the record term within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the record type" $
+      Core.name,
+    "fieldNames">:
+      doc "The names of the missing fields" $
+      T.list Core.name]
+
 -- InvalidTypeError: the union of all type validation errors
 -- T20. NestedTermAnnotationError (optional)
 nestedTermAnnotationError :: TypeDefinition
@@ -484,6 +538,24 @@ nestedTermAnnotationError = define "NestedTermAnnotationError" $
     "location">:
       doc "The path to the outer annotation within the term" $
       Paths.subtermPath]
+
+-- T27. NominalTypeKindMismatchError
+nominalTypeKindMismatchError :: TypeDefinition
+nominalTypeKindMismatchError = define "NominalTypeKindMismatchError" $
+  doc "A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) resolving to a declared type of the wrong kind, e.g. a record term naming a union type" $
+  T.record [
+    "location">:
+      doc "The path to the term with the mismatched nominal type reference" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the referenced type" $
+      Core.name,
+    "expectedVariant">:
+      doc "The type variant required at this site" $
+      Variants.typeVariant,
+    "actualVariant">:
+      doc "The type variant that the name actually resolves to" $
+      Variants.typeVariant]
 
 -- T21. EmptyTermAnnotationError (optional)
 -- Y8. NestedTypeAnnotationError (optional)
@@ -597,6 +669,21 @@ typeVariableShadowingInTypeLambdaError = define "TypeVariableShadowingInTypeLamb
       Paths.subtermPath,
     "name">:
       doc "The name of the shadowed type variable" $
+      Core.name]
+
+-- T28. UndeclaredVariantError
+undeclaredVariantError :: TypeDefinition
+undeclaredVariantError = define "UndeclaredVariantError" $
+  doc "An injection naming a variant that is not declared by its union type" $
+  T.record [
+    "location">:
+      doc "The path to the injection within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the union type" $
+      Core.name,
+    "variantName">:
+      doc "The undeclared variant name" $
       Core.name]
 
 -- T13. ConstantConditionError (optional)
@@ -728,6 +815,21 @@ unknownPrimitiveNameError = define "UnknownPrimitiveNameError" $
       doc "The unknown primitive name" $
       Core.name]
 
+-- T29. UnknownProjectedFieldError
+unknownProjectedFieldError :: TypeDefinition
+unknownProjectedFieldError = define "UnknownProjectedFieldError" $
+  doc "A projection naming a field that is not declared by its record type" $
+  T.record [
+    "location">:
+      doc "The path to the projection within the term" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The name of the record type" $
+      Core.name,
+    "fieldName">:
+      doc "The unknown projected field name" $
+      Core.name]
+
 -- UntypedTermVariableError (replaces UndefinedTypeError)
 -- T16. UnnecessaryIdentityApplicationError (optional)
 unnecessaryIdentityApplicationError :: TypeDefinition
@@ -737,6 +839,18 @@ unnecessaryIdentityApplicationError = define "UnnecessaryIdentityApplicationErro
     "location">:
       doc "The path to the identity application within the term" $
       Paths.subtermPath]
+
+-- T30. UnresolvedNominalTypeError
+unresolvedNominalTypeError :: TypeDefinition
+unresolvedNominalTypeError = define "UnresolvedNominalTypeError" $
+  doc "A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) that does not resolve to any declared type in scope" $
+  T.record [
+    "location">:
+      doc "The path to the term with the unresolved nominal type reference" $
+      Paths.subtermPath,
+    "typeName">:
+      doc "The unresolved type name" $
+      Core.name]
 
 -- T17. InvalidLambdaParameterNameError (optional)
 -- UntypedTermVariableError (replaces UndefinedTypeError)

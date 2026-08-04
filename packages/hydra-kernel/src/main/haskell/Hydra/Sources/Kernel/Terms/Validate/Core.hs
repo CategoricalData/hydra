@@ -112,6 +112,8 @@ module_ = Module {
      toDefinition firstTypeError,
      toDefinition isValidName,
      toDefinition kernelDefaultCoreProfile,
+     toDefinition resolveNominalType,
+     toDefinition resolveRecordFields,
      toDefinition resolveUnionFields,
      toDefinition term,
      toDefinition type_,
@@ -355,10 +357,13 @@ checkTerm = define "checkTerm" $
                         _RedundantWrapUnwrapError_typeName>>: var "unwrapName"])
                     noError]])],
 
-    -- T5: TermRecord — check for empty type name, duplicate fields
+    -- T5/#610: TermRecord — check for empty type name, duplicate fields,
+    -- nominal reference validity (Layer 1), and field-set agreement (Layer 2)
     _Term_record>>: "rec" ~>
       "tname" <~ Core.recordTypeName (var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
+      "suppliedNames" <~ (Sets.fromList (Lists.map (reify Core.fieldName) (var "flds")) :: TypedTerm (S.Set Name)) $
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
       firstFinding @@ list [
         -- T5. EmptyTypeNameInTermError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
@@ -371,7 +376,49 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_duplicateField
           (checkDuplicateFields @@ var "path" @@ (Lists.map
             (reify Core.fieldName)
-            (var "flds")))],
+            (var "flds"))),
+        -- #610 Layer 1a. UnresolvedNominalTypeError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
+              _Type_record>>: constant noError])),
+        -- #610 Layer 2a. MissingRecordFieldsError: declared fields absent from the term
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_missingRecordFields
+          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+            noError
+            ("declFields" ~>
+              "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
+              "missing" <~ (Sets.difference (var "declNames") (var "suppliedNames") :: TypedTerm (S.Set Name)) $
+              Logic.ifElse (Sets.null $ (var "missing" :: TypedTerm (S.Set Name)))
+                noError
+                (mkJust $ inject _InvalidTermError _InvalidTermError_missingRecordFields $
+                  record _MissingRecordFieldsError [
+                    _MissingRecordFieldsError_location>>: var "path",
+                    _MissingRecordFieldsError_typeName>>: var "tname",
+                    _MissingRecordFieldsError_fieldNames>>: Sets.toList (var "missing" :: TypedTerm (S.Set Name))]))),
+        -- #610 Layer 2b. ExtraRecordFieldsError: term fields absent from the declaration
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_extraRecordFields
+          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+            noError
+            ("declFields" ~>
+              "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
+              "extra" <~ (Sets.difference (var "suppliedNames") (var "declNames") :: TypedTerm (S.Set Name)) $
+              Logic.ifElse (Sets.null $ (var "extra" :: TypedTerm (S.Set Name)))
+                noError
+                (mkJust $ inject _InvalidTermError _InvalidTermError_extraRecordFields $
+                  record _ExtraRecordFieldsError [
+                    _ExtraRecordFieldsError_location>>: var "path",
+                    _ExtraRecordFieldsError_typeName>>: var "tname",
+                    _ExtraRecordFieldsError_fieldNames>>: Sets.toList (var "extra" :: TypedTerm (S.Set Name))])))],
 
     -- T1/T2/T10/T11/T18: TermLet — empty bindings, duplicates, shadowing, naming, type var checks
     _Term_let>>: "lt" ~>
@@ -419,15 +466,48 @@ checkTerm = define "checkTerm" $
               (var "bindings")))
             noError)],
 
-    -- T5: TermInject (injection) — check for empty type name
+    -- T5/#610: TermInject (injection) — empty type name, nominal reference
+    -- validity (Layer 1), and declared-variant agreement (Layer 2)
     _Term_inject>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
-      guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
-        (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
-          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
-            record _EmptyTypeNameInTermError [
-              _EmptyTypeNameInTermError_location>>: var "path"])
-          noError),
+      "variantName" <~ Core.fieldName (Core.injectionField $ var "inj") $
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
+      firstFinding @@ list [
+        -- T5. EmptyTypeNameInTermError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
+          (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+            (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+              record _EmptyTypeNameInTermError [
+                _EmptyTypeNameInTermError_location>>: var "path"])
+            noError),
+        -- #610 Layer 1a. UnresolvedNominalTypeError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
+              _Type_union>>: constant noError])),
+        -- #610 Layer 2. UndeclaredVariantError: the injected variant is not
+        -- among the union's declared variants
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undeclaredVariant
+          (Optionals.cases (resolveUnionFields @@ var "cx" @@ var "tname")
+            noError
+            ("declFields" ~>
+              "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
+              Logic.ifElse (Sets.member (var "variantName") (var "declNames" :: TypedTerm (S.Set Name)))
+                noError
+                (mkJust $ inject _InvalidTermError _InvalidTermError_undeclaredVariant $
+                  record _UndeclaredVariantError [
+                    _UndeclaredVariantError_location>>: var "path",
+                    _UndeclaredVariantError_typeName>>: var "tname",
+                    _UndeclaredVariantError_variantName>>: var "variantName"])))],
 
     -- T11/T17/T8: Lambda — shadowing, naming, undefined type vars in domain
     _Term_lambda>>: "lam" ~>
@@ -466,22 +546,12 @@ checkTerm = define "checkTerm" $
                       _UndefinedTypeVariableInLambdaDomainError_location>>: var "path",
                       _UndefinedTypeVariableInLambdaDomainError_name>>: var "uvName"])))
             noError)],
-    -- T5: Projection — check empty type name
+    -- T5/#610: Projection — empty type name, nominal reference validity
+    -- (Layer 1), and declared-field agreement (Layer 2)
     _Term_project>>: "proj" ~>
       "tname" <~ Core.projectionTypeName (var "proj") $
-      guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
-        (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
-          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
-            record _EmptyTypeNameInTermError [
-              _EmptyTypeNameInTermError_location>>: var "path"])
-          noError),
-    -- T4/T5/T6: CaseStatement — check empty type name, empty cases, duplicate case fields
-    _Term_cases>>: "cs" ~>
-      "tname" <~ Core.caseStatementTypeName (var "cs") $
-      "csDefault" <~ Core.caseStatementDefault (var "cs") $
-      "csCases" <~ Core.caseStatementCases (var "cs") $
-      "altNames" <~ (Sets.fromList (Lists.map (reify Core.caseAlternativeName) (var "csCases")) :: TypedTerm (S.Set Name)) $
-      "unionFields" <~ resolveUnionFields @@ var "cx" @@ var "tname" $
+      "fname" <~ Core.projectionFieldName (var "proj") $
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
       firstFinding @@ list [
         -- T5. EmptyTypeNameInTermError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
@@ -490,6 +560,67 @@ checkTerm = define "checkTerm" $
               record _EmptyTypeNameInTermError [
                 _EmptyTypeNameInTermError_location>>: var "path"])
             noError),
+        -- #610 Layer 1a. UnresolvedNominalTypeError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
+              _Type_record>>: constant noError])),
+        -- #610 Layer 2. UnknownProjectedFieldError: the projected field is
+        -- not among the record's declared fields
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unknownProjectedField
+          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+            noError
+            ("declFields" ~>
+              "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
+              Logic.ifElse (Sets.member (var "fname") (var "declNames" :: TypedTerm (S.Set Name)))
+                noError
+                (mkJust $ inject _InvalidTermError _InvalidTermError_unknownProjectedField $
+                  record _UnknownProjectedFieldError [
+                    _UnknownProjectedFieldError_location>>: var "path",
+                    _UnknownProjectedFieldError_typeName>>: var "tname",
+                    _UnknownProjectedFieldError_fieldName>>: var "fname"])))],
+    -- T4/T5/T6: CaseStatement — check empty type name, empty cases, duplicate case fields
+    _Term_cases>>: "cs" ~>
+      "tname" <~ Core.caseStatementTypeName (var "cs") $
+      "csDefault" <~ Core.caseStatementDefault (var "cs") $
+      "csCases" <~ Core.caseStatementCases (var "cs") $
+      "altNames" <~ (Sets.fromList (Lists.map (reify Core.caseAlternativeName) (var "csCases")) :: TypedTerm (S.Set Name)) $
+      "unionFields" <~ resolveUnionFields @@ var "cx" @@ var "tname" $
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
+      firstFinding @@ list [
+        -- T5. EmptyTypeNameInTermError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
+          (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+            (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+              record _EmptyTypeNameInTermError [
+                _EmptyTypeNameInTermError_location>>: var "path"])
+            noError),
+        -- #610 Layer 1a. UnresolvedNominalTypeError. Subsumes the silent
+        -- "Nothing means either unresolved or wrong-kind" conflation that
+        -- resolveUnionFields' own Nothing result previously left implicit
+        -- for missingCaseBranches/unknownCaseAlternative below.
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
+              _Type_union>>: constant noError])),
         -- T6. EmptyCaseStatementError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyCaseStatement
           (Logic.ifElse
@@ -589,15 +720,62 @@ checkTerm = define "checkTerm" $
               _UndefinedTermVariableError_location>>: var "path",
               _UndefinedTermVariableError_name>>: var "varName"])),
 
-    -- T5: TermWrap — check for empty type name
+    -- T5/#610: TermWrap — empty type name and nominal reference validity
+    -- (Layer 1 only; there is no Layer 2 for wrap -- see checkTerm's #610
+    -- TermUnwrap comment below for the rationale).
     _Term_wrap>>: "wt" ~>
       "tname" <~ Core.wrappedTermTypeName (var "wt") $
-      guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
-        (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
-          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
-            record _EmptyTypeNameInTermError [
-              _EmptyTypeNameInTermError_location>>: var "path"])
-          noError)]
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
+      firstFinding @@ list [
+        -- T5. EmptyTypeNameInTermError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTypeNameInTerm
+          (Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+            (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+              record _EmptyTypeNameInTermError [
+                _EmptyTypeNameInTermError_location>>: var "path"])
+            noError),
+        -- #610 Layer 1a. UnresolvedNominalTypeError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
+              _Type_wrap>>: constant noError]))],
+
+    -- #610: TermUnwrap — nominal reference validity (Layer 1 only). No
+    -- empty-type-name check here: unlike the other five sites, 'unwrap'
+    -- carries a bare Name (not a record with a 'typeName' field extracted
+    -- via a Core.*TypeName accessor), so it was never covered by the
+    -- pre-existing emptyTypeNameInTerm rule and #610 does not extend that
+    -- rule to it -- an empty unwrap name is simply an unresolvable nominal
+    -- reference, already caught by UnresolvedNominalTypeError below. No
+    -- Layer 2 either: there is no invalid wrapper at the untyped structural
+    -- level (a wrong wrapped/unwrapped body type is a type-mismatch that
+    -- belongs to inference at the typed boundary, out of scope for #610).
+    _Term_unwrap>>: "tname" ~>
+      "resolved" <~ resolveNominalType @@ var "cx" @@ var "tname" $
+      firstFinding @@ list [
+        -- #610 Layer 1a. UnresolvedNominalTypeError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
+          (Optionals.cases (var "resolved")
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
+              record _UnresolvedNominalTypeError [
+                _UnresolvedNominalTypeError_location>>: var "path",
+                _UnresolvedNominalTypeError_typeName>>: var "tname"])
+            (constant noError)),
+        -- #610 Layer 1b. NominalTypeKindMismatchError
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
+          (Optionals.cases (var "resolved")
+            noError
+            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
+              _Type_wrap>>: constant noError]))]]
 
 -- | Check a list of names for shadowing against the current graph scope
 -- | Check a type for undefined type variables against the current graph scope.
@@ -696,6 +874,24 @@ guardedTypeRule profile unionName variantName findingExpr =
     nothing
   where
     ruleNameTerm = nameLift (qualifiedRule unionName variantName)
+
+-- | Build a NominalTypeKindMismatchError finding for a nominal-type-
+-- referencing term site (record/project -> expected TypeRecord; inject/cases
+-- -> expected TypeUnion; wrap/unwrap -> expected TypeWrap) given the
+-- resolved type it actually names. Used only once Layer 1's
+-- 'resolveNominalType' has confirmed the name resolves at all; the caller is
+-- responsible for checking the resolved type against the expected
+-- constructor first and only invoking this helper on a mismatch.
+nominalTypeKindMismatch
+  :: TypedTerm SubtermPath -> TypedTerm Name -> TypedTerm TypeVariant -> TypedTerm Type
+  -> TypedTerm (Maybe InvalidTermError)
+nominalTypeKindMismatch path tname expectedVariant resolvedType =
+  mkJust $ inject _InvalidTermError _InvalidTermError_nominalTypeKindMismatch $
+    record _NominalTypeKindMismatchError [
+      _NominalTypeKindMismatchError_location>>: path,
+      _NominalTypeKindMismatchError_typeName>>: tname,
+      _NominalTypeKindMismatchError_expectedVariant>>: expectedVariant,
+      _NominalTypeKindMismatchError_actualVariant>>: Reflect.typeVariant @@ resolvedType]
 
 -- | Test whether a rule is active in a profile (in either errorRules or
 -- warningRules). A rule that is active is evaluated by validators; a rule
@@ -817,12 +1013,15 @@ justError (TypedTerm t) = TypedTerm $ TermOptional $ Just t
 
 -- | The default validation profile for hydra.validate.core (term and type
 -- validators). Every check currently wired up is in 'errorRules' except
--- 'InvalidTypeError.singleVariantUnion', which is treated as a warning.
--- 'maxErrors = 1' preserves the legacy 'first error wins' behaviour;
--- 'maxWarnings = 20' is a deliberately small starting cap.
+-- 'InvalidTypeError.singleVariantUnion' and 'InvalidTypeError.emptyRecordType',
+-- which are treated as warnings -- an empty record type is unit-like (one
+-- inhabitant) and often a deliberate marker/placeholder, unlike an empty
+-- union type (uninhabited, kept as an error; 'void' is the sanctioned
+-- intentional-bottom). 'maxErrors = 1' preserves the legacy 'first error
+-- wins' behaviour; 'maxWarnings = 20' is a deliberately small starting cap.
 kernelDefaultCoreProfile :: TypedTermDefinition ValidationProfile
 kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
-  doc "The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion (warning); maxErrors=1, maxWarnings=20." $
+  doc "The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion and InvalidTypeError.emptyRecordType (warnings); maxErrors=1, maxWarnings=20." $
   Validation.validationProfile
     (Sets.fromList $ list $ nameLift <$> coreErrorRules)
     (Sets.fromList $ list $ nameLift <$> coreWarningRules)
@@ -839,27 +1038,32 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
           , _InvalidTermError_emptyLetBindings
           , _InvalidTermError_emptyTermAnnotation
           , _InvalidTermError_emptyTypeNameInTerm
+          , _InvalidTermError_extraRecordFields
           , _InvalidTermError_invalidLambdaParameterName
           , _InvalidTermError_invalidLetBindingName
           , _InvalidTermError_invalidTypeLambdaParameterName
           , _InvalidTermError_missingCaseBranches
+          , _InvalidTermError_missingRecordFields
           , _InvalidTermError_nestedTermAnnotation
+          , _InvalidTermError_nominalTypeKindMismatch
           , _InvalidTermError_redundantWrapUnwrap
           , _InvalidTermError_selfApplication
           , _InvalidTermError_termVariableShadowing
           , _InvalidTermError_typeVariableShadowingInTypeLambda
+          , _InvalidTermError_undeclaredVariant
           , _InvalidTermError_undefinedTermVariable
           , _InvalidTermError_undefinedTypeVariableInBindingType
           , _InvalidTermError_undefinedTypeVariableInLambdaDomain
           , _InvalidTermError_undefinedTypeVariableInTypeApplication
           , _InvalidTermError_unknownCaseAlternative
           , _InvalidTermError_unknownPrimitiveName
+          , _InvalidTermError_unknownProjectedField
           , _InvalidTermError_unnecessaryIdentityApplication
+          , _InvalidTermError_unresolvedNominalType
           , _InvalidTermError_untypedTermVariable]
       , fmap (qualifiedRule _InvalidTypeError)
           [ _InvalidTypeError_duplicateRecordTypeFieldNames
           , _InvalidTypeError_duplicateUnionTypeFieldNames
-          , _InvalidTypeError_emptyRecordType
           , _InvalidTypeError_emptyTypeAnnotation
           , _InvalidTypeError_emptyUnionType
           , _InvalidTypeError_invalidForallParameterName
@@ -873,7 +1077,8 @@ kernelDefaultCoreProfile = define "kernelDefaultCoreProfile" $
 
     coreWarningRules :: [Name]
     coreWarningRules =
-      [qualifiedRule _InvalidTypeError _InvalidTypeError_singleVariantUnion]
+      [ qualifiedRule _InvalidTypeError _InvalidTypeError_emptyRecordType
+      , qualifiedRule _InvalidTypeError _InvalidTypeError_singleVariantUnion]
 
 -- | Helper to make a just from a TypedTerm
 mkJust :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
@@ -897,6 +1102,40 @@ noTypeError = TypedTerm $ TermOptional Nothing
 -- constants. Pure host-side helper; not exported as a kernel term.
 qualifiedRule :: Name -> Name -> Name
 qualifiedRule (Name u) (Name v) = Name (L.concat [u, ".", v])
+
+-- | Resolve a type name to the (annotation-stripped) type it names in the
+-- current graph scope, if any. Looks the name up in schema types first,
+-- falling back to bound types. This is the shared Layer-1 "does this
+-- nominal reference resolve at all" lookup used by every nominal-type-
+-- referencing term site (inject, cases, record, project, wrap, unwrap);
+-- each site then matches on the expected 'Type' constructor itself to
+-- decide "right kind" vs. "wrong kind", since the expected kind differs
+-- per site and is cheapest to express as a local pattern match.
+resolveNominalType :: TypedTermDefinition (Graph -> Name -> Maybe Type)
+resolveNominalType = define "resolveNominalType" $
+  doc "Resolve a type name to the annotation-stripped type it names in the current graph scope, or Nothing if it does not resolve." $
+  "cx" ~> "tname" ~>
+  "toType" <~ ("ts" ~> just (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))) $
+  Optionals.cases (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
+    (Optionals.cases (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
+      nothing
+      (var "toType"))
+    (var "toType")
+
+-- | Resolve a type name to the field list of the record type it names, if
+-- any. Same lookup as 'resolveNominalType', matching on TypeRecord. Returns
+-- Nothing both when the name does not resolve and when it resolves to a
+-- non-record type -- Layer 1 (via 'resolveNominalType') is responsible for
+-- distinguishing those two cases; this helper is Layer 2's schema-agreement
+-- lookup and is only consulted once Layer 1 has already confirmed a record.
+resolveRecordFields :: TypedTermDefinition (Graph -> Name -> Maybe [FieldType])
+resolveRecordFields = define "resolveRecordFields" $
+  doc "Resolve a type name to the field list of the record type it names, or Nothing if it does not resolve to a record type." $
+  "cx" ~> "tname" ~>
+  Optionals.cases (resolveNominalType @@ var "cx" @@ var "tname")
+    nothing
+    ("typ" ~> cases _Type (var "typ") (Just nothing) [
+      _Type_record>>: "fields" ~> just (var "fields")])
 
 -- | Resolve a type name to the field list of the union type it names, if
 -- any. Looks the name up in the current graph scope (schema types, falling
