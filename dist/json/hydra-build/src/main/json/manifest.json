@@ -6,6 +6,7 @@
     "hydra.build.libraries",
     "hydra.build.manifestWriter",
     "hydra.build.modules",
+    "hydra.build.packagingProfile",
     "hydra.build.reconcile",
     "hydra.build.routing",
     "hydra.decode.build.format",

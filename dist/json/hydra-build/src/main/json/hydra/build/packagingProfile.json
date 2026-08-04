@@ -1,0 +1,146 @@
+{
+  "name": "hydra.build.packagingProfile",
+  "metadata": {
+    "description": "Per-package packaging-validation policy: strict vs. doc-relaxed profile selection and native-owned exclusion",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.validate.packaging"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.packagingProfile.isNativeOwned",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.Package"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pkg",
+                "domain": {"variable": "hydra.packaging.Package"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                        "argument": {
+                          "application": {"function": {"project": {"typeName": "hydra.packaging.Package", "fieldName": "name"}}, "argument": {"variable": "pkg"}}}}},
+                    "argument": {"variable": "hydra.build.packagingProfile.nativeOwnedPackagingPackages"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Whether a package's dist/json is written by a separate native driver, so it is excluded from structural validation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.packagingProfile.nativeOwnedPackagingPackages",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-jvm"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-java"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-python"}}}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Packages whose dist/json is written by a separate native driver, hence excluded from structural validation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.packagingProfile.packagingProfileFor",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.Package"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.validation.ValidationProfile"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pkg",
+                "domain": {"variable": "hydra.packaging.Package"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.validation.ValidationProfile"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                    "argument": {
+                                      "application": {"function": {"project": {"typeName": "hydra.packaging.Package", "fieldName": "name"}}, "argument": {"variable": "pkg"}}}}},
+                                "argument": {"variable": "hydra.build.packagingProfile.strictPackagingPackages"}}}}},
+                        "argument": {"variable": "hydra.validate.packaging.kernelDefaultPackagingProfile"}}},
+                    "argument": {"variable": "hydra.validate.packaging.kernelPackagingProfileWithDocWarnings"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Select the packaging validation profile for a package: full-fatal for strict packages, doc-relaxed otherwise"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.packagingProfile.strictPackagingPackages",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-kernel"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-build"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-haskell"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-go"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-lisp"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-wasm"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-typescript"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-rdf"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-pg"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-ext"}}}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Packages held to the full, fatal-on-everything packaging profile"}}}]}}}}}]}
