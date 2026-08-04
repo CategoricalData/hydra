@@ -71,6 +71,8 @@ module_ = Module {
       toDefinition testTypePersonName,
       toDefinition testTypePersonOrSomething,
       toDefinition testTypePersonOrSomethingName,
+      toDefinition testTypePoint,
+      toDefinition testTypePointName,
       toDefinition testTypePolymorphicWrapper,
       toDefinition testTypePolymorphicWrapperName,
       toDefinition testTypeSimpleNumber,
@@ -315,6 +317,16 @@ testTypePersonOrSomething = defineType "testTypePersonOrSomething" $
 testTypePersonOrSomethingName :: TypedTermDefinition Name
 testTypePersonOrSomethingName = define "testTypePersonOrSomethingName" $
   testTypesName "PersonOrSomething"
+
+testTypePoint :: TypedTermDefinition Type
+testTypePoint = defineType "testTypePoint" $
+  T.record testTypePointName [
+    "x">: T.int32,
+    "y">: T.int32]
+
+testTypePointName :: TypedTermDefinition Name
+testTypePointName = define "testTypePointName" $
+  testTypesName "Point"
 
 testTypePolymorphicWrapper :: TypedTermDefinition Type
 testTypePolymorphicWrapper = defineType "testTypePolymorphicWrapper" $

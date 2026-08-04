@@ -100,6 +100,7 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeNumberName TestTypes.testTypeNumber,
     Phantoms.pair TestTypes.testTypePersonName TestTypes.testTypePerson,
     Phantoms.pair TestTypes.testTypePersonOrSomethingName TestTypes.testTypePersonOrSomething,
+    Phantoms.pair TestTypes.testTypePointName TestTypes.testTypePoint,
     Phantoms.pair TestTypes.testTypePolymorphicWrapperName TestTypes.testTypePolymorphicWrapper,
     Phantoms.pair TestTypes.testTypeSimpleNumberName TestTypes.testTypeSimpleNumber,
     Phantoms.pair TestTypes.testTypeStringAliasName TestTypes.testTypeStringAlias,
