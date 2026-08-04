@@ -124,7 +124,7 @@
                                           "application": {
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Name"}}},
                                                 "type": {"literal": "string"}}},
                                             "argument": {"variable": "sname"}}},
                                         "argument": {"variable": "dlft"}}},

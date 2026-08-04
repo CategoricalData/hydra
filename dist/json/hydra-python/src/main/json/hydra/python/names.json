@@ -321,7 +321,7 @@
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                                         "type": {"variable": "hydra.python.syntax.Name"}}},
                                                     "argument": {
                                                       "application": {
@@ -374,7 +374,7 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                     "type": {"variable": "hydra.python.syntax.Name"}}},
                                                                 "argument": {"variable": "mns"}}},
                                                             "argument": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"variable": "pyLocal"}}}}},
@@ -515,7 +515,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.Name"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                         "type": {"variable": "hydra.python.syntax.Name"}}},
                                     "argument": {
                                       "application": {
@@ -568,7 +568,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                     "type": {"variable": "hydra.python.syntax.Name"}}},
                                                 "argument": {"variable": "mns"}}},
                                             "argument": {
@@ -1187,7 +1187,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                     "type": {"literal": "boolean"}}},
                                                 "argument": {"variable": "mns"}}},
                                             "argument": {"literal": {"boolean": false}}}},
