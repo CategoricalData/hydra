@@ -32,6 +32,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -279,7 +281,17 @@ public class Generation {
             Value jsonVal) {
         Name modName = new Name("hydra.packaging.Module");
         hydra.core.Type modType = new hydra.core.Type.Variable(modName);
-        Either<String, hydra.core.Term> jsonResult = hydra.json.Decode.fromJson(schemaMap, modName, modType, jsonVal);
+        // compactMaps = false: decodes the checked-in dist/json module-bootstrapping
+        // representation, which must stay byte-stable for the published-host cold-seeder (#624).
+        // Called via reflection because this file compiles against two different
+        // hydra.json.Decode signatures depending on consumer: the LOCAL dist/java/hydra-kernel
+        // (5-arg, with compactMaps) when compiled into packages/hydra-java's headsExtras
+        // rollup, and the PUBLISHED hydra-kernel jar (still pre-#624 4-arg) when compiled by
+        // target-driver/json-driver. A direct call only compiles against one signature at a
+        // time. Remove the fallback once hydra-kernel republishes with the 5-arg signature.
+        @SuppressWarnings("unchecked")
+        Either<String, hydra.core.Term> jsonResult = (Either<String, hydra.core.Term>) invokeFromJson(
+            schemaMap, modName, modType, jsonVal);
         return jsonResult.accept(new Either.Visitor<String, hydra.core.Term, Module>() {
             @Override
             public Module visit(Either.Left<String, hydra.core.Term> instance) {
@@ -304,6 +316,35 @@ public class Generation {
                 });
             }
         });
+    }
+
+    // Reflective bridge for hydra.json.Decode.fromJson (#624): tries the current 5-arg
+    // signature (schemaMap, compactMaps, name, type, value) first, falling back to the
+    // pre-#624 4-arg signature (schemaMap, name, type, value) if that overload does not
+    // exist on the classpath's hydra.json.Decode. See decodeModuleFromJson's comment: this
+    // file is compiled against the PUBLISHED hydra-kernel (still 4-arg) by target-driver/
+    // json-driver, and against the LOCAL dist/java/hydra-kernel (5-arg) by hydra-java's
+    // headsExtras rollup -- a direct call can only match one at compile time. Remove the
+    // 4-arg fallback branch (and this reflection layer entirely, reverting to a direct call)
+    // once hydra-kernel republishes with the 5-arg signature and hostVersion is bumped past
+    // it -- mirrors the DigestFormat.hs cold-seed shim's removal condition.
+    private static Object invokeFromJson(Map<Name, hydra.core.Type> schemaMap, Name modName,
+            hydra.core.Type modType, Value jsonVal) {
+        try {
+            Method fiveArg = hydra.json.Decode.class.getMethod(
+                "fromJson", Map.class, boolean.class, Name.class, hydra.core.Type.class, Value.class);
+            return fiveArg.invoke(null, schemaMap, false, modName, modType, jsonVal);
+        } catch (NoSuchMethodException e) {
+            try {
+                Method fourArg = hydra.json.Decode.class.getMethod(
+                    "fromJson", Map.class, Name.class, hydra.core.Type.class, Value.class);
+                return fourArg.invoke(null, schemaMap, modName, modType, jsonVal);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e2) {
+                throw new RuntimeException("hydra.json.Decode.fromJson: no compatible overload found", e2);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("hydra.json.Decode.fromJson invocation failed", e);
+        }
     }
 
     /**

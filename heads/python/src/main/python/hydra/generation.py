@@ -133,8 +133,18 @@ def decode_module(bs_graph, schema_map, json_val):
 
     mod_type = TypeVariable(Name("hydra.packaging.Module"))
 
-    # Step 1: Decode JSON to a Term using the schema map
-    json_result = json_decode.from_json(schema_map, Name("hydra.packaging.Module"), mod_type, json_val)
+    # Step 1: Decode JSON to a Term using the schema map. compact_maps=False: decodes the
+    # checked-in dist/json module-bootstrapping representation, which must stay byte-stable
+    # for the published-host cold-seeder (#624). In published-host mode, json_decode resolves
+    # to the published hydra-python wheel, which may still expose the pre-#624 4-arg
+    # from_json (no compact_maps parameter) until hydra-python republishes and hostVersion is
+    # bumped past it -- mirrors the try/except ImportError compat shim above for
+    # hydra.show.error. Remove the except branch once hydra-python republishes with the 5-arg
+    # signature.
+    try:
+        json_result = json_decode.from_json(schema_map, False, Name("hydra.packaging.Module"), mod_type, json_val)
+    except TypeError:
+        json_result = json_decode.from_json(schema_map, Name("hydra.packaging.Module"), mod_type, json_val)
     match json_result:
         case Left(value=err):
             raise RuntimeError(f"Module JSON decode error: {err}")

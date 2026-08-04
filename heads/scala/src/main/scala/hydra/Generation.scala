@@ -88,7 +88,9 @@ object Generation:
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
     val modName: String = "hydra.packaging.Module"
     val modType: Type = Type.variable(modName)
-    hydra.json.decode.fromJson(schemaMap)(modName)(modType)(jsonVal) match
+    // compactMaps = false: decodes the checked-in dist/json module-bootstrapping representation,
+    // which must stay byte-stable for the published-host cold-seeder (#624).
+    hydra.json.decode.fromJson(schemaMap)(false)(modName)(modType)(jsonVal) match
       case Left(err) => throw new RuntimeException(s"JSON decode error: $err")
       case Right(term) =>
         hydra.decode.packaging.module(bsGraph)(term) match
