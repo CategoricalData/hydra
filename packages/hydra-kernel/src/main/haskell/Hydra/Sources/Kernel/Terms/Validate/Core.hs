@@ -379,7 +379,7 @@ checkTerm = define "checkTerm" $
             (var "flds"))),
         -- #610 Layer 1a. UnresolvedNominalTypeError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -387,13 +387,13 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
               _Type_record>>: constant noError])),
         -- #610 Layer 2a. MissingRecordFieldsError: declared fields absent from the term
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_missingRecordFields
-          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+          (Optionals.match (resolveRecordFields @@ var "cx" @@ var "tname")
             noError
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
@@ -407,7 +407,7 @@ checkTerm = define "checkTerm" $
                     _MissingRecordFieldsError_fieldNames>>: Sets.toList (var "missing" :: TypedTerm (S.Set Name))]))),
         -- #610 Layer 2b. ExtraRecordFieldsError: term fields absent from the declaration
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_extraRecordFields
-          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+          (Optionals.match (resolveRecordFields @@ var "cx" @@ var "tname")
             noError
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
@@ -482,7 +482,7 @@ checkTerm = define "checkTerm" $
             noError),
         -- #610 Layer 1a. UnresolvedNominalTypeError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -490,14 +490,14 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
               _Type_union>>: constant noError])),
         -- #610 Layer 2. UndeclaredVariantError: the injected variant is not
         -- among the union's declared variants
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undeclaredVariant
-          (Optionals.cases (resolveUnionFields @@ var "cx" @@ var "tname")
+          (Optionals.match (resolveUnionFields @@ var "cx" @@ var "tname")
             noError
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
@@ -562,7 +562,7 @@ checkTerm = define "checkTerm" $
             noError),
         -- #610 Layer 1a. UnresolvedNominalTypeError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -570,14 +570,14 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
               _Type_record>>: constant noError])),
         -- #610 Layer 2. UnknownProjectedFieldError: the projected field is
         -- not among the record's declared fields
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unknownProjectedField
-          (Optionals.cases (resolveRecordFields @@ var "cx" @@ var "tname")
+          (Optionals.match (resolveRecordFields @@ var "cx" @@ var "tname")
             noError
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
@@ -609,7 +609,7 @@ checkTerm = define "checkTerm" $
         -- resolveUnionFields' own Nothing result previously left implicit
         -- for missingCaseBranches/unknownCaseAlternative below.
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -617,7 +617,7 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
               _Type_union>>: constant noError])),
@@ -736,7 +736,7 @@ checkTerm = define "checkTerm" $
             noError),
         -- #610 Layer 1a. UnresolvedNominalTypeError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -744,7 +744,7 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
               _Type_wrap>>: constant noError]))],
@@ -764,7 +764,7 @@ checkTerm = define "checkTerm" $
       firstFinding @@ list [
         -- #610 Layer 1a. UnresolvedNominalTypeError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unresolvedNominalType
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             (mkJust $ inject _InvalidTermError _InvalidTermError_unresolvedNominalType $
               record _UnresolvedNominalTypeError [
                 _UnresolvedNominalTypeError_location>>: var "path",
@@ -772,7 +772,7 @@ checkTerm = define "checkTerm" $
             (constant noError)),
         -- #610 Layer 1b. NominalTypeKindMismatchError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
-          (Optionals.cases (var "resolved")
+          (Optionals.match (var "resolved")
             noError
             ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
               _Type_wrap>>: constant noError]))]]
@@ -1116,8 +1116,8 @@ resolveNominalType = define "resolveNominalType" $
   doc "Resolve a type name to the annotation-stripped type it names in the current graph scope, or Nothing if it does not resolve." $
   "cx" ~> "tname" ~>
   "toType" <~ ("ts" ~> just (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))) $
-  Optionals.cases (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
-    (Optionals.cases (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
+  Optionals.match (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
+    (Optionals.match (Maps.lookup (var "tname") (Graph.graphBoundTypes $ var "cx"))
       nothing
       (var "toType"))
     (var "toType")
@@ -1132,7 +1132,7 @@ resolveRecordFields :: TypedTermDefinition (Graph -> Name -> Maybe [FieldType])
 resolveRecordFields = define "resolveRecordFields" $
   doc "Resolve a type name to the field list of the record type it names, or Nothing if it does not resolve to a record type." $
   "cx" ~> "tname" ~>
-  Optionals.cases (resolveNominalType @@ var "cx" @@ var "tname")
+  Optionals.match (resolveNominalType @@ var "cx" @@ var "tname")
     nothing
     ("typ" ~> cases _Type (var "typ") (Just nothing) [
       _Type_record>>: "fields" ~> just (var "fields")])

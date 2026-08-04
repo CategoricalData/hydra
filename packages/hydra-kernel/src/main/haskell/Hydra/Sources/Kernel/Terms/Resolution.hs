@@ -331,7 +331,7 @@ resolveBaseType = define "resolveBaseType" $
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   cases _Type (var "stripped") (Just (var "stripped")) [
     _Type_variable>>: "name" ~>
-      Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
+      Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
         (var "stripped")
         ("resolved" ~> resolveBaseType @@ var "types" @@ var "resolved"),
     _Type_wrap>>: "inner" ~> resolveBaseType @@ var "types" @@ var "inner"]
