@@ -370,23 +370,25 @@ assemble_refresh_digest() {
 #
 # #459 circular-seed guard: the Java generator (target-driver) compiles hydra.build.*
 # from dist/java/hydra-build/src (target-driver/build.gradle srcDirs it; hydra-build has
-# NO published Maven artifact, so it cannot come from the jar). That makes generating the
-# `java` dist of `hydra-build` itself circular under the java-default: the driver needs the
-# very output it is being asked to produce, so on a cold checkout its compileJava fails and
-# the pipeline falls back to a ~4h from-source :hydra-java build (the #459 dry-run timeout).
-# hydra-build is the SOLE non-published, self-referential seed. Force its java-target
-# generation through the Haskell generator (which srcDirs NEITHER target-driver NOR
-# dist/java/hydra-build — a non-circular seed), regardless of GENERATOR_HOST. This is exactly
-# the "run one package via Haskell in the same pass" fallback the per-invocation contract
-# above allows, and it keeps the java-default's bytecode win for every other (non-circular)
-# package. Scoped to target=java because only the Java drivers (target-driver, json-driver)
-# srcDir dist/java/hydra-build; other targets have no such dependency.
+# NO published Maven artifact, so it cannot come from the jar). That makes generating
+# `hydra-build` VIA THE JAVA DRIVER circular under the java-default — for ANY target, not
+# just java: the target-driver must compile dist/java/hydra-build to run, but it is the very
+# thing being asked to produce it, so on a cold checkout its compileJava fails and the pipeline
+# falls back to a ~4h from-source :hydra-java build (the #459 dry-run timeout). This also bites
+# target=python: heal_java_python_native (sync.sh) calls `run_layer1_transform python hydra-build`,
+# and since there is no Python native driver that path ALSO routes through the java target-driver
+# — same circularity (the bug the original target=java-scoped guard missed). hydra-build is the
+# SOLE non-published, self-referential seed. Force ITS generation through the Haskell generator
+# (which srcDirs NEITHER target-driver NOR dist/java/hydra-build — a non-circular seed) for EVERY
+# target, regardless of GENERATOR_HOST. This is exactly the "run one package via Haskell in the
+# same pass" fallback the per-invocation contract above allows, and it keeps the java-default's
+# bytecode win for every other (non-circular) package.
 run_layer1_transform() {
     local target="$1"
     local pkg="${2:-}"
     local effective_host="${GENERATOR_HOST:-java}"
-    if [ "$effective_host" = "java" ] && [ "$target" = "java" ] && [ "$pkg" = "hydra-build" ]; then
-        echo "run_layer1_transform: seeding java/hydra-build via Haskell generator (#459 circular-seed guard)" >&2
+    if [ "$effective_host" = "java" ] && [ "$pkg" = "hydra-build" ]; then
+        echo "run_layer1_transform: seeding $target/hydra-build via Haskell generator (#459 circular-seed guard)" >&2
         effective_host="haskell"
     fi
     case "$effective_host" in
