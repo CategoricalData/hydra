@@ -557,13 +557,18 @@ public class Bootstrap {
      * a lib default-implementation referencing another primitive resolves to the primitive, not a
      * lowered binding). Mirrors genForDirLib in bootstrap-from-json/Main.hs.
      */
-    static void runLibPass(String target, String langDir,
+    // #459 (H1): returns the paths written by the lib pass, RELATIVE to langDir, so the caller
+    // can union them into the prune keep-set. The lib pass emits hydra.lib.* def-modules that the
+    // main write did NOT produce, so without this the pruner would treat them as orphans and delete
+    // them. Empty list when there are no lib modules (early return). Mirrors the Haskell driver's
+    // recordKeep accumulation across the main + lib passes before the prune step.
+    static List<String> runLibPass(String target, String langDir,
                                    List<Module> allMainMods, List<Module> modsToGenerate) {
         List<Module> libMods = new ArrayList<>();
         for (Module m : modsToGenerate) {
             if (isLibModule(m)) libMods.add(Codegen.lowerPrimitiveDefinitions(m));
         }
-        if (libMods.isEmpty()) return;
+        if (libMods.isEmpty()) return new ArrayList<>();
 
         List<Module> libUniverse = new ArrayList<>();
         for (Module m : allMainMods) {
@@ -573,15 +578,15 @@ public class Bootstrap {
         System.out.println("Lib pass: emitting " + libMods.size()
                 + " hydra.lib.* definition modules to " + target + "...");
         switch (target) {
-            case "java":        GenerationTargets.writeJava(langDir, libUniverse, libMods); break;
-            case "python":      GenerationTargets.writePython(langDir, libUniverse, libMods); break;
-            case "scala":       GenerationTargets.writeScala(langDir, libUniverse, libMods); break;
-            case "typescript":  GenerationTargets.writeTypeScript(langDir, libUniverse, libMods); break;
-            case "clojure":     GenerationTargets.writeLispDialect(langDir, "clojure", "clj", libUniverse, libMods); break;
-            case "scheme":      GenerationTargets.writeLispDialect(langDir, "scheme", "scm", libUniverse, libMods); break;
-            case "common-lisp": GenerationTargets.writeLispDialect(langDir, "commonLisp", "lisp", libUniverse, libMods); break;
-            case "emacs-lisp":  GenerationTargets.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods); break;
-            default: /* haskell handled by caller guard */ break;
+            case "java":        return GenerationTargets.writeJava(langDir, libUniverse, libMods);
+            case "python":      return GenerationTargets.writePython(langDir, libUniverse, libMods);
+            case "scala":       return GenerationTargets.writeScala(langDir, libUniverse, libMods);
+            case "typescript":  return GenerationTargets.writeTypeScript(langDir, libUniverse, libMods);
+            case "clojure":     return GenerationTargets.writeLispDialect(langDir, "clojure", "clj", libUniverse, libMods);
+            case "scheme":      return GenerationTargets.writeLispDialect(langDir, "scheme", "scm", libUniverse, libMods);
+            case "common-lisp": return GenerationTargets.writeLispDialect(langDir, "commonLisp", "lisp", libUniverse, libMods);
+            case "emacs-lisp":  return GenerationTargets.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods);
+            default:            return new ArrayList<>(); /* haskell handled by caller guard */
         }
     }
 

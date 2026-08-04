@@ -5,6 +5,9 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -59,12 +62,16 @@ public class TransformJsonToTarget {
         String outBase = null;
         boolean includeDsls = false;
         boolean includeTests = false;
-        // --prune-stale / --keep-paths-from <f>: accepted for CLI-contract parity with the
-        // Haskell exec (so assemble-distribution.sh can forward them unconditionally to either
-        // generator host without per-host argument filtering), but NOT YET IMPLEMENTED here —
-        // this driver does not prune orphaned output files. Silently accepted, not acted on.
-        // TODO(#459): implement pruning to reach full parity; until then a Java-driven assemble
-        // can leave stale generated files behind on a module rename/delete.
+        // --prune-stale / --keep-paths-from <f> (#459 H1): after writing, delete any file in the
+        // output dir that was NOT just written and is NOT protected by the keep-paths manifest —
+        // the Java-driver counterpart to the Haskell bootstrap-from-json prune walk (Main.hs
+        // pruneDir), so a module rename/delete does not leave an orphaned generated file behind.
+        // The keep-set is the paths GenerationTargets actually wrote (returned from write*), so it
+        // can never disagree with what was emitted. --keep-paths-from protects hand-written overlay
+        // files (mirrors the Haskell exec's --keep-paths-from). Both are forwarded unconditionally
+        // by assemble-distribution.sh to either generator host.
+        boolean pruneStale = false;
+        String keepPathsFrom = null;
 
         List<String> positional = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {
@@ -88,9 +95,10 @@ public class TransformJsonToTarget {
                     includeTests = true;
                     break;
                 case "--prune-stale":
-                    break; // accepted, not yet implemented (see note above)
+                    pruneStale = true;
+                    break;
                 case "--keep-paths-from":
-                    if (i + 1 < args.length) i++; // consume the value; accepted, not yet implemented
+                    if (i + 1 < args.length) keepPathsFrom = args[++i];
                     break;
                 default:
                     if (!args[i].startsWith("--")) positional.add(args[i]);
@@ -243,33 +251,37 @@ public class TransformJsonToTarget {
                 + File.separator + srcSetDir + File.separator + target;
 
         long stepStart = System.currentTimeMillis();
+        // #459 (H1): accumulate every path written across all passes (main + lib), relative to
+        // outDir, so the prune keep-set is exactly what was emitted. Redirect passes (below) edit
+        // files in place and do not change the file set, so they contribute nothing to the keep-set.
+        List<String> written = new ArrayList<>();
         switch (target) {
             case "java":
-                GenerationTargets.writeJava(outDir, universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeJava(outDir, universeMods, modsToGenerate));
                 break;
             case "python":
-                GenerationTargets.writePython(outDir, universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writePython(outDir, universeMods, modsToGenerate));
                 break;
             case "scala":
-                GenerationTargets.writeScala(outDir, universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeScala(outDir, universeMods, modsToGenerate));
                 break;
             case "typescript":
-                GenerationTargets.writeTypeScript(outDir, universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeTypeScript(outDir, universeMods, modsToGenerate));
                 break;
             case "haskell":
-                GenerationTargets.writeHaskell(outDir, universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeHaskell(outDir, universeMods, modsToGenerate));
                 break;
             case "clojure":
-                GenerationTargets.writeLispDialect(outDir, "clojure", "clj", universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeLispDialect(outDir, "clojure", "clj", universeMods, modsToGenerate));
                 break;
             case "scheme":
-                GenerationTargets.writeLispDialect(outDir, "scheme", "scm", universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeLispDialect(outDir, "scheme", "scm", universeMods, modsToGenerate));
                 break;
             case "common-lisp":
-                GenerationTargets.writeLispDialect(outDir, "commonLisp", "lisp", universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeLispDialect(outDir, "commonLisp", "lisp", universeMods, modsToGenerate));
                 break;
             case "emacs-lisp":
-                GenerationTargets.writeLispDialect(outDir, "emacsLisp", "el", universeMods, modsToGenerate);
+                written.addAll(GenerationTargets.writeLispDialect(outDir, "emacsLisp", "el", universeMods, modsToGenerate));
                 break;
             default:
                 System.out.println("Unknown target: " + target);
@@ -281,12 +293,99 @@ public class TransformJsonToTarget {
         // distJsonRoot's parent dist/ (same convention Bootstrap derives from --json-dir).
         if (!target.equals("haskell")) {
             String repoRoot = Paths.get(distJsonRoot).toAbsolutePath().getParent().toString();
-            Bootstrap.runLibPass(target, outDir, universeMods, modsToGenerate);
+            written.addAll(Bootstrap.runLibPass(target, outDir, universeMods, modsToGenerate));
             Bootstrap.redirectLibCalls(repoRoot, target, outDir);
             Bootstrap.redirectTestEnv(target, outDir);
         }
 
+        // #459 (H1): prune stale outputs — delete any file under outDir not just written and not
+        // protected by --keep-paths-from. The Java counterpart to bootstrap-from-json's pruneDir
+        // walk: a module rename/delete otherwise leaves an orphaned generated file that the dist/json
+        // consistency check ("differs from regenerated") would fail on within a single run.
+        if (pruneStale) {
+            pruneStaleOutputs(outDir, written, keepPathsFrom);
+        }
+
         long totalTime = System.currentTimeMillis() - totalStart;
         System.out.println("Done. Time: " + Bootstrap.formatTime(totalTime));
+    }
+
+    // #459 (H1): delete every regular file under outDir whose path (relative to outDir) is NOT in
+    // the just-written keep-set and NOT protected by the --keep-paths-from manifest, then remove any
+    // directories left empty. Mirrors bootstrap-from-json/Main.hs pruneDir + pruneEmptyDirs. The
+    // keep-set is the set of paths the writers ACTUALLY produced (returned from write*/runLibPass),
+    // so it can never disagree with what was emitted for this target.
+    private static void pruneStaleOutputs(String outDir, List<String> writtenRel, String keepPathsFrom)
+            throws IOException {
+        java.nio.file.Path root = Paths.get(outDir);
+        if (!Files.isDirectory(root)) {
+            return;
+        }
+        // Keep-set: normalized relative paths that were written this run.
+        java.util.Set<String> keep = new java.util.HashSet<>();
+        for (String rel : writtenRel) {
+            keep.add(rel.replace(File.separatorChar, '/'));
+        }
+        // Extend with the caller's keep-paths manifest (hand-written overlay files copied in Step 0,
+        // etc.). copy-overlay.sh writes TAB-separated "<OUT_DIR>\t<relPath>" lines (see copy-overlay.sh
+        // and readKeepPathsFiles in bootstrap-from-json/Main.hs): the relPath is relative to OUT_DIR,
+        // NOT necessarily this outDir, so we keep ONLY the relPaths whose OUT_DIR is this output dir.
+        // Parsing the whole line as a path (the bug this replaces) never matches and would delete every
+        // protected overlay file.
+        if (keepPathsFrom != null) {
+            java.nio.file.Path manifest = Paths.get(keepPathsFrom);
+            if (Files.isRegularFile(manifest)) {
+                String thisOutDir = root.toAbsolutePath().normalize().toString();
+                for (String line : Files.readAllLines(manifest, StandardCharsets.UTF_8)) {
+                    if (line.isEmpty() || line.startsWith("#")) continue;
+                    int tab = line.indexOf('\t');
+                    if (tab < 0) {
+                        // Backward-compatible: a bare relPath with no OUT_DIR prefix is treated as
+                        // relative to this outDir.
+                        keep.add(line.trim().replace(File.separatorChar, '/'));
+                        continue;
+                    }
+                    String dir = Paths.get(line.substring(0, tab)).toAbsolutePath().normalize().toString();
+                    String rel = line.substring(tab + 1).trim();
+                    if (dir.equals(thisOutDir) && !rel.isEmpty()) {
+                        keep.add(rel.replace(File.separatorChar, '/'));
+                    }
+                }
+            }
+        }
+        List<java.nio.file.Path> onDisk = new ArrayList<>();
+        try (java.util.stream.Stream<java.nio.file.Path> walk = Files.walk(root)) {
+            walk.filter(Files::isRegularFile).forEach(onDisk::add);
+        }
+        int pruned = 0;
+        for (java.nio.file.Path p : onDisk) {
+            String rel = root.relativize(p).toString().replace(File.separatorChar, '/');
+            // Defensive: never prune a digest.json bookkeeping sibling if one lives inside the tree
+            // (the current layout keeps it one level up, so this is belt-and-suspenders — matches
+            // pruneDir's same guard).
+            if (rel.equals("digest.json")) continue;
+            if (!keep.contains(rel)) {
+                System.out.println("  - " + p);
+                Files.delete(p);
+                pruned++;
+            }
+        }
+        // Remove directories left empty by the deletions (deepest first).
+        if (pruned > 0) {
+            List<java.nio.file.Path> dirs = new ArrayList<>();
+            try (java.util.stream.Stream<java.nio.file.Path> walk = Files.walk(root)) {
+                walk.filter(Files::isDirectory).forEach(dirs::add);
+            }
+            dirs.sort(java.util.Comparator.comparingInt((java.nio.file.Path d) -> d.getNameCount()).reversed());
+            for (java.nio.file.Path d : dirs) {
+                if (d.equals(root)) continue;
+                try (java.util.stream.Stream<java.nio.file.Path> entries = Files.list(d)) {
+                    if (!entries.findAny().isPresent()) {
+                        Files.delete(d);
+                    }
+                }
+            }
+        }
+        System.out.println("Pruning stale outputs (#459 H1)... pruned " + pruned + " file(s).");
     }
 }

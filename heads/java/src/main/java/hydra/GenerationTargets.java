@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -43,7 +44,12 @@ public class GenerationTargets {
      * are now read from {@code language.supportedFeatures} inside
      * {@code generateSourceFiles}; the caller only supplies {@code doInfer}.
      */
-    public static void generateSources(
+    // #459 (H1): returns the paths written, RELATIVE to basePath, so the caller
+    // (TransformJsonToTarget) can prune stale outputs to exactly this keep-set —
+    // the Java-driver counterpart to the Haskell bootstrap-from-json prune walk.
+    // Deriving the keep-set from the paths ACTUALLY written (not a re-derivation of
+    // moduleNameToPath+ext) means the prune can never disagree with what was emitted.
+    public static List<String> generateSources(
             Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<Error_, Map<String, String>>>>>> coder,
             Language language,
             boolean doInfer,
@@ -67,6 +73,7 @@ public class GenerationTargets {
             throw new RuntimeException("Code generation failed: " + err);
         }
         files = ((Either.Right<Error_, List<Pair<String, String>>>) result).value;
+        List<String> writtenRelPaths = new ArrayList<>();
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;
@@ -80,14 +87,16 @@ public class GenerationTargets {
             } catch (IOException e) {
                 throw new RuntimeException("Failed to write " + filePath, e);
             }
+            writtenRelPaths.add(pair.first);
         }
+        return writtenRelPaths;
     }
 
     /**
      * Generate Java source files from modules.
      */
-    public static void writeJava(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
+    public static List<String> writeJava(String basePath, List<Module> universe, List<Module> mods) {
+        return generateSources(
                 mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(mod, defs, cx, g),
                 hydra.java.Language.javaLanguage(),
                 false,
@@ -97,8 +106,8 @@ public class GenerationTargets {
     /**
      * Generate Python source files from modules.
      */
-    public static void writePython(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
+    public static List<String> writePython(String basePath, List<Module> universe, List<Module> mods) {
+        return generateSources(
                 mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(mod, defs, cx, g),
                 hydra.python.Language.pythonLanguage(),
                 false,
@@ -108,8 +117,8 @@ public class GenerationTargets {
     /**
      * Generate Scala source files from modules.
      */
-    public static void writeScala(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
+    public static List<String> writeScala(String basePath, List<Module> universe, List<Module> mods) {
+        return generateSources(
                 mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(mod, defs, cx, g),
                 hydra.scala.Language.scalaLanguage(),
                 false,
@@ -119,8 +128,8 @@ public class GenerationTargets {
     /**
      * Generate TypeScript source files from modules.
      */
-    public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
+    public static List<String> writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
+        return generateSources(
                 mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
                 false,
@@ -130,8 +139,8 @@ public class GenerationTargets {
     /**
      * Generate Haskell source files from modules.
      */
-    public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
-        generateSources(
+    public static List<String> writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
+        return generateSources(
                 mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
                 hydra.haskell.Language.haskellLanguage(),
                 false,
@@ -141,7 +150,7 @@ public class GenerationTargets {
     /**
      * Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp).
      */
-    public static void writeLispDialect(String basePath, String dialectName, String fileExt,
+    public static List<String> writeLispDialect(String basePath, String dialectName, String fileExt,
                                          List<Module> universe, List<Module> mods) {
         hydra.lisp.syntax.Dialect dialect;
         hydra.util.CaseConvention caseConv;
@@ -168,7 +177,7 @@ public class GenerationTargets {
 
         final hydra.lisp.syntax.Dialect d = dialect;
         final hydra.util.CaseConvention cc = caseConv;
-        generateSources(
+        return generateSources(
                 mod -> defs -> cx -> g -> {
                     hydra.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
                     if (result instanceof hydra.overlay.java.util.Either.Left) {
