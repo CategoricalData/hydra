@@ -1226,6 +1226,61 @@
         "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "PersonOrSomething"}}}}}},
     {
       "term": {
+        "name": "hydra.test.testTypes.testTypePoint",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "inject": {
+                "typeName": "hydra.core.Type",
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "list": [
+                      {
+                        "record": {
+                          "typeName": "hydra.core.FieldType",
+                          "fields": [
+                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
+                            {
+                              "name": "type",
+                              "term": {
+                                "inject": {
+                                  "typeName": "hydra.core.Type",
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.LiteralType",
+                                        "field": {
+                                          "name": "integer",
+                                          "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}},
+                      {
+                        "record": {
+                          "typeName": "hydra.core.FieldType",
+                          "fields": [
+                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}},
+                            {
+                              "name": "type",
+                              "term": {
+                                "inject": {
+                                  "typeName": "hydra.core.Type",
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.LiteralType",
+                                        "field": {
+                                          "name": "integer",
+                                          "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}]}}}},
+            "annotation": {"map": [{"key": {"variable": "firstClassType"}, "value": {"literal": {"boolean": true}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.testTypes.testTypePointName",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Name"}}},
+        "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Point"}}}}}},
+    {
+      "term": {
         "name": "hydra.test.testTypes.testTypePolymorphicWrapper",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.Type"}}},
         "body": {

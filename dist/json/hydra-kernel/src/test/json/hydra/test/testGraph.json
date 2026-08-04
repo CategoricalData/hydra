@@ -300,6 +300,16 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
+                            "first": {"variable": "hydra.test.testTypes.testTypePointName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypePoint"}}},
+                        "type": {"variable": "hydra.core.Name"}}},
+                    "type": {"variable": "hydra.core.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
                             "first": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapperName"},
                             "second": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapper"}}},
                         "type": {"variable": "hydra.core.Name"}}},

@@ -309,6 +309,43 @@
                     "value": {"literal": {"string": "A union type with no alternatives; TypeVoid is preferred (optional)"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.error.core.ExtraRecordFieldsError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the record term within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the record type"}}}]}}}},
+                  {
+                    "name": "fieldNames",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.Name"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The names of the undeclared fields supplied by the record term"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A record term supplying a field that its record type does not declare"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.error.core.InvalidForallParameterNameError",
         "body": {
           "variables": [],
@@ -482,6 +519,16 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term with an empty type name (optional)"}}}]}}}},
                   {
+                    "name": "extraRecordFields",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.ExtraRecordFieldsError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A record term supplying a field not declared by its record type"}}}]}}}},
+                  {
                     "name": "invalidLambdaParameterName",
                     "type": {
                       "annotated": {
@@ -522,6 +569,16 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A case statement that does not cover every variant of the union it matches"}}}]}}}},
                   {
+                    "name": "missingRecordFields",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.MissingRecordFieldsError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A record term omitting a field declared by its record type"}}}]}}}},
+                  {
                     "name": "nestedTermAnnotation",
                     "type": {
                       "annotated": {
@@ -531,6 +588,17 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Nested term annotations that should be merged (optional)"}}}]}}}},
+                  {
+                    "name": "nominalTypeKindMismatch",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.NominalTypeKindMismatchError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A nominal type reference resolving to a type of the wrong kind (e.g. a record term naming a union type)"}}}]}}}},
                   {
                     "name": "redundantWrapUnwrap",
                     "type": {
@@ -565,6 +633,16 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A type lambda parameter that shadows a type variable in scope (optional)"}}}]}}}},
+                  {
+                    "name": "undeclaredVariant",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.UndeclaredVariantError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An injection naming a variant that is not declared by its union type"}}}]}}}},
                   {
                     "name": "undefinedTermVariable",
                     "type": {
@@ -620,6 +698,16 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an unknown primitive function"}}}]}}}},
                   {
+                    "name": "unknownProjectedField",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.UnknownProjectedFieldError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A projection naming a field that is not declared by its record type"}}}]}}}},
+                  {
                     "name": "unnecessaryIdentityApplication",
                     "type": {
                       "annotated": {
@@ -629,6 +717,16 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "An identity lambda applied to an argument (optional)"}}}]}}}},
+                  {
+                    "name": "unresolvedNominalType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.core.UnresolvedNominalTypeError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A nominal type reference that does not resolve to any declared type in scope"}}}]}}}},
                   {
                     "name": "untypedTermVariable",
                     "type": {
@@ -888,6 +986,39 @@
                       "literal": {"string": "A case statement without a default branch that fails to cover every variant of the union it matches"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.error.core.MissingRecordFieldsError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the record term within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the record type"}}}]}}}},
+                  {
+                    "name": "fieldNames",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.Name"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The names of the missing fields"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A record term omitting a field declared by its record type"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.error.core.NestedTermAnnotationError",
         "body": {
           "variables": [],
@@ -932,6 +1063,55 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {"string": "A type annotation directly wrapping another type annotation; annotations should be merged (optional)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.core.NominalTypeKindMismatchError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The path to the term with the mismatched nominal type reference"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the referenced type"}}}]}}}},
+                  {
+                    "name": "expectedVariant",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.variants.TypeVariant"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type variant required at this site"}}}]}}}},
+                  {
+                    "name": "actualVariant",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.variants.TypeVariant"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The type variant that the name actually resolves to"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) resolving to a declared type of the wrong kind, e.g. a record term naming a union type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.error.core.NonComparableMapKeyTypeError",
@@ -1163,6 +1343,39 @@
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A type lambda parameter that shadows a type variable already in scope (optional)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UndeclaredVariantError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the injection within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]}}}},
+                  {
+                    "name": "variantName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The undeclared variant name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An injection naming a variant that is not declared by its union type"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.error.core.UndefinedFieldError",
@@ -1454,6 +1667,39 @@
                     "value": {"literal": {"string": "A primitive function reference to a name not in the known primitive registry"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.error.core.UnknownProjectedFieldError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path to the projection within the term"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the record type"}}}]}}}},
+                  {
+                    "name": "fieldName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unknown projected field name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A projection naming a field that is not declared by its record type"}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.error.core.UnnecessaryIdentityApplicationError",
         "body": {
           "variables": [],
@@ -1477,6 +1723,38 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {"string": "An application of an identity lambda to an argument, which simplifies to the argument (optional)"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.core.UnresolvedNominalTypeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "location",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.paths.SubtermPath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The path to the term with the unresolved nominal type reference"}}}]}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unresolved type name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) that does not resolve to any declared type in scope"}}}]}}}}}},
     {
       "type": {
         "name": "hydra.error.core.UntypedTermVariableError",
