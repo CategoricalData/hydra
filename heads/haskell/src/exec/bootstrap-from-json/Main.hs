@@ -29,6 +29,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
+import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
 import qualified Hydra.Codegen as CodeGeneration
 import Hydra.PackageRouting (RoutingMap, buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
 import Hydra.Dsls (dslModuleName)
@@ -824,11 +825,11 @@ main = do
   haskellKnownLibSubs <- overlayLibSubs haskellOverlayLibDir
   typeScriptKnownLibSubs <- overlayLibSubs typeScriptOverlayLibDir
   let consumerTransform = case target of
-        "haskell"     -> correctHaskellLibRedirect haskellKnownLibSubs
+        "haskell"     -> GenLibraryRedirect.correctHaskellLibRedirect (S.toList haskellKnownLibSubs)
         "java"        -> redirectForSubs libSubsJava "java"
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
-        "typescript"  -> correctTypeScriptLibRedirect typeScriptKnownLibSubs
+        "typescript"  -> GenLibraryRedirect.correctTypeScriptLibRedirect (S.toList typeScriptKnownLibSubs)
         "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
         "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
         "common-lisp" -> redirectLispFlat "common_lisp"

@@ -13,6 +13,8 @@ import Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep)
 import Hydra.Haskell.Coder
 import Hydra.Haskell.Language
 import Hydra.Generation
+import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
+import qualified Data.Set as S
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Packaging as PackagingTypes
@@ -32,10 +34,18 @@ import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 -- reference to the overlay path unconditionally (it has no I/O, so it can't
 -- check which subs actually have an overlay); correctHaskellLibRedirect
 -- narrows that back down using an on-disk existence scan.
+--
+-- #559 Step A: the narrowing rewrite is now the translingual
+-- @hydra.build.libraryRedirect@ (generated 'GenLibraryRedirect'); this full-sync
+-- consumer delegates to it, converting the on-disk 'overlayLibSubs' set to the
+-- list the generated module consumes. The cold-seed path (ColdSeedMain) keeps its
+-- own native 'correctHaskellLibRedirect', because it runs against the published
+-- hydra-build and cannot depend on this not-yet-published generated module -- the
+-- same reason it uses a native redirect for every non-Haskell target already.
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeHaskell basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs haskellOverlayLibDir
-  generateSourcesWithTransform (correctHaskellLibRedirect knownSubs)
+  generateSourcesWithTransform (GenLibraryRedirect.correctHaskellLibRedirect (S.toList knownSubs))
     moduleToHaskell haskellLanguage True basePath universeModules modulesToGenerate
 
 ----------------------------------------

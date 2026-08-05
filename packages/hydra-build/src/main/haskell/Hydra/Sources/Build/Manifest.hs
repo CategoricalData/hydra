@@ -32,6 +32,7 @@ import Hydra.Kernel
 
 import qualified Hydra.Sources.Build.Format as BuildFormat
 import qualified Hydra.Sources.Build.Libraries as BuildLibraries
+import qualified Hydra.Sources.Build.LibraryRedirect as BuildLibraryRedirect
 import qualified Hydra.Sources.Build.ManifestWriter as BuildManifestWriter
 import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Build.PackagingProfile as BuildPackagingProfile
@@ -47,6 +48,7 @@ mainModules :: [Module]
 mainModules = [
   BuildFormat.module_,
   BuildLibraries.module_,
+  BuildLibraryRedirect.module_,
   BuildManifestWriter.module_,
   BuildModules.module_,
   BuildPackagingProfile.module_,

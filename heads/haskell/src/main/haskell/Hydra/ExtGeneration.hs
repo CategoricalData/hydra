@@ -11,6 +11,7 @@ module Hydra.ExtGeneration (
 import Hydra.Kernel
 import qualified Hydra.File as File
 import Hydra.Generation
+import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
 import Hydra.Haskell.Generation
 import Hydra.Sources.Ext
 import Hydra.Sources.All
@@ -115,10 +116,16 @@ writeRust = generateSources moduleToRust rustLanguage True
 -- reference to the overlay path unconditionally (it has no I/O, so it can't
 -- check which subs actually have an overlay); correctTypeScriptLibRedirect
 -- narrows that back down using an on-disk existence scan.
+--
+-- #559 Step A: the narrowing rewrite is now the translingual
+-- @hydra.build.libraryRedirect@ (generated 'GenLibraryRedirect'); this full-sync
+-- consumer delegates to it, converting the on-disk 'overlayLibSubs' set to the
+-- list the generated module consumes. The cold-seed path (ColdSeedMain) keeps its
+-- own native redirect (published-host constraint) -- see writeHaskell.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeTypeScript basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs typeScriptOverlayLibDir
-  generateSourcesWithTransform (correctTypeScriptLibRedirect knownSubs)
+  generateSourcesWithTransform (GenLibraryRedirect.correctTypeScriptLibRedirect (Set.toList knownSubs))
     moduleToTypeScript typeScriptLanguage False basePath universeModules modulesToGenerate
 
 -- | Generate Coq (.v) source files from modules.
