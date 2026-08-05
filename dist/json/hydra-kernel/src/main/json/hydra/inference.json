@@ -221,10 +221,7 @@
                                             "function": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeConstraints"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
-                                                    "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeConstraints"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                 "argument": {"variable": "flowCx"}}},
                                             "argument": {
                                               "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}},
@@ -3318,10 +3315,7 @@
                                                                                                                                         "function": {
                                                                                                                                           "application": {
                                                                                                                                             "function": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {
-                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
-                                                                                                                                                "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                              "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                             "argument": {"variable": "fcx4"}}},
                                                                                                                                         "argument": {
                                                                                                                                           "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}},
@@ -7212,10 +7206,7 @@
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "function": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
-                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeLists"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
-                                                                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeLists"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                 "argument": {"variable": "fcx3"}}},
                                                                                                                             "argument": {
                                                                                                                               "application": {
@@ -12247,10 +12238,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "function": {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
-                                                                                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                                                  "typeApplication": {"body": {"variable": "hydra.unification.unifyTypes"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                                                                                                                 "argument": {"variable": "fcx2"}}},
                                                                                                                                             "argument": {
                                                                                                                                               "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}},
@@ -12809,10 +12797,7 @@
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeConstraints"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
-                                                            "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.unification.unifyTypeConstraints"}, "type": {"variable": "hydra.typing.InferenceContext"}}},
                                                         "argument": {"variable": "flowCx"}}},
                                                     "argument": {
                                                       "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "schemaTypes"}}, "argument": {"variable": "cx"}}}}},
