@@ -62,10 +62,19 @@ allTests = define "allTests" $
       joinTypesTests]
 
 -- | Build schema types map from a list of names.
--- Each name gets TypeScheme [] (TypeVariable name) Nothing
+-- Each name gets TypeScheme [] (TypeVariable name) Nothing -- a transparent (self-referential)
+-- alias, standing in for a nominal type like Vertex whose body is a plain structural type.
 buildSchemaMap :: TypedTerm [Name] -> TypedTerm (M.Map Name TypeScheme)
 buildSchemaMap names = Maps.fromList (Lists.map
   (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (Core.typeVariable (Phantoms.var "n"))))
+  names)
+
+-- | Build schema types map from a list of names, each carrying an OPAQUE (empty record-bodied)
+-- TypeScheme -- standing in for a genuine nominal type like FilePath, which must never be bound
+-- as if it were a free variable.
+buildOpaqueSchemaMap :: TypedTerm [Name] -> TypedTerm (M.Map Name TypeScheme)
+buildOpaqueSchemaMap names = Maps.fromList (Lists.map
+  (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (T.record (Phantoms.var "n") [])))
   names)
 
 -- Helper to create type constraints
@@ -190,6 +199,10 @@ noConstraints = Phantoms.list ([] :: [TypedTerm TypeConstraint])
 noSchema :: TypedTerm [Name]
 noSchema = Phantoms.list ([] :: [TypedTerm Name])
 
+-- Helper: schema types list from plain names
+schema :: [String] -> TypedTerm [Name]
+schema names = Phantoms.list (nm <$> names)
+
 -- | Show a list of TypeConstraints as "[(left ~ right), ...]"
 showConstraints :: TypedTerm [TypeConstraint] -> TypedTerm String
 showConstraints cs = Strings.concat (Phantoms.list [
@@ -232,6 +245,17 @@ unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cn
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
     (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
+  (Phantoms.string "failure")
+
+-- | Universal unifyTypes test case with an OPAQUE schema (expecting failure) -- for cases that
+-- specifically test the opaque-nominal-vs-concrete rejection, as opposed to the transparent-alias
+-- pass-through that buildSchemaMap's self-referential placeholder would otherwise trigger.
+unifyTypesOpaqueFailCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
+unifyTypesOpaqueFailCase cname schemaTypes left right _errSubstring = universalCase cname
+  (Eithers.either
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildOpaqueSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
 unifyTypesTests :: TypedTerm TestGroup
@@ -361,7 +385,71 @@ unifyTypesTests = subgroup "unifyTypes" [
     noSchema
     (T.var "a")
     (T.list (T.var "a"))
-    "appears free"]
+    "appears free",
+
+  -- Schema (nominal) types: a schema name unifies with itself trivially (var/var, same name)
+  unifyTypesCase "unify a schema name with itself"
+    (schema ["Foo"])
+    (T.var "Foo")
+    (T.var "Foo")
+    emptySubst,
+
+  -- A schema name unifies with a genuinely free variable by binding the free variable to it,
+  -- regardless of which side the schema name appears on (var/var, different names)
+  unifyTypesCase "unify a schema name (left) with a free variable"
+    (schema ["Foo"])
+    (T.var "Foo")
+    (T.var "a")
+    [(nm "a", T.var "Foo")],
+
+  unifyTypesCase "unify a free variable with a schema name (right)"
+    (schema ["Foo"])
+    (T.var "a")
+    (T.var "Foo")
+    [(nm "a", T.var "Foo")],
+
+  -- An OPAQUE schema name (record/union/wrap-bodied, e.g. FilePath) must not be silently bound
+  -- as if free when it meets a concrete/structural type on the other side (var/concrete); this
+  -- is the #613 regression. A TRANSPARENT (literal-bodied, e.g. Vertex) schema name is exempt
+  -- from this check -- see "unify a transparent schema name with a concrete type" below.
+  unifyTypesOpaqueFailCase "fail to unify a schema name (left) with an unrelated concrete type"
+    (schema ["Foo"])
+    (T.var "Foo")
+    T.int32
+    "Cannot unify schema name",
+
+  unifyTypesOpaqueFailCase "fail to unify an unrelated concrete type with a schema name (right)"
+    (schema ["Foo"])
+    T.int32
+    (T.var "Foo")
+    "Cannot unify schema name",
+
+  -- A TRANSPARENT schema name (literal-bodied, e.g. hydra.topology.Vertex = int32) legitimately
+  -- unifies structurally with a matching concrete type -- it is not an opaque nominal, so binding
+  -- it is correct, not a #613-shaped bug. (Regression test: an earlier, too-broad version of the
+  -- #613 fix treated ALL schema names as opaque, which broke this case for real kernel code.)
+  unifyTypesCase "unify a transparent schema name with a matching concrete type"
+    (schema ["Foo"])
+    (T.var "Foo")
+    T.int32
+    [(nm "Foo", T.int32)],
+
+  -- The same schema name occurring in both argument and nested-return position of a signature
+  -- must still unify with itself once instantiated (the listDirectory shape from #613): the
+  -- name is compared against itself both directly (var/var) and nested inside a list (list/list
+  -- structural descent reducing to var/var again), never against a differing concrete type.
+  unifyTypesCase "unify a schema name nested in a list with itself"
+    (schema ["Foo"])
+    (T.list (T.var "Foo"))
+    (T.list (T.var "Foo"))
+    emptySubst,
+
+  -- Two distinct schema names can never unify with each other
+  unifyTypesFailCase "fail to unify two distinct schema names"
+    (schema ["Foo", "Bar"])
+    (T.var "Foo")
+    (T.var "Bar")
+    "Attempted to unify schema names"]
 
 -- ============================================================
 -- joinTypes tests

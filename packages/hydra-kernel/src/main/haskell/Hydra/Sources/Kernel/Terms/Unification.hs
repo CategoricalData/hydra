@@ -172,16 +172,28 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
           ((string "Variable ") ++ (Core.unName (var "v")) ++ (string " appears free in type ") ++ (PrintCore.type_ @@ var "t")
             ++ (string " (") ++ var "comment" ++ (string ")"))))
       (var "bind" @@ var "v" @@ var "t")) $
+    "isNominalSchemaType" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
+      (Just false) [
+      _Type_record>>: constant true,
+      _Type_union>>: constant true,
+      _Type_wrap>>: constant true]) $
+    "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
+      (var "tryBinding" @@ var "v" @@ var "t")
+      ("ts" ~> Logic.ifElse (var "isNominalSchemaType" @@ var "ts")
+        (left (Error.unificationError (var "sleft") (var "sright")
+            ((string "Cannot unify schema name ") ++ (Core.unName (var "v")) ++ (string " with type ") ++ (PrintCore.type_ @@ var "t")
+              ++ (string " (") ++ var "comment" ++ (string ")"))))
+        (var "tryBinding" @@ var "v" @@ var "t"))) $
     "noVars" <~ (
       "withConstraints" <~ ("constraints2" ~> unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.concat2 (var "constraints2") (var "rest"))) $
       Eithers.bind (joinTypes @@ var "cx" @@ var "sleft" @@ var "sright" @@ var "comment") (var "withConstraints")) $
     "dflt" <~ cases _Type (var "sright")
       (Just (var "noVars")) [
-      _Type_variable>>: "name" ~> var "tryBinding" @@ var "name" @@ var "sleft"] $
+      _Type_variable>>: "name" ~> var "tryBindOrSchema" @@ var "name" @@ var "sleft"] $
     cases _Type (var "sleft")
       (Just $ var "dflt") [
       _Type_variable>>: "name" ~> cases _Type (var "sright")
-        (Just (var "tryBinding" @@ var "name" @@ var "sright")) [
+        (Just (var "tryBindOrSchema" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
           (unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ var "rest")
           (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name" :: TypedTerm Name) (var "schemaTypes")))
