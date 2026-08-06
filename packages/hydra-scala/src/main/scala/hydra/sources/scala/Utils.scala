@@ -216,23 +216,30 @@ object Utils:
 
   lazy val sprimDef: Definition =
     define(NS, "sprim").doc("Create a Scala primitive reference from a Hydra name, redirecting"
-      + " hydra.lib.<sub> to hydra.overlay.scala.lib.<sub> when <sub> has an overlay implementation"
-      + " on this host (#630 -- the on-disk overlaySubs existence signal, mirroring toPrimImport).")
+      + " hydra.lib.<sub>.<local> to hydra.overlay.scala.lib.<sub>.<local> when <sub> has an overlay"
+      + " implementation on this host (#630 -- the on-disk overlaySubs existence signal). Unlike"
+      + " toPrimImport (which redirects a bare hydra.lib.<sub> MODULE name, always exactly 3"
+      + " segments), a primitive reference is hydra.lib.<sub>.<local> -- at least 4 segments, since"
+      + " it also carries the primitive's own local name -- so the sub to check against overlaySubs"
+      + " is parts[2] alone, not the whole post-prefix tail (#635).")
       .lam("overlaySubs").lam("name").to(
         let(Seq(
           field("raw", CoreDsl.unName(v("name"))),
           field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("raw"))),
           field("sub", applyP("hydra.lib.strings.join", string("."),
             applyP("hydra.lib.lists.drop", int32(2), v("parts")))),
+          field("subHead",
+            applyP("hydra.lib.optionals.withDefault", string(""),
+              applyP("hydra.lib.lists.at", int32(2), v("parts")))),
           field("redirectedRaw",
             applyP("hydra.lib.logic.ifElse",
               applyP("hydra.lib.logic.and",
                 applyP("hydra.lib.logic.and",
-                  applyP("hydra.lib.equality.equal", applyP("hydra.lib.lists.length", v("parts")), int32(3)),
+                  applyP("hydra.lib.ordering.gte", applyP("hydra.lib.lists.length", v("parts")), int32(4)),
                   applyP("hydra.lib.equality.equal",
                     applyP("hydra.lib.lists.take", int32(2), v("parts")),
                     list(string("hydra"), string("lib")))),
-                applyP("hydra.lib.sets.member", v("sub"), v("overlaySubs"))),
+                applyP("hydra.lib.sets.member", v("subHead"), v("overlaySubs"))),
               applyP("hydra.lib.strings.concat2", string("hydra.overlay.scala.lib."), v("sub")),
               v("raw"))),
           field("redirectedName", wrap("hydra.core.Name", v("redirectedRaw"))),
