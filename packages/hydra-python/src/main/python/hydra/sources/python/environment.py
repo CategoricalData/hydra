@@ -109,15 +109,6 @@ def _python_environment():
                         T.set_(_core("Name")),
                     ),
                 ),
-                T.field(
-                    "overlaySubs",
-                    Annotations.doc(
-                        "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this "
-                        "host (#630) -- the on-disk existence signal driving emission-time redirect "
-                        "of primitive references to hydra.overlay.python.lib.<sub>",
-                        T.set_(T.string()),
-                    ),
-                ),
             ]),
         ),
     )

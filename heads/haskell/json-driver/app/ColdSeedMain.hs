@@ -719,30 +719,8 @@ main = do
         "emacs-lisp"  -> Just (LispSyntax.DialectEmacsLisp,  "el")
         _             -> Nothing
 
-  -- #630: mirrors the four *OverlayLibDir constants in Hydra.ExtGeneration, anchored via
-  -- HYDRA_ROOT_DIR (this executable's cwd is not fixed relative to its source tree -- see the
-  -- coldSeedHaskellOverlayLibDir comment above for the full rationale).
-  hydraRootDirLisp <- lookupEnv "HYDRA_ROOT_DIR"
-  let anchorLispDir rel = case hydraRootDirLisp of
-        Just root -> root FP.</> rel
-        Nothing   -> rel
-  let coldSeedClojureOverlayLibDir =
-        anchorLispDir "overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
-  let coldSeedSchemeOverlayLibDir =
-        anchorLispDir "overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
-  let coldSeedCommonLispOverlayLibDir =
-        anchorLispDir "overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
-  let coldSeedEmacsLispOverlayLibDir =
-        anchorLispDir "overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
-  lispKnownLibSubs <- case lispDialectAndExt of
-        Just (LispSyntax.DialectClojure, _)    -> overlayLibSubs coldSeedClojureOverlayLibDir
-        Just (LispSyntax.DialectScheme, _)     -> overlayLibSubs coldSeedSchemeOverlayLibDir
-        Just (LispSyntax.DialectCommonLisp, _) -> overlayLibSubs coldSeedCommonLispOverlayLibDir
-        Just (LispSyntax.DialectEmacsLisp, _)  -> overlayLibSubs coldSeedEmacsLispOverlayLibDir
-        Nothing                                -> return S.empty
-
   let lispGenerator = case lispDialectAndExt of
-        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
+        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
         Nothing -> Nothing
 
   -- 'mods' is the set this scoped package wants written. The full
@@ -760,10 +738,9 @@ main = do
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
   let libSubs = ["chars","eithers","equality","functions","hashing","lists","literals","logic","maps","math","optionals","ordering","pairs","regex","sets","strings"]
-  -- The effectful lib sub-namespaces (#286) have native impls on several hosts
-  -- (hydra.overlay.<lang>.lib.{effects,files,text}); each host below that has shipped these
-  -- runtimes extends libSubs accordingly so its consumer call sites redirect correctly. Hosts
-  -- without the runtime keep the baseline libSubs, since redirecting their call sites would dangle.
+  -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
+  -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
+  -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
   let libSubsPython = libSubs ++ ["effects","files","system","text"]
   -- Scala (#494) likewise provides native effectful impls at hydra.overlay.scala.lib.{effects,files,text},
   -- so its consumer call sites are redirected for these sub-namespaces too.
@@ -893,47 +870,28 @@ main = do
   let coldSeedHaskellOverlayLibDir = case hydraRootDir of
         Just root -> root FP.</> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
         Nothing   -> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
-  let coldSeedTypeScriptOverlayLibDir = case hydraRootDir of
-        Just root -> root FP.</> "overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
-        Nothing   -> "overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
-  let coldSeedScalaOverlayLibDir = case hydraRootDir of
-        Just root -> root FP.</> "overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
-        Nothing   -> "overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
-  let coldSeedPythonOverlayLibDir = case hydraRootDir of
-        Just root -> root FP.</> "overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
-        Nothing   -> "overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
-  -- #630: Haskell, TypeScript, Scala, Python, and Lisp-family coders now emit the
-  -- correct hydra.lib.<sub> vs. hydra.overlay.<lang>.lib.<sub> reference directly
-  -- at coding time (see the #630 comment in bootstrap-from-json/Main.hs) -- no
-  -- post-generation text pass for the lib redirect any more. wrapLongScalaText
-  -- (pure formatting) stays for Scala; redirectClojureTestEnv/redirectSchemeTestEnv
-  -- (hydra.test.testEnv, not hydra.lib.*) stay too. Java remains on its pre-#630
-  -- allow-list redirect.
   haskellKnownLibSubs <- overlayLibSubs coldSeedHaskellOverlayLibDir
-  typeScriptKnownLibSubs <- overlayLibSubs coldSeedTypeScriptOverlayLibDir
-  scalaKnownLibSubs <- overlayLibSubs coldSeedScalaOverlayLibDir
-  pythonKnownLibSubs <- overlayLibSubs coldSeedPythonOverlayLibDir
   let consumerTransform = case target of
-        "haskell"     -> id
+        "haskell"     -> correctHaskellLibRedirect haskellKnownLibSubs
         "java"        -> redirectForSubs libSubsJava "java"
-        "python"      -> id
-        "scala"       -> wrapLongScalaText
-        "clojure"     -> redirectClojureTestEnv "clojure"
-        "scheme"      -> redirectSchemeTestEnv "scheme"
-        "common-lisp" -> id
-        "emacs-lisp"  -> id
+        "python"      -> redirectForSubs libSubsPython "python"
+        "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
+        "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
+        "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
+        "common-lisp" -> redirectLispFlat "common_lisp"
+        "emacs-lisp"  -> redirectLispFlat "emacs_lisp"
         _             -> id
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of
-        "haskell"    -> generateSourcesWithTransform xform (moduleToHaskell haskellKnownLibSubs) haskellLanguage    False dir universe mods
+        "haskell"    -> generateSourcesWithTransform xform moduleToHaskell    haskellLanguage    False dir universe mods
         "java"       -> generateSourcesWithTransform xform moduleToJava       javaLanguage       False dir universe mods
-        "python"     -> generateSourcesWithTransform xform (moduleToPython pythonKnownLibSubs) pythonLanguage     False dir universe mods
-        "scala"      -> generateSourcesWithTransform xform (moduleToScala scalaKnownLibSubs) scalaLanguage False dir universe mods
+        "python"     -> generateSourcesWithTransform xform moduleToPython     pythonLanguage     False dir universe mods
+        "scala"      -> generateSourcesWithTransform xform moduleToScala scalaLanguage False dir universe mods
         -- #376: no "go" branch here — hydra-go is unpublished, so the cold seeder
         -- does not link its coder. dist/haskell/hydra-go SOURCE is still seeded
         -- (it is loaded from JSON and rendered via moduleToHaskell on the "haskell"
         -- target, like every other package), just not emitted as Go.
-        "typescript" -> generateSourcesWithTransform xform (moduleToTypeScript typeScriptKnownLibSubs) typeScriptLanguage False dir universe mods
+        "typescript" -> generateSourcesWithTransform xform moduleToTypeScript typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
               generateSourcesWithTransform xform g lispLanguage False dir universe mods
         _ -> do
@@ -1394,11 +1352,11 @@ pruneEmptyDirs dir = do
 
 -- | Render a module to a single Lisp-dialect file. (From Hydra.ExtGeneration.)
 moduleToLispDialect
-  :: LispSyntax.Dialect -> String -> S.Set String
+  :: LispSyntax.Dialect -> String
   -> Module -> [Definition] -> InferenceContext -> Graph
   -> Either Error (M.Map FilePath String)
-moduleToLispDialect dialect ext overlaySubs mod defs cx g =
-  case moduleToLisp dialect overlaySubs mod defs cx g of
+moduleToLispDialect dialect ext mod defs cx g =
+  case moduleToLisp dialect mod defs cx g of
     Left err -> Left err
     Right program ->
       let code = Serialization.printExpr (Serialization.parenthesize (programToExpr program))

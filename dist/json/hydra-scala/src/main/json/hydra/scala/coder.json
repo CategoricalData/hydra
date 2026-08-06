@@ -403,11 +403,10 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
-            {"name": "arg4", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false}],
+            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
+            {"name": "arg3", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Pkg"}}}}},
         "body": {
           "typeLambda": {
@@ -416,224 +415,217 @@
               "annotated": {
                 "body": {
                   "lambda": {
-                    "parameter": "overlaySubs",
-                    "domain": {"set": {"literal": "string"}},
+                    "parameter": "cx",
+                    "domain": {"variable": "t0"},
                     "body": {
                       "lambda": {
-                        "parameter": "cx",
-                        "domain": {"variable": "t0"},
+                        "parameter": "g",
+                        "domain": {"variable": "hydra.graph.Graph"},
                         "body": {
                           "lambda": {
-                            "parameter": "g",
-                            "domain": {"variable": "hydra.graph.Graph"},
+                            "parameter": "mod",
+                            "domain": {"variable": "hydra.packaging.Module"},
                             "body": {
                               "lambda": {
-                                "parameter": "mod",
-                                "domain": {"variable": "hydra.packaging.Module"},
+                                "parameter": "defs",
+                                "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                                 "body": {
-                                  "lambda": {
-                                    "parameter": "defs",
-                                    "domain": {"list": {"variable": "hydra.packaging.Definition"}},
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "partitioned",
-                                            "term": {"application": {"function": {"variable": "hydra.environment.partitionDefinitions"}, "argument": {"variable": "defs"}}},
-                                            "typeScheme": {
-                                              "variables": [],
-                                              "body": {
-                                                "pair": {
-                                                  "first": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
-                                                  "second": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
-                                          {
-                                            "name": "typeDefs",
-                                            "term": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                                                    "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                                                "argument": {"variable": "partitioned"}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                                          {
-                                            "name": "termDefs",
-                                            "term": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                                                    "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                                                "argument": {"variable": "partitioned"}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                                          {
-                                            "name": "nsName",
-                                            "term": {
-                                              "application": {
-                                                "function": {"unwrap": "hydra.packaging.ModuleName"},
-                                                "argument": {
-                                                  "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                                          {
-                                            "name": "pname",
-                                            "term": {
-                                              "record": {
-                                                "typeName": "hydra.scala.syntax.NameData",
-                                                "fields": [
-                                                  {
-                                                    "name": "value",
-                                                    "term": {
-                                                      "wrap": {
-                                                        "typeName": "hydra.scala.syntax.PredefString",
-                                                        "body": {
-                                                          "application": {
-                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                                                "argument": {"variable": "nsName"}}}}}}}}]}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.NameData"}}},
-                                          {
-                                            "name": "pref",
-                                            "term": {"inject": {"typeName": "hydra.scala.syntax.RefData", "field": {"name": "name", "term": {"variable": "pname"}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.RefData"}}}],
-                                        "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "partitioned",
+                                        "term": {"application": {"function": {"variable": "hydra.environment.partitionDefinitions"}, "argument": {"variable": "defs"}}},
+                                        "typeScheme": {
+                                          "variables": [],
+                                          "body": {
+                                            "pair": {
+                                              "first": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
+                                              "second": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
+                                      {
+                                        "name": "typeDefs",
+                                        "term": {
                                           "application": {
                                             "function": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                        "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                    "type": {"variable": "hydra.scala.syntax.Pkg"}}},
-                                                "argument": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "td",
-                                                            "domain": {"variable": "hydra.packaging.TypeDefinition"},
-                                                            "body": {
-                                                              "application": {
-                                                                "function": {
-                                                                  "application": {
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTypeDefinition"}, "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "hydra.graph.Graph"}}},
-                                                                        "argument": {"variable": "cx"}}},
-                                                                    "argument": {"variable": "g"}}},
-                                                                "argument": {"variable": "td"}}}}}}},
-                                                    "argument": {"variable": "typeDefs"}}}}},
-                                            "argument": {
-                                              "lambda": {
-                                                "parameter": "typeDeclStats",
-                                                "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                              "typeApplication": {
                                                 "body": {
-                                                  "application": {
-                                                    "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                                "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                            "argument": {"variable": "partitioned"}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                      {
+                                        "name": "termDefs",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                                "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                            "argument": {"variable": "partitioned"}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                      {
+                                        "name": "nsName",
+                                        "term": {
+                                          "application": {
+                                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                                            "argument": {
+                                              "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}},
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                      {
+                                        "name": "pname",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.scala.syntax.NameData",
+                                            "fields": [
+                                              {
+                                                "name": "value",
+                                                "term": {
+                                                  "wrap": {
+                                                    "typeName": "hydra.scala.syntax.PredefString",
+                                                    "body": {
                                                       "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                            "type": {"variable": "hydra.scala.syntax.Pkg"}}},
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {
-                                                              "application": {
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
-                                                                        "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "parameter": "td",
-                                                                    "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTermDefinition"}, "type": {"variable": "t0"}}},
-                                                                                "argument": {"variable": "cx"}}},
-                                                                            "argument": {"variable": "g"}}},
-                                                                        "argument": {"variable": "td"}}}}}}},
-                                                            "argument": {"variable": "termDefs"}}}}},
+                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                                            "argument": {"variable": "nsName"}}}}}}}}]}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.NameData"}}},
+                                      {
+                                        "name": "pref",
+                                        "term": {"inject": {"typeName": "hydra.scala.syntax.RefData", "field": {"name": "name", "term": {"variable": "pname"}}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.RefData"}}}],
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                "type": {"variable": "hydra.scala.syntax.Pkg"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
+                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
                                                     "argument": {
                                                       "lambda": {
-                                                        "parameter": "termDeclStats",
-                                                        "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                        "parameter": "td",
+                                                        "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                         "body": {
                                                           "application": {
                                                             "function": {
                                                               "application": {
                                                                 "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTypeDefinition"}, "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "hydra.graph.Graph"}}},
+                                                                    "argument": {"variable": "cx"}}},
+                                                                "argument": {"variable": "g"}}},
+                                                            "argument": {"variable": "td"}}}}}}},
+                                                "argument": {"variable": "typeDefs"}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "typeDeclStats",
+                                            "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                        "type": {"variable": "hydra.scala.syntax.Pkg"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                        "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                    "type": {"variable": "hydra.scala.syntax.Pkg"}}},
-                                                                "argument": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
+                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "parameter": "td",
+                                                                "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                "body": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.findImports"}, "type": {"variable": "t0"}}},
-                                                                                "argument": {"variable": "overlaySubs"}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeTermDefinition"}, "type": {"variable": "t0"}}},
                                                                             "argument": {"variable": "cx"}}},
                                                                         "argument": {"variable": "g"}}},
-                                                                    "argument": {"variable": "mod"}}}}},
+                                                                    "argument": {"variable": "td"}}}}}}},
+                                                        "argument": {"variable": "termDefs"}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "termDeclStats",
+                                                    "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                "type": {"variable": "hydra.scala.syntax.Pkg"}}},
                                                             "argument": {
-                                                              "lambda": {
-                                                                "parameter": "imports",
-                                                                "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.findImports"}, "type": {"variable": "t0"}}},
+                                                                        "argument": {"variable": "cx"}}},
+                                                                    "argument": {"variable": "g"}}},
+                                                                "argument": {"variable": "mod"}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "imports",
+                                                            "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                            "body": {
+                                                              "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "either": {
-                                                                            "right": {
-                                                                              "record": {
-                                                                                "typeName": "hydra.scala.syntax.Pkg",
-                                                                                "fields": [
-                                                                                  {"name": "name", "term": {"variable": "pname"}},
-                                                                                  {"name": "ref", "term": {"variable": "pref"}},
-                                                                                  {
-                                                                                    "name": "stats",
-                                                                                    "term": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                                        "argument": {"list": [{"variable": "imports"}, {"variable": "typeDeclStats"}, {"variable": "termDeclStats"}]}}}}]}}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"variable": "hydra.scala.syntax.Pkg"}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                      "either": {
+                                                                        "right": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.scala.syntax.Pkg",
+                                                                            "fields": [
+                                                                              {"name": "name", "term": {"variable": "pname"}},
+                                                                              {"name": "ref", "term": {"variable": "pref"}},
+                                                                              {
+                                                                                "name": "stats",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                    "argument": {"list": [{"variable": "imports"}, {"variable": "typeDeclStats"}, {"variable": "termDeclStats"}]}}}}]}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"variable": "hydra.scala.syntax.Pkg"}}}}}}}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
                     {
@@ -11881,10 +11873,9 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false}],
+            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false}],
           "result": {
             "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.scala.syntax.Stat"}}}}}},
         "body": {
@@ -11894,32 +11885,30 @@
               "annotated": {
                 "body": {
                   "lambda": {
-                    "parameter": "overlaySubs",
-                    "domain": {"set": {"literal": "string"}},
+                    "parameter": "cx",
+                    "domain": {"variable": "t0"},
                     "body": {
                       "lambda": {
-                        "parameter": "cx",
-                        "domain": {"variable": "t0"},
+                        "parameter": "g",
+                        "domain": {"variable": "hydra.graph.Graph"},
                         "body": {
                           "lambda": {
-                            "parameter": "g",
-                            "domain": {"variable": "hydra.graph.Graph"},
+                            "parameter": "mod",
+                            "domain": {"variable": "hydra.packaging.Module"},
                             "body": {
-                              "lambda": {
-                                "parameter": "mod",
-                                "domain": {"variable": "hydra.packaging.Module"},
-                                "body": {
+                              "application": {
+                                "function": {
                                   "application": {
                                     "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
+                                        "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                    "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                            "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                        "argument": {
                                           "application": {
                                             "function": {
                                               "application": {
@@ -11931,32 +11920,32 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {
-                                                                  "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}},
-                                                                    "argument": {"variable": "cx"}}},
-                                                                "argument": {"variable": "g"}}},
-                                                            "argument": {"literal": {"boolean": false}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}},
+                                                                "argument": {"variable": "cx"}}},
+                                                            "argument": {"variable": "g"}}},
                                                         "argument": {"literal": {"boolean": false}}}},
-                                                    "argument": {"literal": {"boolean": true}}}},
-                                                "argument": {"literal": {"boolean": false}}}},
-                                            "argument": {"variable": "mod"}}}}},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "elImps",
-                                        "domain": {"set": {"variable": "hydra.packaging.ModuleName"}},
-                                        "body": {
+                                                    "argument": {"literal": {"boolean": false}}}},
+                                                "argument": {"literal": {"boolean": true}}}},
+                                            "argument": {"literal": {"boolean": false}}}},
+                                        "argument": {"variable": "mod"}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "elImps",
+                                    "domain": {"set": {"variable": "hydra.packaging.ModuleName"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
+                                                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                            "argument": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                        "type": {"set": {"variable": "hydra.packaging.ModuleName"}}}},
-                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                "argument": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
@@ -11968,59 +11957,57 @@
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}},
-                                                                            "argument": {"variable": "cx"}}},
-                                                                        "argument": {"variable": "g"}}},
-                                                                    "argument": {"literal": {"boolean": false}}}},
-                                                                "argument": {"literal": {"boolean": true}}}},
-                                                            "argument": {"literal": {"boolean": false}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.analysis.moduleDependencyModuleNames"}, "type": {"variable": "t0"}}},
+                                                                        "argument": {"variable": "cx"}}},
+                                                                    "argument": {"variable": "g"}}},
+                                                                "argument": {"literal": {"boolean": false}}}},
+                                                            "argument": {"literal": {"boolean": true}}}},
                                                         "argument": {"literal": {"boolean": false}}}},
-                                                    "argument": {"variable": "mod"}}}}},
-                                            "argument": {
-                                              "lambda": {
-                                                "parameter": "primImps",
-                                                "domain": {"set": {"variable": "hydra.packaging.ModuleName"}},
+                                                    "argument": {"literal": {"boolean": false}}}},
+                                                "argument": {"variable": "mod"}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "primImps",
+                                            "domain": {"set": {"variable": "hydra.packaging.ModuleName"}},
+                                            "body": {
+                                              "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "right": {
-                                                              "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                "argument": {
-                                                                  "list": [
-                                                                    {
+                                                      "either": {
+                                                        "right": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "function": {
                                                                       "application": {
                                                                         "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                            "argument": {"variable": "hydra.scala.coder.toElImport"}}},
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                            "argument": {"variable": "elImps"}}}}},
-                                                                    {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                        "argument": {"variable": "hydra.scala.coder.toElImport"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                        "argument": {"variable": "elImps"}}}}},
+                                                                {
+                                                                  "application": {
+                                                                    "function": {
                                                                       "application": {
                                                                         "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                            "argument": {"application": {"function": {"variable": "hydra.scala.coder.toPrimImport"}, "argument": {"variable": "overlaySubs"}}}}},
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                            "argument": {"variable": "primImps"}}}}}]}}}}},
-                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}}}}},
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                        "argument": {"variable": "hydra.scala.coder.toPrimImport"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                        "argument": {"variable": "primImps"}}}}}]}}}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find import statements for the module"}}}]}}}}}}},
     {
@@ -12598,11 +12585,10 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
-            {"name": "arg2", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg4", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
+            {"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
           "result": {
             "type": {
               "either": {
@@ -12615,96 +12601,89 @@
               "annotated": {
                 "body": {
                   "lambda": {
-                    "parameter": "overlaySubs",
-                    "domain": {"set": {"literal": "string"}},
+                    "parameter": "mod",
+                    "domain": {"variable": "hydra.packaging.Module"},
                     "body": {
                       "lambda": {
-                        "parameter": "mod",
-                        "domain": {"variable": "hydra.packaging.Module"},
+                        "parameter": "defs",
+                        "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                         "body": {
                           "lambda": {
-                            "parameter": "defs",
-                            "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                            "parameter": "cx",
+                            "domain": {"variable": "t0"},
                             "body": {
                               "lambda": {
-                                "parameter": "cx",
-                                "domain": {"variable": "t0"},
+                                "parameter": "g",
+                                "domain": {"variable": "hydra.graph.Graph"},
                                 "body": {
-                                  "lambda": {
-                                    "parameter": "g",
-                                    "domain": {"variable": "hydra.graph.Graph"},
-                                    "body": {
+                                  "application": {
+                                    "function": {
                                       "application": {
                                         "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {"variable": "hydra.scala.syntax.Pkg"}}},
+                                            "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}},
+                                        "argument": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {"variable": "hydra.scala.syntax.Pkg"}}},
-                                                "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}},
-                                            "argument": {
                                               "application": {
                                                 "function": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {
-                                                              "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.constructModule"}, "type": {"variable": "t0"}}},
-                                                                "argument": {"variable": "overlaySubs"}}},
-                                                            "argument": {"variable": "cx"}}},
-                                                        "argument": {"variable": "g"}}},
-                                                    "argument": {"variable": "mod"}}},
-                                                "argument": {"variable": "defs"}}}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "pkg",
-                                            "domain": {"variable": "hydra.scala.syntax.Pkg"},
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "s",
-                                                    "term": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.scala.coder.constructModule"}, "type": {"variable": "t0"}}},
+                                                        "argument": {"variable": "cx"}}},
+                                                    "argument": {"variable": "g"}}},
+                                                "argument": {"variable": "mod"}}},
+                                            "argument": {"variable": "defs"}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "pkg",
+                                        "domain": {"variable": "hydra.scala.syntax.Pkg"},
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "s",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.serialization.printExpr"},
+                                                    "argument": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.serialization.printExpr"},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {"variable": "hydra.serialization.parenthesize"},
-                                                            "argument": {"application": {"function": {"variable": "hydra.scala.serde.pkgToExpr"}, "argument": {"variable": "pkg"}}}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                        "function": {"variable": "hydra.serialization.parenthesize"},
+                                                        "argument": {"application": {"function": {"variable": "hydra.scala.serde.pkgToExpr"}, "argument": {"variable": "pkg"}}}}}}},
+                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                            "body": {
+                                              "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "right": {
+                                                      "either": {
+                                                        "right": {
+                                                          "application": {
+                                                            "function": {
                                                               "application": {
                                                                 "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.singleton"}, "type": {"literal": "string"}}},
+                                                                    "type": {"literal": "string"}}},
+                                                                "argument": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.singleton"}, "type": {"literal": "string"}}},
-                                                                        "type": {"literal": "string"}}},
-                                                                    "argument": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {"variable": "hydra.names.moduleNameToFilePath"},
-                                                                                "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
-                                                                            "argument": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "scala"}}}}}},
-                                                                        "argument": {
-                                                                          "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}}}},
-                                                                "argument": {"variable": "s"}}}}},
-                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}}}}}}}}}}}}}}}}}},
+                                                                            "function": {"variable": "hydra.names.moduleNameToFilePath"},
+                                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
+                                                                        "argument": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "scala"}}}}}},
+                                                                    "argument": {
+                                                                      "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}}}},
+                                                            "argument": {"variable": "s"}}}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a Hydra module to Scala source code"}}}]}}}}}}},
     {
@@ -13591,152 +13570,62 @@
         "name": "hydra.scala.coder.toPrimImport",
         "signature": {
           "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.scala.syntax.Stat"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "overlaySubs",
-                "domain": {"set": {"literal": "string"}},
+                "parameter": "ns",
+                "domain": {"variable": "hydra.packaging.ModuleName"},
                 "body": {
-                  "lambda": {
-                    "parameter": "ns",
-                    "domain": {"variable": "hydra.packaging.ModuleName"},
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "raw",
-                            "term": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                          {
-                            "name": "parts",
-                            "term": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                "argument": {"variable": "raw"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
-                          {
-                            "name": "sub",
-                            "term": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
-                                "argument": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": "string"}}},
-                                        "argument": {"literal": {"integer": {"int32": 2}}}}},
-                                    "argument": {"variable": "parts"}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                          {
-                            "name": "redirected",
-                            "term": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
-                                        "argument": {
-                                          "application": {
-                                            "function": {
-                                              "application": {
-                                                "function": {"variable": "hydra.lib.logic.and"},
-                                                "argument": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {"variable": "hydra.lib.logic.and"},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {
-                                                              "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
-                                                                    "argument": {"variable": "parts"}}}}},
-                                                            "argument": {"literal": {"integer": {"int32": 3}}}}}}},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": "string"}}}},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {
-                                                                  "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": "string"}}},
-                                                                    "argument": {"literal": {"integer": {"int32": 2}}}}},
-                                                                "argument": {"variable": "parts"}}}}},
-                                                        "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "lib"}}]}}}}}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": "string"}}},
-                                                    "argument": {"variable": "sub"}}},
-                                                "argument": {"variable": "overlaySubs"}}}}}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "hydra.overlay.scala.lib."}}}},
-                                        "argument": {"variable": "sub"}}}}},
-                                "argument": {"variable": "raw"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                          {
-                            "name": "redirectedName",
+                  "inject": {
+                    "typeName": "hydra.scala.syntax.Stat",
+                    "field": {
+                      "name": "importExport",
+                      "term": {
+                        "inject": {
+                          "typeName": "hydra.scala.syntax.ImportExportStat",
+                          "field": {
+                            "name": "import",
                             "term": {
                               "record": {
-                                "typeName": "hydra.scala.syntax.NameData",
+                                "typeName": "hydra.scala.syntax.Import",
                                 "fields": [
                                   {
-                                    "name": "value",
+                                    "name": "importers",
                                     "term": {
-                                      "wrap": {
-                                        "typeName": "hydra.scala.syntax.PredefString",
-                                        "body": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                                "argument": {"variable": "redirected"}}}}}}}}]}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.NameData"}}},
-                          {
-                            "name": "redirectedRef",
-                            "term": {
-                              "inject": {"typeName": "hydra.scala.syntax.RefData", "field": {"name": "name", "term": {"variable": "redirectedName"}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.RefData"}}},
-                          {
-                            "name": "redirectedImporter",
-                            "term": {
-                              "record": {
-                                "typeName": "hydra.scala.syntax.Importer",
-                                "fields": [
-                                  {"name": "ref", "term": {"variable": "redirectedRef"}},
-                                  {
-                                    "name": "importees",
-                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Importee"}}}}]}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.scala.syntax.Importer"}}}],
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.scala.syntax.Stat",
-                            "field": {
-                              "name": "importExport",
-                              "term": {
-                                "inject": {
-                                  "typeName": "hydra.scala.syntax.ImportExportStat",
-                                  "field": {
-                                    "name": "import",
-                                    "term": {
-                                      "record": {
-                                        "typeName": "hydra.scala.syntax.Import",
-                                        "fields": [{"name": "importers", "term": {"list": [{"variable": "redirectedImporter"}]}}]}}}}}}}}}}}}}},
+                                      "list": [
+                                        {
+                                          "record": {
+                                            "typeName": "hydra.scala.syntax.Importer",
+                                            "fields": [
+                                              {
+                                                "name": "ref",
+                                                "term": {
+                                                  "inject": {
+                                                    "typeName": "hydra.scala.syntax.RefData",
+                                                    "field": {
+                                                      "name": "name",
+                                                      "term": {
+                                                        "record": {
+                                                          "typeName": "hydra.scala.syntax.NameData",
+                                                          "fields": [
+                                                            {
+                                                              "name": "value",
+                                                              "term": {
+                                                                "wrap": {
+                                                                  "typeName": "hydra.scala.syntax.PredefString",
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "."}}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                                                          "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}}}}}}}]}}}}}},
+                                              {
+                                                "name": "importees",
+                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Importee"}}}}]}}]}}]}}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a primitive import statement"}}}]}}}}},
     {
       "term": {

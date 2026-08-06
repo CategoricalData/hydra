@@ -363,9 +363,7 @@ def _find_namespaces():
                 Packaging.module_name2(string("hydra.core")),
             ),
             field("namespaces",
-                _analysis_module_names_for_definitions(
-                    _pynames_encode_namespace_with_overrides(var("overlaySubs")),
-                    var("focusNs"), var("defs")),
+                _analysis_module_names_for_definitions(_pynames_encode_namespace_with_overrides, var("focusNs"), var("defs")),
             ),
         ],
         Logic.if_else(
@@ -387,9 +385,8 @@ def _find_namespaces():
         ),
     )
     return (_def("findNamespaces")
-        .doc("Find all namespaces referenced by a list of definitions, plus the core namespace (#630: "
-             "overlaySubs drives emission-time hydra.lib.<sub> redirect for these namespace refs)")
-        .lam("overlaySubs").lam("focusNs").lam("defs")
+        .doc("Find all namespaces referenced by a list of definitions, plus the core namespace")
+        .lam("focusNs").lam("defs")
         .to(body))
 
 

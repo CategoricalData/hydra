@@ -4,6 +4,7 @@
   "mainModules": [
     "hydra.build.format",
     "hydra.build.libraries",
+    "hydra.build.libraryRedirect",
     "hydra.build.manifestWriter",
     "hydra.build.modules",
     "hydra.build.packagingProfile",

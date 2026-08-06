@@ -29,6 +29,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
+import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
 import qualified Hydra.Codegen as CodeGeneration
 import Hydra.PackageRouting (RoutingMap, buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
 import Hydra.Dsls (dslModuleName)
@@ -38,8 +39,7 @@ import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
 import Hydra.Sources.All (kernelModules)
-import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform,
-  clojureOverlayLibDir, schemeOverlayLibDir, commonLispOverlayLibDir, emacsLispOverlayLibDir, pythonOverlayLibDir)
+import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
 import Hydra.Go.Coder (moduleToGo, goLanguage)
@@ -685,18 +685,8 @@ main = do
         "emacs-lisp"  -> Just (LispSyntax.DialectEmacsLisp,  "el")
         _             -> Nothing
 
-  -- #630: each Lisp dialect's coder now emits the correct hydra.lib.<sub> vs.
-  -- hydra.overlay.<langSeg>.lib.<sub> reference directly at coding time, driven by the
-  -- on-disk overlay-existence set for its own dialect.
-  lispKnownLibSubs <- case lispDialectAndExt of
-        Just (LispSyntax.DialectClojure, _)    -> overlayLibSubs clojureOverlayLibDir
-        Just (LispSyntax.DialectScheme, _)     -> overlayLibSubs schemeOverlayLibDir
-        Just (LispSyntax.DialectCommonLisp, _) -> overlayLibSubs commonLispOverlayLibDir
-        Just (LispSyntax.DialectEmacsLisp, _)  -> overlayLibSubs emacsLispOverlayLibDir
-        Nothing                                -> return S.empty
-
   let lispGenerator = case lispDialectAndExt of
-        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
+        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
         Nothing -> Nothing
 
   -- 'mods' is the set this scoped package wants written. The full
@@ -823,41 +813,36 @@ main = do
   let redirectSchemeTestEnv langSeg s =
         replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
           $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
-  -- #630: the Haskell, TypeScript, Scala, Python, and Lisp-family coders now emit
-  -- the correct hydra.lib.<sub> vs. hydra.overlay.<lang>.lib.<sub> reference
-  -- directly at coding time, driven by the on-disk overlay-existence set threaded
-  -- in as an explicit parameter (haskellKnownLibSubs / typeScriptKnownLibSubs /
-  -- scalaKnownLibSubs / pythonKnownLibSubs / lispKnownLibSubs, above/below) -- no
-  -- post-generation text pass needed for the lib redirect any more (superseded
-  -- #568's correctHaskellLibRedirect / correctTypeScriptLibRedirect and the
-  -- driver-level redirectForSubs "scala" / "python" / "clojure" / redirectSchemeFor
-  -- / redirectLispFlat calls). wrapLongScalaText is unrelated (pure line-wrap
-  -- formatting) and stays; redirectClojureTestEnv / redirectSchemeTestEnv are
-  -- unrelated (hydra.test.testEnv, not hydra.lib.*) and stay too. Java remains on
-  -- its pre-#630 post-pass / allow-list redirect pending its own #630 fan-out.
+  -- #568: one of three driver-level choke points that must apply the hydra.lib.*
+  -- overlay-redirect existence correction (see the #568 block in Hydra.Generation,
+  -- alongside Hydra.Haskell.Generation.writeHaskell and
+  -- Hydra.ExtGeneration.writeTypeScript). The Haskell/TypeScript DSL coders
+  -- redirect every hydra.lib.<sub> reference to the overlay path unconditionally
+  -- (they have no I/O, so they can't check which subs actually have an overlay);
+  -- these two corrections narrow that back down using an on-disk existence scan,
+  -- so this driver's own haskell/typescript output gets the same #568 fix as the
+  -- sync-haskell entry point (writeHaskell/writeTypeScript).
   haskellKnownLibSubs <- overlayLibSubs haskellOverlayLibDir
   typeScriptKnownLibSubs <- overlayLibSubs typeScriptOverlayLibDir
-  scalaKnownLibSubs <- overlayLibSubs scalaOverlayLibDir
-  pythonKnownLibSubs <- overlayLibSubs pythonOverlayLibDir
   let consumerTransform = case target of
-        "haskell"     -> id
+        "haskell"     -> GenLibraryRedirect.correctHaskellLibRedirect (S.toList haskellKnownLibSubs)
         "java"        -> redirectForSubs libSubsJava "java"
-        "python"      -> id
-        "scala"       -> wrapLongScalaText
-        "typescript"  -> id
-        "clojure"     -> redirectClojureTestEnv "clojure"
-        "scheme"      -> redirectSchemeTestEnv "scheme"
-        "common-lisp" -> id
-        "emacs-lisp"  -> id
+        "python"      -> redirectForSubs libSubsPython "python"
+        "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
+        "typescript"  -> GenLibraryRedirect.correctTypeScriptLibRedirect (S.toList typeScriptKnownLibSubs)
+        "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
+        "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
+        "common-lisp" -> redirectLispFlat "common_lisp"
+        "emacs-lisp"  -> redirectLispFlat "emacs_lisp"
         _             -> id
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of
-        "haskell"    -> generateSourcesWithTransform xform (moduleToHaskell haskellKnownLibSubs) haskellLanguage    False dir universe mods
+        "haskell"    -> generateSourcesWithTransform xform moduleToHaskell    haskellLanguage    False dir universe mods
         "java"       -> generateSourcesWithTransform xform moduleToJava       javaLanguage       False dir universe mods
-        "python"     -> generateSourcesWithTransform xform (moduleToPython pythonKnownLibSubs) pythonLanguage     False dir universe mods
-        "scala"      -> generateSourcesWithTransform xform (moduleToScala scalaKnownLibSubs) scalaLanguage False dir universe mods
+        "python"     -> generateSourcesWithTransform xform moduleToPython     pythonLanguage     False dir universe mods
+        "scala"      -> generateSourcesWithTransform xform moduleToScala scalaLanguage False dir universe mods
         "go"         -> generateSourcesWithTransform xform moduleToGo  goLanguage         False dir universe mods
-        "typescript" -> generateSourcesWithTransform xform (moduleToTypeScript typeScriptKnownLibSubs) typeScriptLanguage False dir universe mods
+        "typescript" -> generateSourcesWithTransform xform moduleToTypeScript typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
               generateSourcesWithTransform xform g lispLanguage False dir universe mods
         _ -> do
