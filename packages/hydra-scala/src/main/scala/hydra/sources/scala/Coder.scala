@@ -276,12 +276,12 @@ object Coder:
     define(NS, "fieldToParam").doc("Convert a field type to a Scala parameter").to(fieldToParamBody)
 
   // encodeUntypeApplicationTerm
-  private val encodeUntypeApplicationTermBody = lambda("cx", lambda("g", lambda("term",
+  private val encodeUntypeApplicationTermBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("term",
     applyP("hydra.lib.eithers.bind",
       applyP("hydra.inference.inferInGraphContext", v("cx"), v("g"), v("term")),
       lambda("result",
         applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"),
-          TypingDsl.inferenceResultTerm(v("result"))))))))
+          TypingDsl.inferenceResultTerm(v("result")))))))))
 
   lazy val encodeUntypeApplicationTermDef: Definition =
     define(NS, "encodeUntypeApplicationTerm").doc("Encode an untyped application term by first inferring types").to(encodeUntypeApplicationTermBody)
@@ -1734,32 +1734,36 @@ object Coder:
 
   // Variable arm: produce a properly-qualified Scala name.
   private val encodeTermVariableArm = lambda("v",
-    Phantoms.let(Seq(
-      field("fullName", CoreDsl.unName(v("v"))),
-      field("localName", applyP("hydra.names.localNameOf", v("v"))),
-      field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("fullName"))),
-      field("numParts", applyP("hydra.lib.lists.length", v("parts"))),
-      field("escaped",
-        applyP("hydra.lib.logic.ifElse",
-          applyP("hydra.lib.ordering.lte", v("numParts"), int32(1)),
-          applyP(localUtils("scalaEscapeName"), v("fullName")),
+    applyP("hydra.lib.optionals.cases",
+      applyP("hydra.lib.maps.lookup", v("v"), GraphDsl.graphPrimitives(v("g"))),
+      Phantoms.let(Seq(
+        field("fullName", CoreDsl.unName(v("v"))),
+        field("localName", applyP("hydra.names.localNameOf", v("v"))),
+        field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("fullName"))),
+        field("numParts", applyP("hydra.lib.lists.length", v("parts"))),
+        field("escaped",
           applyP("hydra.lib.logic.ifElse",
-            applyP("hydra.lib.equality.equal", v("numParts"), int32(2)),
-            applyP("hydra.lib.strings.concat2",
-              applyP("hydra.lib.optionals.withDefault",
-                v("fullName"),
-                applyP("hydra.lib.lists.head", v("parts"))),
+            applyP("hydra.lib.ordering.lte", v("numParts"), int32(1)),
+            applyP(localUtils("scalaEscapeName"), v("fullName")),
+            applyP("hydra.lib.logic.ifElse",
+              applyP("hydra.lib.equality.equal", v("numParts"), int32(2)),
               applyP("hydra.lib.strings.concat2",
+                applyP("hydra.lib.optionals.withDefault",
+                  v("fullName"),
+                  applyP("hydra.lib.lists.head", v("parts"))),
+                applyP("hydra.lib.strings.concat2",
+                  string("."),
+                  applyP(localUtils("scalaEscapeName"), v("localName")))),
+              applyP("hydra.lib.strings.join",
                 string("."),
-                applyP(localUtils("scalaEscapeName"), v("localName")))),
-            applyP("hydra.lib.strings.join",
-              string("."),
-              applyP("hydra.lib.lists.concat2",
-                applyP("hydra.lib.lists.take",
-                  applyP("hydra.lib.math.sub", v("numParts"), int32(1)),
-                  v("parts")),
-                list(applyP(localUtils("scalaEscapeName"), v("localName"))))))))),
-      Phantoms.right(applyP(localUtils("sname"), v("escaped")))))
+                applyP("hydra.lib.lists.concat2",
+                  applyP("hydra.lib.lists.take",
+                    applyP("hydra.lib.math.sub", v("numParts"), int32(1)),
+                    v("parts")),
+                  list(applyP(localUtils("scalaEscapeName"), v("localName"))))))))),
+        Phantoms.right(applyP(localUtils("sname"), v("escaped")))),
+      lambda("_prim",
+        Phantoms.right(applyP(localUtils("sprim"), v("overlaySubs"), v("v"))))))
 
   private val encodeTermUnitArm = constant(
     Phantoms.right(
