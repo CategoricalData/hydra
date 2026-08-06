@@ -398,26 +398,34 @@ else
 fi
 
 # ────────────────────────────────────────────────────────────────────
-# Phase 1.5: Auto-heal stale hydra-java / hydra-python coder JSON (#406).
+# Phase 1.5: Auto-heal stale hydra-java / hydra-python / hydra-scala coder
+# JSON (#406, extended to native-DSL edits + Scala by #632).
 # ────────────────────────────────────────────────────────────────────
 # Per #344, Phase 1 re-exports the hydra.java.* / hydra.python.* coder JSON
 # only on cold-start (HYDRA_INCLUDE_JAVA_PYTHON, set above when a sentinel is
-# missing). On a WARM tree it skips them — but dist/json/hydra-{java,python}/
-# coder.json feeds Phase 2's dist/haskell/hydra-{java,python}/Coder.hs, which
-# is compiled into the core `hydra` library. When a kernel rename ripples into
-# the coders, that warm-skip leaves the coder JSON stale against the just-
-# regenerated kernel; Phase 2 then emits a Coder.hs referencing a renamed-away
-# field and the next `stack build` dies (#406).
+# missing). On a WARM tree it skips them — but dist/json/hydra-{java,python,scala}/
+# coder.json feeds Phase 2's dist/haskell/hydra-{java,python,scala}/Coder.hs, which
+# is compiled into the core `hydra` library. Two things can make that JSON stale on
+# a warm tree: a kernel rename rippling into the coders (#406), or a direct edit to
+# a native DSL coder source with no kernel rename involved (#632's defect C — the
+# freshness gate previously hashed a #346-deleted legacy Haskell DSL path and so
+# never detected this case). Either way, an undetected staleness leaves Phase 2
+# emitting a Coder.hs against outdated JSON, and the next `stack build` either dies
+# outright (#406) or silently compiles a stale coder (#632).
 #
-# Both hydra-java and hydra-python heal via their NATIVE drivers against the
-# PUBLISHED hosts (#346/#370). Each needs only dist/json/hydra-kernel (fresh from
-# Phase 1), NOT a built local host — so this sidesteps the #406 chicken-and-egg
-# entirely (the native generators no longer have to wait for Phase 4). The legacy
-# Haskell-DSL heal (update-json-main --include-java-python) is gone: hydraJavaModules
-# and hydraPythonModules are both [] now that their Haskell DSL sources are deleted.
+# hydra-java and hydra-python heal via their NATIVE drivers against the PUBLISHED
+# hosts (#346/#370); hydra-scala heals via its native driver, which has no
+# published-host mode yet and always runs local (see generate-hydra-scala-from-
+# scala.sh). Each needs only dist/json/hydra-kernel (fresh from Phase 1), NOT a
+# built local host — so this sidesteps the #406 chicken-and-egg entirely (the
+# native generators no longer have to wait for Phase 4). The legacy Haskell-DSL
+# heal (update-json-main --include-java-python) is gone: hydraJavaModules and
+# hydraPythonModules are both [] now that their Haskell DSL sources are deleted.
 #
-# check-java-python-json-fresh.py keys on the translated kernel JSON (the rename
-# signal), so this gate is correct.
+# check-java-python-json-fresh.py keys on the translated kernel JSON (the #406
+# rename signal) and the current native DSL source trees for all three languages
+# (the #632 direct-edit signal), so this gate now correctly covers both triggers
+# and all three languages.
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
 heal_java_python_native() {
     # Forward the sync's host mode to both native drivers, exactly as the Phase 5
@@ -473,6 +481,42 @@ heal_java_python_native() {
     fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "--$pm-host" || return 1
+    # hydra-scala (#632): no published-host mode yet (the driver always runs
+    # local — see generate-hydra-scala-from-scala.sh), so no host-mode flag.
+    # Only run when the Scala native JSON tree exists at all — a tree that has
+    # never generated Scala (e.g. --targets java,python only, ever) has no
+    # coder.json to heal, and Phase 5 (or a future sync that does include
+    # scala) seeds it from scratch.
+    #
+    # KNOWN LIMITATION (#632/#634): unlike Java/Python above, this heal is NOT
+    # guaranteed to succeed even when it runs. generate-hydra-scala-from-scala.sh
+    # invokes `sbt runMain hydra.updateScalaJson`, and packages/hydra-scala/
+    # build.sbt's unmanagedSourceDirectories compiles that driver in the SAME
+    # sbt project as dist/scala/hydra-scala, dist/scala/hydra-build, and 7 other
+    # dist/scala/hydra-* trees — none of which have been refreshed yet at this
+    # point (Phase 3/4 haven't run). If a native Scala DSL edit is substantial
+    # enough that those still-stale dist/scala/ trees now fail to compile
+    # against it, `sbt runMain` never reaches updateScalaJson, and this heal
+    # cannot succeed no matter how it's invoked — pre-assembling dist/scala/
+    # hydra-scala first wouldn't help, since that assembly itself reads the
+    # same stale dist/json/hydra-scala this heal exists to refresh. This is a
+    # hard circular dependency, confirmed via #630's real validation run; #632
+    # closes the DETECTION gap (the freshness gate above now correctly flags a
+    # native Scala DSL edit as stale) but not this HEAL gap. Breaking the cycle
+    # needs either #634 (move Phase 5 ahead of Phase 2, eliminating the
+    # ordering that makes any pre-assembly stale-by-construction) or formalizing
+    # #630's workaround (a standalone dist/json/hydra-scala pre-seed run before
+    # the full sync). Out of #632's minimal-fix scope; tracked as #634.
+    #
+    # A failure here does not invalidate the java/python heals above (both
+    # already ran and returned before reaching this point), so it is reported
+    # but does not abort the sync — sync.sh continues, and Phase 2's Scala
+    # build will surface the same staleness loudly (via #632's fix B) rather
+    # than the java/python fix being silently discarded alongside it.
+    if [ -d "$HYDRA_ROOT/dist/json/hydra-scala/src/main/json" ]; then
+        HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh" || \
+            echo "  WARNING: hydra-scala native heal failed (#632/#634 known circularity); continuing. See sync.sh comment above heal_java_python_native()'s Scala branch."
+    fi
 }
 # hydra-scala input-digest seed (#509). hydra-scala is host-native like
 # hydra-jvm/java/python: its coder JSON is committed and re-derived by the Phase 5
@@ -495,7 +539,7 @@ fi
 
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
-        banner1 "Phase 1.5: cold-start native Java/Python/JVM coder JSON (published hosts) (#346/#505)"
+        banner1 "Phase 1.5: cold-start native Java/Python/JVM/Scala coder JSON (#346/#505/#632)"
         echo ""
         heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
@@ -506,7 +550,7 @@ if [ -x "$JP_FRESH_CHECK" ]; then
         (cd "$HYDRA_HASKELL_DIR" && stack exec update-json-main) || exit 1
         echo ""
     elif ! "$JP_FRESH_CHECK" "$HYDRA_ROOT"; then
-        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python/hydra-jvm coder JSON (#406/#505)"
+        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python/hydra-jvm/hydra-scala coder JSON (#406/#505/#632)"
         echo ""
         heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
@@ -845,12 +889,16 @@ export HYDRA_IN_SYNC=1
 # host. Forwarded to the Python driver as a CLI flag below; the Java native pass
 # has no published/local switch, so its freshness is mode-independent.
 export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
-# Skip a language's native DSL→JSON pass entirely when that language
-# is not in HOSTS — e.g. a TypeScript-only sync (--hosts typescript)
-# has no reason to spin up Java's full kernel build or Python's pypy
-# driver, and on a tree where both heads were built previously the
-# sentinel-based skip alone won't catch them.
-if printf '%s\n' $HOSTS | grep -qx java; then
+# Skip a language's native DSL→JSON pass entirely when that language is
+# not requested at all (hosts ∪ targets) — e.g. a TypeScript-only sync
+# (--hosts typescript --targets typescript) has no reason to spin up
+# Java's full kernel build or Python's pypy driver, and on a tree where
+# both heads were built previously the sentinel-based skip alone won't
+# catch them. Gate on LANG_UNION, not HOSTS alone (#632 defect A): a
+# `--targets python` sync with python absent from --hosts still needs
+# this regen to pick up a native-DSL coder change, or dist/json/hydra-python
+# silently stays stale.
+if printf '%s\n' $LANG_UNION | grep -qx java; then
     echo "--- hydra-java (native Java DSL → JSON) ---"
     # Forward the sync's host mode to the Java coder driver, exactly as the Python
     # block does below. Without this, `sync.sh --local-host` would leave Phase 5's
@@ -863,9 +911,9 @@ if printf '%s\n' $HOSTS | grep -qx java; then
         "$JAVA_HOST_SENTINEL" \
         "$JAVA_HOST_MODE_FLAG"
 else
-    echo "--- hydra-java (skipped: java not in HOSTS) ---"
+    echo "--- hydra-java (skipped: java not in hosts ∪ targets) ---"
 fi
-if printf '%s\n' $HOSTS | grep -qx python; then
+if printf '%s\n' $LANG_UNION | grep -qx python; then
     echo "--- hydra-python (native Python DSL → JSON) ---"
     # Forward the sync's host mode to the Python coder driver. The wrapper
     # defaults to --published-host; without this, `sync.sh --local-host` would
@@ -887,16 +935,16 @@ if printf '%s\n' $HOSTS | grep -qx python; then
             "$PY_HOST_MODE_FLAG"
     fi
 else
-    echo "--- hydra-python (skipped: python not in HOSTS) ---"
+    echo "--- hydra-python (skipped: python not in hosts ∪ targets) ---"
 fi
 # #509: hydra-scala native DSL → JSON. Writes 4 of 5 source modules byte-identically;
 # Coder.json has simplified bodies (pending full translation).
-if printf '%s\n' $HOSTS | grep -qx scala; then
+if printf '%s\n' $LANG_UNION | grep -qx scala; then
     echo "--- hydra-scala (native Scala DSL → JSON) ---"
     "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh" || \
         echo "  WARNING: scala native DSL → JSON failed; continuing (the Haskell DSL pass already wrote dist/json/hydra-scala/)"
 else
-    echo "--- hydra-scala (skipped: scala not in HOSTS) ---"
+    echo "--- hydra-scala (skipped: scala not in hosts ∪ targets) ---"
 fi
 unset HYDRA_IN_SYNC
 

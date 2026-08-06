@@ -58,8 +58,17 @@ source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 cd "$HYDRA_HASKELL_DIR"
 
-# Ensure the exec is built (fast no-op if already up to date).
-stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
+# Ensure the exec is built (fast no-op if already up to date). Capture output
+# so a build failure (e.g. a coder DSL source and its generated dist/json
+# disagree on a signature) is surfaced instead of silently discarded (#632).
+TRANSFORM_BUILD_LOG="$(mktemp)"
+if ! stack build hydra:exe:bootstrap-from-json >"$TRANSFORM_BUILD_LOG" 2>&1; then
+    echo "transform-json-to-target: stack build failed:" >&2
+    tail -30 "$TRANSFORM_BUILD_LOG" >&2
+    rm -f "$TRANSFORM_BUILD_LOG"
+    exit 1
+fi
+rm -f "$TRANSFORM_BUILD_LOG"
 
 # Choose load flags based on which package we're scoping to:
 #   - Baseline (hydra-kernel/hydra-haskell): always loaded.
