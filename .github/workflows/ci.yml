@@ -294,11 +294,13 @@ jobs:
     name: Regression harnesses
     needs: haskell
     runs-on: ubuntu-latest
-    # Five small stack builds/execs, not a full sync — generous but bounded.
-    # Bumped 60->120: post-#376 this job cold-seeds dist/haskell first (which
-    # builds the json-driver + regenerates the kernel tree from dist/json), so
-    # it is no longer just "five small stack execs".
-    timeout-minutes: 120
+    # Bumped 60->120 (post-#376 cold-seed) then 120->240: the job now also runs a
+    # full bin/sync.sh + the per-package assemble-distribution.sh guards, whose
+    # cumulative time exceeds 120min — every run 2026-08-04..06 hit the 120 cap
+    # exactly (120-121min) and was cancelled (a too-slow-for-timeout, not a hang).
+    # 240 matches the cold-clone job's budget. If runs still approach 240, the fix
+    # is to speed up the per-package assembles, not to keep raising the ceiling.
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
       # ghc-version pinned for the cold-seed's json-driver build (system-ghc,
