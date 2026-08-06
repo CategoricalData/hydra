@@ -159,6 +159,9 @@ object Generation:
   /** The Scala-host overlay lib directory. */
   private val scalaOverlayLibDir = "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
 
+  /** The Java-host overlay lib directory. */
+  private val javaOverlayLibDir = "../../overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib"
+
   /** The Haskell-host overlay lib directory. */
   private val haskellOverlayLibDir = "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
 
@@ -206,8 +209,9 @@ object Generation:
 
   /** Generate Java source files from modules. */
   def writeJava(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    val knownSubs = overlayLibSubs(javaOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.java.coder.moduleToJava(mod)(defs)(cx)(g),
+      mod => defs => cx => g => hydra.java.coder.moduleToJava(knownSubs)(mod)(defs)(cx)(g),
       hydra.java.language.javaLanguage,
       doInfer = false,
       basePath, universe, mods)
