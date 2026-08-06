@@ -214,16 +214,18 @@ object Generation:
 
   /** Generate Python source files from modules. */
   def writePython(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    val knownSubs = overlayLibSubs(pythonOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.python.coder.moduleToPython(mod)(defs)(cx)(g),
+      mod => defs => cx => g => hydra.python.coder.moduleToPython(knownSubs)(mod)(defs)(cx)(g),
       hydra.python.language.pythonLanguage,
       doInfer = false,
       basePath, universe, mods)
 
   /** Generate Scala source files from modules. */
   def writeScala(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    val knownSubs = overlayLibSubs(scalaOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.scala.coder.moduleToScala(mod)(defs)(cx)(g),
+      mod => defs => cx => g => hydra.scala.coder.moduleToScala(knownSubs)(mod)(defs)(cx)(g),
       hydra.scala.language.scalaLanguage,
       doInfer = false,
       basePath, universe, mods)
