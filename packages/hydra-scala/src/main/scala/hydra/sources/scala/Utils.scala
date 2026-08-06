@@ -215,28 +215,10 @@ object Utils:
           ScalaSyntax.nameData(ScalaSyntax.predefString(v("s"))))))
 
   lazy val sprimDef: Definition =
-    define(NS, "sprim").doc("Create a Scala primitive reference from a Hydra name, redirecting"
-      + " hydra.lib.<sub> to hydra.overlay.scala.lib.<sub> when <sub> has an overlay implementation"
-      + " on this host (#630 -- the on-disk overlaySubs existence signal, mirroring toPrimImport).")
-      .lam("overlaySubs").lam("name").to(
+    define(NS, "sprim").doc("Create a Scala primitive reference from a Hydra name")
+      .lam("name").to(
         let(Seq(
-          field("raw", CoreDsl.unName(v("name"))),
-          field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("raw"))),
-          field("sub", applyP("hydra.lib.strings.join", string("."),
-            applyP("hydra.lib.lists.drop", int32(2), v("parts")))),
-          field("redirectedRaw",
-            applyP("hydra.lib.logic.ifElse",
-              applyP("hydra.lib.logic.and",
-                applyP("hydra.lib.logic.and",
-                  applyP("hydra.lib.equality.equal", applyP("hydra.lib.lists.length", v("parts")), int32(3)),
-                  applyP("hydra.lib.equality.equal",
-                    applyP("hydra.lib.lists.take", int32(2), v("parts")),
-                    list(string("hydra"), string("lib")))),
-                applyP("hydra.lib.sets.member", v("sub"), v("overlaySubs"))),
-              applyP("hydra.lib.strings.concat2", string("hydra.overlay.scala.lib."), v("sub")),
-              v("raw"))),
-          field("redirectedName", wrap("hydra.core.Name", v("redirectedRaw"))),
-          field("qname", applyP("hydra.names.qualifyName", v("redirectedName"))),
+          field("qname", applyP("hydra.names.qualifyName", v("name"))),
           field("prefix",
             PackagingDsl.unModuleName(
               applyP("hydra.lib.optionals.withDefault",

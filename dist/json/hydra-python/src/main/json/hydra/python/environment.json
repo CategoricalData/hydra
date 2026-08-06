@@ -86,19 +86,7 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]}}}},
-                  {
-                    "name": "overlaySubs",
-                    "type": {
-                      "annotated": {
-                        "body": {"set": {"literal": "string"}},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this host (#630) -- the on-disk existence signal driving emission-time redirect of primitive references to hydra.overlay.python.lib.<sub>"}}}]}}}}]},
+                              "value": {"literal": {"string": "Variables that are inline let bindings (walrus operators)"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Python code generation"}}}]}}}}}},
     {

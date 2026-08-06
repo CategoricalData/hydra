@@ -200,42 +200,15 @@ object Coder:
     define(NS, "toElImport").doc("Create an element import statement").to(toElImportBody)
 
   // toPrimImport
-  //
-  // #630: hydra.lib.<sub> primitive impls live at hydra.overlay.scala.lib.<sub> (the analog
-  // of Haskell's Hydra.Overlay.Haskell.Lib.*), so a primitive-namespace import redirects to the
-  // overlay package IF that sub actually has an overlay implementation on this host (checked via
-  // overlaySubs, the caller-supplied on-disk existence signal), otherwise it stays pointing at the
-  // generated def-module namespace. This existence check happens at emission time; #630 retired the
-  // driver-level post-generation text pass (redirectForSubs) that used to do this rewrite after the
-  // fact for every host but Haskell/TypeScript.
-  private val toPrimImportBody = lambda("overlaySubs", lambda("ns",
-    let(Seq(
-      field("raw", PackagingDsl.unModuleName(v("ns"))),
-      field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("raw"))),
-      field("sub", applyP("hydra.lib.strings.join", string("."),
-        applyP("hydra.lib.lists.drop", int32(2), v("parts")))),
-      field("redirected",
-        applyP("hydra.lib.logic.ifElse",
-          applyP("hydra.lib.logic.and",
-            applyP("hydra.lib.logic.and",
-              applyP("hydra.lib.equality.equal", applyP("hydra.lib.lists.length", v("parts")), int32(3)),
-              applyP("hydra.lib.equality.equal",
-                applyP("hydra.lib.lists.take", int32(2), v("parts")),
-                list(string("hydra"), string("lib")))),
-            applyP("hydra.lib.sets.member", v("sub"), v("overlaySubs"))),
-          applyP("hydra.lib.strings.concat2", string("hydra.overlay.scala.lib."), v("sub")),
-          v("raw"))),
-      field("redirectedName",
-        ScalaSyntax.nameData(ScalaSyntax.predefString(applyP("hydra.lib.strings.join",
-          string("."),
-          applyP("hydra.lib.strings.splitOn", string("."), v("redirected")))))),
-      field("redirectedRef",
-        inject("hydra.scala.syntax.RefData", "name", v("redirectedName"))),
-      field("redirectedImporter",
-        ScalaSyntax.importer(v("redirectedRef"))(emptyList))),
-      inject("hydra.scala.syntax.Stat", "importExport",
-        inject("hydra.scala.syntax.ImportExportStat", "import",
-          ScalaSyntax.`import`(list(v("redirectedImporter"))))))))
+  private val toPrimImportBody = lambda("ns",
+    inject("hydra.scala.syntax.Stat", "importExport",
+      inject("hydra.scala.syntax.ImportExportStat", "import",
+        ScalaSyntax.`import`(list(ScalaSyntax.importer(inject("hydra.scala.syntax.RefData", "name",
+              ScalaSyntax.nameData(ScalaSyntax.predefString(applyP("hydra.lib.strings.join",
+                    string("."),
+                    applyP("hydra.lib.strings.splitOn",
+                      string("."),
+                      PackagingDsl.unModuleName(v("ns"))))))))(emptyList))))))
 
   lazy val toPrimImportDef: Definition =
     define(NS, "toPrimImport").doc("Create a primitive import statement").to(toPrimImportBody)
@@ -280,7 +253,7 @@ object Coder:
     applyP("hydra.lib.eithers.bind",
       applyP("hydra.inference.inferInGraphContext", v("cx"), v("g"), v("term")),
       lambda("result",
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"),
+        applyP(local("encodeTerm"), v("cx"), v("g"),
           TypingDsl.inferenceResultTerm(v("result"))))))))
 
   lazy val encodeUntypeApplicationTermDef: Definition =
@@ -341,7 +314,7 @@ object Coder:
     define(NS, "stripWrapEliminations").doc("Strip wrap eliminations from terms (newtypes are erased in Scala)").to(stripWrapEliminationsBody)
 
   // findImports
-  private val findImportsBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("mod",
+  private val findImportsBody = lambda("cx", lambda("g", lambda("mod",
     applyP("hydra.lib.eithers.bind",
       applyP("hydra.analysis.moduleDependencyModuleNames",
         v("cx"), v("g"), bool(false), bool(false), bool(true), bool(false), v("mod")),
@@ -357,16 +330,16 @@ object Coder:
                     v(local("toElImport")),
                     applyP("hydra.lib.sets.toList", v("elImps"))),
                   applyP("hydra.lib.lists.map",
-                    applyP(local("toPrimImport"), v("overlaySubs")),
-                    applyP("hydra.lib.sets.toList", v("primImps"))))))))))))))
+                    v(local("toPrimImport")),
+                    applyP("hydra.lib.sets.toList", v("primImps")))))))))))))
 
   lazy val findImportsDef: Definition =
     define(NS, "findImports").doc("Find import statements for the module").to(findImportsBody)
 
   // moduleToScala
-  private val moduleToScalaBody = lambda("overlaySubs", lambda("mod", lambda("defs", lambda("cx", lambda("g",
+  private val moduleToScalaBody = lambda("mod", lambda("defs", lambda("cx", lambda("g",
     applyP("hydra.lib.eithers.bind",
-      applyP(local("constructModule"), v("overlaySubs"), v("cx"), v("g"), v("mod"), v("defs")),
+      applyP(local("constructModule"), v("cx"), v("g"), v("mod"), v("defs")),
       lambda("pkg",
         let(Seq(
           field("s",
@@ -379,13 +352,13 @@ object Coder:
                 UtilDsl.caseConventionCamel,
                 wrap("hydra.file.FileExtension", string("scala")),
                 PackagingDsl.moduleName(v("mod"))),
-              v("s")))))))))))
+              v("s"))))))))))
 
   lazy val moduleToScalaDef: Definition =
     define(NS, "moduleToScala").doc("Convert a Hydra module to Scala source code").to(moduleToScalaBody)
 
   // constructModule
-  private val constructModuleBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("mod", lambda("defs",
+  private val constructModuleBody = lambda("cx", lambda("g", lambda("mod", lambda("defs",
     let(Seq(
       field("partitioned", applyP("hydra.environment.partitionDefinitions", v("defs"))),
       field("typeDefs", applyP("hydra.lib.pairs.first", v("partitioned"))),
@@ -404,15 +377,15 @@ object Coder:
         lambda("typeDeclStats",
           applyP("hydra.lib.eithers.bind",
             applyP("hydra.lib.eithers.mapList",
-              lambda("td", applyP(local("encodeTermDefinition"), v("overlaySubs"), v("cx"), v("g"), v("td"))),
+              lambda("td", applyP(local("encodeTermDefinition"), v("cx"), v("g"), v("td"))),
               v("termDefs")),
             lambda("termDeclStats",
               applyP("hydra.lib.eithers.bind",
-                applyP(local("findImports"), v("overlaySubs"), v("cx"), v("g"), v("mod")),
+                applyP(local("findImports"), v("cx"), v("g"), v("mod")),
                 lambda("imports",
                   Phantoms.right(
                     ScalaSyntax.pkg(v("pname"))(v("pref"))(applyP("hydra.lib.lists.concat",
-                        list(v("imports"), v("typeDeclStats"), v("termDeclStats")))))))))))))))))
+                        list(v("imports"), v("typeDeclStats"), v("termDeclStats"))))))))))))))))
 
   lazy val constructModuleDef: Definition =
     define(NS, "constructModule").doc("Construct a Scala package from a Hydra module and its definitions").to(constructModuleBody)
@@ -866,7 +839,7 @@ object Coder:
       applyP(local("encodeType"), v("cx"), v("g"), v("typ'")),
       lambda("stype",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("term")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("term")),
           lambda("rhs",
             Phantoms.right(mkLazyVal(v("lname"), just(v("stype")), v("rhs")))))))
 
@@ -875,7 +848,7 @@ object Coder:
       applyP(local("encodeType"), v("cx"), v("g"), v("typ'")),
       lambda("stype",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("term")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("term")),
           lambda("rhs",
             let(Seq(field("tparams",
               applyP("hydra.lib.lists.map",
@@ -895,13 +868,13 @@ object Coder:
     applyP("hydra.lib.logic.ifElse",
       v("isFunctionType"),
       applyP(local("encodeComplexTermDef"),
-        v("overlaySubs"), v("cx"), v("g"), v("lname"), v("term"), v("typ'")),
+        v("cx"), v("g"), v("lname"), v("term"), v("typ'")),
       applyP("hydra.lib.logic.ifElse",
         applyP("hydra.lib.lists.null", v("freeTypeVarsInTyp")),
         encodeTermDefSimpleVal,
         encodeTermDefZeroParamDef))
 
-  private val encodeTermDefinitionBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("td",
+  private val encodeTermDefinitionBody = lambda("cx", lambda("g", lambda("td",
     let(Seq(
       field("name", PackagingDsl.termDefinitionName(v("td"))),
       field("term", PackagingDsl.termDefinitionBody(v("td"))),
@@ -925,7 +898,7 @@ object Coder:
                 applyP("hydra.lib.strings.toList", CoreDsl.unName(v("v")))))),
           applyP("hydra.lib.sets.toList",
             applyP("hydra.variables.freeVariablesInType", v("typ'")))))),
-      encodeTermDefBranch)))))
+      encodeTermDefBranch))))
 
   lazy val encodeTermDefinitionDef: Definition =
     define(NS, "encodeTermDefinition").doc("Encode a term definition as a Scala statement").to(encodeTermDefinitionBody)
@@ -1100,13 +1073,13 @@ object Coder:
 
   private val encodeLetBindingNoTsBranch =
     applyP("hydra.lib.eithers.bind",
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("bterm")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("bterm")),
       lambda("srhs",
         Phantoms.right(mkLazyVal(v("bname"), nothing, v("srhs")))))
 
   private val encodeLetBindingMonoValBranch =
     applyP("hydra.lib.eithers.bind",
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("bterm")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("bterm")),
       lambda("srhs",
         applyP("hydra.lib.eithers.bind",
           applyP(local("encodeType"), v("cx"), v("g"),
@@ -1131,11 +1104,11 @@ object Coder:
       applyP("hydra.lib.logic.ifElse",
         v("useDef"),
         applyP(local("encodeLocalDef"),
-          v("overlaySubs"), v("cx"), v("g"), v("outerTypeVars"), v("bname"), v("bterm"),
+          v("cx"), v("g"), v("outerTypeVars"), v("bname"), v("bterm"),
           CoreDsl.typeSchemeBody(v("ts"))),
         encodeLetBindingMonoValBranch)))
 
-  private val encodeLetBindingBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("outerTypeVars", lambda("b",
+  private val encodeLetBindingBody = lambda("cx", lambda("g", lambda("outerTypeVars", lambda("b",
     let(Seq(
       field("bname",
         applyP(localUtils("scalaEscapeName"),
@@ -1156,7 +1129,7 @@ object Coder:
       applyP("hydra.lib.optionals.cases",
         v("mts"),
         encodeLetBindingNoTsBranch,
-        encodeLetBindingTsBranch)))))))
+        encodeLetBindingTsBranch))))))
 
   lazy val encodeLetBindingDef: Definition =
     define(NS, "encodeLetBinding")
@@ -1171,7 +1144,7 @@ object Coder:
   // inside the let that binds X (Hydra inference uses SCC analysis on let-rec
   // groups; one binding per let avoids any reordering surprises).
 
-  private val encodeLocalDefBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("outerTypeVars",
+  private val encodeLocalDefBody = lambda("cx", lambda("g", lambda("outerTypeVars",
     lambda("lname", lambda("term", lambda("typ",
       let(Seq(
         field("freeTypeVars",
@@ -1229,7 +1202,7 @@ object Coder:
         lambda("sparams",
           applyP("hydra.lib.eithers.bind",
             applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("gWithTypeVars"),
+              v("cx"), v("gWithTypeVars"),
               applyP(local("extractBody"), v("term"))),
             lambda("sbody",
               applyP("hydra.lib.eithers.bind",
@@ -1252,7 +1225,7 @@ object Coder:
                   applyP("hydra.lib.eithers.bind",
                     applyP("hydra.lib.eithers.mapList",
                       applyP(local("encodeLetBinding"),
-                        v("overlaySubs"), v("cx"), v("gForLets"), v("allTypeVars")),
+                        v("cx"), v("gForLets"), v("allTypeVars")),
                       v("letBindings")),
                     lambda("sbindings",
                       let(Seq(field("defBody",
@@ -1274,7 +1247,7 @@ object Coder:
                                 lambda("p", list(v("p"))),
                                 v("sparams")))(
                               just(v("scod")))(
-                              v("defBody")))))))))))))))))))))))
+                              v("defBody"))))))))))))))))))))))
 
   lazy val encodeLocalDefDef: Definition =
     define(NS, "encodeLocalDef").doc("Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).").to(encodeLocalDefBody)
@@ -1283,7 +1256,7 @@ object Coder:
   // Similar shape to encodeLocalDef but lacks outerTypeVars handling. Uses nested
   // 1-binding lets for unambiguous scoping.
 
-  private val encodeComplexTermDefBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("lname", lambda("term", lambda("typ",
+  private val encodeComplexTermDefBody = lambda("cx", lambda("g", lambda("lname", lambda("term", lambda("typ",
     Phantoms.let(Seq(
       field("doms", applyP(local("extractDomains"), v("typ"))),
       field("paramNames", applyP(local("extractParams"), v("term"))),
@@ -1330,7 +1303,7 @@ object Coder:
         lambda("sparams",
           applyP("hydra.lib.eithers.bind",
             applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("gWithTypeVars"),
+              v("cx"), v("gWithTypeVars"),
               applyP(local("extractBody"), v("term"))),
             lambda("sbody",
               applyP("hydra.lib.eithers.bind",
@@ -1353,7 +1326,7 @@ object Coder:
                     applyP("hydra.lib.eithers.bind",
                       applyP("hydra.lib.eithers.mapList",
                         applyP(local("encodeLetBinding"),
-                          v("overlaySubs"), v("cx"), v("gForLets"),
+                          v("cx"), v("gForLets"),
                           applyP("hydra.lib.sets.fromList", v("freeTypeVars"))),
                         v("letBindings")),
                       lambda("sbindings",
@@ -1376,7 +1349,7 @@ object Coder:
                                     lambda("p", list(v("p"))),
                                     v("sparams")))(
                                   just(v("scod")))(
-                                  v("defBody"))))))))))))))))))))))
+                                  v("defBody")))))))))))))))))))))
 
   lazy val encodeComplexTermDefDef: Definition =
     define(NS, "encodeComplexTermDef").doc("Encode a complex term definition with proper parameter types from the type signature").to(encodeComplexTermDefBody)
@@ -1484,7 +1457,7 @@ object Coder:
 
   private val encodeCaseBindAndReturn =
     applyP("hydra.lib.eithers.bind",
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("applied")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("applied")),
       lambda("body",
         Phantoms.right(
           ScalaSyntax.`case`(v("pat"))(nothing)(v("body")))))
@@ -1495,7 +1468,7 @@ object Coder:
         list(string("v_"), v("shortTypeName"), string("_"),
           CoreDsl.unName(v("fname")), v("lamParamSuffix"))))
 
-  private val encodeCaseBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("ftypes", lambda("sn", lambda("f",
+  private val encodeCaseBody = lambda("cx", lambda("g", lambda("ftypes", lambda("sn", lambda("f",
     Phantoms.let(Seq(
       field("fname", CoreDsl.caseAlternativeName(v("f"))),
       field("fterm", CoreDsl.caseAlternativeHandler(v("f"))),
@@ -1507,7 +1480,7 @@ object Coder:
       field("patArgs", encodeCasePatArgs),
       field("pat", encodeCasePat),
       field("applied", applyP(local("applyVar"), v("fterm"), v("v")))),
-      encodeCaseBindAndReturn)))))))
+      encodeCaseBindAndReturn))))))
 
   lazy val encodeCaseDef: Definition =
     define(NS, "encodeCase").doc("Encode a case branch").to(encodeCaseBody)
@@ -1561,7 +1534,7 @@ object Coder:
         applyP("hydra.lib.optionals.bind", v("rawMdom"),
           lambda("dom", encodeFunctionMdomComputation)))),
       applyP("hydra.lib.eithers.bind",
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("body")),
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("body")),
         encodeFunctionSbodySdomBinder)))
 
   // Unwrap-arm
@@ -1580,7 +1553,7 @@ object Coder:
       v("arg"),
       encodeFunctionUnwrapNoArg,
       lambda("a",
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("a")))))
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("a")))))
 
   // Project-arm
   private val encodeFunctionProjectUnapplied =
@@ -1602,7 +1575,7 @@ object Coder:
 
   private val encodeFunctionProjectApplied = lambda("a",
     applyP("hydra.lib.eithers.bind",
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("a")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("a")),
       lambda("sa",
         Phantoms.right(
           inject("hydra.scala.syntax.Data", "ref",
@@ -1627,7 +1600,7 @@ object Coder:
     applyP("hydra.lib.eithers.mapList",
       lambda("f",
         applyP(local("encodeCase"),
-          v("overlaySubs"), v("cx"), v("g"), v("ftypes"), v("sn"), v("f"))),
+          v("cx"), v("g"), v("ftypes"), v("sn"), v("f"))),
       v("cases"))
 
   private val encodeFunctionCasesAddDefaultThen = lambda("fieldCases",
@@ -1637,7 +1610,7 @@ object Coder:
         Phantoms.right(v("fieldCases")),
         lambda("dfltTerm",
           applyP("hydra.lib.eithers.bind",
-            applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("dfltTerm")),
+            applyP(local("encodeTerm"), v("cx"), v("g"), v("dfltTerm")),
             lambda("sdflt",
               Phantoms.right(
                 applyP("hydra.lib.lists.concat2",
@@ -1661,7 +1634,7 @@ object Coder:
                   v("sdom"))))),
           lambda("a",
             applyP("hydra.lib.eithers.bind",
-              applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("a")),
+              applyP(local("encodeTerm"), v("cx"), v("g"), v("a")),
               lambda("sa",
                 Phantoms.right(
                   inject("hydra.scala.syntax.Data", "match",
@@ -1684,14 +1657,14 @@ object Coder:
         encodeFunctionCasesFieldCases,
         encodeFunctionCasesAddDefaultThen)))
 
-  private val encodeFunctionBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("meta", lambda("funTerm", lambda("arg",
+  private val encodeFunctionBody = lambda("cx", lambda("g", lambda("meta", lambda("funTerm", lambda("arg",
     casesWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("funTerm")),
       errorLeft("unsupported function"),
       field("lambda", encodeFunctionLambdaArm),
       field("unwrap", encodeFunctionUnwrapArm),
       field("project", encodeFunctionProjectArm),
-      field("cases", encodeFunctionCasesArm))))))))
+      field("cases", encodeFunctionCasesArm)))))))
 
   lazy val encodeFunctionDef: Definition =
     define(NS, "encodeFunction").doc("Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression").to(encodeFunctionBody)
@@ -1769,7 +1742,7 @@ object Coder:
   // Helper: delegate to encodeFunction for lambda/project/cases/unwrap arms.
   private def encodeTermFunDelegate(argTerm: TypedTerm[Any]): TypedTerm[Any] =
     applyP(local("encodeFunction"),
-      v("overlaySubs"), v("cx"), v("g"),
+      v("cx"), v("g"),
       applyP("hydra.annotations.termAnnotationInternal", argTerm),
       argTerm,
       nothing)
@@ -1781,24 +1754,24 @@ object Coder:
 
   private val encodeTermAnnotatedArm = lambda("at",
     applyP(local("encodeTerm"),
-      v("overlaySubs"), v("cx"), v("g"),
+      v("cx"), v("g"),
       CoreDsl.annotatedTermBody(v("at"))))
 
   private val encodeTermTypeLambdaArm = lambda("tl",
     applyP(local("encodeTerm"),
-      v("overlaySubs"), v("cx"),
+      v("cx"),
       applyP("hydra.scoping.extendGraphForTypeLambda", v("g"), v("tl")),
       CoreDsl.typeLambdaBody(v("tl"))))
 
   private val encodeTermWrapArm = lambda("wt",
     applyP(local("encodeTerm"),
-      v("overlaySubs"), v("cx"), v("g"),
+      v("cx"), v("g"),
       CoreDsl.wrappedTermBody(v("wt"))))
 
   private val encodeTermListArm = lambda("els",
     applyP("hydra.lib.eithers.bind",
       applyP("hydra.lib.eithers.mapList",
-        lambda("e", applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("e"))),
+        lambda("e", applyP(local("encodeTerm"), v("cx"), v("g"), v("e"))),
         v("els")),
       lambda("sels",
         Phantoms.right(
@@ -1809,7 +1782,7 @@ object Coder:
   private val encodeTermSetArm = lambda("s",
     applyP("hydra.lib.eithers.bind",
       applyP("hydra.lib.eithers.mapList",
-        lambda("e", applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("e"))),
+        lambda("e", applyP(local("encodeTerm"), v("cx"), v("g"), v("e"))),
         applyP("hydra.lib.sets.toList", v("s"))),
       lambda("sels",
         Phantoms.right(
@@ -1820,12 +1793,12 @@ object Coder:
   private val encodeTermPairArm = lambda("p",
     applyP("hydra.lib.eithers.bind",
       applyP(local("encodeTerm"),
-        v("overlaySubs"), v("cx"), v("g"),
+        v("cx"), v("g"),
         applyP("hydra.lib.pairs.first", v("p"))),
       lambda("sf",
         applyP("hydra.lib.eithers.bind",
           applyP(local("encodeTerm"),
-            v("overlaySubs"), v("cx"), v("g"),
+            v("cx"), v("g"),
             applyP("hydra.lib.pairs.second", v("p"))),
           lambda("ss",
             Phantoms.right(
@@ -1839,7 +1812,7 @@ object Coder:
       Phantoms.right(applyP(localUtils("sname"), string("None"))),
       lambda("t",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("t")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("t")),
           lambda("s",
             Phantoms.right(
               applyP(localUtils("sapply"),
@@ -1850,7 +1823,7 @@ object Coder:
     applyP("hydra.lib.eithers.either",
       lambda("l",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("l")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("l")),
           lambda("sl",
             Phantoms.right(
               applyP(localUtils("sapply"),
@@ -1858,7 +1831,7 @@ object Coder:
                 list(v("sl"))))))),
       lambda("r",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("r")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("r")),
           lambda("sr",
             Phantoms.right(
               applyP(localUtils("sapply"),
@@ -1872,12 +1845,12 @@ object Coder:
         lambda("kv",
           applyP("hydra.lib.eithers.bind",
             applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("g"),
+              v("cx"), v("g"),
               applyP("hydra.lib.pairs.first", v("kv"))),
             lambda("sk",
               applyP("hydra.lib.eithers.bind",
                 applyP(local("encodeTerm"),
-                  v("overlaySubs"), v("cx"), v("g"),
+                  v("cx"), v("g"),
                   applyP("hydra.lib.pairs.second", v("kv"))),
                 lambda("sv",
                   Phantoms.right(
@@ -1898,7 +1871,7 @@ object Coder:
         applyP("hydra.lib.eithers.mapList",
           lambda("f",
             applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("g"), CoreDsl.fieldTerm(v("f")))),
+              v("cx"), v("g"), CoreDsl.fieldTerm(v("f")))),
           v("fields")),
         lambda("args",
           Phantoms.right(
@@ -1944,7 +1917,7 @@ object Coder:
                   int32(0))))))),
         Phantoms.right(v("lhs")),
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("ft")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("ft")),
           lambda("sarg",
             Phantoms.right(
               applyP(localUtils("sapply"),
@@ -1968,13 +1941,13 @@ object Coder:
       applyP("hydra.lib.eithers.bind",
         applyP("hydra.lib.eithers.mapList",
           applyP(local("encodeLetBinding"),
-            v("overlaySubs"), v("cx"), v("gLet"),
+            v("cx"), v("gLet"),
             GraphDsl.graphTypeVariables(v("gLet"))),
           v("bindings")),
         lambda("sbindings",
           applyP("hydra.lib.eithers.bind",
             applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("gLet"), v("body")),
+              v("cx"), v("gLet"), v("body")),
             lambda("sbody",
               Phantoms.right(
                 inject("hydra.scala.syntax.Data", "block",
@@ -1989,10 +1962,10 @@ object Coder:
   // Default: encode as plain Scala function application.
   private val encodeTermApplicationDefault =
     applyP("hydra.lib.eithers.bind",
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("fun")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("fun")),
       lambda("sfun",
         applyP("hydra.lib.eithers.bind",
-          applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("arg")),
+          applyP(local("encodeTerm"), v("cx"), v("g"), v("arg")),
           lambda("sarg",
             Phantoms.right(
               applyP(localUtils("sapply"), v("sfun"), list(v("sarg"))))))))
@@ -2003,7 +1976,7 @@ object Coder:
       applyP(localUtils("scalaEscapeName"),
         CoreDsl.unName(CoreDsl.projectionFieldName(v("proj")))),
       applyP("hydra.lib.eithers.bind",
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("arg")),
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("arg")),
         lambda("sarg",
           Phantoms.right(
             inject("hydra.scala.syntax.Data", "ref",
@@ -2014,7 +1987,7 @@ object Coder:
   // Cases arm: beta-reduce to `arg match { cs }` via encodeFunction.
   private val encodeTermApplicationCasesArm = constant(
     applyP(local("encodeFunction"),
-      v("overlaySubs"), v("cx"), v("g"),
+      v("cx"), v("g"),
       applyP("hydra.annotations.termAnnotationInternal", v("fun")),
       v("fun"),
       just(v("arg"))))
@@ -2023,7 +1996,7 @@ object Coder:
   // Inner inner case for Application(Cases, lamParam) detection.
   private val encodeTermApplicationLambdaInnerInnerCasesArm = constant(
     applyP(local("encodeFunction"),
-      v("overlaySubs"), v("cx"), v("g"),
+      v("cx"), v("g"),
       applyP("hydra.annotations.termAnnotationInternal", v("innerFun")),
       v("innerFun"),
       just(v("arg"))))
@@ -2510,7 +2483,7 @@ object Coder:
                 GraphDsl.graphPrimitives(v("g"))),
               applyP("hydra.lib.eithers.bind",
                 applyP(local("encodeTerm"),
-                  v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")),
+                  v("cx"), v("g"), v("substitutedBody")),
                 lambda("svar",
                   Phantoms.right(
                     applyP(localUtils("sapplyTypes"),
@@ -2518,19 +2491,19 @@ object Coder:
               lambda("_prim",
                 Phantoms.right(
                   applyP(localUtils("sapplyTypes"),
-                    applyP(localUtils("sprim"), v("overlaySubs"), v("pname")),
+                    applyP(localUtils("sprim"), v("pname")),
                     v("stypeArgs"))))))))))
 
   private val encodeTermTypeAppInnerDispatch =
     casesWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateTerm", v("substitutedBody")),
-      applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")),
+      applyP(local("encodeTerm"), v("cx"), v("g"), v("substitutedBody")),
       field("project", constant(
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")))),
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("substitutedBody")))),
       field("cases", constant(
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")))),
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("substitutedBody")))),
       field("unwrap", constant(
-        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")))),
+        applyP(local("encodeTerm"), v("cx"), v("g"), v("substitutedBody")))),
       field("variable", encodeTermTypeAppVariableInner))
 
   private val encodeTermTypeApplicationArm = lambda("ta",
@@ -2597,9 +2570,9 @@ object Coder:
     field("unit", encodeTermUnitArm),
     field("let", encodeTermLetArm))
 
-  private val encodeTermBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("term0",
+  private val encodeTermBody = lambda("cx", lambda("g", lambda("term0",
     Phantoms.let("term", applyP(local("stripWrapEliminations"), v("term0")),
-      encodeTermCases)))))
+      encodeTermCases))))
 
   lazy val encodeTermDef: Definition =
     define(NS, "encodeTerm").doc("Encode a Hydra term as a Scala expression").to(encodeTermBody)

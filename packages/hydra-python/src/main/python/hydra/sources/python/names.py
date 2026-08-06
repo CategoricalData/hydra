@@ -15,7 +15,6 @@ import hydra.dsl.lib.logic as Logic
 import hydra.dsl.lib.maps as Maps
 import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
-import hydra.dsl.lib.sets as Sets
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 from hydra.overlay.python.dsl.meta.defs import check_complete
@@ -139,10 +138,7 @@ def _encode_name():
             field("pyNs",
                 lam(
                     "nsVal",
-                    _local("encodeNamespaceStringWithOverrides")(
-                        apply(project(_PY_ENV, Name("overlaySubs")), var("env")),
-                        var("nsVal"),
-                    ),
+                    _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
                 ),
             ),
         ],
@@ -219,10 +215,7 @@ def _encode_name_qualified():
             field("pyNs",
                 lam(
                     "nsVal",
-                    _local("encodeNamespaceStringWithOverrides")(
-                        apply(project(_PY_ENV, Name("overlaySubs")), var("env")),
-                        var("nsVal"),
-                    ),
+                    _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
                 ),
             ),
         ],
@@ -291,16 +284,7 @@ def _encode_namespace():
 
 
 def _encode_namespace_string_with_overrides():
-    """Convert a ModuleName to its Python dotted import string, with overlay overrides.
-
-    #630: a hydra.lib.<sub> namespace redirects to hydra.overlay.python.lib.<sub> IF that sub
-    actually has an overlay implementation on this host (checked via overlaySubs, the
-    caller-supplied on-disk existence signal), before falling back to the fixed
-    overlayPythonModuleAliases map (for non-hydra.lib.* overlay routes like hydra.test.testEnv)
-    and finally to the shape-only default_encoding. This existence check happens at emission
-    time; #630 retired the driver-level post-generation text pass (redirectForSubs "python")
-    that used to do this rewrite after the fact.
-    """
+    """Convert a ModuleName to its Python dotted import string, with overlay overrides."""
     default_encoding = Strings.join(
         string("."),
         Lists.map(
@@ -308,35 +292,14 @@ def _encode_namespace_string_with_overrides():
             Strings.split_on(string("."), packaging_un_module_name(var("nsVal"))),
         ),
     )
-    raw = packaging_un_module_name(var("nsVal"))
-    parts = Strings.split_on(string("."), raw)
-    sub = Strings.join(string("."), Lists.drop(int32(2), parts))
-    lib_redirect = Logic.if_else(
-        Logic.and_(
-            Logic.and_(
-                Equality.equal(Lists.length(parts), int32(3)),
-                Equality.equal(Lists.take(int32(2), parts), list_([string("hydra"), string("lib")])),
-            ),
-            Sets.member(sub, var("overlaySubs")),
-        ),
-        just(Strings.concat2(string("hydra.overlay.python.lib."), sub)),
-        nothing(),
-    )
     return (_def("encodeNamespaceStringWithOverrides")
         .doc("Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*")
         .to(
             lam(
-                "overlaySubs",
-                lam(
-                    "nsVal",
-                    Optionals.cases(
-                        lib_redirect,
-                        Optionals.with_default(
-                            default_encoding,
-                            Maps.lookup(var("nsVal"), _local("overlayPythonModuleAliases")),
-                        ),
-                        lam("redirected", var("redirected")),
-                    ),
+                "nsVal",
+                Optionals.with_default(
+                    default_encoding,
+                    Maps.lookup(var("nsVal"), _local("overlayPythonModuleAliases")),
                 ),
             )))
 
@@ -347,17 +310,14 @@ def _encode_namespace_with_overrides():
         .doc("Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths")
         .to(
             lam(
-                "overlaySubs",
-                lam(
-                    "nsVal",
-                    wrap(
-                        _PY_DOTTED_NAME,
-                        Lists.map(
-                            lam("part", wrap(_PY_NAME, var("part"))),
-                            Strings.split_on(
-                                string("."),
-                                _local("encodeNamespaceStringWithOverrides")(var("overlaySubs"), var("nsVal")),
-                            ),
+                "nsVal",
+                wrap(
+                    _PY_DOTTED_NAME,
+                    Lists.map(
+                        lam("part", wrap(_PY_NAME, var("part"))),
+                        Strings.split_on(
+                            string("."),
+                            _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
                         ),
                     ),
                 ),

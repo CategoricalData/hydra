@@ -12,7 +12,7 @@
 -- fails loudly if the registry and the kernel source tree disagree.
 --
 -- Runs from heads/haskell's working directory (the 'stack test' cwd), matching
--- Hydra.GenerationLibSpec's convention for locating sibling package trees.
+-- Hydra.GenerationLibRedirectSpec's convention for locating sibling package trees.
 
 module Hydra.BuildLibrariesSpec where
 
