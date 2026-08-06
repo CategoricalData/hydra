@@ -822,8 +822,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false}],
+            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false}],
           "result": {
             "type": {
               "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}}}},
@@ -831,22 +832,44 @@
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "focusNs",
-                "domain": {"variable": "hydra.packaging.ModuleName"},
+                "parameter": "overlaySubs",
+                "domain": {"set": {"literal": "string"}},
                 "body": {
                   "lambda": {
-                    "parameter": "defs",
-                    "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                    "parameter": "focusNs",
+                    "domain": {"variable": "hydra.packaging.ModuleName"},
                     "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "coreNs",
-                            "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.core"}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}},
-                          {
-                            "name": "namespaces",
-                            "term": {
+                      "lambda": {
+                        "parameter": "defs",
+                        "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "coreNs",
+                                "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.core"}}}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}},
+                              {
+                                "name": "namespaces",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.analysis.moduleNamesForDefinitions"},
+                                                "type": {"variable": "hydra.python.syntax.DottedName"}}},
+                                            "argument": {
+                                              "application": {"function": {"variable": "hydra.python.names.encodeNamespaceWithOverrides"}, "argument": {"variable": "overlaySubs"}}}}},
+                                        "argument": {"variable": "focusNs"}}},
+                                    "argument": {"variable": "defs"}}},
+                                "typeScheme": {
+                                  "variables": [],
+                                  "body": {
+                                    "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}}}}],
+                            "body": {
                               "application": {
                                 "function": {
                                   "application": {
@@ -854,91 +877,76 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.analysis.moduleNamesForDefinitions"},
-                                            "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                        "argument": {"variable": "hydra.python.names.encodeNamespaceWithOverrides"}}},
-                                    "argument": {"variable": "focusNs"}}},
-                                "argument": {"variable": "defs"}}},
-                            "typeScheme": {
-                              "variables": [],
-                              "body": {
-                                "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}}}}],
-                        "body": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                        "type": {
-                                          "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
+                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                            "type": {
+                                              "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}}}},
+                                        "argument": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
-                                            "argument": {
+                                            "function": {
                                               "application": {
-                                                "function": {"unwrap": "hydra.packaging.ModuleName"},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                        "type": {"variable": "hydra.python.syntax.DottedName"}}},
+                                                    "function": {"unwrap": "hydra.packaging.ModuleName"},
                                                     "argument": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                             "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                                        "argument": {"variable": "namespaces"}}}}}}}}},
-                                        "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "coreNs"}}}}}}},
-                                "argument": {"variable": "namespaces"}}},
-                            "argument": {
-                              "typeApplication": {
-                                "body": {
-                                  "record": {
-                                    "typeName": "hydra.util.ModuleNames",
-                                    "fields": [
-                                      {
-                                        "name": "focus",
-                                        "term": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}},
-                                                "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                            "argument": {"variable": "namespaces"}}}},
-                                      {
-                                        "name": "mapping",
-                                        "term": {
-                                          "application": {
-                                            "function": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}},
+                                                                "type": {"variable": "hydra.python.syntax.DottedName"}}},
+                                                            "argument": {"variable": "namespaces"}}}}}}}}},
+                                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "coreNs"}}}}}}},
+                                    "argument": {"variable": "namespaces"}}},
+                                "argument": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "record": {
+                                        "typeName": "hydra.util.ModuleNames",
+                                        "fields": [
+                                          {
+                                            "name": "focus",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}},
+                                                    "type": {"variable": "hydra.python.syntax.DottedName"}}},
+                                                "argument": {"variable": "namespaces"}}}},
+                                          {
+                                            "name": "mapping",
+                                            "term": {
                                               "application": {
                                                 "function": {
                                                   "application": {
                                                     "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.insert"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                            "type": {"variable": "hydra.python.syntax.DottedName"}}},
+                                                        "argument": {"variable": "coreNs"}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.python.names.encodeNamespace"}, "argument": {"variable": "coreNs"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.insert"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                        "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "mapping"}},
                                                         "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                                    "argument": {"variable": "coreNs"}}},
-                                                "argument": {"application": {"function": {"variable": "hydra.python.names.encodeNamespace"}, "argument": {"variable": "coreNs"}}}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "mapping"}},
-                                                    "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                                "argument": {"variable": "namespaces"}}}}}}]}},
-                                "type": {"variable": "hydra.python.syntax.DottedName"}}}}}}}}}}},
+                                                    "argument": {"variable": "namespaces"}}}}}}]}},
+                                    "type": {"variable": "hydra.python.syntax.DottedName"}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Find all namespaces referenced by a list of definitions, plus the core namespace"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Find all namespaces referenced by a list of definitions, plus the core namespace (#630: overlaySubs drives emission-time hydra.lib.<sub> redirect for these namespace refs)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.python.utils.functionCall",

@@ -133,6 +133,46 @@ object Generation:
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
     mods.filter(m => !m.name.startsWith("hydra.") && !m.name.startsWith("hydra.json.yaml."))
 
+  /** #630: the set of hydra.lib.<sub> sub-namespaces that have an overlay
+   *  implementation on the given host, driving emission-time redirect of
+   *  primitive references to hydra.overlay.<lang>.lib.<sub>. Mirrors
+   *  Hydra.Generation.overlayLibSubs (Haskell host). Empty (not absent) if the
+   *  overlay directory can't be found, so callers get a safe no-redirect
+   *  fallback rather than a crash.
+   */
+  def overlayLibSubs(libDir: String): Set[String] =
+    val dir = new File(libDir)
+    if !dir.isDirectory then Set.empty
+    else
+      val nonSubFiles = Set("libraries", "integraldispatch", "numericdispatch", "primitivetype", "__init__")
+      dir.listFiles().toSeq
+        .map(f => f.getName.split('.').head.toLowerCase)
+        .filterNot(nonSubFiles.contains)
+        .toSet
+
+  /** The Python-host overlay lib directory, relative to the working directory
+   *  every Scala-hosted sync/bootstrap driver runs from (packages/hydra-scala/
+   *  for the updateScalaJson sbt task; mirrors the Haskell host's convention).
+   */
+  private val pythonOverlayLibDir = "../../overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
+
+  /** The Scala-host overlay lib directory. */
+  private val scalaOverlayLibDir = "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
+
+  /** The Haskell-host overlay lib directory. */
+  private val haskellOverlayLibDir = "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+
+  /** The TypeScript-host overlay lib directory. */
+  private val typeScriptOverlayLibDir = "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
+
+  /** Lisp-dialect overlay lib directories, keyed by dialect name. */
+  private def lispOverlayLibDir(dialectName: String): String = dialectName match
+    case "clojure"    => "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
+    case "scheme"     => "../../overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
+    case "commonLisp" => "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
+    case "emacsLisp"  => "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
+    case other        => throw new IllegalArgumentException(s"Unknown Lisp dialect: $other")
+
   /** Generate source files and write them to disk. Returns number of files written.
    *
    *  Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting) are now
@@ -190,16 +230,18 @@ object Generation:
 
   /** Generate Haskell source files from modules. */
   def writeHaskell(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    val knownSubs = overlayLibSubs(haskellOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.haskell.coder.moduleToHaskell(mod)(defs)(cx)(g),
+      mod => defs => cx => g => hydra.haskell.coder.moduleToHaskell(knownSubs)(mod)(defs)(cx)(g),
       hydra.haskell.language.haskellLanguage,
       doInfer = false,
       basePath, universe, mods)
 
   /** Generate TypeScript source files from modules. */
   def writeTypeScript(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
+    val knownSubs = overlayLibSubs(typeScriptOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.typeScript.coder.moduleToTypeScript(mod)(defs)(cx)(g),
+      mod => defs => cx => g => hydra.typeScript.coder.moduleToTypeScript(knownSubs)(mod)(defs)(cx)(g),
       hydra.typeScript.language.typeScriptLanguage,
       doInfer = false,
       basePath, universe, mods)
@@ -219,9 +261,10 @@ object Generation:
     val caseConv: hydra.util.CaseConvention =
       if dialectName == "clojure" then hydra.util.CaseConvention.camel
       else hydra.util.CaseConvention.lowerSnake
+    val knownSubs = overlayLibSubs(lispOverlayLibDir(dialectName))
     generateSources(
       mod => defs => cx => g =>
-        hydra.lisp.coder.moduleToLisp(dialect)(mod)(defs)(cx)(g) match
+        hydra.lisp.coder.moduleToLisp(dialect)(knownSubs)(mod)(defs)(cx)(g) match
           case Left(err) => Left(err)
           case Right(program) =>
             val code = hydra.serialization.printExpr(

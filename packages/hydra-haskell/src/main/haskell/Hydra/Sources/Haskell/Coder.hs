@@ -170,39 +170,38 @@ constantForTypeName = haskellCoderDefinition "constantForTypeName" $
   "tname" ~>
     Strings.concat2 (string "_") (Names.localNameOf @@ var "tname")
 
-constructModule :: TypedTermDefinition (HaskellNamespaces -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error H.Module)
+constructModule :: TypedTermDefinition (S.Set String -> HaskellNamespaces -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error H.Module)
 constructModule = haskellCoderDefinition "constructModule" $
   doc "Construct a Haskell module from a Hydra module and its definitions" $
-  "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
+  "overlaySubs" ~> "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
   -- Convert a ModuleName to its dot-separated namespace string. The
   -- unwrapped name is used as-is for the current module's own declaration
   -- (see `hRaw` below) so that lowered `hydra.lib.<sub>` modules emit
   -- with the canonical module name. For *referenced* namespaces, native
   -- runtime libraries live at "hydra.<host>.lib.<sub>", but kernel JSON
   -- references them as the canonical "hydra.lib.<sub>" (three segments
-  -- exactly). When we see a referenced namespace matching that shape,
-  -- rewrite the middle so generated Haskell imports the host-native
-  -- module. This rewrite is intentionally SHAPE-ONLY (no existence check):
-  -- the DSL has no I/O, so it cannot know which hydra.lib.<sub> subs
-  -- actually have an overlay implementation on this host. A subsequent
-  -- driver-level correction (Hydra.Generation.correctHaskellLibRedirect,
-  -- applied by every caller of this coder -- see the #568 comments at
-  -- writeHaskell / bootstrap-from-json's dispatch) narrows this back down
-  -- using an on-disk existence scan, so an overlay-less module like
-  -- hydra.lib.defaults ends up pointing at the kernel module rather than a
-  -- dangling overlay path. #568 (was: a by-name exclusion here, #549).
+  -- exactly). When we see a referenced namespace matching that shape AND
+  -- its sub is present in 'overlaySubs' (the caller-supplied, on-disk
+  -- overlay-existence signal -- see #630), rewrite the middle so generated
+  -- Haskell imports the host-native module. Subs with no overlay (e.g.
+  -- hydra.lib.defaults) are left pointing at the canonical kernel module.
+  -- This existence check happens at emission time; #630 retired the
+  -- driver-level post-generation text pass that used to narrow an
+  -- unconditional shape-only redirect back down after the fact (#568).
   "hRaw">: "namespace" ~> unwrap _ModuleName @@ var "namespace",
   "h">: "namespace" ~>
     "raw" <~ (unwrap _ModuleName @@ var "namespace") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
+    "sub" <~ Strings.join (string ".") (Lists.drop (int32 2) (var "parts")) $
     Logic.ifElse
       (Logic.and
-        (Equality.equal (Lists.length (var "parts")) (int32 3))
-        (Equality.equal
-          (Lists.take (int32 2) (var "parts"))
-          (list [string "hydra", string "lib"])))
-      (Strings.concat2 (string "hydra.overlay.haskell.lib.")
-        (Strings.join (string ".") (Lists.drop (int32 2) (var "parts"))))
+        (Logic.and
+          (Equality.equal (Lists.length (var "parts")) (int32 3))
+          (Equality.equal
+            (Lists.take (int32 2) (var "parts"))
+            (list [string "hydra", string "lib"])))
+        (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
+      (Strings.concat2 (string "hydra.overlay.haskell.lib.") (var "sub"))
       (var "raw"),
   "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
@@ -810,21 +809,21 @@ liftStringError _cx = Eithers.bimap ("_s" ~> Error.errorExtraction (Error.extrac
 
 type HaskellNamespaces = ModuleNames H.ModuleName
 
-moduleToHaskell :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
+moduleToHaskell :: TypedTermDefinition (S.Set String -> Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   doc "Convert a Hydra module to Haskell source code as a filepath-to-content map" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~>
-  "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
+  "overlaySubs" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~>
+  "hsmod" <<~ moduleToHaskellModule @@ var "overlaySubs" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.moduleNameToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
   right $ (Maps.singleton (var "filepath") (var "s") :: TypedTerm (M.Map String String))
 
-moduleToHaskellModule :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
+moduleToHaskellModule :: TypedTermDefinition (S.Set String -> Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
   doc "Convert a Hydra module and definitions to a Haskell module AST" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+  "overlaySubs" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "namespaces" <<~ HaskellUtilsSource.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
-      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
+      constructModule @@ var "overlaySubs" @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 nameDecls :: TypedTermDefinition (HaskellNamespaces -> Name -> Type -> [H.Declaration])
 nameDecls = haskellCoderDefinition "nameDecls" $
