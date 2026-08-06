@@ -220,31 +220,31 @@ public class Bootstrap {
 
         switch (target) {
             case "haskell":
-                GenerationTargets.writeHaskell(outMain + "/haskell", allMainMods, modsToGenerate);
+                GenerationTargets.writeHaskell(repoRoot, outMain + "/haskell", allMainMods, modsToGenerate);
                 break;
             case "java":
                 GenerationTargets.writeJava(repoRoot, outMain + "/java", allMainMods, modsToGenerate);
                 break;
             case "python":
-                GenerationTargets.writePython(outMain + "/python", allMainMods, modsToGenerate);
+                GenerationTargets.writePython(repoRoot, outMain + "/python", allMainMods, modsToGenerate);
                 break;
             case "scala":
-                GenerationTargets.writeScala(outMain + "/scala", allMainMods, modsToGenerate);
+                GenerationTargets.writeScala(repoRoot, outMain + "/scala", allMainMods, modsToGenerate);
                 break;
             case "typescript":
-                GenerationTargets.writeTypeScript(outMain + "/typescript", allMainMods, modsToGenerate);
+                GenerationTargets.writeTypeScript(repoRoot, outMain + "/typescript", allMainMods, modsToGenerate);
                 break;
             case "clojure":
-                GenerationTargets.writeLispDialect(outMain + "/clojure", "clojure", "clj", allMainMods, modsToGenerate);
+                GenerationTargets.writeLispDialect(repoRoot, outMain + "/clojure", "clojure", "clj", allMainMods, modsToGenerate);
                 break;
             case "scheme":
-                GenerationTargets.writeLispDialect(outMain + "/scheme", "scheme", "scm", allMainMods, modsToGenerate);
+                GenerationTargets.writeLispDialect(repoRoot, outMain + "/scheme", "scheme", "scm", allMainMods, modsToGenerate);
                 break;
             case "common-lisp":
-                GenerationTargets.writeLispDialect(outMain + "/common-lisp", "commonLisp", "lisp", allMainMods, modsToGenerate);
+                GenerationTargets.writeLispDialect(repoRoot, outMain + "/common-lisp", "commonLisp", "lisp", allMainMods, modsToGenerate);
                 break;
             case "emacs-lisp":
-                GenerationTargets.writeLispDialect(outMain + "/emacs-lisp", "emacsLisp", "el", allMainMods, modsToGenerate);
+                GenerationTargets.writeLispDialect(repoRoot, outMain + "/emacs-lisp", "emacsLisp", "el", allMainMods, modsToGenerate);
                 break;
             default:
                 System.out.println("Unknown target: " + target);
@@ -355,31 +355,31 @@ public class Bootstrap {
             try {
                 switch (target) {
                     case "haskell":
-                        GenerationTargets.writeHaskell(outTest + "/haskell", allUniverse, testMods);
+                        GenerationTargets.writeHaskell(repoRoot, outTest + "/haskell", allUniverse, testMods);
                         break;
                     case "java":
                         GenerationTargets.writeJava(repoRoot, outTest + "/java", allUniverse, testMods);
                         break;
                     case "python":
-                        GenerationTargets.writePython(outTest + "/python", allUniverse, testMods);
+                        GenerationTargets.writePython(repoRoot, outTest + "/python", allUniverse, testMods);
                         break;
                     case "scala":
-                        GenerationTargets.writeScala(outTest + "/scala", allUniverse, testMods);
+                        GenerationTargets.writeScala(repoRoot, outTest + "/scala", allUniverse, testMods);
                         break;
                     case "typescript":
-                        GenerationTargets.writeTypeScript(outTest + "/typescript", allUniverse, testMods);
+                        GenerationTargets.writeTypeScript(repoRoot, outTest + "/typescript", allUniverse, testMods);
                         break;
                     case "clojure":
-                        GenerationTargets.writeLispDialect(outTest + "/clojure", "clojure", "clj", allUniverse, testMods);
+                        GenerationTargets.writeLispDialect(repoRoot, outTest + "/clojure", "clojure", "clj", allUniverse, testMods);
                         break;
                     case "scheme":
-                        GenerationTargets.writeLispDialect(outTest + "/scheme", "scheme", "scm", allUniverse, testMods);
+                        GenerationTargets.writeLispDialect(repoRoot, outTest + "/scheme", "scheme", "scm", allUniverse, testMods);
                         break;
                     case "common-lisp":
-                        GenerationTargets.writeLispDialect(outTest + "/common-lisp", "commonLisp", "lisp", allUniverse, testMods);
+                        GenerationTargets.writeLispDialect(repoRoot, outTest + "/common-lisp", "commonLisp", "lisp", allUniverse, testMods);
                         break;
                     case "emacs-lisp":
-                        GenerationTargets.writeLispDialect(outTest + "/emacs-lisp", "emacsLisp", "el", allUniverse, testMods);
+                        GenerationTargets.writeLispDialect(repoRoot, outTest + "/emacs-lisp", "emacsLisp", "el", allUniverse, testMods);
                         break;
                 }
             } catch (Exception e) {
@@ -582,13 +582,13 @@ public class Bootstrap {
                 + " hydra.lib.* definition modules to " + target + "...");
         switch (target) {
             case "java":        return GenerationTargets.writeJava(repoRoot, langDir, libUniverse, libMods);
-            case "python":      return GenerationTargets.writePython(langDir, libUniverse, libMods);
-            case "scala":       return GenerationTargets.writeScala(langDir, libUniverse, libMods);
-            case "typescript":  return GenerationTargets.writeTypeScript(langDir, libUniverse, libMods);
-            case "clojure":     return GenerationTargets.writeLispDialect(langDir, "clojure", "clj", libUniverse, libMods);
-            case "scheme":      return GenerationTargets.writeLispDialect(langDir, "scheme", "scm", libUniverse, libMods);
-            case "common-lisp": return GenerationTargets.writeLispDialect(langDir, "commonLisp", "lisp", libUniverse, libMods);
-            case "emacs-lisp":  return GenerationTargets.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods);
+            case "python":      return GenerationTargets.writePython(repoRoot, langDir, libUniverse, libMods);
+            case "scala":       return GenerationTargets.writeScala(repoRoot, langDir, libUniverse, libMods);
+            case "typescript":  return GenerationTargets.writeTypeScript(repoRoot, langDir, libUniverse, libMods);
+            case "clojure":     return GenerationTargets.writeLispDialect(repoRoot, langDir, "clojure", "clj", libUniverse, libMods);
+            case "scheme":      return GenerationTargets.writeLispDialect(repoRoot, langDir, "scheme", "scm", libUniverse, libMods);
+            case "common-lisp": return GenerationTargets.writeLispDialect(repoRoot, langDir, "commonLisp", "lisp", libUniverse, libMods);
+            case "emacs-lisp":  return GenerationTargets.writeLispDialect(repoRoot, langDir, "emacsLisp", "el", libUniverse, libMods);
             default:            return new ArrayList<>(); /* haskell handled by caller guard */
         }
     }

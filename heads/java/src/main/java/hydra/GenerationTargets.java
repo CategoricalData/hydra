@@ -111,10 +111,13 @@ public class GenerationTargets {
 
     /**
      * Generate Python source files from modules.
+     *
+     * #633: overlaySubs threaded to match #630's emission-time redirect for the other 8 hosts.
      */
-    public static List<String> writePython(String basePath, List<Module> universe, List<Module> mods) {
+    public static List<String> writePython(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
+        java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "python"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(mod, defs, cx, g),
+                mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(overlaySubs, mod, defs, cx, g),
                 hydra.python.Language.pythonLanguage(),
                 false,
                 basePath, universe, mods);
@@ -122,10 +125,13 @@ public class GenerationTargets {
 
     /**
      * Generate Scala source files from modules.
+     *
+     * #633: overlaySubs threaded to match #630's emission-time redirect for the other 8 hosts.
      */
-    public static List<String> writeScala(String basePath, List<Module> universe, List<Module> mods) {
+    public static List<String> writeScala(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
+        java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "scala"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(mod, defs, cx, g),
+                mod -> defs -> cx -> g -> hydra.scala.Coder.moduleToScala(overlaySubs, mod, defs, cx, g),
                 hydra.scala.Language.scalaLanguage(),
                 false,
                 basePath, universe, mods);
@@ -133,10 +139,13 @@ public class GenerationTargets {
 
     /**
      * Generate TypeScript source files from modules.
+     *
+     * #633: overlaySubs threaded to match #630's emission-time redirect for the other 8 hosts.
      */
-    public static List<String> writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
+    public static List<String> writeTypeScript(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
+        java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "typescript"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
+                mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(overlaySubs, mod, defs, cx, g),
                 hydra.typeScript.Language.typeScriptLanguage(),
                 false,
                 basePath, universe, mods);
@@ -144,10 +153,13 @@ public class GenerationTargets {
 
     /**
      * Generate Haskell source files from modules.
+     *
+     * #633: overlaySubs threaded to match #630's emission-time redirect for the other 8 hosts.
      */
-    public static List<String> writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
+    public static List<String> writeHaskell(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
+        java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "haskell"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
+                mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(overlaySubs, mod, defs, cx, g),
                 hydra.haskell.Language.haskellLanguage(),
                 false,
                 basePath, universe, mods);
@@ -155,27 +167,36 @@ public class GenerationTargets {
 
     /**
      * Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp).
+     *
+     * #633: overlaySubs threaded to match #630's emission-time redirect for the other 8 hosts.
+     * libSubsForTarget uses dash-separated target names (matching redirectLibCalls); dialectName
+     * here is camelCase, so it's mapped to the dash form for the existence scan.
      */
-    public static List<String> writeLispDialect(String basePath, String dialectName, String fileExt,
+    public static List<String> writeLispDialect(String repoRoot, String basePath, String dialectName, String fileExt,
                                          List<Module> universe, List<Module> mods) {
         hydra.lisp.syntax.Dialect dialect;
         hydra.util.CaseConvention caseConv;
+        String libSubsTarget;
         switch (dialectName) {
             case "clojure":
                 dialect = new hydra.lisp.syntax.Dialect.Clojure();
                 caseConv = new hydra.util.CaseConvention.Camel();
+                libSubsTarget = "clojure";
                 break;
             case "scheme":
                 dialect = new hydra.lisp.syntax.Dialect.Scheme();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
+                libSubsTarget = "scheme";
                 break;
             case "commonLisp":
                 dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
+                libSubsTarget = "common-lisp";
                 break;
             case "emacsLisp":
                 dialect = new hydra.lisp.syntax.Dialect.EmacsLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
+                libSubsTarget = "emacs-lisp";
                 break;
             default:
                 throw new IllegalArgumentException("Unknown Lisp dialect: " + dialectName);
@@ -183,9 +204,10 @@ public class GenerationTargets {
 
         final hydra.lisp.syntax.Dialect d = dialect;
         final hydra.util.CaseConvention cc = caseConv;
+        final java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, libSubsTarget));
         return generateSources(
                 mod -> defs -> cx -> g -> {
-                    hydra.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
+                    hydra.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, overlaySubs, mod, defs, cx, g);
                     if (result instanceof hydra.overlay.java.util.Either.Left) {
                         return result;
                     }

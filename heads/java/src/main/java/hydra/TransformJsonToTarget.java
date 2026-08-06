@@ -264,28 +264,28 @@ public class TransformJsonToTarget {
                 written.addAll(GenerationTargets.writeJava(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "python":
-                written.addAll(GenerationTargets.writePython(outDir, universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writePython(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "scala":
-                written.addAll(GenerationTargets.writeScala(outDir, universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeScala(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "typescript":
-                written.addAll(GenerationTargets.writeTypeScript(outDir, universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeTypeScript(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "haskell":
-                written.addAll(GenerationTargets.writeHaskell(outDir, universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeHaskell(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "clojure":
-                written.addAll(GenerationTargets.writeLispDialect(outDir, "clojure", "clj", universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeLispDialect(repoRoot, outDir, "clojure", "clj", universeMods, modsToGenerate));
                 break;
             case "scheme":
-                written.addAll(GenerationTargets.writeLispDialect(outDir, "scheme", "scm", universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeLispDialect(repoRoot, outDir, "scheme", "scm", universeMods, modsToGenerate));
                 break;
             case "common-lisp":
-                written.addAll(GenerationTargets.writeLispDialect(outDir, "commonLisp", "lisp", universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeLispDialect(repoRoot, outDir, "commonLisp", "lisp", universeMods, modsToGenerate));
                 break;
             case "emacs-lisp":
-                written.addAll(GenerationTargets.writeLispDialect(outDir, "emacsLisp", "el", universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeLispDialect(repoRoot, outDir, "emacsLisp", "el", universeMods, modsToGenerate));
                 break;
             default:
                 System.out.println("Unknown target: " + target);
