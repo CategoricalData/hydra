@@ -13919,10 +13919,11 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
+            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.typing.InferenceContext"}, "isLazy": false},
+            {"name": "arg4", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
           "result": {
             "type": {
               "either": {
@@ -13930,280 +13931,288 @@
                 "right": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}},
         "body": {
           "lambda": {
-            "parameter": "mod",
-            "domain": {"variable": "hydra.packaging.Module"},
+            "parameter": "overlaySubs",
+            "domain": {"set": {"literal": "string"}},
             "body": {
               "lambda": {
-                "parameter": "defs",
-                "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                "parameter": "mod",
+                "domain": {"variable": "hydra.packaging.Module"},
                 "body": {
                   "lambda": {
-                    "parameter": "cx",
-                    "domain": {"variable": "hydra.typing.InferenceContext"},
+                    "parameter": "defs",
+                    "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                     "body": {
                       "lambda": {
-                        "parameter": "g",
-                        "domain": {"variable": "hydra.graph.Graph"},
+                        "parameter": "cx",
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "aliases",
-                                "term": {"application": {"function": {"variable": "hydra.java.utils.importAliasesForModule"}, "argument": {"variable": "mod"}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.environment.Aliases"}}},
-                              {
-                                "name": "env",
-                                "term": {
-                                  "record": {
-                                    "typeName": "hydra.java.environment.JavaEnvironment",
-                                    "fields": [{"name": "aliases", "term": {"variable": "aliases"}}, {"name": "graph", "term": {"variable": "g"}}]}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.environment.JavaEnvironment"}}},
-                              {
-                                "name": "pkg",
-                                "term": {
-                                  "application": {
-                                    "function": {"variable": "hydra.java.utils.javaPackageDeclaration"},
-                                    "argument": {
-                                      "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.PackageDeclaration"}}},
-                              {
-                                "name": "partitioned",
-                                "term": {"application": {"function": {"variable": "hydra.environment.partitionDefinitions"}, "argument": {"variable": "defs"}}},
-                                "typeScheme": {
-                                  "variables": [],
-                                  "body": {
-                                    "pair": {
-                                      "first": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
-                                      "second": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
-                              {
-                                "name": "typeDefs",
-                                "term": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                                        "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                                    "argument": {"variable": "partitioned"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                              {
-                                "name": "termDefs",
-                                "term": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
-                                        "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                                    "argument": {"variable": "partitioned"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
-                              {
-                                "name": "nonTypedefDefs",
-                                "term": {
-                                  "application": {
-                                    "function": {
+                          "lambda": {
+                            "parameter": "g",
+                            "domain": {"variable": "hydra.graph.Graph"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "aliases",
+                                    "term": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
+                                          "application": {"function": {"variable": "hydra.java.utils.importAliasesForModule"}, "argument": {"variable": "overlaySubs"}}},
+                                        "argument": {"variable": "mod"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.java.environment.Aliases"}}},
+                                  {
+                                    "name": "env",
+                                    "term": {
+                                      "record": {
+                                        "typeName": "hydra.java.environment.JavaEnvironment",
+                                        "fields": [{"name": "aliases", "term": {"variable": "aliases"}}, {"name": "graph", "term": {"variable": "g"}}]}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.java.environment.JavaEnvironment"}}},
+                                  {
+                                    "name": "pkg",
+                                    "term": {
+                                      "application": {
+                                        "function": {"variable": "hydra.java.utils.javaPackageDeclaration"},
                                         "argument": {
-                                          "lambda": {
-                                            "parameter": "td",
-                                            "domain": {"variable": "hydra.packaging.TypeDefinition"},
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "typ",
-                                                    "term": {
-                                                      "application": {
-                                                        "function": {"project": {"typeName": "hydra.core.TypeScheme", "fieldName": "body"}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {"project": {"typeName": "hydra.packaging.TypeDefinition", "fieldName": "body"}},
-                                                            "argument": {"variable": "td"}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
-                                                "body": {"application": {"function": {"variable": "hydra.java.coder.isSerializableJavaType"}, "argument": {"variable": "typ"}}}}}}}}},
-                                    "argument": {"variable": "typeDefs"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}}],
-                            "body": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
+                                          "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.PackageDeclaration"}}},
+                                  {
+                                    "name": "partitioned",
+                                    "term": {"application": {"function": {"variable": "hydra.environment.partitionDefinitions"}, "argument": {"variable": "defs"}}},
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {
+                                        "pair": {
+                                          "first": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
+                                          "second": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
+                                  {
+                                    "name": "typeDefs",
+                                    "term": {
+                                      "application": {
+                                        "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                            "type": {
-                                              "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
-                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                    "argument": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                            "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                        "argument": {"variable": "partitioned"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                  {
+                                    "name": "termDefs",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
+                                            "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                        "argument": {"variable": "partitioned"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
+                                  {
+                                    "name": "nonTypedefDefs",
+                                    "term": {
                                       "application": {
                                         "function": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
-                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                                "type": {"variable": "hydra.errors.Error"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                             "argument": {
                                               "lambda": {
                                                 "parameter": "td",
                                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                 "body": {
-                                                  "application": {
-                                                    "function": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "typ",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.core.TypeScheme", "fieldName": "body"}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.packaging.TypeDefinition", "fieldName": "body"}},
+                                                                "argument": {"variable": "td"}}}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                                                    "body": {"application": {"function": {"variable": "hydra.java.coder.isSerializableJavaType"}, "argument": {"variable": "typ"}}}}}}}}},
+                                        "argument": {"variable": "typeDefs"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {
+                                                  "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
+                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TypeDefinition"}}},
+                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "td",
+                                                    "domain": {"variable": "hydra.packaging.TypeDefinition"},
+                                                    "body": {
                                                       "application": {
                                                         "function": {
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.java.coder.encodeTypeDefinition"}, "argument": {"variable": "pkg"}}},
-                                                                "argument": {"variable": "aliases"}}},
-                                                            "argument": {"variable": "td"}}},
-                                                        "argument": {"variable": "cx"}}},
-                                                    "argument": {"variable": "g"}}}}}}},
-                                        "argument": {"variable": "nonTypedefDefs"}}}}},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "typeUnits",
-                                    "domain": {
-                                      "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}},
-                                    "body": {
-                                      "application": {
-                                        "function": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"application": {"function": {"variable": "hydra.java.coder.encodeTypeDefinition"}, "argument": {"variable": "pkg"}}},
+                                                                    "argument": {"variable": "aliases"}}},
+                                                                "argument": {"variable": "td"}}},
+                                                            "argument": {"variable": "cx"}}},
+                                                        "argument": {"variable": "g"}}}}}}},
+                                            "argument": {"variable": "nonTypedefDefs"}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "typeUnits",
+                                        "domain": {
+                                          "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}},
+                                        "body": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                    "type": {
-                                                      "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
-                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                            "argument": {
                                               "application": {
                                                 "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                            "type": {
-                                                              "either": {
-                                                                "left": {"variable": "hydra.errors.Error"},
-                                                                "right": {
-                                                                  "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
-                                                            "argument": {"variable": "termDefs"}}}}},
-                                                    "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "either": {
-                                                                "right": {
-                                                                  "typeApplication": {
-                                                                    "body": {"list": []},
-                                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}},
-                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {
-                                                          "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}},
+                                                          "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
+                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                "type": {"list": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}}}},
-                                                            "type": {
-                                                              "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
-                                                        "argument": {
                                                           "application": {
                                                             "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                "type": {
+                                                                  "either": {
+                                                                    "left": {"variable": "hydra.errors.Error"},
+                                                                    "right": {
+                                                                      "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}},
+                                                            "argument": {
                                                               "application": {
                                                                 "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
-                                                                        "type": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}}},
-                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "parameter": "td",
-                                                                    "domain": {"variable": "hydra.packaging.TermDefinition"},
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {"application": {"function": {"variable": "hydra.java.coder.encodeTermDefinition"}, "argument": {"variable": "env"}}},
-                                                                                "argument": {"variable": "td"}}},
-                                                                            "argument": {"variable": "cx"}}},
-                                                                        "argument": {"variable": "g"}}}}}}},
-                                                            "argument": {"variable": "termDefs"}}}}},
-                                                    "argument": {
-                                                      "lambda": {
-                                                        "parameter": "dataMembers",
-                                                        "domain": {"list": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}},
-                                                        "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
+                                                                "argument": {"variable": "termDefs"}}}}},
+                                                        "argument": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
                                                                     "right": {
-                                                                      "list": [
-                                                                        {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {"function": {"variable": "hydra.java.coder.constructElementsInterface"}, "argument": {"variable": "mod"}}},
-                                                                            "argument": {"variable": "dataMembers"}}}]}}},
+                                                                      "typeApplication": {
+                                                                        "body": {"list": []},
+                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {
-                                                              "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}}}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "termUnits",
-                                            "domain": {
-                                              "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}},
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "either": {
-                                                        "right": {
+                                                              "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
                                                           "application": {
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                    "type": {"list": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}}}},
+                                                                "type": {
+                                                                  "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                                                    "argument": {"variable": "typeUnits"}}},
-                                                                "argument": {"variable": "termUnits"}}}}}}},
-                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.packaging.TermDefinition"}}},
+                                                                            "type": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "td",
+                                                                        "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"application": {"function": {"variable": "hydra.java.coder.encodeTermDefinition"}, "argument": {"variable": "env"}}},
+                                                                                    "argument": {"variable": "td"}}},
+                                                                                "argument": {"variable": "cx"}}},
+                                                                            "argument": {"variable": "g"}}}}}}},
+                                                                "argument": {"variable": "termDefs"}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "dataMembers",
+                                                            "domain": {"list": {"variable": "hydra.java.syntax.InterfaceMemberDeclarationWithComments"}},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {
+                                                                        "right": {
+                                                                          "list": [
+                                                                            {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {"function": {"variable": "hydra.java.coder.constructElementsInterface"}, "argument": {"variable": "mod"}}},
+                                                                                "argument": {"variable": "dataMembers"}}}]}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {
+                                                                  "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "termUnits",
+                                                "domain": {
+                                                  "list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                    "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
+                                                                        "argument": {"variable": "typeUnits"}}},
+                                                                    "argument": {"variable": "termUnits"}}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}}}}}}}}}}}}}}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.java.coder.encodeElimination",
@@ -32809,10 +32818,11 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
-            {"name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.typing.InferenceContext"}, "isLazy": false},
-            {"name": "arg3", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
+            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.packaging.Module"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "hydra.packaging.Definition"}}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.typing.InferenceContext"}, "isLazy": false},
+            {"name": "arg4", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false}],
           "result": {
             "type": {
               "either": {
@@ -32820,120 +32830,128 @@
                 "right": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}}}},
         "body": {
           "lambda": {
-            "parameter": "mod",
-            "domain": {"variable": "hydra.packaging.Module"},
+            "parameter": "overlaySubs",
+            "domain": {"set": {"literal": "string"}},
             "body": {
               "lambda": {
-                "parameter": "defs",
-                "domain": {"list": {"variable": "hydra.packaging.Definition"}},
+                "parameter": "mod",
+                "domain": {"variable": "hydra.packaging.Module"},
                 "body": {
                   "lambda": {
-                    "parameter": "cx",
-                    "domain": {"variable": "hydra.typing.InferenceContext"},
+                    "parameter": "defs",
+                    "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                     "body": {
                       "lambda": {
-                        "parameter": "g",
-                        "domain": {"variable": "hydra.graph.Graph"},
+                        "parameter": "cx",
+                        "domain": {"variable": "hydra.typing.InferenceContext"},
                         "body": {
-                          "application": {
-                            "function": {
+                          "lambda": {
+                            "parameter": "g",
+                            "domain": {"variable": "hydra.graph.Graph"},
+                            "body": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                    "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}},
-                                "argument": {
                                   "application": {
                                     "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
+                                        "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}},
+                                    "argument": {
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.java.coder.encodeDefinitions"}, "argument": {"variable": "mod"}}},
-                                            "argument": {"variable": "defs"}}},
-                                        "argument": {"variable": "cx"}}},
-                                    "argument": {"variable": "g"}}}}},
-                            "argument": {
-                              "lambda": {
-                                "parameter": "units",
-                                "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}},
-                                "body": {
-                                  "typeApplication": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {"function": {"variable": "hydra.java.coder.encodeDefinitions"}, "argument": {"variable": "overlaySubs"}}},
+                                                    "argument": {"variable": "mod"}}},
+                                                "argument": {"variable": "defs"}}},
+                                            "argument": {"variable": "cx"}}},
+                                        "argument": {"variable": "g"}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "units",
+                                    "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.java.syntax.CompilationUnit"}}},
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "either": {
-                                            "right": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": "string"}}},
-                                                    "type": {"literal": "string"}}},
-                                                "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "right": {
                                                   "application": {
                                                     "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.map"},
-                                                                "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
-                                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "entry",
-                                                            "domain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}},
-                                                            "body": {
-                                                              "let": {
-                                                                "bindings": [
-                                                                  {
-                                                                    "name": "name",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                            "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
-                                                                        "argument": {"variable": "entry"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
-                                                                  {
-                                                                    "name": "unit",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                            "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
-                                                                        "argument": {"variable": "entry"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.CompilationUnit"}}}],
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "pair": {
-                                                                            "first": {"application": {"function": {"variable": "hydra.java.coder.bindingNameToFilePath"}, "argument": {"variable": "name"}}},
-                                                                            "second": {
-                                                                              "application": {
-                                                                                "function": {"variable": "hydra.serialization.printExpr"},
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "function": {"variable": "hydra.serialization.parenthesize"},
-                                                                                    "argument": {"application": {"function": {"variable": "hydra.java.serde.compilationUnitToExpr"}, "argument": {"variable": "unit"}}}}}}}}},
-                                                                        "type": {"literal": "string"}}},
-                                                                    "type": {"literal": "string"}}}}}}}}},
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}},
                                                     "argument": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.core.Name"}}},
-                                                            "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
-                                                        "argument": {"variable": "units"}}}}}}}}},
-                                        "type": {"variable": "hydra.errors.Error"}}},
-                                    "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}}}}}}}}}}}}}}}},
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}}}},
+                                                                "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "parameter": "entry",
+                                                                "domain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "name",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                                            "argument": {"variable": "entry"}}},
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                      {
+                                                                        "name": "unit",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                                            "argument": {"variable": "entry"}}},
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.java.syntax.CompilationUnit"}}}],
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "pair": {
+                                                                                "first": {"application": {"function": {"variable": "hydra.java.coder.bindingNameToFilePath"}, "argument": {"variable": "name"}}},
+                                                                                "second": {
+                                                                                  "application": {
+                                                                                    "function": {"variable": "hydra.serialization.printExpr"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {"variable": "hydra.serialization.parenthesize"},
+                                                                                        "argument": {"application": {"function": {"variable": "hydra.java.serde.compilationUnitToExpr"}, "argument": {"variable": "unit"}}}}}}}}},
+                                                                            "type": {"literal": "string"}}},
+                                                                        "type": {"literal": "string"}}}}}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.java.syntax.CompilationUnit"}}},
+                                                            "argument": {"variable": "units"}}}}}}}}},
+                                            "type": {"variable": "hydra.errors.Error"}}},
+                                        "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}}}}}}}}}}}}}}}}}},
     {
       "term": {
         "name": "hydra.java.coder.nameMapToTypeMap",
