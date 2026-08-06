@@ -11,7 +11,6 @@ module Hydra.ExtGeneration (
 import Hydra.Kernel
 import qualified Hydra.File as File
 import Hydra.Generation
-import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
 import Hydra.Haskell.Generation
 import Hydra.Sources.Ext
 import Hydra.Sources.All
@@ -98,8 +97,22 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage True
 
 -- | Generate Python source files from modules.
 -- Emission flags come from pythonLanguage's supportedFeatures.
+--
+-- #630: the coder (Hydra.Python.Coder.encodeNamespaceStringWithOverrides) now emits the
+-- correct hydra.lib.<sub> vs. hydra.overlay.python.lib.<sub> reference directly at coding
+-- time, driven by the on-disk overlay-existence set computed here and threaded in as an
+-- explicit parameter. This replaces the old driver-level post-generation text pass
+-- (redirectForSubs "python").
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writePython = generateSources moduleToPython pythonLanguage True
+writePython basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs pythonOverlayLibDir
+  generateSources (moduleToPython knownSubs) pythonLanguage True basePath universeModules modulesToGenerate
+
+-- | The Python-host overlay lib directory, relative to the heads/haskell/
+-- working directory that every sync/bootstrap driver runs from.
+pythonOverlayLibDir :: FilePath
+pythonOverlayLibDir =
+  "../../overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
 
 -- | Generate Rust source files from modules.
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
@@ -108,25 +121,17 @@ writeRust = generateSources moduleToRust rustLanguage True
 -- | Generate TypeScript source files from modules.
 -- Emission flags come from typeScriptLanguage's supportedFeatures.
 --
--- #568: one of three driver-level choke points that must apply the
--- hydra.lib.* overlay-redirect existence correction (see the #568 block in
--- Hydra.Generation, alongside Hydra.Haskell.Generation.writeHaskell and
--- bootstrap-from-json/Main.hs's dispatch). The DSL coder
--- (Hydra.TypeScript.Coder.importsToText) redirects every hydra.lib.<sub>
--- reference to the overlay path unconditionally (it has no I/O, so it can't
--- check which subs actually have an overlay); correctTypeScriptLibRedirect
--- narrows that back down using an on-disk existence scan.
---
--- #559 Step A: the narrowing rewrite is now the translingual
--- @hydra.build.libraryRedirect@ (generated 'GenLibraryRedirect'); this full-sync
--- consumer delegates to it, converting the on-disk 'overlayLibSubs' set to the
--- list the generated module consumes. The cold-seed path (ColdSeedMain) keeps its
--- own native redirect (published-host constraint) -- see writeHaskell.
+-- #630: the coder (Hydra.TypeScript.Coder.importsToText) emits the correct
+-- hydra.lib.<sub> vs. hydra.overlay.typescript.lib.<sub> reference directly at
+-- coding time, driven by the on-disk overlay-existence set computed here and
+-- threaded in as an explicit parameter. This replaces the old #568
+-- driver-level post-generation text pass (correctTypeScriptLibRedirect), which
+-- used to narrow an unconditional shape-only redirect back down after the
+-- coder had already run -- a post-generation patch of emitted source.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeTypeScript basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs typeScriptOverlayLibDir
-  generateSourcesWithTransform (GenLibraryRedirect.correctTypeScriptLibRedirect (Set.toList knownSubs))
-    moduleToTypeScript typeScriptLanguage False basePath universeModules modulesToGenerate
+  generateSources (moduleToTypeScript knownSubs) typeScriptLanguage False basePath universeModules modulesToGenerate
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory
@@ -192,12 +197,18 @@ coqLibPrimitiveNames = Set.fromList [
   "unlines","zip","zipWith"]
 
 -- | Wrap moduleToLisp for a specific dialect
+--
+-- #630: the coder (Hydra.Lisp.Coder.moduleImports / encodeTerm's variable arm) now emits the
+-- correct hydra.lib.<sub> vs. hydra.overlay.<langSeg>.lib.<sub> reference directly at coding
+-- time, driven by the on-disk overlay-existence set threaded in as an explicit parameter. This
+-- replaces the old driver-level post-generation text passes (redirectForSubs /
+-- redirectSchemeForSubs / redirectLispFlat) for the lib redirect.
 moduleToLispDialect
-  :: LispSyntax.Dialect -> String
+  :: LispSyntax.Dialect -> String -> Set.Set String
   -> Module -> [Definition] -> InferenceContext -> Graph
   -> Either Error (M.Map FilePath String)
-moduleToLispDialect dialect ext mod defs cx g =
-  case moduleToLisp dialect mod defs cx g of
+moduleToLispDialect dialect ext overlaySubs mod defs cx g =
+  case moduleToLisp dialect overlaySubs mod defs cx g of
     Left err -> Left err
     Right program ->
       let code = Serialization.printExpr (Serialization.parenthesize (programToExpr program))
@@ -207,17 +218,37 @@ moduleToLispDialect dialect ext mod defs cx g =
           filePath = Names.moduleNameToFilePath caseConvention (File.FileExtension ext) (moduleName mod)
       in Right (M.singleton filePath code)
 
+-- | The overlay lib directories for the four Lisp dialects, relative to the heads/haskell/
+-- working directory that every sync/bootstrap driver runs from.
+clojureOverlayLibDir, schemeOverlayLibDir, commonLispOverlayLibDir, emacsLispOverlayLibDir :: FilePath
+clojureOverlayLibDir =
+  "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
+schemeOverlayLibDir =
+  "../../overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
+commonLispOverlayLibDir =
+  "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
+emacsLispOverlayLibDir =
+  "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
+
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeClojure = generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj") lispLanguage True
+writeClojure basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs clojureOverlayLibDir
+  generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
 
 writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeScheme = generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm") lispLanguage True
+writeScheme basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs schemeOverlayLibDir
+  generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
 
 writeCommonLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeCommonLisp = generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp") lispLanguage True
+writeCommonLisp basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs commonLispOverlayLibDir
+  generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
 
 writeEmacsLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el") lispLanguage True
+writeEmacsLisp basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs emacsLispOverlayLibDir
+  generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
@@ -229,10 +260,18 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- points (commas / arrow-after-paren outside string literals). Applied
 -- as part of the generation pipeline (via the per-file content
 -- transform in 'generateSourcesWithTransform'), not as a read-back
--- post-pass on disk.
+-- post-pass on disk. This is unrelated to the #630 overlay-redirect fix
+-- (a pure formatting pass, kept as-is): the coder (Hydra.Scala.Coder.toPrimImport)
+-- now emits the correct hydra.lib.<sub> vs. hydra.overlay.scala.lib.<sub>
+-- reference directly at coding time, driven by the on-disk overlay-existence
+-- set computed here and threaded in as an explicit parameter -- no post-generation
+-- text pass needed for the lib redirect any more (superseded the driver-level
+-- redirectForSubs "scala" call).
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeScala = generateSourcesWithTransform wrapLongScalaText
-  moduleToScala scalaLanguage True
+writeScala basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs scalaOverlayLibDir
+  generateSourcesWithTransform wrapLongScalaText
+    (moduleToScala knownSubs) scalaLanguage True basePath universeModules modulesToGenerate
 
 -- | Generate WebAssembly text format (WAT) files from modules.
 writeWasm :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]

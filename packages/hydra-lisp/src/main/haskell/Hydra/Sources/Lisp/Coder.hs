@@ -158,21 +158,21 @@ dialectSupportsLetrec = def "dialectSupportsLetrec" $
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
-encodeApplication :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
+encodeApplication :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
 encodeApplication = def "encodeApplication" $
   doc "Encode a function application, detecting ifElse and other lazy primitives; transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E)" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
     -- Helper: encode a normal (non-special) application. Wrapped in a 0-arg
     -- lambda so strict hosts (e.g. self-hosted Clojure) only evaluate it on
     -- the fallback path; otherwise every application encoded both the special
     -- and non-special form and the cost grew exponentially with nesting (#479).
     "normal" <~ ("_" ~>
-      "fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
-      "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
+      "fun" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "rawFun") $
+      "arg" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "rawArg") $
         right (lispApp @@ var "fun" @@ list [var "arg"])) $
     -- Helper: encode a term
-    "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "t") $
+    "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "t") $
     cases _Term (var "dFun") (Just $ var "normal" @@ unit)
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
@@ -241,26 +241,26 @@ encodeFieldDef = def "encodeFieldDef" $
         L._FieldDefinition_defaultValue>>: nothing]
 
 -- | Encode a Hydra lambda as a Lisp expression
-encodeLambdaTerm :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Lambda -> Either Error L.Expression)
+encodeLambdaTerm :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Lambda -> Either Error L.Expression)
 encodeLambdaTerm = def "encodeLambdaTerm" $
   doc "Encode a Hydra lambda as a Lisp expression" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "lam" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "lam" $
     "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
-    "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
+    "body" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
       right (lispLambdaExpr @@ list [var "param"] @@ var "body")
 
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
 -- so that the loader's fix-letrec can transform them into proper letrec with thunking.
-encodeLetAsLambdaApp :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsLambdaApp :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
   doc "Encode let bindings as nested ((lambda (x) body) init) applications, for self-referential non-lambda bindings" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
-    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
+    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "body") $
     Eithers.foldList
       (lambda "acc" $ lambda "b" $
         "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
-        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
+        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
           right (lispApp @@ (lispLambdaExpr @@ list [var "bname"] @@ var "acc") @@ list [var "bval"]))
       (var "bodyExpr")
       (Lists.reverse (var "bindings"))
@@ -269,11 +269,11 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 -- Self-referential bindings -> letrec (with eta-expansion for non-lambda self-refs)
 -- Single non-self-ref binding -> let
 -- Multiple non-self-ref bindings -> let* (sequential)
-encodeLetAsNative :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
+encodeLetAsNative :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   doc "Encode let bindings as native let, let*, or letrec expressions depending on self-reference and binding count" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
-    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
+    "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "body") $
     -- Topologically sort bindings into strongly-connected components. Singleton
     -- SCCs flow through in dependency order (so non-cyclic forward references
     -- become valid sequential bindings), and any cycle (SCC of size > 1) marks
@@ -307,7 +307,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
         "isLambda" <~ (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
           (Just $ boolean False)
           [_Term_lambda>>: constant (boolean True)]) $
-        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
+        "bval" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
         -- Handle self-referential bindings:
         -- For Clojure: use named fn for self-reference (both lambda and eta-expanded)
         -- For others: use letrec (eta-expand non-lambda self-refs for letrec compat)
@@ -470,10 +470,10 @@ encodeLiteral = def "encodeLiteral" $
 
 -- | Encode a Hydra record projection as a Lisp expression.
 -- Takes an optional argument for applied projections.
-encodeProjectionElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   doc "Encode a Hydra record projection as a Lisp expression, with an optional argument for applied projections" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
       -- Record projection: (:field record) or (record-type-field record)
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
@@ -492,7 +492,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
                 L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
                 L._FieldAccess_target>>: lispVar @@ string "__rec"])))
           (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject L._Expression L._Expression_fieldAccess $
                 record L._FieldAccess [
                   L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
@@ -500,30 +500,30 @@ encodeProjectionElim = def "encodeProjectionElim" $
                   L._FieldAccess_target>>: var "sarg"]))
 
 -- | Encode a Hydra term as a Lisp expression
-encodeTerm :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Term -> Either Error L.Expression)
+encodeTerm :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Term -> Either Error L.Expression)
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a Lisp expression" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "term" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") Nothing
     [_Term_annotated>>: lambda "at" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
+       encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
 
      _Term_application>>: lambda "app" $
        -- Check if this is a fully-applied ifElse: (((ifElse C) T) E) -> (if C T E)
        "rawFun" <~ Core.applicationFunction (var "app") $
        "rawArg" <~ Core.applicationArgument (var "app") $
-       encodeApplication @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun" @@ var "rawArg",
+       encodeApplication @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "rawFun" @@ var "rawArg",
 
      _Term_either>>: lambda "e" $
        Eithers.either
          (lambda "l" $
-           "sl" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "l") $
+           "sl" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "l") $
              -- Left v -> (list :left v)
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "left",
                var "sl"]))
          (lambda "r" $
-           "sr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "r") $
+           "sr" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "r") $
              -- Right v -> (list :right v)
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "right",
@@ -531,21 +531,21 @@ encodeTerm = def "encodeTerm" $
          (var "e"),
 
      _Term_lambda>>: lambda "lam" $
-       encodeLambdaTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "lam",
+       encodeLambdaTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "lam",
      _Term_project>>: lambda "proj" $
-       encodeProjectionElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "proj" @@ nothing,
+       encodeProjectionElim @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "proj" @@ nothing,
      _Term_cases>>: lambda "cs" $
-       encodeUnionElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "cs" @@ nothing,
+       encodeUnionElim @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "cs" @@ nothing,
      _Term_unwrap>>: lambda "name" $
-       encodeUnwrapElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "name" @@ nothing,
+       encodeUnwrapElim @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "name" @@ nothing,
 
      _Term_let>>: lambda "lt" $
        "bindings" <~ Core.letBindings (var "lt") $
        "body" <~ Core.letBody (var "lt") $
-       encodeLetAsNative @@ var "dialect" @@ var "cx" @@ var "g" @@ var "bindings" @@ var "body",
+       encodeLetAsNative @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "bindings" @@ var "body",
 
      _Term_list>>: lambda "els" $
-       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g") (var "els")) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g") (var "els")) $
          right (lispListExpr @@ var "sels"),
 
      _Term_literal>>: lambda "lit" $
@@ -554,8 +554,8 @@ encodeTerm = def "encodeTerm" $
      _Term_map>>: lambda "m" $
        "pairs" <<~ (Eithers.mapList
          (lambda "entry" $
-           "k" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
-           "v" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
+           "k" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
+           "v" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
              right (record L._MapEntry [
                L._MapEntry_key>>: var "k",
                L._MapEntry_value>>: var "v"]))
@@ -571,14 +571,14 @@ encodeTerm = def "encodeTerm" $
            lispKeyword @@ string "none"]))
          -- Given val -> (list :given encodedVal)
          (lambda "val" $
-           "sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "val") $
+           "sval" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "val") $
              right (lispApp @@ (lispVar @@ string "list") @@ list [
                lispKeyword @@ string "given",
                var "sval"])),
 
      _Term_pair>>: lambda "p" $
-       "f" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $
-       "s" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.second (var "p")) $
+       "f" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $
+       "s" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Pairs.second (var "p")) $
          right (lispListExpr @@ list [var "f", var "s"]),
 
      _Term_record>>: lambda "rec" $
@@ -586,14 +586,14 @@ encodeTerm = def "encodeTerm" $
        "fields" <~ Core.recordFields (var "rec") $
        "sfields" <<~ (Eithers.mapList
          (lambda "f" $
-           encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f"))
+           encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f"))
          (var "fields")) $
        -- Dialect-aware constructor: (make-TypeName ...) or (->TypeName ...)
        "constructorName" <~ Strings.concat2 (dialectConstructorPrefix @@ var "dialect") (qualifiedSnakeName @@ var "rname") $
          right (lispApp @@ (lispVar @@ var "constructorName") @@ var "sfields"),
 
      _Term_set>>: lambda "s" $
-       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g") (Sets.toList (var "s"))) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g") (Sets.toList (var "s"))) $
          right (inject L._Expression L._Expression_set $
            record L._SetLiteral [
              L._SetLiteral_elements>>: var "sels"]),
@@ -613,7 +613,7 @@ encodeTerm = def "encodeTerm" $
            lispKeyword @@ (Formatting.convertCaseCamelToLowerSnake @@ var "fname"),
            asTerm lispNilExpr]))
          -- Non-unit variant: (list :variantName value)
-         ("sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "fterm") $
+         ("sval" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "fterm") $
            right (lispApp @@ (lispVar @@ string "list") @@ list [
              lispKeyword @@ (Formatting.convertCaseCamelToLowerSnake @@ var "fname"),
              var "sval"])),
@@ -621,23 +621,50 @@ encodeTerm = def "encodeTerm" $
      _Term_unit>>: constant $
        right (asTerm lispNilExpr),
 
+     -- #630: a hydra.lib.<sub>.<fn> variable reference redirects to
+     -- hydra.overlay.<langSeg>.lib.<sub>.<fn> IF that sub has an overlay implementation on
+     -- this dialect (checked via overlaySubs), before case-conversion to the flat Lisp
+     -- identifier form -- so e.g. hydra.lib.strings.concat2 becomes
+     -- hydra_overlay_clojure_lib_strings_concat2 for a redirected sub, matching what the
+     -- retired driver-level redirectLispFlat post-pass used to produce for the flat-namespace
+     -- dialects, and resolving correctly for Clojure/Scheme via their (now redirected)
+     -- dotted-namespace imports. Subs with no overlay stay canonical.
      _Term_variable>>: lambda "name" $
-       right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
+       "fullName" <~ Core.unName (var "name") $
+       "parts" <~ Strings.splitOn (string ".") (var "fullName") $
+       "sub" <~ Optionals.withDefault (string "") (Lists.at (int32 2) (var "parts")) $
+       "redirectedName" <~ Logic.ifElse
+         (Logic.and
+           (Logic.and
+             (Equality.equal (Lists.length (var "parts")) (int32 4))
+             (Equality.equal (Lists.take (int32 2) (var "parts")) (list [string "hydra", string "lib"])))
+           (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
+         (Strings.concat (list [
+           string "hydra.overlay.",
+           (cases L._Dialect (var "dialect") (Just $ string "lisp") [
+             L._Dialect_clojure>>: constant $ string "clojure",
+             L._Dialect_scheme>>: constant $ string "scheme",
+             L._Dialect_commonLisp>>: constant $ string "common_lisp",
+             L._Dialect_emacsLisp>>: constant $ string "emacs_lisp"]),
+           string ".lib.",
+           Strings.join (string ".") (Lists.drop (int32 2) (var "parts"))]))
+         (var "fullName") $
+       right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "redirectedName"))),
 
      _Term_typeApplication>>: lambda "ta" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.typeApplicationTermBody (var "ta"),
+       encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.typeApplicationTermBody (var "ta"),
 
      _Term_typeLambda>>: lambda "tl" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.typeLambdaBody (var "tl"),
+       encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.typeLambdaBody (var "tl"),
 
      _Term_wrap>>: lambda "wt" $
-       encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")]
+       encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")]
 
 -- | Encode a Hydra term definition as a Lisp top-level form
-encodeTermDefinition :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
+encodeTermDefinition :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> TermDefinition -> Either Error L.TopLevelFormWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   doc "Encode a Hydra term definition as a Lisp top-level form" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
@@ -645,7 +672,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Check if the term is a lambda (function) or a value
     cases _Term (var "dterm") (Just $
       -- Non-function: encode as a variable definition
-      "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
+      "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "term") $
         right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
           record L._VariableDefinition [
             L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -654,7 +681,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     [_Term_lambda>>: lambda "lam" $
        -- Encode as (def name (fn [param] body)) to avoid Clojure compile-time
        -- symbol resolution issues with Y-combinator patterns in recursive bindings
-       "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
+       "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "term") $
          right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
            record L._VariableDefinition [
              L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -800,10 +827,10 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Encode a Hydra case statement (union elimination) as a Lisp expression.
 -- Takes an optional argument for applied case statements.
-encodeUnionElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
 encodeUnionElim = def "encodeUnionElim" $
   doc "Encode a Hydra case statement (union elimination) as a Lisp expression, with an optional argument for applied case statements" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
       -- Union elimination: cond dispatch on tagged values
         "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
         "caseFields" <~ Core.caseStatementCases (var "cs") $
@@ -819,7 +846,7 @@ encodeUnionElim = def "encodeUnionElim" $
               lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
               lispKeyword @@ var "cfname"]) $
             -- Body: apply handler to (cadr __m)
-            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
+            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
               right (record L._CondClause [
                 L._CondClause_condition>>: var "condExpr",
                 L._CondClause_body>>: var "bodyExpr"]))
@@ -830,7 +857,7 @@ encodeUnionElim = def "encodeUnionElim" $
         "defExpr" <<~ (Optionals.cases (var "defCase")
           (right nothing)
           (lambda "dt" $
-            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
+            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "dt") $
               right (just (var "defBody"))))  $
         -- Build the cond expression wrapped in a lambda taking "v"
         "condExpr" <~ (inject L._Expression L._Expression_cond $
@@ -845,23 +872,23 @@ encodeUnionElim = def "encodeUnionElim" $
           -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
           (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
           (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "arg") $
               -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
               right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
 
 -- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
 -- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
 encodeUnwrapElim = def "encodeUnwrapElim" $
   doc "Encode a Hydra wrap elimination (unwrap) as a Lisp expression, with an optional argument for applied unwraps" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
+  "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
         Optionals.cases (var "marg")
           -- Unapplied: identity function. Param name must not collide with
           -- kernel-bound names like `v` (see #428 and encodeProjectionElim).
           (right (lispLambdaExpr @@ list [string "__rec"] @@ (lispVar @@ string "__rec")))
           (lambda "arg" $
-            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
+            encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "arg")
 
 -- | Extract the primitive/variable name a head term refers to (stripping
 -- annotations, type applications, and type lambdas), or nothing if the head is
@@ -1060,23 +1087,49 @@ moduleExports = def "moduleExports" $
 --   This ensures that all forward references are resolved, making the generated code
 
 -- | Generate import declarations from the dependency namespaces of a module's definitions.
-moduleImports :: TypedTermDefinition (ModuleName -> [Definition] -> [L.ImportDeclaration])
+--
+-- #630: a hydra.lib.<sub> import redirects to hydra.overlay.<langSeg>.lib.<sub> IF that sub
+-- actually has an overlay implementation on this dialect (checked via overlaySubs, the
+-- caller-supplied on-disk existence signal), otherwise it stays pointing at the generated
+-- def-module namespace. This existence check happens at emission time, structurally on the
+-- ModuleName -- each dialect's own AST-to-text serializer then renders the (possibly
+-- redirected) namespace in its native import syntax unchanged. #630 retired the driver-level
+-- post-generation text passes (redirectForSubs / redirectSchemeForSubs / redirectLispFlat)
+-- that used to do this rewrite after the fact.
+moduleImports :: TypedTermDefinition (L.Dialect -> S.Set String -> ModuleName -> [Definition] -> [L.ImportDeclaration])
 moduleImports = def "moduleImports" $
   doc "Generate import declarations from the dependency namespaces of a module's definitions" $
-  "focusNs" ~> "defs" ~>
+  "dialect" ~> "overlaySubs" ~> "focusNs" ~> "defs" ~>
+    "langSeg" <~ (cases L._Dialect (var "dialect") (Just $ string "lisp") [
+      L._Dialect_clojure>>: constant $ string "clojure",
+      L._Dialect_scheme>>: constant $ string "scheme",
+      L._Dialect_commonLisp>>: constant $ string "common_lisp",
+      L._Dialect_emacsLisp>>: constant $ string "emacs_lisp"]) $
+    "redirectedNsString" <~ ("ns" ~>
+      "raw" <~ Packaging.unModuleName (var "ns") $
+      "parts" <~ Strings.splitOn (string ".") (var "raw") $
+      "sub" <~ Strings.join (string ".") (Lists.drop (int32 2) (var "parts")) $
+      Logic.ifElse
+        (Logic.and
+          (Logic.and
+            (Equality.equal (Lists.length (var "parts")) (int32 3))
+            (Equality.equal (Lists.take (int32 2) (var "parts")) (list [string "hydra", string "lib"])))
+          (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
+        (Strings.concat (list [string "hydra.overlay.", var "langSeg", string ".lib.", var "sub"]))
+        (var "raw")) $
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
       (Analysis.definitionDependencyModuleNames @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
-        L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unModuleName (var "ns")),
+        L._ImportDeclaration_module>>: wrap L._NamespaceName (var "redirectedNsString" @@ var "ns"),
         L._ImportDeclaration_spec>>: inject L._ImportSpec L._ImportSpec_all unit])
       (var "depNss")
 
 -- | Convert a Hydra module to a Lisp program.
-moduleToLisp :: TypedTermDefinition (L.Dialect -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error L.Program)
+moduleToLisp :: TypedTermDefinition (L.Dialect -> S.Set String -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error L.Program)
 moduleToLisp = def "moduleToLisp" $
   doc "Convert a Hydra module to a Lisp program" $
-  "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
+  "dialect" ~> "overlaySubs" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
     "defs" <~ (Environment.reorderDefs @@ var "defs0") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
@@ -1087,12 +1140,12 @@ moduleToLisp = def "moduleToLisp" $
       Predicates.isNominalType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
-    "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $
+    "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     "nsName" <~ Packaging.unModuleName (Packaging.moduleName (var "mod")) $
     "focusNs" <~ Packaging.moduleName (var "mod") $
     -- Generate imports from cross-module dependencies
-    "imports" <~ (moduleImports @@ var "focusNs" @@ var "defs") $
+    "imports" <~ (moduleImports @@ var "dialect" @@ var "overlaySubs" @@ var "focusNs" @@ var "defs") $
     -- Generate exports from all forms
     "exports" <~ (moduleExports @@ var "allItems") $
       right (record L._Program [

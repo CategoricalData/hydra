@@ -139,16 +139,16 @@ modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 
 -- ============================================================================
--- #568: hydra.lib.* overlay-redirect existence check
+-- #568/#630: hydra.lib.* overlay-redirect existence check
 -- ============================================================================
 --
--- Shared by the three driver-level choke points that generate Haskell or
--- TypeScript source: 'Hydra.Haskell.Generation.writeHaskell',
--- 'Hydra.ExtGeneration.writeTypeScript', and
--- heads/haskell/src/exec/bootstrap-from-json/Main.hs's per-target dispatch.
--- Each must pass 'correctHaskellLibRedirect'/'correctTypeScriptLibRedirect'
--- (built from 'overlayLibSubs') as its 'generateSourcesWithTransform' argument;
--- see the #568 comment at each of those three call sites.
+-- 'overlayLibSubs' drives emission-time redirect of hydra.lib.<sub> references
+-- to hydra.overlay.<lang>.lib.<sub> directly inside each coder (Haskell,
+-- TypeScript, Scala, Python, Lisp family), consulted at coding time via an
+-- explicit overlaySubs parameter threaded through each coder's entry point
+-- (#630). The driver-level POST-generation correction pass this section used
+-- to also provide ('correctHaskellLibRedirect'/'correctTypeScriptLibRedirect'/
+-- 'redirectLibBack') is now dead code, deleted -- superseded by #630.
 
 -- | #568 structural fix: the redirectable @hydra.lib.\<sub\>@ sub-namespaces for a
 -- given host, derived from which overlay lib files actually exist on disk rather
@@ -173,10 +173,11 @@ overlayLibSubs libDir = do
     then return S.empty
     else do
       entries <- SD.listDirectory libDir
+      let nonSubFiles = S.fromList ["libraries", "integraldispatch", "numericdispatch", "primitivetype", "__init__"]
       let subs = [ name
                  | entry <- entries
                  , let name = map toLower (FP.dropExtension entry)
-                 , name /= "libraries"
+                 , not (S.member name nonSubFiles)
                  ]
       return (S.fromList subs)
 
@@ -192,55 +193,11 @@ typeScriptOverlayLibDir :: FilePath
 typeScriptOverlayLibDir =
   "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
 
--- | #568: rewrite a generated Haskell source file's @Hydra.Overlay.Haskell.Lib.\<Sub\>@
--- import back to the canonical @Hydra.Lib.\<Sub\>@ kernel-module name for any sub
--- that has NO overlay implementation on disk. The DSL-level coder
--- (Hydra.Haskell.Coder.constructModule) redirects every 3-segment
--- @hydra.lib.\<sub\>@ reference unconditionally (shape-only, no existence check --
--- the DSL has no I/O and cannot check); this driver-level correction narrows that
--- to only the subs that actually have a host-native implementation, so an
--- overlay-less module like @hydra.lib.defaults@ ends up pointing at the kernel
--- module instead of a dangling overlay path. No-op (returns input unchanged) for
--- every sub that DOES have an overlay -- those stay redirected, as intended. The
--- Haskell coder capitalizes every dotted segment when building the qualified
--- import name (@importName@ in Hydra.Haskell.Coder), so the on-the-wire text is
--- PascalCase (@Hydra.Overlay.Haskell.Lib.Defaults@); this only affects the
--- prefix strings matched below, not 'overlayLibSubs' (which already lowercases
--- both the directory listing and each matched sub before comparing).
-correctHaskellLibRedirect :: S.Set String -> String -> String
-correctHaskellLibRedirect knownSubs = redirectLibBack knownSubs "Hydra.Overlay.Haskell.Lib." "Hydra.Lib."
-
--- | #568: TypeScript analog of 'correctHaskellLibRedirect'. The TS coder
--- (Hydra.TypeScript.Coder.importsToText) redirects any import whose first
--- post-@hydra.@ segment is @lib@ to @overlay/typescript/...@ unconditionally
--- (shape-only); this narrows that to subs with an actual overlay file, so
--- @hydra.lib.defaults@ (and any future overlay-less module) resolves back to its
--- generated def-module path instead of a dangling overlay path.
-correctTypeScriptLibRedirect :: S.Set String -> String -> String
-correctTypeScriptLibRedirect knownSubs = redirectLibBack knownSubs "overlay/typescript/lib/" "lib/"
-
--- | Shared corrective rewrite for the #568 driver-level fix: scan for every
--- occurrence of 'old' immediately followed by an identifier (the sub name, up to
--- the next non-identifier character), and for each occurrence whose sub is NOT in
--- 'knownSubs', rewrite that occurrence's prefix from 'old' to 'new'. Occurrences
--- whose sub IS in 'knownSubs' are left untouched (still redirected, as the DSL
--- coder intended). This only ever narrows what the DSL already redirected --
--- it never introduces a NEW redirect the DSL didn't already emit.
-redirectLibBack :: S.Set String -> String -> String -> String -> String
-redirectLibBack knownSubs old new = go
-  where
-    oldLen = length old
-    isIdentChar c = c == '_' || c `elem` (['a'..'z'] ++ ['A'..'Z'] ++ ['0'..'9'])
-    go [] = []
-    go s@(c:rest)
-      | old `L.isPrefixOf` s =
-          let afterOld = drop oldLen s
-              sub = takeWhile isIdentChar afterOld
-              afterSub = drop (length sub) afterOld
-          in if not (null sub) && not (S.member (map toLower sub) knownSubs)
-               then new ++ sub ++ go afterSub
-               else old ++ sub ++ go afterSub
-      | otherwise = c : go rest
+-- | The Scala-host overlay lib directory, relative to the heads/haskell/
+-- working directory that every sync/bootstrap driver runs from.
+scalaOverlayLibDir :: FilePath
+scalaOverlayLibDir =
+  "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
 
 -- ============================================================================
 -- Package-level validation support (#575)
