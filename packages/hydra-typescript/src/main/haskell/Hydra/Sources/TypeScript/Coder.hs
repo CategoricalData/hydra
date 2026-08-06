@@ -1445,10 +1445,10 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
 -- `kind` selects the import flavor:
 --   "type"  → emits `import type { ... }` with PascalCased names (for type refs).
 --   "value" → emits `import { ... }` with names verbatim (for term-level refs).
-importsToText :: TypedTermDefinition (String -> ModuleName -> S.Set Name -> String)
+importsToText :: TypedTermDefinition (S.Set String -> String -> ModuleName -> S.Set Name -> String)
 importsToText = def "importsToText" $
   doc "Render a set of qualified names as TypeScript import statements grouped by source module" $
-  lambda "kind" $ lambda "currentNs" $ lambda "names" $
+  lambda "overlaySubs" $ lambda "kind" $ lambda "currentNs" $ lambda "names" $
     -- Pair each Name with its optional ModuleName; drop ones with no namespace
     -- or whose namespace matches the current module.
     "pairs" <~ (Optionals.givens $ Lists.map
@@ -1519,19 +1519,19 @@ importsToText = def "importsToText" $
         -- #501/#507: the TS lib runtime impls (hydra.lib.*) ship under the renamed
         -- overlay namespace at hydra/overlay/typescript/lib/, not hydra/lib/ (which holds
         -- only the generated PrimitiveDefinition def-modules). A generated reference to
-        -- hydra.lib.<x> must import from overlay/typescript/lib/<x>. Remap ONLY the on-disk
-        -- path here; the module alias (nsSlug below) keeps the original hydra.lib.<x> segments
-        -- so the import alias still matches the call sites. This rewrite is intentionally
-        -- SHAPE-ONLY (no existence check): the DSL has no I/O, so it cannot know which
-        -- hydra.lib.<sub> subs actually have an overlay implementation on this host. A
-        -- subsequent driver-level correction (Hydra.Generation.correctTypeScriptLibRedirect,
-        -- applied by every caller of this coder -- see the #568 comments at writeTypeScript /
-        -- bootstrap-from-json's dispatch) narrows this back down using an on-disk existence
-        -- scan, so an overlay-less module like hydra.lib.defaults ends up pointing at its
-        -- generated def-module path rather than a dangling overlay path. #568 (was: a by-name
-        -- exclusion here, #565).
+        -- hydra.lib.<x> must import from overlay/typescript/lib/<x> IF that sub actually has
+        -- an overlay implementation on this host (checked via 'overlaySubs', the caller-supplied
+        -- on-disk existence signal -- see #630); otherwise it stays pointing at the generated
+        -- def-module path. Remap ONLY the on-disk path here; the module alias (nsSlug below)
+        -- keeps the original hydra.lib.<x> segments so the import alias still matches the call
+        -- sites. This existence check happens at emission time; #630 retired the driver-level
+        -- post-generation text pass (correctTypeScriptLibRedirect) that used to narrow an
+        -- unconditional shape-only redirect back down after the fact (#568).
+        "targetSub" <~ Optionals.withDefault (string "") (Lists.at (int32 1) (var "targetSegs")) $
         "targetPathSegs" <~ Logic.ifElse
-          (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
+          (Logic.and
+            (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
+            (Sets.member (var "targetSub") (var "overlaySubs" :: TypedTerm (S.Set String))))
           (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
           (var "targetSegs") $
         "targetPath" <~ Strings.join (string "/") (var "targetPathSegs") $
@@ -1665,10 +1665,10 @@ mkDocComment = def "mkDocComment" $
 -- Emits both type definitions (interfaces, type aliases) and term definitions
 -- (export const). Imports are collected from type definitions only today;
 -- term-level cross-module refs may be missing imports.
-moduleToTypeScript :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
+moduleToTypeScript :: TypedTermDefinition (S.Set String -> Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToTypeScript = def "moduleToTypeScript" $
   doc "Convert a Hydra module to a map from .ts file path to TypeScript source" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+  "overlaySubs" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "currentNs" <~ Packaging.moduleName (var "mod") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
@@ -1721,8 +1721,8 @@ moduleToTypeScript = def "moduleToTypeScript" $
             @@ (Packaging.termDefinitionBody (var "td"))))
       (Sets.empty :: TypedTerm (S.Set Name))
       (var "termDefs")) $
-    "typeImportsBlock" <~ (importsToText @@ string "type" @@ var "currentNs" @@ var "typeImports") $
-    "termImportsBlock" <~ (importsToText @@ string "value" @@ var "currentNs" @@ var "termImports") $
+    "typeImportsBlock" <~ (importsToText @@ var "overlaySubs" @@ string "type" @@ var "currentNs" @@ var "typeImports") $
+    "termImportsBlock" <~ (importsToText @@ var "overlaySubs" @@ string "value" @@ var "currentNs" @@ var "termImports") $
     "importsBlock" <~ Strings.concat2 (var "typeImportsBlock") (var "termImportsBlock") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "typeDefs")) $
     "termItems" <~ (Lists.map (encodeTermDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "termDefs")) $

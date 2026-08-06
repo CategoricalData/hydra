@@ -13,8 +13,6 @@ import Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep)
 import Hydra.Haskell.Coder
 import Hydra.Haskell.Language
 import Hydra.Generation
-import qualified Hydra.Build.LibraryRedirect as GenLibraryRedirect
-import qualified Data.Set as S
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Packaging as PackagingTypes
@@ -26,27 +24,17 @@ import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 --
--- #568: one of three driver-level choke points that must apply the
--- hydra.lib.* overlay-redirect existence correction (see the #568 block in
--- Hydra.Generation, alongside Hydra.ExtGeneration.writeTypeScript and
--- bootstrap-from-json/Main.hs's dispatch). The DSL coder
--- (Hydra.Haskell.Coder.constructModule) redirects every hydra.lib.<sub>
--- reference to the overlay path unconditionally (it has no I/O, so it can't
--- check which subs actually have an overlay); correctHaskellLibRedirect
--- narrows that back down using an on-disk existence scan.
---
--- #559 Step A: the narrowing rewrite is now the translingual
--- @hydra.build.libraryRedirect@ (generated 'GenLibraryRedirect'); this full-sync
--- consumer delegates to it, converting the on-disk 'overlayLibSubs' set to the
--- list the generated module consumes. The cold-seed path (ColdSeedMain) keeps its
--- own native 'correctHaskellLibRedirect', because it runs against the published
--- hydra-build and cannot depend on this not-yet-published generated module -- the
--- same reason it uses a native redirect for every non-Haskell target already.
+-- #630: the coder (Hydra.Haskell.Coder.constructModule) emits the correct
+-- hydra.lib.<sub> vs. hydra.overlay.haskell.lib.<sub> reference directly at
+-- coding time, driven by the on-disk overlay-existence set computed here and
+-- threaded in as an explicit parameter. This replaces the old #568
+-- driver-level post-generation text pass (correctHaskellLibRedirect), which
+-- used to narrow an unconditional shape-only redirect back down after the
+-- coder had already run -- a post-generation patch of emitted source.
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeHaskell basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs haskellOverlayLibDir
-  generateSourcesWithTransform (GenLibraryRedirect.correctHaskellLibRedirect (S.toList knownSubs))
-    moduleToHaskell haskellLanguage True basePath universeModules modulesToGenerate
+  generateSources (moduleToHaskell knownSubs) haskellLanguage True basePath universeModules modulesToGenerate
 
 ----------------------------------------
 
@@ -102,7 +90,8 @@ writeDslHaskell basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     let withCoreDeps = fmap addCoreDep nonEmpty
-    _ <- generateSources moduleToHaskell haskellLanguage False basePath universeModules withCoreDeps
+    knownSubs <- overlayLibSubs haskellOverlayLibDir
+    _ <- generateSources (moduleToHaskell knownSubs) haskellLanguage False basePath universeModules withCoreDeps
     return ()
   where
     addCoreDep m = m { moduleDependencies = unqualifiedDep CoreTypes.ns : moduleDependencies m }
