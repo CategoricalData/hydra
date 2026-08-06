@@ -2536,7 +2536,7 @@ def _encode_python_module():
         lam("defStmts", post_defStmts_body),
     )
     body = lambdas(
-        ["cx", "g", "mod", "defs0"],
+        ["overlaySubs", "cx", "g", "mod", "defs0"],
         let_chain(
             [
                 (
@@ -2545,7 +2545,7 @@ def _encode_python_module():
                 ),
                 (
                     "meta0",
-                    _local("gatherMetadata")(Pkg.module_name(var("mod")), var("defs")),
+                    _local("gatherMetadata")(var("overlaySubs"), Pkg.module_name(var("mod")), var("defs")),
                 ),
                 (
                     "namespaces0",
@@ -2553,7 +2553,7 @@ def _encode_python_module():
                 ),
                 (
                     "env0",
-                    _local("initialEnvironment")(var("namespaces0"), var("g")),
+                    _local("initialEnvironment")(var("namespaces0"), var("g"), var("overlaySubs")),
                 ),
                 (
                     "isTypeMod",
@@ -2564,7 +2564,8 @@ def _encode_python_module():
         ),
     )
     return (_def("encodePythonModule")
-        .doc("Encode a Hydra module to a Python module AST")
+        .doc("Encode a Hydra module to a Python module AST, given the on-disk overlay-existence "
+             "set (#630) driving emission-time primitive-reference redirects")
         .to(body))
 
 
@@ -3386,6 +3387,9 @@ def _encode_term_inline():
                                             ),
                                             _env("inlineVariables", "innerEnv0"),
                                         ),
+                                    ),
+                                    field("overlaySubs",
+                                        _env("overlaySubs", "innerEnv0"),
                                     ),
                                 ],
                             ),
@@ -5504,6 +5508,8 @@ def _extend_env_with_type_var():
                     field("skipCasts", _env("skipCasts", "env")),
                     field("inlineVariables", _env("inlineVariables", "env")
                     ),
+                    field("overlaySubs", _env("overlaySubs", "env")
+                    ),
                 ],
             ),
         ),
@@ -6402,8 +6408,11 @@ def _extend_meta_for_types():
                 ),
                 ("currentNs", _meta_proj("namespaces", "meta")),
                 (
+                    # #630: type-namespace references never resolve to hydra.lib.<sub> (primitives
+                    # are terms, not types), so the overlaySubs argument here is passed empty --
+                    # equivalent to "never redirect", matching pre-#630 behavior on this path exactly.
                     "updatedNs",
-                    hydra.dsl.analysis.add_names_to_module_names(_kref.names_encode_namespace_with_overrides, var("names"), var("currentNs")),
+                    hydra.dsl.analysis.add_names_to_module_names(_kref.names_encode_namespace_with_overrides(Sets.empty()), var("names"), var("currentNs")),
                 ),
                 (
                     "meta1",
@@ -6807,12 +6816,22 @@ def _gather_metadata():
         ),
     )
     body = lambdas(
-        ["focusNs", "defs"],
+        ["overlaySubs", "focusNs", "defs"],
         let_chain(
             [
                 (
                     "start",
-                    _local("emptyMetadata")(_kref.utils_find_namespaces(var("focusNs"), var("defs"))),
+                    # #630: built as a direct term application (not via the generated
+                    # hydra.dsl.python.utils.find_namespaces wrapper) because this module is
+                    # itself loaded against the PUBLISHED hydra-python host by
+                    # bin/update-python-json.py's default published-host mode, whose wrapper
+                    # arity may lag this DSL source's findNamespaces definition (see the #630
+                    # cold-clone/published-boundary story documented in Hydra.Generation for the
+                    # Haskell-side analog). Direct application has no arity to go stale.
+                    _local("emptyMetadata")(
+                        apply(apply(apply(
+                            var("hydra.python.utils.findNamespaces"),
+                            var("overlaySubs")), var("focusNs")), var("defs"))),
                 ),
                 ("addDef", add_def),
                 (
@@ -6863,7 +6882,7 @@ def _generic_arg():
 
 def _initial_environment():
     body = lambdas(
-        ["namespaces", "tcontext"],
+        ["namespaces", "tcontext", "overlaySubs"],
         record("hydra.python.environment.PythonEnvironment",
             [
                 field("namespaces", var("namespaces")),
@@ -6875,11 +6894,13 @@ def _initial_environment():
                 field("version", _local("targetPythonVersion")),
                 field("skipCasts", true()),
                 field("inlineVariables", Sets.empty()),
+                field("overlaySubs", var("overlaySubs")),
             ],
         ),
     )
     return (_def("initialEnvironment")
-        .doc("Create an initial Python environment for code generation")
+        .doc("Create an initial Python environment for code generation, given the on-disk "
+             "overlay-existence set (#630) driving emission-time primitive-reference redirects")
         .to(body))
 
 
@@ -7404,9 +7425,9 @@ def _module_domain_imports():
 
 def _module_to_python():
     body = lambdas(
-        ["mod", "defs", "cx", "g"],
+        ["overlaySubs", "mod", "defs", "cx", "g"],
         Eithers.bind(
-            _local("encodePythonModule")(var("cx"), var("g"), var("mod"), var("defs")),
+            _local("encodePythonModule")(var("overlaySubs"), var("cx"), var("g"), var("mod"), var("defs")),
             lam(
                 "file",
                 let_chain(
@@ -7520,6 +7541,7 @@ def _python_environment_set_graph():
                 field("version", _env("version", "env")),
                 field("skipCasts", _env("skipCasts", "env")),
                 field("inlineVariables", _env("inlineVariables", "env")),
+                field("overlaySubs", _env("overlaySubs", "env")),
             ],
         ),
     )
@@ -7982,6 +8004,8 @@ def _with_let_inline():
                                     var("inlineVars"),
                                     _env("inlineVariables", "innerEnv"),
                                 ),
+                            ),
+                            field("overlaySubs", _env("overlaySubs", "innerEnv")
                             ),
                         ],
                     ),
