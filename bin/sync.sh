@@ -760,16 +760,16 @@ done
 # ────────────────────────────────────────────────────────────────────
 # Re-generate dist/json/hydra-java/ from the Java DSL sources, and
 # dist/json/hydra-python/ from the Python DSL sources. The native
-# generators are the authoritative DSL→JSON path for these two
-# packages; the Haskell-DSL copies in packages/hydra-{java,python}/
-# src/main/haskell/ remain a legacy bootstrap fallback (to be removed
-# before 0.16). Phase 1 already wrote a Haskell-DSL-emitted version of
-# these JSON trees; this phase overwrites them with the native output.
+# generators are the SOLE writers of these JSON trees (#344/#346/#370) —
+# the legacy Haskell-DSL copies under packages/hydra-{java,python}/
+# src/main/haskell/ have been deleted; see the Phase 1 comment above.
+# On a warm tree, Phase 1 doesn't touch this JSON at all; this phase is
+# what (re)generates it from the native sources.
 #
-# Diff diagnostic: we snapshot the Haskell-DSL output, run the native
-# generator, then report the number of files that differ (without
-# failing). Byte-equality is no longer required — the two DSL paths
-# can drift as long as their generated target code passes tests.
+# Diff diagnostic: we snapshot the JSON tree as it was going into this
+# phase (from the previous native-generator run, or cold-seeded by
+# Phase 1.5), run the native generator, then report the number of files
+# that differ (without failing).
 #
 # Skip when the relevant host is not in HOSTS (the native generator
 # needs the host's coder package compiled, which is only built when
@@ -790,7 +790,7 @@ native_generate_and_report() {
 
     if [ ! -f "$sentinel" ]; then
         echo "  skipping: native $lang host not built (missing $sentinel)."
-        echo "  hydra-$lang JSON remains as written by Phase 1 (Haskell DSL bootstrap)."
+        echo "  hydra-$lang JSON remains as written by the last native-generator run (or Phase 1.5 cold-seed)."
         return 0
     fi
     if [ ! -d "$json_dir" ]; then
@@ -837,12 +837,12 @@ native_generate_and_report() {
 
         # Phase 5 runs last, but its output (dist/json/hydra-<lang>/) is an
         # input to the Phase 2 build of dist/haskell/hydra-<lang>/ — the Haskell
-        # coder that bootstrap-from-json compiles. So in this interim dual-write
-        # state (Phase 1 writes coder.json from the legacy Haskell DSL, Phase 5
-        # overwrites it from the native sources), a native coder change reaches
-        # dist/haskell only if we re-assemble it here from the just-written
-        # native JSON; otherwise it lags to the next sync and the CI consistency
-        # gate (git diff dist/json dist/haskell) fails.
+        # coder that bootstrap-from-json compiles. The native generators are the
+        # sole writers of dist/json/hydra-<lang>/ (#344/#346/#370; see the Phase 1
+        # comment above), so a native coder change reaches dist/haskell only if we
+        # re-assemble it here from the just-written native JSON; otherwise it lags
+        # to the next sync and the CI consistency gate (git diff dist/json
+        # dist/haskell) fails.
         #
         # This re-assemble flows through the normal freshness gate: Phase 1's
         # update-json-main now folds the native hydra.<lang>.* source hashes into
@@ -851,12 +851,11 @@ native_generate_and_report() {
         # No output-digest force-drop is needed (that was the #400 workaround,
         # now removed — the input digest is honest).
         #
-        # TODO(post-0.16): once the legacy Haskell DSL copies for hydra-java /
-        # hydra-python are deleted, the native generators become the sole writers
-        # of dist/json/hydra-<lang>/. At that point move this native DSL→JSON step
-        # ahead of Phase 2 (so dist/haskell builds from the native JSON in the
-        # same pass) and delete this re-assemble block entirely — there will be
-        # no remaining producer ordering to reconcile.
+        # NOTE: now that the legacy Haskell DSL copies are gone and Phase 1 never
+        # writes hydra.{java,python}.* JSON, there's no producer-ordering conflict
+        # left to reconcile — moving this native DSL→JSON step ahead of Phase 2
+        # and deleting this re-assemble block is a viable simplification, just not
+        # done yet. Left as a future cleanup rather than bundled here.
         echo "  hydra-$lang: regenerating dist/haskell/hydra-$lang from native JSON..."
         "$HYDRA_ROOT/heads/haskell/bin/assemble-distribution.sh" "hydra-$lang"
         echo "  hydra-$lang: rebuilding Haskell executables so bootstrap-from-json embeds the new coder..."
