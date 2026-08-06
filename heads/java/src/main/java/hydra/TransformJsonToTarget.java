@@ -251,13 +251,17 @@ public class TransformJsonToTarget {
                 + File.separator + srcSetDir + File.separator + target;
 
         long stepStart = System.currentTimeMillis();
+        // repoRoot is the parent of distJsonRoot's parent dist/ (same convention Bootstrap derives
+        // from --json-dir) — computed here (rather than only after the switch, as before) because
+        // writeJava now needs it to derive overlaySubs via Bootstrap's existing libSubsForTarget scan.
+        String repoRoot = Paths.get(distJsonRoot).toAbsolutePath().getParent().toString();
         // #459 (H1): accumulate every path written across all passes (main + lib), relative to
         // outDir, so the prune keep-set is exactly what was emitted. Redirect passes (below) edit
         // files in place and do not change the file set, so they contribute nothing to the keep-set.
         List<String> written = new ArrayList<>();
         switch (target) {
             case "java":
-                written.addAll(GenerationTargets.writeJava(outDir, universeMods, modsToGenerate));
+                written.addAll(GenerationTargets.writeJava(repoRoot, outDir, universeMods, modsToGenerate));
                 break;
             case "python":
                 written.addAll(GenerationTargets.writePython(outDir, universeMods, modsToGenerate));
@@ -289,11 +293,9 @@ public class TransformJsonToTarget {
         }
 
         // #473 lib pass + redirect, mirroring Bootstrap's main-pass handling — required for
-        // self-host correctness on every non-Haskell target. repoRoot is the parent of
-        // distJsonRoot's parent dist/ (same convention Bootstrap derives from --json-dir).
+        // self-host correctness on every non-Haskell target.
         if (!target.equals("haskell")) {
-            String repoRoot = Paths.get(distJsonRoot).toAbsolutePath().getParent().toString();
-            written.addAll(Bootstrap.runLibPass(target, outDir, universeMods, modsToGenerate));
+            written.addAll(Bootstrap.runLibPass(repoRoot, target, outDir, universeMods, modsToGenerate));
             Bootstrap.redirectLibCalls(repoRoot, target, outDir);
             Bootstrap.redirectTestEnv(target, outDir);
         }

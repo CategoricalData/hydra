@@ -223,7 +223,7 @@ public class Bootstrap {
                 GenerationTargets.writeHaskell(outMain + "/haskell", allMainMods, modsToGenerate);
                 break;
             case "java":
-                GenerationTargets.writeJava(outMain + "/java", allMainMods, modsToGenerate);
+                GenerationTargets.writeJava(repoRoot, outMain + "/java", allMainMods, modsToGenerate);
                 break;
             case "python":
                 GenerationTargets.writePython(outMain + "/python", allMainMods, modsToGenerate);
@@ -267,7 +267,7 @@ public class Bootstrap {
         // test + ext-for-tests passes below also write into outMain/<target> and outTest/<target>),
         // so every generated consumer file gets its hydra.lib.* impl call-sites redirected.
         if (!target.equals("haskell")) {
-            runLibPass(target, outMain + File.separator + target, allMainMods, modsToGenerate);
+            runLibPass(repoRoot, target, outMain + File.separator + target, allMainMods, modsToGenerate);
         }
 
         stepTime = System.currentTimeMillis() - stepStart;
@@ -358,7 +358,7 @@ public class Bootstrap {
                         GenerationTargets.writeHaskell(outTest + "/haskell", allUniverse, testMods);
                         break;
                     case "java":
-                        GenerationTargets.writeJava(outTest + "/java", allUniverse, testMods);
+                        GenerationTargets.writeJava(repoRoot, outTest + "/java", allUniverse, testMods);
                         break;
                     case "python":
                         GenerationTargets.writePython(outTest + "/python", allUniverse, testMods);
@@ -527,7 +527,10 @@ public class Bootstrap {
      * (repoRoot guess wrong, or a packaged/relocated invocation) so behavior degrades to the old
      * static-list approach rather than silently skipping the redirect.
      */
-    private static List<String> libSubsForTarget(String repoRoot, String target) {
+    // #633: package-visible (not private) so GenerationTargets.writeJava can reuse this same
+    // existence scan to derive overlaySubs for the Java coder's own emission-time redirect,
+    // rather than duplicating the directory-listing + Libraries/PrimitiveType-exclusion logic.
+    static List<String> libSubsForTarget(String repoRoot, String target) {
         String seg = overlayDirSegment(target);
         java.nio.file.Path libDir = Paths.get(repoRoot, "overlay", target, "hydra-kernel", "src", "main",
                 target, "hydra", "overlay", seg, "lib");
@@ -562,7 +565,7 @@ public class Bootstrap {
     // main write did NOT produce, so without this the pruner would treat them as orphans and delete
     // them. Empty list when there are no lib modules (early return). Mirrors the Haskell driver's
     // recordKeep accumulation across the main + lib passes before the prune step.
-    static List<String> runLibPass(String target, String langDir,
+    static List<String> runLibPass(String repoRoot, String target, String langDir,
                                    List<Module> allMainMods, List<Module> modsToGenerate) {
         List<Module> libMods = new ArrayList<>();
         for (Module m : modsToGenerate) {
@@ -578,7 +581,7 @@ public class Bootstrap {
         System.out.println("Lib pass: emitting " + libMods.size()
                 + " hydra.lib.* definition modules to " + target + "...");
         switch (target) {
-            case "java":        return GenerationTargets.writeJava(langDir, libUniverse, libMods);
+            case "java":        return GenerationTargets.writeJava(repoRoot, langDir, libUniverse, libMods);
             case "python":      return GenerationTargets.writePython(langDir, libUniverse, libMods);
             case "scala":       return GenerationTargets.writeScala(langDir, libUniverse, libMods);
             case "typescript":  return GenerationTargets.writeTypeScript(langDir, libUniverse, libMods);

@@ -455,45 +455,45 @@ public class Utils {
                                                 VariableInitializer.EXPRESSION,
                                                 var("rhs"))))))))));
 
-    private static TypedTerm overlayLibPair(String sub) {
-        return pair(
-            wrap(new Name("hydra.packaging.ModuleName"), string("hydra.lib." + sub)),
-            apply(ref(Names.javaPackageName), list(
-                string("hydra"), string("overlay"), string("java"), string("lib"), string(sub))));
+    // #633: gated on overlaySubs (an existence check, mirroring the other 8 hosts' #630 fix) rather
+    // than unconditionally including all 20 subs — a sub with no overlay on this host must fall back
+    // to its canonical hydra.lib.<sub> reference.
+    private static TypedTerm<List<String>> allOverlayLibSubs() {
+        return list(
+            string("chars"), string("effects"), string("eithers"), string("equality"), string("files"),
+            string("functions"), string("hashing"), string("lists"), string("literals"), string("logic"),
+            string("maps"), string("math"), string("optionals"), string("ordering"), string("pairs"),
+            string("regex"), string("sets"), string("strings"), string("system"), string("text"));
     }
 
     public static final Def overlayJavaLibPackageAliases = def("overlayJavaLibPackageAliases")
+        .lam("overlaySubs")
         .to(() ->
-                Maps.fromList(list(
-            overlayLibPair("chars"),
-            overlayLibPair("effects"),
-            overlayLibPair("eithers"),
-            overlayLibPair("equality"),
-            overlayLibPair("files"),
-            overlayLibPair("functions"),
-            overlayLibPair("hashing"),
-            overlayLibPair("lists"),
-            overlayLibPair("literals"),
-            overlayLibPair("logic"),
-            overlayLibPair("maps"),
-            overlayLibPair("math"),
-            overlayLibPair("optionals"),
-            overlayLibPair("ordering"),
-            overlayLibPair("pairs"),
-            overlayLibPair("regex"),
-            overlayLibPair("sets"),
-            overlayLibPair("strings"),
-            overlayLibPair("system"),
-            overlayLibPair("text"))));
+                Maps.fromList(
+                    Lists.map(
+                        lambda("sub", apply(ref(Utils.overlayLibPairFor), var("sub"))),
+                        Lists.filter(
+                            lambda("sub", Sets.member(var("sub"), var("overlaySubs"))),
+                            allOverlayLibSubs()))));
+
+    public static final Def overlayLibPairFor = def("overlayLibPairFor")
+        .lam("sub")
+        .to(() ->
+                pair(
+                    wrap(new Name("hydra.packaging.ModuleName"),
+                        Strings.concat2(string("hydra.lib."), var("sub"))),
+                    apply(ref(Names.javaPackageName), Lists.concat2(
+                        list(string("hydra"), string("overlay"), string("java"), string("lib")),
+                        list(var("sub"))))));
 
     public static final Def importAliasesForModule = def("importAliasesForModule")
-        .lam("mod")
+        .lam("overlaySubs").lam("mod")
         .to(() ->
                 record(Aliases.TYPE_,
                     field(
                         Aliases.CURRENT_NAMESPACE,
                         proj(Module.TYPE_, Module.NAME, "mod")),
-                    field(Aliases.PACKAGES, ref(overlayJavaLibPackageAliases)),
+                    field(Aliases.PACKAGES, apply(ref(overlayJavaLibPackageAliases), var("overlaySubs"))),
                     field(Aliases.BRANCH_VARS, hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.RECURSIVE_VARS,
@@ -3209,6 +3209,7 @@ public class Utils {
             nameToJavaTypeIdentifier,
             nameToQualifiedJavaName,
             overlayJavaLibPackageAliases,
+            overlayLibPairFor,
             overrideAnnotation,
             referenceTypeToResult,
             sanitizeJavaName,

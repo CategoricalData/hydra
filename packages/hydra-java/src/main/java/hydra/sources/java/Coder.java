@@ -4634,11 +4634,11 @@ public class Coder {
                                                         constant(apply(var("elimBranch"), unit())))))))))))));
 
     public static final Def encodeDefinitions = def("encodeDefinitions")
-        .lam("mod").lam("defs").lam("cx").lam("g")
+        .lam("overlaySubs").lam("mod").lam("defs").lam("cx").lam("g")
         .to(() ->
                 let(
                     field("aliases",
-                        apply(ref(Utils.importAliasesForModule), var("mod"))),
+                        apply(ref(Utils.importAliasesForModule), var("overlaySubs"), var("mod"))),
                     field("env",
                         record(JavaEnvironment.TYPE_,
                             field(JavaEnvironment.ALIASES, var("aliases")),
@@ -10832,11 +10832,12 @@ public class Coder {
                                     proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
 
     public static final Def moduleToJava = def("moduleToJava")
-        .lam("mod").lam("defs").lam("cx").lam("g")
+        .lam("overlaySubs").lam("mod").lam("defs").lam("cx").lam("g")
         .to(() ->
                 Eithers.bind(
                     apply(
                         ref(Coder.encodeDefinitions),
+                        var("overlaySubs"),
                         var("mod"),
                         var("defs"),
                         var("cx"),

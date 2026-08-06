@@ -94,10 +94,16 @@ public class GenerationTargets {
 
     /**
      * Generate Java source files from modules.
+     *
+     * #633: overlaySubs is derived from the same existence scan
+     * {@link Bootstrap#libSubsForTarget} uses to drive {@code redirectLibCalls} for the other
+     * targets — Java's own coder now redirects hydra.lib.&lt;sub&gt; references to their overlay
+     * namespace at emission time, the same pattern #630 applied to the other 8 hosts.
      */
-    public static List<String> writeJava(String basePath, List<Module> universe, List<Module> mods) {
+    public static List<String> writeJava(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
+        java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "java"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(mod, defs, cx, g),
+                mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(overlaySubs, mod, defs, cx, g),
                 hydra.java.Language.javaLanguage(),
                 false,
                 basePath, universe, mods);
