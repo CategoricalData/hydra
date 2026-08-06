@@ -18,25 +18,6 @@
 # into typesmods/ by bin/cold-seed-dist-haskell.sh), and it compiles against ANY
 # published hydra-kernel. See the import comment in app/ColdSeedMain.hs and the
 # typesmods/ source-dir comment below.
-#
-# #630 published-host coder-signature shim (retire at the next hostVersion
-# publish that includes the #630 overlaySubs signatures): every moduleTo<Lang>
-# coder entry point gained a new leading `overlaySubs :: S.Set String`
-# parameter, but the published Hackage hydra-{haskell,python,scala,typescript,
-# lisp} packages (pinned below at 0.17.3) still expose the pre-#630 signature —
-# confirmed directly against their Hackage source. Rather than a text-patch
-# shim (the #607 ManifestWriter / #508 X3 style, both later found
-# structurally-unneeded and dropped), this source-dirs the already-regenerated
-# dist/haskell/hydra-{haskell,python,scala,typescript,lisp} trees directly —
-# the SAME mechanism heads/haskell/package.yaml's own local mode already uses
-# for these exact packages (source-dir dist/haskell/<pkg>/src/main/haskell
-# instead of linking Hackage). This keeps the cold seeder compiling against the
-# NEW signatures while every other package (notably hydra-kernel and
-# hydra-build) stays on its published Hackage pin — the oil-and-water guard
-# above is unaffected, since none of these 5 packages carry Terms-phantom
-# authoring source; dist/haskell/<pkg> is already-generated, kernel-agnostic
-# output. Once a hostVersion publish ships the new signatures, drop the 5
-# source-dirs below and restore the 5 removed `dependencies` entries.
 name:         hydra-json-driver
 version:      0.17.1
 author:       Joshua Shinavier <josh@fortytwo.net>
@@ -65,21 +46,21 @@ dependencies:
   # cold seeder does not link their coders; their dist/haskell source is still
   # seeded from JSON via the Haskell coder.
   #
-  # #608: hydra-kernel stays here as an ordinary published dep. The seeder
-  # links its published generated code (kernel types). It does NOT source-dir
-  # HEAD's Terms authoring tree — that combination was the oil-and-water
-  # violation (see the header comment).
+  # #608: hydra-kernel / hydra-haskell stay here as ordinary published deps.
+  # The seeder links their published generated code (kernel types + Haskell
+  # coder). It does NOT source-dir their HEAD Terms authoring tree — that
+  # combination was the oil-and-water violation (see the header comment).
   - hydra-kernel
+  - hydra-haskell
   - hydra-java
   - hydra-jvm
+  - hydra-python
+  - hydra-scala
+  - hydra-typescript
+  - hydra-lisp
   - hydra-rdf
   - hydra-pg
   - hydra-build
-  # hydra-haskell/hydra-python/hydra-scala/hydra-typescript/hydra-lisp are
-  # deliberately NOT listed here (#630 shim, see header comment) — they are
-  # source-dir'd below from dist/haskell/<pkg>/src/main/haskell instead, so
-  # the cold seeder compiles the NEW overlaySubs coder signatures rather than
-  # the old published-0.17.3 ones.
 
 executables:
   cold-seed-from-json:
@@ -122,17 +103,4 @@ executables:
       # Hydra.Build.Routing (used by headmods/PackageRouting.hs) resolves from the
       # published hydra-build library, not from Sources.Build.*.
       - typesmods
-      # #630 shim (see header comment): source-dir the already-generated
-      # dist/haskell/<pkg> trees for the 5 coders whose moduleTo<Lang> entry
-      # point gained the new overlaySubs parameter, instead of linking their
-      # stale-signature published Hackage releases. Mirrors
-      # heads/haskell/package.yaml's own local-mode source-dirs for these
-      # exact packages. Each dist/haskell/<pkg> tree already compiles against
-      # the published hydra-kernel (they are generated output, not
-      # Terms-phantom authoring source) — no oil-and-water reintroduction.
-      - ../../../dist/haskell/hydra-haskell/src/main/haskell
-      - ../../../dist/haskell/hydra-python/src/main/haskell
-      - ../../../dist/haskell/hydra-scala/src/main/haskell
-      - ../../../dist/haskell/hydra-typescript/src/main/haskell
-      - ../../../dist/haskell/hydra-lisp/src/main/haskell
     ghc-options: [-rtsopts]
