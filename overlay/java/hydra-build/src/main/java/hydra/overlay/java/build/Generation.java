@@ -332,7 +332,7 @@ public class Generation {
             hydra.core.Type modType, Value jsonVal) {
         try {
             Method fiveArg = hydra.json.Decode.class.getMethod(
-                "fromJson", Map.class, boolean.class, Name.class, hydra.core.Type.class, Value.class);
+                "fromJson", Map.class, Boolean.class, Name.class, hydra.core.Type.class, Value.class);
             return fiveArg.invoke(null, schemaMap, false, modName, modType, jsonVal);
         } catch (NoSuchMethodException e) {
             try {
