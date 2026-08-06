@@ -80,8 +80,27 @@ writeGraphqlRaw = generateSources moduleToGraphql graphqlLanguage False
 -- | Generate Java source files from modules.
 -- Emission flags (eta-expansion, case-hoisting, polymorphic-let-hoisting)
 -- come from javaLanguage's supportedFeatures.
+--
+-- #633: the coder (hydra.sources.java.Utils.overlayJavaLibPackageAliases) now emits the
+-- correct hydra.lib.<sub> vs. hydra.overlay.java.lib.<sub> reference directly at coding
+-- time, driven by the on-disk overlay-existence set computed here and threaded in as an
+-- explicit parameter, matching the other 8 hosts (#630). javaOverlayLibDir's entries are
+-- per-sub SUBDIRECTORIES (chars/, system/, ...) rather than the flat per-sub FILES the
+-- other hosts' overlay dirs use, but overlayLibSubs's directory listing + dropExtension +
+-- toLower filtering is agnostic to file-vs-directory entries, so it works unmodified here.
 writeJava :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeJava = generateSources moduleToJava javaLanguage True
+writeJava basePath universeModules modulesToGenerate = do
+  knownSubs <- overlayLibSubs javaOverlayLibDir
+  generateSources (moduleToJava knownSubs) javaLanguage True basePath universeModules modulesToGenerate
+
+-- | The Java-host overlay lib directory, relative to the heads/haskell/
+-- working directory that every sync/bootstrap driver runs from. Entries are
+-- per-sub subdirectories (chars/, system/, ...) plus two loose non-sub files
+-- (Libraries.java, PrimitiveType.java) already excluded by overlayLibSubs's
+-- nonSubFiles set.
+javaOverlayLibDir :: FilePath
+javaOverlayLibDir =
+  "../../overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib"
 
 -- | Generate JSON Schema files from modules.
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]

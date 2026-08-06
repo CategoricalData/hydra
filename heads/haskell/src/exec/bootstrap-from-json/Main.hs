@@ -39,7 +39,8 @@ import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform,
-  clojureOverlayLibDir, schemeOverlayLibDir, commonLispOverlayLibDir, emacsLispOverlayLibDir, pythonOverlayLibDir)
+  clojureOverlayLibDir, schemeOverlayLibDir, commonLispOverlayLibDir, emacsLispOverlayLibDir, pythonOverlayLibDir,
+  javaOverlayLibDir)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
 import Hydra.Go.Coder (moduleToGo, goLanguage)
@@ -839,6 +840,15 @@ main = do
   typeScriptKnownLibSubs <- overlayLibSubs typeScriptOverlayLibDir
   scalaKnownLibSubs <- overlayLibSubs scalaOverlayLibDir
   pythonKnownLibSubs <- overlayLibSubs pythonOverlayLibDir
+  -- #633: Java's coder now ALSO takes an explicit overlaySubs parameter (matching the
+  -- other 5 hosts above), so moduleToJava needs javaKnownLibSubs threaded in below --
+  -- required for this to compile against the regenerated dist/json/hydra-java, not a
+  -- behavior change. The libSubsJava/redirectForSubs "java" post-pass is INTENTIONALLY
+  -- kept as-is here (not retired): whether it's still load-bearing for the effectful
+  -- hydra.lib.system primitives is an open, empirically-unconfirmed question (#633
+  -- deliverable 1/4, tracked separately) -- retiring it prematurely here would risk
+  -- silently breaking Java-hosted generation of hydra.lib.system if it's still needed.
+  javaKnownLibSubs <- overlayLibSubs javaOverlayLibDir
   let consumerTransform = case target of
         "haskell"     -> id
         "java"        -> redirectForSubs libSubsJava "java"
@@ -853,7 +863,7 @@ main = do
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of
         "haskell"    -> generateSourcesWithTransform xform (moduleToHaskell haskellKnownLibSubs) haskellLanguage    False dir universe mods
-        "java"       -> generateSourcesWithTransform xform moduleToJava       javaLanguage       False dir universe mods
+        "java"       -> generateSourcesWithTransform xform (moduleToJava javaKnownLibSubs) javaLanguage       False dir universe mods
         "python"     -> generateSourcesWithTransform xform (moduleToPython pythonKnownLibSubs) pythonLanguage     False dir universe mods
         "scala"      -> generateSourcesWithTransform xform (moduleToScala scalaKnownLibSubs) scalaLanguage False dir universe mods
         "go"         -> generateSourcesWithTransform xform moduleToGo  goLanguage         False dir universe mods
