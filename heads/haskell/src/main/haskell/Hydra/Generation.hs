@@ -139,16 +139,35 @@ modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 
 -- ============================================================================
--- #568: hydra.lib.* overlay-redirect existence check
+-- #568/#630: hydra.lib.* overlay-redirect existence check
 -- ============================================================================
 --
--- Shared by the three driver-level choke points that generate Haskell or
--- TypeScript source: 'Hydra.Haskell.Generation.writeHaskell',
--- 'Hydra.ExtGeneration.writeTypeScript', and
--- heads/haskell/src/exec/bootstrap-from-json/Main.hs's per-target dispatch.
--- Each must pass 'correctHaskellLibRedirect'/'correctTypeScriptLibRedirect'
--- (built from 'overlayLibSubs') as its 'generateSourcesWithTransform' argument;
--- see the #568 comment at each of those three call sites.
+-- 'overlayLibSubs' drives emission-time redirect of hydra.lib.<sub> references
+-- to hydra.overlay.<lang>.lib.<sub> directly inside each coder (Haskell,
+-- TypeScript, Scala, Python, Lisp family), consulted at coding time via an
+-- explicit overlaySubs parameter threaded through each coder's entry point
+-- (#630), for every driver EXCEPT the published-host cold seeder (below).
+--
+-- #630 cold-clone circularity (found + reverted 2026-08-06): a first attempt
+-- at #630 also switched heads/haskell/json-driver/app/ColdSeedMain.hs to the
+-- new overlaySubs-parameterized coder calls, source-dirring the freshly
+-- regenerated dist/haskell/hydra-{haskell,python,scala,typescript,lisp} into
+-- json-driver's stack project to satisfy the new signature against the
+-- (stale, pre-#630) published Hackage packages. That is CIRCULAR on a
+-- genuinely cold clone: dist/haskell is gitignored/absent pre-seed, but the
+-- seeder that CREATES it needs those same trees as compile-time inputs to
+-- build itself. Landed, then reverted when cold-clone CI (a real cold
+-- environment, unlike a warm dev worktree) caught it. ColdSeedMain.hs
+-- therefore keeps calling the OLD published (pre-#630) coder signature and
+-- relies on THIS driver-level POST-generation correction pass
+-- ('correctHaskellLibRedirect'/'correctTypeScriptLibRedirect'/
+-- 'redirectLibBack') to narrow the published coders' unconditional redirect
+-- down to only the subs with a real overlay -- the same mechanism already
+-- kept alive here for Java (deferred to #633). Every OTHER driver
+-- (bootstrap-from-json/Main.hs, heads/{scala,python}'s own native drivers)
+-- and every coder DSL source use the full emission-time fix; this is a
+-- narrow, self-documenting exception scoped to the published-pinned cold
+-- seeder alone, retired at the next hostVersion publish.
 
 -- | #568 structural fix: the redirectable @hydra.lib.\<sub\>@ sub-namespaces for a
 -- given host, derived from which overlay lib files actually exist on disk rather
@@ -173,10 +192,11 @@ overlayLibSubs libDir = do
     then return S.empty
     else do
       entries <- SD.listDirectory libDir
+      let nonSubFiles = S.fromList ["libraries", "integraldispatch", "numericdispatch", "primitivetype", "__init__"]
       let subs = [ name
                  | entry <- entries
                  , let name = map toLower (FP.dropExtension entry)
-                 , name /= "libraries"
+                 , not (S.member name nonSubFiles)
                  ]
       return (S.fromList subs)
 
@@ -192,10 +212,17 @@ typeScriptOverlayLibDir :: FilePath
 typeScriptOverlayLibDir =
   "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
 
--- | #568: rewrite a generated Haskell source file's @Hydra.Overlay.Haskell.Lib.\<Sub\>@
+-- | The Scala-host overlay lib directory, relative to the heads/haskell/
+-- working directory that every sync/bootstrap driver runs from.
+scalaOverlayLibDir :: FilePath
+scalaOverlayLibDir =
+  "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
+
+-- | #568/#630: rewrite a generated Haskell source file's @Hydra.Overlay.Haskell.Lib.\<Sub\>@
 -- import back to the canonical @Hydra.Lib.\<Sub\>@ kernel-module name for any sub
--- that has NO overlay implementation on disk. The DSL-level coder
--- (Hydra.Haskell.Coder.constructModule) redirects every 3-segment
+-- that has NO overlay implementation on disk. Used ONLY by the published-host cold
+-- seeder (ColdSeedMain.hs, see the block comment above): that driver links the
+-- published (pre-#630) Haskell coder, which still redirects every 3-segment
 -- @hydra.lib.\<sub\>@ reference unconditionally (shape-only, no existence check --
 -- the DSL has no I/O and cannot check); this driver-level correction narrows that
 -- to only the subs that actually have a host-native implementation, so an
@@ -210,16 +237,17 @@ typeScriptOverlayLibDir =
 correctHaskellLibRedirect :: S.Set String -> String -> String
 correctHaskellLibRedirect knownSubs = redirectLibBack knownSubs "Hydra.Overlay.Haskell.Lib." "Hydra.Lib."
 
--- | #568: TypeScript analog of 'correctHaskellLibRedirect'. The TS coder
--- (Hydra.TypeScript.Coder.importsToText) redirects any import whose first
--- post-@hydra.@ segment is @lib@ to @overlay/typescript/...@ unconditionally
--- (shape-only); this narrows that to subs with an actual overlay file, so
--- @hydra.lib.defaults@ (and any future overlay-less module) resolves back to its
--- generated def-module path instead of a dangling overlay path.
+-- | #568/#630: TypeScript analog of 'correctHaskellLibRedirect', for the same
+-- published-host cold-seeder use (the TS coder linked there also redirects
+-- unconditionally). The TS coder (Hydra.TypeScript.Coder.importsToText) redirects
+-- any import whose first post-@hydra.@ segment is @lib@ to @overlay/typescript/...@
+-- unconditionally (shape-only); this narrows that to subs with an actual overlay
+-- file, so @hydra.lib.defaults@ (and any future overlay-less module) resolves back
+-- to its generated def-module path instead of a dangling overlay path.
 correctTypeScriptLibRedirect :: S.Set String -> String -> String
 correctTypeScriptLibRedirect knownSubs = redirectLibBack knownSubs "overlay/typescript/lib/" "lib/"
 
--- | Shared corrective rewrite for the #568 driver-level fix: scan for every
+-- | Shared corrective rewrite for the #568/#630 cold-seeder-only fix: scan for every
 -- occurrence of 'old' immediately followed by an identifier (the sub name, up to
 -- the next non-identifier character), and for each occurrence whose sub is NOT in
 -- 'knownSubs', rewrite that occurrence's prefix from 'old' to 'new'. Occurrences
