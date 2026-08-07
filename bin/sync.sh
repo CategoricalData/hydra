@@ -467,8 +467,29 @@ heal_java_python_native() {
         # Mirror the srcDirs in packages/hydra-java/build.gradle so the local rollup
         # compiles against a complete dist/java on a cold checkout.
         # hydra-jvm must precede hydra-java (dependency order). (#505)
+        #
+        # #633: packages/hydra-java/build.gradle's :hydra-java:compileHeadsExtrasJava
+        # source set is ONE ATOMIC Gradle compile unit spanning ALL 8 dist/java/hydra-*
+        # trees below. It needs every one of them present simultaneously to compile at
+        # all — not each package individually self-referential (only hydra-kernel and
+        # hydra-java individually self-import their own generated namespace; the other
+        # 6 don't). Since this loop populates the 8 trees ONE AT A TIME via the
+        # java-driver's transform-json-to-target.sh (which falls back to
+        # compileHeadsExtrasJava whenever target-driver's published-classpath probe
+        # fails — e.g. a Java coder signature change ahead of the published host, see
+        # #630/#633), every early package's fallback attempt fails on a
+        # not-yet-populated LATER package in this same loop. Force the WHOLE loop
+        # through the Haskell generator (which has no dist/java dependency at all —
+        # confirmed via heads/haskell/bin/transform-json-to-target.sh) so it seeds all
+        # 8 trees from a genuinely non-circular path first. Scoped tightly to this loop
+        # only via the per-command `VAR=val cmd` prefix form (exports GENERATOR_HOST
+        # into just this one child process, not this shell), so Phase 3/4 and every
+        # other caller keep the java-default's bytecode win for non-circular
+        # generation. This is orthogonal to the #459 circular-seed guard in
+        # assemble-common.sh (which handles hydra-build's own, different, per-package
+        # circularity) — that guard is untouched.
         for pkg in hydra-kernel hydra-haskell hydra-jvm hydra-java hydra-lisp hydra-python hydra-scala hydra-typescript; do
-            "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg" || return 1
+            GENERATOR_HOST=haskell "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg" || return 1
         done
     fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
