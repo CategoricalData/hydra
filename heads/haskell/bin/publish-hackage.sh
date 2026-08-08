@@ -76,10 +76,12 @@ fi
 # 0.17.1). Mirrors the Java/Scala coder set — Hackage ships the Haskell SOURCE of
 # every coder package — plus the hand-written `hydra` umbrella (which Java/Scala have
 # no analog of). Registry packages NOT published to Hackage: the experimental targets
-# hydra-go/hydra-coq/hydra-wasm ("head buds", runtime partial), hydra-bench (inference
-# benchmarks, not a consumable library), and hydra-ext (coder limitation, also excluded
-# from the Java/Python sets). Ordered deps-first; Guard 1 below asserts dependency
-# closure so any ordering/omission error is caught before upload.
+# hydra-go/hydra-coq/hydra-wasm ("head buds", runtime partial), and hydra-bench
+# (inference benchmarks, not a consumable library). hydra-ext IS published here — its
+# Java/Python exclusion is a coder-side eta-expansion limitation (#636) that does not
+# apply to Haskell (no eta-expansion; Haskell uses currying). Ordered deps-first;
+# Guard 1 below asserts dependency closure so any ordering/omission error is caught
+# before upload.
 # NOTE (#573): the long-term plan is to derive all per-registry sets from registry
 # metadata (with per-registry exclusions stored in the registry) to end hand-list rot;
 # targeted for 0.18. For 0.17.1 this stays an explicit, curated list like the others.
@@ -95,6 +97,7 @@ PUBLISH_SET=(
     hydra-typescript
     hydra-rdf
     hydra-pg
+    hydra-ext
     hydra
 )
 

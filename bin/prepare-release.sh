@@ -379,11 +379,12 @@ SDIST_WORK=""
 # The Hackage publish set is the SINGLE SOURCE OF TRUTH curated in
 # heads/haskell/bin/publish-hackage.sh (its PUBLISH_SET), consumed here via
 # `--list` so the two can never drift. That set is leaves-first and deliberately
-# EXCLUDES the experimental targets (hydra-go/coq/wasm), hydra-bench, and hydra-ext
-# — which is exactly what the sdist check below must iterate, since publish-hackage.sh
-# only assembles those packages. (An earlier registry-topo re-derivation here pulled
-# in hydra-go and failed the sdist extraction — #589 follow-up.) The `hydra` umbrella
-# is already included by publish-hackage.sh's set.
+# EXCLUDES the experimental targets (hydra-go/coq/wasm) and hydra-bench — which is
+# exactly what the sdist check below must iterate, since publish-hackage.sh only
+# assembles those packages. (An earlier registry-topo re-derivation here pulled in
+# hydra-go and failed the sdist extraction — #589 follow-up.) The `hydra` umbrella
+# is already included by publish-hackage.sh's set, as is hydra-ext (#636 — its
+# Java/Python coder limitation does not affect the Haskell/Hackage channel).
 # Word-split the newline-separated --list output. Unquoted command substitution
 # (not `read -ra`, which stops at the first newline) splits on both newlines and
 # spaces; package names contain neither spaces nor glob chars, so this is safe.

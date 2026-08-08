@@ -3,6 +3,6 @@
   "name": "hydra-ext",
   "description": "Various extensions to Hydra",
   "sourceLanguage": "haskell",
-  "targetLanguages": ["python"],
+  "targetLanguages": ["haskell", "python"],
   "dependencies": ["hydra-kernel", "hydra-rdf"]
 }

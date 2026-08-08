@@ -215,11 +215,12 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    Hydra publishes a per-package Hackage distribution for **every** Hydra Haskell
    package (`hydra-kernel`, `hydra-haskell`, each generated coder — `hydra-coq`,
    `hydra-scala`, `hydra-pg`, `hydra-rdf`, … — and the `hydra` umbrella), rather
-   than one monolithic `hydra` sdist. The set is an **explicit curated list** in
+   than one monolithic `hydra` sdist, plus `hydra-ext` (#636 — unlike the Java/Scala/
+   Python/npm channels, Hackage has no eta-expansion so hydra-ext's coder limitation
+   does not apply). The set is an **explicit curated list** in
    `heads/haskell/bin/publish-hackage.sh` (`--list` prints it), deliberately
-   **excluding** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`),
-   the `hydra-bench` benchmarks, and `hydra-ext` — matching the Java/Scala coder
-   sets plus the `hydra` umbrella. (#573 tracks deriving all per-registry sets
+   **excluding** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`) and
+   the `hydra-bench` benchmarks. (#573 tracks deriving all per-registry sets
    from registry metadata for 0.18; until then each channel keeps its own curated
    list, and `prepare-release.sh` consumes this one via `--list` so they cannot
    drift.) This step assembles them all (leaves first) on a
@@ -503,15 +504,17 @@ The following are Haskell-specific release steps:
   The publish set is an **explicit curated list** in `publish-hackage.sh`
   (`--list` prints it), mirroring the per-channel curated sets that Java (Maven),
   Scala (Maven), Python (PyPI), and npm each keep. It began as the 0.16.0 trio
-  (`hydra-kernel`, `hydra-haskell`, `hydra`); as of 0.17.1 it is the twelve-package
+  (`hydra-kernel`, `hydra-haskell`, `hydra`); as of 0.17.4 it is the thirteen-package
   set covering the kernel, every **released** coder (`hydra-jvm`, `hydra-java`,
   `hydra-python`, `hydra-scala`, `hydra-lisp`, `hydra-typescript`, `hydra-rdf`,
-  `hydra-pg`), `hydra-build`, and the `hydra` umbrella. It deliberately **excludes**
-  the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`), the `hydra-bench`
-  benchmarks, and `hydra-ext` — the same exclusions the Java/Scala coder sets apply.
-  (#573 tracks deriving all per-registry sets from registry metadata for 0.18; until
-  then the list is curated per channel.) The set is always **dependency-closed**
-  (asserted before upload).
+  `hydra-pg`), `hydra-build`, `hydra-ext`, and the `hydra` umbrella. It deliberately
+  **excludes** the experimental targets (`hydra-go`, `hydra-coq`, `hydra-wasm`) and
+  the `hydra-bench` benchmarks. `hydra-ext` **is** published to Hackage (#636) even
+  though it is excluded from the Java/Python/Scala/npm sets — its coder limitation is
+  specific to eta-expanding targets and does not affect Haskell (which uses currying,
+  no eta-expansion). (#573 tracks deriving all per-registry sets from registry
+  metadata for 0.18; until then the list is curated per channel.) The set is always
+  **dependency-closed** (asserted before upload).
   * `bin/prepare-release.sh` already produced the upload-ready per-package sdists
     and Haddock-for-Hackage tarballs under `release-artifacts/` (one
     `<pkg>-<version>.tar.gz` + `<pkg>-<version>-docs.tar.gz` per package).
@@ -614,7 +617,10 @@ do NOT yet qualify.
 
 `hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) is intentionally NOT in the Java
 publish set due to a known Java-coder limitation with parametric union case-elimination on
-concretely-instantiated arguments. Track this before adding `hydra-ext` to a future Java publish set.
+concretely-instantiated arguments (#636). The same limitation excludes it from the Python
+and Scala/Maven publish sets and npm; it does **not** affect Hackage, since Haskell has no
+eta-expansion (hydra-ext ships to Hackage as of 0.17.4 — see the Hackage set above). Track
+#636 before adding `hydra-ext` to a future Java/Python/Scala/npm publish set.
 
 Each artifact's `build.gradle` is regenerated from `packages/<pkg>/package.json` (which declares
 the inter-package `dependencies` array) and `hydra.json:currentVersion` by
