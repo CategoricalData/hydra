@@ -314,8 +314,14 @@ generateSourceFiles = define "generateSourceFiles" $
   "typeModulesToGenerate" <~ Lists.filter ("mod" ~> hasTypeDefinitions (var "mod")) (var "modsToGenerate") $
   "termModulesToGenerate" <~ Lists.filter ("mod" ~> hasTermDefinitions (var "mod")) (var "modsToGenerate") $
 
-  -- Compute transitive deps and build graphs
-  "closureMods" <~ moduleDepsTransitive @@ var "namespaceMap" @@ var "modsToGenerate" $
+  -- Compute transitive deps and build graphs.
+  -- Seed the closure from BOTH universeModules and modsToGenerate, not modsToGenerate alone.
+  -- A schema type referenced only by a primitive's signature (e.g. hydra.error.file.FileError
+  -- for hydra.lib.files.readFile) has no reason to be a declared dependency of the module being
+  -- generated; the caller's only way to make it resolvable is via universeModules. Seeding the
+  -- closure from modsToGenerate alone silently drops such types from graphSchemaTypes, causing
+  -- them to be treated as free type variables during unification and wrongly generalized. #637
+  "closureMods" <~ moduleDepsTransitive @@ var "namespaceMap" @@ (Lists.concat2 (var "universeModules") (var "modsToGenerate")) $
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
       (var "closureMods")) $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "closureMods")) $
@@ -750,7 +756,13 @@ modulesToGraph = define "modulesToGraph" $
   "universe" <~ (Maps.fromList (Lists.map
     ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modules"))) :: TypedTerm (M.Map Name Module)) $
-  "closureModules" <~ moduleDepsTransitive @@ var "universe" @@ var "modules" $
+  -- Seed the closure from BOTH universeModules and modules, not modules alone.
+  -- A schema type referenced only by a primitive's signature (e.g. hydra.error.file.FileError
+  -- for hydra.lib.files.readFile) has no reason to be a declared dependency of a caller's own
+  -- target module; the caller's only way to make it resolvable is via universeModules. Seeding
+  -- the closure from modules alone silently drops such types from graphSchemaTypes, causing
+  -- them to be treated as free type variables during unification and wrongly generalized. #637
+  "closureModules" <~ moduleDepsTransitive @@ var "universe" @@ (Lists.concat2 (var "universeModules") (var "modules")) $
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
       (var "closureModules")) $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "closureModules")) $

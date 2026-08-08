@@ -174,8 +174,10 @@ kernelLibModules :: [Module]
 kernelLibModules = [
   LibChars.module_,
   LibDefaults.module_,
+  LibEffects.module_,
   LibEithers.module_,
   LibEquality.module_,
+  LibFiles.module_,
   LibFunctions.module_,
   LibLists.module_,
   LibLiterals.module_,
@@ -187,4 +189,6 @@ kernelLibModules = [
   LibPairs.module_,
   LibRegex.module_,
   LibSets.module_,
-  LibStrings.module_]
+  LibStrings.module_,
+  LibSystem.module_,
+  LibText.module_]

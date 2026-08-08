@@ -26,6 +26,11 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Validate.Packaging as ValidatePackaging
 import qualified Hydra.Validate.Core as ValidateCore
+import qualified Hydra.Sources.Kernel.Types.Error.File as TypesErrorFile
+import qualified Hydra.Sources.Kernel.Types.Error.System as TypesErrorSystem
+import qualified Hydra.Sources.Kernel.Types.File as TypesFile
+import qualified Hydra.Sources.Kernel.Types.System as TypesSystem
+import qualified Hydra.Sources.Kernel.Types.Time as TypesTime
 -- Hydra.Kernel re-exports Hydra.Error.Core (InvalidTypeError, InvalidTermError)
 -- but NOT Hydra.Error.Packaging (InvalidPackageError) -- import it explicitly.
 import Hydra.Error.Packaging (InvalidPackageError)
@@ -137,6 +142,22 @@ generateSourcesWithTransform transform printDefinitions lang doInfer basePath un
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
+
+-- | The kernel type modules that back primitives outside a caller's own module
+-- dependencies -- e.g. hydra.lib.files.readFile references hydra.error.file.FileError
+-- without requiring the caller to declare hydra.lib.files as a dependency, since
+-- primitives resolve globally (see #637's graphPrimitives/graphSchemaTypes asymmetry).
+-- A downstream caller can pass these modules as (part of) generateSourceFiles's/
+-- modulesToGraph's universeModules argument to make such nominal types resolvable,
+-- without vendoring the kernel JSON modules by hand (#640). Listed deps-first
+-- (Time -> File -> Error.File; File -> System; File -> Error.System).
+kernelTypeUniverse :: [Module]
+kernelTypeUniverse = [
+  TypesTime.module_,
+  TypesFile.module_,
+  TypesErrorFile.module_,
+  TypesSystem.module_,
+  TypesErrorSystem.module_]
 
 -- ============================================================================
 -- #568/#630: hydra.lib.* overlay-redirect existence check

@@ -710,6 +710,25 @@ public interface Types {
     }
 
     /**
+     * Effect type.
+     * Example: effect(string())
+     * @param value the value type
+     * @return the effect type
+     */
+    static Type effect(Type value) {
+        return new Type.Effect(value);
+    }
+
+    /**
+     * Effect type (with string variable name).
+     * @param value the value type variable name
+     * @return the effect type
+     */
+    static Type effect(String value) {
+        return effect(var(value));
+    }
+
+    /**
      * Set type.
      * Example: set(string())
      * @param elements the element type
