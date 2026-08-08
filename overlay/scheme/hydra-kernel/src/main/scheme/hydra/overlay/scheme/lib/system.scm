@@ -23,15 +23,15 @@
           (only (ice-9 popen) open-pipe* close-pipe)
           (only (ice-9 binary-ports) get-bytevector-all put-bytevector)
           (only (rnrs bytevectors) bytevector-length bytevector-u8-ref make-bytevector bytevector-u8-set!))
-  (export hydra_lib_system_execute
-          hydra_lib_system_exit
-          hydra_lib_system_get_environment
-          hydra_lib_system_get_environment_variable
-          hydra_lib_system_get_time
-          hydra_lib_system_get_working_directory
-          hydra_lib_system_read_stdin
-          hydra_lib_system_write_stderr
-          hydra_lib_system_write_stdout)
+  (export hydra_overlay_scheme_lib_system_execute
+          hydra_overlay_scheme_lib_system_exit
+          hydra_overlay_scheme_lib_system_get_environment
+          hydra_overlay_scheme_lib_system_get_environment_variable
+          hydra_overlay_scheme_lib_system_get_time
+          hydra_overlay_scheme_lib_system_get_working_directory
+          hydra_overlay_scheme_lib_system_read_stdin
+          hydra_overlay_scheme_lib_system_write_stderr
+          hydra_overlay_scheme_lib_system_write_stdout)
   (begin
 
     ;; Scheme (guile) implementations of hydra.lib.system primitives (#498).
@@ -122,7 +122,7 @@
     ;; ---- Primitives ----
 
     ;; execute :: Command -> effect<Either<SystemError, ProcessResult>>
-    (define hydra_lib_system_execute
+    (define hydra_overlay_scheme_lib_system_execute
       (lambda (command)
         (let ((program (rec-ref '(hydra system) 'hydra_system_command-program command))
               (args (rec-ref '(hydra system) 'hydra_system_command-arguments command))
@@ -153,12 +153,12 @@
                     (when (file-exists? errfile) (delete-file errfile)))))))))
 
     ;; exit :: StatusCode -> effect<unit>
-    (define hydra_lib_system_exit
+    (define hydra_overlay_scheme_lib_system_exit
       (lambda (code) (primitive-exit code)))
 
     ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>  (nullary effect: a bare value)
     ;; A map is an alist of (key . value) pairs (accepted by hydra.lib.maps).
-    (define hydra_lib_system_get_environment
+    (define hydra_overlay_scheme_lib_system_get_environment
       (map (lambda (entry)
              (let ((eq (string-index entry #\=)))
                (if eq
@@ -167,34 +167,34 @@
            (environ)))
 
     ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
-    (define hydra_lib_system_get_environment_variable
+    (define hydra_overlay_scheme_lib_system_get_environment_variable
       (lambda (name)
         (let ((v (getenv name)))
           (if v (list 'given v) (list 'none)))))
 
     ;; getTime :: effect<Timespec>  (nullary effect: a bare value)
-    (define hydra_lib_system_get_time
+    (define hydra_overlay_scheme_lib_system_get_time
       (let ((tv (gettimeofday)))
         (make-rec '(hydra time) 'make-hydra_time_timespec (car tv) (* (cdr tv) 1000))))
 
     ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
-    (define hydra_lib_system_get_working_directory
+    (define hydra_overlay_scheme_lib_system_get_working_directory
       (list 'right (getcwd)))
 
     ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
-    (define hydra_lib_system_read_stdin
+    (define hydra_overlay_scheme_lib_system_read_stdin
       (let ((bv (get-bytevector-all (current-input-port))))
         (list 'right (if (eof-object? bv) #() (bytevector->binary bv)))))
 
     ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
-    (define hydra_lib_system_write_stderr
+    (define hydra_overlay_scheme_lib_system_write_stderr
       (lambda (bs)
         (put-bytevector (current-error-port) (binary->bytevector bs))
         (force-output (current-error-port))
         (list 'right '())))
 
     ;; writeStdout :: binary -> effect<Either<SystemError, unit>>
-    (define hydra_lib_system_write_stdout
+    (define hydra_overlay_scheme_lib_system_write_stdout
       (lambda (bs)
         (put-bytevector (current-output-port) (binary->bytevector bs))
         (force-output (current-output-port))

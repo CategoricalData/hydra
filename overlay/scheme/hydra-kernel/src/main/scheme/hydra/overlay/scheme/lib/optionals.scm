@@ -1,17 +1,17 @@
 (define-library (hydra overlay scheme lib optionals)
   (import (scheme base))
-  (export hydra_lib_optionals_apply
-          hydra_lib_optionals_bind
-          hydra_lib_optionals_cases
-          hydra_lib_optionals_givens
-          hydra_lib_optionals_compose
-          hydra_lib_optionals_with_default
-          hydra_lib_optionals_is_given
-          hydra_lib_optionals_is_none
-          hydra_lib_optionals_map
-          hydra_lib_optionals_map_optional
-          hydra_lib_optionals_pure
-          hydra_lib_optionals_to_list
+  (export hydra_overlay_scheme_lib_optionals_apply
+          hydra_overlay_scheme_lib_optionals_bind
+          hydra_overlay_scheme_lib_optionals_cases
+          hydra_overlay_scheme_lib_optionals_givens
+          hydra_overlay_scheme_lib_optionals_compose
+          hydra_overlay_scheme_lib_optionals_with_default
+          hydra_overlay_scheme_lib_optionals_is_given
+          hydra_overlay_scheme_lib_optionals_is_none
+          hydra_overlay_scheme_lib_optionals_map
+          hydra_overlay_scheme_lib_optionals_map_optional
+          hydra_overlay_scheme_lib_optionals_pure
+          hydra_overlay_scheme_lib_optionals_to_list
           maybe-nothing?
           maybe-value)
   (begin
@@ -30,7 +30,7 @@
         (else m)))
 
     ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
-    (define hydra_lib_optionals_apply
+    (define hydra_overlay_scheme_lib_optionals_apply
       (lambda (mf)
         (lambda (mx)
           (if (maybe-nothing? mf)
@@ -40,7 +40,7 @@
                   (list 'given ((maybe-value mf) (maybe-value mx))))))))
 
     ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
-    (define hydra_lib_optionals_bind
+    (define hydra_overlay_scheme_lib_optionals_bind
       (lambda (m)
         (lambda (f)
           (if (maybe-nothing? m)
@@ -49,7 +49,7 @@
 
     ;; cases :: Maybe a -> b -> (a -> b) -> b
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_lib_optionals_cases
+    (define hydra_overlay_scheme_lib_optionals_cases
       (lambda (m)
         (lambda (def)
           (lambda (f)
@@ -58,7 +58,7 @@
                 (f (maybe-value m)))))))
 
     ;; cat :: [Maybe a] -> [a]
-    (define hydra_lib_optionals_givens
+    (define hydra_overlay_scheme_lib_optionals_givens
       (lambda (ms)
         (let loop ((rest ms) (acc '()))
           (if (null? rest)
@@ -68,7 +68,7 @@
                   (loop (cdr rest) acc))))))
 
     ;; compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
-    (define hydra_lib_optionals_compose
+    (define hydra_overlay_scheme_lib_optionals_compose
       (lambda (g)
         (lambda (f)
           (lambda (x)
@@ -79,7 +79,7 @@
 
     ;; from_optional :: a -> Maybe a -> a
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_lib_optionals_with_default
+    (define hydra_overlay_scheme_lib_optionals_with_default
       (lambda (def)
         (lambda (m)
           (if (maybe-nothing? m)
@@ -87,17 +87,17 @@
               (maybe-value m)))))
 
     ;; is_given :: Maybe a -> Bool
-    (define hydra_lib_optionals_is_given
+    (define hydra_overlay_scheme_lib_optionals_is_given
       (lambda (m)
         (not (maybe-nothing? m))))
 
     ;; is_none :: Maybe a -> Bool
-    (define hydra_lib_optionals_is_none
+    (define hydra_overlay_scheme_lib_optionals_is_none
       (lambda (m)
         (maybe-nothing? m)))
 
     ;; map :: (a -> b) -> Maybe a -> Maybe b
-    (define hydra_lib_optionals_map
+    (define hydra_overlay_scheme_lib_optionals_map
       (lambda (f)
         (lambda (m)
           (if (maybe-nothing? m)
@@ -105,7 +105,7 @@
               (list 'given (f (maybe-value m)))))))
 
     ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
-    (define hydra_lib_optionals_map_optional
+    (define hydra_overlay_scheme_lib_optionals_map_optional
       (lambda (f)
         (lambda (xs)
           (let loop ((rest xs) (acc '()))
@@ -117,12 +117,12 @@
                       (loop (cdr rest) acc))))))))
 
     ;; pure :: a -> Maybe a
-    (define hydra_lib_optionals_pure
+    (define hydra_overlay_scheme_lib_optionals_pure
       (lambda (x)
         (list 'given x)))
 
     ;; to_list :: Maybe a -> [a]
-    (define hydra_lib_optionals_to_list
+    (define hydra_overlay_scheme_lib_optionals_to_list
       (lambda (m)
         (if (maybe-nothing? m)
             '()

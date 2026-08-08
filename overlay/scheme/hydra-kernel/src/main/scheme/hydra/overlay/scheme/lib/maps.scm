@@ -2,26 +2,26 @@
   (import (scheme base) (scheme write)
           (ice-9 vlist)
           (only (guile) make-hash-table hash-ref hash-set! sort))
-  (export hydra_lib_maps_alter
-          hydra_lib_maps_bimap
-          hydra_lib_maps_delete
-          hydra_lib_maps_elems
-          hydra_lib_maps_empty
-          hydra_lib_maps_filter
-          hydra_lib_maps_filter_with_key
-          hydra_lib_maps_find_with_default
-          hydra_lib_maps_from_list
-          hydra_lib_maps_insert
-          hydra_lib_maps_keys
-          hydra_lib_maps_lookup
-          hydra_lib_maps_map
-          hydra_lib_maps_member
-          hydra_lib_maps_null
-          hydra_lib_maps_singleton
-          hydra_lib_maps_size
-          hydra_lib_maps_to_list
-          hydra_lib_maps_map_keys
-          hydra_lib_maps_union)
+  (export hydra_overlay_scheme_lib_maps_alter
+          hydra_overlay_scheme_lib_maps_bimap
+          hydra_overlay_scheme_lib_maps_delete
+          hydra_overlay_scheme_lib_maps_elems
+          hydra_overlay_scheme_lib_maps_empty
+          hydra_overlay_scheme_lib_maps_filter
+          hydra_overlay_scheme_lib_maps_filter_with_key
+          hydra_overlay_scheme_lib_maps_find_with_default
+          hydra_overlay_scheme_lib_maps_from_list
+          hydra_overlay_scheme_lib_maps_insert
+          hydra_overlay_scheme_lib_maps_keys
+          hydra_overlay_scheme_lib_maps_lookup
+          hydra_overlay_scheme_lib_maps_map
+          hydra_overlay_scheme_lib_maps_member
+          hydra_overlay_scheme_lib_maps_null
+          hydra_overlay_scheme_lib_maps_singleton
+          hydra_overlay_scheme_lib_maps_size
+          hydra_overlay_scheme_lib_maps_to_list
+          hydra_overlay_scheme_lib_maps_map_keys
+          hydra_overlay_scheme_lib_maps_union)
   (begin
 
     ;; Maps use Guile's vhash for O(1) amortized lookup/insert.
@@ -119,7 +119,7 @@
                (cadr body)
                body)))
         (else m)))
-    (define hydra_lib_maps_alter
+    (define hydra_overlay_scheme_lib_maps_alter
       (lambda (f)
         (lambda (k)
           (lambda (m)
@@ -138,7 +138,7 @@
                   (vhash-cons k (alter-get-value new-maybe) vh)))))))
 
     ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-    (define hydra_lib_maps_bimap
+    (define hydra_overlay_scheme_lib_maps_bimap
       (lambda (fk)
         (lambda (fv)
           (lambda (m)
@@ -150,7 +150,7 @@
                             (vhash-cons (fk (car p)) (fv (cdr p)) vh))))))))))
 
     ;; delete :: k -> Map k v -> Map k v
-    (define hydra_lib_maps_delete
+    (define hydra_overlay_scheme_lib_maps_delete
       (lambda (k)
         (lambda (m)
           (let ((vh (ensure-vhash m)))
@@ -160,15 +160,15 @@
 
     ;; elems :: Map k v -> [v]
     ;; Returned in key-sorted order (matching Haskell Data.Map semantics).
-    (define hydra_lib_maps_elems
+    (define hydra_overlay_scheme_lib_maps_elems
       (lambda (m)
         (map cdr (vhash-sorted-entries (ensure-vhash m)))))
 
     ;; empty :: Map k v
-    (define hydra_lib_maps_empty vlist-null)
+    (define hydra_overlay_scheme_lib_maps_empty vlist-null)
 
     ;; filter :: (v -> Bool) -> Map k v -> Map k v
-    (define hydra_lib_maps_filter
+    (define hydra_overlay_scheme_lib_maps_filter
       (lambda (pred)
         (lambda (m)
           (let ((vh (ensure-vhash m)))
@@ -177,7 +177,7 @@
                         vlist-null vh)))))
 
     ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
-    (define hydra_lib_maps_filter_with_key
+    (define hydra_overlay_scheme_lib_maps_filter_with_key
       (lambda (pred)
         (lambda (m)
           (let ((vh (ensure-vhash m)))
@@ -187,7 +187,7 @@
 
     ;; find_with_default :: v -> k -> Map k v -> v
     ;; Thunk-aware: the default is lazy (#391); if def is a zero-arg procedure, only call it on a miss.
-    (define hydra_lib_maps_find_with_default
+    (define hydra_overlay_scheme_lib_maps_find_with_default
       (lambda (def)
         (lambda (k)
           (lambda (m)
@@ -196,7 +196,7 @@
 
     ;; from_list :: [Pair k v] -> Map k v
     ;; Input is list of (list k v) pairs.
-    (define hydra_lib_maps_from_list
+    (define hydra_overlay_scheme_lib_maps_from_list
       (lambda (pairs)
         (let loop ((rest pairs) (vh vlist-null))
           (if (null? rest) vh
@@ -206,19 +206,19 @@
 
     ;; insert :: k -> v -> Map k v -> Map k v
     ;; vhash-cons shadows the older entry, so subsequent lookups see the new value.
-    (define hydra_lib_maps_insert
+    (define hydra_overlay_scheme_lib_maps_insert
       (lambda (k)
         (lambda (v)
           (lambda (m)
             (vhash-cons k v (ensure-vhash m))))))
 
     ;; keys :: Map k v -> [k]
-    (define hydra_lib_maps_keys
+    (define hydra_overlay_scheme_lib_maps_keys
       (lambda (m)
         (map car (vhash-sorted-entries (ensure-vhash m)))))
 
     ;; lookup :: k -> Map k v -> Maybe v
-    (define hydra_lib_maps_lookup
+    (define hydra_overlay_scheme_lib_maps_lookup
       (lambda (k)
         (lambda (m)
           (let ((entry (vhash-assoc k (ensure-vhash m))))
@@ -227,7 +227,7 @@
                 (list 'none))))))
 
     ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
-    (define hydra_lib_maps_map
+    (define hydra_overlay_scheme_lib_maps_map
       (lambda (f)
         (lambda (m)
           (let ((entries (vhash-unique-entries (ensure-vhash m))))
@@ -238,13 +238,13 @@
                           (vhash-cons (car p) (f (cdr p)) vh)))))))))
 
     ;; member :: k -> Map k v -> Bool
-    (define hydra_lib_maps_member
+    (define hydra_overlay_scheme_lib_maps_member
       (lambda (k)
         (lambda (m)
           (if (vhash-assoc k (ensure-vhash m)) #t #f))))
 
     ;; null :: Map k v -> Bool
-    (define hydra_lib_maps_null
+    (define hydra_overlay_scheme_lib_maps_null
       (lambda (m)
         (cond
           ((vlist? m) (vlist-null? m))
@@ -253,26 +253,26 @@
           (else #t))))
 
     ;; singleton :: k -> v -> Map k v
-    (define hydra_lib_maps_singleton
+    (define hydra_overlay_scheme_lib_maps_singleton
       (lambda (k)
         (lambda (v)
           (vhash-cons k v vlist-null))))
 
     ;; size :: Map k v -> Int
     ;; Counts unique keys (vhash may have shadowed duplicates).
-    (define hydra_lib_maps_size
+    (define hydra_overlay_scheme_lib_maps_size
       (lambda (m)
         (length (vhash-unique-entries (ensure-vhash m)))))
 
     ;; to_list :: Map k v -> [Pair k v]
     ;; Returned in key-sorted order, as (list k v) pairs.
-    (define hydra_lib_maps_to_list
+    (define hydra_overlay_scheme_lib_maps_to_list
       (lambda (m)
         (map (lambda (p) (list (car p) (cdr p)))
              (vhash-sorted-entries (ensure-vhash m)))))
 
     ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-    (define hydra_lib_maps_map_keys
+    (define hydra_overlay_scheme_lib_maps_map_keys
       (lambda (f)
         (lambda (m)
           (let ((entries (vhash-unique-entries (ensure-vhash m))))
@@ -285,7 +285,7 @@
     ;; union :: Map k v -> Map k v -> Map k v
     ;; Left-biased: entries from first map take precedence.
     ;; vhash-cons shadows older entries, so we cons m1's entries last.
-    (define hydra_lib_maps_union
+    (define hydra_overlay_scheme_lib_maps_union
       (lambda (m1)
         (lambda (m2)
           (let ((vh1 (ensure-vhash m1))

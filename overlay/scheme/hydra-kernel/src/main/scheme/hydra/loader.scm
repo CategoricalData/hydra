@@ -497,7 +497,7 @@
 ;; ============================================================================
 
 ;; The code generator translates Haskell's `if cond then else` as eager curried
-;; calls: (((hydra_lib_logic_if_else cond) then) else). In strict Scheme both
+;; calls: (((hydra_overlay_scheme_lib_logic_if_else cond) then) else). In strict Scheme both
 ;; branches are evaluated, causing infinite recursion for recursive functions
 ;; that use if_else for termination. We transform these into Scheme's native
 ;; short-circuiting (if ...) special form, matching what the CL loader does.
@@ -585,35 +585,35 @@
       (else (loop (cdr cls) found-var)))))
 
 (define (fix-if-else form)
-  "Walk form and transform (((hydra_lib_logic_if_else C) T) E) into (if C T E).
-   Also transforms ((hydra_lib_logic_and A) B) -> (and A B) and
-   ((hydra_lib_logic_or A) B) -> (or A B) for short-circuit evaluation.
+  "Walk form and transform (((hydra_overlay_scheme_lib_logic_if_else C) T) E) into (if C T E).
+   Also transforms ((hydra_overlay_scheme_lib_logic_and A) B) -> (and A B) and
+   ((hydra_overlay_scheme_lib_logic_or A) B) -> (or A B) for short-circuit evaluation.
    Also fixes cond else clauses where literals are called as functions:
    (else (LITERAL expr)) -> (else LITERAL) when LITERAL is #t, #f, a number, or '()."
   (cond
     ((not (pair? form)) form)
     ((eq? (car form) 'quote) form)
-    ;; Detect ((hydra_lib_logic_and A) B) -> (and A B)
-    ;; and ((hydra_lib_logic_or A) B) -> (or A B)
-    ;; Structure: form = (X B) where X = (hydra_lib_logic_and A)
+    ;; Detect ((hydra_overlay_scheme_lib_logic_and A) B) -> (and A B)
+    ;; and ((hydra_overlay_scheme_lib_logic_or A) B) -> (or A B)
+    ;; Structure: form = (X B) where X = (hydra_overlay_scheme_lib_logic_and A)
     ((and (pair? (car form))
           (pair? (cdr form))
           (null? (cddr form))                 ;; exactly one arg (B)
           (symbol? (caar form))
-          (or (eq? (caar form) 'hydra_lib_logic_and)
-              (eq? (caar form) 'hydra_lib_logic_or))
+          (or (eq? (caar form) 'hydra_overlay_scheme_lib_logic_and)
+              (eq? (caar form) 'hydra_overlay_scheme_lib_logic_or))
           (pair? (cdar form))
           (null? (cddar form)))               ;; exactly one arg for X (A)
-     (let ((op (if (eq? (caar form) 'hydra_lib_logic_and) 'and 'or))
+     (let ((op (if (eq? (caar form) 'hydra_overlay_scheme_lib_logic_and) 'and 'or))
            (a (fix-if-else (cadar form)))
            (b (fix-if-else (cadr form))))
        (list op a b)))
-    ;; Detect (((hydra_lib_logic_if_else C) T) E)
-    ;; Structure: form = (X E) where X = (Y T) where Y = (hydra_lib_logic_if_else C)
-    ;; So: form = (((hydra_lib_logic_if_else C) T) E)
-    ;;   car form = ((hydra_lib_logic_if_else C) T)
-    ;;   caar form = (hydra_lib_logic_if_else C)
-    ;;   caaar form = hydra_lib_logic_if_else  (a symbol)
+    ;; Detect (((hydra_overlay_scheme_lib_logic_if_else C) T) E)
+    ;; Structure: form = (X E) where X = (Y T) where Y = (hydra_overlay_scheme_lib_logic_if_else C)
+    ;; So: form = (((hydra_overlay_scheme_lib_logic_if_else C) T) E)
+    ;;   car form = ((hydra_overlay_scheme_lib_logic_if_else C) T)
+    ;;   caar form = (hydra_overlay_scheme_lib_logic_if_else C)
+    ;;   caaar form = hydra_overlay_scheme_lib_logic_if_else  (a symbol)
     ((and (pair? (car form))                  ;; form = (X E ...)
           (pair? (cdr form))
           (null? (cddr form))                 ;; exactly one arg (E)
@@ -621,7 +621,7 @@
           (pair? (cdar form))
           (null? (cddar form))                ;; exactly one arg for X (T)
           (symbol? (caaar form))              ;; Y starts with a symbol
-          (eq? (caaar form) 'hydra_lib_logic_if_else)
+          (eq? (caaar form) 'hydra_overlay_scheme_lib_logic_if_else)
           (pair? (cdaar form))                ;; Y has an arg (C)
           (null? (cddaar form)))              ;; exactly one arg for Y
      (let ((cond-form (fix-if-else (cadaar form)))         ;; C
@@ -987,7 +987,7 @@
    X -> def:X and evaluating the (begin ...) body flat in the interaction environment (#473).
 
    The registry (overlay/scheme/libraries.scm) needs, per primitive, BOTH the PrimitiveDefinition
-   DATA (as def:hydra_lib_<sub>_<fn>) and the impl PROCEDURE (as hydra_lib_<sub>_<fn>, provided by the
+   DATA (as def:hydra_lib_<sub>_<fn>) and the impl PROCEDURE (as hydra_overlay_scheme_lib_<sub>_<fn>, provided by the
    flat-loaded overlay/scheme/lib/* impls). Loading the def-modules as real R7RS libraries fails: their
    (make-hydra_packaging_primitive_definition ...) bodies would use the library-scoped record type,
    which the flat-loaded registry's hydra_packaging_primitive_definition-name accessor does not accept

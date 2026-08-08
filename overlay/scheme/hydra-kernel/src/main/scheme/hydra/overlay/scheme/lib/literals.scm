@@ -2,72 +2,72 @@
   (import (scheme base) (scheme inexact)
           (scheme bytevector)
           (srfi 151))         ;; Bitwise operations (chibi-compatible)
-  (export hydra_lib_literals_bigint_to_decimal
-          hydra_lib_literals_bigint_to_int
-          hydra_lib_literals_bigint_to_int8
-          hydra_lib_literals_bigint_to_int16
-          hydra_lib_literals_bigint_to_int32
-          hydra_lib_literals_bigint_to_int64
-          hydra_lib_literals_bigint_to_uint
-          hydra_lib_literals_bigint_to_uint8
-          hydra_lib_literals_bigint_to_uint16
-          hydra_lib_literals_bigint_to_uint32
-          hydra_lib_literals_bigint_to_uint64
-          hydra_lib_literals_binary_to_base64
-          hydra_lib_literals_decimal_to_bigint
-          hydra_lib_literals_decimal_to_float32
-          hydra_lib_literals_decimal_to_float64
-          hydra_lib_literals_float
-          hydra_lib_literals_float32_to_decimal
-          hydra_lib_literals_float32_to_float64
-          hydra_lib_literals_float64_to_decimal
-          hydra_lib_literals_float64_to_float32
-          hydra_lib_literals_int
-          hydra_lib_literals_int8_to_bigint
-          hydra_lib_literals_int16_to_bigint
-          hydra_lib_literals_int32_to_bigint
-          hydra_lib_literals_int64_to_bigint
-          hydra_lib_literals_read_bigint
-          hydra_lib_literals_read_decimal
-          hydra_lib_literals_read_float
-          hydra_lib_literals_read_float32
-          hydra_lib_literals_read_int
-          hydra_lib_literals_read_int64
-          hydra_lib_literals_read_uint
-          hydra_lib_literals_read_uint32
-          hydra_lib_literals_read_uint64
-          hydra_lib_literals_show_bigint
-          hydra_lib_literals_show_decimal
-          hydra_lib_literals_show_float
-          hydra_lib_literals_show_float32
-          hydra_lib_literals_show_float64
-          hydra_lib_literals_show_int
-          hydra_lib_literals_show_int8
-          hydra_lib_literals_show_int16
-          hydra_lib_literals_show_int32
-          hydra_lib_literals_show_int64
-          hydra_lib_literals_print_string
-          hydra_lib_literals_show_uint
-          hydra_lib_literals_show_uint8
-          hydra_lib_literals_show_uint16
-          hydra_lib_literals_show_uint32
-          hydra_lib_literals_show_uint64
-          hydra_lib_literals_base64_to_binary
-          hydra_lib_literals_uint
-          hydra_lib_literals_uint8_to_bigint
-          hydra_lib_literals_uint16_to_bigint
-          hydra_lib_literals_uint32_to_bigint
-          hydra_lib_literals_binary_to_bytes
-          hydra_lib_literals_parse_boolean
-          hydra_lib_literals_read_float64
-          hydra_lib_literals_read_int8
-          hydra_lib_literals_read_int16
-          hydra_lib_literals_read_int32
-          hydra_lib_literals_parse_string
-          hydra_lib_literals_read_uint8
-          hydra_lib_literals_read_uint16
-          hydra_lib_literals_print_boolean
-          hydra_lib_literals_uint64_to_bigint)
+  (export hydra_overlay_scheme_lib_literals_bigint_to_decimal
+          hydra_overlay_scheme_lib_literals_bigint_to_int
+          hydra_overlay_scheme_lib_literals_bigint_to_int8
+          hydra_overlay_scheme_lib_literals_bigint_to_int16
+          hydra_overlay_scheme_lib_literals_bigint_to_int32
+          hydra_overlay_scheme_lib_literals_bigint_to_int64
+          hydra_overlay_scheme_lib_literals_bigint_to_uint
+          hydra_overlay_scheme_lib_literals_bigint_to_uint8
+          hydra_overlay_scheme_lib_literals_bigint_to_uint16
+          hydra_overlay_scheme_lib_literals_bigint_to_uint32
+          hydra_overlay_scheme_lib_literals_bigint_to_uint64
+          hydra_overlay_scheme_lib_literals_binary_to_base64
+          hydra_overlay_scheme_lib_literals_decimal_to_bigint
+          hydra_overlay_scheme_lib_literals_decimal_to_float32
+          hydra_overlay_scheme_lib_literals_decimal_to_float64
+          hydra_overlay_scheme_lib_literals_float
+          hydra_overlay_scheme_lib_literals_float32_to_decimal
+          hydra_overlay_scheme_lib_literals_float32_to_float64
+          hydra_overlay_scheme_lib_literals_float64_to_decimal
+          hydra_overlay_scheme_lib_literals_float64_to_float32
+          hydra_overlay_scheme_lib_literals_int
+          hydra_overlay_scheme_lib_literals_int8_to_bigint
+          hydra_overlay_scheme_lib_literals_int16_to_bigint
+          hydra_overlay_scheme_lib_literals_int32_to_bigint
+          hydra_overlay_scheme_lib_literals_int64_to_bigint
+          hydra_overlay_scheme_lib_literals_read_bigint
+          hydra_overlay_scheme_lib_literals_read_decimal
+          hydra_overlay_scheme_lib_literals_read_float
+          hydra_overlay_scheme_lib_literals_read_float32
+          hydra_overlay_scheme_lib_literals_read_int
+          hydra_overlay_scheme_lib_literals_read_int64
+          hydra_overlay_scheme_lib_literals_read_uint
+          hydra_overlay_scheme_lib_literals_read_uint32
+          hydra_overlay_scheme_lib_literals_read_uint64
+          hydra_overlay_scheme_lib_literals_show_bigint
+          hydra_overlay_scheme_lib_literals_show_decimal
+          hydra_overlay_scheme_lib_literals_show_float
+          hydra_overlay_scheme_lib_literals_show_float32
+          hydra_overlay_scheme_lib_literals_show_float64
+          hydra_overlay_scheme_lib_literals_show_int
+          hydra_overlay_scheme_lib_literals_show_int8
+          hydra_overlay_scheme_lib_literals_show_int16
+          hydra_overlay_scheme_lib_literals_show_int32
+          hydra_overlay_scheme_lib_literals_show_int64
+          hydra_overlay_scheme_lib_literals_print_string
+          hydra_overlay_scheme_lib_literals_show_uint
+          hydra_overlay_scheme_lib_literals_show_uint8
+          hydra_overlay_scheme_lib_literals_show_uint16
+          hydra_overlay_scheme_lib_literals_show_uint32
+          hydra_overlay_scheme_lib_literals_show_uint64
+          hydra_overlay_scheme_lib_literals_base64_to_binary
+          hydra_overlay_scheme_lib_literals_uint
+          hydra_overlay_scheme_lib_literals_uint8_to_bigint
+          hydra_overlay_scheme_lib_literals_uint16_to_bigint
+          hydra_overlay_scheme_lib_literals_uint32_to_bigint
+          hydra_overlay_scheme_lib_literals_binary_to_bytes
+          hydra_overlay_scheme_lib_literals_parse_boolean
+          hydra_overlay_scheme_lib_literals_read_float64
+          hydra_overlay_scheme_lib_literals_read_int8
+          hydra_overlay_scheme_lib_literals_read_int16
+          hydra_overlay_scheme_lib_literals_read_int32
+          hydra_overlay_scheme_lib_literals_parse_string
+          hydra_overlay_scheme_lib_literals_read_uint8
+          hydra_overlay_scheme_lib_literals_read_uint16
+          hydra_overlay_scheme_lib_literals_print_boolean
+          hydra_overlay_scheme_lib_literals_uint64_to_bigint)
   (begin
 
     ;; Safe abs that handles complex numbers (returns magnitude for complex, which is real)
@@ -80,62 +80,62 @@
 
     ;; bigint_to_decimal :: BigInteger -> Decimal
     ;; Scheme has no native decimal; adapter fallback uses inexact double.
-    (define hydra_lib_literals_bigint_to_decimal
+    (define hydra_overlay_scheme_lib_literals_bigint_to_decimal
       (lambda (x)
         (inexact x)))
 
     ;; bigint_to_int :: BigInteger -> Int  (identity in Scheme)
-    (define hydra_lib_literals_bigint_to_int
+    (define hydra_overlay_scheme_lib_literals_bigint_to_int
       (lambda (x)
         x))
 
     ;; bigint_to_int8 :: BigInteger -> Int8
-    (define hydra_lib_literals_bigint_to_int8
+    (define hydra_overlay_scheme_lib_literals_bigint_to_int8
       (lambda (x)
         x))
 
     ;; bigint_to_int16 :: BigInteger -> Int16
-    (define hydra_lib_literals_bigint_to_int16
+    (define hydra_overlay_scheme_lib_literals_bigint_to_int16
       (lambda (x)
         x))
 
     ;; bigint_to_int32 :: BigInteger -> Int32
-    (define hydra_lib_literals_bigint_to_int32
+    (define hydra_overlay_scheme_lib_literals_bigint_to_int32
       (lambda (x)
         x))
 
     ;; bigint_to_int64 :: BigInteger -> Int64
-    (define hydra_lib_literals_bigint_to_int64
+    (define hydra_overlay_scheme_lib_literals_bigint_to_int64
       (lambda (x)
         x))
 
     ;; bigint_to_uint :: BigInteger -> Uint
-    (define hydra_lib_literals_bigint_to_uint
+    (define hydra_overlay_scheme_lib_literals_bigint_to_uint
       (lambda (x)
         x))
 
     ;; bigint_to_uint8 :: BigInteger -> Uint8
-    (define hydra_lib_literals_bigint_to_uint8
+    (define hydra_overlay_scheme_lib_literals_bigint_to_uint8
       (lambda (x)
         x))
 
     ;; bigint_to_uint16 :: BigInteger -> Uint16
-    (define hydra_lib_literals_bigint_to_uint16
+    (define hydra_overlay_scheme_lib_literals_bigint_to_uint16
       (lambda (x)
         x))
 
     ;; bigint_to_uint32 :: BigInteger -> Uint32
-    (define hydra_lib_literals_bigint_to_uint32
+    (define hydra_overlay_scheme_lib_literals_bigint_to_uint32
       (lambda (x)
         x))
 
     ;; bigint_to_uint64 :: BigInteger -> Uint64
-    (define hydra_lib_literals_bigint_to_uint64
+    (define hydra_overlay_scheme_lib_literals_bigint_to_uint64
       (lambda (x)
         x))
 
     ;; binary_to_base64 :: ByteString -> String (base64 encoding)
-    (define hydra_lib_literals_binary_to_base64
+    (define hydra_overlay_scheme_lib_literals_binary_to_base64
       (let ((b64-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
         (lambda (bv)
           (let* ((bytes (cond
@@ -167,75 +167,75 @@
 
     ;; decimal_to_bigint :: Decimal -> BigInteger
     ;; Scheme has no native decimal; input is inexact double.
-    (define hydra_lib_literals_decimal_to_bigint
+    (define hydra_overlay_scheme_lib_literals_decimal_to_bigint
       (lambda (x)
         (exact (round x))))
 
     ;; decimal_to_float32 :: Decimal -> Float
-    (define hydra_lib_literals_decimal_to_float32
+    (define hydra_overlay_scheme_lib_literals_decimal_to_float32
       (lambda (x) (float32-approx x)))
 
     ;; decimal_to_float64 :: Decimal -> Double
-    (define hydra_lib_literals_decimal_to_float64
+    (define hydra_overlay_scheme_lib_literals_decimal_to_float64
       (lambda (x)
         (inexact x)))
 
     ;; float :: FloatPrecision -> Double -> Double
-    (define hydra_lib_literals_float
+    (define hydra_overlay_scheme_lib_literals_float
       (lambda (precision)
         (lambda (x)
           (inexact x))))
 
     ;; float32_to_decimal :: Float -> Decimal
-    (define hydra_lib_literals_float32_to_decimal
+    (define hydra_overlay_scheme_lib_literals_float32_to_decimal
       (lambda (x)
         (inexact x)))
 
     ;; float32_to_float64 :: Float -> Double
     ;; Scheme has a single inexact float type; widening is identity.
-    (define hydra_lib_literals_float32_to_float64
+    (define hydra_overlay_scheme_lib_literals_float32_to_float64
       (lambda (x)
         (inexact x)))
 
     ;; float64_to_decimal :: Double -> Decimal
-    (define hydra_lib_literals_float64_to_decimal
+    (define hydra_overlay_scheme_lib_literals_float64_to_decimal
       (lambda (x)
         (inexact x)))
 
     ;; float64_to_float32 :: Double -> Float
     ;; Snap to IEEE 754 single-precision (lossy narrowing).
-    (define hydra_lib_literals_float64_to_float32
+    (define hydra_overlay_scheme_lib_literals_float64_to_float32
       (lambda (x)
         (float32-approx x)))
 
     ;; int :: IntPrecision -> Int -> Int
-    (define hydra_lib_literals_int
+    (define hydra_overlay_scheme_lib_literals_int
       (lambda (precision)
         (lambda (x)
           x)))
 
     ;; int8_to_bigint :: Int8 -> BigInteger
-    (define hydra_lib_literals_int8_to_bigint
+    (define hydra_overlay_scheme_lib_literals_int8_to_bigint
       (lambda (x)
         x))
 
     ;; int16_to_bigint :: Int16 -> BigInteger
-    (define hydra_lib_literals_int16_to_bigint
+    (define hydra_overlay_scheme_lib_literals_int16_to_bigint
       (lambda (x)
         x))
 
     ;; int32_to_bigint :: Int32 -> BigInteger
-    (define hydra_lib_literals_int32_to_bigint
+    (define hydra_overlay_scheme_lib_literals_int32_to_bigint
       (lambda (x)
         x))
 
     ;; int64_to_bigint :: Int64 -> BigInteger
-    (define hydra_lib_literals_int64_to_bigint
+    (define hydra_overlay_scheme_lib_literals_int64_to_bigint
       (lambda (x)
         x))
 
     ;; read_decimal :: String -> Maybe Decimal
-    (define hydra_lib_literals_read_decimal
+    (define hydra_overlay_scheme_lib_literals_read_decimal
       (lambda (s)
         (let ((n (string->number s)))
           (if n
@@ -243,7 +243,7 @@
               (list 'none)))))
 
     ;; read_bigint :: String -> Maybe BigInteger
-    (define hydra_lib_literals_read_bigint
+    (define hydra_overlay_scheme_lib_literals_read_bigint
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
@@ -251,7 +251,7 @@
               (list 'none)))))
 
     ;; read_float :: String -> Maybe Double
-    (define hydra_lib_literals_read_float
+    (define hydra_overlay_scheme_lib_literals_read_float
       (lambda (s)
         (let ((n (string->number s)))
           (if n
@@ -260,7 +260,7 @@
 
     ;; read_float32 :: String -> Maybe Float
     ;; Round to float32 precision
-    (define hydra_lib_literals_read_float32
+    (define hydra_overlay_scheme_lib_literals_read_float32
       (lambda (s)
         (cond
           ((string=? s "NaN") (list 'given +nan.0))
@@ -272,7 +272,7 @@
                       (list 'none)))))))
 
     ;; read_int :: String -> Maybe Int
-    (define hydra_lib_literals_read_int
+    (define hydra_overlay_scheme_lib_literals_read_int
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
@@ -280,7 +280,7 @@
               (list 'none)))))
 
     ;; read_int64 :: String -> Maybe Int64
-    (define hydra_lib_literals_read_int64
+    (define hydra_overlay_scheme_lib_literals_read_int64
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
@@ -288,7 +288,7 @@
               (list 'none)))))
 
     ;; read_uint :: String -> Maybe Uint
-    (define hydra_lib_literals_read_uint
+    (define hydra_overlay_scheme_lib_literals_read_uint
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
@@ -296,7 +296,7 @@
               (list 'none)))))
 
     ;; read_uint32 :: String -> Maybe Uint32
-    (define hydra_lib_literals_read_uint32
+    (define hydra_overlay_scheme_lib_literals_read_uint32
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
@@ -304,7 +304,7 @@
               (list 'none)))))
 
     ;; read_uint64 :: String -> Maybe Uint64
-    (define hydra_lib_literals_read_uint64
+    (define hydra_overlay_scheme_lib_literals_read_uint64
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0))
@@ -418,57 +418,57 @@
           (else (try-digits 1)))))))
 
     ;; show_decimal :: Decimal -> String
-    (define hydra_lib_literals_show_decimal
+    (define hydra_overlay_scheme_lib_literals_show_decimal
       (lambda (x)
         (haskell-show-float x)))
 
     ;; show_bigint :: BigInteger -> String
-    (define hydra_lib_literals_show_bigint
+    (define hydra_overlay_scheme_lib_literals_show_bigint
       (lambda (x)
         (number->string x)))
 
     ;; show_float :: Double -> String
-    (define hydra_lib_literals_show_float
+    (define hydra_overlay_scheme_lib_literals_show_float
       (lambda (x)
         (haskell-show-float x)))
 
     ;; show_float32 :: Float -> String
-    (define hydra_lib_literals_show_float32
+    (define hydra_overlay_scheme_lib_literals_show_float32
       (lambda (x)
         (haskell-show-float32 x)))
 
     ;; show_float64 :: Double -> String
-    (define hydra_lib_literals_show_float64
+    (define hydra_overlay_scheme_lib_literals_show_float64
       (lambda (x)
         (haskell-show-float x)))
 
     ;; show_int :: Int -> String
-    (define hydra_lib_literals_show_int
+    (define hydra_overlay_scheme_lib_literals_show_int
       (lambda (x)
         (number->string x)))
 
     ;; show_int8 :: Int8 -> String
-    (define hydra_lib_literals_show_int8
+    (define hydra_overlay_scheme_lib_literals_show_int8
       (lambda (x)
         (number->string x)))
 
     ;; show_int16 :: Int16 -> String
-    (define hydra_lib_literals_show_int16
+    (define hydra_overlay_scheme_lib_literals_show_int16
       (lambda (x)
         (number->string x)))
 
     ;; show_int32 :: Int32 -> String
-    (define hydra_lib_literals_show_int32
+    (define hydra_overlay_scheme_lib_literals_show_int32
       (lambda (x)
         (number->string x)))
 
     ;; show_int64 :: Int64 -> String
-    (define hydra_lib_literals_show_int64
+    (define hydra_overlay_scheme_lib_literals_show_int64
       (lambda (x)
         (number->string x)))
 
     ;; show_string :: String -> String  (Haskell-compatible quoted representation)
-    (define hydra_lib_literals_print_string
+    (define hydra_overlay_scheme_lib_literals_print_string
       (lambda (s)
         (let loop ((i 0) (acc "\""))
           (if (>= i (string-length s))
@@ -494,32 +494,32 @@
                           (else (string c))))))))))
 
     ;; show_uint :: Uint -> String
-    (define hydra_lib_literals_show_uint
+    (define hydra_overlay_scheme_lib_literals_show_uint
       (lambda (x)
         (number->string x)))
 
     ;; show_uint8 :: Uint8 -> String
-    (define hydra_lib_literals_show_uint8
+    (define hydra_overlay_scheme_lib_literals_show_uint8
       (lambda (x)
         (number->string x)))
 
     ;; show_uint16 :: Uint16 -> String
-    (define hydra_lib_literals_show_uint16
+    (define hydra_overlay_scheme_lib_literals_show_uint16
       (lambda (x)
         (number->string x)))
 
     ;; show_uint32 :: Uint32 -> String
-    (define hydra_lib_literals_show_uint32
+    (define hydra_overlay_scheme_lib_literals_show_uint32
       (lambda (x)
         (number->string x)))
 
     ;; show_uint64 :: Uint64 -> String
-    (define hydra_lib_literals_show_uint64
+    (define hydra_overlay_scheme_lib_literals_show_uint64
       (lambda (x)
         (number->string x)))
 
     ;; base64_to_binary :: String -> [Int8] (base64 decode)
-    (define hydra_lib_literals_base64_to_binary
+    (define hydra_overlay_scheme_lib_literals_base64_to_binary
       (let ((b64-vals (let ((tbl (make-vector 128 -1)))
               (let loop ((i 0) (chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
                 (when (< i (string-length chars))
@@ -552,28 +552,28 @@
                           (loop (+ i 4) acc3)))))))))))
 
     ;; uint :: UintPrecision -> Uint -> Uint
-    (define hydra_lib_literals_uint
+    (define hydra_overlay_scheme_lib_literals_uint
       (lambda (precision)
         (lambda (x)
           x)))
 
     ;; uint8_to_bigint :: Uint8 -> BigInteger
-    (define hydra_lib_literals_uint8_to_bigint
+    (define hydra_overlay_scheme_lib_literals_uint8_to_bigint
       (lambda (x)
         x))
 
     ;; uint16_to_bigint :: Uint16 -> BigInteger
-    (define hydra_lib_literals_uint16_to_bigint
+    (define hydra_overlay_scheme_lib_literals_uint16_to_bigint
       (lambda (x)
         x))
 
     ;; uint32_to_bigint :: Uint32 -> BigInteger
-    (define hydra_lib_literals_uint32_to_bigint
+    (define hydra_overlay_scheme_lib_literals_uint32_to_bigint
       (lambda (x)
         x))
 
     ;; binary_to_bytes :: Binary -> [Int8]
-    (define hydra_lib_literals_binary_to_bytes
+    (define hydra_overlay_scheme_lib_literals_binary_to_bytes
       (lambda (bs)
         (cond
           ((bytevector? bs)
@@ -585,7 +585,7 @@
           (else (vector->list bs)))))
 
     ;; read_boolean :: String -> Maybe Bool
-    (define hydra_lib_literals_parse_boolean
+    (define hydra_overlay_scheme_lib_literals_parse_boolean
       (lambda (s)
         (cond
           ((string=? s "true") (list 'given #t))
@@ -593,7 +593,7 @@
           (else (list 'none)))))
 
     ;; read_float64 :: String -> Maybe Float64
-    (define hydra_lib_literals_read_float64
+    (define hydra_overlay_scheme_lib_literals_read_float64
       (lambda (s)
         (cond
           ((string=? s "NaN") (list 'given +nan.0))
@@ -605,7 +605,7 @@
                       (list 'none)))))))
 
     ;; read_int8 :: String -> Maybe Int8
-    (define hydra_lib_literals_read_int8
+    (define hydra_overlay_scheme_lib_literals_read_int8
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n -128) (<= n 127))
@@ -613,7 +613,7 @@
               (list 'none)))))
 
     ;; read_int16 :: String -> Maybe Int16
-    (define hydra_lib_literals_read_int16
+    (define hydra_overlay_scheme_lib_literals_read_int16
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n -32768) (<= n 32767))
@@ -621,7 +621,7 @@
               (list 'none)))))
 
     ;; read_int32 :: String -> Maybe Int32
-    (define hydra_lib_literals_read_int32
+    (define hydra_overlay_scheme_lib_literals_read_int32
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n))
@@ -629,7 +629,7 @@
               (list 'none)))))
 
     ;; read_string :: String -> Maybe String
-    (define hydra_lib_literals_parse_string
+    (define hydra_overlay_scheme_lib_literals_parse_string
       (lambda (s)
         (let ((len (string-length s)))
           (if (and (>= len 2)
@@ -653,7 +653,7 @@
               (list 'none)))))
 
     ;; read_uint8 :: String -> Maybe Uint8
-    (define hydra_lib_literals_read_uint8
+    (define hydra_overlay_scheme_lib_literals_read_uint8
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0) (<= n 255))
@@ -661,7 +661,7 @@
               (list 'none)))))
 
     ;; read_uint16 :: String -> Maybe Uint16
-    (define hydra_lib_literals_read_uint16
+    (define hydra_overlay_scheme_lib_literals_read_uint16
       (lambda (s)
         (let ((n (string->number s)))
           (if (and n (integer? n) (>= n 0) (<= n 65535))
@@ -669,11 +669,11 @@
               (list 'none)))))
 
     ;; show_boolean :: Bool -> String
-    (define hydra_lib_literals_print_boolean
+    (define hydra_overlay_scheme_lib_literals_print_boolean
       (lambda (x)
         (if x "true" "false")))
 
     ;; uint64_to_bigint :: Uint64 -> BigInteger
-    (define hydra_lib_literals_uint64_to_bigint
+    (define hydra_overlay_scheme_lib_literals_uint64_to_bigint
       (lambda (x)
         x))))

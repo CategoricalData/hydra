@@ -2,17 +2,17 @@
   (import (scheme base)
           (scheme char)
           (ice-9 regex))
-  (export hydra_lib_regex_matches
-          hydra_lib_regex_find
-          hydra_lib_regex_find_all
-          hydra_lib_regex_replace
-          hydra_lib_regex_replace_all
-          hydra_lib_regex_split)
+  (export hydra_overlay_scheme_lib_regex_matches
+          hydra_overlay_scheme_lib_regex_find
+          hydra_overlay_scheme_lib_regex_find_all
+          hydra_overlay_scheme_lib_regex_replace
+          hydra_overlay_scheme_lib_regex_replace_all
+          hydra_overlay_scheme_lib_regex_split)
   (begin
 
     ;; matches :: String -> String -> Bool
     ;; Full match: pattern must match the entire input
-    (define hydra_lib_regex_matches
+    (define hydra_overlay_scheme_lib_regex_matches
       (lambda (pattern)
         (lambda (input)
           (let ((m (string-match (string-append "^" pattern "$") input)))
@@ -20,7 +20,7 @@
 
     ;; find :: String -> String -> Maybe String
     ;; Returns (list 'given match) or (list 'none)
-    (define hydra_lib_regex_find
+    (define hydra_overlay_scheme_lib_regex_find
       (lambda (pattern)
         (lambda (input)
           (let ((m (string-match pattern input)))
@@ -29,7 +29,7 @@
                 (list 'none))))))
 
     ;; findAll :: String -> String -> [String]
-    (define hydra_lib_regex_find_all
+    (define hydra_overlay_scheme_lib_regex_find_all
       (lambda (pattern)
         (lambda (input)
           (let loop ((start 0) (acc '()))
@@ -40,7 +40,7 @@
 
     ;; replace :: String -> String -> String -> String
     ;; Replace first occurrence
-    (define hydra_lib_regex_replace
+    (define hydra_overlay_scheme_lib_regex_replace
       (lambda (pattern)
         (lambda (replacement)
           (lambda (input)
@@ -51,7 +51,7 @@
 
     ;; replaceAll :: String -> String -> String -> String
     ;; Replace all occurrences
-    (define hydra_lib_regex_replace_all
+    (define hydra_overlay_scheme_lib_regex_replace_all
       (lambda (pattern)
         (lambda (replacement)
           (lambda (input)
@@ -63,7 +63,7 @@
                           (string-append acc (match:prefix m) replacement)))))))))
 
     ;; split :: String -> String -> [String]
-    (define hydra_lib_regex_split
+    (define hydra_overlay_scheme_lib_regex_split
       (lambda (pattern)
         (lambda (input)
           (let loop ((remaining input) (acc '()))

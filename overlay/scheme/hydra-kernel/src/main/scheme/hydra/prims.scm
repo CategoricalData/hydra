@@ -104,7 +104,7 @@
     (define (alist->maybe-constraints alist)
       (if (or (not alist) (null? alist))
           (list 'none)
-          (list 'given (hydra_lib_maps_from_list alist))))
+          (list 'given (hydra_overlay_scheme_lib_maps_from_list alist))))
 
     ;; ============================================================================
     ;; Error helpers
@@ -242,9 +242,9 @@
                 g) t))))
         (lambda (cx)
           (lambda (s)
-            (let loop ((items (hydra_lib_sets_to_list s)) (acc '()))
+            (let loop ((items (hydra_overlay_scheme_lib_sets_to_list s)) (acc '()))
               (if (null? items)
-                  (list 'right (list 'set (hydra_lib_sets_from_list (reverse acc))))
+                  (list 'right (list 'set (hydra_overlay_scheme_lib_sets_from_list (reverse acc))))
                   (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (car items))))
                     (if (eq? (car r) 'left)
                         r
@@ -262,14 +262,14 @@
                 g) t))))
         (lambda (cx)
           (lambda (m)
-            (let loop ((pairs (hydra_lib_maps_to_list m)) (acc '()))
+            (let loop ((pairs (hydra_overlay_scheme_lib_maps_to_list m)) (acc '()))
               (if (null? pairs)
-                  (list 'right (list 'map (hydra_lib_maps_from_list (reverse acc))))
+                  (list 'right (list 'map (hydra_overlay_scheme_lib_maps_from_list (reverse acc))))
                   (let* ((p (car pairs))
-                         (kr (((hydra_graph_term_coder-decode key-coder) cx) (hydra_lib_pairs_first p))))
+                         (kr (((hydra_graph_term_coder-decode key-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
                     (if (eq? (car kr) 'left)
                         kr
-                        (let ((vr (((hydra_graph_term_coder-decode val-coder) cx) (hydra_lib_pairs_second p))))
+                        (let ((vr (((hydra_graph_term_coder-decode val-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
                           (if (eq? (car vr) 'left)
                               vr
                               (loop (cdr pairs) (cons (list (cadr kr) (cadr vr)) acc))))))))))))
@@ -325,9 +325,9 @@
                 g) t))))
         (lambda (cx)
           (lambda (p)
-            (let ((fr (((hydra_graph_term_coder-decode first-coder) cx) (hydra_lib_pairs_first p))))
+            (let ((fr (((hydra_graph_term_coder-decode first-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
               (if (eq? (car fr) 'left) fr
-                  (let ((sr (((hydra_graph_term_coder-decode second-coder) cx) (hydra_lib_pairs_second p))))
+                  (let ((sr (((hydra_graph_term_coder-decode second-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
                     (if (eq? (car sr) 'left) sr
                         (list 'right (list 'pair (list (cadr fr) (cadr sr))))))))))))
 

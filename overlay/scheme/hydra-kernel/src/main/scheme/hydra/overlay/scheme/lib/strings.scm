@@ -1,31 +1,31 @@
 (define-library (hydra overlay scheme lib strings)
   (import (scheme base)
           (scheme char))
-  (export hydra_lib_strings_concat
-          hydra_lib_strings_concat2
-          hydra_lib_strings_cons
-          hydra_lib_strings_drop
-          hydra_lib_strings_from_list
-          hydra_lib_strings_head
-          hydra_lib_strings_join
-          hydra_lib_strings_is_infix_of
-          hydra_lib_strings_is_prefix_of
-          hydra_lib_strings_is_suffix_of
-          hydra_lib_strings_length
-          hydra_lib_strings_lines
-          hydra_lib_strings_char_at
-          hydra_lib_strings_null
-          hydra_lib_strings_replicate
-          hydra_lib_strings_reverse
-          hydra_lib_strings_split_on
-          hydra_lib_strings_tail
-          hydra_lib_strings_take
-          hydra_lib_strings_to_list
-          hydra_lib_strings_to_lower
-          hydra_lib_strings_to_upper
-          hydra_lib_strings_unlines
-          hydra_lib_strings_unwords
-          hydra_lib_strings_words)
+  (export hydra_overlay_scheme_lib_strings_concat
+          hydra_overlay_scheme_lib_strings_concat2
+          hydra_overlay_scheme_lib_strings_cons
+          hydra_overlay_scheme_lib_strings_drop
+          hydra_overlay_scheme_lib_strings_from_list
+          hydra_overlay_scheme_lib_strings_head
+          hydra_overlay_scheme_lib_strings_join
+          hydra_overlay_scheme_lib_strings_is_infix_of
+          hydra_overlay_scheme_lib_strings_is_prefix_of
+          hydra_overlay_scheme_lib_strings_is_suffix_of
+          hydra_overlay_scheme_lib_strings_length
+          hydra_overlay_scheme_lib_strings_lines
+          hydra_overlay_scheme_lib_strings_char_at
+          hydra_overlay_scheme_lib_strings_null
+          hydra_overlay_scheme_lib_strings_replicate
+          hydra_overlay_scheme_lib_strings_reverse
+          hydra_overlay_scheme_lib_strings_split_on
+          hydra_overlay_scheme_lib_strings_tail
+          hydra_overlay_scheme_lib_strings_take
+          hydra_overlay_scheme_lib_strings_to_list
+          hydra_overlay_scheme_lib_strings_to_lower
+          hydra_overlay_scheme_lib_strings_to_upper
+          hydra_overlay_scheme_lib_strings_unlines
+          hydra_overlay_scheme_lib_strings_unwords
+          hydra_overlay_scheme_lib_strings_words)
   (begin
 
     ;; Hydra represents characters as integer code points (int32).
@@ -33,24 +33,24 @@
     (define (char->int c) (if (char? c) (char->integer c) c))
 
     ;; Concatenate a list of strings into a single string.
-    (define hydra_lib_strings_concat
+    (define hydra_overlay_scheme_lib_strings_concat
       (lambda (strs)
         (apply string-append strs)))
 
     ;; Concatenate two strings.
-    (define hydra_lib_strings_concat2
+    (define hydra_overlay_scheme_lib_strings_concat2
       (lambda (a)
         (lambda (b)
           (string-append a b))))
 
     ;; Prepend a character (as code point) to a string.
-    (define hydra_lib_strings_cons
+    (define hydra_overlay_scheme_lib_strings_cons
       (lambda (c)
         (lambda (s)
           (string-append (string (int->char c)) s))))
 
     ;; Drop the first n characters from a string.
-    (define hydra_lib_strings_drop
+    (define hydra_overlay_scheme_lib_strings_drop
       (lambda (n)
         (lambda (s)
           (if (>= n (string-length s))
@@ -58,17 +58,17 @@
               (substring s n (string-length s))))))
 
     ;; Convert a list of Unicode code points to a string.
-    (define hydra_lib_strings_from_list
+    (define hydra_overlay_scheme_lib_strings_from_list
       (lambda (chars)
         (list->string (map int->char chars))))
 
     ;; Get the first character of a string as a code point.
-    (define hydra_lib_strings_head
+    (define hydra_overlay_scheme_lib_strings_head
       (lambda (s)
         (char->int (string-ref s 0))))
 
     ;; Join a list of strings with a separator between each element.
-    (define hydra_lib_strings_join
+    (define hydra_overlay_scheme_lib_strings_join
       (lambda (sep)
         (lambda (strs)
           (if (null? strs)
@@ -80,7 +80,7 @@
                           (string-append acc sep (car rest)))))))))
 
     ;; Check whether a string contains another string as a substring.
-    (define hydra_lib_strings_is_infix_of
+    (define hydra_overlay_scheme_lib_strings_is_infix_of
       (lambda (needle)
         (lambda (haystack)
           (let ((nlen (string-length needle))
@@ -94,7 +94,7 @@
                     (else (loop (+ i 1))))))))))
 
     ;; Check whether a string starts with a given prefix.
-    (define hydra_lib_strings_is_prefix_of
+    (define hydra_overlay_scheme_lib_strings_is_prefix_of
       (lambda (prefix)
         (lambda (s)
           (let ((plen (string-length prefix)))
@@ -102,7 +102,7 @@
                  (string=? (substring s 0 plen) prefix))))))
 
     ;; Check whether a string ends with a given suffix.
-    (define hydra_lib_strings_is_suffix_of
+    (define hydra_overlay_scheme_lib_strings_is_suffix_of
       (lambda (suffix)
         (lambda (s)
           (let ((slen (string-length suffix))
@@ -111,13 +111,13 @@
                  (string=? (substring s (- len slen) len) suffix))))))
 
     ;; Return the length of a string.
-    (define hydra_lib_strings_length
+    (define hydra_overlay_scheme_lib_strings_length
       (lambda (s)
         (string-length s)))
 
     ;; Split a string into lines.
     ;; Haskell behavior: lines "" = [], lines "hello\n" = ["hello"]
-    (define hydra_lib_strings_lines
+    (define hydra_overlay_scheme_lib_strings_lines
       (lambda (s)
         (let ((len (string-length s)))
           (if (= len 0)
@@ -135,7 +135,7 @@
                    (loop (+ i 1) start acc))))))))
 
     ;; maybe_char_at :: Int -> String -> Maybe Int
-    (define hydra_lib_strings_char_at
+    (define hydra_overlay_scheme_lib_strings_char_at
       (lambda (n)
         (lambda (s)
           (if (and (>= n 0) (< n (string-length s)))
@@ -143,12 +143,12 @@
               (list 'none)))))
 
     ;; Check whether a string is empty.
-    (define hydra_lib_strings_null
+    (define hydra_overlay_scheme_lib_strings_null
       (lambda (s)
         (= (string-length s) 0)))
 
     ;; Replicate a string n times.
-    (define hydra_lib_strings_replicate
+    (define hydra_overlay_scheme_lib_strings_replicate
       (lambda (n)
         (lambda (s)
           (let loop ((k n) (acc ""))
@@ -157,14 +157,14 @@
                 (loop (- k 1) (string-append acc s)))))))
 
     ;; Reverse a string.
-    (define hydra_lib_strings_reverse
+    (define hydra_overlay_scheme_lib_strings_reverse
       (lambda (s)
         (list->string (reverse (string->list s)))))
 
     ;; Split a string on a delimiter string.
     ;; Haskell behavior: splitOn "" "abc" = ["", "a", "b", "c"]
     ;;                   splitOn "" "" = [""]
-    (define hydra_lib_strings_split_on
+    (define hydra_overlay_scheme_lib_strings_split_on
       (lambda (sep)
         (lambda (s)
           (let ((sep-len (string-length sep))
@@ -184,40 +184,40 @@
                      (loop (+ i 1) start acc)))))))))
 
     ;; Get all characters of a string except the first.
-    (define hydra_lib_strings_tail
+    (define hydra_overlay_scheme_lib_strings_tail
       (lambda (s)
         (substring s 1 (string-length s))))
 
     ;; Take the first n characters from a string.
-    (define hydra_lib_strings_take
+    (define hydra_overlay_scheme_lib_strings_take
       (lambda (n)
         (lambda (s)
           (substring s 0 (min n (string-length s))))))
 
     ;; Convert a string to a list of Unicode code points.
-    (define hydra_lib_strings_to_list
+    (define hydra_overlay_scheme_lib_strings_to_list
       (lambda (s)
         (map char->int (string->list s))))
 
     ;; Convert a string to lowercase.
-    (define hydra_lib_strings_to_lower
+    (define hydra_overlay_scheme_lib_strings_to_lower
       (lambda (s)
         (list->string
           (map char-downcase (string->list s)))))
 
     ;; Convert a string to uppercase.
-    (define hydra_lib_strings_to_upper
+    (define hydra_overlay_scheme_lib_strings_to_upper
       (lambda (s)
         (list->string
           (map char-upcase (string->list s)))))
 
     ;; Join a list of strings with newlines, appending a trailing newline.
-    (define hydra_lib_strings_unlines
+    (define hydra_overlay_scheme_lib_strings_unlines
       (lambda (strs)
         (apply string-append (map (lambda (s) (string-append s "\n")) strs))))
 
     ;; Join a list of strings with spaces.
-    (define hydra_lib_strings_unwords
+    (define hydra_overlay_scheme_lib_strings_unwords
       (lambda (strs)
         (if (null? strs)
             ""
@@ -227,7 +227,7 @@
                   (loop (cdr rest) (string-append acc " " (car rest))))))))
 
     ;; Split a string into words (separated by whitespace).
-    (define hydra_lib_strings_words
+    (define hydra_overlay_scheme_lib_strings_words
       (lambda (s)
         (let ((chars (string->list s)))
           (let loop ((rest chars) (current '()) (acc '()))

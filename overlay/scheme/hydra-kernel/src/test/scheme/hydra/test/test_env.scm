@@ -290,14 +290,14 @@
              (test-schemas
                (map (lambda (entry)
                       (list (car entry) (type-to-ts (cadr entry))))
-                    (hydra_lib_maps_to_list test-types)))
+                    (hydra_overlay_scheme_lib_maps_to_list test-types)))
              (schema-types
-               (hydra_lib_maps_from_list
+               (hydra_overlay_scheme_lib_maps_from_list
                  (append kernel-schemas test-schemas)))
              (test-term-pairs
                (map (lambda (entry)
                       (list (car entry) (cadr entry)))
-                    (hydra_lib_maps_to_list test-terms)))
+                    (hydra_overlay_scheme_lib_maps_to_list test-terms)))
              (bound-terms
                (append
                  (annotation-bindings)
@@ -305,12 +305,12 @@
                        (list "hydra.lexical.emptyGraph" (list 'unit '())))
                  test-term-pairs)))
         (make-hydra_graph_graph
-          (hydra_lib_maps_from_list bound-terms)
-          hydra_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list bound-terms)
+          hydra_overlay_scheme_lib_maps_empty
           (list)
           (list)
-          hydra_lib_maps_empty
-          (hydra_lib_maps_from_list
+          hydra_overlay_scheme_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) all-prims))
           schema-types
           (list)))))))

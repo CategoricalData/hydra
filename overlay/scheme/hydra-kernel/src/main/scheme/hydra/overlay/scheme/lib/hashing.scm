@@ -1,8 +1,8 @@
 (define-library (hydra overlay scheme lib hashing)
   (import (scheme base)
           (srfi 151))         ;; Bitwise operations (chibi-compatible)
-  (export hydra_lib_hashing_sha256
-          hydra_lib_hashing_sha256_hex)
+  (export hydra_overlay_scheme_lib_hashing_sha256
+          hydra_overlay_scheme_lib_hashing_sha256_hex)
   (begin
 
     ;; Scheme (R7RS) implementations of hydra.lib.hashing primitives (#524).
@@ -142,12 +142,12 @@
     (define hex-chars "0123456789abcdef")
 
     ;; sha256 :: binary -> binary
-    (define hydra_lib_hashing_sha256
+    (define hydra_overlay_scheme_lib_hashing_sha256
       (lambda (data)
         (bytevector->binary (sha256-digest data))))
 
     ;; sha256Hex :: binary -> string
-    (define hydra_lib_hashing_sha256_hex
+    (define hydra_overlay_scheme_lib_hashing_sha256_hex
       (lambda (data)
         (let* ((digest (sha256-digest data))
                (out (make-string (* 2 (bytevector-length digest)))))

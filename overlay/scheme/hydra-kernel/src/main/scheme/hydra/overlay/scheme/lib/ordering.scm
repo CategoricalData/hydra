@@ -1,12 +1,12 @@
 (define-library (hydra overlay scheme lib ordering)
   (import (scheme base) (scheme write))
-  (export hydra_lib_ordering_compare
-          hydra_lib_ordering_gt
-          hydra_lib_ordering_gte
-          hydra_lib_ordering_lt
-          hydra_lib_ordering_lte
-          hydra_lib_ordering_max
-          hydra_lib_ordering_min
+  (export hydra_overlay_scheme_lib_ordering_compare
+          hydra_overlay_scheme_lib_ordering_gt
+          hydra_overlay_scheme_lib_ordering_gte
+          hydra_overlay_scheme_lib_ordering_lt
+          hydra_overlay_scheme_lib_ordering_lte
+          hydra_overlay_scheme_lib_ordering_max
+          hydra_overlay_scheme_lib_ordering_min
           generic-compare)
   (begin
 
@@ -41,7 +41,7 @@
                 (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))))
 
     ;; Compare two values and return a Comparison.
-    (define hydra_lib_ordering_compare
+    (define hydra_overlay_scheme_lib_ordering_compare
       (lambda (a)
         (lambda (b)
           (let ((c (generic-compare a b)))
@@ -51,37 +51,37 @@
               (else    (list 'greater_than '())))))))
 
     ;; Check if first value is greater than second.
-    (define hydra_lib_ordering_gt
+    (define hydra_overlay_scheme_lib_ordering_gt
       (lambda (a)
         (lambda (b)
           (> (generic-compare a b) 0))))
 
     ;; Check if first value is greater than or equal to second.
-    (define hydra_lib_ordering_gte
+    (define hydra_overlay_scheme_lib_ordering_gte
       (lambda (a)
         (lambda (b)
           (>= (generic-compare a b) 0))))
 
     ;; Check if first value is less than second.
-    (define hydra_lib_ordering_lt
+    (define hydra_overlay_scheme_lib_ordering_lt
       (lambda (a)
         (lambda (b)
           (< (generic-compare a b) 0))))
 
     ;; Check if first value is less than or equal to second.
-    (define hydra_lib_ordering_lte
+    (define hydra_overlay_scheme_lib_ordering_lte
       (lambda (a)
         (lambda (b)
           (<= (generic-compare a b) 0))))
 
     ;; Return the maximum of two values.
-    (define hydra_lib_ordering_max
+    (define hydra_overlay_scheme_lib_ordering_max
       (lambda (a)
         (lambda (b)
           (if (>= (generic-compare a b) 0) a b))))
 
     ;; Return the minimum of two values.
-    (define hydra_lib_ordering_min
+    (define hydra_overlay_scheme_lib_ordering_min
       (lambda (a)
         (lambda (b)
           (if (<= (generic-compare a b) 0) a b))))))

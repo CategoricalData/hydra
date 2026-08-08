@@ -1,43 +1,43 @@
 (define-library (hydra overlay scheme lib lists)
   (import (scheme base)
           (scheme write))
-  (export hydra_lib_lists_concat
-          hydra_lib_lists_concat2
-          hydra_lib_lists_cons
-          hydra_lib_lists_drop
-          hydra_lib_lists_drop_while
-          hydra_lib_lists_member
-          hydra_lib_lists_filter
-          hydra_lib_lists_find
-          hydra_lib_lists_foldl
-          hydra_lib_lists_foldr
-          hydra_lib_lists_join
-          hydra_lib_lists_intersperse
-          hydra_lib_lists_length
-          hydra_lib_lists_map
-          hydra_lib_lists_at
-          hydra_lib_lists_head
-          hydra_lib_lists_init
-          hydra_lib_lists_last
-          hydra_lib_lists_tail
-          hydra_lib_lists_distinct
-          hydra_lib_lists_null
-          hydra_lib_lists_partition
-          hydra_lib_lists_pure
-          hydra_lib_lists_replicate
-          hydra_lib_lists_reverse
-          hydra_lib_lists_singleton
-          hydra_lib_lists_sort
-          hydra_lib_lists_sort_by
-          hydra_lib_lists_span
-          hydra_lib_lists_take
-          hydra_lib_lists_transpose
-          hydra_lib_lists_uncons
-          hydra_lib_lists_apply
-          hydra_lib_lists_bind
-          hydra_lib_lists_group
-          hydra_lib_lists_zip
-          hydra_lib_lists_zip_with)
+  (export hydra_overlay_scheme_lib_lists_concat
+          hydra_overlay_scheme_lib_lists_concat2
+          hydra_overlay_scheme_lib_lists_cons
+          hydra_overlay_scheme_lib_lists_drop
+          hydra_overlay_scheme_lib_lists_drop_while
+          hydra_overlay_scheme_lib_lists_member
+          hydra_overlay_scheme_lib_lists_filter
+          hydra_overlay_scheme_lib_lists_find
+          hydra_overlay_scheme_lib_lists_foldl
+          hydra_overlay_scheme_lib_lists_foldr
+          hydra_overlay_scheme_lib_lists_join
+          hydra_overlay_scheme_lib_lists_intersperse
+          hydra_overlay_scheme_lib_lists_length
+          hydra_overlay_scheme_lib_lists_map
+          hydra_overlay_scheme_lib_lists_at
+          hydra_overlay_scheme_lib_lists_head
+          hydra_overlay_scheme_lib_lists_init
+          hydra_overlay_scheme_lib_lists_last
+          hydra_overlay_scheme_lib_lists_tail
+          hydra_overlay_scheme_lib_lists_distinct
+          hydra_overlay_scheme_lib_lists_null
+          hydra_overlay_scheme_lib_lists_partition
+          hydra_overlay_scheme_lib_lists_pure
+          hydra_overlay_scheme_lib_lists_replicate
+          hydra_overlay_scheme_lib_lists_reverse
+          hydra_overlay_scheme_lib_lists_singleton
+          hydra_overlay_scheme_lib_lists_sort
+          hydra_overlay_scheme_lib_lists_sort_by
+          hydra_overlay_scheme_lib_lists_span
+          hydra_overlay_scheme_lib_lists_take
+          hydra_overlay_scheme_lib_lists_transpose
+          hydra_overlay_scheme_lib_lists_uncons
+          hydra_overlay_scheme_lib_lists_apply
+          hydra_overlay_scheme_lib_lists_bind
+          hydra_overlay_scheme_lib_lists_group
+          hydra_overlay_scheme_lib_lists_zip
+          hydra_overlay_scheme_lib_lists_zip_with)
   (begin
 
     (define (obj->string x)
@@ -93,24 +93,24 @@
                    (merge-sort less? (cdr halves))))))
 
     ;; concat :: [[a]] -> [a]
-    (define hydra_lib_lists_concat
+    (define hydra_overlay_scheme_lib_lists_concat
       (lambda (xss)
         (apply append xss)))
 
     ;; concat2 :: [a] -> [a] -> [a]
-    (define hydra_lib_lists_concat2
+    (define hydra_overlay_scheme_lib_lists_concat2
       (lambda (xs)
         (lambda (ys)
           (append xs ys))))
 
     ;; cons :: a -> [a] -> [a]
-    (define hydra_lib_lists_cons
+    (define hydra_overlay_scheme_lib_lists_cons
       (lambda (x)
         (lambda (xs)
           (cons x xs))))
 
     ;; drop :: Int -> [a] -> [a]
-    (define hydra_lib_lists_drop
+    (define hydra_overlay_scheme_lib_lists_drop
       (lambda (n)
         (lambda (xs)
           (let loop ((k n) (rest xs))
@@ -119,7 +119,7 @@
                 (loop (- k 1) (cdr rest)))))))
 
     ;; drop_while :: (a -> Bool) -> [a] -> [a]
-    (define hydra_lib_lists_drop_while
+    (define hydra_overlay_scheme_lib_lists_drop_while
       (lambda (pred)
         (lambda (xs)
           (let loop ((rest xs))
@@ -128,7 +128,7 @@
                 (loop (cdr rest)))))))
 
     ;; elem :: a -> [a] -> Bool
-    (define hydra_lib_lists_member
+    (define hydra_overlay_scheme_lib_lists_member
       (lambda (x)
         (lambda (xs)
           (let loop ((rest xs))
@@ -138,7 +138,7 @@
               (else (loop (cdr rest))))))))
 
     ;; filter :: (a -> Bool) -> [a] -> [a]
-    (define hydra_lib_lists_filter
+    (define hydra_overlay_scheme_lib_lists_filter
       (lambda (pred)
         (lambda (xs)
           (let loop ((rest xs) (acc '()))
@@ -149,7 +149,7 @@
                     (loop (cdr rest) acc)))))))
 
     ;; find :: (a -> Bool) -> [a] -> Maybe a
-    (define hydra_lib_lists_find
+    (define hydra_overlay_scheme_lib_lists_find
       (lambda (pred)
         (lambda (xs)
           (let loop ((rest xs))
@@ -159,7 +159,7 @@
               (else (loop (cdr rest))))))))
 
     ;; foldl :: (b -> a -> b) -> b -> [a] -> b
-    (define hydra_lib_lists_foldl
+    (define hydra_overlay_scheme_lib_lists_foldl
       (lambda (f)
         (lambda (init)
           (lambda (xs)
@@ -169,7 +169,7 @@
                   (loop ((f acc) (car rest)) (cdr rest))))))))
 
     ;; foldr :: (a -> b -> b) -> b -> [a] -> b
-    (define hydra_lib_lists_foldr
+    (define hydra_overlay_scheme_lib_lists_foldr
       (lambda (f)
         (lambda (init)
           (lambda (xs)
@@ -179,7 +179,7 @@
                   (loop (cdr rest) ((f (car rest)) acc))))))))
 
     ;; intercalate :: [a] -> [[a]] -> [a]
-    (define hydra_lib_lists_join
+    (define hydra_overlay_scheme_lib_lists_join
       (lambda (sep)
         (lambda (xss)
           (if (null? xss)
@@ -190,7 +190,7 @@
                     (loop (cdr rest) (append acc sep (car rest)))))))))
 
     ;; intersperse :: a -> [a] -> [a]
-    (define hydra_lib_lists_intersperse
+    (define hydra_overlay_scheme_lib_lists_intersperse
       (lambda (sep)
         (lambda (xs)
           (if (or (null? xs) (null? (cdr xs)))
@@ -202,18 +202,18 @@
                           (cons sep (cons (car rest) (loop (cdr rest)))))))))))
 
     ;; length :: [a] -> Int
-    (define hydra_lib_lists_length
+    (define hydra_overlay_scheme_lib_lists_length
       (lambda (xs)
         (length xs)))
 
     ;; map :: (a -> b) -> [a] -> [b]
-    (define hydra_lib_lists_map
+    (define hydra_overlay_scheme_lib_lists_map
       (lambda (f)
         (lambda (xs)
           (map f xs))))
 
     ;; maybe_at :: Int -> [a] -> Maybe a
-    (define hydra_lib_lists_at
+    (define hydra_overlay_scheme_lib_lists_at
       (lambda (n)
         (lambda (xs)
           (if (and (>= n 0) (< n (length xs)))
@@ -221,14 +221,14 @@
               (list 'none)))))
 
     ;; maybe_head :: [a] -> Maybe a
-    (define hydra_lib_lists_head
+    (define hydra_overlay_scheme_lib_lists_head
       (lambda (xs)
         (if (null? xs)
             (list 'none)
             (list 'given (car xs)))))
 
     ;; maybe_init :: [a] -> Maybe [a]
-    (define hydra_lib_lists_init
+    (define hydra_overlay_scheme_lib_lists_init
       (lambda (xs)
         (if (null? xs)
             (list 'none)
@@ -238,7 +238,7 @@
                               (cons (car rest) (loop (cdr rest)))))))))
 
     ;; maybe_last :: [a] -> Maybe a
-    (define hydra_lib_lists_last
+    (define hydra_overlay_scheme_lib_lists_last
       (lambda (xs)
         (if (null? xs)
             (list 'none)
@@ -248,14 +248,14 @@
                               (loop (cdr rest))))))))
 
     ;; maybe_tail :: [a] -> Maybe [a]
-    (define hydra_lib_lists_tail
+    (define hydra_overlay_scheme_lib_lists_tail
       (lambda (xs)
         (if (null? xs)
             (list 'none)
             (list 'given (cdr xs)))))
 
     ;; nub :: [a] -> [a]  (remove duplicates, keeping first occurrence)
-    (define hydra_lib_lists_distinct
+    (define hydra_overlay_scheme_lib_lists_distinct
       (lambda (xs)
         (let loop ((rest xs) (seen '()) (acc '()))
           (if (null? rest)
@@ -265,12 +265,12 @@
                   (loop (cdr rest) (cons (car rest) seen) (cons (car rest) acc)))))))
 
     ;; null :: [a] -> Bool
-    (define hydra_lib_lists_null
+    (define hydra_overlay_scheme_lib_lists_null
       (lambda (xs)
         (null? xs)))
 
     ;; partition :: (a -> Bool) -> [a] -> Pair [a] [a]
-    (define hydra_lib_lists_partition
+    (define hydra_overlay_scheme_lib_lists_partition
       (lambda (pred)
         (lambda (xs)
           (let loop ((rest xs) (yes '()) (no '()))
@@ -281,12 +281,12 @@
                     (loop (cdr rest) yes (cons (car rest) no))))))))
 
     ;; pure :: a -> [a]
-    (define hydra_lib_lists_pure
+    (define hydra_overlay_scheme_lib_lists_pure
       (lambda (x)
         (list x)))
 
     ;; replicate :: Int -> a -> [a]
-    (define hydra_lib_lists_replicate
+    (define hydra_overlay_scheme_lib_lists_replicate
       (lambda (n)
         (lambda (x)
           (let loop ((k n) (acc '()))
@@ -295,28 +295,28 @@
                 (loop (- k 1) (cons x acc)))))))
 
     ;; reverse :: [a] -> [a]
-    (define hydra_lib_lists_reverse
+    (define hydra_overlay_scheme_lib_lists_reverse
       (lambda (xs)
         (reverse xs)))
 
     ;; singleton :: a -> [a]
-    (define hydra_lib_lists_singleton
+    (define hydra_overlay_scheme_lib_lists_singleton
       (lambda (x)
         (list x)))
 
     ;; sort :: [a] -> [a]
-    (define hydra_lib_lists_sort
+    (define hydra_overlay_scheme_lib_lists_sort
       (lambda (xs)
         (merge-sort generic<? xs)))
 
     ;; sort_on :: (a -> b) -> [a] -> [a]
-    (define hydra_lib_lists_sort_by
+    (define hydra_overlay_scheme_lib_lists_sort_by
       (lambda (f)
         (lambda (xs)
           (merge-sort (lambda (a b) (generic<? (f a) (f b))) xs))))
 
     ;; span :: (a -> Bool) -> [a] -> Pair [a] [a]
-    (define hydra_lib_lists_span
+    (define hydra_overlay_scheme_lib_lists_span
       (lambda (pred)
         (lambda (xs)
           (let loop ((rest xs) (acc '()))
@@ -325,7 +325,7 @@
                 (loop (cdr rest) (cons (car rest) acc)))))))
 
     ;; take :: Int -> [a] -> [a]
-    (define hydra_lib_lists_take
+    (define hydra_overlay_scheme_lib_lists_take
       (lambda (n)
         (lambda (xs)
           (let loop ((k n) (rest xs) (acc '()))
@@ -335,23 +335,23 @@
 
     ;; transpose :: [[a]] -> [[a]]
     ;; Haskell behavior: filters out empty sublists (handles ragged matrices)
-    (define hydra_lib_lists_transpose
+    (define hydra_overlay_scheme_lib_lists_transpose
       (lambda (xss)
-        (let ((non-empty ((hydra_lib_lists_filter (lambda (xs) (not (null? xs)))) xss)))
+        (let ((non-empty ((hydra_overlay_scheme_lib_lists_filter (lambda (xs) (not (null? xs)))) xss)))
           (if (null? non-empty)
               '()
               (cons (map car non-empty)
-                    (hydra_lib_lists_transpose (map cdr non-empty)))))))
+                    (hydra_overlay_scheme_lib_lists_transpose (map cdr non-empty)))))))
 
     ;; uncons :: [a] -> Maybe (a, [a])
-    (define hydra_lib_lists_uncons
+    (define hydra_overlay_scheme_lib_lists_uncons
       (lambda (xs)
         (if (null? xs)
             (list 'none)
             (list 'given (list (car xs) (cdr xs))))))
 
     ;; zip :: [a] -> [b] -> [Pair a b]
-    (define hydra_lib_lists_zip
+    (define hydra_overlay_scheme_lib_lists_zip
       (lambda (xs)
         (lambda (ys)
           (let loop ((a xs) (b ys) (acc '()))
@@ -360,7 +360,7 @@
                 (loop (cdr a) (cdr b) (cons (list (car a) (car b)) acc)))))))
 
     ;; zip_with :: (a -> b -> c) -> [a] -> [b] -> [c]
-    (define hydra_lib_lists_zip_with
+    (define hydra_overlay_scheme_lib_lists_zip_with
       (lambda (f)
         (lambda (xs)
           (lambda (ys)
@@ -370,7 +370,7 @@
                   (loop (cdr a) (cdr b) (cons ((f (car a)) (car b)) acc))))))))
 
     ;; apply :: [a -> b] -> [a] -> [b]
-    (define hydra_lib_lists_apply
+    (define hydra_overlay_scheme_lib_lists_apply
       (lambda (fs)
         (lambda (xs)
           (let loop ((rest fs) (acc '()))
@@ -382,7 +382,7 @@
                             (inner (cdr xs2) (cons ((car rest) (car xs2)) a))))))))))
 
     ;; bind :: [a] -> (a -> [b]) -> [b]
-    (define hydra_lib_lists_bind
+    (define hydra_overlay_scheme_lib_lists_bind
       (lambda (xs)
         (lambda (f)
           (let loop ((rest xs) (acc '()))
@@ -394,7 +394,7 @@
                             (inner (cdr ys) (cons (car ys) a))))))))))
 
     ;; group :: [a] -> [[a]]
-    (define hydra_lib_lists_group
+    (define hydra_overlay_scheme_lib_lists_group
       (lambda (xs)
         (if (null? xs) '()
             (let loop ((rest (cdr xs))

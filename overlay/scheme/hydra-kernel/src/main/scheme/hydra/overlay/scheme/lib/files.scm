@@ -12,17 +12,17 @@
                 opendir readdir closedir
                 stat stat:type stat:size stat:mtime stat:mtimensec
                 stat:atime stat:atimensec stat:ctime stat:ctimensec))
-  (export hydra_lib_files_copy
-          hydra_lib_files_append_file
-          hydra_lib_files_create_directory
-          hydra_lib_files_exists
-          hydra_lib_files_list_directory
-          hydra_lib_files_read_file
-          hydra_lib_files_remove_directory
-          hydra_lib_files_remove_file
-          hydra_lib_files_rename
-          hydra_lib_files_status
-          hydra_lib_files_write_file)
+  (export hydra_overlay_scheme_lib_files_copy
+          hydra_overlay_scheme_lib_files_append_file
+          hydra_overlay_scheme_lib_files_create_directory
+          hydra_overlay_scheme_lib_files_exists
+          hydra_overlay_scheme_lib_files_list_directory
+          hydra_overlay_scheme_lib_files_read_file
+          hydra_overlay_scheme_lib_files_remove_directory
+          hydra_overlay_scheme_lib_files_remove_file
+          hydra_overlay_scheme_lib_files_rename
+          hydra_overlay_scheme_lib_files_status
+          hydra_overlay_scheme_lib_files_write_file)
   (begin
 
     ;; Scheme (R7RS) implementations of hydra.lib.files primitives (#494).
@@ -273,7 +273,7 @@
 
     ;; appendFile :: FilePath -> binary -> effect<Either<FileError, unit>>
     ;; Append raw bytes to the end of a file, creating it if absent.
-    (define hydra_lib_files_append_file
+    (define hydra_overlay_scheme_lib_files_append_file
       (lambda (path)
         (lambda (contents)
           (with-file-error path
@@ -283,7 +283,7 @@
 
     ;; copy :: Bool -> FilePath -> FilePath -> effect<Either<FileError, unit>>
     ;; Copy source to destination; when recursive, source may be a directory whose tree is copied.
-    (define hydra_lib_files_copy
+    (define hydra_overlay_scheme_lib_files_copy
       (lambda (recursive)
         (lambda (source)
           (lambda (destination)
@@ -298,7 +298,7 @@
 
     ;; createDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
     ;; Create a directory; when recursive, create missing parents (mkdir -p).
-    (define hydra_lib_files_create_directory
+    (define hydra_overlay_scheme_lib_files_create_directory
       (lambda (recursive)
         (lambda (path)
           (with-file-error path
@@ -308,28 +308,28 @@
 
     ;; exists :: FilePath -> effect<Either<FileError, Bool>>
     ;; Test whether anything exists at the given path (no error on absence).
-    (define hydra_lib_files_exists
+    (define hydra_overlay_scheme_lib_files_exists
       (lambda (path)
         (with-file-error path
           (lambda () (file-exists? path)))))
 
     ;; listDirectory :: FilePath -> effect<Either<FileError, [FilePath]>>
     ;; Returns the bare entry names (not full paths), mirroring the Haskell listDirectory.
-    (define hydra_lib_files_list_directory
+    (define hydra_overlay_scheme_lib_files_list_directory
       (lambda (path)
         (with-file-error path
           (lambda () (list-dir path)))))
 
     ;; readFile :: FilePath -> effect<Either<FileError, binary>>
     ;; Read the entire contents of a file as raw bytes.
-    (define hydra_lib_files_read_file
+    (define hydra_overlay_scheme_lib_files_read_file
       (lambda (path)
         (with-file-error path
           (lambda () (read-file-bytes path)))))
 
     ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
     ;; Remove a directory; when recursive, remove its entire contents (rm -r); otherwise POSIX rmdir.
-    (define hydra_lib_files_remove_directory
+    (define hydra_overlay_scheme_lib_files_remove_directory
       (lambda (recursive)
         (lambda (path)
           (with-file-error path
@@ -341,14 +341,14 @@
 
     ;; removeFile :: FilePath -> effect<Either<FileError, unit>>
     ;; Remove a file (POSIX unlink).
-    (define hydra_lib_files_remove_file
+    (define hydra_overlay_scheme_lib_files_remove_file
       (lambda (path)
         (with-file-error path
           (lambda () (remove-a-file path) '()))))
 
     ;; rename :: FilePath -> FilePath -> effect<Either<FileError, unit>>
     ;; Rename or move a file or directory from source to destination.
-    (define hydra_lib_files_rename
+    (define hydra_overlay_scheme_lib_files_rename
       (lambda (source)
         (lambda (destination)
           (with-file-error source
@@ -358,7 +358,7 @@
 
     ;; status :: FilePath -> effect<Either<FileError, FileStatus>>
     ;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
-    (define hydra_lib_files_status
+    (define hydra_overlay_scheme_lib_files_status
       (lambda (path)
         (with-file-error path
           (lambda ()
@@ -372,7 +372,7 @@
 
     ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
     ;; Replace the file at path with the raw bytes contents, creating it if necessary.
-    (define hydra_lib_files_write_file
+    (define hydra_overlay_scheme_lib_files_write_file
       (lambda (path)
         (lambda (contents)
           (with-file-error path

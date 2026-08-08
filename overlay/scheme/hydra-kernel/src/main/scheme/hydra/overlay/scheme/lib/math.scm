@@ -2,50 +2,50 @@
   (import (scheme base)
           (scheme inexact)
           (scheme bytevector))
-  (export hydra_lib_math_abs
-          hydra_lib_math_acos
-          hydra_lib_math_acosh
-          hydra_lib_math_add
-          hydra_lib_math_add_float64
-          hydra_lib_math_asin
-          hydra_lib_math_asinh
-          hydra_lib_math_atan
-          hydra_lib_math_atan2
-          hydra_lib_math_atanh
-          hydra_lib_math_ceiling
-          hydra_lib_math_cos
-          hydra_lib_math_cosh
-          hydra_lib_math_e
-          hydra_lib_math_even
-          hydra_lib_math_exp
-          hydra_lib_math_floor
-          hydra_lib_math_log
-          hydra_lib_math_logBase
-          hydra_lib_math_log_base
-          hydra_lib_math_div
-          hydra_lib_math_divide
-          hydra_lib_math_mod
-          hydra_lib_math_rem
-          hydra_lib_math_mul
-          hydra_lib_math_mul_float64
-          hydra_lib_math_negate
-          hydra_lib_math_negate_float64
-          hydra_lib_math_odd
-          hydra_lib_math_pi
-          hydra_lib_math_pow
-          hydra_lib_math_range
-          hydra_lib_math_round
-          hydra_lib_math_round_float32
-          hydra_lib_math_round_float64
-          hydra_lib_math_signum
-          hydra_lib_math_sin
-          hydra_lib_math_sinh
-          hydra_lib_math_sqrt
-          hydra_lib_math_sub
-          hydra_lib_math_sub_float64
-          hydra_lib_math_tan
-          hydra_lib_math_tanh
-          hydra_lib_math_truncate)
+  (export hydra_overlay_scheme_lib_math_abs
+          hydra_overlay_scheme_lib_math_acos
+          hydra_overlay_scheme_lib_math_acosh
+          hydra_overlay_scheme_lib_math_add
+          hydra_overlay_scheme_lib_math_add_float64
+          hydra_overlay_scheme_lib_math_asin
+          hydra_overlay_scheme_lib_math_asinh
+          hydra_overlay_scheme_lib_math_atan
+          hydra_overlay_scheme_lib_math_atan2
+          hydra_overlay_scheme_lib_math_atanh
+          hydra_overlay_scheme_lib_math_ceiling
+          hydra_overlay_scheme_lib_math_cos
+          hydra_overlay_scheme_lib_math_cosh
+          hydra_overlay_scheme_lib_math_e
+          hydra_overlay_scheme_lib_math_even
+          hydra_overlay_scheme_lib_math_exp
+          hydra_overlay_scheme_lib_math_floor
+          hydra_overlay_scheme_lib_math_log
+          hydra_overlay_scheme_lib_math_logBase
+          hydra_overlay_scheme_lib_math_log_base
+          hydra_overlay_scheme_lib_math_div
+          hydra_overlay_scheme_lib_math_divide
+          hydra_overlay_scheme_lib_math_mod
+          hydra_overlay_scheme_lib_math_rem
+          hydra_overlay_scheme_lib_math_mul
+          hydra_overlay_scheme_lib_math_mul_float64
+          hydra_overlay_scheme_lib_math_negate
+          hydra_overlay_scheme_lib_math_negate_float64
+          hydra_overlay_scheme_lib_math_odd
+          hydra_overlay_scheme_lib_math_pi
+          hydra_overlay_scheme_lib_math_pow
+          hydra_overlay_scheme_lib_math_range
+          hydra_overlay_scheme_lib_math_round
+          hydra_overlay_scheme_lib_math_round_float32
+          hydra_overlay_scheme_lib_math_round_float64
+          hydra_overlay_scheme_lib_math_signum
+          hydra_overlay_scheme_lib_math_sin
+          hydra_overlay_scheme_lib_math_sinh
+          hydra_overlay_scheme_lib_math_sqrt
+          hydra_overlay_scheme_lib_math_sub
+          hydra_overlay_scheme_lib_math_sub_float64
+          hydra_overlay_scheme_lib_math_tan
+          hydra_overlay_scheme_lib_math_tanh
+          hydra_overlay_scheme_lib_math_truncate)
   (begin
 
     ;; Hyperbolic functions (not in R7RS, defined inline)
@@ -228,18 +228,18 @@
             (/ (* 1.0 x) (* 1.0 y)))))
 
     ;; abs :: numeric x => x -> x
-    (define hydra_lib_math_abs
+    (define hydra_overlay_scheme_lib_math_abs
       (numeric-unary "abs" (lambda (a) (abs a)) (lambda (a) (abs a))))
 
     ;; acos :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
-    (define hydra_lib_math_acos
+    (define hydra_overlay_scheme_lib_math_acos
       (lambda (x)
         (if (or (nan? x) (< x -1.0) (> x 1.0))
             +nan.0
             (acos x))))
 
     ;; acosh :: Double -> Double  (domain [1, +inf); out-of-domain -> NaN)
-    (define hydra_lib_math_acosh
+    (define hydra_overlay_scheme_lib_math_acosh
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((< x 1.0) +nan.0)
@@ -247,24 +247,24 @@
               (else (acosh x)))))
 
     ;; add :: numeric x => x -> x -> x
-    (define hydra_lib_math_add
+    (define hydra_overlay_scheme_lib_math_add
       (numeric-binary "add" + +))
 
     ;; addFloat64 :: Double -> Double -> Double
-    (define hydra_lib_math_add_float64
+    (define hydra_overlay_scheme_lib_math_add_float64
       (lambda (a)
         (lambda (b)
           (+ (* 1.0 a) (* 1.0 b)))))
 
     ;; asin :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
-    (define hydra_lib_math_asin
+    (define hydra_overlay_scheme_lib_math_asin
       (lambda (x)
         (if (or (nan? x) (< x -1.0) (> x 1.0))
             +nan.0
             (asin x))))
 
     ;; asinh :: Double -> Double  (unrestricted domain)
-    (define hydra_lib_math_asinh
+    (define hydra_overlay_scheme_lib_math_asinh
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((= x +inf.0) +inf.0)
@@ -272,13 +272,13 @@
               (else (asinh x)))))
 
     ;; atan :: Double -> Double  (unrestricted domain)
-    (define hydra_lib_math_atan
+    (define hydra_overlay_scheme_lib_math_atan
       (lambda (x) (atan x)))
 
     ;; atan2 :: Double -> Double -> Double
     ;; Match Haskell: atan2 returns NaN when both arguments are infinite
     ;; (Scheme's two-arg atan returns ±pi/4 or ±3pi/4 in these cases).
-    (define hydra_lib_math_atan2
+    (define hydra_overlay_scheme_lib_math_atan2
       (lambda (y)
         (lambda (x)
           (if (and (infinite? y) (infinite? x))
@@ -286,7 +286,7 @@
               (atan y x)))))
 
     ;; atanh :: Double -> Double  (domain (-1, 1); boundary -> ±Inf; |x|>1 -> NaN)
-    (define hydra_lib_math_atanh
+    (define hydra_overlay_scheme_lib_math_atanh
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((< x -1.0) +nan.0)
@@ -298,41 +298,41 @@
     ;; ceiling :: Double -> Double
     ;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
     ;; NaN/Inf propagate naturally per IEEE 754.
-    (define hydra_lib_math_ceiling
+    (define hydra_overlay_scheme_lib_math_ceiling
       (lambda (x)
         (if (or (nan? x) (infinite? x))
             x
             (inexact (ceiling x)))))
 
     ;; cos :: Double -> Double
-    (define hydra_lib_math_cos
+    (define hydra_overlay_scheme_lib_math_cos
       (lambda (x) (cos x)))
 
     ;; cosh :: Double -> Double
-    (define hydra_lib_math_cosh
+    (define hydra_overlay_scheme_lib_math_cosh
       (lambda (x) (cosh x)))
 
     ;; e :: Double
-    (define hydra_lib_math_e (exp 1))
+    (define hydra_overlay_scheme_lib_math_e (exp 1))
 
     ;; even :: integral x => x -> Bool
-    (define hydra_lib_math_even
+    (define hydra_overlay_scheme_lib_math_even
       (even-or-odd "even" #t))
 
     ;; exp :: Double -> Double
-    (define hydra_lib_math_exp
+    (define hydra_overlay_scheme_lib_math_exp
       (lambda (x) (exp x)))
 
     ;; floor :: Double -> Double
     ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-    (define hydra_lib_math_floor
+    (define hydra_overlay_scheme_lib_math_floor
       (lambda (x)
         (if (or (nan? x) (infinite? x))
             x
             (inexact (floor x)))))
 
     ;; log :: Double -> Double  (domain (0, +inf); x=0 -> -Inf; x<0 -> NaN)
-    (define hydra_lib_math_log
+    (define hydra_overlay_scheme_lib_math_log
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((< x 0.0) +nan.0)
@@ -342,61 +342,61 @@
 
     ;; logBase :: Double -> Double -> Double
     ;; Defined via the guarded log, so NaN/Inf compose correctly.
-    (define hydra_lib_math_logBase
+    (define hydra_overlay_scheme_lib_math_logBase
       (lambda (base)
         (lambda (x)
-          (/ (hydra_lib_math_log x) (hydra_lib_math_log base)))))
+          (/ (hydra_overlay_scheme_lib_math_log x) (hydra_overlay_scheme_lib_math_log base)))))
 
-    (define hydra_lib_math_log_base hydra_lib_math_logBase)
+    (define hydra_overlay_scheme_lib_math_log_base hydra_overlay_scheme_lib_math_logBase)
 
     ;; div :: integral x => x -> x -> optional x
-    (define hydra_lib_math_div
+    (define hydra_overlay_scheme_lib_math_div
       (integral-binary "div" floor-quotient #t))
 
     ;; divide :: fractional x => x -> x -> x
-    (define hydra_lib_math_divide
+    (define hydra_overlay_scheme_lib_math_divide
       divide-dispatch)
 
     ;; mod :: integral x => x -> x -> optional x
-    (define hydra_lib_math_mod
+    (define hydra_overlay_scheme_lib_math_mod
       (integral-binary "mod" floor-remainder #f))
 
     ;; rem :: integral x => x -> x -> optional x
-    (define hydra_lib_math_rem
+    (define hydra_overlay_scheme_lib_math_rem
       (integral-binary "rem" truncate-remainder #f))
 
     ;; mul :: numeric x => x -> x -> x
-    (define hydra_lib_math_mul
+    (define hydra_overlay_scheme_lib_math_mul
       (numeric-binary "mul" * *))
 
     ;; mulFloat64 :: Double -> Double -> Double
-    (define hydra_lib_math_mul_float64
+    (define hydra_overlay_scheme_lib_math_mul_float64
       (lambda (a)
         (lambda (b)
           (* (* 1.0 a) (* 1.0 b)))))
 
     ;; negate :: numeric x => x -> x
-    (define hydra_lib_math_negate
+    (define hydra_overlay_scheme_lib_math_negate
       (numeric-unary "negate" - -))
 
     ;; negateFloat64 :: Double -> Double
-    (define hydra_lib_math_negate_float64
+    (define hydra_overlay_scheme_lib_math_negate_float64
       (lambda (a)
         (- (* 1.0 a))))
 
     ;; odd :: integral x => x -> Bool
-    (define hydra_lib_math_odd
+    (define hydra_overlay_scheme_lib_math_odd
       (even-or-odd "odd" #f))
 
     ;; pi :: Double
-    (define hydra_lib_math_pi (* 4 (atan 1)))
+    (define hydra_overlay_scheme_lib_math_pi (* 4 (atan 1)))
 
     ;; pow :: Double -> Double -> Double
     ;; Scheme's expt can return complex numbers (e.g. negative base with
     ;; fractional exponent); Haskell's (**) returns NaN in such cases.
     ;; pow :: Double -> Double -> Double
     ;; Match Haskell's (**): 0^negative = Inf, complex results -> NaN
-    (define hydra_lib_math_pow
+    (define hydra_overlay_scheme_lib_math_pow
       (lambda (base)
         (lambda (exp_)
           (let ((b (* 1.0 base)) (e (* 1.0 exp_)))
@@ -410,7 +410,7 @@
                       +nan.0))))))))
 
     ;; range :: Int -> Int -> [Int]  (inclusive both ends)
-    (define hydra_lib_math_range
+    (define hydra_overlay_scheme_lib_math_range
       (lambda (start)
         (lambda (end)
           (let loop ((i start) (acc '()))
@@ -420,7 +420,7 @@
 
     ;; round :: Double -> Double
     ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-    (define hydra_lib_math_round
+    (define hydra_overlay_scheme_lib_math_round
       (lambda (x)
         (if (or (nan? x) (infinite? x))
             x
@@ -428,7 +428,7 @@
 
     ;; roundFloat64 :: Int -> Double -> Double
     ;; Returns NaN/Inf inputs unchanged (no rounding is possible).
-    (define hydra_lib_math_round_float64
+    (define hydra_overlay_scheme_lib_math_round_float64
       (lambda (n)
         (lambda (x)
           (cond ((or (nan? x) (infinite? x)) x)
@@ -439,15 +439,15 @@
 
     ;; roundFloat32 :: Int -> Float -> Float
     ;; Rounds to N significant digits, then snaps through IEEE float32
-    (define hydra_lib_math_round_float32
+    (define hydra_overlay_scheme_lib_math_round_float32
       (lambda (n)
         (lambda (x)
-          (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
+          (snap-to-float32 ((hydra_overlay_scheme_lib_math_round_float64 n) x)))))
 
     ;; signum :: numeric x => x -> x
     ;; Returns -1/0/1 for integers; for floats, preserves the sign of zero (signum(-0.0) = -0.0)
     ;; and propagates NaN, matching the other hosts' float signum.
-    (define hydra_lib_math_signum
+    (define hydra_overlay_scheme_lib_math_signum
       (numeric-unary "signum"
         (lambda (a) (cond ((positive? a) 1) ((negative? a) -1) (else 0)))
         (lambda (a)
@@ -458,15 +458,15 @@
                 (else a)))))
 
     ;; sin :: Double -> Double
-    (define hydra_lib_math_sin
+    (define hydra_overlay_scheme_lib_math_sin
       (lambda (x) (sin x)))
 
     ;; sinh :: Double -> Double
-    (define hydra_lib_math_sinh
+    (define hydra_overlay_scheme_lib_math_sinh
       (lambda (x) (sinh x)))
 
     ;; sqrt :: Double -> Double  (domain [0, +inf); x<0 -> NaN)
-    (define hydra_lib_math_sqrt
+    (define hydra_overlay_scheme_lib_math_sqrt
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((< x 0.0) +nan.0)
@@ -474,23 +474,23 @@
               (else (sqrt x)))))
 
     ;; sub :: numeric x => x -> x -> x
-    (define hydra_lib_math_sub
+    (define hydra_overlay_scheme_lib_math_sub
       (numeric-binary "sub" - -))
 
     ;; subFloat64 :: Double -> Double -> Double
-    (define hydra_lib_math_sub_float64
+    (define hydra_overlay_scheme_lib_math_sub_float64
       (lambda (a)
         (lambda (b)
           (- (* 1.0 a) (* 1.0 b)))))
 
     ;; tan :: Double -> Double
-    (define hydra_lib_math_tan
+    (define hydra_overlay_scheme_lib_math_tan
       (lambda (x) (tan x)))
 
     ;; tanh :: Double -> Double
     ;; The custom tanh (sinh/cosh) returns NaN for ±Inf because Inf/Inf = NaN.
     ;; Haskell's tanh returns ±1.0 at the infinities.
-    (define hydra_lib_math_tanh
+    (define hydra_overlay_scheme_lib_math_tanh
       (lambda (x)
         (cond ((nan? x) +nan.0)
               ((= x +inf.0) 1.0)
@@ -499,7 +499,7 @@
 
     ;; truncate :: Double -> Double
     ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-    (define hydra_lib_math_truncate
+    (define hydra_overlay_scheme_lib_math_truncate
       (lambda (x)
         (if (or (nan? x) (infinite? x))
             x

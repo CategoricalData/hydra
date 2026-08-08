@@ -1,7 +1,7 @@
 (define-library (hydra overlay scheme lib text)
   (import (scheme base))
-  (export hydra_lib_text_decode_utf8
-          hydra_lib_text_encode_utf8)
+  (export hydra_overlay_scheme_lib_text_decode_utf8
+          hydra_overlay_scheme_lib_text_encode_utf8)
   (begin
 
     ;; Scheme (R7RS) implementations of hydra.lib.text primitives (#494).
@@ -47,7 +47,7 @@
     ;; bytes are not valid UTF-8, where message is a host-provided description of the failure.
     ;; R7RS utf8->string raises on malformed input in strict implementations (e.g. guile); we guard
     ;; and report the failure as Left.
-    (define hydra_lib_text_decode_utf8
+    (define hydra_overlay_scheme_lib_text_decode_utf8
       (lambda (data)
         (guard (e (#t
                    (let ((m (and (error-object? e) (error-object-message e))))
@@ -56,6 +56,6 @@
 
     ;; encodeUtf8 :: string -> binary
     ;; Total: every Hydra string is valid Unicode and therefore always encodes.
-    (define hydra_lib_text_encode_utf8
+    (define hydra_overlay_scheme_lib_text_encode_utf8
       (lambda (text)
         (bytevector->binary (string->utf8 text))))))
