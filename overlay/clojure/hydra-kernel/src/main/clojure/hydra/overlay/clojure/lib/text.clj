@@ -23,7 +23,7 @@
 ;; decodeUtf8 :: binary -> Either<string, string>
 ;; Strict UTF-8 decode: returns (list :right text) on success, or (list :left message) when the
 ;; bytes are not valid UTF-8, where message is a host-provided description of the failure.
-(def hydra_lib_text_decode_utf8
+(def hydra_overlay_clojure_lib_text_decode_utf8
   "Decode a sequence of bytes as UTF-8 text (strict)."
   (fn [data]
     (let [decoder (doto (.newDecoder StandardCharsets/UTF_8)
@@ -37,6 +37,6 @@
 
 ;; encodeUtf8 :: string -> binary
 ;; Total: every Hydra string is valid Unicode and therefore always encodes.
-(def hydra_lib_text_encode_utf8
+(def hydra_overlay_clojure_lib_text_encode_utf8
   "Encode text as a sequence of UTF-8 bytes."
   (fn [text] (bytes->binary (.getBytes ^String text StandardCharsets/UTF_8))))

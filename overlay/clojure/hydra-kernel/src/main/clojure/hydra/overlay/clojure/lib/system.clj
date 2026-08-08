@@ -57,7 +57,7 @@
 ;; ---- Primitives ----
 
 ;; execute :: Command -> effect<Either<SystemError, ProcessResult>>
-(def hydra_lib_system_execute
+(def hydra_overlay_clojure_lib_system_execute
   "Run a program to completion, capturing stdout/stderr (binary) and the exit code."
   (fn [command]
     (let [program (:program command)
@@ -84,7 +84,7 @@
           (list :left (list :interrupted)))))))
 
 ;; exit :: StatusCode -> effect<unit>
-(def hydra_lib_system_exit
+(def hydra_overlay_clojure_lib_system_exit
   "Terminate the current process immediately with the given status. Does not return."
   (fn [code]
     (System/exit code)
@@ -93,25 +93,25 @@
 ;; getEnvironment :: effect<Map<EnvironmentVariable, string>>
 ;; A nullary effect: generated consumer code references this as a bare value (the effect result), so it
 ;; is a plain def, not a thunk. (The reducer registry wraps it in a thunk; see register-system.)
-(def hydra_lib_system_get_environment
+(def hydra_overlay_clojure_lib_system_get_environment
   "Return the entire environment of the current process as a map from variable name to value."
   (into {} (System/getenv)))
 
 ;; getEnvironmentVariable :: EnvironmentVariable -> effect<Optional<string>>
-(def hydra_lib_system_get_environment_variable
+(def hydra_overlay_clojure_lib_system_get_environment_variable
   "Return the value of the named environment variable, or none if it is not set."
   (fn [name]
     (let [v (System/getenv ^String name)]
       (if (nil? v) (list :none) (list :given v)))))
 
 ;; getTime :: effect<Timespec>  (nullary effect: a bare value, see getEnvironment note)
-(def hydra_lib_system_get_time
+(def hydra_overlay_clojure_lib_system_get_time
   "Return the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix epoch)."
   (let [now (java.time.Instant/now)]
     (->hydra_time_timespec (.getEpochSecond now) (long (.getNano now)))))
 
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
-(def hydra_lib_system_get_working_directory
+(def hydra_overlay_clojure_lib_system_get_working_directory
   "Return the current working directory as a FilePath (string)."
   (let [cwd (System/getProperty "user.dir")]
     (if (nil? cwd)
@@ -119,14 +119,14 @@
       (list :right cwd))))
 
 ;; readStdin :: effect<Either<SystemError, binary>>  (nullary effect: a bare value)
-(def hydra_lib_system_read_stdin
+(def hydra_overlay_clojure_lib_system_read_stdin
   "Read standard input until end-of-file, returning the complete contents as raw bytes."
   (try
     (list :right (bytes->binary (read-all System/in)))
     (catch IOException e (list :left (list :other (message e))))))
 
 ;; writeStderr :: binary -> effect<Either<SystemError, unit>>
-(def hydra_lib_system_write_stderr
+(def hydra_overlay_clojure_lib_system_write_stderr
   "Write bytes to standard error."
   (fn [bs]
     (try
@@ -137,7 +137,7 @@
       (catch IOException e (list :left (list :other (message e)))))))
 
 ;; writeStdout :: binary -> effect<Either<SystemError, unit>>
-(def hydra_lib_system_write_stdout
+(def hydra_overlay_clojure_lib_system_write_stdout
   "Write bytes to standard output."
   (fn [bs]
     (try

@@ -88,7 +88,7 @@
 ;; ---- Primitives ----
 
 ;; appendFile :: FilePath -> binary -> effect<Either<FileError, unit>>
-(def hydra_lib_files_append_file
+(def hydra_overlay_clojure_lib_files_append_file
   "Append raw bytes to the end of a file, creating it if absent."
   (fn [path] (fn [contents]
     (with-file-error path
@@ -98,7 +98,7 @@
         nil)))))
 
 ;; copy :: Bool -> FilePath -> FilePath -> effect<Either<FileError, unit>>
-(def hydra_lib_files_copy
+(def hydra_overlay_clojure_lib_files_copy
   "Copy source to destination; when recursive, source may be a directory whose tree is copied."
   (fn [recursive] (fn [source] (fn [destination]
     (with-file-error source
@@ -114,7 +114,7 @@
           nil)))))))
 
 ;; createDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
-(def hydra_lib_files_create_directory
+(def hydra_overlay_clojure_lib_files_create_directory
   "Create a directory; when recursive, create missing parents (mkdir -p)."
   (fn [recursive] (fn [path]
     (with-file-error path
@@ -126,7 +126,7 @@
         nil)))))
 
 ;; exists :: FilePath -> effect<Either<FileError, Bool>>
-(def hydra_lib_files_exists
+(def hydra_overlay_clojure_lib_files_exists
   "Test whether anything exists at the given path (no error on absence)."
   (fn [path]
     (with-file-error path
@@ -134,7 +134,7 @@
 
 ;; listDirectory :: FilePath -> effect<Either<FileError, [FilePath]>>
 ;; Returns the bare entry names (not full paths), mirroring the Haskell listDirectory.
-(def hydra_lib_files_list_directory
+(def hydra_overlay_clojure_lib_files_list_directory
   "List the immediate entries of a directory as bare names."
   (fn [path]
     (with-file-error path
@@ -149,14 +149,14 @@
             (finally (.close stream))))))))
 
 ;; readFile :: FilePath -> effect<Either<FileError, binary>>
-(def hydra_lib_files_read_file
+(def hydra_overlay_clojure_lib_files_read_file
   "Read the entire contents of a file as raw bytes."
   (fn [path]
     (with-file-error path
       (fn [] (bytes->binary (Files/readAllBytes (path-of path)))))))
 
 ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
-(def hydra_lib_files_remove_directory
+(def hydra_overlay_clojure_lib_files_remove_directory
   "Remove a directory; when recursive, remove its entire contents (rm -r)."
   (fn [recursive] (fn [path]
     (with-file-error path
@@ -167,14 +167,14 @@
         nil)))))
 
 ;; removeFile :: FilePath -> effect<Either<FileError, unit>>
-(def hydra_lib_files_remove_file
+(def hydra_overlay_clojure_lib_files_remove_file
   "Remove a file (POSIX unlink)."
   (fn [path]
     (with-file-error path
       (fn [] (Files/delete (path-of path)) nil))))
 
 ;; rename :: FilePath -> FilePath -> effect<Either<FileError, unit>>
-(def hydra_lib_files_rename
+(def hydra_overlay_clojure_lib_files_rename
   "Rename or move a file or directory from source to destination."
   (fn [source] (fn [destination]
     (with-file-error source
@@ -199,7 +199,7 @@
 ;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
 ;; FileStatus is a hydra_file_file_status defrecord
 ;; {:file_type :size :modification_time :access_time :status_change_time}.
-(def hydra_lib_files_status
+(def hydra_overlay_clojure_lib_files_status
   "Retrieve metadata about the file at path (POSIX stat)."
   (fn [path]
     (with-file-error path
@@ -213,7 +213,7 @@
             (list :none)))))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
-(def hydra_lib_files_write_file
+(def hydra_overlay_clojure_lib_files_write_file
   "Replace the file at path with the raw bytes contents, creating it if necessary."
   (fn [path] (fn [contents]
     (with-file-error path

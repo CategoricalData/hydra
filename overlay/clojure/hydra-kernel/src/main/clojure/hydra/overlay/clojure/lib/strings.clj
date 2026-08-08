@@ -1,17 +1,17 @@
 (ns hydra.overlay.clojure.lib.strings)
 
 ;; concat :: [String] -> String
-(def hydra_lib_strings_concat
+(def hydra_overlay_clojure_lib_strings_concat
   "Concatenate a list of strings into a single string."
   (fn [ss] (apply str ss)))
 
 ;; concat2 :: String -> String -> String
-(def hydra_lib_strings_concat2
+(def hydra_overlay_clojure_lib_strings_concat2
   "Concatenate two strings."
   (fn [a] (fn [b] (str a b))))
 
 ;; from_list :: [Int] -> String (codepoints to string)
-(def hydra_lib_strings_from_list
+(def hydra_overlay_clojure_lib_strings_from_list
   "Convert a list of Unicode code points to a string."
   (fn [cs]
     (let [sb (StringBuilder.)]
@@ -20,18 +20,18 @@
       (.toString sb))))
 
 ;; join :: String -> [String] -> String
-(def hydra_lib_strings_join
+(def hydra_overlay_clojure_lib_strings_join
   "Join a list of strings with a separator between each element."
   (fn [sep] (fn [ss] (clojure.string/join sep ss))))
 
 ;; length :: String -> Int (codepoint count)
-(def hydra_lib_strings_length
+(def hydra_overlay_clojure_lib_strings_length
   "Return the length of a string."
   (fn [s] (.codePointCount s 0 (.length s))))
 
 ;; lines :: String -> [String]
 ;; Haskell semantics: lines "" = [], lines "hello\n" = ["hello"], lines "\n" = [""]
-(def hydra_lib_strings_lines
+(def hydra_overlay_clojure_lib_strings_lines
   "Split a string into lines."
   (fn [s]
     (if (= s "")
@@ -50,7 +50,7 @@
           parts)))))
 
 ;; char_at :: Int -> String -> Maybe Int
-(def hydra_lib_strings_char_at
+(def hydra_overlay_clojure_lib_strings_char_at
   "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
   (fn [n] (fn [s]
     (if (and (>= n 0) (< n (.codePointCount s 0 (.length s))))
@@ -58,12 +58,12 @@
       (list :none)))))
 
 ;; null :: String -> Bool
-(def hydra_lib_strings_null
+(def hydra_overlay_clojure_lib_strings_null
   "Check whether a string is empty."
   (fn [s] (= s "")))
 
 ;; split_on :: String -> String -> [String]
-(def hydra_lib_strings_split_on
+(def hydra_overlay_clojure_lib_strings_split_on
   "Split a string on a delimiter string."
   (fn [sep] (fn [s]
     (if (= sep "")
@@ -78,7 +78,7 @@
           (recur (inc i) start acc)))))))
 
 ;; to_list :: String -> [Int] (codepoints)
-(def hydra_lib_strings_to_list
+(def hydra_overlay_clojure_lib_strings_to_list
   "Convert a string to a list of Unicode code points."
   (fn [s]
     (let [len (.length s)]
@@ -90,16 +90,16 @@
             (recur (+ i chars) (cons cp acc))))))))
 
 ;; to_lower :: String -> String
-(def hydra_lib_strings_to_lower
+(def hydra_overlay_clojure_lib_strings_to_lower
   "Convert a string to lowercase."
   (fn [s] (clojure.string/lower-case s)))
 
 ;; to_upper :: String -> String
-(def hydra_lib_strings_to_upper
+(def hydra_overlay_clojure_lib_strings_to_upper
   "Convert a string to uppercase."
   (fn [s] (clojure.string/upper-case s)))
 
 ;; unlines :: [String] -> String
-(def hydra_lib_strings_unlines
+(def hydra_overlay_clojure_lib_strings_unlines
   "Join a list of strings with newlines, appending a trailing newline."
   (fn [ss] (apply str (map (fn [s] (str s "\n")) ss))))

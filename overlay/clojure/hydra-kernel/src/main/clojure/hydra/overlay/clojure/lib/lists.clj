@@ -2,27 +2,27 @@
   (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]))
 
 ;; concat :: [[a]] -> [a]
-(def hydra_lib_lists_concat
+(def hydra_overlay_clojure_lib_lists_concat
   (fn [xss] (apply concat xss)))
 
 ;; concat2 :: [a] -> [a] -> [a]
-(def hydra_lib_lists_concat2
+(def hydra_overlay_clojure_lib_lists_concat2
   (fn [xs] (fn [ys] (concat xs ys))))
 
 ;; cons :: a -> [a] -> [a]
-(def hydra_lib_lists_cons
+(def hydra_overlay_clojure_lib_lists_cons
   (fn [x] (fn [xs] (cons x xs))))
 
 ;; drop :: Int -> [a] -> [a]
-(def hydra_lib_lists_drop
+(def hydra_overlay_clojure_lib_lists_drop
   (fn [n] (fn [xs] (drop n xs))))
 
 ;; drop_while :: (a -> Bool) -> [a] -> [a]
-(def hydra_lib_lists_drop_while
+(def hydra_overlay_clojure_lib_lists_drop_while
   (fn [pred_] (fn [xs] (drop-while pred_ xs))))
 
 ;; member :: a -> [a] -> Bool
-(def hydra_lib_lists_member
+(def hydra_overlay_clojure_lib_lists_member
   (fn [x] (fn [xs]
     (loop [rest_ (seq xs)]
       (cond
@@ -31,11 +31,11 @@
         :else (recur (next rest_)))))))
 
 ;; filter :: (a -> Bool) -> [a] -> [a]
-(def hydra_lib_lists_filter
+(def hydra_overlay_clojure_lib_lists_filter
   (fn [pred_] (fn [xs] (filter pred_ xs))))
 
 ;; find :: (a -> Bool) -> [a] -> Maybe a
-(def hydra_lib_lists_find
+(def hydra_overlay_clojure_lib_lists_find
   (fn [pred_] (fn [xs]
     (loop [rest_ (seq xs)]
       (cond
@@ -44,7 +44,7 @@
         :else (recur (next rest_)))))))
 
 ;; foldl :: (b -> a -> b) -> b -> [a] -> b
-(def hydra_lib_lists_foldl
+(def hydra_overlay_clojure_lib_lists_foldl
   (fn [f] (fn [init_] (fn [xs]
     (loop [acc init_ rest_ (seq xs)]
       (if (nil? rest_)
@@ -52,12 +52,12 @@
         (recur ((f acc) (first rest_)) (next rest_))))))))
 
 ;; foldr :: (a -> b -> b) -> b -> [a] -> b
-(def hydra_lib_lists_foldr
+(def hydra_overlay_clojure_lib_lists_foldr
   (fn [f] (fn [init_] (fn [xs]
     (reduce (fn [acc el] ((f el) acc)) init_ (reverse xs))))))
 
 ;; join :: [a] -> [[a]] -> [a]
-(def hydra_lib_lists_join
+(def hydra_overlay_clojure_lib_lists_join
   (fn [sep] (fn [xss]
     (if (empty? xss)
       ()
@@ -67,7 +67,7 @@
           (recur (next rest_) (cons (first rest_) (cons sep acc)))))))))
 
 ;; intersperse :: a -> [a] -> [a]
-(def hydra_lib_lists_intersperse
+(def hydra_overlay_clojure_lib_lists_intersperse
   (fn [sep] (fn [xs]
     (if (empty? xs)
       ()
@@ -77,50 +77,50 @@
           (recur (next rest_) (cons (first rest_) (cons sep acc)))))))))
 
 ;; length :: [a] -> Int
-(def hydra_lib_lists_length
+(def hydra_overlay_clojure_lib_lists_length
   (fn [xs] (count xs)))
 
 ;; map :: (a -> b) -> [a] -> [b]
-(def hydra_lib_lists_map
+(def hydra_overlay_clojure_lib_lists_map
   (fn [f] (fn [xs] (map f xs))))
 
 ;; at :: Int -> [a] -> Maybe a
-(def hydra_lib_lists_at
+(def hydra_overlay_clojure_lib_lists_at
   (fn [n] (fn [xs]
     (if (and (>= n 0) (< n (count xs)))
       (list :given (nth xs n))
       (list :none)))))
 
 ;; head :: [a] -> Maybe a
-(def hydra_lib_lists_head
+(def hydra_overlay_clojure_lib_lists_head
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (first xs)))))
 
 ;; init :: [a] -> Maybe [a]
-(def hydra_lib_lists_init
+(def hydra_overlay_clojure_lib_lists_init
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (or (butlast xs) ())))))
 
 ;; last :: [a] -> Maybe a
-(def hydra_lib_lists_last
+(def hydra_overlay_clojure_lib_lists_last
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (last xs)))))
 
 ;; tail :: [a] -> Maybe [a]
-(def hydra_lib_lists_tail
+(def hydra_overlay_clojure_lib_lists_tail
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (rest xs)))))
 
 ;; distinct :: [a] -> [a]  (remove duplicates, preserve order)
-(def hydra_lib_lists_distinct
+(def hydra_overlay_clojure_lib_lists_distinct
   (fn [xs]
     (loop [rest_ (seq xs) seen #{} acc ()]
       (if (nil? rest_)
@@ -131,11 +131,11 @@
             (recur (next rest_) (conj seen x) (cons x acc))))))))
 
 ;; null :: [a] -> Bool
-(def hydra_lib_lists_null
+(def hydra_overlay_clojure_lib_lists_null
   (fn [xs] (empty? xs)))
 
 ;; partition :: (a -> Bool) -> [a] -> Pair [a] [a]
-(def hydra_lib_lists_partition
+(def hydra_overlay_clojure_lib_lists_partition
   (fn [pred_] (fn [xs]
     (loop [rest_ (seq xs) yes () no ()]
       (if (nil? rest_)
@@ -145,31 +145,31 @@
           (recur (next rest_) yes (cons (first rest_) no))))))))
 
 ;; pure :: a -> [a]
-(def hydra_lib_lists_pure
+(def hydra_overlay_clojure_lib_lists_pure
   (fn [x] (list x)))
 
 ;; replicate :: Int -> a -> [a]
-(def hydra_lib_lists_replicate
+(def hydra_overlay_clojure_lib_lists_replicate
   (fn [n] (fn [x] (repeat n x))))
 
 ;; reverse :: [a] -> [a]
-(def hydra_lib_lists_reverse
+(def hydra_overlay_clojure_lib_lists_reverse
   (fn [xs] (reverse xs)))
 
 ;; singleton :: a -> [a]
-(def hydra_lib_lists_singleton
+(def hydra_overlay_clojure_lib_lists_singleton
   (fn [x] (list x)))
 
 ;; sort :: [a] -> [a]
-(def hydra_lib_lists_sort
+(def hydra_overlay_clojure_lib_lists_sort
   (fn [xs] (sort-by identity generic-compare xs)))
 
 ;; sort_by :: (a -> b) -> [a] -> [a]
-(def hydra_lib_lists_sort_by
+(def hydra_overlay_clojure_lib_lists_sort_by
   (fn [f] (fn [xs] (sort-by f generic-compare xs))))
 
 ;; span :: (a -> Bool) -> [a] -> Pair [a] [a]
-(def hydra_lib_lists_span
+(def hydra_overlay_clojure_lib_lists_span
   (fn [pred_] (fn [xs]
     (loop [rest_ (seq xs) acc ()]
       (cond
@@ -178,12 +178,12 @@
         :else (list (reverse acc) rest_))))))
 
 ;; take :: Int -> [a] -> [a]
-(def hydra_lib_lists_take
+(def hydra_overlay_clojure_lib_lists_take
   (fn [n] (fn [xs] (take n xs))))
 
 ;; transpose :: [[a]] -> [[a]]
 ;; Haskell semantics: handles ragged lists (takes what's available at each index)
-(def hydra_lib_lists_transpose
+(def hydra_overlay_clojure_lib_lists_transpose
   (fn [xss]
     (if (empty? xss)
       ()
@@ -203,23 +203,23 @@
                 (recur (inc i) (cons col acc))))))))))
 
 ;; uncons :: [a] -> Maybe (a, [a])
-(def hydra_lib_lists_uncons
+(def hydra_overlay_clojure_lib_lists_uncons
   (fn [xs]
     (if (empty? xs)
       (list :none)
       (list :given (list (first xs) (rest xs))))))
 
 ;; apply :: [a -> b] -> [a] -> [b]
-(def hydra_lib_lists_apply
+(def hydra_overlay_clojure_lib_lists_apply
   (fn [fs] (fn [xs]
     (mapcat (fn [f] (map f xs)) fs))))
 
 ;; bind :: [a] -> (a -> [b]) -> [b]
-(def hydra_lib_lists_bind
+(def hydra_overlay_clojure_lib_lists_bind
   (fn [xs] (fn [f] (mapcat f xs))))
 
 ;; group :: [a] -> [[a]]
-(def hydra_lib_lists_group
+(def hydra_overlay_clojure_lib_lists_group
   (fn [xs]
     (if (empty? xs)
       ()
@@ -232,10 +232,10 @@
               (recur (next rest_) x (list x) (cons (reverse acc-group) groups)))))))))
 
 ;; zip :: [a] -> [b] -> [Pair a b]
-(def hydra_lib_lists_zip
+(def hydra_overlay_clojure_lib_lists_zip
   (fn [xs] (fn [ys] (map list xs ys))))
 
 ;; zip_with :: (a -> b -> c) -> [a] -> [b] -> [c]
-(def hydra_lib_lists_zip_with
+(def hydra_overlay_clojure_lib_lists_zip_with
   (fn [f] (fn [xs] (fn [ys]
     (map (fn [x y] ((f x) y)) xs ys)))))

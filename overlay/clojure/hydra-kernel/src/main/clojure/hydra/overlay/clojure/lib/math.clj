@@ -192,37 +192,37 @@
 ;; Uses -' (auto-promoting subtract, like negate below) rather than unchecked -: at
 ;; Long/MIN_VALUE, -a overflows a primitive long (Math/negateExact throws "long overflow"); -'
 ;; promotes to BigInteger instead, which wrap-int then correctly narrows back to minBound.
-(def hydra_lib_math_abs
+(def hydra_overlay_clojure_lib_math_abs
   "Constraint-polymorphic absolute value over any type with a 'numeric' instance."
   (numeric-unary "abs" (fn [a] (if (< a 0) (-' a) a)) (fn [a] (Math/abs (double a)))))
 
 ;; acos :: Double -> Double
-(def hydra_lib_math_acos
+(def hydra_overlay_clojure_lib_math_acos
   "Return the arc cosine of x in radians."
   (fn [x] (Math/acos x)))
 
 ;; acosh :: Double -> Double
-(def hydra_lib_math_acosh
+(def hydra_overlay_clojure_lib_math_acosh
   "Return the inverse hyperbolic cosine of x."
   (fn [x] (Math/log (+ x (Math/sqrt (- (* x x) 1.0))))))
 
 ;; add :: numeric x => x -> x -> x
-(def hydra_lib_math_add
+(def hydra_overlay_clojure_lib_math_add
   "Constraint-polymorphic addition over any type with a 'numeric' instance."
   (numeric-binary "add" +' +))
 
 ;; addFloat64 :: Double -> Double -> Double
-(def hydra_lib_math_add_float64
+(def hydra_overlay_clojure_lib_math_add_float64
   "Add two Float64 numbers."
   (fn [a] (fn [b] (+ (double a) (double b)))))
 
 ;; asin :: Double -> Double
-(def hydra_lib_math_asin
+(def hydra_overlay_clojure_lib_math_asin
   "Return the arc sine of x in radians."
   (fn [x] (Math/asin x)))
 
 ;; asinh :: Double -> Double
-(def hydra_lib_math_asinh
+(def hydra_overlay_clojure_lib_math_asinh
   "Return the inverse hyperbolic sine of x."
   ;; Special-case infinities: asinh(±Inf) = ±Inf (naive formula gives NaN for -Inf).
   (fn [x]
@@ -231,12 +231,12 @@
       (Math/log (+ x (Math/sqrt (+ (* x x) 1.0)))))))
 
 ;; atan :: Double -> Double
-(def hydra_lib_math_atan
+(def hydra_overlay_clojure_lib_math_atan
   "Return the arc tangent of x in radians."
   (fn [x] (Math/atan x)))
 
 ;; atan2 :: Double -> Double -> Double
-(def hydra_lib_math_atan2
+(def hydra_overlay_clojure_lib_math_atan2
   "Return the arc tangent of y/x in radians, using signs to determine quadrant."
   ;; Match Haskell: atan2 returns NaN when both arguments are infinite
   ;; (Java's Math.atan2 returns ±pi/4 or ±3pi/4 in these cases).
@@ -246,14 +246,14 @@
       (Math/atan2 y x)))))
 
 ;; atanh :: Double -> Double
-(def hydra_lib_math_atanh
+(def hydra_overlay_clojure_lib_math_atanh
   "Return the inverse hyperbolic tangent of x."
   (fn [x] (* 0.5 (Math/log (/ (+ 1.0 x) (- 1.0 x))))))
 
 ;; ceiling :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
 ;; NaN/Inf propagate naturally per IEEE 754.
-(def hydra_lib_math_ceiling
+(def hydra_overlay_clojure_lib_math_ceiling
   "Return the ceiling of x as a float."
   (fn [x]
     (if (or (Double/isNaN x) (Double/isInfinite x))
@@ -261,33 +261,33 @@
       (Math/ceil x))))
 
 ;; cos :: Double -> Double
-(def hydra_lib_math_cos
+(def hydra_overlay_clojure_lib_math_cos
   "Return the cosine of x radians."
   (fn [x] (Math/cos x)))
 
 ;; cosh :: Double -> Double
-(def hydra_lib_math_cosh
+(def hydra_overlay_clojure_lib_math_cosh
   "Return the hyperbolic cosine of x."
   (fn [x] (Math/cosh x)))
 
 ;; e :: Double
-(def hydra_lib_math_e
+(def hydra_overlay_clojure_lib_math_e
   "Euler's number (e = 2.71828...)."
   Math/E)
 
 ;; even :: integral x => x -> Bool
-(def hydra_lib_math_even
+(def hydra_overlay_clojure_lib_math_even
   "Check if an integer is even (constraint-polymorphic over any 'integral' type)."
   (even-or-odd "even" true))
 
 ;; exp :: Double -> Double
-(def hydra_lib_math_exp
+(def hydra_overlay_clojure_lib_math_exp
   "Return e raised to the power x."
   (fn [x] (Math/exp x)))
 
 ;; floor :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(def hydra_lib_math_floor
+(def hydra_overlay_clojure_lib_math_floor
   "Return the floor of x as a float."
   (fn [x]
     (if (or (Double/isNaN x) (Double/isInfinite x))
@@ -295,82 +295,82 @@
       (Math/floor x))))
 
 ;; log :: Double -> Double
-(def hydra_lib_math_log
+(def hydra_overlay_clojure_lib_math_log
   "Return the natural logarithm of x."
   (fn [x] (Math/log x)))
 
 ;; logBase :: Double -> Double -> Double
-(def hydra_lib_math_logBase
+(def hydra_overlay_clojure_lib_math_logBase
   "Return the logarithm of x to the given base."
   (fn [base] (fn [x] (/ (Math/log x) (Math/log base)))))
-(def hydra_lib_math_log_base
+(def hydra_overlay_clojure_lib_math_log_base
   "Return the logarithm of x to the given base."
-  hydra_lib_math_logBase)
+  hydra_overlay_clojure_lib_math_logBase)
 
 ;; div :: integral x => x -> x -> optional x
-(def hydra_lib_math_div
+(def hydra_overlay_clojure_lib_math_div
   "Constraint-polymorphic floor division over any type with an 'integral' instance."
   (integral-binary "div" floor-div true))
 
 ;; mod :: integral x => x -> x -> optional x
-(def hydra_lib_math_mod
+(def hydra_overlay_clojure_lib_math_mod
   "Constraint-polymorphic floor modulus over any type with an 'integral' instance."
   (integral-binary "mod" floor-mod false))
 
 ;; rem :: integral x => x -> x -> optional x
-(def hydra_lib_math_rem
+(def hydra_overlay_clojure_lib_math_rem
   "Constraint-polymorphic truncated remainder over any type with an 'integral' instance."
   (integral-binary "rem" rem false))
 
 ;; divide :: fractional x => x -> x -> x
-(def hydra_lib_math_divide
+(def hydra_overlay_clojure_lib_math_divide
   "Constraint-polymorphic IEEE-total division over any type with a 'fractional' instance."
   divide-dispatch)
 
 ;; mul :: numeric x => x -> x -> x
-(def hydra_lib_math_mul
+(def hydra_overlay_clojure_lib_math_mul
   "Constraint-polymorphic multiplication over any type with a 'numeric' instance."
   (numeric-binary "mul" *' *))
 
 ;; mulFloat64 :: Double -> Double -> Double
-(def hydra_lib_math_mul_float64
+(def hydra_overlay_clojure_lib_math_mul_float64
   "Multiply two Float64 numbers."
   (fn [a] (fn [b] (* (double a) (double b)))))
 
 ;; negate :: numeric x => x -> x
-(def hydra_lib_math_negate
+(def hydra_overlay_clojure_lib_math_negate
   "Constraint-polymorphic negation over any type with a 'numeric' instance."
   (numeric-unary "negate" -' -))
 
 ;; negateFloat64 :: Double -> Double
-(def hydra_lib_math_negate_float64
+(def hydra_overlay_clojure_lib_math_negate_float64
   "Negate a Float64 number."
   (fn [n] (- (double n))))
 
 ;; odd :: integral x => x -> Bool
-(def hydra_lib_math_odd
+(def hydra_overlay_clojure_lib_math_odd
   "Check if an integer is odd (constraint-polymorphic over any 'integral' type)."
   (even-or-odd "odd" false))
 
 ;; pi :: Double
-(def hydra_lib_math_pi
+(def hydra_overlay_clojure_lib_math_pi
   "Pi (= 3.14159...)."
   Math/PI)
 
 ;; pow :: Double -> Double -> Double
-(def hydra_lib_math_pow
+(def hydra_overlay_clojure_lib_math_pow
   "Return x raised to the power y."
   (fn [base] (fn [exp_] (Math/pow base exp_))))
 
 ;; range :: Int -> Int -> [Int]  (inclusive both ends)
-(def hydra_lib_math_range
+(def hydra_overlay_clojure_lib_math_range
   "Generate a range of values from start to end (inclusive)."
   (fn [start_] (fn [end_]
     (range start_ (inc end_)))))
 
 ;; round :: Double -> Double (Haskell-style round half to even)
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(def hydra_lib_math_round
+(def hydra_overlay_clojure_lib_math_round
   "Return x rounded to the nearest integer, as a float."
   (fn [x]
     (if (or (Double/isNaN x) (Double/isInfinite x))
@@ -379,7 +379,7 @@
 
 ;; roundFloat32 :: Int -> Float -> Float
 ;; Returns NaN/Inf inputs unchanged (no rounding is possible).
-(def hydra_lib_math_round_float32
+(def hydra_overlay_clojure_lib_math_round_float32
   "Round a float32 to n significant digits."
   (fn [n] (fn [x]
     (let [dx (double x)]
@@ -393,7 +393,7 @@
 
 ;; roundFloat64 :: Int -> Double -> Double
 ;; Returns NaN/Inf inputs unchanged (no rounding is possible).
-(def hydra_lib_math_round_float64
+(def hydra_overlay_clojure_lib_math_round_float64
   "Round a float64 to n significant digits."
   (fn [n] (fn [x]
     (cond
@@ -405,51 +405,51 @@
           (/ (Math/round (* x factor)) factor))))))
 
 ;; signum :: numeric x => x -> x
-(def hydra_lib_math_signum
+(def hydra_overlay_clojure_lib_math_signum
   "Constraint-polymorphic sign function over any type with a 'numeric' instance.
   Returns -1/0/1 for integers; for floats, preserves the sign of zero (signum(-0.0) = -0.0)
   and propagates NaN, matching Math/signum."
   (numeric-unary "signum" (fn [a] (cond (pos? a) 1 (neg? a) -1 :else 0)) (fn [a] (Math/signum (double a)))))
 
 ;; sin :: Double -> Double
-(def hydra_lib_math_sin
+(def hydra_overlay_clojure_lib_math_sin
   "Return the sine of x radians."
   (fn [x] (Math/sin x)))
 
 ;; sinh :: Double -> Double
-(def hydra_lib_math_sinh
+(def hydra_overlay_clojure_lib_math_sinh
   "Return the hyperbolic sine of x."
   (fn [x] (Math/sinh x)))
 
 ;; sqrt :: Double -> Double
-(def hydra_lib_math_sqrt
+(def hydra_overlay_clojure_lib_math_sqrt
   "Return the square root of x."
   (fn [x] (Math/sqrt x)))
 
 ;; sub :: numeric x => x -> x -> x
-(def hydra_lib_math_sub
+(def hydra_overlay_clojure_lib_math_sub
   "Constraint-polymorphic subtraction over any type with a 'numeric' instance."
   (numeric-binary "sub" -' -))
 
 ;; subFloat64 :: Double -> Double -> Double
-(def hydra_lib_math_sub_float64
+(def hydra_overlay_clojure_lib_math_sub_float64
   "Subtract two Float64 numbers."
   (fn [a] (fn [b] (- (double a) (double b)))))
 
 
 ;; tan :: Double -> Double
-(def hydra_lib_math_tan
+(def hydra_overlay_clojure_lib_math_tan
   "Return the tangent of x radians."
   (fn [x] (Math/tan x)))
 
 ;; tanh :: Double -> Double
-(def hydra_lib_math_tanh
+(def hydra_overlay_clojure_lib_math_tanh
   "Return the hyperbolic tangent of x."
   (fn [x] (Math/tanh x)))
 
 ;; truncate :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(def hydra_lib_math_truncate
+(def hydra_overlay_clojure_lib_math_truncate
   "Return x truncated (towards zero), as a float."
   (fn [x]
     (if (or (Double/isNaN x) (Double/isInfinite x))

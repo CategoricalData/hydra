@@ -1,7 +1,7 @@
 (ns hydra.overlay.clojure.lib.equality)
 
 ;; equal :: a -> a -> Bool
-(def hydra_lib_equality_equal
+(def hydra_overlay_clojure_lib_equality_equal
   "Check if two values are equal."
   (fn [a] (fn [b]
     ;; Hydra decimal equality is numerical. Java BigDecimal's .equals is scale-sensitive

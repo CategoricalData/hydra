@@ -15,14 +15,14 @@
     :else m))
 
 ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
-(def hydra_lib_optionals_bind
+(def hydra_overlay_clojure_lib_optionals_bind
   (fn [m] (fn [f]
     (if (maybe-nothing? m)
       (list :none)
       (f (maybe-value m))))))
 
 ;; givens :: [Maybe a] -> [a]
-(def hydra_lib_optionals_givens
+(def hydra_overlay_clojure_lib_optionals_givens
   (fn [ms]
     (loop [rest_ ms acc ()]
       (if (empty? rest_)
@@ -34,22 +34,22 @@
 
 ;; with_default :: a -> Maybe a -> a
 ;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
-(def hydra_lib_optionals_with_default
+(def hydra_overlay_clojure_lib_optionals_with_default
   (fn [def_] (fn [m]
     (if (maybe-nothing? m)
       (if (fn? def_) (def_) def_)
       (maybe-value m)))))
 
 ;; is_given :: Maybe a -> Bool
-(def hydra_lib_optionals_is_given
+(def hydra_overlay_clojure_lib_optionals_is_given
   (fn [m] (not (maybe-nothing? m))))
 
 ;; is_none :: Maybe a -> Bool
-(def hydra_lib_optionals_is_none
+(def hydra_overlay_clojure_lib_optionals_is_none
   (fn [m] (maybe-nothing? m)))
 
 ;; map :: (a -> b) -> Maybe a -> Maybe b
-(def hydra_lib_optionals_map
+(def hydra_overlay_clojure_lib_optionals_map
   (fn [f] (fn [m]
     (if (maybe-nothing? m)
       (if (or (nil? m) (and (sequential? m) (empty? m)))
@@ -61,7 +61,7 @@
           result))))))
 
 ;; map_optional :: (a -> Maybe b) -> [a] -> [b]
-(def hydra_lib_optionals_map_optional
+(def hydra_overlay_clojure_lib_optionals_map_optional
   (fn [f] (fn [xs]
     (loop [rest_ (seq xs) acc ()]
       (if (nil? rest_)
@@ -72,7 +72,7 @@
             (recur (next rest_) acc))))))))
 
 ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
-(def hydra_lib_optionals_apply
+(def hydra_overlay_clojure_lib_optionals_apply
   (fn [mf] (fn [ma]
     (if (maybe-nothing? mf)
       (list :none)
@@ -82,14 +82,14 @@
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
 ;; Thunk-aware: if nothing-val is a zero-arg fn, only called when Maybe is Nothing
-(def hydra_lib_optionals_cases
+(def hydra_overlay_clojure_lib_optionals_cases
   (fn [m] (fn [nothing-val] (fn [just-fn]
     (if (maybe-nothing? m)
       (if (fn? nothing-val) (nothing-val) nothing-val)
       (just-fn (maybe-value m)))))))
 
 ;; compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
-(def hydra_lib_optionals_compose
+(def hydra_overlay_clojure_lib_optionals_compose
   (fn [f] (fn [g] (fn [x]
     (let [result (f x)]
       (if (maybe-nothing? result)
@@ -97,11 +97,11 @@
         (g (maybe-value result))))))))
 
 ;; pure :: a -> Maybe a
-(def hydra_lib_optionals_pure
+(def hydra_overlay_clojure_lib_optionals_pure
   (fn [x] (list :given x)))
 
 ;; to_list :: Maybe a -> [a]
-(def hydra_lib_optionals_to_list
+(def hydra_overlay_clojure_lib_optionals_to_list
   (fn [m]
     (if (maybe-nothing? m)
       ()

@@ -55,7 +55,7 @@
 
 ;; compare :: a -> a -> Comparison
 ;; Returns a Comparison union: (list :less_than nil), (list :equal_to nil), (list :greater_than nil)
-(def hydra_lib_ordering_compare
+(def hydra_overlay_clojure_lib_ordering_compare
   "Compare two values and return a Comparison."
   (fn [a] (fn [b]
     (let [c (generic-compare a b)]
@@ -65,31 +65,31 @@
         :else (list :greater_than nil))))))
 
 ;; gt :: a -> a -> Bool
-(def hydra_lib_ordering_gt
+(def hydra_overlay_clojure_lib_ordering_gt
   "Check if first value is greater than second."
   (fn [a] (fn [b] (> (generic-compare a b) 0))))
 
 ;; gte :: a -> a -> Bool
-(def hydra_lib_ordering_gte
+(def hydra_overlay_clojure_lib_ordering_gte
   "Check if first value is greater than or equal to second."
   (fn [a] (fn [b] (>= (generic-compare a b) 0))))
 
 ;; lt :: a -> a -> Bool
-(def hydra_lib_ordering_lt
+(def hydra_overlay_clojure_lib_ordering_lt
   "Check if first value is less than second."
   (fn [a] (fn [b] (< (generic-compare a b) 0))))
 
 ;; lte :: a -> a -> Bool
-(def hydra_lib_ordering_lte
+(def hydra_overlay_clojure_lib_ordering_lte
   "Check if first value is less than or equal to second."
   (fn [a] (fn [b] (<= (generic-compare a b) 0))))
 
 ;; max :: a -> a -> a
-(def hydra_lib_ordering_max
+(def hydra_overlay_clojure_lib_ordering_max
   "Return the maximum of two values."
   (fn [a] (fn [b] (if (>= (generic-compare a b) 0) a b))))
 
 ;; min :: a -> a -> a
-(def hydra_lib_ordering_min
+(def hydra_overlay_clojure_lib_ordering_min
   "Return the minimum of two values."
   (fn [a] (fn [b] (if (<= (generic-compare a b) 0) a b))))

@@ -20,7 +20,7 @@
     :else {}))
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-(def hydra_lib_maps_alter
+(def hydra_overlay_clojure_lib_maps_alter
   (fn [f] (fn [k] (fn [m]
     (let [hm (to-hash-map m)
           old-maybe (if (contains? hm k)
@@ -36,7 +36,7 @@
           (assoc hm k v))))))))
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-(def hydra_lib_maps_bimap
+(def hydra_overlay_clojure_lib_maps_bimap
   (fn [fk] (fn [fv] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc (fk k) (fv v)))
@@ -44,18 +44,18 @@
                (to-hash-map m))))))
 
 ;; delete :: k -> Map k v -> Map k v
-(def hydra_lib_maps_delete
+(def hydra_overlay_clojure_lib_maps_delete
   (fn [k] (fn [m] (dissoc (to-hash-map m) k))))
 
 ;; elems :: Map k v -> [v]
-(def hydra_lib_maps_elems
+(def hydra_overlay_clojure_lib_maps_elems
   (fn [m] (vals (to-hash-map m))))
 
 ;; empty :: Map k v
-(def hydra_lib_maps_empty {})
+(def hydra_overlay_clojure_lib_maps_empty {})
 
 ;; filter :: (v -> Bool) -> Map k v -> Map k v
-(def hydra_lib_maps_filter
+(def hydra_overlay_clojure_lib_maps_filter
   (fn [pred_] (fn [m]
     (reduce-kv (fn [acc k v]
                  (if (pred_ v) (assoc acc k v) acc))
@@ -63,7 +63,7 @@
                (to-hash-map m)))))
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
-(def hydra_lib_maps_filter_with_key
+(def hydra_overlay_clojure_lib_maps_filter_with_key
   (fn [pred_] (fn [m]
     (reduce-kv (fn [acc k v]
                  (if ((pred_ k) v) (assoc acc k v) acc))
@@ -72,7 +72,7 @@
 
 ;; find_with_default :: v -> k -> Map k v -> v
 ;; Thunk-aware: the default is lazy (#391); if def_ is a zero-arg fn, only call it on a miss.
-(def hydra_lib_maps_find_with_default
+(def hydra_overlay_clojure_lib_maps_find_with_default
   (fn [def_] (fn [k] (fn [m]
     (let [hm (to-hash-map m)]
       (if (contains? hm k)
@@ -80,7 +80,7 @@
         (if (fn? def_) (def_) def_)))))))
 
 ;; from_list :: [Pair k v] -> Map k v
-(def hydra_lib_maps_from_list
+(def hydra_overlay_clojure_lib_maps_from_list
   (fn [pairs]
     (reduce (fn [acc entry]
               (assoc acc (first entry) (second entry)))
@@ -88,16 +88,16 @@
             pairs)))
 
 ;; insert :: k -> v -> Map k v -> Map k v
-(def hydra_lib_maps_insert
+(def hydra_overlay_clojure_lib_maps_insert
   (fn [k] (fn [v] (fn [m] (assoc (to-hash-map m) k v)))))
 
 ;; keys :: Map k v -> [k]
 ;; Returns keys in sorted order (via generic-compare) for determinism across platforms.
-(def hydra_lib_maps_keys
+(def hydra_overlay_clojure_lib_maps_keys
   (fn [m] (sort generic-compare (clojure.core/keys (to-hash-map m)))))
 
 ;; lookup :: k -> Map k v -> Maybe v
-(def hydra_lib_maps_lookup
+(def hydra_overlay_clojure_lib_maps_lookup
   (fn [k] (fn [m]
     (let [hm (to-hash-map m)]
       (if (contains? hm k)
@@ -105,7 +105,7 @@
         (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
-(def hydra_lib_maps_map
+(def hydra_overlay_clojure_lib_maps_map
   (fn [f] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc k (f v)))
@@ -113,7 +113,7 @@
                (to-hash-map m)))))
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-(def hydra_lib_maps_map_keys
+(def hydra_overlay_clojure_lib_maps_map_keys
   (fn [f] (fn [m]
     (reduce-kv (fn [acc k v]
                  (assoc acc (f k) v))
@@ -121,24 +121,24 @@
                (to-hash-map m)))))
 
 ;; member :: k -> Map k v -> Bool
-(def hydra_lib_maps_member
+(def hydra_overlay_clojure_lib_maps_member
   (fn [k] (fn [m] (contains? (to-hash-map m) k))))
 
 ;; null :: Map k v -> Bool
-(def hydra_lib_maps_null
+(def hydra_overlay_clojure_lib_maps_null
   (fn [m] (or (nil? m) (empty? m))))
 
 ;; singleton :: k -> v -> Map k v
-(def hydra_lib_maps_singleton
+(def hydra_overlay_clojure_lib_maps_singleton
   (fn [k] (fn [v] {k v})))
 
 ;; size :: Map k v -> Int
-(def hydra_lib_maps_size
+(def hydra_overlay_clojure_lib_maps_size
   (fn [m] (count m)))
 
 ;; to_list :: Map k v -> [Pair k v]
 ;; Sort by key for deterministic output
-(def hydra_lib_maps_to_list
+(def hydra_overlay_clojure_lib_maps_to_list
   (fn [m]
     (let [hm (to-hash-map m)]
       (map (fn [entry]
@@ -150,7 +150,7 @@
                     (seq hm))))))
 
 ;; union :: Map k v -> Map k v -> Map k v (left-biased)
-(def hydra_lib_maps_union
+(def hydra_overlay_clojure_lib_maps_union
   (fn [m1] (fn [m2]
     ;; merge m2 into m1; m1 takes precedence (left-biased)
     (merge (to-hash-map m2) (to-hash-map m1)))))

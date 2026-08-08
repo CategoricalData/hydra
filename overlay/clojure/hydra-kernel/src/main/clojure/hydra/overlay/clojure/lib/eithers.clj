@@ -4,35 +4,35 @@
 ;; Either representation: (list :left val) or (list :right val)
 
 ;; bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
-(def hydra_lib_eithers_bimap
+(def hydra_overlay_clojure_lib_eithers_bimap
   (fn [f] (fn [g] (fn [e]
     (if (= (first e) :left)
       (list :left (f (second e)))
       (list :right (g (second e))))))))
 
 ;; bind :: Either a b -> (b -> Either a c) -> Either a c
-(def hydra_lib_eithers_bind
+(def hydra_overlay_clojure_lib_eithers_bind
   (fn [e] (fn [f]
     (if (= (first e) :left)
       e
       (f (second e))))))
 
 ;; either :: (a -> c) -> (b -> c) -> Either a b -> c
-(def hydra_lib_eithers_either
+(def hydra_overlay_clojure_lib_eithers_either
   (fn [f] (fn [g] (fn [e]
     (if (= (first e) :left)
       (f (second e))
       (g (second e)))))))
 
 ;; map :: (b -> c) -> Either a b -> Either a c
-(def hydra_lib_eithers_map
+(def hydra_overlay_clojure_lib_eithers_map
   (fn [f] (fn [e]
     (if (= (first e) :left)
       e
       (list :right (f (second e)))))))
 
 ;; map_list :: (a -> Either e b) -> [a] -> Either e [b]
-(def hydra_lib_eithers_map_list
+(def hydra_overlay_clojure_lib_eithers_map_list
   (fn [f] (fn [xs]
     (loop [rest_ (seq xs) acc ()]
       (if (nil? rest_)
@@ -43,7 +43,7 @@
             (recur (next rest_) (cons (second result) acc)))))))))
 
 ;; map_optional :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)
-(def hydra_lib_eithers_map_optional
+(def hydra_overlay_clojure_lib_eithers_map_optional
   (fn [f] (fn [m]
     (cond
       (or (nil? m)
@@ -72,7 +72,7 @@
           (list :right (second result))))))))
 
 ;; fold_list :: (a -> b -> Either c a) -> a -> [b] -> Either c a
-(def hydra_lib_eithers_fold_list
+(def hydra_overlay_clojure_lib_eithers_fold_list
   (fn [f] (fn [init] (fn [xs]
     (loop [rest_ (seq xs) acc init]
       (if (nil? rest_)
@@ -83,30 +83,30 @@
             (recur (next rest_) (second result))))))))))
 
 ;; is_left :: Either a b -> Bool
-(def hydra_lib_eithers_is_left
+(def hydra_overlay_clojure_lib_eithers_is_left
   (fn [e] (= (first e) :left)))
 
 ;; is_right :: Either a b -> Bool
-(def hydra_lib_eithers_is_right
+(def hydra_overlay_clojure_lib_eithers_is_right
   (fn [e] (= (first e) :right)))
 
 ;; lefts :: [Either a b] -> [a]
-(def hydra_lib_eithers_lefts
+(def hydra_overlay_clojure_lib_eithers_lefts
   (fn [es] (map second (filter #(= (first %) :left) es))))
 
 ;; partition :: [Either a b] -> ([a], [b])
-(def hydra_lib_eithers_partition
+(def hydra_overlay_clojure_lib_eithers_partition
   (fn [es]
     (let [lefts_  (vec (map second (filter #(= (first %) :left) es)))
           rights_ (vec (map second (filter #(= (first %) :right) es)))]
       (list lefts_ rights_))))
 
 ;; rights :: [Either a b] -> [b]
-(def hydra_lib_eithers_rights
+(def hydra_overlay_clojure_lib_eithers_rights
   (fn [es] (map second (filter #(= (first %) :right) es))))
 
 ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
-(def hydra_lib_eithers_map_set
+(def hydra_overlay_clojure_lib_eithers_map_set
   (fn [f] (fn [s]
     (loop [rest_ (seq s) acc ()]
       (if (nil? rest_)

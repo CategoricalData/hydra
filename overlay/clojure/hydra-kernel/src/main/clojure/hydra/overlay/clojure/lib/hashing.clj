@@ -23,11 +23,11 @@
   (.digest (MessageDigest/getInstance "SHA-256") (binary->bytes data)))
 
 ;; sha256 :: binary -> binary
-(def hydra_lib_hashing_sha256
+(def hydra_overlay_clojure_lib_hashing_sha256
   "Compute the SHA-256 digest of a sequence of bytes."
   (fn [data] (bytes->binary (digest data))))
 
 ;; sha256Hex :: binary -> string
-(def hydra_lib_hashing_sha256_hex
+(def hydra_overlay_clojure_lib_hashing_sha256_hex
   "Compute the SHA-256 digest of a sequence of bytes as a lowercase hex string."
   (fn [data] (apply str (map #(format "%02x" (bit-and % 0xff)) (digest data)))))
