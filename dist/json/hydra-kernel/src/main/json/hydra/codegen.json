@@ -2021,7 +2021,13 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {"function": {"variable": "hydra.codegen.moduleDepsTransitive"}, "argument": {"variable": "namespaceMap"}}},
-                                                                                            "argument": {"variable": "modsToGenerate"}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.packaging.Module"}}},
+                                                                                                    "argument": {"variable": "universeModules"}}},
+                                                                                                "argument": {"variable": "modsToGenerate"}}}}},
                                                                                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.Module"}}}}],
                                                                                     "body": {
                                                                                       "let": {
@@ -5419,7 +5425,13 @@
                                     "term": {
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.codegen.moduleDepsTransitive"}, "argument": {"variable": "universe"}}},
-                                        "argument": {"variable": "modules"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.packaging.Module"}}},
+                                                "argument": {"variable": "universeModules"}}},
+                                            "argument": {"variable": "modules"}}}}},
                                     "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.packaging.Module"}}}}],
                                 "body": {
                                   "let": {
