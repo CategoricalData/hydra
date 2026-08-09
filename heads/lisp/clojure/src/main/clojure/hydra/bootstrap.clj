@@ -359,11 +359,11 @@
            :language lang
            ;; do_infer=false to avoid hydra.adapt mutual recursion issue in Clojure
            :flags [false false false false]
-           :subdir subdir})))
+           :subdir subdir}))
     ;; Default: unsupported
     (do (println (str "Unsupported target for Clojure host: " target))
         (println "Supported targets: haskell, java, python, scala, typescript, clojure, scheme, common-lisp, emacs-lisp")
-        (System/exit 1))))
+        (System/exit 1)))))
 
 (defn -main [& args]
   ;; Load generated kernel modules (includes encode/decode and JSON modules)
