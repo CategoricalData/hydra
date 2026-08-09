@@ -682,10 +682,20 @@
                      (else (scan (- i 1)))))))
     (if dot (substring name 0 dot) name)))
 
+;; Most targets use an all-lowercase overlay tree, but Haskell's follows Haskell module-path
+;; convention and is capitalized (.../src/main/haskell/Hydra/Overlay/Haskell/Lib). Getting this
+;; wrong is silent on case-insensitive filesystems (macOS): the existence check matches, the scan
+;; then returns capitalized names that never equal the lowercase subs the coder tests against, so
+;; every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
+;; Hydra.Overlay.Haskell.Lib.* (#630).
+(define (overlay-lib-dir repo-root target)
+  (if (string=? target "haskell")
+      (string-append repo-root "/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib")
+      (string-append repo-root "/overlay/" target "/hydra-kernel/src/main/" target
+                     "/hydra/overlay/" (overlay-dir-segment target) "/lib")))
+
 (define (lib-subs-for-target repo-root target)
-  (let* ((seg (overlay-dir-segment target))
-         (lib-dir (string-append repo-root "/overlay/" target "/hydra-kernel/src/main/" target
-                                  "/hydra/overlay/" seg "/lib")))
+  (let ((lib-dir (overlay-lib-dir repo-root target)))
     (if (not (file-exists? lib-dir))
         lib-subs-fallback
         (let* ((entries (scandir lib-dir (lambda (n) (not (member n '("." ".."))))))
@@ -695,9 +705,12 @@
                                         (string=? s "PrimitiveType"))))
                              (map (lambda (n)
                                     (let ((full (string-append lib-dir "/" n)))
-                                      (if (and (file-exists? full) (eq? (stat:type (stat full)) 'directory))
-                                          n
-                                          (strip-extension n))))
+                                      ;; Lower-case: callers compare against the lowercase <sub> of
+                                      ;; hydra.lib.<sub>, but Haskell's overlay files are capitalized.
+                                      (string-downcase
+                                        (if (and (file-exists? full) (eq? (stat:type (stat full)) 'directory))
+                                            n
+                                            (strip-extension n)))))
                                   entries))))
           (if (null? subs) lib-subs-fallback subs)))))
 

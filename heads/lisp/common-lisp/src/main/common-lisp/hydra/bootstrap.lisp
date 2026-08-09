@@ -337,9 +337,17 @@
    hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
    none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
    *lib-subs-fallback* if the overlay source tree isn't reachable from repo-root."
-  (let* ((seg (overlay-dir-segment target))
-         (lib-dir (format nil "~A/overlay/~A/hydra-kernel/src/main/~A/hydra/overlay/~A/lib/"
-                           repo-root target target seg)))
+  ;; Most targets use an all-lowercase overlay tree, but Haskell's follows Haskell module-path
+  ;; convention and is capitalized (.../src/main/haskell/Hydra/Overlay/Haskell/Lib/). Getting this
+  ;; wrong is silent on case-insensitive filesystems (macOS): probe-file matches, the directory
+  ;; scan then returns capitalized names that never equal the lowercase subs the coder tests
+  ;; against, so every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.*
+  ;; instead of Hydra.Overlay.Haskell.Lib.* (#630).
+  (let* ((lib-dir (if (string= target "haskell")
+                      (format nil "~A/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/"
+                              repo-root)
+                      (format nil "~A/overlay/~A/hydra-kernel/src/main/~A/hydra/overlay/~A/lib/"
+                              repo-root target target (overlay-dir-segment target)))))
     (if (not (probe-file lib-dir))
         *lib-subs-fallback*
         (let* ((entries (append (directory (merge-pathnames "*.*" lib-dir))
@@ -349,9 +357,12 @@
                        (lambda (n) (or (string-equal n "Libraries")
                                        (string= n "__init__")
                                        (string= n "PrimitiveType")))
+                       ;; Lower-case: callers compare against the lowercase <sub> of
+                       ;; hydra.lib.<sub>, but Haskell's overlay files are capitalized.
                        (mapcar (lambda (p)
-                                 (if (pathname-name p) (pathname-name p)
-                                     (car (last (pathname-directory p)))))
+                                 (string-downcase
+                                  (if (pathname-name p) (pathname-name p)
+                                      (car (last (pathname-directory p))))))
                                entries))
                       :test #'string=)))
           (if subs subs *lib-subs-fallback*)))))

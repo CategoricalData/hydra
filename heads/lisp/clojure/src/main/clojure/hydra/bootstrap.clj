@@ -49,10 +49,18 @@
    none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
    lib-subs-fallback if the overlay source tree isn't reachable from repo-root."
   [repo-root target]
-  (let [seg (overlay-dir-segment target)
-        lib-dir (java.io.File. ^String (clojure.string/join java.io.File/separator
-                  [repo-root "overlay" target "hydra-kernel" "src" "main" target
-                   "hydra" "overlay" seg "lib"]))]
+  ;; Most targets use an all-lowercase overlay tree, but Haskell's follows Haskell module-path
+  ;; convention and is capitalized (.../src/main/haskell/Hydra/Overlay/Haskell/Lib). Getting this
+  ;; wrong is silent on case-insensitive filesystems (macOS): isDirectory matches, listFiles then
+  ;; returns capitalized names that never equal the lowercase subs the coder tests against, so
+  ;; every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
+  ;; Hydra.Overlay.Haskell.Lib.* (#630).
+  (let [lib-dir (java.io.File. ^String (clojure.string/join java.io.File/separator
+                  (if (= target "haskell")
+                    [repo-root "overlay" "haskell" "hydra-kernel" "src" "main" "haskell"
+                     "Hydra" "Overlay" "Haskell" "Lib"]
+                    [repo-root "overlay" target "hydra-kernel" "src" "main" target
+                     "hydra" "overlay" (overlay-dir-segment target) "lib"])))]
     (if-not (.isDirectory lib-dir)
       lib-subs-fallback
       (let [entries (or (.listFiles lib-dir) (make-array java.io.File 0))
@@ -64,7 +72,10 @@
                       (remove (fn [^String n]
                                 (or (.equalsIgnoreCase n "Libraries")
                                     (= n "__init__")
-                                    (= n "PrimitiveType")))))]
+                                    (= n "PrimitiveType"))))
+                      ;; Lower-case: callers compare against the lowercase <sub> of hydra.lib.<sub>,
+                      ;; but Haskell's overlay files are capitalized (Strings.hs, Lists.hs).
+                      (map clojure.string/lower-case))]
         (if (seq subs) (vec subs) lib-subs-fallback)))))
 
 (defn- lib-module? [m]
