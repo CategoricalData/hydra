@@ -64,9 +64,18 @@ def _overlay_lib_subs(target):
     IS the signal a host ships a native impl). Falls back to _LIB_SUBS_FALLBACK if the overlay tree
     isn't reachable. Self-contained here to avoid a circular import with hydra.bootstrap (which
     imports this module); mirrors hydra.bootstrap._lib_subs_for_target."""
-    seg = _OVERLAY_DIR_SEGMENT.get(target, target)
-    lib_dir = os.path.join(_resolve_repo_root(), "overlay", target, "hydra-kernel", "src", "main",
-                           target, "hydra", "overlay", seg, "lib")
+    # Most targets use an all-lowercase overlay tree, but Haskell's follows Haskell module-path
+    # convention and is capitalized (.../src/main/haskell/Hydra/Overlay/Haskell/Lib). Getting this
+    # wrong is silent on case-insensitive filesystems (macOS): isdir() matches, listdir() then
+    # returns capitalized names that never equal the lowercase subs the coder tests against, so
+    # every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
+    # Hydra.Overlay.Haskell.Lib.* (#630).
+    base = os.path.join(_resolve_repo_root(), "overlay", target, "hydra-kernel", "src", "main")
+    if target == "haskell":
+        lib_dir = os.path.join(base, "haskell", "Hydra", "Overlay", "Haskell", "Lib")
+    else:
+        seg = _OVERLAY_DIR_SEGMENT.get(target, target)
+        lib_dir = os.path.join(base, target, "hydra", "overlay", seg, "lib")
     if not os.path.isdir(lib_dir):
         return _LIB_SUBS_FALLBACK
     subs = set()
@@ -75,7 +84,9 @@ def _overlay_lib_subs(target):
         sub = name if os.path.isdir(path) else os.path.splitext(name)[0]
         if sub.lower() in ("libraries",) or sub in ("__init__", "PrimitiveType"):
             continue
-        subs.add(sub)
+        # Lower-case: the coder compares these against the lowercase <sub> of a hydra.lib.<sub>
+        # module name, but Haskell's overlay files are capitalized (Strings.hs, Lists.hs).
+        subs.add(sub.lower())
     return frozenset(subs) or _LIB_SUBS_FALLBACK
 
 
