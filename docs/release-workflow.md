@@ -615,12 +615,15 @@ kernel plus the six coders, omitting `hydra-jvm`/`hydra-build`/`hydra-pg`/`hydra
 version — now including `hydra-jvm`). The newer `hydra-coq`, `hydra-go`, and `hydra-wasm` targets
 do NOT yet qualify.
 
-`hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) is intentionally NOT in the Java
-publish set due to a known Java-coder limitation with parametric union case-elimination on
-concretely-instantiated arguments (#636). The same limitation excludes it from the Python
-and Scala/Maven publish sets and npm; it does **not** affect Hackage, since Haskell has no
-eta-expansion (hydra-ext ships to Hackage as of 0.17.4 — see the Hackage set above). Track
-#636 before adding `hydra-ext` to a future Java/Python/Scala/npm publish set.
+`hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) joined the Java publish set as of 0.17.4
+(#636). It had been excluded since 0.15 due to a documented "Java-coder limitation with
+parametric union case-elimination on concretely-instantiated arguments" — traced by #636 to
+issue #475 (a Java/Python eta-expansion + re-inference gap on polymorphic/recursive/Set-typed
+encoder/decoder shapes), fixed 2026-06-13 but never re-validated against hydra-ext until #636
+confirmed clean generation (1105 files, no failures). `hydra-ext` also joined the Python publish
+set in the same pass (#636); it remains excluded from Scala/Maven and npm, which have their own
+independent eta-expansion exposure and have not yet been re-validated — track before adding
+`hydra-ext` to those.
 
 Each artifact's `build.gradle` is regenerated from `packages/<pkg>/package.json` (which declares
 the inter-package `dependencies` array) and `hydra.json:currentVersion` by
@@ -800,8 +803,9 @@ The published artifacts mirror the Java set (with `hydra-pg` still excluded, bel
 | `hydra-pg_3` _(not yet published)_ | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel_3`, `hydra-rdf_3` |
 
 `hydra-pg` is **not** in the current Scala publish set — the generated Scala pg coder has a
-type-variable threading issue that prevents standalone compilation. Track the fix separately before
-adding it (analogous to `hydra-ext` being excluded from the Java and Python publish sets).
+type-variable threading issue that prevents standalone compilation. Track the fix separately
+before adding it. (`hydra-ext` is similarly excluded from this Scala/Maven set — see the Java
+section above for how the analogous Java/Python exclusion was resolved via #636.)
 
 Each artifact's `build.sbt` is regenerated from `packages/<pkg>/package.json` and
 `hydra.json:currentVersion` by `bin/lib/generate-scala-package-build.py`, and
@@ -879,11 +883,10 @@ The published wheels are:
 | `hydra-build` | Build/packaging model shared across coders. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
-| `hydra-ext` _(not yet published)_ | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
+| `hydra-ext` | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
 | `hydra-python` | Python syntax, serde, and coder. | `hydra-kernel` |
 
-`hydra-ext` is **not** in the current publish set — it is outside the standard sync matrix and has
-not shipped to PyPI (see the publish steps below). The other five are the active set.
+`hydra-ext` joined the publish set as of 0.17.4 (#636) — see the publish steps below.
 
 Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and
 `hydra.json:currentVersion` by `bin/lib/generate-python-package-build.py`.
@@ -923,10 +926,8 @@ The following are Python-specific release steps:
   twine check wheels/*                        # validate metadata (recommended pre-flight)
   heads/python/bin/publish-pypi.sh --upload   # build + twine upload
   ```
-  The publish set is `hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-python`.
-  **`hydra-ext` is excluded** — it is not in the standard sync matrix (so `dist/python/hydra-ext/`
-  is not generated) and was not in the 0.15 PyPI release. (The "published wheels" table above lists
-  it aspirationally; the actual publish set is these five.)
+  The publish set is `hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-ext`,
+  `hydra-python` (six packages as of 0.17.4 — `hydra-ext` joined per #636).
   * **Builder portability.** The script prefers `uv build` (hermetic, needs no preinstalled
     `build` module) and falls back to `python3 -m build`. Plain `python -m build` fails with
     `No module named build.__main__` on an interpreter without the `build` package — prefer `uv`.
@@ -1004,9 +1005,12 @@ The following are Python-specific release steps:
   it is now in place and subsequent releases are routine version + sha256 bumps):
 
   - `recipe/recipe.yaml` is a **multi-output recipe**, one conda package per published Python
-    wheel. The active outputs are `hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`;
-    `hydra-ext` is present but **commented out** ("not yet published to PyPI"), matching the
-    PyPI publish set. The feedstock repo name (`hydra-python-feedstock`) does NOT change —
+    wheel. As of 0.17.3 the active outputs are `hydra-kernel`, `hydra-rdf`, `hydra-pg`,
+    `hydra-python`, with `hydra-ext` present but **commented out** ("not yet published to
+    PyPI") — this predates #636 (0.17.4), which added `hydra-ext` to the PyPI publish set; the
+    feedstock recipe itself has not yet been updated to uncomment it (separate repo, not
+    covered by #636 — track as a follow-up). The feedstock repo name (`hydra-python-feedstock`)
+    does NOT change —
     conda-forge convention is one feedstock-with-many-outputs per upstream project, named after
     the most prominent output. Each output declares its own `requirements.run`.
   - Source is the **per-package PyPI sdist** — each output's `source.url` is

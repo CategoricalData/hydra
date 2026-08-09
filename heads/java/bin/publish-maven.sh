@@ -82,7 +82,12 @@ fi
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# The 0.16.1 Java publish set, in LEAVES-FIRST topological order.
+# The Java publish set, in LEAVES-FIRST topological order. hydra-ext joined as of
+# 0.17.4 (#636) — its prior exclusion (a documented "parametric union case-elimination"
+# coder limitation) was traced to #475 (Java/Python eta-expansion + re-inference gap
+# on polymorphic/recursive/Set-typed encoder/decoder shapes), which was fixed
+# 2026-06-13 but never re-validated against hydra-ext until #636 confirmed a clean
+# generation (1105 files, no failures) with the fix in place.
 PUBLISH_SET=(
     hydra-kernel
     hydra-build
@@ -95,6 +100,7 @@ PUBLISH_SET=(
     hydra-typescript
     hydra-rdf
     hydra-pg
+    hydra-ext
 )
 
 GRADLE_TASK="publishAggregationToCentralPortal"

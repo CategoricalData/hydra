@@ -2,12 +2,12 @@
 # Build (and optionally upload) the Hydra Python per-package wheels + sdists.
 #
 # Python analog of heads/haskell/bin/publish-hackage.sh and
-# heads/java/bin/publish-maven.sh. The 0.16.0 PyPI publish set is:
+# heads/java/bin/publish-maven.sh. The 0.16.0 PyPI publish set was:
 #   hydra-kernel, hydra-rdf, hydra-pg, hydra-python
-# (matching what 0.15 actually shipped to PyPI). hydra-ext is intentionally
-# excluded — it is not in the standard sync matrix and was not in the 0.15 PyPI
-# release, mirroring its Java exclusion; the docs' Python wheel table lists it
-# aspirationally. See docs/release-workflow.md.
+# (matching what 0.15 actually shipped to PyPI). hydra-ext joined as of 0.17.4
+# (#636) — its prior exclusion mirrored the Java exclusion (a coder-side
+# eta-expansion limitation traced to #475, fixed 2026-06-13 and confirmed
+# against hydra-ext by #636). See docs/release-workflow.md.
 #
 # Unlike Hackage/Maven, PyPI uploads need no dependency ordering (PyPI accepts
 # each wheel independently; inter-package deps resolve at install time), and
@@ -52,7 +52,7 @@ mkdir -p "$OUT_DIR"
 OUT_DIR="$(cd "$OUT_DIR" && pwd)"
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
-PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-python)
+PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-ext hydra-python)
 
 # --- Guard: dependency closure -----------------------------------------------
 echo "=== Checking dependency closure of PyPI publish set ==="
