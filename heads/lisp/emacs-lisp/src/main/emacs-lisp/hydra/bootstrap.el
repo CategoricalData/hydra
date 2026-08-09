@@ -301,21 +301,33 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 ;; Coder resolution
 ;; ============================================================================
 
+;; #630: the complete set of redirectable hydra.lib.<sub> sub-namespaces. Each target coder takes
+;; overlaySubs as its first curried arg; the driver MUST pre-apply it (like the Python/Scala heads)
+;; so bootstrap-generate-sources' 4-arg (mod)(defs)(cx)(g) callback resolves. This head has no
+;; overlay-dir resolver, so it uses the complete fallback list directly (correct for the kernel).
+(defconst bootstrap-lib-subs
+  '("chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals"
+    "logic" "maps" "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text")
+  "Complete hydra.lib.* sub-namespaces with a relocated overlay impl (#630 overlaySubs).")
+
 (defun bootstrap-resolve-coder (target)
   "Resolve the coder, language, flags, and subdirectory for TARGET."
+  (cl-flet ((wrap (coder)
+              (lambda (mod) (lambda (defs) (lambda (cx) (lambda (g)
+                (funcall (funcall (funcall (funcall (funcall coder bootstrap-lib-subs) mod) defs) cx) g)))))))
   (cond
    ((string= target "python")
-    (list (symbol-value 'hydra_python_coder_module_to_python)
+    (list (wrap (symbol-value 'hydra_python_coder_module_to_python))
           (symbol-value 'hydra_python_language_python_language)
           (list nil t t nil)
           "python"))
    ((string= target "java")
-    (list (symbol-value 'hydra_java_coder_module_to_java)
+    (list (wrap (symbol-value 'hydra_java_coder_module_to_java))
           (symbol-value 'hydra_java_language_java_language)
           (list nil t nil t)
           "java"))
    ((string= target "haskell")
-    (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+    (list (wrap (symbol-value 'hydra_haskell_coder_module_to_haskell))
           (symbol-value 'hydra_haskell_language_haskell_language)
           (list nil nil nil nil)
           "haskell"))
@@ -333,7 +345,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
               (lambda (defs)
                 (lambda (cx)
                   (lambda (g)
-                    (let ((result (funcall (funcall (funcall (funcall (funcall mtl (list dialect nil)) mod) defs) cx) g)))
+                    (let ((result (funcall (funcall (funcall (funcall (funcall (funcall mtl (list dialect nil)) bootstrap-lib-subs) mod) defs) cx) g)))
                       (if (eq (car result) :left)
                           result
                         (let* ((program (cadr result))
@@ -347,7 +359,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
             (symbol-value 'hydra_lisp_language_lisp_language)
             (list nil nil nil nil)
             target)))
-   (t (error "Unsupported target: %s" target))))
+   (t (error "Unsupported target: %s" target)))))
 
 
 ;; ============================================================================

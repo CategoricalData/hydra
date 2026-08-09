@@ -270,31 +270,39 @@
 
 (defn- resolve-coder
   "Resolve the coder function and language for a given target.
-   The coder modules must already be available on the classpath."
-  [target]
+   The coder modules must already be available on the classpath.
+   #630: each target coder takes overlaySubs (the redirectable hydra.lib.<sub> set for TARGET)
+   as its first curried argument; the driver MUST pre-apply it so generate-sources' 4-arg
+   (mod)(defs)(cx)(g) callback resolves. Mirrors the Python head (generation.py) + Scala head."
+  [repo-root target]
+  (let [known-subs (lib-subs-for-target repo-root target)]
   (case target
     "haskell"
     (do (load-coder-modules! ["hydra.haskell.coder"])
-        {:coder @(rc 'hydra_haskell_coder_module_to_haskell)
+        {:coder (let [c @(rc 'hydra_haskell_coder_module_to_haskell)]
+                  (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
          :language @(rc 'hydra_haskell_language_haskell_language)
          :flags [false false false false]
          :subdir "haskell"})
     "java"
     (do (load-coder-modules! ["hydra.java.coder"])
-        {:coder @(rc 'hydra_java_coder_module_to_java)
+        {:coder (let [c @(rc 'hydra_java_coder_module_to_java)]
+                  (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
          :language @(rc 'hydra_java_language_java_language)
          :flags [false true false true]
          :subdir "java"})
     "python"
     (do (load-coder-modules! ["hydra.python.coder"])
         (preload/install-coder-performance-patches!)
-        {:coder @(rc 'hydra_python_coder_module_to_python)
+        {:coder (let [c @(rc 'hydra_python_coder_module_to_python)]
+                  (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
          :language @(rc 'hydra_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
     "scala"
     (do (load-coder-modules! ["hydra.scala.coder"])
-        {:coder @(rc 'hydra_scala_coder_module_to_scala)
+        {:coder (let [c @(rc 'hydra_scala_coder_module_to_scala)]
+                  (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
          :language @(rc 'hydra_scala_language_scala_language)
          :flags [false false false false]
          :subdir "scala"})
@@ -303,7 +311,8 @@
     ;; identifier segments to snake_case, so vars are hydra_type_script_*.
     ;; CLI target stays "typescript".
     (do (load-coder-modules! ["hydra.typeScript.coder"])
-        {:coder @(rc 'hydra_type_script_coder_module_to_type_script)
+        {:coder (let [c @(rc 'hydra_type_script_coder_module_to_type_script)]
+                  (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
          :language @(rc 'hydra_type_script_language_type_script_language)
          :flags [false false false false]
          :subdir "typescript"})
@@ -331,7 +340,7 @@
                        "common-lisp" "common-lisp"
                        "emacs-lisp" "emacs-lisp")
               coder (fn [mod] (fn [defs] (fn [cx] (fn [g]
-                      (let [result (((((module-to-lisp dialect) mod) defs) cx) g)]
+                      (let [result ((((((module-to-lisp dialect) known-subs) mod) defs) cx) g)]
                         (if (= (first result) :left)
                           result
                           (let [program (second result)
@@ -350,7 +359,7 @@
            :language lang
            ;; do_infer=false to avoid hydra.adapt mutual recursion issue in Clojure
            :flags [false false false false]
-           :subdir subdir}))
+           :subdir subdir})))
     ;; Default: unsupported
     (do (println (str "Unsupported target for Clojure host: " target))
         (println "Supported targets: haskell, java, python, scala, typescript, clojure, scheme, common-lisp, emacs-lisp")
@@ -385,7 +394,12 @@
 
       (let [target-cap (str (.toUpperCase (subs target 0 1)) (subs target 1))
             out-dir (str (:output opts) "/clojure-to-" target)
-            coder-info (resolve-coder target)
+            ;; #630: repo-root needed here to pre-bind overlaySubs into the coder (see resolve-coder).
+            ;; Same derivation as Step 1's repo-root below (parent of dist/json's parent dist/).
+            repo-root-for-coder (let [djr (dist-json-root-of json-dir)
+                                      f (.getParentFile (.getParentFile (.getAbsoluteFile (java.io.File. ^String djr))))]
+                                  (if f (.getPath f) djr))
+            coder-info (resolve-coder repo-root-for-coder target)
             [do-infer do-expand do-hoist-case do-hoist-poly] (:flags coder-info)]
 
         (println "==========================================")

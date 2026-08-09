@@ -497,19 +497,26 @@
 ;; ============================================================================
 
 (define (resolve-coder target)
+  ;; #630: each target coder takes overlaySubs (redirectable hydra.lib.<sub> set for TARGET) as its
+  ;; first curried arg; the driver MUST pre-apply it (like the Python/Scala heads) so
+  ;; generate-sources' 4-arg (mod)(defs)(cx)(g) callback resolves.
+  (let ((known-subs (lib-subs-for-target *repo-root* target)))
+   (define (wrap coder)
+     (lambda (mod) (lambda (defs) (lambda (cx) (lambda (g)
+       (((((coder known-subs) mod) defs) cx) g))))))
   (cond
     ((equal? target "python")
-     (list hydra_python_coder_module_to_python
+     (list (wrap hydra_python_coder_module_to_python)
            hydra_python_language_python_language
            (list #f #t #t #f)   ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((equal? target "java")
-     (list hydra_java_coder_module_to_java
+     (list (wrap hydra_java_coder_module_to_java)
            hydra_java_language_java_language
            (list #f #t #f #t)
            "java"))
     ((equal? target "haskell")
-     (list hydra_haskell_coder_module_to_haskell
+     (list (wrap hydra_haskell_coder_module_to_haskell)
            hydra_haskell_language_haskell_language
            (list #f #f #f #f)
            "haskell"))
@@ -526,7 +533,7 @@
                (lambda (defs)
                  (lambda (cx)
                    (lambda (g)
-                     (let ((result (((((mtl dialect) mod) defs) cx) g)))
+                     (let ((result ((((((mtl dialect) known-subs) mod) defs) cx) g)))
                        (if (eq? (car result) 'left)
                            result
                            (let* ((program (cadr result))
@@ -552,7 +559,7 @@
                    ((equal? target "scheme") "scheme")
                    ((equal? target "common-lisp") "common-lisp")
                    ((equal? target "emacs-lisp") "emacs-lisp")))))
-    (else (error "Unsupported target" target))))
+    (else (error "Unsupported target" target)))))
 
 ;; ============================================================================
 ;; Code generation

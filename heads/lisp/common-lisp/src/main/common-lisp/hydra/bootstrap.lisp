@@ -196,30 +196,37 @@
 
 ;; --- Coder resolution ---
 
-(defun resolve-coder (target)
+;; #630: each target coder takes overlaySubs (redirectable hydra.lib.<sub> set for TARGET) as its
+;; first curried arg; the driver MUST pre-apply it (like the Python/Scala heads) so generate-sources'
+;; 4-arg (mod)(defs)(cx)(g) callback resolves. resolve-coder takes repo-root to compute the subs.
+(defun resolve-coder (repo-root target)
+  (let ((known-subs (lib-subs-for-target repo-root target)))
+  (flet ((wrap (coder)
+           (lambda (mod) (lambda (defs) (lambda (cx) (lambda (g)
+             (funcall (funcall (funcall (funcall (funcall coder known-subs) mod) defs) cx) g)))))))
   (cond
     ((string= target "python")
-     (list (symbol-value 'hydra_python_coder_module_to_python)
+     (list (wrap (symbol-value 'hydra_python_coder_module_to_python))
            (symbol-value 'hydra_python_language_python_language)
            (list nil t t nil)  ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((string= target "java")
-     (list (symbol-value 'hydra_java_coder_module_to_java)
+     (list (wrap (symbol-value 'hydra_java_coder_module_to_java))
            (symbol-value 'hydra_java_language_java_language)
            (list nil t nil t)
            "java"))
     ((string= target "haskell")
-     (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+     (list (wrap (symbol-value 'hydra_haskell_coder_module_to_haskell))
            (symbol-value 'hydra_haskell_language_haskell_language)
            (list nil nil nil nil)
            "haskell"))
     ((string= target "scala")
-     (list (symbol-value 'hydra_scala_coder_module_to_scala)
+     (list (wrap (symbol-value 'hydra_scala_coder_module_to_scala))
            (symbol-value 'hydra_scala_language_scala_language)
            (list nil nil nil nil)
            "scala"))
     ((string= target "typescript")
-     (list (symbol-value 'hydra_type_script_coder_module_to_type_script)
+     (list (wrap (symbol-value 'hydra_type_script_coder_module_to_type_script))
            (symbol-value 'hydra_type_script_language_type_script_language)
            (list nil t t nil)
            "ts"))
@@ -238,7 +245,7 @@
                (lambda (defs)
                  (lambda (cx)
                    (lambda (g)
-                     (let ((result (funcall (funcall (funcall (funcall (funcall mtl (list dialect nil)) mod) defs) cx) g)))
+                     (let ((result (funcall (funcall (funcall (funcall (funcall (funcall mtl (list dialect nil)) known-subs) mod) defs) cx) g)))
                        (if (eq (first result) :left)
                            result
                            (let* ((program (second result))
@@ -259,7 +266,7 @@
              (symbol-value 'hydra_lisp_language_lisp_language)
              (list nil nil nil nil)
              target)))
-    (t (error "Unsupported target: ~A" target))))
+    (t (error "Unsupported target: ~A" target))))))
 
 ;; --- Code generation ---
 
@@ -469,8 +476,13 @@
 ;; Re-set function bindings after coder modules are loaded
 (hydra-set-function-bindings)
 
-(let ((coder-info (resolve-coder *target*))
-      (target-cap (concatenate 'string
+(let* (;; #630: repo-root needed to pre-bind overlaySubs into the coder (see resolve-coder).
+       ;; Same derivation as Step 1's repo-root below (parent of dist/json's parent dist/).
+       (coder-repo-root (let* ((trimmed (string-right-trim "/" (dist-json-root-of *json-dir*)))
+                               (slash (position #\/ trimmed :from-end t)))
+                          (if slash (subseq trimmed 0 slash) trimmed)))
+       (coder-info (resolve-coder coder-repo-root *target*))
+       (target-cap (concatenate 'string
                     (string (char-upcase (char *target* 0)))
                     (subseq *target* 1))))
   (let ((coder (first coder-info))
