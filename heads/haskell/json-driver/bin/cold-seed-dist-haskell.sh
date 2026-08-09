@@ -82,9 +82,9 @@ done
 # head source and the local build both keep the real 5-arg call unchanged. Remove this
 # patch once hydra-kernel republishes with the 5-arg signature and stack.yaml's pin is
 # bumped past it.
-sed -i \
-    -e 's/JsonEncode\.toJson (fcSchemaMap ctx) False /JsonEncode.toJson (fcSchemaMap ctx) /' \
-    -e 's/JsonDecode\.fromJson (fcSchemaMap ctx) False /JsonDecode.fromJson (fcSchemaMap ctx) /' \
+sed_inplace 's/JsonEncode\.toJson (fcSchemaMap ctx) False /JsonEncode.toJson (fcSchemaMap ctx) /' \
+    "$HEADMODS/DigestFormat.hs"
+sed_inplace 's/JsonDecode\.fromJson (fcSchemaMap ctx) False /JsonDecode.fromJson (fcSchemaMap ctx) /' \
     "$HEADMODS/DigestFormat.hs"
 
 # #622: writePerPackageManifestsJson (the #607 shim's target) has been moved
