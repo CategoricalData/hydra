@@ -20,7 +20,7 @@
 
 ;; Decimal conversions
 (def hydra_overlay_clojure_lib_literals_decimal_to_bigint (fn [x] (.toBigInteger (.setScale (bigdec x) 0 java.math.RoundingMode/HALF_EVEN))))
-(def hydra_overlay_clojure_lib_literals_decimal_to_float32 (fn [x] (float (.doubleValue (bigdec x)))))
+(def hydra_overlay_clojure_lib_literals_decimal_to_float32 (fn [x] (.floatValue (bigdec x))))
 (def hydra_overlay_clojure_lib_literals_decimal_to_float64 (fn [x] (double (.doubleValue (bigdec x)))))
 
 ;; Float conversions
