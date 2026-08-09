@@ -531,9 +531,7 @@ public class Bootstrap {
     // existence scan to derive overlaySubs for the Java coder's own emission-time redirect,
     // rather than duplicating the directory-listing + Libraries/PrimitiveType-exclusion logic.
     static List<String> libSubsForTarget(String repoRoot, String target) {
-        String seg = overlayDirSegment(target);
-        java.nio.file.Path libDir = Paths.get(repoRoot, "overlay", target, "hydra-kernel", "src", "main",
-                target, "hydra", "overlay", seg, "lib");
+        java.nio.file.Path libDir = overlayLibDir(repoRoot, target);
         if (!Files.isDirectory(libDir)) return LIB_SUBS_FALLBACK;
         List<String> subs = new ArrayList<>();
         File[] entries = libDir.toFile().listFiles();
@@ -542,11 +540,32 @@ public class Bootstrap {
             String name = f.isDirectory() ? f.getName() : f.getName().replaceFirst("\\.[^.]+$", "");
             // Exclude the hand-written registry file/dir (Libraries.*, libraries.*) and any
             // other non-sub file (e.g. Python's __init__.py, Java's PrimitiveType.java) —
-            // real sub-namespace entries are lowercase and match a hydra.lib.<sub> module name.
+            // real sub-namespace entries match a hydra.lib.<sub> module name.
             if (name.equalsIgnoreCase("Libraries") || name.equals("__init__") || name.equals("PrimitiveType")) continue;
-            subs.add(name);
+            // Lower-case the on-disk entry name: the caller compares these against the lowercase
+            // <sub> of a hydra.lib.<sub> module name, but Haskell's overlay tree capitalizes its
+            // filenames (Strings.hs, Lists.hs). Mirrors Hydra.Generation's `map toLower` (#630).
+            subs.add(name.toLowerCase());
         }
         return subs.isEmpty() ? LIB_SUBS_FALLBACK : subs;
+    }
+
+    /**
+     * Resolve the overlay lib source directory for TARGET. Most targets use an all-lowercase
+     * tree (overlay/<t>/hydra-kernel/src/main/<t>/hydra/overlay/<seg>/lib), but Haskell's
+     * overlay follows Haskell module-path convention and is capitalized
+     * (.../src/main/haskell/Hydra/Overlay/Haskell/Lib). Getting this wrong is silent on
+     * case-insensitive filesystems (macOS): isDirectory() matches, listFiles() then returns
+     * capitalized names that never equal the lowercase subs the coder tests against, so every
+     * hydra.lib.* redirect is skipped and the generated Haskell imports Hydra.Lib.* instead of
+     * Hydra.Overlay.Haskell.Lib.* (#630).
+     */
+    private static java.nio.file.Path overlayLibDir(String repoRoot, String target) {
+        java.nio.file.Path base = Paths.get(repoRoot, "overlay", target, "hydra-kernel", "src", "main");
+        if ("haskell".equals(target)) {
+            return base.resolve(Paths.get("haskell", "Hydra", "Overlay", "Haskell", "Lib"));
+        }
+        return base.resolve(Paths.get(target, "hydra", "overlay", overlayDirSegment(target), "lib"));
     }
 
     private static boolean isLibModule(Module m) {

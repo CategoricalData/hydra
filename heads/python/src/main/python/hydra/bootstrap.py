@@ -57,9 +57,7 @@ def _lib_subs_for_target(repo_root, target):
     none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
     _LIB_SUBS_FALLBACK if the overlay source tree isn't reachable from repo_root.
     """
-    seg = _overlay_dir_segment(target)
-    lib_dir = os.path.join(repo_root, "overlay", target, "hydra-kernel", "src", "main", target,
-                            "hydra", "overlay", seg, "lib")
+    lib_dir = _overlay_lib_dir(repo_root, target)
     if not os.path.isdir(lib_dir):
         return _LIB_SUBS_FALLBACK
     subs = []
@@ -68,8 +66,26 @@ def _lib_subs_for_target(repo_root, target):
         sub = name if os.path.isdir(path) else os.path.splitext(name)[0]
         if sub.lower() in ("libraries",) or sub in ("__init__", "PrimitiveType"):
             continue
-        subs.append(sub)
+        # Lower-case the on-disk entry: callers compare these against the lowercase <sub> of a
+        # hydra.lib.<sub> module name, but Haskell's overlay tree capitalizes its filenames
+        # (Strings.hs, Lists.hs). Mirrors Hydra.Generation's `map toLower` (#630).
+        subs.append(sub.lower())
     return subs or _LIB_SUBS_FALLBACK
+
+
+def _overlay_lib_dir(repo_root, target):
+    """Resolve the overlay lib source directory for TARGET. Most targets use an all-lowercase tree
+    (overlay/<t>/hydra-kernel/src/main/<t>/hydra/overlay/<seg>/lib), but Haskell's overlay follows
+    Haskell module-path convention and is capitalized (.../src/main/haskell/Hydra/Overlay/Haskell/Lib).
+    Getting this wrong is silent on case-insensitive filesystems (macOS): isdir() matches, listdir()
+    then returns capitalized names that never equal the lowercase subs the coder tests against, so
+    every hydra.lib.* redirect is skipped and the generated Haskell imports Hydra.Lib.* instead of
+    Hydra.Overlay.Haskell.Lib.* (#630).
+    """
+    base = os.path.join(repo_root, "overlay", target, "hydra-kernel", "src", "main")
+    if target == "haskell":
+        return os.path.join(base, "haskell", "Hydra", "Overlay", "Haskell", "Lib")
+    return os.path.join(base, target, "hydra", "overlay", _overlay_dir_segment(target), "lib")
 
 # Lisp dialect arg -> (coder dialect name, file extension). Module-level so the #473 lib pass can
 # reach it as well as main().
