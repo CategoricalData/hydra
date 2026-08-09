@@ -30,6 +30,55 @@ from hydra.scoping import f_type_to_type_scheme
 from hydra.overlay.python.sources.libraries import standard_library
 
 
+# #630/#635 overlaySubs threading: the hydra.lib.* sub-namespaces that a target host ships a
+# native overlay implementation for. The coder's moduleTo<Target> takes this set as its first
+# (curried) argument -- the head driver MUST pre-apply it so the kernel's printDefinitions
+# callback receives a 4-arg (mod, defs, cx, g) coder. Mirrors overlayLibSubs in the Scala head
+# (heads/scala/.../Generation.scala) and the Haskell head (heads/haskell/.../Generation.hs).
+# Complete list of the hydra.lib.* subs with a relocated overlay impl; used when the overlay
+# source tree isn't reachable at generation time (e.g. a packaged/dist-copied invocation).
+_LIB_SUBS_FALLBACK = frozenset({
+    "chars", "effects", "eithers", "equality", "files", "functions", "hashing", "lists",
+    "literals", "logic", "maps", "math", "optionals", "ordering", "pairs", "regex", "sets",
+    "strings", "system", "text",
+})
+
+# Target-name -> the overlay directory segment (Lisp dialects use underscored segment names).
+_OVERLAY_DIR_SEGMENT = {"common-lisp": "common_lisp", "emacs-lisp": "emacs_lisp"}
+
+
+def _resolve_repo_root():
+    """Best-effort worktree root. Prefer HYDRA_JSON_DIR (exported by the invoke drivers as
+    <root>/dist/json, so the root is two levels up); else derive from this file's location
+    (heads/python/src/main/python/hydra/generation.py -> 6 levels up)."""
+    json_dir = os.environ.get("HYDRA_JSON_DIR")
+    if json_dir:
+        # <root>/dist/json -> <root>
+        return os.path.dirname(os.path.dirname(os.path.abspath(json_dir)))
+    return os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), *([".."] * 6)))
+
+
+def _overlay_lib_subs(target):
+    """#630/#635: derive the redirectable hydra.lib.<sub> sub-namespaces for TARGET by checking
+    which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files exist on disk (existence
+    IS the signal a host ships a native impl). Falls back to _LIB_SUBS_FALLBACK if the overlay tree
+    isn't reachable. Self-contained here to avoid a circular import with hydra.bootstrap (which
+    imports this module); mirrors hydra.bootstrap._lib_subs_for_target."""
+    seg = _OVERLAY_DIR_SEGMENT.get(target, target)
+    lib_dir = os.path.join(_resolve_repo_root(), "overlay", target, "hydra-kernel", "src", "main",
+                           target, "hydra", "overlay", seg, "lib")
+    if not os.path.isdir(lib_dir):
+        return _LIB_SUBS_FALLBACK
+    subs = set()
+    for name in os.listdir(lib_dir):
+        path = os.path.join(lib_dir, name)
+        sub = name if os.path.isdir(path) else os.path.splitext(name)[0]
+        if sub.lower() in ("libraries",) or sub in ("__init__", "PrimitiveType"):
+            continue
+        subs.add(sub)
+    return frozenset(subs) or _LIB_SUBS_FALLBACK
+
+
 @lru_cache(1)
 def bootstrap_schema_map():
     """Build a schema map from the bootstrap type map.
@@ -316,8 +365,10 @@ def write_java(base_path, universe, mods):
     """Generate Java source files from modules."""
     from hydra.java.coder import module_to_java
     from hydra.java.language import java_language
+    known_subs = _overlay_lib_subs("java")
     generate_sources(
-        module_to_java, java_language(),
+        (lambda mod, defs, cx, g: module_to_java(known_subs, mod, defs, cx, g)),
+        java_language(),
         False,
         base_path, universe, mods)
 
@@ -326,8 +377,10 @@ def write_python(base_path, universe, mods):
     """Generate Python source files from modules."""
     from hydra.python.coder import module_to_python
     from hydra.python.language import python_language
+    known_subs = _overlay_lib_subs("python")
     generate_sources(
-        module_to_python, python_language(),
+        (lambda mod, defs, cx, g: module_to_python(known_subs, mod, defs, cx, g)),
+        python_language(),
         False,
         base_path, universe, mods)
 
@@ -336,8 +389,10 @@ def write_haskell(base_path, universe, mods):
     """Generate Haskell source files from modules."""
     from hydra.haskell.coder import module_to_haskell
     from hydra.haskell.language import haskell_language
+    known_subs = _overlay_lib_subs("haskell")
     generate_sources(
-        module_to_haskell, haskell_language(),
+        (lambda mod, defs, cx, g: module_to_haskell(known_subs, mod, defs, cx, g)),
+        haskell_language(),
         False,
         base_path, universe, mods)
 
@@ -346,8 +401,10 @@ def write_scala(base_path, universe, mods):
     """Generate Scala source files from modules."""
     from hydra.scala.coder import module_to_scala
     from hydra.scala.language import scala_language
+    known_subs = _overlay_lib_subs("scala")
     generate_sources(
-        module_to_scala, scala_language(),
+        (lambda mod, defs, cx, g: module_to_scala(known_subs, mod, defs, cx, g)),
+        scala_language(),
         False,
         base_path, universe, mods)
 
@@ -356,8 +413,10 @@ def write_typescript(base_path, universe, mods):
     """Generate TypeScript source files from modules."""
     from hydra.type_script.coder import module_to_type_script
     from hydra.type_script.language import type_script_language
+    known_subs = _overlay_lib_subs("typescript")
     generate_sources(
-        module_to_type_script, type_script_language(),
+        (lambda mod, defs, cx, g: module_to_type_script(known_subs, mod, defs, cx, g)),
+        type_script_language(),
         False,
         base_path, universe, mods)
 
@@ -383,8 +442,13 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
 
     case_conv = CaseConvention.CAMEL if dialect_name == "clojure" else CaseConvention.LOWER_SNAKE
 
+    # #630/#635: overlay dir uses hyphenated target names (common-lisp, emacs-lisp); the coder
+    # dialect_name is underscored (common_lisp, emacs_lisp). Map back for the overlay lookup.
+    _dialect_to_target = {"common_lisp": "common-lisp", "emacs_lisp": "emacs-lisp"}
+    known_subs = _overlay_lib_subs(_dialect_to_target.get(dialect_name, dialect_name))
+
     def lisp_coder(mod, defs, cx, g):
-        result = module_to_lisp(dialect, mod, defs, cx, g)
+        result = module_to_lisp(dialect, known_subs, mod, defs, cx, g)
         match result:
             case Left():
                 return result
