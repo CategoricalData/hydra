@@ -130,9 +130,9 @@
          (json-obj (json-read-file file-path))
          (hydra-json (cl-to-hydra-json json-obj))
          (mod-type (list :variable "hydra.packaging.Module"))
-         (json-result (funcall (funcall (funcall (funcall
+         (json-result (funcall (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.packaging.Module") mod-type) hydra-json)))
+                        nil) "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (first json-result) :left)
       (error "JSON decode error for ~A: ~A" ns-str (second json-result)))
     (let* ((term (second json-result))

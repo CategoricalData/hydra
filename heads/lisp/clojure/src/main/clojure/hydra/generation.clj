@@ -78,7 +78,7 @@
   "Decode a single module from a JSON value."
   [bs-graph schema-map json-val]
   (let [mod-type (list :variable "hydra.packaging.Module")
-        json-result (((((r 'hydra_json_decode_from_json) schema-map) "hydra.packaging.Module") mod-type) json-val)]
+        json-result ((((((r 'hydra_json_decode_from_json) schema-map) false) "hydra.packaging.Module") mod-type) json-val)]
     (when (= (first json-result) :left)
       (throw (RuntimeException. (str "Module JSON decode error: " (second json-result)))))
     (let [term (second json-result)

@@ -267,9 +267,9 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
          (mod-type (list :variable "hydra.packaging.Module"))
-         (json-result (funcall (funcall (funcall (funcall
+         (json-result (funcall (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.packaging.Module") mod-type) hydra-json)))
+                        nil) "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (car json-result) :left)
       (error "JSON decode error for %s: %s" ns-str (cadr json-result)))
     (let* ((term (cadr json-result))
