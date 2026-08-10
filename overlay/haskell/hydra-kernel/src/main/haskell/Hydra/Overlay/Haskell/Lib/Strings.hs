@@ -34,6 +34,10 @@ join = L.intercalate
 length :: String -> Int
 length = L.length
 
+-- | Split a string into lines.
+lines :: String -> [String]
+lines = L.lines
+
 -- | Check whether a string is empty.
 null :: String -> Bool
 null = L.null
@@ -53,3 +57,7 @@ toLower = fmap C.toLower
 -- | Convert a string to uppercase.
 toUpper :: String -> String
 toUpper = fmap C.toUpper
+
+-- | Join a list of strings with newlines, appending a trailing newline.
+unlines :: [String] -> String
+unlines = L.unlines

@@ -29,6 +29,26 @@
   "Return the length of a string."
   (fn [s] (.codePointCount s 0 (.length s))))
 
+;; lines :: String -> [String]
+;; Haskell semantics: lines "" = [], lines "hello\n" = ["hello"], lines "\n" = [""]
+(def hydra_overlay_clojure_lib_strings_lines
+  "Split a string into lines."
+  (fn [s]
+    (if (= s "")
+      ()
+      (let [parts (loop [i 0 start 0 acc ()]
+                    (cond
+                      (>= i (count s))
+                      (reverse (cons (subs s start) acc))
+                      (= (.charAt s i) \newline)
+                      (recur (inc i) (inc i) (cons (subs s start i) acc))
+                      :else
+                      (recur (inc i) start acc)))]
+        ;; Drop trailing empty string if input ended with \n
+        (if (and (not (empty? parts)) (= (last parts) "") (.endsWith s "\n"))
+          (butlast parts)
+          parts)))))
+
 ;; char_at :: Int -> String -> Maybe Int
 (def hydra_overlay_clojure_lib_strings_char_at
   "Get the Unicode code point at a specific index, returning Nothing if out of bounds."
@@ -78,3 +98,8 @@
 (def hydra_overlay_clojure_lib_strings_to_upper
   "Convert a string to uppercase."
   (fn [s] (clojure.string/upper-case s)))
+
+;; unlines :: [String] -> String
+(def hydra_overlay_clojure_lib_strings_unlines
+  "Join a list of strings with newlines, appending a trailing newline."
+  (fn [ss] (apply str (map (fn [s] (str s "\n")) ss))))

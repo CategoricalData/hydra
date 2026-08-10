@@ -49,12 +49,14 @@ allTests = define "allTests" $
       stringsFromList,
       stringsJoin,
       stringsLength,
+      stringsLines,
       stringsCharAt,
       stringsNull,
       stringsSplitOn,
       stringsToList,
       stringsToLower,
-      stringsToUpper]
+      stringsToUpper,
+      stringsUnlines]
     where
       -- Show functions for evalPair
       showInt32 :: TypedTerm (Int -> String)
@@ -144,6 +146,29 @@ allTests = define "allTests" $
           test name s result = evalPair name showInt32
             (Strings.length (Phantoms.string s))
             (Phantoms.int32 result)
+  
+      stringsLines = subgroup "lines" [
+        -- Basic functionality
+        test "single line" "hello world" ["hello world"],
+        test "two lines" "hello\nworld" ["hello", "world"],
+        test "three lines" "one\ntwo\nthree" ["one", "two", "three"],
+
+        -- Edge cases with newlines
+        test "empty string" "" [],
+        test "just newline" "\n" [""],
+        test "trailing newline" "hello\n" ["hello"],
+        test "leading newline" "\nhello" ["", "hello"],
+
+        -- Consecutive newlines
+        test "multiple consecutive newlines" "a\n\nb" ["a", "", "b"],
+
+        -- Unicode and other whitespace
+        test "unicode content" "\241\n\19990" ["\241", "\19990"],  -- ñ, 世
+        test "tabs not split" "a\tb\nc" ["a\tb", "c"]]  -- only \n splits, not \t
+        where
+          test name s result = evalPair name showStringList
+            (Strings.lines (Phantoms.string s))
+            (Phantoms.list (Phantoms.string <$> result))
   
       stringsCharAt = subgroup "charAt" [
         test "first character" 0 "hello" (Just 104),
@@ -263,4 +288,21 @@ allTests = define "allTests" $
         where
           test name s result = stringEvalPair name
             (Strings.toUpper (Phantoms.string s))
+            (Phantoms.string result)
+  
+      stringsUnlines = subgroup "unlines" [
+        -- Basic functionality
+        test "multiple lines" ["one", "two", "three"] "one\ntwo\nthree\n",
+        test "single line" ["hello"] "hello\n",
+        test "empty list" [] "",
+
+        -- Empty strings in list
+        test "with empty lines" ["hello", "", "world"] "hello\n\nworld\n",
+        test "all empty lines" ["", "", ""] "\n\n\n",
+
+        -- Unicode
+        test "unicode content" ["\241o\241o", "\19990\30028"] "\241o\241o\n\19990\30028\n"]  -- ñoño, 世界
+        where
+          test name strs result = stringEvalPair name
+            (Strings.unlines (Phantoms.list (Phantoms.string <$> strs)))
             (Phantoms.string result)

@@ -12,6 +12,7 @@
           hydra_overlay_scheme_lib_strings_is_prefix_of
           hydra_overlay_scheme_lib_strings_is_suffix_of
           hydra_overlay_scheme_lib_strings_length
+          hydra_overlay_scheme_lib_strings_lines
           hydra_overlay_scheme_lib_strings_char_at
           hydra_overlay_scheme_lib_strings_null
           hydra_overlay_scheme_lib_strings_replicate
@@ -22,6 +23,7 @@
           hydra_overlay_scheme_lib_strings_to_list
           hydra_overlay_scheme_lib_strings_to_lower
           hydra_overlay_scheme_lib_strings_to_upper
+          hydra_overlay_scheme_lib_strings_unlines
           hydra_overlay_scheme_lib_strings_unwords
           hydra_overlay_scheme_lib_strings_words)
   (begin
@@ -113,6 +115,25 @@
       (lambda (s)
         (string-length s)))
 
+    ;; Split a string into lines.
+    ;; Haskell behavior: lines "" = [], lines "hello\n" = ["hello"]
+    (define hydra_overlay_scheme_lib_strings_lines
+      (lambda (s)
+        (let ((len (string-length s)))
+          (if (= len 0)
+              '()
+              (let loop ((i 0) (start 0) (acc '()))
+                (cond
+                  ((= i len)
+                   (reverse (cons (substring s start i) acc)))
+                  ((char=? (string-ref s i) #\newline)
+                   (if (= (+ i 1) len)
+                       ;; Trailing newline: don't add empty string after it
+                       (reverse (cons (substring s start i) acc))
+                       (loop (+ i 1) (+ i 1) (cons (substring s start i) acc))))
+                  (else
+                   (loop (+ i 1) start acc))))))))
+
     ;; maybe_char_at :: Int -> String -> Maybe Int
     (define hydra_overlay_scheme_lib_strings_char_at
       (lambda (n)
@@ -189,6 +210,11 @@
       (lambda (s)
         (list->string
           (map char-upcase (string->list s)))))
+
+    ;; Join a list of strings with newlines, appending a trailing newline.
+    (define hydra_overlay_scheme_lib_strings_unlines
+      (lambda (strs)
+        (apply string-append (map (lambda (s) (string-append s "\n")) strs))))
 
     ;; Join a list of strings with spaces.
     (define hydra_overlay_scheme_lib_strings_unwords

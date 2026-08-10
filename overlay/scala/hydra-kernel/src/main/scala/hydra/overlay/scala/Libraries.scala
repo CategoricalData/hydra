@@ -1231,6 +1231,8 @@ object Libraries:
         impl2((sep, ss) => mkString(strings.join(exString(sep))(exList(ss).map(exString))))),
       hydra.lib.strings.length.name -> mkPrimImpl(hydra.lib.strings.length.name, tMono(tFun(tString, tInt32)),
         impl1(s => mkInt32(strings.length(exString(s))))),
+      hydra.lib.strings.lines.name -> mkPrimImpl(hydra.lib.strings.lines.name, tMono(tFun(tString, tList(tString))),
+        impl1(s => mkList(strings.lines(exString(s)).map(mkString)))),
       hydra.lib.strings.charAt.name -> mkPrimImpl(hydra.lib.strings.charAt.name, tMono(tFun(tInt32, tFun(tString, tOpt(tInt32)))),
         impl2((i, s) => mkMaybe(strings.charAt(exInt32(i))(exString(s)).map(mkInt32)))),
       hydra.lib.strings.`null`.name -> mkPrimImpl(hydra.lib.strings.`null`.name, tMono(tFun(tString, tBool)),
@@ -1243,6 +1245,8 @@ object Libraries:
         impl1(s => mkString(strings.toLower(exString(s))))),
       hydra.lib.strings.toUpper.name -> mkPrimImpl(hydra.lib.strings.toUpper.name, tMono(tFun(tString, tString)),
         impl1(s => mkString(strings.toUpper(exString(s))))),
+      hydra.lib.strings.unlines.name -> mkPrimImpl(hydra.lib.strings.unlines.name, tMono(tFun(tList(tString), tString)),
+        impl1(ss => mkString(strings.unlines(exList(ss).map(exString))))),
     )
 
   // ===== Literals primitives =====

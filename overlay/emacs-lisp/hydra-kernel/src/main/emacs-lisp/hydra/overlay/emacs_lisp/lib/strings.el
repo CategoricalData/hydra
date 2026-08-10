@@ -88,6 +88,27 @@
     "Return the length of a string."
     (length (hydra--ensure-multibyte s))))
 
+;; lines :: String -> [String]
+;; Haskell semantics: lines "" = [], lines "\n" = [""], lines "a\n" = ["a"]
+(defvar hydra_overlay_emacs_lisp_lib_strings_lines
+  (lambda (s)
+    "Split a string into lines."
+    (if (= (length s) 0)
+        nil
+        (let ((len (length s))
+              (acc nil)
+              (start 0))
+          (let ((i 0))
+            (while (< i len)
+              (when (= (aref s i) ?\n)
+                (push (substring s start i) acc)
+                (setq start (1+ i)))
+              (setq i (1+ i))))
+          ;; Only add trailing segment if string doesn't end with newline
+          (when (< start len)
+            (push (substring s start len) acc))
+          (nreverse acc)))))
+
 ;; char_at :: Int -> String -> Maybe Int
 (defvar hydra_overlay_emacs_lisp_lib_strings_char_at
   (lambda (n)
@@ -173,6 +194,13 @@
   (lambda (s)
     "Convert a string to uppercase."
     (upcase (hydra--ensure-multibyte s))))
+
+;; unlines :: [String] -> String
+(defvar hydra_overlay_emacs_lisp_lib_strings_unlines
+  (lambda (strs)
+    "Join a list of strings with newlines, appending a trailing newline."
+    (apply #'concat
+           (mapcar (lambda (s) (concat s "\n")) strs))))
 
 ;; unwords :: [String] -> String
 (defvar hydra_overlay_emacs_lisp_lib_strings_unwords

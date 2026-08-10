@@ -669,6 +669,7 @@
                                                   hydra_overlay_scheme_lib_strings_join
                                                   #f s (tc-list s) s))
           (cons (prim-name def:hydra_lib_strings_length)      (prim1 (prim-name def:hydra_lib_strings_length)      hydra_overlay_scheme_lib_strings_length      #f s i))
+          (cons (prim-name def:hydra_lib_strings_lines)       (prim1 (prim-name def:hydra_lib_strings_lines)       hydra_overlay_scheme_lib_strings_lines       #f s (tc-list s)))
           (cons (prim-name def:hydra_lib_strings_char_at) (prim2 (prim-name def:hydra_lib_strings_char_at) hydra_overlay_scheme_lib_strings_char_at #f i s (tc-optional i)))
           (cons (prim-name def:hydra_lib_strings_null)        (prim1 (prim-name def:hydra_lib_strings_null)        hydra_overlay_scheme_lib_strings_null        #f s b))
           (cons (prim-name def:hydra_lib_strings_split_on)     (prim2 (prim-name def:hydra_lib_strings_split_on)
@@ -676,7 +677,8 @@
                                                   #f s s (tc-list s)))
           (cons (prim-name def:hydra_lib_strings_to_list)      (prim1 (prim-name def:hydra_lib_strings_to_list)      hydra_overlay_scheme_lib_strings_to_list     #f s (tc-list i)))
           (cons (prim-name def:hydra_lib_strings_to_lower)     (prim1 (prim-name def:hydra_lib_strings_to_lower)     hydra_overlay_scheme_lib_strings_to_lower    #f s s))
-          (cons (prim-name def:hydra_lib_strings_to_upper)     (prim1 (prim-name def:hydra_lib_strings_to_upper)     hydra_overlay_scheme_lib_strings_to_upper    #f s s)))))
+          (cons (prim-name def:hydra_lib_strings_to_upper)     (prim1 (prim-name def:hydra_lib_strings_to_upper)     hydra_overlay_scheme_lib_strings_to_upper    #f s s))
+          (cons (prim-name def:hydra_lib_strings_unlines)     (prim1 (prim-name def:hydra_lib_strings_unlines)     hydra_overlay_scheme_lib_strings_unlines     #f (tc-list s) s)))))
 
     ;; ============================================================================
     ;; Text (#494)

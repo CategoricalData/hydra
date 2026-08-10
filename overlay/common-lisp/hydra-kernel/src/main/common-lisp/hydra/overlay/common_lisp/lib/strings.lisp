@@ -84,6 +84,25 @@
   (lambda (s)
     (length s)))
 
+;; lines :: String -> [String]
+;; Split a string into lines.
+;; Haskell semantics: lines "" = [], lines "\n" = [""], lines "a\n" = ["a"]
+(defvar hydra_overlay_common_lisp_lib_strings_lines
+  (lambda (s)
+    (if (zerop (length s))
+        nil
+        (let ((len (length s))
+              (acc nil)
+              (start 0))
+          (loop for i from 0 below len
+                when (char= (char s i) #\Newline)
+                do (push (subseq s start i) acc)
+                   (setf start (1+ i)))
+          ;; Only add trailing segment if string doesn't end with newline
+          (when (< start len)
+            (push (subseq s start len) acc))
+          (nreverse acc)))))
+
 ;; char_at :: Int -> String -> Maybe Int
 ;; Get the Unicode code point at a specific index, returning Nothing if out of bounds.
 (defvar hydra_overlay_common_lisp_lib_strings_char_at
@@ -166,6 +185,13 @@
 (defvar hydra_overlay_common_lisp_lib_strings_to_upper
   (lambda (s)
     (string-upcase s)))
+
+;; unlines :: [String] -> String
+;; Join a list of strings with newlines, appending a trailing newline.
+(defvar hydra_overlay_common_lisp_lib_strings_unlines
+  (lambda (strs)
+    (apply #'concatenate 'string
+           (mapcar (lambda (s) (concatenate 'string s (string #\Newline))) strs))))
 
 ;; unwords :: [String] -> String
 ;; Join a list of strings with spaces.

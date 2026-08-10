@@ -7,7 +7,7 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), concat, length, null)
+import           Prelude hiding ((++), concat, length, lines, null, unlines)
 
 
 ns :: ModuleName
@@ -20,8 +20,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.strings module.")}
   where
-    definitions = [charAt, concat, concat2, fromList, join, length,
-                   null, splitOn, toList, toLower, toUpper]
+    definitions = [charAt, concat, concat2, fromList, join, length, lines,
+                   null, splitOn, toList, toLower, toUpper, unlines]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -77,6 +77,14 @@ length = define "length" "Return the length of a string."
   \ the number of code points it uses.",
    "Total on strings shorter than 2^31-1 code points."]
 
+lines :: PrimitiveDefinition
+lines = define "lines" "Split a string into lines."
+  (fn [("s", "the string to split into lines")] Types.string (Types.list Types.string))
+  ["lines(s) splits s into a list of lines, splitting on newline characters (U+000A).",
+   "The trailing newline is consumed but does not produce an empty trailing element (matching\
+  \ Haskell's lines behavior).",
+   "Total. Corresponds to Haskell's lines :: String -> [String]."]
+
 null :: PrimitiveDefinition
 null = define "null" "Check whether a string is empty."
   (fn [("s", "the string to test for emptiness")] Types.string Types.boolean)
@@ -121,3 +129,9 @@ toUpper = define "toUpper" "Convert a string to uppercase."
   \ host-specific full case-folding API.",
    "Total."]
 
+unlines :: PrimitiveDefinition
+unlines = define "unlines" "Join a list of strings with newlines, appending a trailing newline."
+  (fn [("xs", "the list of strings to join with newlines")] (Types.list Types.string) Types.string)
+  ["unlines(xs) returns the concatenation of every string in xs with a newline character (U+000A)\
+  \ appended after each, including the last. The inverse of lines for normalized input.",
+   "Total. Corresponds to Haskell's unlines :: [String] -> String."]

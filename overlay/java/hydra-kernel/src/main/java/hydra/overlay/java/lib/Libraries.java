@@ -384,11 +384,13 @@ public class Libraries {
                 new hydra.overlay.java.lib.strings.FromList(),
                 new hydra.overlay.java.lib.strings.Join(),
                 new hydra.overlay.java.lib.strings.Length(),
+                new hydra.overlay.java.lib.strings.Lines(),
                 new hydra.overlay.java.lib.strings.Null(),
                 new hydra.overlay.java.lib.strings.SplitOn(),
                 new hydra.overlay.java.lib.strings.ToList(),
                 new hydra.overlay.java.lib.strings.ToLower(),
-                new hydra.overlay.java.lib.strings.ToUpper());
+                new hydra.overlay.java.lib.strings.ToUpper(),
+                new hydra.overlay.java.lib.strings.Unlines());
     }
 
     private static List<PrimitiveFunction> systemPrimitives() {
