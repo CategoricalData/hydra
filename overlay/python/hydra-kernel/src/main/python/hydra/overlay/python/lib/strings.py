@@ -31,17 +31,6 @@ def length(s: str) -> int:
     return len(s)
 
 
-def lines(s: str) -> frozenlist[str]:
-    """Split a string into lines."""
-    if not s:
-        return ()
-    result = s.split('\n')
-    # Remove trailing empty string if the string ends with newline
-    if result and result[-1] == '':
-        result = result[:-1]
-    return tuple(result)
-
-
 def char_at(i: int, s: str) -> Optional[int]:
     """Get the Unicode code point at a specific index, returning none if out of bounds."""
     return Given(ord(s[i])) if 0 <= i < len(s) else None_()
@@ -76,13 +65,6 @@ def to_lower(s: str) -> str:
 def to_upper(s: str) -> str:
     """Convert a string to uppercase."""
     return s.upper()
-
-
-def unlines(xs: Sequence[str]) -> str:
-    """Join a list of strings with newlines, appending a trailing newline."""
-    if not xs:
-        return ""
-    return '\n'.join(xs) + '\n'
 
 
 def words(s: str) -> frozenlist[str]:

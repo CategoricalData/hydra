@@ -432,14 +432,12 @@ hydraLibStrings = standardLibrary [
   prim2 DefStrings.join Strings.join string (list string) string,
   prim2 DefStrings.join        Strings.join        string (list string) string,
   prim1 DefStrings.length      Strings.length      string int32,
-  prim1 DefStrings.lines       Strings.lines       string (list string),
   prim2 DefStrings.charAt Strings.charAt int32 string (optional int32),
   prim1 DefStrings.null        Strings.null        string boolean,
   prim2 DefStrings.splitOn     Strings.splitOn     string string (list string),
   prim1 DefStrings.toList      Strings.toList      string (list int32),
   prim1 DefStrings.toLower     Strings.toLower     string string,
-  prim1 DefStrings.toUpper     Strings.toUpper     string string,
-  prim1 DefStrings.unlines     Strings.unlines     (list string) string]
+  prim1 DefStrings.toUpper     Strings.toUpper     string string]
 
 hydraLibSystem :: Library
 hydraLibSystem = standardLibrary [
