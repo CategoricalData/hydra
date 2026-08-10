@@ -313,7 +313,7 @@ optDesc = define "optDesc" $
           (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
             (string "//")
             (Strings.concat2 (string "// ") (var "line")))
-          (Formatting.lines @@ (var "descStr")),
+          (Strings.lines (var "descStr")),
         "comment">: Serialization.cst @@ (Strings.join (string "\n") (var "commentLines")),
         "sep">: Logic.ifElse (var "doubleNewline")
           (Serialization.doubleNewlineSep @@ list [var "comment", var "expr"])

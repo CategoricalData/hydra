@@ -70,7 +70,6 @@ import qualified Hydra.Sources.Json.Decode                  as JsonDecode
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
-import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
@@ -91,7 +90,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Formatting.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
      Environment.ns, PrintCore.ns, PrintError.ns, Strip.ns,
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
@@ -280,9 +279,9 @@ generateLexicon = define "generateLexicon" $
   "termLines" <~ Lists.map ("b" ~> formatTermBinding @@ var "b") (var "sortedTerms") $
   "primitiveLines" <~ Lists.map ("p" ~> formatPrimitive @@ var "p") (var "sortedPrimitives") $
   right $
-    (string "Primitives:\n") ++ (Formatting.unlines @@ var "primitiveLines")
-    ++ (string "\nTypes:\n") ++ (Formatting.unlines @@ var "typeLines")
-    ++ (string "\nTerms:\n") ++ (Formatting.unlines @@ var "termLines")
+    (string "Primitives:\n") ++ Strings.unlines (var "primitiveLines")
+    ++ (string "\nTypes:\n") ++ Strings.unlines (var "typeLines")
+    ++ (string "\nTerms:\n") ++ Strings.unlines (var "termLines")
 
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.

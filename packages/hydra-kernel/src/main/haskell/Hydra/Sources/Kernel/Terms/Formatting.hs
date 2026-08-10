@@ -4,8 +4,8 @@ module Hydra.Sources.Kernel.Terms.Formatting where
 import Hydra.Kernel hiding (
   capitalize, convertCase, convertCaseCamelOrUnderscoreToLowerSnake, convertCaseCamelToLowerSnake, convertCaseCamelToUpperSnake,
   convertCasePascalToUpperSnake, decapitalize, escapeWithUnderscore, indentLines,
-  javaStyleComment, lines, mapFirstLetter, nonAlnumToUnderscores, normalizeComment, sanitizeWithUnderscores,
-  showList, stripLeadingAndTrailingWhitespace, unlines, withCharacterAliases, wrapLine)
+  javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, normalizeComment, sanitizeWithUnderscores,
+  showList, stripLeadingAndTrailingWhitespace, withCharacterAliases, wrapLine)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -47,7 +47,7 @@ import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), lines, showList, unlines)
+import           Prelude hiding ((++), showList)
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
@@ -77,14 +77,12 @@ module_ = Module {
       toDefinition escapeWithUnderscore,
       toDefinition indentLines,
       toDefinition javaStyleComment,
-      toDefinition lines,
       toDefinition mapFirstLetter,
       toDefinition nonAlnumToUnderscores,
       toDefinition normalizeComment,
       toDefinition sanitizeWithUnderscores,
       toDefinition showList,
       toDefinition stripLeadingAndTrailingWhitespace,
-      toDefinition unlines,
       toDefinition withCharacterAliases,
       toDefinition wrapLine]
 
@@ -167,30 +165,12 @@ indentLines = define "indentLines" $
   doc "Indent each line of a string with four spaces" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
-    $ unlines @@ (Lists.map (var "indent") $ lines @@ var "s")
+    $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
 javaStyleComment :: TypedTermDefinition (String -> String)
 javaStyleComment = define "javaStyleComment" $
   doc "Format a string as a Java-style block comment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
-
-lines :: TypedTermDefinition (String -> [String])
-lines = define "lines" $
-  doc "Split a string into lines on newline (U+000A); a trailing newline is consumed without\
-      \ producing an empty trailing element, and the empty string yields the empty list." $
-  lambda "s" $
-    Logic.ifElse (Strings.null $ var "s")
-      (list ([] :: [TypedTerm String]))
-      (lets [
-        "parts">: Strings.splitOn (string "\n") (var "s")]
-        -- For non-empty s, the final element of splitOn "\n" is empty iff s ends with a newline;
-        -- in that case drop it, matching Haskell's lines. Otherwise keep all parts.
-        $ Optionals.withDefault (var "parts") $
-            Optionals.map ("lst" ~>
-              Logic.ifElse (Strings.null $ var "lst")
-                (Optionals.withDefault (var "parts") (Lists.init $ var "parts"))
-                (var "parts"))
-              (Lists.last $ var "parts"))
 
 -- TODO: simplify this helper
 mapFirstLetter :: TypedTermDefinition ((String -> String) -> String -> String)
@@ -263,12 +243,6 @@ stripLeadingAndTrailingWhitespace = define "stripLeadingAndTrailingWhitespace" $
   doc "Remove leading and trailing whitespace from a string" $
   "s" ~> Strings.fromList $ Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
-
-unlines :: TypedTermDefinition ([String] -> String)
-unlines = define "unlines" $
-  doc "Join a list of strings with newlines (U+000A), appending a newline after each element\
-      \ including the last; the empty list yields the empty string." $
-  lambda "xs" $ Strings.concat $ Lists.map ("l" ~> var "l" ++ string "\n") (var "xs")
 
 withCharacterAliases :: TypedTermDefinition (String -> String)
 withCharacterAliases = define "withCharacterAliases" $

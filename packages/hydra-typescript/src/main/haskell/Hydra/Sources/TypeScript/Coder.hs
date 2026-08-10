@@ -1785,7 +1785,7 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
     "members" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_members @@ var "decl") $
     "renderMember" <~ ("ps" ~>
       Strings.join (string "\n  ")
-        (Formatting.lines @@ (asTerm printPropertySignature @@ var "ps"))) $
+        (Strings.lines (asTerm printPropertySignature @@ var "ps"))) $
     "body" <~ Logic.ifElse (Lists.null (var "members"))
       (string "")
       (Strings.concat (list [

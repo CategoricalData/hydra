@@ -94,7 +94,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Formatting.ns, Names.ns, Serialization.ns, HaskellOperators.ns, PrintDocs.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Names.ns, Serialization.ns, HaskellOperators.ns, PrintDocs.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
@@ -581,7 +581,7 @@ toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "-- |")
       (Strings.concat2 (string "-- | ") (var "s")))
-    (Formatting.lines @@ (PrintDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c"))
+    (Strings.lines $ PrintDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c")
 
 toSimpleComments :: TypedTermDefinition (String -> String)
 toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
@@ -591,7 +591,7 @@ toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "--")
       (Strings.concat2 (string "-- ") (var "s")))
-    (Formatting.lines @@ var "c")
+    (Strings.lines $ var "c")
 
 typeSignatureToExpr :: TypedTermDefinition (H.TypeSignature -> Expr)
 typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
