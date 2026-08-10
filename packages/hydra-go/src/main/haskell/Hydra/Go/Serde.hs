@@ -778,9 +778,9 @@ annotatedDeclarationToExpr (Go.AnnotatedDeclaration comment decl) = newlineSep [
   topLevelDeclToExpr decl]
 
 commentToExpr :: String -> Ast.Expr
-commentToExpr s = if L.null (lines s)
+commentToExpr s = if L.null (L.lines s)
   then cst ""
-  else newlineSep (singleLineComment <$> lines s)
+  else newlineSep (singleLineComment <$> L.lines s)
 
 -- ============================================================================
 -- Helpers

@@ -108,7 +108,7 @@ saveCache hashes = do
       entry (i, (k, v)) =
         "    \"" ++ k ++ "\": \"" ++ v ++ "\""
         ++ (if i == M.size hashes - 1 then "" else ",")
-  writeFile cachePath (unlines lns)
+  writeFile cachePath (Prelude.unlines lns)
 
 main :: IO ()
 main = do
