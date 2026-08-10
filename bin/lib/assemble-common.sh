@@ -313,6 +313,12 @@ assemble_check_fresh() {
     # Pass the keep-paths manifest (hand-written overlay files copied into the
     # output dir by copy-overlay.sh) so the #393 orphan reconcile inside `fresh`
     # does not delete them — they are not in the recorded output digest. (#511)
+    # NOTE: bash 3.2 (still the macOS system bash) treats "${arr[@]}" on an EMPTY
+    # array as an unbound variable under `set -u`, so the expansion must be guarded
+    # rather than written inline — otherwise every caller that passes no manifest
+    # (or an empty one) dies with "keep_args[@]: unbound variable". Linux's bash
+    # 4.4+ special-cases this, so an unguarded form passes there and fails only on
+    # macOS — the same environment asymmetry that has bitten this repo before.
     local keep_args=()
     if [ -n "$keep_manifest" ] && [ -f "$keep_manifest" ]; then
         keep_args=(--keep-paths-from "$keep_manifest")
@@ -322,7 +328,7 @@ assemble_check_fresh() {
         --inputs "$input_digest" \
         --output-dir "$output_dir" \
         --output-digest "$output_digest" \
-        "${keep_args[@]}")
+        ${keep_args[@]+"${keep_args[@]}"})
 }
 
 # Write the per-source-set output digest after a (re)generation. Called in
