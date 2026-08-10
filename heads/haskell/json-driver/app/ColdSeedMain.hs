@@ -719,9 +719,9 @@ main = do
         "emacs-lisp"  -> Just (LispSyntax.DialectEmacsLisp,  "el")
         _             -> Nothing
 
-  let lispGenerator = case lispDialectAndExt of
-        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
-        Nothing -> Nothing
+  -- NOTE: lispGenerator is defined further down, alongside the other #630
+  -- overlaySubs-parameterized coders -- it needs lispKnownLibSubs, which in turn
+  -- needs the HYDRA_ROOT_DIR-anchored overlay dir resolved below.
 
   -- 'mods' is the set this scoped package wants written. The full
   -- universe is passed for typing context only; generateSourceFiles
@@ -867,10 +867,47 @@ main = do
   -- always computes and exports (repo root, independent of invocation cwd) --
   -- not any relative path guess.
   hydraRootDir <- lookupEnv "HYDRA_ROOT_DIR"
-  let coldSeedHaskellOverlayLibDir = case hydraRootDir of
-        Just root -> root FP.</> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
-        Nothing   -> "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+  -- Resolve an overlay lib dir the same HYDRA_ROOT_DIR-anchored way for EVERY target,
+  -- not just Haskell. The Hydra.Generation / Hydra.ExtGeneration constants
+  -- (haskellOverlayLibDir, typeScriptOverlayLibDir, clojureOverlayLibDir, ...) are all
+  -- "../../overlay/..." paths documented as relative to heads/haskell/, which is exactly
+  -- what this executable CANNOT rely on -- see the long note above.
+  let coldSeedOverlayLibDir rel = case hydraRootDir of
+        Just root -> root FP.</> rel
+        Nothing   -> rel
+  let coldSeedHaskellOverlayLibDir =
+        coldSeedOverlayLibDir "overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
   haskellKnownLibSubs <- overlayLibSubs coldSeedHaskellOverlayLibDir
+  -- #630: the TypeScript and Lisp-family coders take the same overlaySubs first argument
+  -- as the haskell/java/python/scala coders below. Derived from the on-disk overlay tree
+  -- (overlayLibSubs), matching bootstrap-from-json/Main.hs -- NOT from the hardcoded
+  -- libSubs* allow-lists, which exist to drive the redirectForSubs TEXT post-pass and are
+  -- a different (host-specific, deliberately narrower) set.
+  typeScriptKnownLibSubs <- overlayLibSubs $
+    coldSeedOverlayLibDir "overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
+  lispKnownLibSubs <- case lispDialectAndExt of
+        Just (LispSyntax.DialectClojure, _)    -> overlayLibSubs $ coldSeedOverlayLibDir
+          "overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
+        Just (LispSyntax.DialectScheme, _)     -> overlayLibSubs $ coldSeedOverlayLibDir
+          "overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
+        Just (LispSyntax.DialectCommonLisp, _) -> overlayLibSubs $ coldSeedOverlayLibDir
+          "overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
+        Just (LispSyntax.DialectEmacsLisp, _)  -> overlayLibSubs $ coldSeedOverlayLibDir
+          "overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
+        Nothing                                -> return S.empty
+  let lispGenerator = case lispDialectAndExt of
+        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
+        Nothing -> Nothing
+  scalaKnownLibSubs <- overlayLibSubs $
+    coldSeedOverlayLibDir "overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
+  pythonKnownLibSubs <- overlayLibSubs $
+    coldSeedOverlayLibDir "overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
+  -- #633: Java's coder takes the same explicit overlaySubs parameter as the other hosts.
+  -- The libSubsJava/redirectForSubs "java" post-pass below is INTENTIONALLY kept as-is
+  -- (see the #633 note in bootstrap-from-json/Main.hs): whether it is still load-bearing
+  -- for the effectful hydra.lib.system primitives is an open question tracked separately.
+  javaKnownLibSubs <- overlayLibSubs $
+    coldSeedOverlayLibDir "overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib"
   let consumerTransform = case target of
         "haskell"     -> correctHaskellLibRedirect haskellKnownLibSubs
         "java"        -> redirectForSubs libSubsJava "java"
@@ -883,15 +920,29 @@ main = do
         _             -> id
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of
-        "haskell"    -> generateSourcesWithTransform xform moduleToHaskell    haskellLanguage    False dir universe mods
-        "java"       -> generateSourcesWithTransform xform moduleToJava       javaLanguage       False dir universe mods
-        "python"     -> generateSourcesWithTransform xform moduleToPython     pythonLanguage     False dir universe mods
-        "scala"      -> generateSourcesWithTransform xform moduleToScala scalaLanguage False dir universe mods
+        -- #630: every target coder takes overlaySubs (the on-disk overlay-existence
+        -- set for the TARGET) as its first curried argument, so the seeder must
+        -- PRE-APPLY it — exactly as bootstrap-from-json/Main.hs does. Published
+        -- 0.17.3 still exposed the pre-#630 bare form, so these calls were
+        -- unparameterized until stack.yaml's pin moved to 0.17.4; leaving them bare
+        -- against 0.17.4 fails with "Couldn't match type `S.Set String' with `Module'".
+        --
+        -- The argument is *overlayLibSubs <dir>*, NOT `S.fromList libSubs*`. The two
+        -- are different sets and are not interchangeable: libSubs* are ALLOW-lists
+        -- feeding the redirectForSubs TEXT post-pass, and libSubsJava in particular is
+        -- deliberately just ["system"], while overlay/java/.../lib holds 20 subs.
+        -- Passing the allow-list here would strip the overlay redirect from every
+        -- other sub and silently emit wrong references — the same class of bug the
+        -- empty-set regression described in the HYDRA_ROOT_DIR note above produced.
+        "haskell"    -> generateSourcesWithTransform xform (moduleToHaskell haskellKnownLibSubs)   haskellLanguage    False dir universe mods
+        "java"       -> generateSourcesWithTransform xform (moduleToJava javaKnownLibSubs)         javaLanguage       False dir universe mods
+        "python"     -> generateSourcesWithTransform xform (moduleToPython pythonKnownLibSubs)     pythonLanguage     False dir universe mods
+        "scala"      -> generateSourcesWithTransform xform (moduleToScala scalaKnownLibSubs)       scalaLanguage      False dir universe mods
         -- #376: no "go" branch here — hydra-go is unpublished, so the cold seeder
         -- does not link its coder. dist/haskell/hydra-go SOURCE is still seeded
         -- (it is loaded from JSON and rendered via moduleToHaskell on the "haskell"
         -- target, like every other package), just not emitted as Go.
-        "typescript" -> generateSourcesWithTransform xform moduleToTypeScript typeScriptLanguage False dir universe mods
+        "typescript" -> generateSourcesWithTransform xform (moduleToTypeScript typeScriptKnownLibSubs) typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
               generateSourcesWithTransform xform g lispLanguage False dir universe mods
         _ -> do
@@ -1351,12 +1402,14 @@ pruneEmptyDirs dir = do
 -- ---------------------------------------------------------------------------
 
 -- | Render a module to a single Lisp-dialect file. (From Hydra.ExtGeneration.)
+-- #630: mirrors the original's new overlaySubs parameter (threaded straight through
+-- to the published moduleToLisp, which took it on as of 0.17.4).
 moduleToLispDialect
-  :: LispSyntax.Dialect -> String
+  :: LispSyntax.Dialect -> String -> S.Set String
   -> Module -> [Definition] -> InferenceContext -> Graph
   -> Either Error (M.Map FilePath String)
-moduleToLispDialect dialect ext mod defs cx g =
-  case moduleToLisp dialect mod defs cx g of
+moduleToLispDialect dialect ext overlaySubs mod defs cx g =
+  case moduleToLisp dialect overlaySubs mod defs cx g of
     Left err -> Left err
     Right program ->
       let code = Serialization.printExpr (Serialization.parenthesize (programToExpr program))
