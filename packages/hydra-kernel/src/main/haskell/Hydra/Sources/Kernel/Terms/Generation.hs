@@ -501,6 +501,11 @@ inferModules = define "inferModules" $
 -- identical behavior to 'inferModules'. When a caching layer pre-populates schemes on clean
 -- modules, only the target set plus any transitively-reachable untyped binding is actually
 -- re-solved — the point of issue #247.
+-- | Supported downstream entry point: a project generating code from its own Hydra
+-- modules can call this directly, passing its own modules as both universeMods and
+-- targetMods, to type-check them together with no routing and no dependency on a
+-- pre-existing manifest tree. This is the same call inferAndWriteByPackage makes once
+-- per package internally. See docs/recipes/downstream-codegen.md. (#650)
 inferModulesGiven :: TypedTermDefinition (InferenceContext -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $

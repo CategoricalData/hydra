@@ -621,6 +621,15 @@ public class Generation {
      * their derived DSL/encode/decode/source-wrapper names (expanded by the
      * generated module) route to the declaring package; an unrouted namespace
      * fails loudly rather than falling back to "hydra-kernel".
+     *
+     * <p><b>Not a downstream entry point.</b> This (and {@link #groupByPackage},
+     * {@link #inferAndWriteByPackage}, {@link #writePackageManifests}) implement
+     * Hydra's own multi-package self-hosted build orchestration: routing requires
+     * {@code distJsonRoot} to already contain each package's {@code manifest.json},
+     * which a fresh downstream output root does not. A project generating code from
+     * its own Hydra modules should call {@link hydra.Codegen#inferModulesGiven} and
+     * {@link hydra.build.ManifestWriter#packageManifestJson} directly instead — see
+     * docs/recipes/downstream-codegen.md (#650).</p>
      */
     public static Map<ModuleName, String> buildRoutingMap(String distJsonRoot) throws IOException {
         List<Pair<String, List<ModuleName>>> pkgs = new ArrayList<>();

@@ -335,6 +335,7 @@ Primary entry point — the doc most likely to answer the question by task:
 |------|------------|
 | Set up a contributor environment (fresh checkout) | [docs/contributor-setup.md](docs/contributor-setup.md) — toolchain prerequisites tiered by scope; `bin/check-env.sh` probes what is installed |
 | Use Hydra as a library (library user, not contributor) | [docs/getting-started.md](docs/getting-started.md) — dependency coordinates and minimal-program walk-throughs per host |
+| Generate code from your own Hydra modules (downstream project) | [docs/recipes/downstream-codegen.md](docs/recipes/downstream-codegen.md) — supported entry points vs. Hydra's own multi-package orchestration |
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~270 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, and the published-host consume model (#370) for all three hosts |
 | Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostOverrides` pinning vs `--local-host`; the per-host shims |

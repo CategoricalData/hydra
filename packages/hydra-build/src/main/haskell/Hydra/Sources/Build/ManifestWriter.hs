@@ -114,6 +114,10 @@ sortedNamespaces = define "sortedNamespaces" $
 -- Arguments are already scoped to a single package (the caller groups by
 -- package via hydra.build.routing.groupByPackageIn, #560); this function does
 -- no grouping or I/O.
+-- | Supported downstream entry point: a project generating code from its own Hydra
+-- modules can call this directly (with its own package name and module lists) to
+-- produce a manifest.json, with no routing and no dependency on a pre-existing
+-- manifest tree. See docs/recipes/downstream-codegen.md. (#650)
 packageManifestJson :: TypedTermDefinition (
   String -> [Module] -> [Module] -> [Module] -> [Module] -> JM.Value)
 packageManifestJson = define "packageManifestJson" $

@@ -35,6 +35,7 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 ### Code Generation
 
 - **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
+- **[Generating code from your own Hydra modules](downstream-codegen.md)** - For downstream projects: the supported entry points (`ManifestWriter.packageManifestJson` + `Codegen.inferModulesGiven`), why the multi-package orchestration functions don't apply, and adjacent gaps (#640, #644)
 - **[Ingesting JSON data into a Hydra schema](ingesting-json.md)** - Loading external JSON into typed host values via the build-the-Term-directly path: generating decoders, Term-construction reference, fail-fast decoder roundtrip, and cycle-breaking patterns
 - **[Migration shims: building when a published host can't](migration-shims.md)** - What to do when a published host (Java/Python/Haskell) can't build the current tree: pinning to an earlier good release vs. the local-host shim for backward-incompatible kernel changes
 - For the build/sync/cache *model* (phases, what each cache keys on, the published-host consume model for all three hosts), see **[The Hydra build system](../build-system.md)** at the top level of `docs/`.
