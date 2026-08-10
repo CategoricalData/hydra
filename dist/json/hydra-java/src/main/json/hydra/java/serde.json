@@ -17,6 +17,7 @@
     {"module": "hydra.error.core"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.formatting"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -8607,7 +8608,7 @@
                                                                             "argument": {"variable": "l"}}}}}}}}},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"variable": "hydra.lib.strings.lines"},
+                                                                "function": {"variable": "hydra.formatting.lines"},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {"variable": "hydra.java.serde.sanitizeJavaComment"},

@@ -3,6 +3,7 @@
   "metadata": {"description": "Rust serializer: converts Rust AST to concrete syntax", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.constants"},
+    {"module": "hydra.formatting"},
     {"module": "hydra.serialization"},
     {"module": "hydra.rust.operators"},
     {"module": "hydra.rust.syntax"},
@@ -5756,7 +5757,7 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "// "}}}},
                                         "argument": {"variable": "s"}}}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "c"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "c"}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5809,7 +5810,7 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "/// "}}}},
                                         "argument": {"variable": "s"}}}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "c"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "c"}}}}}}}}},
             "annotation": {
               "map": [
                 {
