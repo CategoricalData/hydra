@@ -77,8 +77,12 @@ jobs:
           #    .tar.gz can never verify on a different runner. The uncompressed
           #    tar IS content-deterministic, so its signature verifies anywhere.
           git archive --format=tar    --prefix="hydra-${version}/" -o "hydra-${version}-src.tar" HEAD
+          # `gzip -k` writes <name>.gz alongside the input, which IS "$archive"
+          # (hydra-<version>-src.tar.gz) — so no rename is needed. The `mv` that
+          # used to follow became a self-move when #441/0483d7133d switched this
+          # step to build the uncompressed .tar first, and `mv X X` is an error
+          # under `bash -e`, which is what failed this job on every tag since.
           gzip -n -k -f "hydra-${version}-src.tar"
-          mv "hydra-${version}-src.tar.gz" "$archive"
           echo "archive=$archive"        >> "$GITHUB_OUTPUT"
           echo "tar=hydra-${version}-src.tar" >> "$GITHUB_OUTPUT"
           echo "Built $archive ($(du -h "$archive" | cut -f1)) + uncompressed .tar for signing"
