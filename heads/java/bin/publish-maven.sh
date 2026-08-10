@@ -5,8 +5,9 @@
 # Java analog of heads/haskell/bin/publish-hackage.sh. The published artifacts
 # live under group net.fortytwo.hydra.java (#519). The Java publish set is:
 #   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
-#   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg
-# (hydra-ext is intentionally excluded; see docs/release-workflow.md.)
+#   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg -> hydra-ext
+# (hydra-ext rejoined the set in #636; see docs/release-workflow.md. It ships to
+# Hackage + Maven-Java + PyPI, but NOT Maven-Scala or npm.)
 #
 # Each dist/java/<pkg>/ is (still) an independently buildable Gradle build.
 # Publishing, however, goes through a generated ROOT aggregator build at
@@ -26,10 +27,18 @@
 #      its dependents, so consumers' transitive POM resolution is satisfiable.
 #      (The final aggregated upload itself has no "order" — it is one upload.)
 #
-# Central Portal note: the root aggregator sets publishingType = AUTOMATIC, so
-# the single aggregated upload auto-publishes with no manual Central Portal UI
-# step — this is the entire point of aggregating (#591). There is no --publish
-# flag: --upload performs the complete upload-and-publish in one step.
+# Central Portal note: by default the root aggregator sets publishingType =
+# AUTOMATIC, so the single aggregated upload auto-publishes with no manual
+# Central Portal UI step — this is the entire point of aggregating (#591).
+# There is no --publish flag: --upload performs upload-and-publish in one step.
+#
+# REVIEW CHECKPOINT: set HYDRA_JAVA_PUBLISH_HOLD=1 to generate the aggregator
+# with publishingType = USER_MANAGED instead, so --upload validates and then
+# HOLDS at VALIDATED for review in the Portal UI before anything reaches Maven
+# Central. A held deployment can be dropped; an AUTOMATIC one cannot be undone.
+# Mirrors HYDRA_SCALA_PUBLISH_HOLD in heads/scala/bin/publish-sbt.sh. The
+# aggregator is regenerated on every run, so the variable takes effect
+# immediately (no stale dist/java/build.gradle).
 #
 # Usage:
 #   publish-maven.sh [--upload] [--package <pkg>]
@@ -39,7 +48,8 @@
 #   --upload        build+publishToMavenLocal every package (leaves first), then
 #                   run ONE `gradle publishAggregationToCentralPortal` at the
 #                   root aggregator (uploads + auto-publishes every package as a
-#                   single Central Portal deployment).
+#                   single Central Portal deployment — or HOLDS at VALIDATED
+#                   when HYDRA_JAVA_PUBLISH_HOLD=1).
 #   --package <pkg> restrict the BUILD step to a single package (must still be
 #                   in the set). The aggregated upload itself always covers the
 #                   full PUBLISH_SET — a single-package Central Portal
@@ -250,8 +260,15 @@ if [ "$DO_UPLOAD" = true ]; then
     ( cd "$ROOT_AGGREGATOR_DIR" && gradle "$GRADLE_TASK" )
     echo ""
     echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as ONE aggregated deployment. ==="
-    echo "publishingType = AUTOMATIC: validates once (~8 min) then auto-publishes — no manual"
-    echo "Central Portal UI step required. Packages in the deployment:"
+    if [ "${HYDRA_JAVA_PUBLISH_HOLD:-}" = "1" ]; then
+        echo "publishingType = USER_MANAGED: validates once (~8 min) then HOLDS at VALIDATED."
+        echo "Nothing reaches Maven Central until you release it at"
+        echo "https://central.sonatype.com/publishing/deployments (a held deployment can be dropped)."
+    else
+        echo "publishingType = AUTOMATIC: validates once (~8 min) then auto-publishes — no manual"
+        echo "Central Portal UI step required."
+    fi
+    echo "Packages in the deployment:"
     printf '  %s\n' "${PUBLISH_SET[@]}"
 else
     echo "=== Dry run complete (no upload). Re-run with --upload to push to the Central Portal. ==="
