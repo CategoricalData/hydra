@@ -5,6 +5,7 @@ module Hydra.Sources.Yaml.Serde where
 import Hydra.Kernel
 import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
+import qualified Hydra.Sources.Kernel.Terms.Formatting                as Formatting
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Equality               as Equality
@@ -36,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [Formatting.ns, ModuleName "hydra.yaml.model"])),
             moduleMetadata = descriptionMetadata (Just "Native YAML serialization: YAML Node to String")}
   where
     definitions = [
@@ -93,7 +94,7 @@ indentString = define "indentString" $
     ("line" ~> Logic.ifElse (Strings.null $ var "line")
       (string "")
       (Strings.concat $ list [string "  ", var "line", string "\n"]))
-    (Strings.lines $ var "s")
+    (Formatting.lines @@ var "s")
 
 -- | Check if a list of character codes represents a decimal number (digits.digits)
 isDecimalString :: TypedTermDefinition ([Int] -> Bool)

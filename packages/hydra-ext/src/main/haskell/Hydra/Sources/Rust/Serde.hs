@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Formatting.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Rust serializer: converts Rust AST to concrete syntax")}
   where
     -- Definitions in alphabetical order by local (unqualified) term name. Originally grouped by
@@ -1207,7 +1207,7 @@ toRustComment = define "toRustComment" $
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "//")
       (Strings.concat2 (string "// ") (var "s")))
-    (Strings.lines $ var "c")
+    (Formatting.lines @@ var "c")
 
 toRustDocComment :: TypedTermDefinition (String -> String)
 toRustDocComment = define "toRustDocComment" $
@@ -1217,7 +1217,7 @@ toRustDocComment = define "toRustDocComment" $
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "///")
       (Strings.concat2 (string "/// ") (var "s")))
-    (Strings.lines $ var "c")
+    (Formatting.lines @@ var "c")
 
 traitConstToExpr :: TypedTermDefinition (R.TraitConst -> Expr)
 traitConstToExpr = define "traitConstToExpr" $
