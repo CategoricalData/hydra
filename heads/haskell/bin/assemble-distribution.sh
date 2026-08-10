@@ -71,15 +71,47 @@ source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 # inputs themselves changing. See assemble-common.sh and #347.
 export_generation_env haskell
 
+# Keep-paths manifest for the hand-written Haskell overlay files that
+# overlay-kernel-runtime.sh merged into dist/haskell/<pkg>/. Without it,
+# --prune-stale below deletes them: the prune keeps only what the generator
+# just wrote, and overlay files are copied, never generated — the "copy" half
+# of `dist/<lang>/<pkg>/ = transform(packages/) + copy(overlay/)`.
+#
+# Concretely (caught by a full sync): the Haskell-target assemble of
+# hydra-typescript pruned Hydra/Overlay/Haskell/Dsl/TypeScript/Helpers.hs, which
+# package.yaml's source-dirs glob legitimately expects, breaking the head build
+# with "can't find source for Hydra/Overlay/Haskell/Dsl/TypeScript/Helpers".
+#
+# Python/Scheme/Go already do this; Haskell was the gap. Its overlay copy is a
+# single global step (overlay-kernel-runtime.sh in sync-haskell.sh), not a
+# per-package Step 0, so there was no copy step here to emit the manifest —
+# hence deriving it from the overlay tree directly. Format is the one both prune
+# paths key on: "<SOURCE_SET_DIR>\t<relPath>" (see python/bin/copy-overlay.sh and
+# readKeepPathsFiles). The overlay layout is src/<config>/haskell/<rel>, so the
+# source-set dir is the first two components.
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-haskell.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+OVERLAY_SRC="$HYDRA_ROOT_DIR/overlay/haskell/$PACKAGE/src"
+if [ -d "$OVERLAY_SRC" ]; then
+    ( cd "$OVERLAY_SRC" && find . -type f -print \
+        | sed 's|^\./||' \
+        | awk -v base="$OUT_DIR/src" -F/ '{
+              ss = $1 "/" $2;                         # e.g. main/haskell
+              rel = substr($0, length(ss) + 2);       # path after "main/haskell/"
+              printf "%s/%s\t%s\n", base, ss, rel;
+          }' \
+        >> "$KEEP_MANIFEST" )
+fi
+
 # Step 1: Main modules.
-if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN" "$KEEP_MANIFEST"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
 else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Haskell modules..."
     run_layer1_transform haskell "$PACKAGE" main \
         --output "$DIST_ROOT" --include-dsls \
-        --prune-stale
+        --prune-stale --keep-paths-from "$KEEP_MANIFEST"
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi
 
@@ -98,7 +130,7 @@ else
         echo "Step 2: Generating test Haskell modules..."
         run_layer1_transform haskell "$PACKAGE" test \
             --output "$DIST_ROOT" \
-            --prune-stale
+            --prune-stale --keep-paths-from "$KEEP_MANIFEST"
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
     fi
 fi
