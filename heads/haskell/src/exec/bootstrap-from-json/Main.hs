@@ -176,7 +176,7 @@ parseArgs = go defaultOptions
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
 usage :: String
-usage = L.unlines
+usage = unlines
   [ "Usage: bootstrap-from-json --target <haskell|java|python|scala|go|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]"
   , ""
   , "Options:"
@@ -1250,7 +1250,7 @@ readKeepPathsFiles paths = do
         return []
       else do
         contents <- readFile p
-        return $ Y.mapMaybe parseLine (L.lines contents)
+        return $ Y.mapMaybe parseLine (lines contents)
   return $ M.fromListWith S.union [(d, S.singleton r) | (d, r) <- pairs]
   where
     parseLine s = case dropWhile (== ' ') s of

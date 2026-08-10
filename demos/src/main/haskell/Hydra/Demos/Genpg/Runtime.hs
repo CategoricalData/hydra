@@ -218,7 +218,7 @@ parseCsvLine = go [] [] False False
 
 readTable :: Bool -> FilePath -> IO (Table String)
 readTable hasHeader path = do
-  rawLines <- fmap L.lines $ readFile path
+  rawLines <- fmap lines $ readFile path
   case CM.zipWithM parseLine rawLines [1..] of
     Left err -> fail $ "CSV read error in " ++ show path ++ ": " ++ err
     Right rows0 -> do

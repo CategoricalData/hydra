@@ -206,7 +206,7 @@ runDemo outDir = do
 
   -- Write summary to file
   let summaryFile = outDir </> "summary.txt"
-  writeFile summaryFile $ L.unlines
+  writeFile summaryFile $ unlines
     [ "Automatic Differentiation Demo Summary"
     , "======================================"
     , ""
@@ -239,7 +239,7 @@ evaluateFunction outDir (df, deriv) = do
 
   -- Write derivative terms to file
   let derivFile = outDir </> (sanitize (dfName df) ++ "_derivative.txt")
-  writeFile derivFile $ L.unlines
+  writeFile derivFile $ unlines
     [ "f(x) = " ++ dfName df
     , ""
     , "Original term:"
@@ -344,7 +344,7 @@ optimizationDemo outDir = do
 
   -- Write optimization trace to file
   let optFile = outDir </> "optimization.txt"
-  writeFile optFile $ L.unlines
+  writeFile optFile $ unlines
     [ "Single-variable optimization"
     , "f(x) = (x - 3)^2 + 2*sin(x)"
     , "Method: gradient descent, lr=0.1, 30 steps"
@@ -432,7 +432,7 @@ curveFittingDemo outDir = do
 
   -- Write results
   let fitFile = outDir </> "curve_fitting.txt"
-  writeFile fitFile $ L.unlines
+  writeFile fitFile $ unlines
     [ "Linear regression via gradient descent"
     , "Model: y = a*x + b"
     , "True: a = " ++ show trueA ++ ", b = " ++ show trueB

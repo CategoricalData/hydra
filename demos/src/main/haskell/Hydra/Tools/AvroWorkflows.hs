@@ -147,7 +147,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let cx = emptyInferenceContext
     let entities = case format of
           Json -> [contents]
-          Jsonl -> L.filter (not . L.null) $ L.lines contents
+          Jsonl -> L.filter (not . L.null) $ lines contents
     lmEncoder <- eitherToIo $ lastMileEncoder lastMile (adapterTarget adapter) cx hydraCoreGraph
     descs <- L.concat <$> CM.mapM (jsonToTarget inFile adapter lmEncoder cx) (L.zip [1..] entities)
     result <- eitherToIo $ lastMileSerializer lastMile descs

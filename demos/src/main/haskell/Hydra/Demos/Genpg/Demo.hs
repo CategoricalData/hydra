@@ -94,7 +94,7 @@ transformTables fileRoot tableTypes spec = do
 
 decodeTableIo :: TableType -> FilePath -> IO (Table Term)
 decodeTableIo tableType path = do
-    rawLines <- fmap L.lines $ readFile path
+    rawLines <- fmap lines $ readFile path
     table <- case Transform.parseTableLines True rawLines of
       Left err -> fail $ "CSV read error in " ++ show path ++ ": " ++ err
       Right t -> return t
