@@ -5,9 +5,10 @@
 # Java analog of heads/haskell/bin/publish-hackage.sh. The published artifacts
 # live under group net.fortytwo.hydra.java (#519). The Java publish set is:
 #   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
-#   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg -> hydra-ext
-# (hydra-ext rejoined the set in #636; see docs/release-workflow.md. It ships to
-# Hackage + Maven-Java + PyPI, but NOT Maven-Scala or npm.)
+#   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg
+# (hydra-ext rejoined the set in #636 and ships to Hackage + PyPI, but is
+# EXCLUDED here as of 0.17.4: it does not compile for Java (#643). Restore it
+# once that lands. See docs/release-workflow.md.)
 #
 # Each dist/java/<pkg>/ is (still) an independently buildable Gradle build.
 # Publishing, however, goes through a generated ROOT aggregator build at
@@ -110,7 +111,11 @@ PUBLISH_SET=(
     hydra-typescript
     hydra-rdf
     hydra-pg
-    hydra-ext
+    # hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 — does not compile for Java
+    # (#643: the visitor-pattern inner interface collides with the enclosing
+    # `Visitor` type in hydra.cpp.syntax). ext still ships to Hackage and PyPI
+    # at 0.17.4. Restore this entry once #643 lands; see #636 for the intent to
+    # publish ext to Hackage + Maven-Java + PyPI.
 )
 
 GRADLE_TASK="publishAggregationToCentralPortal"
