@@ -3,7 +3,7 @@
 # Haskell analog of heads/java/json-driver/. Compiles a haskell-target-only
 # seeder (app/ColdSeedMain.hs) + the head's coder-agnostic generation modules +
 # the kernel/haskell DSL authoring sources against the PUBLISHED Hydra packages
-# from Hackage (extra-deps below, pinned at 0.17.3) — NOT against any local
+# from Hackage (extra-deps below, pinned at 0.17.4) — NOT against any local
 # dist/haskell tree. Running the seeder emits dist/haskell/* from dist/json on a
 # cold clone, before the main host compiles. This is what lets dist/haskell be
 # untracked (#376).
@@ -23,22 +23,22 @@ install-ghc: false
 packages:
   - .
 
-# Published Hydra packages consumed from Hackage, pinned at 0.17.3 — the first
-# fully consistent republish of the whole set since 0.17.1 (0.17.2's hydra-build
-# was a stale 3/8-module truncation; #621's artifact-content gate now guards
-# against a repeat). Bumped from 0.17.1 straight to 0.17.3, skipping 0.17.2
-# entirely, since 0.17.2 was never a valid target for this pin set. Verified via
-# Hackage .cabal content (not just HTTP 200) that hydra-build-0.17.3 exposes all
-# 8 modules before bumping.
+# Published Hydra packages consumed from Hackage, pinned at 0.17.4. This is the
+# release that carries the `divide` primitive (#317), which is what clears the
+# cold-clone dangle: a cold seed against 0.17.3 could not resolve DefMath.divide,
+# so the gate stayed red until 0.17.4 published. Verified via Hackage .cabal
+# content (not just HTTP 200) that all 11 pinned packages exist at 0.17.4 with
+# their modules exposed before bumping — the same check that caught 0.17.2's
+# 3/8-module hydra-build truncation, which is why 0.17.2 was skipped entirely.
 extra-deps:
-  - hydra-kernel-0.17.3
-  - hydra-haskell-0.17.3
-  - hydra-java-0.17.3
-  - hydra-jvm-0.17.3
-  - hydra-python-0.17.3
-  - hydra-scala-0.17.3
-  - hydra-typescript-0.17.3
-  - hydra-lisp-0.17.3
-  - hydra-rdf-0.17.3
-  - hydra-pg-0.17.3
-  - hydra-build-0.17.3
+  - hydra-kernel-0.17.4
+  - hydra-haskell-0.17.4
+  - hydra-java-0.17.4
+  - hydra-jvm-0.17.4
+  - hydra-python-0.17.4
+  - hydra-scala-0.17.4
+  - hydra-typescript-0.17.4
+  - hydra-lisp-0.17.4
+  - hydra-rdf-0.17.4
+  - hydra-pg-0.17.4
+  - hydra-build-0.17.4
