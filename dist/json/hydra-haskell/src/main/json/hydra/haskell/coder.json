@@ -840,11 +840,9 @@
                                                                                     {"literal": {"string": "decodeFloat"}},
                                                                                     {"literal": {"string": "encodeFloat"}},
                                                                                     {"literal": {"string": "fail"}},
-                                                                                    {"literal": {"string": "lines"}},
                                                                                     {"literal": {"string": "map"}},
                                                                                     {"literal": {"string": "pure"}},
-                                                                                    {"literal": {"string": "sum"}},
-                                                                                    {"literal": {"string": "unlines"}}]}}},
+                                                                                    {"literal": {"string": "sum"}}]}}},
                                                                             "type": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"literal": "string"}}}}}},
                                                                         "type": {"list": {"literal": "string"}}}}]},
                                                                 {

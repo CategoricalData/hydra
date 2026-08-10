@@ -1040,7 +1040,7 @@
                                                               "application": {
                                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "// "}}}},
                                                                 "argument": {"variable": "line"}}}}}}}}},
-                                                "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "descStr"}}}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "descStr"}}}}},
                                             "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
                                           {
                                             "name": "comment",

@@ -31,7 +31,6 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"},
-    {"module": "hydra.formatting"},
     {"module": "hydra.yaml.model"}],
   "definitions": [
     {
@@ -221,7 +220,7 @@
                                       "application": {
                                         "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {"list": [{"literal": {"string": "  "}}, {"variable": "line"}, {"literal": {"string": "\n"}}]}}}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "s"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "s"}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Indent all lines of a string by 2 spaces"}}}]}}}}},
     {

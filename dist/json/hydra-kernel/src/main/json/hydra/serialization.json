@@ -5,7 +5,6 @@
     "comments": [],
     "seeAlso": []},
   "dependencies": [
-    {"module": "hydra.formatting"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -585,7 +584,7 @@
                                               "application": {
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "idt"}}},
                                                 "argument": {"variable": "line"}}}}}}}}},
-                                "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "s"}}}}}}}}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "s"}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2728,7 +2727,7 @@
                                                         "name": "lns",
                                                         "term": {
                                                           "application": {
-                                                            "function": {"variable": "hydra.formatting.lines"},
+                                                            "function": {"variable": "hydra.lib.strings.lines"},
                                                             "argument": {"application": {"function": {"variable": "hydra.serialization.printExpr"}, "argument": {"variable": "expr"}}}}},
                                                         "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
                                                     "body": {

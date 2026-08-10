@@ -150,6 +150,22 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.strings.lines",
+        "metadata": {
+          "description": "Split a string into lines.",
+          "comments": [
+            "lines(s) splits s into a list of lines, splitting on newline characters (U+000A).",
+            "The trailing newline is consumed but does not produce an empty trailing element (matching Haskell's lines behavior).",
+            "Total. Corresponds to Haskell's lines :: String -> [String]."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the string to split into lines", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.strings.null",
         "metadata": {
           "description": "Check whether a string is empty.",
@@ -225,6 +241,26 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to convert to uppercase", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.strings.unlines",
+        "metadata": {
+          "description": "Join a list of strings with newlines, appending a trailing newline.",
+          "comments": [
+            "unlines(xs) returns the concatenation of every string in xs with a newline character (U+000A) appended after each, including the last. The inverse of lines for normalized input.",
+            "Total. Corresponds to Haskell's unlines :: [String] -> String."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "xs",
+              "description": "the list of strings to join with newlines",
+              "type": {"list": {"literal": "string"}},
+              "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}}]}
