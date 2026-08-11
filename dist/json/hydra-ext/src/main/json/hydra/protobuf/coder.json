@@ -1456,8 +1456,14 @@
                                             "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 1}}}}},
                                             "argument": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                                "argument": {"variable": "fts"}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                        "argument": {"variable": "fts"}}}}},
+                                                "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                         "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
                                     "body": {
                                       "application": {

@@ -2503,13 +2503,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                                        "argument": {"variable": "n"}}},
-                                                                                    "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
+                                                                                "argument": {"variable": "n"}}}}},
                                                                         "argument": {"variable": "grp"}}}}}}},
                                                             "typeScheme": {
                                                               "variables": [],
