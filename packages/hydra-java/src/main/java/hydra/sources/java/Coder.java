@@ -3097,6 +3097,10 @@ public class Coder {
                                                                                                 var("fields")),
                                                                                             apply(
                                                                                                 ref(Coder.recordHashCodeMethod),
+                                                                                                var("fields")),
+                                                                                            apply(
+                                                                                                ref(Coder.recordToStringMethod),
+                                                                                                var("elName"),
                                                                                                 var("fields"))),
                                                                                         var("comparableMethods")))),
                                                                             field("bodyDecls",
@@ -9704,6 +9708,36 @@ public class Coder {
                                     ref(Coder.extractTypeApplicationArgs_go),
                                     proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at")))))));
 
+    public static final Def fieldToStringPart = def("fieldToStringPart")
+        .lam("f")
+        .to(() ->
+                let(
+                    field("fname",
+                        apply(
+                            unwrap(Name.TYPE_),
+                            proj(FieldType.TYPE_, FieldType.NAME, "f"))),
+                    field("nameLiteral",
+                        apply(
+                            ref(Utils.javaStringMultiplicativeExpression),
+                            Strings.concat2(var("fname"), string("=")))),
+                    field("valueExpr",
+                        inject(MultiplicativeExpression.TYPE_,
+                            MultiplicativeExpression.UNARY,
+                            apply(
+                                ref(Utils.javaExpressionToJavaUnaryExpression),
+                                apply(
+                                    ref(Utils.javaExpressionNameToJavaExpression),
+                                    apply(
+                                        ref(Utils.fieldExpression),
+                                        wrap(Identifier.TYPE_, string("this")),
+                                        apply(ref(Utils.javaIdentifier), var("fname"))))))),
+                    list(
+                        apply(
+                            ref(Utils.javaStringMultiplicativeExpression),
+                            string(", ")),
+                        var("nameLiteral"),
+                        var("valueExpr"))));
+
     public static final Def fieldTypeToFormalParam = def("fieldTypeToFormalParam")
         .lam("aliases").lam("ft").lam("cx").lam("g")
         .to(() ->
@@ -11977,6 +12011,67 @@ public class Coder {
                                         ref(Utils.fieldNameToJavaVariableDeclarator),
                                         var("fname"))))))));
 
+    public static final Def recordToStringMethod = def("recordToStringMethod")
+        .lam("elName").lam("fields")
+        .to(() ->
+                let(
+                    binds(
+                        field("anns",
+                            list(ref(Utils.overrideAnnotation))),
+                        field("mods",
+                            list(
+                                inject(MethodModifier.TYPE_,
+                                    MethodModifier.PUBLIC,
+                                    unit()))),
+                        field("result",
+                            apply(
+                                ref(Utils.javaTypeToJavaResult),
+                                apply(
+                                    ref(Utils.javaRefType),
+                                    list(),
+                                    nothing(),
+                                    string("String")))),
+                        field("className",
+                            apply(unwrap(Name.TYPE_), var("elName"))),
+                        field("fieldParts",
+                            Lists.drop(int32(1),
+                                Lists.concat(
+                                    Lists.map(
+                                        ref(Coder.fieldToStringPart),
+                                        var("fields"))))),
+                        field("allParts",
+                            Lists.concat2(
+                                list(
+                                    apply(
+                                        ref(Utils.javaStringMultiplicativeExpression),
+                                        Strings.concat2(var("className"), string("{")))),
+                                Lists.concat2(
+                                    var("fieldParts"),
+                                    list(
+                                        apply(
+                                            ref(Utils.javaStringMultiplicativeExpression),
+                                            string("}")))))),
+                        field("returnStr",
+                            inject(BlockStatement.TYPE_,
+                                BlockStatement.STATEMENT,
+                                apply(
+                                    ref(Utils.javaReturnStatement),
+                                    just(
+                                        apply(
+                                            ref(Utils.javaAdditiveExpressionToJavaExpression),
+                                            apply(
+                                                ref(Utils.addExpressions),
+                                                var("allParts")))))))),
+                    apply(
+                        ref(Utils.methodDeclaration),
+                        var("mods"),
+                        list(),
+                        var("anns"),
+                        ref(Names.toStringMethodName),
+                        list(),
+                        var("result"),
+                        just(list(var("returnStr"))))));
+
     public static final Def recordWithMethod = def("recordWithMethod")
         .lam("aliases").lam("elName").lam("fields").lam("field").lam("cx").lam("g")
         .to(() ->
@@ -13896,6 +13991,7 @@ public class Coder {
             extractInOutPair,
             extractTypeApplicationArgs,
             extractTypeApplicationArgs_go,
+            fieldToStringPart,
             fieldTypeToFormalParam,
             filterByFlags,
             filterPhantomTypeArgs,
@@ -13963,6 +14059,7 @@ public class Coder {
             recordEqualsMethod,
             recordHashCodeMethod,
             recordMemberVar,
+            recordToStringMethod,
             recordWithMethod,
             resolveTypeApps,
             selfRefSubstitution,

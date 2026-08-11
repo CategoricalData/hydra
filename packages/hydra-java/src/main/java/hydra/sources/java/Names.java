@@ -147,6 +147,10 @@ public class Names {
         .to(() ->
                 string("set"));
 
+    public static final Def toStringMethodName = def("toStringMethodName")
+        .to(() ->
+                string("toString"));
+
     public static final Def valueFieldName = def("valueFieldName")
         .to(() ->
                 string("value"));
@@ -182,6 +186,7 @@ public class Names {
             otherwiseMethodName,
             partialVisitorName,
             setMethodName,
+            toStringMethodName,
             valueFieldName,
             visitMethodName,
             visitorName,

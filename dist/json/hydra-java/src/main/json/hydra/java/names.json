@@ -214,6 +214,11 @@
         "body": {"literal": {"string": "set"}}}},
     {
       "term": {
+        "name": "hydra.java.names.toStringMethodName",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {"literal": {"string": "toString"}}}},
+    {
+      "term": {
         "name": "hydra.java.names.valueFieldName",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
         "body": {"literal": {"string": "value"}}}},
