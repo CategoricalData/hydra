@@ -125,7 +125,7 @@ checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
         (mapError $ fmap normalize $ coderEncode serde term)
         (normalize expected)
   where
-    normalize = unlines . L.filter (not . L.null) . lines
+    normalize = L.unlines . L.filter (not . L.null) . L.lines
 
 eval :: Term -> Either String Term
 eval term = case reduceTerm testContext testGraph True term of

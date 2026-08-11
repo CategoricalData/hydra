@@ -41,6 +41,7 @@ from hydra.sources.python._source_dsl import (
 #   [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.constants")),
+    unqualified_dep(ModuleName("hydra.formatting")),
     unqualified_dep(ModuleName("hydra.names")),
     unqualified_dep(ModuleName("hydra.serialization")),
     unqualified_dep(ModuleName("hydra.print.docs")),
@@ -2076,7 +2077,7 @@ def _to_python_comments():
                         Strings.concat2(string("# "), var("line")),
                     ),
                 ),
-                Strings.lines(var("hydra.print.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),
+                var("hydra.formatting.lines")(var("hydra.print.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),
             ),
         ),
     )

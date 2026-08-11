@@ -99,7 +99,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Formatting.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting TypeScript AST to abstract expressions")}
   where
     -- Alphabetical order by local name, per the definition-ordering style guide
@@ -1146,7 +1146,7 @@ toLineComment = define "toLineComment" $
     (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
       (string "//")
       (Strings.concat2 (string "// ") (var "line")))
-    (Strings.lines $ var "s")
+    (Formatting.lines @@ var "s")
 
 
 -- ============================================================================
@@ -1163,7 +1163,7 @@ toTypeScriptComments = define "toTypeScriptComments" $
       (Lists.map (lambda "line" $ Logic.ifElse (Equality.equal (var "line") (string ""))
           (string " *")
           (Strings.concat2 (string " * ") (var "line")))
-        (Strings.lines $ var "desc")),
+        (Formatting.lines @@ var "desc")),
     "tagLines">: Lists.map (asTerm documentationTagToLine) (var "tags"),
     "allLines">: Lists.concat $ list [var "descLines", var "tagLines"]] $
     Logic.ifElse (Lists.null $ var "allLines")

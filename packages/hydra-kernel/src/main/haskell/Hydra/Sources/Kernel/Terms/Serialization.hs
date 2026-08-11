@@ -35,6 +35,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
 import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
@@ -71,7 +72,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."))}
   where
    definitions = [
@@ -241,7 +242,7 @@ customIndent = define "customIndent" $
     Lists.intersperse (string "\n") $
       Lists.map ("line" ~>
         Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "idt" ++ var "line")) $
-      Strings.lines $ var "s"
+      Formatting.lines @@ var "s"
 
 customIndentBlock :: TypedTermDefinition (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
@@ -570,7 +571,7 @@ printExpr = define "printExpr" $
     _Expr_indent>>: "indentExpr" ~>
       "style" <~ Ast.indentedExpressionStyle (var "indentExpr") $
       "expr" <~ Ast.indentedExpressionExpr (var "indentExpr") $
-      "lns" <~ Strings.lines (printExpr @@ var "expr") $
+      "lns" <~ Formatting.lines @@ (printExpr @@ var "expr") $
       -- Indent prefix is applied only to non-empty lines; otherwise
       -- empty lines pick up trailing whitespace and downstream tools
       -- (host writers, byte-identity comparisons in the bootstrap

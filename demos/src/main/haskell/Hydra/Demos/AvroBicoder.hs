@@ -308,11 +308,11 @@ runPropertyGraphDemo = do
   if exists
     then do
       content <- readFile outFile
-      let lineCount = length (lines content)
+      let lineCount = length (L.lines content)
       putStrLn $ "  Generated " ++ show lineCount ++ " GraphSON vertices"
       putStrLn $ "  Output: " ++ outFile
       putStrLn "  First 3 vertices:"
-      mapM_ (\l -> putStrLn $ "    " ++ take 120 l ++ if length l > 120 then "..." else "") (take 3 $ lines content)
+      mapM_ (\l -> putStrLn $ "    " ++ take 120 l ++ if length l > 120 then "..." else "") (take 3 $ L.lines content)
     else putStrLn "  ERROR: output file not generated"
 
 

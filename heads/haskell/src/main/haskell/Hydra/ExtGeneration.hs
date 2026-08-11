@@ -326,7 +326,7 @@ arrowBreakThreshold = 60
 --   the max length pass through unchanged; long lines are broken at safe
 --   points (commas outside string literals, when the segment is long).
 wrapLongScalaText :: String -> String
-wrapLongScalaText = unlines . fmap wrapLongScalaLine . lines
+wrapLongScalaText = L.unlines . fmap wrapLongScalaLine . L.lines
 
 -- | Break a single long line at safe break points. If the line is short
 --   enough, returns it unchanged. Otherwise walks character-by-character,

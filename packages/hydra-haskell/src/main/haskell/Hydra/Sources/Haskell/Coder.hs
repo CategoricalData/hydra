@@ -251,7 +251,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         -- Prelude is always imported (hides names that conflict with Hydra)
         list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
-            "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"])],
+            "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "lines", "map", "pure", "sum", "unlines"])],
         -- Data.Scientific is always imported (modules that don't use it produce an unused-import warning)
         list [
           pair (pair (string "Data.Scientific") (just $ string "Sci")) (list ([] :: [TypedTerm String]))],

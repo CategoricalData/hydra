@@ -3177,7 +3177,8 @@ public class Serde {
                                                                 Strings.concat2(
                                                                     string(" * "),
                                                                     var("l")))),
-                                                        Strings.lines(
+                                                        apply(
+                                                            var("hydra.formatting.lines"),
                                                             apply(
                                                                 ref(Serde.sanitizeJavaComment),
                                                                 apply(
@@ -3391,6 +3392,7 @@ public class Serde {
         new ModuleName("hydra.error.core"),
         new ModuleName("hydra.error.packaging"),
         new ModuleName("hydra.errors"),
+        new ModuleName("hydra.formatting"),
         new ModuleName("hydra.graph"),
         new ModuleName("hydra.json.model"),
         new ModuleName("hydra.packaging"),
