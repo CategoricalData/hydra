@@ -10,8 +10,9 @@ Strings as sequences of Unicode code points.
 A Hydra string is a sequence of Unicode code points — not UTF-16 code units and not grapheme
 clusters — and `length` and index positions count code points.
 The general split/join pair (`splitOn` and `join`) is the primary line-and-token machinery;
-the newline-specific `lines` and `unlines` were removed in its favor (see the deprecated entries
-at the end of this page).
+the newline-specific `lines` and `unlines` were removed as primitives in its favor, their exact
+semantics preserved as the non-primitive term helpers `hydra.formatting.lines` and
+`hydra.formatting.unlines` (see the removed entries at the end of this page).
 
 #### charAt — **Draft**
 
@@ -197,12 +198,13 @@ Deprecated since: 0.18. Use: `concat2`.
 
 Deprecated since: 0.18. Use: `join`.
 
-#### lines — **Deprecated**
+#### lines — **Removed**
 
 `string → list<string>`
 
-Deprecated since: 0.18. Use `splitOn` with a newline separator; note that `splitOn` yields a
-trailing empty string when the input ends with a newline, where `lines` did not.
+Removed as a primitive in 0.18. The exact behavior is preserved by the non-primitive term helper
+`hydra.formatting.lines`, defined in terms of `splitOn`. (A newline-separated `splitOn "\n" s` differs:
+it yields a trailing empty string when the input ends with a newline, where `lines` does not.)
 
 #### maybeCharAt — **Deprecated**
 
@@ -210,9 +212,10 @@ trailing empty string when the input ends with a newline, where `lines` did not.
 
 Deprecated since: 0.18. Use: `charAt`.
 
-#### unlines — **Deprecated**
+#### unlines — **Removed**
 
 `list<string> → string`
 
-Deprecated since: 0.18. Use `join` with a newline separator; note that `unlines` also appended
-a trailing newline.
+Removed as a primitive in 0.18. The exact behavior is preserved by the non-primitive term helper
+`hydra.formatting.unlines`, defined in terms of `join`. (A newline-separated `join "\n" xs` differs:
+it does not append the trailing newline that `unlines` does.)
