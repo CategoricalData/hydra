@@ -1016,9 +1016,6 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     primitives[def_strings.length.name] = prims.prim1(
         def_strings.length.name, strings.length, [], prims.string(), prims.int32()
     )
-    primitives[def_strings.lines.name] = prims.prim1(
-        def_strings.lines.name, strings.lines, [], prims.string(), prims.list_(prims.string())
-    )
     primitives[def_strings.char_at.name] = prims.prim2(
         def_strings.char_at.name, strings.char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
     )
@@ -1037,9 +1034,6 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     )
     primitives[def_strings.to_upper.name] = prims.prim1(
         def_strings.to_upper.name, strings.to_upper, [], prims.string(), prims.string()
-    )
-    primitives[def_strings.unlines.name] = prims.prim1(
-        def_strings.unlines.name, strings.unlines, [], prims.list_(prims.string()), prims.string()
     )
 
     return primitives

@@ -1134,24 +1134,6 @@ const stringsPrimitives = (): readonly Primitive[] => [
         }
         return right(tString(s));
       })),
-  prim("hydra.lib.strings.lines", scheme(tyFn(tyString, tyList(tyString))),
-    (g, args) =>
-      bind(need(args, 0, "lines"), (a0) =>
-        bind(dString(g, a0), (s) =>
-          right({ tag: "list", value: libStrings.lines(s).map((p) => tString(p)) } as never)))),
-  prim("hydra.lib.strings.unlines", scheme(tyFn(tyList(tyString), tyString)),
-    (g, args) =>
-      bind(need(args, 0, "unlines"), (a0) => {
-        const lst = a0 as { tag: string; value?: readonly Term[] };
-        if (lst.tag !== "list") return left({ tag: "other", value: "unlines: expected list" } as never);
-        const parts: string[] = [];
-        for (const t of (lst.value || [])) {
-          const r = dString(g, t);
-          if (r.tag === "left") return r as Either<HydraError, Term>;
-          parts.push(r.value);
-        }
-        return right(tString(libStrings.unlines(parts)));
-      })),
   prim("hydra.lib.strings.join", scheme(tyFnCurried(tyString, tyList(tyString), tyString)),
     (g, args) =>
       bind(need(args, 0, "intercalate"), (a0) =>

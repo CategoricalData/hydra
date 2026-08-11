@@ -511,7 +511,6 @@
                                          (fn [sep ss] ((strings/hydra_overlay_clojure_lib_strings_join sep) ss))
                                          [] s (p/tc-list s) s)
      (prim-name 'hydra.lib.strings/hydra_lib_strings_length)      (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_length)      strings/hydra_overlay_clojure_lib_strings_length      [] s i)
-     (prim-name 'hydra.lib.strings/hydra_lib_strings_lines)       (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_lines)       strings/hydra_overlay_clojure_lib_strings_lines       [] s (p/tc-list s))
      (prim-name 'hydra.lib.strings/hydra_lib_strings_char_at)     (p/prim2 (prim-name 'hydra.lib.strings/hydra_lib_strings_char_at)
                                          (fn [n str] ((strings/hydra_overlay_clojure_lib_strings_char_at n) str))
                                          [] i s (p/tc-optional i))
@@ -521,8 +520,7 @@
                                          [] s s (p/tc-list s))
      (prim-name 'hydra.lib.strings/hydra_lib_strings_to_list)      (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_list)      strings/hydra_overlay_clojure_lib_strings_to_list     [] s (p/tc-list i))
      (prim-name 'hydra.lib.strings/hydra_lib_strings_to_lower)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_lower)     strings/hydra_overlay_clojure_lib_strings_to_lower    [] s s)
-     (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     strings/hydra_overlay_clojure_lib_strings_to_upper    [] s s)
-     (prim-name 'hydra.lib.strings/hydra_lib_strings_unlines)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_unlines)     strings/hydra_overlay_clojure_lib_strings_unlines     [] (p/tc-list s) s)}))
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     strings/hydra_overlay_clojure_lib_strings_to_upper    [] s s)}))
 
 ;; ============================================================
 ;; Literals

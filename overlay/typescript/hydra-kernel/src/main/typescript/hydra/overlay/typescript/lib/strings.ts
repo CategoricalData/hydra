@@ -39,19 +39,6 @@ export const toLower = (s: string): string => s.toLowerCase();
 
 export const trim = (s: string): string => s.trim();
 
-// `lines` mirrors Haskell's `Data.List.lines`: an empty input yields
-// `[]`; a trailing newline does NOT add an empty final element.
-export const lines = (s: string): readonly string[] => {
-  if (s === "") return [];
-  const parts = s.split("\n");
-  // Drop trailing empty caused by a final "\n".
-  if (parts[parts.length - 1] === "") parts.pop();
-  return parts;
-};
-// `unlines` appends "\n" after EVERY element (including the last),
-// matching Haskell's `Data.List.unlines`.
-export const unlines = (xs: readonly string[]): string => xs.map((x) => x + "\n").join("");
-
 export const charAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
   const cp = s.codePointAt(i);
   return cp === undefined ? { tag: "none" } : { tag: "given", value: cp };

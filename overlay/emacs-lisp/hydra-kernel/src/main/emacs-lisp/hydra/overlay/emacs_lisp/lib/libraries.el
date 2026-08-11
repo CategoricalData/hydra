@@ -627,7 +627,6 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
                                                hydra_overlay_emacs_lisp_lib_strings_join
                                                nil s (tc-list s) s))
       (cons (prim-name hydra_lib_strings_length)      (prim1 (prim-name hydra_lib_strings_length)      hydra_overlay_emacs_lisp_lib_strings_length      nil s i))
-      (cons (prim-name hydra_lib_strings_lines)       (prim1 (prim-name hydra_lib_strings_lines)       hydra_overlay_emacs_lisp_lib_strings_lines       nil s (tc-list s)))
       (cons (prim-name hydra_lib_strings_char_at) (prim2 (prim-name hydra_lib_strings_char_at) hydra_overlay_emacs_lisp_lib_strings_char_at nil i s (tc-optional i)))
       (cons (prim-name hydra_lib_strings_null)        (prim1 (prim-name hydra_lib_strings_null)        hydra_overlay_emacs_lisp_lib_strings_null        nil s b))
       (cons (prim-name hydra_lib_strings_split_on)     (prim2 (prim-name hydra_lib_strings_split_on)
@@ -635,8 +634,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
                                                nil s s (tc-list s)))
       (cons (prim-name hydra_lib_strings_to_list)      (prim1 (prim-name hydra_lib_strings_to_list)      hydra_overlay_emacs_lisp_lib_strings_to_list     nil s (tc-list i)))
       (cons (prim-name hydra_lib_strings_to_lower)     (prim1 (prim-name hydra_lib_strings_to_lower)     hydra_overlay_emacs_lisp_lib_strings_to_lower    nil s s))
-      (cons (prim-name hydra_lib_strings_to_upper)     (prim1 (prim-name hydra_lib_strings_to_upper)     hydra_overlay_emacs_lisp_lib_strings_to_upper    nil s s))
-      (cons (prim-name hydra_lib_strings_unlines)     (prim1 (prim-name hydra_lib_strings_unlines)     hydra_overlay_emacs_lisp_lib_strings_unlines     nil (tc-list s) s)))))
+      (cons (prim-name hydra_lib_strings_to_upper)     (prim1 (prim-name hydra_lib_strings_to_upper)     hydra_overlay_emacs_lisp_lib_strings_to_upper    nil s s)))))
 
 ;; ============================================================================
 ;; Text (#494)
