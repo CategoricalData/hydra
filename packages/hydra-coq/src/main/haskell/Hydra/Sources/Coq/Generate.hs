@@ -412,7 +412,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
     var "bundleArgsLine"]) $
   -- Projection Definitions: one per function in the group.
   "indexed" <~ (Lists.zip
-    (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
+    (Math.range (int32 0) (var "n"))
     (var "funInfos")) $
   "projDefs" <~ Strings.concat (Lists.map
     ("iFi" ~>
@@ -422,7 +422,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "t" <~ Pairs.first (Pairs.second (var "fi")) $
       "projText0" <~ Optionals.withDefault (string "") (Maps.lookup (var "i")
         (Maps.fromList $ Lists.zip
-          (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
+          (Math.range (int32 0) (var "n"))
           (var "projExprs"))) $
       "projText" <~ (replaceBundle @@ var "projText0" @@ var "bundleName") $
       "argsDef" <~ (implicitArgsLine @@ var "nm" @@ var "allTypeVarNames") $
@@ -781,7 +781,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
           "nFields">: Lists.length $ var "fields",
           "fieldVars">: Lists.map
             (lambda "i" $ Strings.concat (list [string "f", Literals.showInt32 $ var "i"]))
-            (Math.range (int32 0) (Math.sub (var "nFields") (int32 1))),
+            (Math.range (int32 0) (var "nFields")),
           "constrPat">: CSyntax.pattern10_Qualid
             (CoqCoderSource.coqQualid @@ Strings.concat (list [string "Build_", var "name"]))
             (Lists.map
@@ -790,7 +790,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
                 (Phantoms.nothing :: TypedTerm (Maybe C.ScopeKey)))
               (var "fieldVars")),
           "indexed">: Lists.zip
-            (Math.range (int32 0) (Math.sub (var "nFields") (int32 1)))
+            (Math.range (int32 0) (var "nFields"))
             (var "fields")] $
           Lists.map (lambda "ift" $ makeOneAccessor
             @@ var "name"
@@ -884,7 +884,7 @@ makeOneAccessor = define "makeOneAccessor" $
   "returnExpr" <~ (CoqCoderSource.coqTermQualid @@
     (Optionals.withDefault (string "") (Maps.lookup (var "idx")
       (Maps.fromList $ Lists.zip
-        (Math.range (int32 0) (Math.sub (Lists.length $ var "fieldVars") (int32 1)))
+        (Math.range (int32 0) (Lists.length $ var "fieldVars"))
         (var "fieldVars"))))) $
   "matchExpr" <~ (inject C._Term C._Term_term100 $
     CSyntax.term100Term10 $
@@ -977,7 +977,7 @@ makeProjectionExprs = define "makeProjectionExprs" $
         (list [var "bvar"])
         (Lists.map
           ("i" ~> var "mkProj" @@ var "i" @@ var "n" @@ var "bvar")
-          (Math.range (int32 0) (Math.sub (var "n") (int32 1)))))
+          (Math.range (int32 0) (var "n"))))
 
 -- | Build the return-type Coq term for a type definition with the given
 -- name and parameter-name list. Zero-param: just a qualified reference;

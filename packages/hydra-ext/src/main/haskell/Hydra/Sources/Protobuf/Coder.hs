@@ -288,7 +288,7 @@ encodeEnumDefinition = def "encodeEnumDefinition" $
         P3._EnumValue_name>>: asTerm encodeEnumValueName @@ var "tname" @@ var "fname",
         P3._EnumValue_number>>: var "idx",
         P3._EnumValue_options>>: var "opts"],
-    "indices">: Math.range (int32 1) (Lists.length (var "fts"))] $
+    "indices">: Math.range (int32 1) (Math.add (Lists.length (var "fts")) (int32 1))] $
     "values" <<~ (Eithers.mapList
       ("p" ~> var "encodeEnumField" @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")))
       (Lists.zip (var "fts") (var "indices"))) $

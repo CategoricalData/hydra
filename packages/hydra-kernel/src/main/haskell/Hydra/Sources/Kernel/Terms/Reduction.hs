@@ -242,10 +242,10 @@ etaExpandTerm = define "etaExpandTerm" $
       (list ([] :: [TypedTerm (Maybe Type)]))
       (optCases (var "mt")
         -- No type available: return n copies of Nothing
-        (Lists.map (constant nothing) (Math.range (int32 1) (var "n")))
+        (Lists.map (constant nothing) (Math.range (int32 0) (var "n")))
         ("typ" ~>
           cases _Type (var "typ")
-            (Just $ Lists.map (constant nothing) (Math.range (int32 1) (var "n"))) [
+            (Just $ Lists.map (constant nothing) (Math.range (int32 0) (var "n"))) [
             _Type_function>>: "ftyp" ~>
               Lists.cons (just $ Core.functionTypeDomain $ var "ftyp")
                 (var "domainTypes" @@ Math.sub (var "n") (int32 1) @@ just (Core.functionTypeCodomain $ var "ftyp")),
@@ -257,7 +257,7 @@ etaExpandTerm = define "etaExpandTerm" $
             -- forall-bound variable would become free in the lambda domain. Return Nothing
             -- for all remaining positions, letting downstream code infer the types.
             _Type_forall>>: constant $
-              Lists.map (constant nothing) (Math.range (int32 1) (var "n"))]))) $
+              Lists.map (constant nothing) (Math.range (int32 0) (var "n"))]))) $
 
   -- peelFunctionDomains: given a Maybe Type and a count, peel n function type domains.
   -- Returns the remaining type after stripping n arrow domains.
@@ -293,7 +293,7 @@ etaExpandTerm = define "etaExpandTerm" $
     Logic.ifElse (Logic.and (Ordering.gt (var "needed") (int32 0))
                             (Logic.or (var "alwaysPad") (Ordering.gt (var "numArgs") (int32 0))))
       -- Pad with lambdas: first build fully applied term, then wrap with lambdas
-      ("indices" <~ Math.range (int32 1) (var "needed") $
+      ("indices" <~ Math.range (int32 1) (Math.add (var "needed") (int32 1)) $
        -- Compute domain types for the wrapper lambdas from the head's type after applying numArgs
        "remainingType" <~ var "peelFunctionDomains" @@ var "headTyp" @@ var "numArgs" $
        "domains" <~ var "domainTypes" @@ var "needed" @@ var "remainingType" $
@@ -602,7 +602,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
 
 
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
-      Math.range (int32 1) (var "n")) $
+      Math.range (int32 1) (Math.add (var "n") (int32 1))) $
     "pad" <~ ("vars" ~> "body" ~>
       Optionals.cases (Lists.uncons $ var "vars") (var "body") ("uc" ~>
           "v0" <~ Pairs.first (var "uc") $

@@ -5898,7 +5898,7 @@ def _encode_variable():
                                     ),
                                 ),
                                 Math.range_(
-                                    int32(1), var("numRemaining")
+                                    int32(1), Math.add(var("numRemaining"), int32(1))
                                 ),
                             ),
                         ),
@@ -7146,7 +7146,7 @@ def _make_simple_lambda():
                                 )
                             ),
                         ),
-                        Math.range_(int32(1), var("arity")),
+                        Math.range_(int32(1), Math.add(var("arity"), int32(1))),
                     ),
                 ),
             ],

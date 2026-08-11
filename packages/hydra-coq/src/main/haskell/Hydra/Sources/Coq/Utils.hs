@@ -429,7 +429,7 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
         (var "mkProj" @@ var "bvar" @@ var "i")
         (Core.bindingTypeScheme $ var "b"))
       (Lists.zip
-        (Math.range (int32 0) (Math.sub (var "n") (int32 1)))
+        (Math.range (int32 0) (var "n"))
         (var "grp"))) $
   "innerProjBindings" <~ (var "mkProjBindings" @@ var "innerBundleVar") $
   "outerProjBindings" <~ (var "mkProjBindings" @@ var "outerBundleVar") $
