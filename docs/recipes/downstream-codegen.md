@@ -123,6 +123,15 @@ for (Name n : Generation.bootstrapGraph().primitives.keySet()) {
 This yields the full set of `hydra.lib.*` subnamespaces (`effects`, `files`, `text`, ...) that have
 per-target overlay implementations.
 
+### Indexed access over `hydra.lib.lists.map` output (#651)
+
+On Java and the four Lisp-dialect hosts, `hydra.lib.lists.map` (and similar list primitives) return
+a linked (cons) structure, so repeated indexed access in a loop is quadratic rather than linear —
+easy to hit in a downstream project's own traversal code, since nothing at the type level signals
+the cost. Python, Scala, and TypeScript are unaffected (array/tuple-backed). See
+[List representation and indexed-access performance](list-performance.md) for the full per-host
+breakdown and the materialize-before-indexing workaround.
+
 ## Related documentation
 
 - [Generating code with Hydra](code-generation.md) — the general pipeline, DSL vs. JSON paths,
