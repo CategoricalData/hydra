@@ -8555,7 +8555,7 @@
                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n  "}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.lib.strings.lines"},
+                                                        "function": {"variable": "hydra.formatting.lines"},
                                                         "argument": {
                                                           "application": {"function": {"variable": "hydra.typeScript.coder.printPropertySignature"}, "argument": {"variable": "ps"}}}}}}}}},
                                             "typeScheme": {

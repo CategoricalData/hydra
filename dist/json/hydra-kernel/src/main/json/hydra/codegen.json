@@ -8,6 +8,7 @@
     {"module": "hydra.adapt"},
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},
+    {"module": "hydra.formatting"},
     {"module": "hydra.inference"},
     {"module": "hydra.json.decode"},
     {"module": "hydra.lexical"},
@@ -1551,11 +1552,11 @@
                                                                                                               "application": {
                                                                                                                 "function": {
                                                                                                                   "application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "Primitives:\n"}}}},
-                                                                                                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.unlines"}, "argument": {"variable": "primitiveLines"}}}}}}},
+                                                                                                                "argument": {"application": {"function": {"variable": "hydra.formatting.unlines"}, "argument": {"variable": "primitiveLines"}}}}}}},
                                                                                                         "argument": {"literal": {"string": "\nTypes:\n"}}}}}},
-                                                                                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.unlines"}, "argument": {"variable": "typeLines"}}}}}}},
+                                                                                                "argument": {"application": {"function": {"variable": "hydra.formatting.unlines"}, "argument": {"variable": "typeLines"}}}}}}},
                                                                                         "argument": {"literal": {"string": "\nTerms:\n"}}}}}},
-                                                                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.unlines"}, "argument": {"variable": "termLines"}}}}}}},
+                                                                                "argument": {"application": {"function": {"variable": "hydra.formatting.unlines"}, "argument": {"variable": "termLines"}}}}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                     "type": {"literal": "string"}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {

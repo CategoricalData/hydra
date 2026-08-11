@@ -3,6 +3,7 @@
   "metadata": {"description": "Python serializer: converts Python AST to concrete syntax", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.constants"},
+    {"module": "hydra.formatting"},
     {"module": "hydra.names"},
     {"module": "hydra.serialization"},
     {"module": "hydra.print.docs"},
@@ -5714,7 +5715,7 @@
                                             "argument": {"variable": "line"}}}}}}}}},
                             "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.strings.lines"},
+                                "function": {"variable": "hydra.formatting.lines"},
                                 "argument": {
                                   "application": {
                                     "function": {
