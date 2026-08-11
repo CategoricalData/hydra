@@ -378,13 +378,13 @@ Infinity and flushing underflow (magnitudes below the smallest subnormal) to zer
     (lambda (exp-val)
       (expt (float base) (float exp-val)))))
 
-;; range :: Int -> Int -> [Int]  (inclusive both ends)
+;; range :: Int -> Int -> [Int]  (half-open, [start, end))
 (defvar hydra_overlay_emacs_lisp_lib_math_range
   (lambda (start)
     (lambda (end)
       (let ((acc nil))
         (let ((i start))
-          (while (<= i end)
+          (while (< i end)
             (push i acc)
             (setq i (1+ i))))
         (nreverse acc)))))

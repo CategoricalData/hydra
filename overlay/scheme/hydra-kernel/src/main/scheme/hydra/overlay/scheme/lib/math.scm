@@ -409,12 +409,12 @@
                       result
                       +nan.0))))))))
 
-    ;; range :: Int -> Int -> [Int]  (inclusive both ends)
+    ;; range :: Int -> Int -> [Int]  (half-open, [start, end))
     (define hydra_overlay_scheme_lib_math_range
       (lambda (start)
         (lambda (end)
           (let loop ((i start) (acc '()))
-            (if (> i end)
+            (if (>= i end)
                 (reverse acc)
                 (loop (+ i 1) (cons i acc)))))))
 

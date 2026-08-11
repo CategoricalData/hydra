@@ -67,7 +67,7 @@ object math:
   def odd[A](x: A): Boolean = IntegralDispatch.applyNativeOdd(x)
   def pi: Double = scala.math.Pi
   def pow(base: Double)(exp: Double): Double = scala.math.pow(base, exp)
-  def range(start: Int)(end: Int): Seq[Int] = (start to end).toSeq
+  def range(start: Int)(end: Int): Seq[Int] = (start until end).toSeq
   def rem[A](x: A)(y: A): Option[A] = IntegralDispatch.applyNativeRem(x, y)
   // Haskell uses half-even (banker's) rounding
   // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).

@@ -362,11 +362,11 @@
   "Return x raised to the power y."
   (fn [base] (fn [exp_] (Math/pow base exp_))))
 
-;; range :: Int -> Int -> [Int]  (inclusive both ends)
+;; range :: Int -> Int -> [Int]  (half-open, [start, end))
 (def hydra_overlay_clojure_lib_math_range
-  "Generate a range of values from start to end (inclusive)."
+  "Generate a half-open range of values from start (inclusive) to end (exclusive)."
   (fn [start_] (fn [end_]
-    (range start_ (inc end_)))))
+    (range start_ end_))))
 
 ;; round :: Double -> Double (Haskell-style round half to even)
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).

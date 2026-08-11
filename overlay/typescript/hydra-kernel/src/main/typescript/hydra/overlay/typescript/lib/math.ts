@@ -23,10 +23,10 @@ export const maybeDiv = (a: number, b: number): Optional<number> =>
 export const maybeMod = (a: number, b: number): Optional<number> =>
   b === 0 ? None : Given(a % b);
 
-// Haskell-style inclusive range `[a..b]`: includes both endpoints.
-// `range 1 3 = [1,2,3]`; `range 1 1 = [1]`; `range 2 1 = []`.
+// Half-open range `[a, b)`: includes the lower bound, excludes the upper bound.
+// `range 1 4 = [1,2,3]`; `range 1 1 = []`; `range 2 1 = []`.
 export const range = (a: number, b: number): readonly number[] => {
   const out: number[] = [];
-  for (let i = a; i <= b; i++) out.push(i);
+  for (let i = a; i < b; i++) out.push(i);
   return out;
 };

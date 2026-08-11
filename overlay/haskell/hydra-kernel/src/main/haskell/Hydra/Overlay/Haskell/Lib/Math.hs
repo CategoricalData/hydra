@@ -144,9 +144,9 @@ pi = Prelude.pi
 pow :: Double -> Double -> Double
 pow = (Prelude.**)
 
--- | Generate a range of values from start to end (inclusive).
-range :: Enum a => a -> a -> [a]
-range start end = [start .. end]
+-- | Generate a half-open range of values from start (inclusive) to end (exclusive).
+range :: (Enum a, Ord a) => a -> a -> [a]
+range start end = if start Prelude.>= end then [] else [start .. Prelude.pred end]
 
 -- | Integer remainder, returning Nothing on division by zero.
 rem :: Int -> Int -> Maybe Int

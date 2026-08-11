@@ -460,8 +460,8 @@ pow = pow_
 
 
 def range_(start: int, end: int) -> frozenlist[int]:
-    """Generate a range of values from start to end (inclusive)."""
-    return tuple(range(start, end + 1))
+    """Generate a half-open range of values from start (inclusive) to end (exclusive)."""
+    return tuple(range(start, end))
 
 
 def round_(x: float) -> float:

@@ -994,10 +994,14 @@ mathPow = subgroup "pow" [
 
 mathRange :: TypedTerm TestGroup
 mathRange = subgroup "range" [
-  test "ascending range" 1 5 [1, 2, 3, 4, 5],
-  test "single element" 5 5 [5],
-  test "two elements" 3 4 [3, 4],
-  test "negative start" (-2) 2 [(-2), (-1), 0, 1, 2]]
+  test "ascending range" 1 6 [1, 2, 3, 4, 5],
+  test "single element" 5 6 [5],
+  test "two elements" 3 5 [3, 4],
+  test "negative start" (-2) 3 [(-2), (-1), 0, 1, 2],
+  test "empty range, equal bounds" 5 5 [],
+  test "empty range, descending bounds" 5 3 [],
+  test "produce n items idiom, 0-indexed" 0 5 [0, 1, 2, 3, 4],
+  test "produce n items idiom, 1-indexed values preserved" 1 6 [1, 2, 3, 4, 5]]
   where
     test name start end result = primCase name DefMath.range [int32 start, int32 end] (list $ int32 <$> result)
 

@@ -411,11 +411,11 @@
                (if (complexp r) +hydra-nan+ r))
              (arithmetic-error () +hydra-nan+))))))))
 
-;; range :: Int -> Int -> [Int]  (inclusive both ends)
+;; range :: Int -> Int -> [Int]  (half-open, [start, end))
 (defvar hydra_overlay_common_lisp_lib_math_range
   (lambda (start)
     (lambda (end)
-      (loop for i from start to end collect i))))
+      (loop for i from start below end collect i))))
 
 ;; round :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).

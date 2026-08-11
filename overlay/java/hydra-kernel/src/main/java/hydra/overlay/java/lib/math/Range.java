@@ -20,7 +20,7 @@ import hydra.overlay.java.util.Either;
 
 
 /**
- * Generates a range of integers.
+ * Generates a half-open range of integers, [start, end).
  */
 public class Range extends PrimitiveFunction {
     /**
@@ -48,7 +48,7 @@ public class Range extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.overlay.java.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.overlay.java.lib.eithers.Map.apply(arg1 -> {
                 ConsList<Term> result = ConsList.empty();
-                for (int i = arg1; i >= arg0; i--) {
+                for (int i = arg1 - 1; i >= arg0; i--) {
                     result = ConsList.cons(Terms.int32(i), result);
                 }
                 return Terms.list(result);
@@ -56,7 +56,7 @@ public class Range extends PrimitiveFunction {
     }
 
     /**
-     * Generates a range from start to end.
+     * Generates a half-open range from start (inclusive) to end (exclusive).
      * @param start the start
      * @return the list of integers
      */
@@ -65,17 +65,17 @@ public class Range extends PrimitiveFunction {
     }
 
     /**
-     * Generates a range from start to end.
+     * Generates a half-open range from start (inclusive) to end (exclusive).
      * @param start the start
      * @param end the end
      * @return the list of integers
      */
     public static List<Integer> apply(Integer start, Integer end) {
-        if (start > end) {
+        if (start >= end) {
             return ConsList.empty();
         }
         ConsList<Integer> result = ConsList.empty();
-        for (int i = end; i >= start; i--) {
+        for (int i = end - 1; i >= start; i--) {
             result = ConsList.cons(i, result);
         }
         return result;

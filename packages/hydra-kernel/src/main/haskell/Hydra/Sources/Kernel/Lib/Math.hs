@@ -358,12 +358,14 @@ pow = define "pow" "Raise the first argument to the power of the second." (f64To
    "Corresponds to Haskell's (**) :: Double -> Double -> Double."]
 
 range :: PrimitiveDefinition
-range = define "range" "Construct the inclusive integer range from the first to the second argument." (int32To2List [("a", "the inclusive lower bound of the range"), ("b", "the inclusive upper bound of the range")])
-  ["range(a, b) returns the list [a, a+1, ..., b]. The range is inclusive at both ends; if a > b the\
-  \ result is the empty list (i.e. the range does not count downward). For a = b the result is the\
-  \ singleton [a]. The length of the result is max(0, b - a + 1).",
-   "Corresponds to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32], equivalent to the\
-  \ list-comprehension form [a..b]."]
+range = define "range" "Construct the half-open integer range from the first argument up to (but excluding) the second." (int32To2List [("a", "the inclusive lower bound of the range"), ("b", "the exclusive upper bound of the range")])
+  ["range(a, b) returns the list [a, a+1, ..., b-1]. The range is inclusive of the lower bound and\
+  \ exclusive of the upper bound; if a >= b the result is the empty list (i.e. the range does not\
+  \ count downward, and an empty range is the natural result of equal bounds). The length of the\
+  \ result is max(0, b - a).",
+   "Does not directly correspond to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32] (which is\
+  \ inclusive of both bounds, i.e. [a..b]); range(a, b) is equivalent to [a .. b-1]. This matches the\
+  \ half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range."]
 
 round :: PrimitiveDefinition
 round = define "round" "Round a floating-point number to the nearest integer-valued float." (f64To [("x", "the value to round to the nearest integer")])
