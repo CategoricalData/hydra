@@ -2,7 +2,6 @@
 name = "hydra"
 version = "0.17.4"
 description = "Python host for Hydra, a strongly typed intermediate language for data, schemas, and code"
-readme = "../../packages/hydra-python/README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Joshua Shinavier", email = "josh@fortytwo.net" }]
 keywords = [
