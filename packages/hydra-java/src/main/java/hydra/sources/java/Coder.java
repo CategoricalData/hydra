@@ -3194,7 +3194,7 @@ public class Coder {
                                                 var("innerDecl"))))))),
                         Lists.zip(
                             var("fields"),
-                            Math_.range(int32(0), Math_.sub(Lists.length(var("fields")), int32(1))))),
+                            Math_.range(int32(0), Lists.length(var("fields"))))),
                     lambda("variantClasses",
                         let("variantDecls",
                             Lists.map(
@@ -5353,7 +5353,7 @@ public class Coder {
                                     lambda("i",
                                         wrap(Name.TYPE_,
                                             Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
-                                    Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
+                                    Math_.range(int32(0), var("arity")))),
                             field("paramExprs",
                                 Lists.map(
                                     lambda("p",
@@ -9407,7 +9407,7 @@ public class Coder {
                             lambda("i",
                                 wrap(Name.TYPE_,
                                     Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
-                            Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
+                            Math_.range(int32(0), var("arity")))),
                     field("paramExprs",
                         Lists.map(
                             lambda("pn",
@@ -13404,9 +13404,7 @@ public class Coder {
                                                                                         var("i"))))),
                                                                         Math_.range(
                                                                             int32(0),
-                                                                            Math_.sub(
-                                                                                var("arity"),
-                                                                                int32(1))))),
+                                                                            var("arity")))),
                                                                 field("paramExprs",
                                                                     Lists.map(
                                                                         lambda("p",
