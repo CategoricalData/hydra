@@ -185,3 +185,58 @@ def test_slicing_full():
 def test_direct_construction_forbidden():
     with pytest.raises(TypeError):
         ConsList()
+
+
+def test_tail_is_o1_shares_backing_tuple():
+    """tail must not copy: repeated tail() calls share the same backing tuple."""
+    l = ConsList.of(*range(1000))
+    cur = l
+    count = 0
+    while not cur.is_empty():
+        assert cur._inner is l._inner
+        cur = cur.tail
+        count += 1
+    assert count == 1000
+
+
+def test_drop_is_o1_shares_backing_tuple():
+    l = ConsList.of(*range(1000))
+    dropped = l.drop(500)
+    assert dropped._inner is l._inner
+    assert list(dropped) == list(range(500, 1000))
+
+
+def test_tail_after_offset():
+    """tail/drop compose correctly across chained offsets."""
+    l = ConsList.of(1, 2, 3, 4, 5)
+    assert l.drop(2).tail.head == 4
+    assert l.tail.tail.tail == ConsList.of(4, 5)
+
+
+def test_offset_getitem_and_slicing():
+    l = ConsList.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    d = l.drop(3)
+    assert d[0] == 3
+    assert d[-1] == 9
+    assert list(d[1:4]) == [4, 5, 6]
+
+
+def test_offset_equality_and_hash():
+    a = ConsList.of(1, 2, 3, 4, 5).drop(2)
+    b = ConsList.of(3, 4, 5)
+    assert a == b
+    assert hash(a) == hash(b)
+
+
+def test_offset_repr_and_iteration():
+    l = ConsList.of(1, 2, 3, 4).drop(2)
+    assert repr(l) == "ConsList(3, 4)"
+    assert list(reversed(l)) == [4, 3]
+    assert 3 in l
+    assert 1 not in l
+
+
+def test_offset_last_and_init():
+    l = ConsList.of(1, 2, 3, 4, 5).drop(2)
+    assert l.last() == 5
+    assert l.init() == ConsList.of(3, 4)
