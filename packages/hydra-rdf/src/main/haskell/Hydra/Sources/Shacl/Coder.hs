@@ -330,6 +330,7 @@ encodeTerm = define "encodeTerm" $
           (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
       _Term_optional>>: lambda "mterm" $
         Optionals.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
+      _Term_unit>>: constant $ right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx")),
       _Term_record>>: lambda "rec" $ lets [
         "rname">: Core.recordTypeName (var "rec"),
         "fields">: Core.recordFields (var "rec")] $

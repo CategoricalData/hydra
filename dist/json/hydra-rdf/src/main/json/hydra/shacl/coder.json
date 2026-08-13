@@ -1681,6 +1681,30 @@
                                                             "argument": {"variable": "cx"}}},
                                                         "argument": {"variable": "g"}}}}}}}}}},
                                       {
+                                        "name": "unit",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "_",
+                                            "domain": "unit",
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "right": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "pair": {
+                                                                    "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
+                                                                    "second": {"variable": "cx"}}},
+                                                                "type": {"list": {"variable": "hydra.rdf.syntax.Description"}}}},
+                                                            "type": {"literal": {"integer": "int32"}}}}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                "type": {"pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"literal": {"integer": "int32"}}}}}}}}},
+                                      {
                                         "name": "record",
                                         "handler": {
                                           "lambda": {
