@@ -28,6 +28,20 @@
 
 set -euo pipefail
 
+# #660: force the Haskell generator host for this harness's assemble-distribution.sh
+# calls. Left at the java default, run_layer1_transform's Layer 1 dispatch
+# (bin/lib/assemble-common.sh) routes hydra-python/hydra-java assembly through the Java
+# target-driver, whose published-classpath probe requires a pre-seeded dist/java/hydra-build
+# (unconditionally srcDir'd by heads/java/target-driver/build.gradle). On a fresh checkout
+# dist/java/ doesn't exist and nothing here seeds it (unlike sync.sh's
+# heal_java_python_native), so the probe fails and falls back to a full from-source
+# :hydra-java:compileHeadsExtrasJava build — which forces :hydra-java:compileJava against
+# eight empty dist/java/<pkg> trees, a cascading unresolved-symbol failure that OOMs the
+# forked javac worker even at a 6g heap. This harness only exercises the freshness-gate/
+# digest logic, not the Java generator, so routing through Haskell instead is orthogonal to
+# what it tests and sidesteps the OOM entirely.
+export GENERATOR_HOST=haskell
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
