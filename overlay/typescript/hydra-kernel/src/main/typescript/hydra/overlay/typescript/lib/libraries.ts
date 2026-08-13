@@ -573,9 +573,7 @@ const mathPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "range"), (a1) =>
             bind(dAnyInt(g, a0), (x) =>
               bind(dAnyInt(g, a1), (y) => {
-                // Inclusive range, matching Haskell's [x..y].
-                const els: Term[] = [];
-                for (let i = x; i <= y; i++) els.push(tInt(i));
+                const els: Term[] = libMath.range(x, y).map((i) => tInt(i));
                 return right({ tag: "list", value: els } as never);
               }))))),
     // Trig / transcendental — operate on Float64.
