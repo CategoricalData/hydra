@@ -403,14 +403,16 @@ const main = async (): Promise<void> => {
   const schemaMap = (jsonBootstrap as { typesByName: unknown }).typesByName;
   const modName = { value: "hydra.packaging.Module" };
   const modType = { tag: "variable", value: modName };
-  const fromJson = (jsonDecode as { fromJson: (s: unknown, n: unknown, t: unknown, v: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown } }).fromJson;
+  const fromJson = (jsonDecode as { fromJson: (s: unknown, c: boolean, n: unknown, t: unknown, v: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: unknown } }).fromJson;
   const modDecoder = (decodePackaging as { module_: (g: unknown, t: unknown) => { tag: "left"; value: unknown } | { tag: "right"; value: Module } }).module_;
   const modulesByPath: Array<{ path: string; module: Module; isTest: boolean; pkg: string }> = [];
 
   for (const { path, json, isTest, pkg } of jsonFiles) {
     try {
       const hydraJson = toHydraJson(json);
-      const termResult = fromJson(schemaMap, modName, modType, hydraJson);
+      // compactMaps = false: decodes the checked-in dist/json module-bootstrapping
+      // representation, which must stay byte-stable for the published-host cold-seeder (#624).
+      const termResult = fromJson(schemaMap, false, modName, modType, hydraJson);
       if (termResult.tag === "left") {
         console.error(`  warning: JSON-to-Term decode failed for ${path}: ${JSON.stringify(termResult.value).slice(0, 200)}`);
         continue;
