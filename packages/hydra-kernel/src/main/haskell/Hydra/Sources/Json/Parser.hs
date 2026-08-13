@@ -362,7 +362,7 @@ parseJson :: TypedTermDefinition (String -> ParseResult J.Value)
 parseJson = define "parseJson" $
   doc "Parse a JSON document from a string" $
   "input" ~>
-    unwrap _Parser @@
+    Parsers.runParser @@
       (Parsers.bind @@ whitespace @@ (constant $
         Parsers.bind @@ jsonValue @@ ("v" ~>
           Parsers.bind @@ whitespace @@ (constant $

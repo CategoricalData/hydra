@@ -49,9 +49,12 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": "string"},
+                      "body": {"list": {"literal": {"integer": "int32"}}},
                       "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -76,9 +79,12 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": "string"},
+                            "body": {"list": {"literal": {"integer": "int32"}}},
                             "annotation": {
-                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -194,9 +200,12 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": "string"},
+                    "body": {"list": {"literal": {"integer": "int32"}}},
                     "annotation": {
-                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}}}},
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -364,9 +373,12 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": "string"},
+                      "body": {"list": {"literal": {"integer": "int32"}}},
                       "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -386,9 +398,12 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": "string"},
+                            "body": {"list": {"literal": {"integer": "int32"}}},
                             "annotation": {
-                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -927,8 +942,12 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": "string"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
+                      "body": {"list": {"literal": {"integer": "int32"}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -955,8 +974,12 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": "string"},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
+                            "body": {"list": {"literal": {"integer": "int32"}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -1079,8 +1102,12 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": "string"},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}}}},
+                    "body": {"list": {"literal": {"integer": "int32"}}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1258,8 +1285,12 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": "string"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
+                      "body": {"list": {"literal": {"integer": "int32"}}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1283,8 +1314,12 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": "string"},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
+                            "body": {"list": {"literal": {"integer": "int32"}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -1517,7 +1552,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "function": {
-                      "domain": {"literal": "string"},
+                      "domain": {"list": {"literal": {"integer": "int32"}}},
                       "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}},
               "isLazy": false}],
           "result": {
@@ -1535,7 +1570,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "function": {
-                        "domain": {"literal": "string"},
+                        "domain": {"list": {"literal": {"integer": "int32"}}},
                         "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}},
                 "body": {
                   "wrap": {
@@ -1579,7 +1614,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "function": {
-                    "domain": {"literal": "string"},
+                    "domain": {"list": {"literal": {"integer": "int32"}}},
                     "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}}},
         "body": {
           "annotated": {

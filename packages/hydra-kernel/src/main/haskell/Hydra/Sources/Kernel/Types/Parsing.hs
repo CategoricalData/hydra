@@ -36,8 +36,8 @@ parseError = define "ParseError" $
       doc "An error message" $
       T.string,
     "remainder">:
-      doc "The remaining input at the point of failure" $
-      T.string]
+      doc "The remaining input (as codepoints) at the point of failure" $
+      T.list T.int32]
 
 parseResult :: TypeDefinition
 parseResult = define "ParseResult" $
@@ -58,11 +58,13 @@ parseSuccess = define "ParseSuccess" $
       doc "The parsed value"
       "a",
     "remainder">:
-      doc "The remaining unparsed input" $
-      T.string]
+      doc "The remaining unparsed input, as codepoints. Represented as a list rather than a string" $
+      T.list T.int32]
 
 parser :: TypeDefinition
 parser = define "Parser" $
-  doc "A parser which consumes characters from a string and produces a value" $
+  doc ("A parser which consumes characters from a codepoint list and produces a value."
+    <> " The input is a list, rather than a string, so that consuming one character is a"
+    <> " constant-time operation rather than a linear-time string copy.") $
   T.forAll "a" $ T.wrap $
-    T.string ~> parseResult @@ "a"
+    T.list T.int32 ~> parseResult @@ "a"

@@ -662,17 +662,14 @@
                                                     "type": {"optional": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"project": {"typeName": "hydra.parsing.ParseSuccess", "fieldName": "remainder"}},
-                                                                "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
-                                                            "argument": {"variable": "s"}}}}},
-                                                    "argument": {"literal": {"string": ""}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"project": {"typeName": "hydra.parsing.ParseSuccess", "fieldName": "remainder"}},
+                                                            "type": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}},
+                                                        "argument": {"variable": "s"}}}}}}},
                                             "argument": {
                                               "optional": {
                                                 "application": {

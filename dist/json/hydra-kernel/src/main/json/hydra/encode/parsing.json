@@ -66,14 +66,37 @@
                                             "application": {
                                               "function": {
                                                 "lambda": {
-                                                  "parameter": "x",
-                                                  "domain": {"literal": "string"},
+                                                  "parameter": "xs",
+                                                  "domain": {"list": {"literal": {"integer": "int32"}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
                                                       "field": {
-                                                        "name": "literal",
-                                                        "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "x",
+                                                                    "domain": {"literal": {"integer": "int32"}},
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.Literal",
+                                                                              "field": {
+                                                                                "name": "integer",
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"variable": "x"}}}}}}}}}}}}}},
+                                                            "argument": {"variable": "xs"}}}}}}}},
                                               "argument": {
                                                 "application": {
                                                   "function": {"project": {"typeName": "hydra.parsing.ParseError", "fieldName": "remainder"}},
@@ -232,14 +255,37 @@
                                                 "application": {
                                                   "function": {
                                                     "lambda": {
-                                                      "parameter": "x",
-                                                      "domain": {"literal": "string"},
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"literal": {"integer": "int32"}}},
                                                       "body": {
                                                         "inject": {
                                                           "typeName": "hydra.core.Term",
                                                           "field": {
-                                                            "name": "literal",
-                                                            "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "x",
+                                                                        "domain": {"literal": {"integer": "int32"}},
+                                                                        "body": {
+                                                                          "inject": {
+                                                                            "typeName": "hydra.core.Term",
+                                                                            "field": {
+                                                                              "name": "literal",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.Literal",
+                                                                                  "field": {
+                                                                                    "name": "integer",
+                                                                                    "term": {"inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"variable": "x"}}}}}}}}}}}}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
                                                   "argument": {
                                                     "application": {
                                                       "function": {"project": {"typeName": "hydra.parsing.ParseSuccess", "fieldName": "remainder"}},

@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Terms.Parsers as Parsers
 import qualified Hydra.Sources.Json.Parser as JsonParser
 import qualified Hydra.Sources.Json.Writer as JsonWriter
+import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Strings as Strings
 
 
@@ -139,7 +140,7 @@ objectsGroup = subgroup "objects" [
 parserCase :: String -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 parserCase name input expectedValue = universalCase name
   (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
-  (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.string "")))
+  (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.list ([] :: [TypedTerm Int]))))
 
 primitivesGroup :: TypedTerm TestGroup
 primitivesGroup = subgroup "primitives" [
@@ -174,7 +175,7 @@ showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
       (Strings.concat2
         (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
         (Strings.concat2 (Phantoms.string ", ")
-          (Strings.concat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
+          (Strings.concat2 (Strings.fromList (Parsing.parseSuccessRemainder (Phantoms.var "ps"))) (Phantoms.string ")"))))),
     _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.concat2
       (Phantoms.string "failure(")
       (Strings.concat2 (Phantoms.string "parse error") (Phantoms.string ")")))]

@@ -1067,7 +1067,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"unwrap": "hydra.parsing.Parser"}, "type": {"variable": "hydra.json.model.Value"}}},
+                        "function": {"typeApplication": {"body": {"variable": "hydra.parsers.runParser"}, "type": {"variable": "hydra.json.model.Value"}}},
                         "argument": {
                           "application": {
                             "function": {

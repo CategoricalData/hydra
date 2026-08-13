@@ -168,8 +168,8 @@ eof :: TypedTermDefinition (Parser ())
 eof = define "eof" $
   doc "A parser that succeeds only at the end of input" $
   Parsing.parser ("input" ~>
-    Logic.ifElse (Equality.equal (var "input") (string ""))
-      (Parsing.parseResultSuccess (Parsing.parseSuccess unit (string "")))
+    Logic.ifElse (Lists.null $ var "input")
+      (Parsing.parseResultSuccess (Parsing.parseSuccess unit (var "input")))
       (Parsing.parseResultFailure (Parsing.parseError (string "expected end of input") (var "input"))))
 
 -- | A parser that always fails with the given message
@@ -231,9 +231,10 @@ pure = define "pure" $
 -- | Run a parser on input and return the result
 runParser :: TypedTermDefinition (Parser a -> String -> ParseResult a)
 runParser = define "runParser" $
-  doc "Run a parser on the given input string" $
+  doc ("Run a parser on the given input string. The string is converted to a codepoint list"
+    <> " once, up front, so that the parser itself can consume characters in constant time.") $
   "p" ~> "input" ~>
-    unwrap _Parser @@ (var "p") @@ (var "input")
+    unwrap _Parser @@ (var "p") @@ (Strings.toList $ var "input")
 
 -- | Parse a character that satisfies a predicate (characters represented as codepoints)
 satisfy :: TypedTermDefinition ((Int -> Bool) -> Parser Int)
@@ -241,9 +242,9 @@ satisfy = define "satisfy" $
   doc "Parse a character (codepoint) that satisfies the given predicate" $
   "pred" ~>
   "parse" <~ ("input" ~>
-    "codes" <~ Strings.toList (var "input") $
-    Optionals.cases (Lists.head $ var "codes") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("c" ~>
-       "rest" <~ Strings.fromList (Lists.drop (int32 1) (var "codes")) $
+    Optionals.cases (Lists.uncons $ var "input") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("uc" ~>
+       "c" <~ Pairs.first (var "uc") $
+       "rest" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "pred" @@ var "c")
          (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))
          (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))) $
@@ -279,15 +280,14 @@ string_ :: TypedTermDefinition (String -> Parser String)
 string_ = define "string" $
   doc "Parse a specific string" $
   "str" ~>
+    "strCodes" <~ Strings.toList (var "str") $
+    "strLen" <~ Lists.length (var "strCodes") $
     Parsing.parser ("input" ~>
-      "strCodes" <~ Strings.toList (var "str") $
-      "inputCodes" <~ Strings.toList (var "input") $
-      "strLen" <~ Lists.length (var "strCodes") $
-      "inputPrefix" <~ Lists.take (var "strLen") (var "inputCodes") $
+      "inputPrefix" <~ Lists.take (var "strLen") (var "input") $
       Logic.ifElse (Equality.equal (var "strCodes") (var "inputPrefix"))
         (Parsing.parseResultSuccess (Parsing.parseSuccess
           (var "str")
-          (Strings.fromList (Lists.drop (var "strLen") (var "inputCodes")))))
+          (Lists.drop (var "strLen") (var "input"))))
         (Parsing.parseResultFailure (Parsing.parseError
           (string "expected: " ++ var "str")
           (var "input"))))

@@ -22,9 +22,12 @@
                     "name": "remainder",
                     "type": {
                       "annotated": {
-                        "body": {"literal": "string"},
+                        "body": {"list": {"literal": {"integer": "int32"}}},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}]},
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}}}}},
     {
@@ -82,8 +85,12 @@
                         "name": "remainder",
                         "type": {
                           "annotated": {
-                            "body": {"literal": "string"},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}]}}},
+                            "body": {"list": {"literal": {"integer": "int32"}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}]}}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}}}}},
     {
       "type": {
@@ -98,10 +105,12 @@
                   "body": {
                     "wrap": {
                       "function": {
-                        "domain": {"literal": "string"},
+                        "domain": {"list": {"literal": {"integer": "int32"}}},
                         "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A parser which consumes characters from a string and produces a value"}}}]}}}}}}]}
+                    "value": {
+                      "literal": {
+                        "string": "A parser which consumes characters from a codepoint list and produces a value. The input is a list, rather than a string, so that consuming one character is a constant-time operation rather than a linear-time string copy."}}}]}}}}}}]}
