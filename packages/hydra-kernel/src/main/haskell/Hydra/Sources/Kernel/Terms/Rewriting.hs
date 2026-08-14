@@ -22,7 +22,9 @@ import Hydra.Kernel hiding (
   rewriteTypeM,
   subterms,
   subtermsWithSteps,
-  subtypes)
+  subtypes,
+  wrapTermToRecord,
+  wrapTypeToRecord)
 import Hydra.Overlay.Haskell.Libraries
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
@@ -71,6 +73,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 
 
@@ -84,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Scoping.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Scoping.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Core rewrite and fold combinators for terms and types")}
   where
    definitions = [
@@ -106,7 +109,9 @@ module_ = Module {
      toDefinition rewriteTypeM,
      toDefinition subterms,
      toDefinition subtermsWithSteps,
-     toDefinition subtypes]
+     toDefinition subtypes,
+     toDefinition wrapTermToRecord,
+     toDefinition wrapTypeToRecord]
 
 applyInsideTypeLambdasAndAnnotations :: TypedTermDefinition ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
@@ -1233,3 +1238,17 @@ subtypes = define "subtypes" $
     _Type_variable>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_void>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
+
+wrapTermToRecord :: TypedTermDefinition (Name -> Term -> Term)
+wrapTermToRecord = define "wrapTermToRecord" $
+  doc ("Convert a wrapped (newtype) term to an equivalent single-field record term,"
+    <> " for target languages without a newtype concept") $
+  "tname" ~> "body" ~> Core.termRecord $ Core.record (var "tname") (list [
+    Core.field (Core.name $ asTerm Constants.fieldNameValue) (var "body")])
+
+wrapTypeToRecord :: TypedTermDefinition (Type -> Type)
+wrapTypeToRecord = define "wrapTypeToRecord" $
+  doc ("Convert a wrapped (newtype) type to an equivalent single-field record type,"
+    <> " for target languages without a newtype concept") $
+  "t" ~> Core.typeRecord $ list [
+    Core.fieldType (Core.name $ asTerm Constants.fieldNameValue) (var "t")]

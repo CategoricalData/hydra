@@ -2,6 +2,7 @@ module Hydra.Sources.Kernel.Terms.Constants where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  fieldNameValue,
   ignoredVariable, keyClasses, keyDebugId, keyDeprecated, keyDescription,
   keyExclude, keyFirstClassType, keyFreshTypeVariableCount, keyMaxLength, keyMinLength,
   keyPreserveFieldName, keyType, maxInt32, maxTraceDepth,
@@ -67,6 +68,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for tier-0 constants."))}
   where
    definitions = [
+     toDefinition fieldNameValue,
      toDefinition ignoredVariable,
      toDefinition keyClasses,
      toDefinition keyDebugId,
@@ -98,6 +100,11 @@ defineAnnotationKey name mdesc = define ("key" <> capitalize name) $ case mdesc 
     def = wrap _Name $ string name
     capitalize [] = []
     capitalize (c:cs) = Char.toUpper c : cs
+
+fieldNameValue :: TypedTermDefinition String
+fieldNameValue = define "fieldNameValue" $
+  doc "The conventional field name used when normalizing a wrapped (newtype) value to a single-field record" $
+  string "value"
 
 ignoredVariable :: TypedTermDefinition String
 ignoredVariable = define "ignoredVariable" $
