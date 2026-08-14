@@ -15,10 +15,13 @@ import hydra.overlay.java.lib.chars.IsSpace;
 import hydra.overlay.java.lib.chars.IsUpper;
 import hydra.overlay.java.lib.maps.Elems;
 import hydra.overlay.java.lib.sets.Delete;
+import hydra.overlay.java.tools.DefaultFallbackPrimitiveFunction;
 import hydra.overlay.java.tools.PrimitiveFunction;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import hydra.overlay.java.util.ConsList;
 
@@ -57,12 +60,51 @@ public class Libraries {
                 setsPrimitives(),
                 stringsPrimitives(),
                 systemPrimitives(),
-                textPrimitives())) {
+                textPrimitives(),
+                defaultFallbackPrimitives())) {
             for (PrimitiveFunction p : group) {
                 reversed = ConsList.cons(p, reversed);
             }
         }
         return reversed.reverse();
+    }
+
+    /**
+     * Primitive functions which have no native Java implementation, but do declare a portable
+     * defaultImplementation term in the kernel (see hydra.lib.Defaults.defaultImplementations()).
+     * Each is registered as a {@link DefaultFallbackPrimitiveFunction}, which evaluates the
+     * default term via {@link hydra.Reduction#reduceTerm} rather than running Java logic.
+     *
+     * Spike (#609 Stage 2): only lists.takeWhile is wired here, as the validation case for the
+     * reduceTerm-fallback mechanism. Once confirmed sound, the remaining 11 Group-A primitives
+     * (eithers.{apply,compose,pure}, equality.notEqual, functions.{compose,const,flip},
+     * optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way.
+     */
+    private static List<PrimitiveFunction> defaultFallbackPrimitives() {
+        Set<String> alreadyNative = new HashSet<>();
+        for (List<PrimitiveFunction> group : Arrays.asList(
+                charsPrimitives(), effectsPrimitives(), eithersPrimitives(), equalityPrimitives(),
+                filesPrimitives(), functionsPrimitives(), hashingPrimitives(), listsPrimitives(),
+                literalsPrimitives(), logicPrimitives(), mapsPrimitives(), mathPrimitives(),
+                optionalsPrimitives(), orderingPrimitives(), pairsPrimitives(), regexPrimitives(),
+                setsPrimitives(), stringsPrimitives(), systemPrimitives(), textPrimitives())) {
+            for (PrimitiveFunction p : group) {
+                alreadyNative.add(p.name().value);
+            }
+        }
+
+        ConsList<PrimitiveFunction> fallbacks = ConsList.empty();
+        for (hydra.packaging.PrimitiveDefinition def : Arrays.asList(
+                hydra.lib.Lists.takeWhile())) {
+            if (!alreadyNative.contains(def.name.value)) {
+                hydra.core.Term defaultImpl = hydra.lib.Defaults.defaultImplementations().get(def.name);
+                if (defaultImpl != null) {
+                    fallbacks = ConsList.cons(
+                        new DefaultFallbackPrimitiveFunction(def, defaultImpl), fallbacks);
+                }
+            }
+        }
+        return fallbacks.reverse();
     }
 
     private static List<PrimitiveFunction> charsPrimitives() {

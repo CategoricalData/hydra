@@ -5,10 +5,13 @@
           (hydra packaging)
           (hydra typing)
           (hydra scoping)
+          (hydra reduction)
           (hydra extract core)
           (hydra overlay scheme lib maps)
           (hydra overlay scheme lib pairs)
-          (hydra overlay scheme lib sets))
+          (hydra overlay scheme lib sets)
+          ;; #609 Stage 4: default-implementation fallback registry (NOT YET SLOT-VALIDATED).
+          (prefix (hydra lib defaults) def:))
   (export collect-type-vars-ordered build-type-scheme
           wrap-other-error
           tc-bigint tc-decimal tc-boolean
@@ -20,7 +23,7 @@
           tc-effect tc-unit tc-named
           tc-variable tc-term tc-comparison
           tc-function tc-function-with-reduce
-          prim0 prim1 prim2 prim3 lazy-args)
+          prim0 prim1 prim2 prim3 lazy-args default-fallback-primitive)
   (begin
 
     ;; ============================================================================
@@ -450,6 +453,31 @@
     ;; primCx = emptyInferenceContext and Python's PRIM_CX, which are likewise
     ;; vestigial under #446.
     (define prim-cx '())
+
+    ;; #609 Stage 4: Build a Primitive for a kernel primitive with no native Scheme
+    ;; implementation, but which declares a portable, cross-compilable defaultImplementation
+    ;; term (see hydra.lib.defaults/hydra_lib_defaults_default_implementations, imported here
+    ;; under the def: prefix). Its implementation folds call args into an Application chain
+    ;; over the term and evaluates via reduceTerm, rather than running hand-written Scheme
+    ;; logic. Ported from Common Lisp / Emacs Lisp / Clojure's default-fallback-primitive.
+    ;; NOT YET SLOT-VALIDATED (no dist/scheme build in this worktree).
+    (define (default-fallback-primitive pname variables inputs output . rest)
+      (let* ((constraints (if (pair? rest) (car rest) #f))
+             (ts (build-type-scheme variables inputs output constraints))
+             (sig (hydra_scoping_type_scheme_to_term_signature ts))
+             (default-impl (let ((entry (assoc pname def:hydra_lib_defaults_default_implementations)))
+                              (if entry (cdr entry)
+                                  (error "default-fallback-primitive: no defaultImplementation for" pname))))
+             (definition (make-hydra_packaging_primitive_definition pname (list 'none) sig #t #t (list 'given default-impl))))
+        (make-hydra_graph_primitive definition
+          (lambda (g)
+            (lambda (args)
+              (let ((applied (let loop ((fn-term default-impl) (remaining args))
+                               (if (null? remaining)
+                                   fn-term
+                                   (loop (list 'application (make-hydra_core_application fn-term (car remaining)))
+                                         (cdr remaining))))))
+                ((((hydra_reduction_reduce_term prim-cx) g) #t) applied)))))))
 
     (define (prim0 pname value-fn variables output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))

@@ -862,33 +862,52 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
                                               nil s s (tc-list s))))))
 
 ;; ============================================================================
+;; Default-implementation fallbacks (#609 Stage 4): primitives with no native Emacs Lisp
+;; implementation, but which declare a portable defaultImplementation term. NOT YET
+;; SLOT-VALIDATED (no dist/emacs-lisp build in this worktree) — mirrors the Java/Python/
+;; Scala/TS/Clojure/Common-Lisp validation case; only lists.takeWhile is wired here pending
+;; confirmation.
+;; ============================================================================
+
+(defun register-default-fallbacks (already-native)
+  (let ((a (tc-variable "a")))
+    (delq nil
+      (list
+        (unless (member (prim-name hydra_lib_lists_take_while) already-native)
+          (cons (prim-name hydra_lib_lists_take_while)
+                (default-fallback-primitive (prim-name hydra_lib_lists_take_while)
+                  nil (list (fun a (tc-boolean)) (tc-list a)) (tc-list a))))))))
+
+;; ============================================================================
 ;; Standard library: all primitives combined
 ;; ============================================================================
 
 (defun standard-library ()
   "Returns an alist from primitive name (string) to Primitive record."
-  (append
-    (register-chars)
-    (register-effects)
-    (register-eithers)
-    (register-equality)
-    (register-files)
-    (register-functions)
-    (register-hashing)
-    (register-lists)
-    (register-literals)
-    (register-logic)
-    (register-maps)
-    (register-math)
-    (register-optionals)
-    (register-ordering)
-    (register-pairs)
-    (register-regex)
-    (register-sets)
-    (register-strings)
-    (register-system)
-    (register-text)
-    (register-annotations)))
+  (let ((native
+          (append
+            (register-chars)
+            (register-effects)
+            (register-eithers)
+            (register-equality)
+            (register-files)
+            (register-functions)
+            (register-hashing)
+            (register-lists)
+            (register-literals)
+            (register-logic)
+            (register-maps)
+            (register-math)
+            (register-optionals)
+            (register-ordering)
+            (register-pairs)
+            (register-regex)
+            (register-sets)
+            (register-strings)
+            (register-system)
+            (register-text)
+            (register-annotations))))
+    (append native (register-default-fallbacks (mapcar #'car native)))))
 
 (provide 'hydra.lib.libraries)
 

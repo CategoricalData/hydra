@@ -1329,6 +1329,25 @@ def register_pairs_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_default_fallback_primitives(already_native: dict[Name, Primitive]) -> dict[Name, Primitive]:
+    """Register primitives which have no native Python implementation, but do declare a portable
+    defaultImplementation term in the kernel (see hydra.lib.defaults.default_implementations()).
+    Each is registered via prims.default_fallback_primitive, which evaluates the default term via
+    reduce_term rather than running Python logic.
+
+    Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring the Java validation case
+    (#609 Stage 2). Once confirmed here, the remaining 11 Group-A primitives are wired the same way.
+    """
+    from hydra.lib import lists as def_lists
+    from hydra.overlay.python.dsl.python import Given
+
+    primitives: dict[Name, Primitive] = {}
+    for definition in [def_lists.take_while]:
+        if definition.name not in already_native and isinstance(definition.default_implementation, Given):
+            primitives[definition.name] = prims.default_fallback_primitive(definition)
+    return primitives
+
+
 def standard_library() -> dict[Name, Primitive]:
     """Get all standard library primitives."""
     primitives: dict[Name, Primitive] = {}
@@ -1352,4 +1371,5 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_strings_primitives())
     primitives.update(register_system_primitives())
     primitives.update(register_text_primitives())
+    primitives.update(register_default_fallback_primitives(primitives))
     return primitives

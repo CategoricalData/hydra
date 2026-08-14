@@ -4,7 +4,9 @@
             [hydra.typing :refer :all]
             [hydra.errors :refer :all]
             [hydra.packaging :refer :all]
-            [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]])
+            [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]]
+            [hydra.lib.defaults]
+            [hydra.reduction])
   (:import [hydra.core hydra_core_function_type hydra_core_type_scheme
                        hydra_core_application hydra_core_injection hydra_core_field
                        hydra_core_type_variable_constraints]
@@ -470,6 +472,37 @@
    (fn [cx v] (list :left (other-err "cannot decode functions to terms")))))
 
 ;; Primitive constructors
+
+(defn default-fallback-primitive
+  "Build a Primitive for a kernel primitive with no native Clojure implementation, but which
+   declares a portable, cross-compilable defaultImplementation term (see
+   hydra.lib.defaults/hydra_lib_defaults_default_implementations). Its implementation folds call
+   args into an Application chain over the term and evaluates via reduceTerm, rather than running
+   hand-written Clojure logic.
+
+   Note: the default term is already real and directly reducible (a `(list :lambda ...)` value),
+   not an encoded/reified term-as-data requiring a decode step — confirmed by comparing
+   defaults.clj's entries against encode/core.clj's real Lambda case (which produces
+   `(list :inject (->hydra_core_injection ...))`). Mirrors the Java/Python/Scala fallback
+   (#609 Stage 2/3). `variables`/`inputs`/`output` mirror prim1/prim2's build-type-scheme args
+   (TermCoder-shaped) — used only to build the PrimitiveDefinition's signature; the runtime
+   implementation ignores the coders entirely (no encode/decode round-trip through native types —
+   the default term already speaks in Term-space)."
+  ([pname variables inputs output] (default-fallback-primitive pname variables inputs output nil))
+  ([pname variables inputs output constraints]
+   (let [ts (build-type-scheme variables inputs output constraints)
+         sig (hydra_scoping_type_scheme_to_term_signature ts)
+         default-impl (get @(ns-resolve 'hydra.lib.defaults 'hydra_lib_defaults_default_implementations) pname)
+         _ (when (nil? default-impl)
+             (throw (ex-info (str "default-fallback-primitive: no defaultImplementation for " pname) {})))
+         definition (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :given default-impl))]
+     (->hydra_graph_primitive
+      definition
+      (fn [g] (fn [args]
+        (let [applied (reduce (fn [fn-term arg] (list :application (->hydra_core_application fn-term arg)))
+                               default-impl args)
+              reduce-fn @(ns-resolve 'hydra.reduction 'hydra_reduction_reduce_term)]
+          ((((reduce-fn prim-cx) g) true) applied))))))))
 
 (defn prim0
   "Create a 0-argument primitive function."

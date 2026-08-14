@@ -856,29 +856,46 @@
                       (list :either (list :right term-maybe))))))
               [] t t t t)}))
 
+;; Default-implementation fallbacks (#609 Stage 3): primitives with no native Clojure
+;; implementation, but which declare a portable defaultImplementation term. Spike: only
+;; lists.takeWhile is wired here, mirroring the Java/Python/Scala validation case. Once
+;; confirmed, the remaining 11 Group-A names are wired the same way.
+;; ============================================================
+
+(defn register-default-fallbacks [already-native]
+  (let [a (p/tc-variable "a")
+        candidates {(prim-name 'hydra.lib.lists/hydra_lib_lists_take_while)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.lib.lists/hydra_lib_lists_take_while)
+                            [] [(fun a (p/tc-boolean)) (p/tc-list a)] (p/tc-list a)))}]
+    (into {} (map (fn [[pname build-fn]] [pname (build-fn)])
+                  (remove (fn [[pname _]] (contains? already-native pname)) candidates)))))
+
 ;; Standard library: all primitives combined
 ;; ============================================================
 
 (defn standard-library
   "Returns a map from primitive name (string) to Primitive record."
   []
-  (merge
-   (register-chars)
-   (register-effects)
-   (register-eithers)
-   (register-equality)
-   (register-files)
-   (register-hashing)
-   (register-lists)
-   (register-literals)
-   (register-logic)
-   (register-maps)
-   (register-math)
-   (register-optionals)
-   (register-pairs)
-   (register-regex)
-   (register-sets)
-   (register-strings)
-   (register-system)
-   (register-text)
-   (register-annotations)))
+  (let [native
+        (merge
+         (register-chars)
+         (register-effects)
+         (register-eithers)
+         (register-equality)
+         (register-files)
+         (register-hashing)
+         (register-lists)
+         (register-literals)
+         (register-logic)
+         (register-maps)
+         (register-math)
+         (register-optionals)
+         (register-pairs)
+         (register-regex)
+         (register-sets)
+         (register-strings)
+         (register-system)
+         (register-text)
+         (register-annotations))]
+    (merge native (register-default-fallbacks (set (keys native))))))

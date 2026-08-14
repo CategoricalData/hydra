@@ -819,31 +819,49 @@
                                                 #f s s (tc-list s))))))
 
     ;; ============================================================================
+    ;; Default-implementation fallbacks (#609 Stage 4): primitives with no native Scheme
+    ;; implementation, but which declare a portable defaultImplementation term. NOT YET
+    ;; SLOT-VALIDATED (no dist/scheme build in this worktree) — mirrors the Java/Python/
+    ;; Scala/TS/Clojure/Common-Lisp/Emacs-Lisp validation case; only lists.takeWhile is wired
+    ;; here pending confirmation.
+    ;; ============================================================================
+
+    (define (register-default-fallbacks already-native)
+      (let ((a (tc-variable "a")))
+        (if (member (prim-name def:hydra_lib_lists_take_while) already-native)
+            '()
+            (list (cons (prim-name def:hydra_lib_lists_take_while)
+                        (default-fallback-primitive (prim-name def:hydra_lib_lists_take_while)
+                          #f (list (fun a (tc-boolean)) (tc-list a)) (tc-list a)))))))
+
+    ;; ============================================================================
     ;; Standard library: all primitives combined
     ;; ============================================================================
 
     (define (standard-library)
-      (append
-        (register-chars)
-        (register-effects)
-        (register-eithers)
-        (register-equality)
-        (register-files)
-        (register-functions)
-        (register-hashing)
-        (register-lists)
-        (register-literals)
-        (register-logic)
-        (register-maps)
-        (register-math)
-        (register-optionals)
-        (register-ordering)
-        (register-pairs)
-        (register-regex)
-        (register-sets)
-        (register-strings)
-        (register-system)
-        (register-text)))
+      (let ((native
+              (append
+                (register-chars)
+                (register-effects)
+                (register-eithers)
+                (register-equality)
+                (register-files)
+                (register-functions)
+                (register-hashing)
+                (register-lists)
+                (register-literals)
+                (register-logic)
+                (register-maps)
+                (register-math)
+                (register-optionals)
+                (register-ordering)
+                (register-pairs)
+                (register-regex)
+                (register-sets)
+                (register-strings)
+                (register-system)
+                (register-text))))
+        (append native (register-default-fallbacks (map car native)))))
 
 )
 )

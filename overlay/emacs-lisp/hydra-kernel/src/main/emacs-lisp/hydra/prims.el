@@ -380,6 +380,29 @@
 ;; Primitive constructors
 ;; ============================================================================
 
+(defun default-fallback-primitive (pname variables inputs output &optional constraints)
+  "Build a Primitive for a kernel primitive with no native Emacs Lisp implementation, but
+which declares a portable, cross-compilable defaultImplementation term (see
+hydra.lib.defaults/hydra_lib_defaults_default_implementations). Its implementation folds call
+args into an Application chain over the term and evaluates via reduceTerm, rather than running
+hand-written Lisp logic. Ported from Common Lisp's default-fallback-primitive (#609 Stage 4 —
+NOT YET SLOT-VALIDATED; the defaults symbol name below is inferred from the naming convention
+shared by Java/Python/Scala/TS/Clojure/Common-Lisp, not confirmed against a real
+dist/emacs-lisp build)."
+  (let* ((ts (build-type-scheme variables inputs output constraints))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts))
+         (default-impl (cdr (assoc pname hydra_lib_defaults_default_implementations #'equal)))
+         (definition (progn
+                       (when (null default-impl)
+                         (error "default-fallback-primitive: no defaultImplementation for %s" pname))
+                       (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :given default-impl)))))
+    (make-hydra_graph_primitive definition
+      (lambda (g)
+        (lambda (args)
+          (let ((applied (cl-reduce (lambda (fn-term arg) (list :application (make-hydra_core_application fn-term arg)))
+                                     args :initial-value default-impl)))
+            (funcall (funcall (funcall (funcall hydra_reduction_reduce_term hydra-prim-cx) g) t) applied)))))))
+
 (defun prim0 (pname value-fn variables output &optional constraints)
   (make-hydra_graph_primitive (build-prim-def pname variables nil output constraints)
     (lambda (_g) (lambda (_args)

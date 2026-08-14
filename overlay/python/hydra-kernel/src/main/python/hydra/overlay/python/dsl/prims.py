@@ -104,6 +104,33 @@ def type_vars_to_constraints(vars: list[TypeVar_]) -> list[tuple[str, list[Name]
     return [(tv.name, tv.classes) for tv in vars if tv.classes]
 
 
+def default_fallback_primitive(definition: PrimitiveDefinition) -> Primitive:
+    """Build a Primitive for a kernel primitive with no native Python implementation, but which
+    declares a portable, cross-compilable defaultImplementation term (see
+    hydra.lib.defaults.default_implementations()). Its implementation evaluates that term against
+    the call arguments via reduce_term, rather than running hand-written Python logic. Requires
+    definition.default_implementation to be Given (the caller is expected to check this before
+    constructing the fallback).
+
+    Note: default_implementation is already a real, directly reducible Term (e.g. TermLambda(...)),
+    not an encoded/reified term-as-data requiring a decode step — confirmed by reading the published
+    host's hydra.lib.lists.take_while().default_implementation. This differs from the Haskell kernel
+    source's Lib/Defaults.hs, which reifies each implementation via EncodeCore.term specifically
+    because a single TermMap can't hold heterogeneously-typed executable terms; the Python code
+    generator resolves that reification at generation time instead.
+    """
+    import hydra.reduction as reduction
+    default_impl = definition.default_implementation.value
+
+    def impl(g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
+        applied = default_impl
+        for arg in args:
+            applied = TermApplication(Application(applied, arg))
+        return reduction.reduce_term(PRIM_CX, g, True, applied)
+
+    return Primitive(definition=definition, implementation=impl)
+
+
 def default_primitive_definition(name: Name, typ, lazy_args: list[int] = []) -> PrimitiveDefinition:
     """Build a PrimitiveDefinition with default metadata (mirrors Haskell default). For #156.
 

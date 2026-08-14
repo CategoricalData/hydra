@@ -461,6 +461,33 @@
 ;; Primitive constructors
 ;; ============================================================================
 
+(defun default-fallback-primitive (pname variables inputs output &optional constraints)
+  "Build a Primitive for a kernel primitive with no native Common Lisp implementation, but which
+   declares a portable, cross-compilable defaultImplementation term (see
+   hydra.lib.defaults/hydra_lib_defaults_default_implementations). Its implementation folds call
+   args into an Application chain over the term and evaluates via reduceTerm, rather than running
+   hand-written Lisp logic. Direct translation of Clojure's default-fallback-primitive (#609 Stage
+   4 — NOT YET SLOT-VALIDATED; the defaults symbol name below is inferred from the naming
+   convention shared by Java/Python/Scala/TS/Clojure, not confirmed against a real dist/common-lisp
+   build).
+
+   Note: the default term is already real and directly reducible, not an encoded/reified
+   term-as-data requiring a decode step (mirrors the Java/Python/Scala/Clojure/TS fallback,
+   #609 Stage 2/3/4)."
+  (let* ((ts (build-type-scheme variables inputs output constraints))
+         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts))
+         (default-impl (cdr (assoc pname hydra_lib_defaults_default_implementations :test #'equal)))
+         (definition (progn
+                       (when (null default-impl)
+                         (error "default-fallback-primitive: no defaultImplementation for ~A" pname))
+                       (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :given default-impl)))))
+    (make-primitive definition
+      (lambda (g)
+        (lambda (args)
+          (let* ((applied (reduce (lambda (fn-term arg) (list :application (make-application fn-term arg)))
+                                   args :initial-value default-impl)))
+            (funcall (funcall (funcall (funcall hydra_reduction_reduce_term *prim-cx*) g) t) applied)))))))
+
 (defun prim0 (pname value-fn variables output &optional constraints)
   "Create a 0-argument primitive function."
   (make-primitive (build-prim-def pname variables nil output constraints)

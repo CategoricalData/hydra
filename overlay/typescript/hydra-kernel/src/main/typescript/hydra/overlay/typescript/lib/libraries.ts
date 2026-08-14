@@ -234,6 +234,53 @@ const prim = (qname: string, ts: TypeScheme, impl: Impl, lazyPositions?: readonl
   };
 };
 
+// A primitive with no native TypeScript implementation, but which declares a portable
+// defaultImplementation term (see `defaultImplementations` above). Its implementation folds call
+// args into an Application chain over the term and evaluates via reduceTerm, rather than running
+// hand-written TS logic.
+//
+// Note: defaultImpl is already a real, directly-reducible Term (a `{tag: "lambda", ...}` value),
+// not an encoded/reified term-as-data requiring a decode step — confirmed by comparing
+// defaults.ts's entries against encode/core.ts's real Lambda case (which produces
+// `{tag: "inject", ...}`). Mirrors the Java/Python fallback (#609 Stage 2/3).
+const defaultFallback = (qname: string, ts: TypeScheme): Primitive => {
+  const defaultImpl = defaultImplementationsByName.get(qname);
+  if (defaultImpl === undefined) {
+    throw new Error(`defaultFallback: no defaultImplementation for ${qname}`);
+  }
+  const sig = scoping.typeSchemeToTermSignature(ts as any) as any;
+  return {
+    definition: {
+      name: { value: qname } as Name,
+      metadata: { tag: "none" },
+      signature: sig,
+      isPure: true,
+      isTotal: true,
+      defaultImplementation: { tag: "given", value: defaultImpl },
+    },
+    implementation: (g, args) => {
+      let applied: Term = defaultImpl;
+      for (const arg of args) {
+        applied = { tag: "application", value: { function_: applied, argument: arg } } as never;
+      }
+      return reduceTerm(reduceCx, g, true, applied) as Either<HydraError, Term>;
+    },
+  };
+};
+
+// Primitives which have no native TypeScript implementation, but do declare a portable
+// defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring
+// the Java/Python validation case. Once confirmed, the remaining 11 Group-A names are wired the
+// same way.
+const defaultFallbackPrimitives = (alreadyNative: ReadonlySet<string>): readonly Primitive[] => {
+  const candidates: ReadonlyArray<readonly [string, TypeScheme]> = [
+    ["hydra.lib.lists.takeWhile", scheme(tyFnCurried(tyFn(tyVar("x"), tyBool), tyList(tyVar("x")), tyList(tyVar("x"))), ["x"])],
+  ];
+  return candidates
+    .filter(([qname]) => !alreadyNative.has(qname) && defaultImplementationsByName.has(qname))
+    .map(([qname, ts]) => defaultFallback(qname, ts));
+};
+
 // === Curried-arity bridges ===
 //
 // For most primitives the decode/call/encode boilerplate fits a small set
@@ -2339,26 +2386,30 @@ const eithersPrimitives = (): readonly Primitive[] => {
   ];
 };
 
-export const standardPrimitives = (): readonly Primitive[] => [
-  ...charsPrimitives(),
-  ...effectsPrimitives(),
-  ...eithersPrimitives(),
-  ...equalityPrimitives(),
-  ...filesPrimitives(),
-  ...hashingPrimitives(),
-  ...listsPrimitives(),
-  ...literalsPrimitives(),
-  ...logicPrimitives(),
-  ...mapsPrimitives(),
-  ...mathPrimitives(),
-  ...optionalsPrimitives(),
-  ...pairsPrimitivesList(),
-  ...regexPrimitives(),
-  ...setsPrimitives(),
-  ...stringsPrimitives(),
-  ...textPrimitives(),
-  ...systemPrimitives(),
-];
+export const standardPrimitives = (): readonly Primitive[] => {
+  const native = [
+    ...charsPrimitives(),
+    ...effectsPrimitives(),
+    ...eithersPrimitives(),
+    ...equalityPrimitives(),
+    ...filesPrimitives(),
+    ...hashingPrimitives(),
+    ...listsPrimitives(),
+    ...literalsPrimitives(),
+    ...logicPrimitives(),
+    ...mapsPrimitives(),
+    ...mathPrimitives(),
+    ...optionalsPrimitives(),
+    ...pairsPrimitivesList(),
+    ...regexPrimitives(),
+    ...setsPrimitives(),
+    ...stringsPrimitives(),
+    ...textPrimitives(),
+    ...systemPrimitives(),
+  ];
+  const nativeNames = new Set(native.map((p) => p.definition.name.value));
+  return [...native, ...defaultFallbackPrimitives(nativeNames)];
+};
 
 function pairsPrimitivesList(): readonly Primitive[] {
   return [

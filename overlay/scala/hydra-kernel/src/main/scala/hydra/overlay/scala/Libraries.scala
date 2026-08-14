@@ -368,6 +368,37 @@ object Libraries:
   private def mkPrimImpl(name: String, ts: TypeScheme, impl: Impl): Primitive =
     Primitive(mkPrimDef(name, ts), impl)
 
+  // A primitive with no native Scala implementation, but which declares a portable
+  // defaultImplementation term (see hydra.lib.defaults.defaultImplementations). Its implementation
+  // folds call args into an Application chain over the term and evaluates via reduceTerm, rather
+  // than running hand-written Scala logic.
+  //
+  // Note: the default term is already real and directly reducible (confirmed by reading
+  // defaults.scala's entries — hydra.core.Term.lambda(...), not an encoded/reified term-as-data
+  // requiring a decode step). Mirrors the Java/Python fallback (#609 Stage 2/3).
+  private def mkPrimDefaultFallback(name: String, ts: TypeScheme): Primitive =
+    val defaultImpl = hydra.lib.defaults.defaultImplementations.getOrElse(name,
+      throw new RuntimeException(s"mkPrimDefaultFallback: no defaultImplementation for $name"))
+    val impl: Impl = g => args =>
+      val applied = args.foldLeft(defaultImpl)((fn, arg) => Term.application(Application(fn, arg)))
+      reduce(g, applied)
+    Primitive(mkPrimDef(name, ts), impl)
+
+  // Primitives which have no native Scala implementation, but do declare a portable
+  // defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring
+  // the Java/Python validation case. Once confirmed, the remaining 11 Group-A names are wired the
+  // same way.
+  private def defaultFallbackPrimitives(alreadyNative: Set[String]): Map[String, Primitive] =
+    val x = tVar("x")
+    val candidates: Seq[(String, TypeScheme)] = Seq(
+      hydra.lib.lists.takeWhile.name -> tScheme(Seq("x"), tFun(tFun(x, tBool), tFun(tList(x), tList(x)))),
+    )
+    candidates
+      .filterNot((name, _) => alreadyNative.contains(name))
+      .filter((name, _) => hydra.lib.defaults.defaultImplementations.contains(name))
+      .map((name, ts) => name -> mkPrimDefaultFallback(name, ts))
+      .toMap
+
   // Effectful primitives (hydra.lib.{effects,files,system}.*) are impure and non-total: they perform
   // real I/O / observable side effects, so the test framework must NOT constant-fold them (doing so
   // breaks the effectful test cases: time/file/getEnvironment). The kernel PrimitiveDefinition carries
@@ -1535,23 +1566,25 @@ object Libraries:
 
   /** All standard primitives. */
   def standardPrimitives(): Map[String, Primitive] =
-    charsPrimitives() ++
-    effectsPrimitives() ++
-    equalityPrimitives() ++
-    eithersPrimitives() ++
-    filesPrimitives() ++
-    functionsPrimitives() ++
-    hashingPrimitives() ++
-    listsPrimitives() ++
-    literalsPrimitives() ++
-    logicPrimitives() ++
-    mapsPrimitives() ++
-    mathPrimitives() ++
-    optionalsPrimitives() ++
-    orderingPrimitives() ++
-    pairsPrimitives() ++
-    regexPrimitives() ++
-    setsPrimitives() ++
-    stringsPrimitives() ++
-    systemPrimitives() ++
-    textPrimitives()
+    val native =
+      charsPrimitives() ++
+      effectsPrimitives() ++
+      equalityPrimitives() ++
+      eithersPrimitives() ++
+      filesPrimitives() ++
+      functionsPrimitives() ++
+      hashingPrimitives() ++
+      listsPrimitives() ++
+      literalsPrimitives() ++
+      logicPrimitives() ++
+      mapsPrimitives() ++
+      mathPrimitives() ++
+      optionalsPrimitives() ++
+      orderingPrimitives() ++
+      pairsPrimitives() ++
+      regexPrimitives() ++
+      setsPrimitives() ++
+      stringsPrimitives() ++
+      systemPrimitives() ++
+      textPrimitives()
+    native ++ defaultFallbackPrimitives(native.keySet)
