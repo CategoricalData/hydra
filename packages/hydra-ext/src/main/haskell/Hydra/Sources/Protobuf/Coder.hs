@@ -250,12 +250,10 @@ encodeDefinition = def "encodeDefinition" $
   "cx" ~> "g" ~> "localNs" ~> "name" ~> "typ" ~> lets [
     "cx1">: esResetFieldIndex (var "cx"),
     "cx2">: Pairs.second (esNextFieldIndex (var "cx1")),
-    "wrapAsRecordType">: "t" ~>
-      inject _Type _Type_record (list [Core.fieldType (Core.name (string "value")) (var "t")]),
     "toEitherString">: "result" ~> var "result",
     "encode">: "cx0" ~> "options" ~> "t" ~>
       cases _Type (asTerm simplifyType @@ var "t")
-        (Just $ var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ var "t")) [
+        (Just $ var "encode" @@ var "cx0" @@ var "options" @@ (Rewriting.wrapTypeToRecord @@ var "t")) [
         _Type_record>>: "fts" ~>
           Eithers.map
             ("md" ~> inject P3._Definition P3._Definition_message (var "md"))
@@ -264,7 +262,7 @@ encodeDefinition = def "encodeDefinition" $
           (Eithers.map
             ("ed" ~> inject P3._Definition P3._Definition_enum (var "ed"))
             (var "toEitherString" @@ (asTerm encodeEnumDefinition @@ var "cx0" @@ var "g" @@ var "options" @@ var "name" @@ var "fts")))
-          (var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ (inject _Type _Type_union (var "fts"))))]] $
+          (var "encode" @@ var "cx0" @@ var "options" @@ (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_union (var "fts"))))]] $
     "options" <<~ (var "toEitherString" @@ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "typ")) $
     var "encode" @@ var "cx2" @@ var "options" @@ var "typ"
 

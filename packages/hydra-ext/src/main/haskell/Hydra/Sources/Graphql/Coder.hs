@@ -59,6 +59,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
@@ -95,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns, PrintCore.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns, PrintCore.ns, Rewriting.ns,
       moduleName GraphqlLanguage.module_,
       GraphqlSerde.ns] L.++ (moduleName GraphqlSyntax.module_:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions")}
@@ -234,22 +235,28 @@ encodeNamedType = define "encodeNamedType" $
             Core.fieldType (Core.name $ string "first") (project _PairType _PairType_first @@ var "pt"),
             Core.fieldType (Core.name $ string "second") (project _PairType _PairType_second @@ var "pt")]),
       _Type_list>>: lambda "lt_" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_list (var "lt_")),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_list (var "lt_"))),
       _Type_set>>: lambda "st" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_list (var "st")),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_list (var "st"))),
       _Type_map>>: lambda "mt" $
         encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
           (inject _Type _Type_record $ list [
             Core.fieldType (Core.name $ string "key") (Core.mapTypeKeys (var "mt")),
             Core.fieldType (Core.name $ string "value") (Core.mapTypeValues (var "mt"))]),
       _Type_literal>>: lambda "lt_" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_literal (var "lt_")),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_literal (var "lt_"))),
       _Type_variable>>: lambda "vn" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_variable (var "vn")),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_variable (var "vn"))),
       _Type_wrap>>: lambda "wt" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (var "wt"),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ var "wt"),
       _Type_unit>>: constant $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_literal (inject _LiteralType _LiteralType_boolean unit)),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (Rewriting.wrapTypeToRecord @@ (inject _Type _Type_literal (inject _LiteralType _LiteralType_boolean unit))),
       -- Forall: strip the quantifier and encode the body type
       _Type_forall>>: lambda "ft" $
         encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@ (Core.forallTypeBody (var "ft")),
@@ -424,10 +431,3 @@ sanitize :: TypedTermDefinition (String -> String)
 sanitize = define "sanitize" $
   doc "Sanitize a string for use as a GraphQL identifier" $
   lambda "s" $ Formatting.sanitizeWithUnderscores @@ GraphqlLanguage.graphqlReservedWords @@ var "s"
-
--- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TypedTerm Name -> TypedTerm InferenceContext -> TypedTerm Graph -> TypedTerm (M.Map ModuleName String) -> TypedTerm Type -> TypedTerm (Either Error G.TypeDefinition)
-wrapAsRecord name cx g prefixes innerTyp =
-  encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
-    (inject _Type _Type_record $ list [
-      Core.fieldType (Core.name $ string "value") innerTyp])
