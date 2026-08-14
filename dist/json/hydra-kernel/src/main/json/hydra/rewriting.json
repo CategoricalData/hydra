@@ -2,6 +2,7 @@
   "name": "hydra.rewriting",
   "metadata": {"description": "Core rewrite and fold combinators for terms and types", "comments": [], "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.constants"},
     {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -14156,4 +14157,87 @@
                     "name": "wrap",
                     "handler": {"lambda": {"parameter": "nt", "domain": {"variable": "hydra.core.Type"}, "body": {"list": [{"variable": "nt"}]}}}}]}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the children of a given type expression"}}}]}}}}}]}
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Find the children of a given type expression"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rewriting.wrapTermToRecord",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Term"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tname",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "lambda": {
+                    "parameter": "body",
+                    "domain": {"variable": "hydra.core.Term"},
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {"name": "typeName", "term": {"variable": "tname"}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"variable": "hydra.constants.fieldNameValue"}}}},
+                                            {"name": "term", "term": {"variable": "body"}}]}}]}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a wrapped (newtype) term to an equivalent single-field record term, for target languages without a newtype concept"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rewriting.wrapTypeToRecord",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.core.Type"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Type",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "list": [
+                          {
+                            "record": {
+                              "typeName": "hydra.core.FieldType",
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"variable": "hydra.constants.fieldNameValue"}}}},
+                                {"name": "type", "term": {"variable": "t"}}]}}]}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Convert a wrapped (newtype) type to an equivalent single-field record type, for target languages without a newtype concept"}}}]}}}}}]}

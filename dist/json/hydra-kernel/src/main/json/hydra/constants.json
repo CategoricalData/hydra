@@ -34,6 +34,19 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.constants.fieldNameValue",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "value"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The conventional field name used when normalizing a wrapped (newtype) value to a single-field record"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.constants.ignoredVariable",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
         "body": {

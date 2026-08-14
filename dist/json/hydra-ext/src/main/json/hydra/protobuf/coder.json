@@ -1102,28 +1102,6 @@
                                                 "type": {"variable": "hydra.protobuf.environment.EncoderState"}}}}},
                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.environment.EncoderState"}}},
                                       {
-                                        "name": "wrapAsRecordType",
-                                        "term": {
-                                          "lambda": {
-                                            "parameter": "t",
-                                            "domain": {"variable": "hydra.core.Type"},
-                                            "body": {
-                                              "inject": {
-                                                "typeName": "hydra.core.Type",
-                                                "field": {
-                                                  "name": "record",
-                                                  "term": {
-                                                    "list": [
-                                                      {
-                                                        "record": {
-                                                          "typeName": "hydra.core.FieldType",
-                                                          "fields": [
-                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                            {"name": "type", "term": {"variable": "t"}}]}}]}}}}}},
-                                        "typeScheme": {
-                                          "variables": [],
-                                          "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"variable": "hydra.core.Type"}}}}},
-                                      {
                                         "name": "toEitherString",
                                         "term": {
                                           "typeLambda": {
@@ -1155,7 +1133,7 @@
                                                                   "application": {
                                                                     "function": {"application": {"function": {"variable": "encode"}, "argument": {"variable": "cx0"}}},
                                                                     "argument": {"variable": "options"}}},
-                                                                "argument": {"application": {"function": {"variable": "wrapAsRecordType"}, "argument": {"variable": "t"}}}}},
+                                                                "argument": {"application": {"function": {"variable": "hydra.rewriting.wrapTypeToRecord"}, "argument": {"variable": "t"}}}}},
                                                             "cases": [
                                                               {
                                                                 "name": "record",
@@ -1265,7 +1243,7 @@
                                                                                 "argument": {"variable": "options"}}},
                                                                             "argument": {
                                                                               "application": {
-                                                                                "function": {"variable": "wrapAsRecordType"},
+                                                                                "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
                                                                                 "argument": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "union", "term": {"variable": "fts"}}}}}}}}}}}}}]}},
                                                         "argument": {"application": {"function": {"variable": "hydra.protobuf.coder.simplifyType"}, "argument": {"variable": "t"}}}}}}}}}}},
                                         "typeScheme": {

@@ -66,6 +66,29 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.dsl.constants.fieldNameValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.constants.fieldNameValue"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.constants.fieldNameValue"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.constants.ignoredVariable",
         "signature": {
           "typeParameters": [],

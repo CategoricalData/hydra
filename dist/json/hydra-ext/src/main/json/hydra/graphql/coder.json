@@ -13,6 +13,7 @@
     {"module": "hydra.annotations"},
     {"module": "hydra.serialization"},
     {"module": "hydra.print.core"},
+    {"module": "hydra.rewriting"},
     {"module": "hydra.graphql.language"},
     {"module": "hydra.graphql.serde"},
     {"module": "hydra.graphql.syntax"},
@@ -1094,20 +1095,9 @@
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
                                                         "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {
-                                                                          "name": "type",
-                                                                          "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "list", "term": {"variable": "lt_"}}}}}]}}]}}}}}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
+                                                            "argument": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "list", "term": {"variable": "lt_"}}}}}}}}}}},
                                               {
                                                 "name": "set",
                                                 "handler": {
@@ -1130,20 +1120,9 @@
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
                                                         "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {
-                                                                          "name": "type",
-                                                                          "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "list", "term": {"variable": "st"}}}}}]}}]}}}}}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
+                                                            "argument": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "list", "term": {"variable": "st"}}}}}}}}}}},
                                               {
                                                 "name": "map",
                                                 "handler": {
@@ -1212,20 +1191,9 @@
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
                                                         "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {
-                                                                          "name": "type",
-                                                                          "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "literal", "term": {"variable": "lt_"}}}}}]}}]}}}}}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
+                                                            "argument": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "literal", "term": {"variable": "lt_"}}}}}}}}}}},
                                               {
                                                 "name": "variable",
                                                 "handler": {
@@ -1248,20 +1216,9 @@
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
                                                         "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {
-                                                                          "name": "type",
-                                                                          "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "variable", "term": {"variable": "vn"}}}}}]}}]}}}}}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
+                                                            "argument": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "variable", "term": {"variable": "vn"}}}}}}}}}}},
                                               {
                                                 "name": "wrap",
                                                 "handler": {
@@ -1283,19 +1240,7 @@
                                                                     "argument": {"variable": "g"}}},
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
-                                                        "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {"name": "type", "term": {"variable": "wt"}}]}}]}}}}}}}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.rewriting.wrapTypeToRecord"}, "argument": {"variable": "wt"}}}}}}}},
                                               {
                                                 "name": "unit",
                                                 "handler": {
@@ -1318,25 +1263,14 @@
                                                                 "argument": {"variable": "prefixes"}}},
                                                             "argument": {"variable": "name"}}},
                                                         "argument": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "record",
-                                                              "term": {
-                                                                "list": [
-                                                                  {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.FieldType",
-                                                                      "fields": [
-                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "value"}}}}},
-                                                                        {
-                                                                          "name": "type",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "typeName": "hydra.core.Type",
-                                                                              "field": {
-                                                                                "name": "literal",
-                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}}]}}]}}}}}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rewriting.wrapTypeToRecord"},
+                                                            "argument": {
+                                                              "inject": {
+                                                                "typeName": "hydra.core.Type",
+                                                                "field": {
+                                                                  "name": "literal",
+                                                                  "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}}}}}}}},
                                               {
                                                 "name": "forall",
                                                 "handler": {
