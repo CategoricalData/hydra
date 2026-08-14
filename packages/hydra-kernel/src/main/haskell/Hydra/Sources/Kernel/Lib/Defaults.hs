@@ -20,6 +20,7 @@ import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMet
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Lib.Eithers as Eithers
 import qualified Hydra.Sources.Kernel.Lib.Equality as Equality
+import qualified Hydra.Sources.Kernel.Lib.Functions as Functions
 import qualified Hydra.Sources.Kernel.Lib.Lists as Lists
 import qualified Hydra.Sources.Kernel.Lib.Logic as Logic
 import qualified Hydra.Sources.Kernel.Lib.Maps as Maps
@@ -41,6 +42,7 @@ defaultsSourceModules :: [Module]
 defaultsSourceModules = [
   Eithers.module_,
   Equality.module_,
+  Functions.module_,
   Lists.module_,
   Logic.module_,
   Maps.module_,
@@ -53,7 +55,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm defaultImplementationsDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.lib.eithers", ModuleName "hydra.lib.equality", ModuleName "hydra.lib.lists", ModuleName "hydra.lib.logic", ModuleName "hydra.lib.maps", ModuleName "hydra.lib.math", ModuleName "hydra.lib.optionals", ModuleName "hydra.lib.pairs", ModuleName "hydra.lib.sets"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.lib.eithers", ModuleName "hydra.lib.equality", ModuleName "hydra.lib.functions", ModuleName "hydra.lib.lists", ModuleName "hydra.lib.logic", ModuleName "hydra.lib.maps", ModuleName "hydra.lib.math", ModuleName "hydra.lib.optionals", ModuleName "hydra.lib.pairs", ModuleName "hydra.lib.sets"],
             moduleMetadata = descriptionMetadata (Just ("A module which provides a single map from primitive names to their"
       ++ " default, cross-compilable reference implementations, for primitives which declare one."))}
 
