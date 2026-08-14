@@ -73,6 +73,7 @@ module_ = Module {
      toDefinition fail,
      toDefinition lazy,
      toDefinition many,
+     toDefinition manyLoop,
      toDefinition map,
      toDefinition optional,
      toDefinition pure,
@@ -195,7 +196,22 @@ many :: TypedTermDefinition (Parser a -> Parser [a])
 many = define "many" $
   doc "Parse zero or more occurrences of the given parser" $
   "p" ~>
-    alt @@ (some @@ var "p") @@ (pure @@ list ([] :: [TypedTerm a]))
+  "parse" <~ ("input" ~> manyLoop @@ var "p" @@ var "input" @@ list ([] :: [TypedTerm a])) $
+  Parsing.parser (var "parse")
+
+-- | Tail-recursive accumulation loop for 'many'. Repeatedly applies p to the input,
+--   consuming one element per self-call in constant stack space, until p fails
+--   without consuming input.
+manyLoop :: TypedTermDefinition (Parser a -> [Int] -> [a] -> ParseResult [a])
+manyLoop = define "manyLoop" $
+  doc "Repeatedly apply a parser, accumulating results, until it fails" $
+  "p" ~> "input" ~> "acc" ~>
+  cases _ParseResult (unwrap _Parser @@ (var "p") @@ (var "input")) Nothing [
+    _ParseResult_success>>: "s" ~>
+      manyLoop @@ (var "p") @@ (Parsing.parseSuccessRemainder $ var "s") @@
+        (Lists.cons (Parsing.parseSuccessValue $ var "s") (var "acc")),
+    _ParseResult_failure>>: constant $
+      Parsing.parseResultSuccess (Parsing.parseSuccess (Lists.reverse $ var "acc") (var "input"))]
 
 -- | Map a function over the result of a parser
 map :: TypedTermDefinition ((a -> b) -> Parser a -> Parser b)
