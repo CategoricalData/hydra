@@ -58,6 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
@@ -95,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, Constants.ns, ModuleName "hydra.decode.core", ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, Constants.ns, ModuleName "hydra.decode.core", ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns, Rewriting.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions")}
   where
     definitions = [
@@ -316,18 +317,9 @@ encodeTerm = define "encodeTerm" $
             @@ var "cx"
             @@ (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
       _Term_wrap>>: lambda "wt" $
-        Eithers.map
-          ("__dr" ~> lets [
-            "descs">: Pairs.first (var "__dr"),
-            "cx1">: Pairs.second (var "__dr")] $
-            pair
-              (Optionals.withDefault (var "descs") (Optionals.map
-                (lambda "p" $ Lists.cons
-                  (withType @@ (Core.wrappedTermTypeName (var "wt")) @@ Pairs.first (var "p"))
-                  (Pairs.second (var "p")))
-                (Lists.uncons (var "descs"))))
-              (var "cx1"))
-          (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
+        encodeTerm @@ var "subject" @@
+          (Rewriting.wrapTermToRecord @@ (Core.wrappedTermTypeName (var "wt")) @@ (Core.wrappedTermBody (var "wt"))) @@
+          var "cx" @@ var "g",
       _Term_optional>>: lambda "mterm" $
         Optionals.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
       _Term_unit>>: constant $ right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx")),
@@ -381,7 +373,8 @@ encodeType = define "encodeType" $
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),
       _Type_map>>: lambda "_" $ var "any",
       _Type_pair>>: lambda "_" $ var "any",
-      _Type_wrap>>: lambda "_" $ var "any",
+      _Type_wrap>>: lambda "wt" $
+        encodeType @@ var "tname" @@ (Rewriting.wrapTypeToRecord @@ var "wt") @@ var "cx",
       _Type_record>>: "fts" ~>
         Eithers.map
           ("__props" ~> common @@ list [
