@@ -6478,7 +6478,12 @@ public class Coder {
                                                                                                                     var("name"))))),
                                                                                                     field(
                                                                                                         "isTCO",
-                                                                                                        bool(false)),
+                                                                                                        Logic.and(
+                                                                                                            Logic.not(
+                                                                                                                Lists.null_(var("params"))),
+                                                                                                            hydra.dsl.Analysis.isSelfTailRecursive(
+                                                                                                                var("name"),
+                                                                                                                var("body")))),
                                                                                                     Eithers.bind(
                                                                                                         Logic.ifElse(
                                                                                                             var("isTCO"),
@@ -6548,6 +6553,7 @@ public class Coder {
                                                                                                                         var("env2WithTypeParams"),
                                                                                                                         var("name"),
                                                                                                                         var("params"),
+                                                                                                                        var("tparams"),
                                                                                                                         var("tcoVarRenames"),
                                                                                                                         int32(0),
                                                                                                                         var("tcoBody"),
@@ -8099,7 +8105,7 @@ public class Coder {
     public static final Def encodeTermTCO = def("encodeTermTCO")
         .to(() ->
                 lambda(
-                params("env0", "funcName", "paramNames", "tcoVarRenames", "tcoDepth", "term", "cx", "g"),
+                params("env0", "funcName", "paramNames", "tparams", "tcoVarRenames", "tcoDepth", "term", "cx", "g"),
                 let(
                     binds(    field("aliases0",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env0")),
@@ -8255,16 +8261,16 @@ public class Coder {
                                                             proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                                         field("cases_",
                                                             proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
-                                                        Eithers.bind(
-                                                            apply(
-                                                                ref(Coder.domTypeArgs),
-                                                                var("aliases"),
-                                                                hydra.dsl.Resolution.nominalApplication(
-                                                                    var("tname"),
-                                                                    list()),
-                                                                var("cx"),
-                                                                var("g")),
-                                                            lambda("domArgs",
+                                                        field("domArgs",
+                                                            Lists.map(
+                                                                lambda("tp",
+                                                                    apply(
+                                                                        ref(Utils.typeParameterToTypeArgument),
+                                                                        apply(
+                                                                            ref(Utils.javaTypeParameter),
+                                                                            hydra.dsl.Formatting.capitalize(
+                                                                                apply(unwrap(Name.TYPE_), var("tp")))))),
+                                                                var("tparams"))),
                                                                 Eithers.bind(
                                                                     apply(
                                                                         ref(Coder.encodeTerm),
@@ -8315,6 +8321,19 @@ public class Coder {
                                                                                                     var("aliases"),
                                                                                                     bool(true),
                                                                                                     var("domArgs"),
+                                                                                                    var("tname"),
+                                                                                                    just(
+                                                                                                        hydra.dsl.Formatting.capitalize(
+                                                                                                            apply(
+                                                                                                                unwrap(Name.TYPE_),
+                                                                                                                var("fieldName")))))),
+                                                                                            field(
+                                                                                                "variantRawType",
+                                                                                                apply(
+                                                                                                    ref(Utils.nameToJavaReferenceType),
+                                                                                                    var("aliases"),
+                                                                                                    bool(true),
+                                                                                                    list(),
                                                                                                     var("tname"),
                                                                                                     just(
                                                                                                         hydra.dsl.Formatting.capitalize(
@@ -8389,6 +8408,7 @@ public class Coder {
                                                                                                                                 var("env3"),
                                                                                                                                 var("funcName"),
                                                                                                                                 var("paramNames"),
+                                                                                                                                var("tparams"),
                                                                                                                                 var("tcoVarRenames"),
                                                                                                                                 Math_.add(
                                                                                                                                     var("tcoDepth"),
@@ -8468,7 +8488,7 @@ public class Coder {
                                                                                                                                             apply(
                                                                                                                                                 ref(Utils.javaExpressionToJavaUnaryExpression),
                                                                                                                                                 var("jArg"))),
-                                                                                                                                        var("variantRefType"))),
+                                                                                                                                        var("variantRawType"))),
                                                                                                                                 field(
                                                                                                                                     "condExpr",
                                                                                                                                     apply(
@@ -8516,9 +8536,16 @@ public class Coder {
                                                                                                         BlockStatement.TYPE_,
                                                                                                         BlockStatement.STATEMENT,
                                                                                                         apply(
-                                                                                                            ref(Utils.javaReturnStatement),
-                                                                                                            just(
-                                                                                                                var("jArg")))))),
+                                                                                                            ref(Utils.javaThrowIllegalStateException),
+                                                                                                            list(
+                                                                                                                apply(
+                                                                                                                    ref(Utils.javaAdditiveExpressionToJavaExpression),
+                                                                                                                    apply(
+                                                                                                                        ref(Utils.addExpressions),
+                                                                                                                        list(
+                                                                                                                            apply(
+                                                                                                                                ref(Utils.javaStringMultiplicativeExpression),
+                                                                                                                                string("Non-exhaustive patterns when matching")))))))))),
                                                                                             lambda(
                                                                                                 "d",
                                                                                                 Eithers.bind(
@@ -8547,7 +8574,7 @@ public class Coder {
                                                                                                         list(
                                                                                                             var("matchDecl")),
                                                                                                         var("ifBlocks"),
-                                                                                                        var("defaultStmt")))))))))))))))))),
+                                                                                                        var("defaultStmt")))))))))))))))),
                                     Eithers.bind(
                                         apply(
                                             ref(Coder.encodeTerm),
@@ -8590,6 +8617,7 @@ public class Coder {
                                                             var("envAfterLet"),
                                                             var("funcName"),
                                                             var("paramNames"),
+                                                            var("tparams"),
                                                             var("tcoVarRenames"),
                                                             var("tcoDepth"),
                                                             var("letBody"),
