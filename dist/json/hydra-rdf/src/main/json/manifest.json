@@ -4,6 +4,7 @@
   "mainModules": [
     "hydra.owl.syntax",
     "hydra.rdf.serde",
+    "hydra.rdf.shaclRdf",
     "hydra.rdf.syntax",
     "hydra.rdf.utils",
     "hydra.shacl.coder",
