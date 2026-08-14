@@ -115,16 +115,15 @@ The demo generates three intentionally invalid RDF instances:
 ## Translingual support
 
 The demo currently runs in Haskell only. The SHACL coder (`encodeType`, `encodeTerm`), the RDF
-serde (`rdfGraphToNtriples`), and the SHACL/RDF model types are all generated into Java and Python,
-so Java and Python drivers are feasible. To make the demo fully translingual:
+serde (`rdfGraphToNtriples`), the SHACL/RDF model types, and the shapes-to-RDF-triples serializer
+(`shapesGraphToTriples`/`shapesGraphToNtriples`, promoted from hand-written Haskell to a Hydra DSL
+module) are all generated into Java and Python, so Java and Python drivers are feasible. To make the
+demo fully translingual:
 
 1. **Regenerate Java and Python** from the updated SHACL coder source so that the `TypeVariable`
    support and `withType` fix propagate to those languages.
 2. **Write Java and Python drivers** following the same pattern as the Haskell driver: load
    modules from JSON, call the coder, serialize to N-Triples.
-3. **Port or promote `ShaclRdf`** (the shapes-to-RDF-triples serializer). This is currently
-   hand-written Haskell. It could be promoted to a Hydra DSL module so it gets generated
-   into all target languages automatically, or ported manually.
 
 ## Directory structure
 
@@ -136,13 +135,16 @@ demos/
   src/main/
     haskell/Hydra/Demos/Shacl/
       Demo.hs                                   # Haskell driver
-      ShaclRdf.hs                               # ShapesGraph -> RDF triples serializer
 packages/hydra-rdf/
   src/main/
     haskell/Hydra/Sources/Shacl/
       Coder.hs                                  # SHACL coder (DSL source)
+    haskell/Hydra/Sources/Rdf/
+      ShaclRdf.hs                               # ShapesGraph -> RDF triples serializer (DSL source)
 dist/haskell/hydra-rdf/
   src/main/
     haskell/Hydra/Shacl/
       Coder.hs                                  # SHACL coder (generated)
+    haskell/Hydra/Rdf/
+      ShaclRdf.hs                               # ShapesGraph -> RDF triples serializer (generated)
 ```

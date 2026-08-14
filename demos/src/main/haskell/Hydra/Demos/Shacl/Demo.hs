@@ -25,7 +25,7 @@ import qualified Hydra.Encode.Packaging as EncodePackaging
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Lexical as Lexical
 
-import Hydra.Demos.Shacl.ShaclRdf (shapesGraphToTriples)
+import Hydra.Rdf.ShaclRdf (shapesGraphToTriples)
 
 import qualified Data.Set as S
 import Control.Exception (catch, SomeException, evaluate)
