@@ -14,6 +14,7 @@ import Hydra.Kernel
 
 import qualified Hydra.Sources.Owl.Syntax as OwlSyntax
 import qualified Hydra.Sources.Rdf.Serde as RdfSerde
+import qualified Hydra.Sources.Rdf.ShaclRdf as RdfShaclRdf
 import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Sources.Rdf.Utils as RdfUtils
 import qualified Hydra.Sources.Shacl.Coder as ShaclCoder
@@ -26,6 +27,7 @@ mainModules :: [Module]
 mainModules = [
   OwlSyntax.module_,
   RdfSerde.module_,
+  RdfShaclRdf.module_,
   RdfSyntax.module_,
   RdfUtils.module_,
   ShaclCoder.module_,
