@@ -333,16 +333,44 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
   subgroup "Math primitive errors" [
     expectFailure 1 []
       (primitive DefMath.add @@ string "not a number" @@ int32 42),
-    -- add/sub/mul are now constraint-polymorphic (numeric x => x -> x -> x), so two boolean
-    -- operands would only be rejected by instance enforcement, which does not yet exist (see the
-    -- #566 enforcement gap). This case instead exercises a mismatch that fails via unification
-    -- regardless of the numeric constraint: the two operands have different types.
+    -- Now that constraint discharge exists (#317/#648), this exercises the REAL numeric
+    -- constraint violation (boolean is not a numeric instance) rather than the same-type
+    -- mismatch workaround this case used before entailment landed.
     expectFailure 2 []
-      (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
+      (primitive DefMath.add @@ true @@ false),
     expectFailure 3 []
       (primitive DefMath.div @@ list [int32 42] @@ int32 2),
     expectFailure 4 []
-      (primitive DefMath.mod @@ int32 42 @@ string "not a number")]]
+      (primitive DefMath.mod @@ int32 42 @@ string "not a number")],
+
+  -- #317/#648 constraint-discharge coverage proof: divide-on-int (the exact #648 case) tested
+  -- through three DIFFERENT inference sub-rules that each construct their InferenceResult
+  -- directly rather than via yieldChecked*/yieldWithConstraints (Inference.hs §3a coverage
+  -- analysis) — proving the discharge check at the two top-level entry points is not
+  -- accidentally narrow to whichever sub-rule a single test case happens to exercise.
+  subgroup "Constraint discharge coverage (#317/#648)" [
+    -- Bare application: inferTypeOfApplication (Inference.hs, direct InferenceResult construction).
+    expectFailure 1 []
+      (primitive DefMath.divide @@ int32 6 @@ int32 3),
+    -- Let-bound: inferTypeOfLet's mutual-recursion binding pipeline (Inference.hs) — the exact
+    -- bypass that would have silently passed under the original (pre-coverage-gate) design,
+    -- which hooked only yieldChecked*/yieldWithConstraints.
+    expectFailure 2 []
+      (lets ["x">: primitive DefMath.divide @@ int32 6 @@ int32 3] $ var "x"),
+    -- Explicit type application: inferTypeOfTypeApplication (Inference.hs), a distinct
+    -- direct-construction site from both of the above.
+    expectFailure 3 []
+      (tyapp (primitive DefMath.divide) T.int32 @@ int32 6 @@ int32 3),
+    -- Positive control: the correct usage must still type-check (no over-reject).
+    expectMono 4 []
+      (primitive DefMath.divide @@ float64 6.0 @@ float64 3.0)
+      T.float64,
+    -- Positive control: a let-bound correct usage must also still type-check, confirming the
+    -- discharge check's "resolved but violating" condition doesn't also catch "resolved and
+    -- satisfying".
+    expectMono 5 []
+      (lets ["x">: primitive DefMath.divide @@ float64 6.0 @@ float64 3.0] $ var "x")
+      T.float64]]
 
 recursiveTypeTests :: TypedTermDefinition TestGroup
 recursiveTypeTests = define "recursiveTypeTests" $
@@ -418,13 +446,11 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
       (primitive DefMath.sub @@ string "not a number" @@ int32 42),
     expectFailure 3 []
       (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
-    -- Note: div's operands are the SAME type (Bool = Bool), so this is a genuine type
-    -- mismatch (Bool vs int32), not a constraint violation (div is now integral-constrained,
-    -- and inference does not verify the 'integral' constraint against a concrete type — a
-    -- shared, deliberately-deferred gap; see #317 design doc §3.5). A same-type-but-wrong
-    -- example (e.g. Bool @@ Bool) would type-check under the current constraint model.
+    -- Now that constraint discharge exists (#317/#648), this exercises the REAL integral
+    -- constraint violation (boolean is not an integral instance) via a same-type application,
+    -- rather than the cross-type-mismatch workaround this case used before entailment landed.
     expectFailure 4 []
-      (primitive DefMath.div @@ true @@ int32 42)]]
+      (primitive DefMath.div @@ true @@ false)]]
 
 undefinedVariableTests :: TypedTermDefinition TestGroup
 undefinedVariableTests = define "undefinedVariableTests" $
