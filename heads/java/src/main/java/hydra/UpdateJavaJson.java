@@ -22,8 +22,9 @@ import java.util.Map;
  * <p>The driver:</p>
  * <ol>
  *   <li>Loads the kernel universe from {@code dist/json/hydra-kernel/}.</li>
- *   <li>Loads the Java DSL source modules' {@code module_} static fields via
- *       reflection.</li>
+ *   <li>Loads the Java/JVM DSL source modules from the canonical package
+ *       manifests ({@code hydra.sources.jvm.Manifest.mainModules} then
+ *       {@code hydra.sources.java.Manifest.mainModules}).</li>
  *   <li>Runs {@link Codegen#inferModulesGiven} over (universe + sources).</li>
  *   <li>Builds a schema_map from the inferred graph.</li>
  *   <li>Encodes each module to JSON via {@link Codegen#moduleToJson}.</li>
@@ -39,29 +40,6 @@ import java.util.Map;
  * </pre>
  */
 public class UpdateJavaJson {
-
-    /** Static-field name on each source class that returns the source module. */
-    private static final String MODULE_FIELD = "module_";
-
-    /**
-     * Java/JVM DSL source modules in dependency order: hydra-jvm first (no deps
-     * on hydra-java), then hydra-java (depends on hydra-jvm). Fully-qualified class
-     * names exposing a static {@code module_} field of type {@link Module}.
-     */
-    private static final List<String> SOURCE_CLASS_NAMES = java.util.Arrays.asList(
-        // hydra-jvm (must precede hydra-java in the universe)
-        "hydra.sources.jvm.Serde",
-        // hydra-java
-        "hydra.sources.java.Coder",
-        "hydra.sources.java.Environment",
-        "hydra.sources.java.Gradle",
-        "hydra.sources.java.Language",
-        "hydra.sources.java.Names",
-        "hydra.sources.java.Serde",
-        "hydra.sources.java.Syntax",
-        "hydra.sources.java.Testing",
-        "hydra.sources.java.Utils"
-    );
 
     public static void main(String[] args) throws Exception {
         String hydraRoot = null;
@@ -128,27 +106,20 @@ public class UpdateJavaJson {
         System.err.println("  loaded " + universe.size() + " kernel modules ("
             + String.format("%.1f", tUniverse) + "s)");
 
-        // 2. Discover and load Java DSL source modules.
+        // 2. Load the Java/JVM DSL source modules from the canonical package
+        // manifests (#559 Step B): hydra-jvm's manifest first (no deps on
+        // hydra-java), then hydra-java's. Previously this driver hand-coded the
+        // source-class list and loaded each module via reflection; those lists
+        // duplicated the authoritative Manifest.mainModules declarations and
+        // drifted whenever a package's source set changed. Consuming the
+        // manifests directly removes the duplicate + the reflection.
         t0 = System.nanoTime();
         System.err.println("Loading Java DSL source modules ...");
         List<Module> sources = new ArrayList<>();
-        for (String className : SOURCE_CLASS_NAMES) {
-            try {
-                Class<?> cls = Class.forName(className);
-                Object val = cls.getDeclaredField(MODULE_FIELD).get(null);
-                if (!(val instanceof Module)) {
-                    System.err.println("  WARNING: " + className + "." + MODULE_FIELD
-                        + " is " + val.getClass().getName() + ", expected Module; skipping");
-                    continue;
-                }
-                Module m = (Module) val;
-                sources.add(m);
-                int nDefs = m.definitions.size();
-                System.err.println("    " + m.name.value + ": " + nDefs + " definitions");
-            } catch (ClassNotFoundException e) {
-                System.err.println("  MISSING: " + className
-                    + " (skipping; expected when port is incomplete)");
-            }
+        sources.addAll(hydra.sources.jvm.Manifest.mainModules);
+        sources.addAll(hydra.sources.java.Manifest.mainModules);
+        for (Module m : sources) {
+            System.err.println("    " + m.name.value + ": " + m.definitions.size() + " definitions");
         }
         double tImport = (System.nanoTime() - t0) / 1e9;
         if (sources.isEmpty()) {
