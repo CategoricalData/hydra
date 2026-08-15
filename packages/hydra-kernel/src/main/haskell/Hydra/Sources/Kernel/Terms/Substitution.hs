@@ -128,10 +128,15 @@ singletonTypeSubst = define "singletonTypeSubst" $
 
 -- | Apply a type substitution to a map of class constraints.
 -- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
--- When a type variable is mapped to a complex type, the constraint is propagated to all free variables in that type.
+-- When a type variable is mapped to a type with free variables, the constraint is propagated to those free
+-- variables. When a type variable is mapped to a concrete type with NO free variables (e.g. a literal type
+-- like int32), the constraint is retained under the ORIGINAL variable name rather than dropped: this is the
+-- point at which entailment becomes checkable (see Classes.classIsSatisfiedByType and
+-- Inference.dischargeClassConstraints), and a constrained variable resolving to a concrete type must remain
+-- visible to that check, not silently vanish for lack of a free variable to carry it forward.
 substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
 substInClassConstraints = define "substInClassConstraints" $
-  doc "Apply a type substitution to class constraints, propagating to free variables" $
+  doc "Apply a type substitution to class constraints, propagating to free variables or retaining on concrete resolution" $
   "subst" ~> "constraints" ~>
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   -- Helper to insert a constraint, merging with existing if present
@@ -142,7 +147,8 @@ substInClassConstraints = define "substInClassConstraints" $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution
   -- 2. If not found, keep (varName, metadata) in result
-  -- 3. If found, propagate constraint to all free variables in the target type
+  -- 3. If found and the target type has free variables, propagate constraint to those free variables
+  -- 4. If found and the target type is concrete (no free variables), retain under the original varName
   Lists.foldl
     ("acc" ~> "pair" ~>
       "varName" <~ Pairs.first (var "pair") $
@@ -151,13 +157,16 @@ substInClassConstraints = define "substInClassConstraints" $
         (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
         -- Not in substitution: keep original
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
-        -- In substitution: propagate constraint to all free variables in the target type
+        -- In substitution: propagate constraint to all free variables in the target type,
+        -- or retain under the original name if the target type is concrete
         ("targetType" ~>
           "freeVars" <~ Sets.toList (Variables.freeVariablesInType @@ var "targetType") $
-          Lists.foldl
-            ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
-            (var "acc")
-            (var "freeVars")))
+          Logic.ifElse (Lists.null (var "freeVars"))
+            (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
+            (Lists.foldl
+              ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
+              (var "acc")
+              (var "freeVars"))))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 

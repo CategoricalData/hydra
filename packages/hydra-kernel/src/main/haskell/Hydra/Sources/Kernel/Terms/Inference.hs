@@ -6,6 +6,7 @@ module Hydra.Sources.Kernel.Terms.Inference where
 import Hydra.Kernel hiding (
   atOrFail,
   bindConstraints, bindUnboundTypeVariables, buildTypeApplicationTerm,
+  dischargeClassConstraints,
   extendContext, finalizeInferredTerm,
   forInferredTerm, freeVariablesInContext, freshVariableType,
   generalize, headOrFail, inferGraphTypes, inferInGraphContext, inferMany,
@@ -75,6 +76,7 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Dsl.Error.Core       as ErrorsCore
 import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Checking     as Checking
+import qualified Hydra.Sources.Kernel.Terms.Classes      as Classes
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
@@ -98,7 +100,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, Classes.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, Scoping.ns, PrintCore.ns, PrintError.ns, PrintTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just $ "Type inference for Hydra: Hindley-Milner with elaboration to System F."
@@ -111,6 +113,7 @@ module_ = Module {
       toDefinition bindConstraints,
       toDefinition bindUnboundTypeVariables,
       toDefinition buildTypeApplicationTerm,
+      toDefinition dischargeClassConstraints,
       toDefinition extendContext,
       toDefinition finalizeInferredTerm,
       toDefinition forInferredTerm,
@@ -269,6 +272,48 @@ extendContext = define "extendContext" $
     (Maps.fromList $ var "pairs")
     (Graph.graphBoundTypes $ var "cx")
 
+-- | Discharge accumulated class constraints against a final type substitution: for every type
+-- variable that was constrained during inference AND resolved to a concrete type by the
+-- substitution, check that the resolved type is an instance of every class the variable was
+-- constrained to. This is the entailment step named in the #317/#648 design (Stage C
+-- enforcement): constraints are collected throughout inference (Graph.classConstraints,
+-- generalize, mergeClassConstraints) but nothing previously checked them against the concrete
+-- types variables actually resolved to, so e.g. divide's fractional constraint type-checked
+-- but never rejected an int32 argument.
+--
+-- Called once at each of the two genuine top-level entry points into inference
+-- (inferGraphTypes, inferTypeOf) rather than inside any individual inference sub-rule: most
+-- sub-rules (application, let, literal, type application, ...) construct their InferenceResult
+-- directly rather than through yieldChecked/yieldWithConstraints, so a per-rule hook would miss
+-- most of inference. Every sub-rule's constraints and substitution flow through the same
+-- InferenceResult record on the way to one of these two entry points, so checking there is
+-- complete: there is no third path into a fully-inferred term.
+dischargeClassConstraints :: TypedTermDefinition (InferenceContext -> TypeSubst -> M.Map Name TypeVariableConstraints -> Prelude.Either Error ())
+dischargeClassConstraints = define "dischargeClassConstraints" $
+  doc "Check that every constrained type variable's final resolved type is an instance of each class it was constrained to." $
+  "fcx" ~> "subst" ~> "constraints" ~>
+  "substMap" <~ Typing.unTypeSubst (var "subst") $
+  "checkOne" <~ ("pair" ~>
+    "varName" <~ Pairs.first (var "pair") $
+    "varConstraints" <~ Pairs.second (var "pair") $
+    Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
+      (right unit)
+      ("resolvedType" ~>
+        "checkClass" <~ ("classConstraint" ~>
+          "className" <~ cases _TypeClassConstraint (var "classConstraint") Nothing [
+            _TypeClassConstraint_simple>>: "n" ~> var "n"] $
+          Logic.ifElse (Classes.classIsSatisfiedByType @@ var "className" @@ var "resolvedType")
+            (right unit)
+            (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
+              (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx")))
+              (Strings.concat $ list [
+                (string "Type "), PrintCore.type_ @@ var "resolvedType",
+                (string " does not satisfy constraint "), Core.unName (var "className")])))) $
+        Eithers.bind (Eithers.mapList (var "checkClass") (Core.typeVariableConstraintsClasses $ var "varConstraints"))
+          ("_" ~> right unit))) $
+  Eithers.bind (Eithers.mapList (var "checkOne") (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))))
+    ("_" ~> right unit)
+
 finalizeInferredTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error Term)
 finalizeInferredTerm = define "finalizeInferredTerm" $
   doc "Finalize an inferred term by checking for unbound type variables, then normalizing type variables" $
@@ -353,6 +398,7 @@ inferGraphTypes = define "inferGraphTypes" $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "g0" @@ (Core.termLet $ var "let0") @@ (string "graph term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
   "term" <~ Typing.inferenceResultTerm (var "result") $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "g0" @@ var "term" $
   cases _Term (var "finalized")
     Nothing [
@@ -409,6 +455,7 @@ inferTypeOf = define "inferTypeOf" $
     (MetaTerms.string "ignoredBody")) $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "letTerm" @@ (string "infer type of term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
   "letResult" <<~ ExtractCore.let_ @@ var "cx" @@ var "finalized" $
   "bindings" <~ Core.letBindings (var "letResult") $
@@ -1354,7 +1401,10 @@ yield = define "yield" $
     Maps.empty
     (var "fcx")
 
--- TODO: pass context and variables, and actually check types
+-- "Checked" here refers to the type substitution having been applied, not to class-constraint
+-- discharge -- that happens once, centrally, in dischargeClassConstraints at the two top-level
+-- inference entry points (not per yield site; most inference sub-rules don't call these yield
+-- helpers at all, so a per-site check here would not be complete).
 yieldChecked :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> InferenceResult)
 yieldChecked = define "yieldChecked" $
   doc "Create a checked inference result" $
@@ -1389,5 +1439,3 @@ yieldWithConstraints = define "yieldWithConstraints" $
     (var "subst")
     (var "constraints")
     (var "fcx")
-
--- TODO: pass context and variables, and actually check types
