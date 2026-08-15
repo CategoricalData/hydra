@@ -251,6 +251,19 @@ later phases; a validation failure is fatal and stops the sync. See the
 [Validation wiki page](https://github.com/CategoricalData/hydra/wiki/Validation) for the full
 constraint catalog and the profiles that decide which findings are hard errors.
 
+**Scope gotcha — `sync-haskell.sh` and scoped `--targets haskell` do not regenerate ext packages.**
+Phase 1 (`sync-haskell.sh`) regenerates only `dist/haskell/{hydra-kernel, hydra-haskell}/`; the ext packages
+(`hydra-rdf`, `hydra-ext`) are produced later — by Phase 3 of a *full* `bin/sync.sh`, not by `sync-haskell.sh`
+on its own. Two consequences that bite a local dev/agent loop:
+- Running `sync-haskell.sh` alone leaves `dist/haskell/hydra-rdf/` at its cold-seeded (published-derived)
+  content. A build or byte-parity check against a freshly-promoted ext module then fails with
+  "Could not find module `Hydra.Rdf.…`" until the package is regenerated. Fix: run
+  `bin/sync-packages.sh hydra-rdf --targets haskell` (with `GENERATOR_HOST=haskell` exported, to avoid the
+  from-source Gradle path).
+- `bin/sync.sh --hosts H --targets T` does **not** automatically sweep every ext package into target `T` — it
+  maps the coder packages. Regenerate an ext package into a specific target explicitly with
+  `bin/sync-packages.sh <pkg> --targets <T>`.
+
 Phase 1.5 closes a warm/cold asymmetry from #344 that
 [#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic.
 `dist/json/hydra-{java,python}/coder.json` feeds Phase 2's
