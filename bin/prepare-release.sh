@@ -157,6 +157,18 @@ else
     echo "  OK: All versions are $EXPECTED"
 fi
 
+# #663: currentVersion must not already be a released tag. If it is, the cycle-open
+# bump (docs/release-workflow.md, run immediately after the previous tag) was skipped,
+# and every downstream build compiled from this source would silently resolve against
+# the stale published artifact of the same version string instead of local changes.
+if git tag -l | grep -qx "$EXPECTED"; then
+    echo "  ERROR: currentVersion ($EXPECTED) already exists as a git tag."
+    echo "         Did you forget to run bin/bump-version.sh after the last release?"
+    echo "         See docs/release-workflow.md — the cycle-open bump happens"
+    echo "         immediately after tagging, not before the next release."
+    ERRORS=$((ERRORS + 1))
+fi
+
 # --- Step 2: Haskell tests ---
 # The hydra-test Stack target covers hydra-kernel and hydra-ext content.
 # Post-#290, hydra-ext is a frozen Hydra package whose generated Haskell

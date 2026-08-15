@@ -22,9 +22,6 @@ Releases are currently performed from the `main` branch and involve the followin
 
 1. Finalize any changes to the Hydra kernel
    (whose source of truth is the `Hydra/Sources/Kernel` directory in Hydra-Haskell).
-1. Bump the version number using `bin/bump-version.sh` (see "Version synchronization" below).
-   This must happen before syncing
-   so that the new version appears in all generated code, documentation, and packages.
 1. Regenerate all implementations using `bin/sync-all.sh` (see "Synchronizing all implementations" below).
 1. Run `./bin/prepare-release.sh` from the repository root.
    This verifies that all implementations are consistent and passing,
@@ -43,14 +40,27 @@ Releases are currently performed from the `main` branch and involve the followin
    [Releases](https://github.com/CategoricalData/hydra/wiki/Releases)
    with the new release, tag, changelog heading, and package links
    (see "Updating the release index" below).
+1. **Open the next development cycle**: immediately after tagging, run
+   `bin/bump-version.sh <next-version>` (see "Version synchronization" below) so that all
+   post-release dev-cycle source is versioned *ahead* of the release just cut. This is
+   **not optional** — skipping it leaves `currentVersion` equal to the tag just created, so
+   every downstream ext-package build compiled from dev-cycle source requests the exact
+   Maven/PyPI coordinate the release just published, and the registry's now-stale artifact
+   silently wins over local source (`#663`). `bin/prepare-release.sh` fails the *next*
+   release if this step was skipped (see "Version synchronization" below), so forgetting it
+   surfaces at the next release gate rather than staying latent.
+
+Note the version is **not** bumped immediately before this release: `hydra.json:currentVersion`
+already holds the version being released, set by the previous cycle's cycle-open bump (the last
+step above). A release tags the repository *as-is*.
 
 ```bash
 # Recommended release commands
-bin/bump-version.sh 0.13.0         # Bump version everywhere
 bin/sync-all.sh                    # Regenerate all implementations
 bin/prepare-release.sh             # Verify + build upload-ready artifacts
 # Update CHANGELOG.md, commit, tag, push, publish
 # After publication, update the wiki Releases page
+bin/bump-version.sh 0.14.0         # Open the next dev cycle (run immediately after tagging)
 ```
 
 ## Access prerequisites
@@ -114,9 +124,16 @@ The canonical version lives in `hydra.json` at the repository root as the
 
 ### Bumping the version
 
+Run this **immediately after tagging a release**, to open the next development cycle —
+not immediately before the next release (see [Overview](#overview)). Between a release tag
+and its cycle-open bump, `currentVersion` would otherwise equal an already-published version,
+which is the root cause of [#663](https://github.com/CategoricalData/hydra/issues/663): dev-cycle
+source silently resolves against the stale published artifact of the same version string instead
+of local changes.
+
 ```bash
-# Set the new release version and propagate to all config files
-bin/bump-version.sh 0.13.0
+# Set the new dev-cycle version and propagate to all config files
+bin/bump-version.sh 0.14.0
 
 # Or, if you've already edited hydra.json currentVersion manually:
 bin/bump-version.sh
