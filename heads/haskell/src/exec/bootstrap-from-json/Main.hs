@@ -238,21 +238,25 @@ main = do
         _             -> ""
 
   -- Determine output directories
+  --
+  -- Output path convention: --output (and this default) is the PARENT of
+  -- per-package dirs, e.g. ../../dist/java — each module is then routed to
+  -- <outBase>/<package>/src/{main,test}/<lang>/ by packageOutMain/packageOutTest
+  -- below. The default must NOT itself contain a package segment; a hardcoded
+  -- "hydra-kernel" here previously produced a doubled dist/java/hydra-kernel/hydra-kernel/…
+  -- segment because the per-package logic appends the package name again (#664).
   let defaultOutput = case target of
         "haskell"     -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
-        "java"        -> "../../dist/java/hydra-kernel"
-        "python"      -> "../../dist/python/hydra-kernel"
-        "scala"       -> "../../dist/scala/hydra-kernel"
-        "go"          -> "../../dist/go/hydra-kernel"
-        "clojure"     -> "../../dist/clojure/hydra-kernel"
-        "scheme"      -> "../../dist/scheme/hydra-kernel"
-        "common-lisp" -> "../../dist/common-lisp/hydra-kernel"
-        "emacs-lisp"  -> "../../dist/emacs-lisp/hydra-kernel"
+        "java"        -> "../../dist/java"
+        "python"      -> "../../dist/python"
+        "scala"       -> "../../dist/scala"
+        "go"          -> "../../dist/go"
+        "clojure"     -> "../../dist/clojure"
+        "scheme"      -> "../../dist/scheme"
+        "common-lisp" -> "../../dist/common-lisp"
+        "emacs-lisp"  -> "../../dist/emacs-lisp"
         _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
-  -- Output path convention: callers pass the parent of per-package dirs as
-  -- --output (e.g. --output ../../dist/haskell), and each module is routed
-  -- to ../../dist/haskell/<package>/src/{main,test}/<lang>/.
   let packageOutMain pkg = outBase FP.</> pkg FP.</> ("src/main/" ++ target)
   let packageOutTest pkg = outBase FP.</> pkg FP.</> ("src/test/" ++ target)
   -- Flat outMain / outTest are used by the few legacy writers (test-mode
