@@ -1,0 +1,251 @@
+{
+  "name": "hydra.build.langexpansion",
+  "metadata": {
+    "description": "Pure language/host list-expansion utilities shared by the sync/test/bench drivers",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.strip"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.allLanguages",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "haskell"}},
+                {"literal": {"string": "java"}},
+                {"literal": {"string": "python"}},
+                {"literal": {"string": "scala"}},
+                {"literal": {"string": "go"}},
+                {"literal": {"string": "typescript"}},
+                {"literal": {"string": "clojure"}},
+                {"literal": {"string": "scheme"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}}]},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The canonical set of all target languages"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.expandLangAlias",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tok",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": "string"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
+                                    "argument": {"variable": "tok"}}},
+                                "argument": {"literal": {"string": "all"}}}}}},
+                        "argument": {"variable": "hydra.build.langexpansion.allLanguages"}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": "string"}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
+                                        "argument": {"variable": "tok"}}},
+                                    "argument": {"literal": {"string": "lisp"}}}}}},
+                            "argument": {"variable": "hydra.build.langexpansion.lispDialects"}}},
+                        "argument": {"list": [{"variable": "tok"}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Expand a single language token: 'all' -> all languages, 'lisp' -> the dialects, else itself"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.expandLangs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "toks",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.distinct"}, "type": {"literal": "string"}}},
+                    "argument": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": "string"}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                    "type": {"list": {"literal": "string"}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "tok",
+                                    "domain": {"literal": "string"},
+                                    "body": {
+                                      "application": {"function": {"variable": "hydra.build.langexpansion.expandLangAlias"}, "argument": {"variable": "tok"}}}}}}},
+                            "argument": {"variable": "toks"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Expand a list of language tokens (aliases resolved), preserving order, deduped"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.isKnownLang",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "lang",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"literal": "string"}}},
+                        "argument": {"variable": "lang"}}},
+                    "argument": {"variable": "hydra.build.langexpansion.allLanguages"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a language token is a known target language"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.langUnion",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "hosts",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "targets",
+                    "domain": {"list": {"literal": "string"}},
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.build.langexpansion.expandLangs"},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": "string"}}},
+                            "argument": {"list": [{"variable": "hosts"}, {"variable": "targets"}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The expanded, deduped union of two token lists (hosts + targets)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.lispDialects",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "clojure"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}},
+                {"literal": {"string": "scheme"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The four Lisp dialects the 'lisp' alias expands to"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.langexpansion.validateLangs",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "toks",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"literal": "string"}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "lang",
+                            "domain": {"literal": "string"},
+                            "body": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.logic.not"},
+                                "argument": {"application": {"function": {"variable": "hydra.build.langexpansion.isKnownLang"}, "argument": {"variable": "lang"}}}}}}}}},
+                    "argument": {"application": {"function": {"variable": "hydra.build.langexpansion.expandLangs"}, "argument": {"variable": "toks"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Validate a token list; return the unknown expanded tokens (empty = all valid)"}}}]}}}}}]}

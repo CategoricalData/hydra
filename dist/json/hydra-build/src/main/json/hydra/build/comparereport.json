@@ -1,0 +1,129 @@
+{
+  "name": "hydra.build.comparereport",
+  "metadata": {
+    "description": "Type-level model for the JSON snapshot compare-report: the per-module comparison record and the whole-report summary shared by the native generator drivers. See https://github.com/CategoricalData/hydra/issues/416",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.build.comparereport.CompareReport",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "rows",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.build.comparereport.ModuleCompare"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One record per compared module"}}}]}}}},
+                  {
+                    "name": "byteEqCount",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How many modules were byte-identical"}}}]}}}},
+                  {
+                    "name": "total",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How many modules were compared"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The whole compare-report: per-module records plus the byte-identical tally"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.comparereport.CompareStatus",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "byteEq",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The two sides are byte-identical"}}}]}}}},
+                  {
+                    "name": "differ",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Both sides exist but differ"}}}]}}}},
+                  {
+                    "name": "missing",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Our side is absent (the canonical side has the module, ours does not)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The result of comparing one module's JSON on the two sides"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.comparereport.ModuleCompare",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The module name (the JSON file's base name, without the .json suffix)"}}}]}}}},
+                  {
+                    "name": "status",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.comparereport.CompareStatus"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The comparison status"}}}]}}}},
+                  {
+                    "name": "ourSize",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The byte size of our (freshly generated) side, or 0 if missing"}}}]}}}},
+                  {
+                    "name": "canonSize",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The byte size of the canonical side"}}}]}}}},
+                  {
+                    "name": "diffLines",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The number of differing lines (0 when byte-identical)"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One module's comparison record"}}}]}}}}}}]}

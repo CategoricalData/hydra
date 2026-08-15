@@ -1,0 +1,153 @@
+{
+  "name": "hydra.build.benchresult",
+  "metadata": {
+    "description": "Type-level model for benchmark result JSON: a typed result model whose generated codec replaces the hand-rolled JSON assembly in the bench drivers. See https://github.com/CategoricalData/hydra/issues/416",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.build.benchresult.BenchMetadata",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "timestamp",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ISO-8601 UTC timestamp of the run"}}}]}}}},
+                  {
+                    "name": "language",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The host language the benchmark ran on"}}}]}}}},
+                  {
+                    "name": "branch",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The git branch"}}}]}}}},
+                  {
+                    "name": "commit",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The short git commit hash"}}}]}}}},
+                  {
+                    "name": "commitMessage",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The commit subject line"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Per-run metadata: timestamp and git context of a benchmark run"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.benchresult.GenBenchResult",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "target",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target language being generated"}}}]}}}},
+                  {
+                    "name": "runs",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The number of timed runs per (host, package)"}}}]}}}},
+                  {
+                    "name": "hosts",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.build.benchresult.HostResult"}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Per-host results, keyed by host language name"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.build.benchresult.BenchMetadata"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional run metadata"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A generator-benchmark result: target, run count, and per-host results"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.benchresult.HostResult",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "setupMs",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Host setup/build time in milliseconds"}}}]}}}},
+                  {
+                    "name": "packages",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.build.benchresult.RunStats"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Per-package run statistics, keyed by package name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One host's generator-benchmark result: setup time and per-package timings"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.benchresult.RunStats",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "runsMs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"integer": "int32"}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Each run's elapsed time in milliseconds"}}}]}}}},
+                  {
+                    "name": "medianMs",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The median elapsed time in milliseconds"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Timing statistics for one (host, package): per-run elapsed times and the median"}}}]}}}}}}]}
