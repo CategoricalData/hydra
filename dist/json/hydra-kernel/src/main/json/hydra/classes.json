@@ -2,6 +2,7 @@
   "name": "hydra.classes",
   "metadata": {"description": "Registry of Hydra's built-in type classes.", "comments": [], "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.strip"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -32,6 +33,171 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.classes.classIsSatisfiedByType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "className",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "lambda": {
+                    "parameter": "typ",
+                    "domain": {"variable": "hydra.core.Type"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "isIntegerLiteral",
+                            "term": {
+                              "application": {
+                                "function": {
+                                  "cases": {
+                                    "typeName": "hydra.core.Type",
+                                    "default": {"literal": {"boolean": false}},
+                                    "cases": [
+                                      {
+                                        "name": "literal",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "lt",
+                                            "domain": {"variable": "hydra.core.LiteralType"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "cases": {
+                                                    "typeName": "hydra.core.LiteralType",
+                                                    "default": {"literal": {"boolean": false}},
+                                                    "cases": [
+                                                      {
+                                                        "name": "integer",
+                                                        "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.IntegerType"}, "body": {"literal": {"boolean": true}}}}}]}},
+                                                "argument": {"variable": "lt"}}}}}}]}},
+                                "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "isFloatLiteral",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.core.Type",
+                                        "default": {"literal": {"boolean": false}},
+                                        "cases": [
+                                          {
+                                            "name": "literal",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "lt",
+                                                "domain": {"variable": "hydra.core.LiteralType"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "cases": {
+                                                        "typeName": "hydra.core.LiteralType",
+                                                        "default": {"literal": {"boolean": false}},
+                                                        "cases": [
+                                                          {
+                                                            "name": "float",
+                                                            "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.FloatType"}, "body": {"literal": {"boolean": true}}}}}]}},
+                                                    "argument": {"variable": "lt"}}}}}}]}},
+                                    "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "boolean"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Name"}}},
+                                                "argument": {"variable": "className"}}},
+                                            "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "equality"}}}}}}}},
+                                    "argument": {"literal": {"boolean": true}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "boolean"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Name"}}},
+                                                    "argument": {"variable": "className"}}},
+                                                "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "ordering"}}}}}}}},
+                                        "argument": {"literal": {"boolean": true}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "boolean"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Name"}}},
+                                                        "argument": {"variable": "className"}}},
+                                                    "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "isIntegerLiteral"}}},
+                                                "argument": {"variable": "isFloatLiteral"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "boolean"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Name"}}},
+                                                            "argument": {"variable": "className"}}},
+                                                        "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "integral"}}}}}}}},
+                                                "argument": {"variable": "isIntegerLiteral"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "boolean"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                "argument": {"variable": "className"}}},
+                                                            "argument": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "fractional"}}}}}}}},
+                                                    "argument": {"variable": "isFloatLiteral"}}},
+                                                "argument": {"literal": {"boolean": false}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a type is an instance of a constraint class, by the class's short name."}}}]}}}}},
     {
       "term": {
         "name": "hydra.classes.equality",
