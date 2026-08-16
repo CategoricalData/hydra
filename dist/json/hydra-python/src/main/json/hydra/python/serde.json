@@ -2246,7 +2246,7 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.python.syntax.Name"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.Name"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "alias"}}},
                             "argument": {"application": {"function": {"variable": "hydra.python.serde.nameToExpr"}, "argument": {"variable": "name"}}}}},
@@ -4538,7 +4538,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}},
                                         "type": {"literal": "string"}}},
                                     "argument": {
                                       "application": {

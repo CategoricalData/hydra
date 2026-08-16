@@ -1128,7 +1128,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "domain": {"variable": "hydra.core.Term"},
@@ -2253,7 +2253,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "domain": {"variable": "hydra.core.Term"},
@@ -2520,7 +2520,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "domain": {"variable": "hydra.core.Term"},
@@ -7014,7 +7014,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                         "type": {
                                                                           "function": {
                                                                             "domain": {"variable": "hydra.core.Term"},

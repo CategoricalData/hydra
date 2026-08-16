@@ -2,7 +2,7 @@
   (import (scheme base))
   (export hydra_overlay_scheme_lib_optionals_apply
           hydra_overlay_scheme_lib_optionals_bind
-          hydra_overlay_scheme_lib_optionals_match
+          hydra_overlay_scheme_lib_optionals_cases
           hydra_overlay_scheme_lib_optionals_givens
           hydra_overlay_scheme_lib_optionals_compose
           hydra_overlay_scheme_lib_optionals_with_default
@@ -47,9 +47,9 @@
               (list 'none)
               (f (maybe-value m))))))
 
-    ;; match :: Maybe a -> b -> (a -> b) -> b
+    ;; cases :: Maybe a -> b -> (a -> b) -> b
     ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_overlay_scheme_lib_optionals_match
+    (define hydra_overlay_scheme_lib_optionals_cases
       (lambda (m)
         (lambda (def)
           (lambda (f)

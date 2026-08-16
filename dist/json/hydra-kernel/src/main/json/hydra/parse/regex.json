@@ -353,7 +353,7 @@
                                                                         "application": {
                                                                           "function": {
                                                                             "typeApplication": {
-                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                               "type": {"literal": "boolean"}}},
                                                                           "argument": {"variable": "neg"}}},
                                                                       "argument": {"literal": {"boolean": false}}}},
@@ -869,7 +869,7 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                     "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantifier"}}}}},
                                                                 "argument": {"variable": "comma"}}},
                                                             "argument": {
@@ -931,7 +931,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                             "type": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.regex.Quantifier"}}}}},
                                                                                         "argument": {"variable": "mm"}}},
                                                                                     "argument": {

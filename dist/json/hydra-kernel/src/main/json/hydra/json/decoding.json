@@ -198,7 +198,7 @@
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t1"}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t1"}}},
                                                         "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "t1"}}}}},
                                                     "argument": {"variable": "mf"}}},
                                                 "argument": {
@@ -327,7 +327,7 @@
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t0"}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t0"}}},
                                                         "type": {"either": {"left": {"variable": "t1"}, "right": {"optional": {"variable": "t2"}}}}}},
                                                     "argument": {
                                                       "application": {

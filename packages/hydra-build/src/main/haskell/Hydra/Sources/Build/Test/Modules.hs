@@ -141,7 +141,7 @@ showModuleDetail m = Strings.concat (Phantoms.list [
         Phantoms.string "term:",
         Core.unName (Packaging.termDefinitionName (Phantoms.var "td")),
         Phantoms.string ":sig=",
-        Optionals.match (Packaging.termDefinitionSignature (Phantoms.var "td"))
+        Optionals.cases (Packaging.termDefinitionSignature (Phantoms.var "td"))
           (Phantoms.string "no")
           (Phantoms.lambda "_" (Phantoms.string "yes"))]))]
 

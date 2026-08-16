@@ -933,7 +933,7 @@
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
                                                         "type": {"variable": "hydra.ast.Expr"}}},
                                                     "argument": {"variable": "typ"}}},
                                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "nameStr"}}}}},

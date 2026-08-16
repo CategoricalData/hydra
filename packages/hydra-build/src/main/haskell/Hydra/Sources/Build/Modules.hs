@@ -107,7 +107,7 @@ filterKernelModules = define "filterKernelModules" $
   -- empty first segment and at least one further segment (guards the empty-string case).
   "startsWith" <~ ("prefix" ~> "s" ~>
     "parts" <~ Strings.splitOn (var "prefix") (var "s") $
-    Optionals.match (Lists.uncons $ var "parts")
+    Optionals.cases (Lists.uncons $ var "parts")
       false
       ("uc" ~> Logic.and
         (Strings.null $ Pairs.first $ var "uc")

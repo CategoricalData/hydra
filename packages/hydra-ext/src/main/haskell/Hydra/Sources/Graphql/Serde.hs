@@ -146,7 +146,7 @@ enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
     "desc">: project G._EnumTypeDefinition G._EnumTypeDefinition_Description @@ var "def",
     "name">: project G._EnumTypeDefinition G._EnumTypeDefinition_Name @@ var "def",
     "values">: project G._EnumTypeDefinition G._EnumTypeDefinition_EnumValuesDefinition @@ var "def",
-    "valuesExpr">: Optionals.match (var "values") (list ([] :: [TypedTerm Expr])) (lambda "vs" $ Lists.map (asTerm enumValueDefinitionToExpr) (unwrap G._EnumValuesDefinition @@ var "vs"))] $
+    "valuesExpr">: Optionals.cases (var "values") (list ([] :: [TypedTerm Expr])) (lambda "vs" $ Lists.map (asTerm enumValueDefinitionToExpr) (unwrap G._EnumValuesDefinition @@ var "vs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "enum",
@@ -212,7 +212,7 @@ objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
     "desc">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Description @@ var "def",
     "name">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Name @@ var "def",
     "fields">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_FieldsDefinition @@ var "def",
-    "fieldsExpr">: Optionals.match (var "fields") (list ([] :: [TypedTerm Expr])) (lambda "fs" $ Lists.map (asTerm fieldDefinitionToExpr) (unwrap G._FieldsDefinition @@ var "fs"))] $
+    "fieldsExpr">: Optionals.cases (var "fields") (list ([] :: [TypedTerm Expr])) (lambda "fs" $ Lists.map (asTerm fieldDefinitionToExpr) (unwrap G._FieldsDefinition @@ var "fs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "type",

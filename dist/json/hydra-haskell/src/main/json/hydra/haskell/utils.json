@@ -179,7 +179,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                         "type": {"variable": "hydra.haskell.syntax.Name"}}},
                                     "argument": {
                                       "application": {
@@ -199,7 +199,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.haskell.syntax.ModuleName"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.haskell.syntax.ModuleName"}}},
                                                 "type": {"variable": "hydra.haskell.syntax.Name"}}},
                                             "argument": {
                                               "application": {
@@ -1237,7 +1237,7 @@
                                                                                                                                                                           "application": {
                                                                                                                                                                             "function": {
                                                                                                                                                                               "typeApplication": {
-                                                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                                                                                                                 "type": {"literal": {"integer": "int32"}}}},
                                                                                                                                                                             "argument": {"variable": "existing"}}},
                                                                                                                                                                         "argument": {"variable": "segCount"}}},

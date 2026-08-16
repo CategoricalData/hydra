@@ -288,7 +288,7 @@ public class Coder {
                         Eithers.bind(
                             right(hydra.dsl.Lexical.lookupBinding( var("g"), var("cname"))),
                             lambda("mel",
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mel"),
                                     right(
                                         Optionals.map(
@@ -303,7 +303,7 @@ public class Coder {
                                         right(
                                             proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el")))))),
                         lambda("mts",
-                            Optionals.match(
+                            Optionals.cases(
                                 var("mts"),
                                 right(var("argTerms")),
                                 lambda("ts",
@@ -448,7 +448,7 @@ public class Coder {
                                     hydra.dsl.Annotations.getAnnotationMap(
                                         proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"))),
                                 field("ann'",
-                                    Optionals.match(
+                                    Optionals.cases(
                                         Maps.lookup(hydra.dsl.Constants.keyType(), var("ann")),
                                         var("ann"),
                                         lambda("typeTerm",
@@ -956,7 +956,7 @@ public class Coder {
     public static final Def bindingIsFunctionType = def("bindingIsFunctionType")
         .lam("b")
         .to(() ->
-                Optionals.match(
+                Optionals.cases(
                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"),
                     casesWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm(
@@ -1085,11 +1085,11 @@ public class Coder {
                                     lambda("names",
                                         Logic.ifElse(
                                             Equality.equal(Lists.length(var("names")), int32(1)),
-                                            Optionals.match(
+                                            Optionals.cases(
                                                 Lists.head(var("names")),
                                                 list(),
                                                 lambda("singleName",
-                                                    Optionals.match(
+                                                    Optionals.cases(
                                                         Maps.lookup(
                                                             var("singleName"),
                                                             var("allDeps")),
@@ -1285,7 +1285,7 @@ public class Coder {
                                         var("g"),
                                         var("body"))),
                                 field("annSubst",
-                                    Optionals.match(
+                                    Optionals.cases(
                                         Maps.lookup(hydra.dsl.Constants.keyType(), var("anns")),
                                         hydra.dsl.lib.Maps.empty(),
                                         lambda("typeTerm",
@@ -1299,7 +1299,7 @@ public class Coder {
                                                         field(
                                                             Term.LAMBDA,
                                                             lambda("lam",
-                                                                Optionals.match(
+                                                                Optionals.cases(
                                                                     proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                                                     hydra.dsl.lib.Maps.empty(),
                                                                     lambda("dom",
@@ -1348,7 +1348,7 @@ public class Coder {
                         lambda("cs",
                             let(
                                 field("defSubst",
-                                    Optionals.match(
+                                    Optionals.cases(
                                         proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs"),
                                         hydra.dsl.lib.Maps.empty(),
                                         lambda("d",
@@ -1415,7 +1415,7 @@ public class Coder {
                     field(
                         Term.OPTIONAL,
                         lambda("mt",
-                            Optionals.match(
+                            Optionals.cases(
                                 var("mt"),
                                 hydra.dsl.lib.Maps.empty(),
                                 lambda("t",
@@ -1868,14 +1868,14 @@ public class Coder {
                 Eithers.bind(
                     right(hydra.dsl.Lexical.lookupBinding( var("g"), var("name"))),
                     lambda("mel",
-                        Optionals.match(
+                        Optionals.cases(
                             var("mel"),
                             right(
                                 inject(JavaSymbolClass.TYPE_,
                                     JavaSymbolClass.LOCAL_VARIABLE,
                                     unit())),
                             lambda("el",
-                                Optionals.match(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     left(
                                         inject(Error_.TYPE_,
@@ -2035,7 +2035,7 @@ public class Coder {
                     field(
                         Term.LAMBDA,
                         lambda("lam",
-                            Optionals.match(
+                            Optionals.cases(
                                 proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 pair(list(), var("t")),
                                 lambda("dom",
@@ -2533,7 +2533,7 @@ public class Coder {
     field("parentNs",
                         apply(ref(Coder.namespaceParent), var("ns"))),
     field("pkg",
-                        Optionals.match(
+                        Optionals.cases(
                             var("parentNs"),
                             apply(ref(Utils.javaPackageDeclaration), var("ns")),
                             lambda("pns",
@@ -2635,11 +2635,11 @@ public class Coder {
                 Eithers.bind(
                     right(hydra.dsl.Lexical.lookupBinding( var("g"), var("name"))),
                     lambda("mel",
-                        Optionals.match(
+                        Optionals.cases(
                             var("mel"),
                             right(var("fallbackTypeApps")),
                             lambda("el",
-                                Optionals.match(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("fallbackTypeApps")),
                                     lambda("ts",
@@ -2782,7 +2782,7 @@ public class Coder {
                                         Lists.bind(
                                             var("mArgTypes"),
                                             lambda("m",
-                                                Optionals.match(
+                                                Optionals.cases(
                                                     var("m"),
                                                     list(),
                                                     lambda("x", Lists.pure(var("x"))))))),
@@ -2886,7 +2886,7 @@ public class Coder {
                                                 var("aliases"),
                                                 var("elName")))),
                                     field("linkTargetStr",
-                                        Optionals.match(
+                                        Optionals.cases(
                                             var("parentName"),
                                             var("elNameStr"),
                                             lambda("pn",
@@ -2964,7 +2964,7 @@ public class Coder {
                                                                             var("f")),
                                                                         lambda("mDoc",
                                                                             right(
-                                                                                Optionals.match(var("mDoc"), string(""), lambda("d",
+                                                                                Optionals.cases(var("mDoc"), string(""), lambda("d",
                                                                                         Strings.concat(
                                                                                             list(
                                                                                                 string("@param "),
@@ -3052,7 +3052,7 @@ public class Coder {
                                                                         let(
                                                                             field(
                                                                                 "comparableMethods",
-                                                                                Optionals.match(
+                                                                                Optionals.cases(
                                                                                     var("parentName"),
                                                                                     Logic.ifElse(
                                                                                         Logic.and(
@@ -3987,14 +3987,14 @@ public class Coder {
                             var("codVar"),
                             var("groupedDirect"))),
     field("codSubst",
-                        Optionals.match(
+                        Optionals.cases(
                                 apply(ref(Coder.findPairFirst), var("cod")),
                                 hydra.dsl.lib.Maps.empty(),
                                 lambda("cv",
                                 Logic.ifElse(
                                     Maps.member(var("cv"), var("selfRefSubst")),
                                     hydra.dsl.lib.Maps.empty(),
-                                    Optionals.match(
+                                    Optionals.cases(
                                             apply(ref(Coder.findSelfRefVar), var("groupedByInput")),
                                             hydra.dsl.lib.Maps.empty(),
                                             lambda("refVar",
@@ -4009,11 +4009,11 @@ public class Coder {
                                 lambda("d",
                                     Sets.toList(apply(ref(Coder.collectTypeVars), var("d"))))))),
     field("danglingSubst",
-                        Optionals.match(apply(ref(Coder.findPairFirst), var("cod")), hydra.dsl.lib.Maps.empty(), lambda("cv",
+                        Optionals.cases(apply(ref(Coder.findPairFirst), var("cod")), hydra.dsl.lib.Maps.empty(), lambda("cv",
                                 Logic.ifElse(
                                     Sets.member(var("cv"), var("domVars")),
                                     hydra.dsl.lib.Maps.empty(),
-                                    Optionals.match(apply(ref(Coder.findSelfRefVar), var("groupedByInput")), hydra.dsl.lib.Maps.empty(), lambda("refVar",
+                                    Optionals.cases(apply(ref(Coder.findSelfRefVar), var("groupedByInput")), hydra.dsl.lib.Maps.empty(), lambda("refVar",
                                             Maps.singleton(
                                                 var("cv"),
                                                 inject(Type.TYPE_,
@@ -4131,7 +4131,7 @@ public class Coder {
                                         hydra.dsl.Formatting.capitalize( var("local"))),
                                     string(".")),
                                 ref(Names.applyMethodName))),
-                        Optionals.match(
+                        Optionals.cases(
                             var("ns_"),
                             wrap(Identifier.TYPE_,
                                 apply(ref(Utils.sanitizeJavaName), var("local"))),
@@ -4219,7 +4219,7 @@ public class Coder {
                                 hydra.dsl.Annotations.termAnnotationInternal( var("fun")))),
                         lambda("mfunTyp",
                             Eithers.bind(
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mfunTyp"),
                                     hydra.dsl.Checking.typeOfTerm(
                                         var("cx"),
@@ -4240,7 +4240,7 @@ public class Coder {
                                                     Term.VARIABLE,
                                                     lambda("n", just(var("n")))))),
                                         Eithers.bind(
-                                            Optionals.match(
+                                            Optionals.cases(
                                                 var("calleeName"),
                                                 right(var("args")),
                                                 lambda("cname",
@@ -4470,7 +4470,7 @@ public class Coder {
                             hydra.dsl.Annotations.termAnnotationInternal( var("lhs")))),
                     lambda("mt",
                         Eithers.bind(
-                            Optionals.match(
+                            Optionals.cases(
                                 var("mt"),
                                 hydra.dsl.Checking.typeOfTerm(
                                     var("cx"),
@@ -4585,7 +4585,7 @@ public class Coder {
                                                                                 hydra.dsl.Annotations.termAnnotationInternal(
                                                                                     var("rhs")))),
                                                                         lambda("mrt",
-                                                                            Optionals.match(
+                                                                            Optionals.cases(
                                                                                 var("mrt"),
                                                                                 Eithers.bind(
                                                                                     hydra.dsl.Checking.typeOfTerm(
@@ -4742,7 +4742,7 @@ public class Coder {
                                                     var("jdom0"),
                                                     var("cx")),
                                                 constant(
-                                                    Optionals.match(
+                                                    Optionals.cases(
                                                         var("marg"),
                                                         let(
                                                             field("projVar",
@@ -4799,7 +4799,7 @@ public class Coder {
                                         proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                     field("fields",
                                         proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
-                                    Optionals.match(
+                                    Optionals.cases(
                                         var("marg"),
                                         let(
                                             field("uVar",
@@ -4921,7 +4921,7 @@ public class Coder {
                                                                                             TypeArgument.REFERENCE,
                                                                                             var("rt"))))),
                                                                             Eithers.bind(
-                                                                                Optionals.match(
+                                                                                Optionals.cases(
                                                                                     var("def_"),
                                                                                     right(list()),
                                                                                     lambda("d",
@@ -5018,7 +5018,7 @@ public class Coder {
                                                         ref(Utils.javaIdentifier),
                                                         ref(Names.valueFieldName)))))),
                                     right(
-                                        Optionals.match(
+                                        Optionals.cases(
                                             var("marg"),
                                             let(
                                                 field("wVar",
@@ -5273,9 +5273,9 @@ public class Coder {
                             hydra.dsl.Annotations.getType( var("g"), var("combinedAnns"))),
                         lambda("mt",
                             Eithers.bind(
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mt"),
-                                    Optionals.match(
+                                    Optionals.cases(
                                         apply(ref(Coder.tryInferFunctionType), var("term")),
                                         hydra.dsl.Checking.typeOfTerm(
                                             var("cx"),
@@ -6161,7 +6161,7 @@ public class Coder {
                         lambda("mDoc",
                             let(
                                 field("ts",
-                                    Optionals.match(proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"), record(TypeScheme.TYPE_,
+                                    Optionals.cases(proj(TermDefinition.TYPE_, TermDefinition.SIGNATURE, "tdef"), record(TypeScheme.TYPE_,
                                             field(TypeScheme.VARIABLES, list()),
                                             field(
                                                 TypeScheme.BODY,
@@ -6637,7 +6637,7 @@ public class Coder {
                                                                                                                     just(
                                                                                                                         var("methodBody"))),
                                                                                                                 right(
-                                                                                                                    Optionals.match(var("mDoc"), apply(
+                                                                                                                    Optionals.cases(var("mDoc"), apply(
                                                                                                                             ref(Coder.noInterfaceComment),
                                                                                                                             var("imdMember")), lambda(
                                                                                                                             "doc",
@@ -6768,7 +6768,7 @@ public class Coder {
                                                             lambda(
                                                                 "methodName",
                                                                 "expr",
-                                                                Optionals.match(
+                                                                Optionals.cases(
                                                                     var("mtargs"),
                                                                     apply(
                                                                         ref(Utils.javaMethodInvocationToJavaExpression),
@@ -6797,7 +6797,7 @@ public class Coder {
                                                         Eithers.either(
                                                             lambda("term1",
                                                                 Eithers.bind(
-                                                                    Optionals.match(
+                                                                    Optionals.cases(
                                                                         var("branchTypes"),
                                                                         apply(
                                                                             var("encode"),
@@ -6816,7 +6816,7 @@ public class Coder {
                                                                                 var("expr")))))),
                                                             lambda("term1",
                                                                 Eithers.bind(
-                                                                    Optionals.match(
+                                                                    Optionals.cases(
                                                                         var("branchTypes"),
                                                                         apply(
                                                                             var("encode"),
@@ -6978,7 +6978,7 @@ public class Coder {
                                                                             var("combinedAnns"))),
                                                                     lambda("mt",
                                                                         Eithers.bind(
-                                                                            Optionals.match(
+                                                                            Optionals.cases(
                                                                                 var("mt"),
                                                                                 hydra.dsl.Checking.typeOfTerm(
                                                                                     var("cx"),
@@ -7195,7 +7195,7 @@ public class Coder {
                         field(
                             Term.OPTIONAL,
                             lambda("mt",
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mt"),
                                     Logic.ifElse(
                                         Lists.null_(var("tyapps")),
@@ -7400,7 +7400,7 @@ public class Coder {
                                                                                         var("args"))))))))))),
                                                 field("encodeField",
                                                     lambda("fld",
-                                                        Optionals.match(
+                                                        Optionals.cases(
                                                             var("mFieldTypeMap"),
                                                             apply(
                                                                 var("encode"),
@@ -7410,7 +7410,7 @@ public class Coder {
                                                                     Maps.lookup(
                                                                         proj(Field.TYPE_, Field.NAME, "fld"),
                                                                         var("ftmap")),
-                                                                    Optionals.match(
+                                                                    Optionals.cases(
                                                                         var("mftyp"),
                                                                         apply(
                                                                             var("encode"),
@@ -7419,7 +7419,7 @@ public class Coder {
                                                                             let(
                                                                                 field(
                                                                                     "resolvedType",
-                                                                                    Optionals.match(
+                                                                                    Optionals.cases(
                                                                                         var("mTypeSubst"),
                                                                                         var("ftyp"),
                                                                                         lambda(
@@ -7508,7 +7508,7 @@ public class Coder {
                                                                                     var("g"),
                                                                                     var("combinedAnns"))),
                                                                             lambda("mtyp",
-                                                                                Optionals.match(
+                                                                                Optionals.cases(
                                                                                     var("mtyp"),
                                                                                     right(nothing()),
                                                                                     lambda("annTyp",
@@ -7662,7 +7662,7 @@ public class Coder {
                                                         var("combinedAnns"))),
                                                 lambda("mtyp",
                                                     let("annotatedBody",
-                                                        Optionals.match(
+                                                        Optionals.cases(
                                                             var("mtyp"),
                                                             proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
                                                             lambda("t",
@@ -7749,7 +7749,7 @@ public class Coder {
                         field(
                             Term.VARIABLE,
                             lambda("name",
-                                Optionals.match(
+                                Optionals.cases(
                                     Maps.lookup(
                                         var("name"),
                                         proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
@@ -7783,7 +7783,7 @@ public class Coder {
                                                         var("combinedAnns"))),
                                                 lambda("mt",
                                                     Eithers.bind(
-                                                        Optionals.match(
+                                                        Optionals.cases(
                                                             var("mt"),
                                                             hydra.dsl.Checking.typeOfTerm(
                                                                 var("cx"),
@@ -7881,7 +7881,7 @@ public class Coder {
                                                             var("combinedAnns"))),
                                                     lambda("mtyp",
                                                         Eithers.bind(
-                                                            Optionals.match(
+                                                            Optionals.cases(
                                                                 var("mtyp"),
                                                                 hydra.dsl.Checking.typeOfTerm(
                                                                     var("cx"),
@@ -8528,7 +8528,7 @@ public class Coder {
                                                                                     var("cases_")),
                                                                                 lambda("ifBlocks",
                                                                                     Eithers.bind(
-                                                                                        Optionals.match(
+                                                                                        Optionals.cases(
                                                                                             var("dflt"),
                                                                                             right(
                                                                                                 list(
@@ -8998,7 +8998,7 @@ public class Coder {
                                             var("cx"),
                                             var("g")),
                                         lambda("resolved",
-                                            Optionals.match(
+                                            Optionals.cases(
                                                 var("resolved"),
                                                 right(
                                                     Logic.ifElse(
@@ -9154,7 +9154,7 @@ public class Coder {
                         right(nothing()),
                         let("schemaTypes",
                             proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
-                            Optionals.match(
+                            Optionals.cases(
                                 Maps.lookup(var("name"), var("schemaTypes")),
                                 right(nothing()),
                                 lambda("ts",
@@ -9466,11 +9466,11 @@ public class Coder {
                     Eithers.bind(
                         right(hydra.dsl.Lexical.lookupBinding( var("g"), var("name"))),
                         lambda("mel",
-                            Optionals.match(
+                            Optionals.cases(
                                 var("mel"),
                                 right(var("lam")),
                                 lambda("el",
-                                    Optionals.match(
+                                    Optionals.cases(
                                         proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                         right(var("lam")),
                                         lambda("ts",
@@ -9799,11 +9799,11 @@ public class Coder {
                 Eithers.bind(
                     right(hydra.dsl.Lexical.lookupBinding( var("g"), var("calleeName"))),
                     lambda("mel",
-                        Optionals.match(
+                        Optionals.cases(
                             var("mel"),
                             right(var("allTypeArgs")),
                             lambda("el",
-                                Optionals.match(
+                                Optionals.cases(
                                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("allTypeArgs")),
                                     lambda("ts",
@@ -10082,7 +10082,7 @@ public class Coder {
                                                     var("jargs"))))),
                                     let("overrideMethodName",
                                         lambda("jid",
-                                            Optionals.match(
+                                            Optionals.cases(
                                                 var("mMethodOverride"),
                                                 var("jid"),
                                                 lambda("m",
@@ -10134,7 +10134,7 @@ public class Coder {
                                                     proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                                                 field("localName",
                                                     proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
-                                                Optionals.match(
+                                                Optionals.cases(
                                                     var("mns"),
                                                     let("header",
                                                         inject(
@@ -10257,7 +10257,7 @@ public class Coder {
                         lambda("__a", var("__a")),
                         hydra.dsl.Annotations.getType( var("g"), var("ann"))),
                     lambda("mt",
-                        Optionals.match(
+                        Optionals.cases(
                             var("mt"),
                             left(
                                 inject(Error_.TYPE_,
@@ -10290,7 +10290,7 @@ public class Coder {
                                 Pairs.second(var("p"))),
                             Maps.alter(
                                 lambda("mv",
-                                    Optionals.match(var("mv"), just(list(var("v"))), lambda("vs", just(Lists.concat2(var("vs"), list(var("v"))))))),
+                                    Optionals.cases(var("mv"), just(list(var("v"))), lambda("vs", just(Lists.concat2(var("vs"), list(var("v"))))))),
                                 var("k"),
                                 var("m")))),
                     hydra.dsl.lib.Maps.empty(),
@@ -10631,7 +10631,7 @@ public class Coder {
         .to(() ->
                 let("schemaTypes",
                     proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
-                    Optionals.match(
+                    Optionals.cases(
                         Maps.lookup(var("typeName"), var("schemaTypes")),
                         right(bool(false)),
                         lambda("ts",
@@ -10643,7 +10643,7 @@ public class Coder {
                                     Type.UNION,
                                     lambda("rt",
                                         right(
-                                            Optionals.match(
+                                            Optionals.cases(
                                                 Lists.find(
                                                     lambda("ft",
                                                         Equality.equal(
@@ -11164,7 +11164,7 @@ public class Coder {
                                 let("propagatedBindings",
                                     Lists.map(
                                         lambda("b",
-                                            Optionals.match(proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"), var("b"), lambda("ts",
+                                            Optionals.cases(proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"), var("b"), lambda("ts",
                                                     record(Binding.TYPE_,
                                                         field(
                                                             Binding.NAME,
@@ -12278,7 +12278,7 @@ public class Coder {
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
                     field("mInit",
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
-                    Optionals.match(
+                    Optionals.cases(
                         var("mInit"),
                         list(
                             inject(InterfaceMemberDeclaration.TYPE_,
@@ -12412,7 +12412,7 @@ public class Coder {
                     field(
                         Type.VARIABLE,
                         lambda("v",
-                            Optionals.match(
+                            Optionals.cases(
                                 Maps.lookup(var("v"), var("subst")),
                                 var("t"),
                                 lambda("rep", var("rep"))))),
@@ -12724,7 +12724,7 @@ public class Coder {
                                     var("combinedAnns"))),
                             lambda("mtyp",
                                 Eithers.bind(
-                                    Optionals.match(
+                                    Optionals.cases(
                                         var("mtyp"),
                                         // No retained type (neither a wrapping type application nor a
                                         // keyType annotation reached this collection term, e.g. a literal
@@ -12926,7 +12926,7 @@ public class Coder {
                         field("value",
                             proj(Binding.TYPE_, Binding.TERM, "binding")),
                         Eithers.bind(
-                            Optionals.match(
+                            Optionals.cases(
                                 proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                                 hydra.dsl.Checking.typeOfTerm(
                                     var("cx"),
@@ -13038,7 +13038,7 @@ public class Coder {
                     field("value",
                         proj(Binding.TYPE_, Binding.TERM, "binding")),
                     Eithers.bind(
-                        Optionals.match(
+                        Optionals.cases(
                             proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                             hydra.dsl.Checking.typeOfTerm(
                                 var("cx"),
@@ -13288,7 +13288,7 @@ public class Coder {
                         field(
                             JavaSymbolClass.NULLARY_FUNCTION,
                             constant(
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mns"),
                                     apply(
                                         ref(Coder.typeAppFallbackCast),
@@ -13360,7 +13360,7 @@ public class Coder {
                         field(
                             JavaSymbolClass.HOISTED_LAMBDA,
                             lambda("arity",
-                                Optionals.match(
+                                Optionals.cases(
                                     var("mns"),
                                     apply(
                                         ref(Coder.typeAppFallbackCast),
@@ -13855,7 +13855,7 @@ public class Coder {
     public static final Def lazyFlagsForPrimitive = def("lazyFlagsForPrimitive")
         .lam("g").lam("name")
         .to(() ->
-                Optionals.match(
+                Optionals.cases(
                     Maps.lookup(var("name"), proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
                     list(),
                     lambda("prim",

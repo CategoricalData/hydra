@@ -1208,7 +1208,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.match"},
+                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                 "type": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"list": {"literal": {"integer": "int32"}}}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"literal": {"integer": "int32"}}}}}},
                                         "argument": {

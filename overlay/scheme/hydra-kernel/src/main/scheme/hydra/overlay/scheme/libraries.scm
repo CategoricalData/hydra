@@ -571,8 +571,8 @@
           (cons (prim-name def:hydra_lib_optionals_bind)     (prim2 (prim-name def:hydra_lib_optionals_bind)
                                               hydra_overlay_scheme_lib_optionals_bind
                                               #f (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
-          (cons (prim-name def:hydra_lib_optionals_match)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_match)
-                                              hydra_overlay_scheme_lib_optionals_match
+          (cons (prim-name def:hydra_lib_optionals_cases)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_cases)
+                                              hydra_overlay_scheme_lib_optionals_cases
                                               #f (tc-optional a) b (fun a b) b)))
           (cons (prim-name def:hydra_lib_optionals_givens)      (prim1 (prim-name def:hydra_lib_optionals_givens)      hydra_overlay_scheme_lib_optionals_givens      #f (tc-list (tc-optional a)) (tc-list a)))
           (cons (prim-name def:hydra_lib_optionals_compose)  (prim3 (prim-name def:hydra_lib_optionals_compose)

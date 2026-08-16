@@ -410,7 +410,7 @@ object Libraries:
 
   // Mark the given (0-based) parameter positions as lazy. The Lisp coder
   // reads parameterIsLazy to decide which arguments to wrap in `(fn [] ...)`
-  // thunks; without this, higher-order primitives like optionals.match emit
+  // thunks; without this, higher-order primitives like optionals.cases emit
   // strict recursive calls that blow the stack (#453). Mirrors Haskell's
   // lazySig / markLazyParams in Hydra.Sources.Kernel.Lib.{Optionals,Logic,...}.
   private def withLazy(prim: Primitive, idxs: Seq[Int]): Primitive =
@@ -1116,7 +1116,7 @@ object Libraries:
             case None => mkMaybe(None)
             case Some(x) => app(f, x)
         }),
-      hydra.lib.optionals.`match`.name -> withLazy(mkPrimImpl(hydra.lib.optionals.`match`.name, tScheme(Seq("a", "b"),
+      hydra.lib.optionals.cases.name -> withLazy(mkPrimImpl(hydra.lib.optionals.cases.name, tScheme(Seq("a", "b"),
         tFun(tOpt(a), tFun(b, tFun(tFun(a, b), b)))),
         impl3 { (mx, d, f) =>
           exMaybe(mx) match

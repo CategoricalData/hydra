@@ -59,7 +59,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.python.syntax.Expression"}}},
                                 "argument": {"variable": "mcomment"}}},
                             "argument": {"variable": "expr"}}},
@@ -115,7 +115,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.python.syntax.Statement"}}},
                                 "argument": {"variable": "mcomment"}}},
                             "argument": {"variable": "stmt"}}},
@@ -1069,7 +1069,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                             "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
                                         "argument": {"variable": "mcomment"}}},
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.Statement"}}}}},
@@ -1264,7 +1264,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.optionals.match"},
+                                                    "body": {"variable": "hydra.lib.optionals.cases"},
                                                     "type": {
                                                       "pair": {"first": {"variable": "hydra.python.syntax.Primary"}, "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
                                                 "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
@@ -2001,7 +2001,7 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                 "type": {"variable": "hydra.python.syntax.Primary"}}},
                             "argument": {
                               "application": {"function": {"variable": "hydra.python.utils.decodePyExpressionToPyPrimary"}, "argument": {"variable": "e"}}}}},

@@ -196,7 +196,7 @@ showDef d = Phantoms.cases _Definition d Nothing [
       Strings.concat (list [
         Core.unName (Packaging.termDefinitionName (var "td")),
         Phantoms.string " :: ",
-        Optionals.match (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> PrintCore.typeScheme # var "ts"),
+        Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> PrintCore.typeScheme # var "ts"),
         Phantoms.string " = ",
         PrintCore.term # (Packaging.termDefinitionBody (var "td")),
         Phantoms.string "\n"]),

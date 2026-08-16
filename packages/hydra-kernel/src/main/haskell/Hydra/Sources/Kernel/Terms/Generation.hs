@@ -177,7 +177,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
           var "hexDigit" @@ (Optionals.withDefault (int32 0) (Math.mod (var "b") (int32 16)))]) $
   -- go :: Bool -> Bool -> [Int32] -> [Int32]
   "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
-    Optionals.match (Lists.uncons $ var "bytes") (TypedTerm (Terms.list []) :: TypedTerm [Int]) ("uc" ~>
+    Optionals.cases (Lists.uncons $ var "bytes") (TypedTerm (Terms.list []) :: TypedTerm [Int]) ("uc" ~>
        "b" <~ Pairs.first (var "uc") $
        "bs" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "esc")

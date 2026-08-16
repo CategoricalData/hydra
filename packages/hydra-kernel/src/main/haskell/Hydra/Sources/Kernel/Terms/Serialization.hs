@@ -253,7 +253,7 @@ customIndentBlock = define "customIndentBlock" $
       (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Optionals.match (Lists.head $ var "els") (cst @@ string "") ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
+    Optionals.cases (Lists.head $ var "els") (cst @@ string "") ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
 
@@ -292,7 +292,7 @@ expressionLength = define "expressionLength" $
     _Ws_breakAndIndent>>: "s" ~> int32 10000,
     _Ws_doubleBreak>>: constant $ int32 10000]) $
   "blockStyleLength" <~ ("style" ~>
-    "mindentLen" <~ Optionals.match (Ast.blockStyleIndent $ var "style") (int32 0) (reify Strings.length) $
+    "mindentLen" <~ Optionals.cases (Ast.blockStyleIndent $ var "style") (int32 0) (reify Strings.length) $
     "nlBeforeLen" <~ Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0) $
     "nlAfterLen" <~ Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0) $
     Math.add (var "mindentLen") $ Math.add (var "nlBeforeLen") (var "nlAfterLen")) $
@@ -450,7 +450,7 @@ orSep = define "orSep" $
   doc "Separate alternatives with `|`, breaking onto separate lines when the block style requests a newline before content" $
   "style" ~> "l" ~>
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
-    Optionals.match (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+    Optionals.cases (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 parenList :: TypedTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
@@ -612,7 +612,7 @@ printExpr = define "printExpr" $
       "spadlIsNewline" <~ var "isNewlineWs" @@ var "spadl" $
       "spadrIsNewline" <~ var "isNewlineWs" @@ var "spadr" $
       "joinElements" <~ ("acc" ~> "el" ~>
-        "elStartsWithNewline" <~ Optionals.match (Strings.charAt (int32 0) (var "el")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
+        "elStartsWithNewline" <~ Optionals.cases (Strings.charAt (int32 0) (var "el")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
         "elIsEmpty" <~ Equality.equal (var "el") (string "") $
         -- Suppress whitespace padding when the next element either
         -- starts with `\n` (whitespace would dangle on previous line)
@@ -631,7 +631,7 @@ printExpr = define "printExpr" $
           (string "")
           (var "pad" @@ var "spadr") $
         Strings.concat $ list [var "acc", var "padlEff", var "ssym", var "padrEff", var "el"]) $
-      Optionals.match (Lists.head $ var "printedElements") (string "") ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements"))),
+      Optionals.cases (Lists.head $ var "printedElements") (string "") ("h" ~> Lists.foldl (var "joinElements") (var "h") (Lists.drop (int32 1) (var "printedElements"))),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
@@ -684,7 +684,7 @@ printExpr = define "printExpr" $
         (string "")
         (var "pad" @@ var "padl") $
       "padrPad" <~ (var "pad" @@ var "padr") $
-      "rhsStartsWithNewline" <~ Optionals.match (Strings.charAt (int32 0) (var "rhs")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
+      "rhsStartsWithNewline" <~ Optionals.cases (Strings.charAt (int32 0) (var "rhs")) (boolean False) ("c" ~> Equality.equal (var "c") (int32 10)) $
       "padrEffective" <~ Logic.ifElse
         (Logic.and (var "rhsStartsWithNewline")
                    (Logic.not $ var "padrIsNewline"))
@@ -701,7 +701,7 @@ printExpr = define "printExpr" $
       "doIndent" <~ Ast.blockStyleIndent (var "style") $
       "nlBefore" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
       "nlAfter" <~ Ast.blockStyleNewlineAfterContent (var "style") $
-      "ibody" <~ Optionals.match (var "doIndent") (var "body") ("pre" ~> customIndent @@ var "pre" @@ var "body") $
+      "ibody" <~ Optionals.cases (var "doIndent") (var "body") ("pre" ~> customIndent @@ var "pre" @@ var "body") $
       "pre" <~ Logic.ifElse (var "nlBefore") (string "\n") (string "") $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]
@@ -715,7 +715,7 @@ sep :: TypedTermDefinition (Op -> [Expr] -> Expr)
 sep = define "sep" $
   doc "Combine a list of expressions into a single OpExpr chain using the given operator. Returns the empty constant for an empty list." $
   "op" ~> "els" ~>
-    Optionals.match (Lists.head $ var "els") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
+    Optionals.cases (Lists.head $ var "els") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
 
 spaceSep :: TypedTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
@@ -791,7 +791,7 @@ symbolSep = define "symbolSep" $
       (Ast.padding Ast.wsNone (var "break"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Optionals.match (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+    Optionals.cases (Lists.head $ var "l") (cst @@ string "") ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
 
 tabIndent :: TypedTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $

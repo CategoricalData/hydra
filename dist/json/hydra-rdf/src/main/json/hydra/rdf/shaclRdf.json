@@ -313,7 +313,7 @@
                                                           "application": {
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                                                 "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                             "argument": {"variable": "flags_"}}},
                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
@@ -794,7 +794,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "boolean"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "boolean"}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {
@@ -1427,7 +1427,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "bigint"}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "bigint"}}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {

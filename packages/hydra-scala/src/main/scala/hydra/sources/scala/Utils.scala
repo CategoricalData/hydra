@@ -50,7 +50,7 @@ object Utils:
     define(NS, "qualifyUnionFieldName").doc("Qualify a union field name, optionally prefixing with the Scala type name")
       .lam("dlft").lam("sname").lam("fname").to(
         cat2(
-          applyP("hydra.lib.optionals.match",
+          applyP("hydra.lib.optionals.cases",
             v("sname"),
             v("dlft"),
             lambda("n",

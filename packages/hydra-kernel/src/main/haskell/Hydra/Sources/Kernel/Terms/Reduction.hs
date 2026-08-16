@@ -306,7 +306,7 @@ etaExpandTerm = define "etaExpandTerm" $
            Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
          (var "applied") (var "indices") $
        -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
-       "fullyApplied" <~ Optionals.match (var "codomainType") (var "fullyAppliedRaw") ("ct" ~> Core.termAnnotated $ Core.annotatedTerm (var "fullyAppliedRaw")
+       "fullyApplied" <~ Optionals.cases (var "codomainType") (var "fullyAppliedRaw") ("ct" ~> Core.termAnnotated $ Core.annotatedTerm (var "fullyAppliedRaw")
            (Annotations.wrapAnnotationMap @@ Maps.singleton (Core.name (string "type")) (Phantoms.encoderFor _Type @@ var "ct"))) $
        -- Step 2: Wrap with lambdas from inside out by reversing indices: \v1 -> \v2 -> ... -> fullyApplied
        -- Using foldl with reversed indices+domains gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)
@@ -604,7 +604,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
       Math.range (int32 1) (Math.add (var "n") (int32 1))) $
     "pad" <~ ("vars" ~> "body" ~>
-      Optionals.match (Lists.uncons $ var "vars") (var "body") ("uc" ~>
+      Optionals.cases (Lists.uncons $ var "vars") (var "body") ("uc" ~>
           "v0" <~ Pairs.first (var "uc") $
           "vrest" <~ Pairs.second (var "uc") $
           Core.termLambda $ Core.lambda (var "v0") nothing $ var "pad"
@@ -706,7 +706,7 @@ etaExpansionArity = define "etaExpansionArity" $
     _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
       -- Note: we assume that the graph is fully typed.
-      Optionals.match (Optionals.bind
+      Optionals.cases (Optionals.bind
           (Lexical.lookupBinding @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingTypeScheme $ var "b")) (int32 0) ("ts" ~> Arity.typeArity @@ (Core.typeSchemeBody $ var "ts"))]
 
@@ -766,7 +766,7 @@ reduceTerm = define "reduceTerm" $
       (right $ var "arg")
       (var "reduce" @@ false @@ var "arg")) $
   "applyToArguments" <~ ("fun" ~> "args" ~>
-    Optionals.match (Lists.uncons $ var "args") (var "fun") ("uc" ~>
+    Optionals.cases (Lists.uncons $ var "args") (var "fun") ("uc" ~>
         var "applyToArguments" @@
           (Core.termApplication $ Core.application (var "fun") (Pairs.first $ var "uc")) @@
           (Pairs.second $ var "uc"))) $
@@ -777,33 +777,33 @@ reduceTerm = define "reduceTerm" $
     "matching" <~ (Lists.find
       ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionFieldName $ var "proj"))
       (var "fields")) $
-    Optionals.match (var "matching") (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj"))) ("mf" ~> right $ Core.fieldTerm $ var "mf")) $
+    Optionals.cases (var "matching") (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj"))) ("mf" ~> right $ Core.fieldTerm $ var "mf")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>
     "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
     "matching" <~ (Lists.find
       ("f" ~> Equality.equal (Core.caseAlternativeName $ var "f") (Core.fieldName $ var "field"))
       (Core.caseStatementCases $ var "cs")) $
-    Optionals.match (var "matching") (Optionals.match (Core.caseStatementDefault $ var "cs") (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field"))) (reify right)) ("mf" ~> right $ Core.termApplication $ Core.application
+    Optionals.cases (var "matching") (Optionals.cases (Core.caseStatementDefault $ var "cs") (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field"))) (reify right)) ("mf" ~> right $ Core.termApplication $ Core.application
         (Core.caseAlternativeHandler $ var "mf")
         (Core.fieldTerm $ var "field"))) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "original" $
     "forProjection" <~ ("proj" ~> "args" ~>
-      Optionals.match (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
+      Optionals.cases (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
           "arg" <~ Pairs.first (var "uc") $
           "remainingArgs" <~ Pairs.second (var "uc") $
           "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
           "reducedResult" <<~ Eithers.bind (var "applyProjection" @@ var "proj" @@ var "reducedArg") (var "reduce" @@ var "eager") $
           var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")) $
     "forCases" <~ ("cs" ~> "args" ~>
-      Optionals.match (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
+      Optionals.cases (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
           "arg" <~ Pairs.first (var "uc") $
           "remainingArgs" <~ Pairs.second (var "uc") $
           "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
           "reducedResult" <<~ Eithers.bind (var "applyCases" @@ var "cs" @@ var "reducedArg") (var "reduce" @@ var "eager") $
           var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")) $
     "forUnwrap" <~ ("name" ~> "args" ~>
-      Optionals.match (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
+      Optionals.cases (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
           "arg" <~ Pairs.first (var "uc") $
           "remainingArgs" <~ Pairs.second (var "uc") $
           "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
@@ -812,7 +812,7 @@ reduceTerm = define "reduceTerm" $
     "forLambda" <~ ("l" ~> "args" ~>
       "param" <~ Core.lambdaParameter (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
-      Optionals.match (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
+      Optionals.cases (Lists.uncons $ var "args") (right $ var "original") ("uc" ~>
           "arg" <~ Pairs.first (var "uc") $
           "remainingArgs" <~ Pairs.second (var "uc") $
           "reducedArg" <<~ var "reduce" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
@@ -852,11 +852,11 @@ reduceTerm = define "reduceTerm" $
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
         "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
-        Optionals.match
+        Optionals.cases
           (var "mBinding")
           -- Not found in graphBoundTerms: fall through to graphPrimitives
           ("mPrim" <~ Lexical.lookupPrimitive @@ var "graph" @@ var "v" $
-           Optionals.match
+           Optionals.cases
              (var "mPrim")
              -- Not found in either: lambda-bound variable, return with args applied
              (right $ var "applyToArguments" @@ var "original" @@ var "args")
@@ -924,7 +924,7 @@ termIsValue = define "termIsValue" $
     _Term_application>>: constant false,
     _Term_cases>>: "cs" ~>
       Logic.and (var "checkCaseAlternatives" @@ Core.caseStatementCases (var "cs"))
-        (Optionals.match (Core.caseStatementDefault $ var "cs") true (asTerm termIsValue)),
+        (Optionals.cases (Core.caseStatementDefault $ var "cs") true (asTerm termIsValue)),
     _Term_either>>: "e" ~>
       Eithers.either
         ("l" ~> termIsValue @@ var "l")
@@ -942,7 +942,7 @@ termIsValue = define "termIsValue" $
           (termIsValue @@ Pairs.second (var "kv")))
         true $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
     _Term_optional>>: "m" ~>
-      Optionals.match (var "m") true (asTerm termIsValue),
+      Optionals.cases (var "m") true (asTerm termIsValue),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
     _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
     _Term_inject>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),

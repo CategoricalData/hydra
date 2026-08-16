@@ -109,7 +109,7 @@ appendFindingModule :: TypedTermDefinition (
 appendFindingModule = define "appendFindingModule" $
   doc "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -139,7 +139,7 @@ appendFindingPackage :: TypedTermDefinition (
 appendFindingPackage = define "appendFindingPackage" $
   doc "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -174,11 +174,11 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.match (var "err")
+      Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           "key" <~ Strings.toLower (Packaging.unModuleName $ var "ns") $
           "existing" <~ Maps.lookup (var "key" :: TypedTerm String) (var "seen") $
-          Optionals.match (var "existing")
+          Optionals.cases (var "existing")
             -- No conflict: add to map
             (pair (Maps.insert (var "key" :: TypedTerm String) (var "ns") (var "seen")) nothing)
             -- Conflict found
@@ -210,7 +210,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
   -- For each type definition that is a union, check each field
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.match (var "acc")
+      Optionals.cases (var "acc")
         (cases _Definition (var "def") (Just nothing) [
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
@@ -221,7 +221,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                 -- Check each field of the union
                 Lists.foldl
                   ("innerAcc" ~> "field" ~>
-                    Optionals.match (var "innerAcc")
+                    Optionals.cases (var "innerAcc")
                       ("fieldName" <~ Core.fieldTypeName (var "field") $
                         "localFieldName" <~ (Names.localNameOf @@ var "fieldName") $
                         "constructorName" <~ Strings.concat2
@@ -255,7 +255,7 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.match (var "acc")
+      Optionals.cases (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "documented" <~ cases _Definition (var "def") (Just false) [
             _Definition_term>>: "td" ~>
@@ -269,7 +269,7 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
-              Optionals.match (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
+              Optionals.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
                   (Optionals.withDefault (string "") (Packaging.entityMetadataDescription $ var "em"))
                   (string "")))] $
           Logic.ifElse (var "documented")
@@ -292,7 +292,7 @@ checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
   "prefixLen" <~ Strings.length (var "prefix") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.match (var "acc")
+      Optionals.cases (var "acc")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           "nameStr" <~ Core.unName (var "name") $
@@ -316,7 +316,7 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.match (var "acc")
+      Optionals.cases (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "local" <~ (Names.localNameOf @@ var "name") $
           "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
@@ -357,10 +357,10 @@ checkDefinitionOrdering = define "checkDefinitionOrdering" $
     ("acc" ~> "def" ~>
       "prev" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.match (var "err")
+      Optionals.cases (var "err")
         ("currName" <~ (definitionName @@ var "def") $
           "currLocal" <~ (Names.localNameOf @@ var "currName") $
-          Optionals.match (var "prev")
+          Optionals.cases (var "prev")
             -- First entry: no comparison needed
             (pair (just $ var "currName") nothing)
             -- Subsequent entries: compare local names
@@ -392,7 +392,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
     ("acc" ~> "def" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.match (var "err")
+      Optionals.cases (var "err")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           Logic.ifElse (Sets.member (var "name") (var "seen" :: TypedTerm (S.Set Name)))
@@ -416,7 +416,7 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.match (var "err")
+      Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           Logic.ifElse (Sets.member (var "ns") (var "seen" :: TypedTerm (S.Set ModuleName)))
             (pair (var "seen") (just $

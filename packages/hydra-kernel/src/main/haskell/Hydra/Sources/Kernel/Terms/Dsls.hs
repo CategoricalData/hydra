@@ -279,7 +279,7 @@ generateRefBindings = define "generateRefBindings" $
   cases _Definition (var "d") (Just $ right (list ([] :: [TypedTerm Binding]))) [
     _Definition_type>>: constant (right (list ([] :: [TypedTerm Binding]))),
     _Definition_term>>: "td" ~>
-      Optionals.match (Packaging.termDefinitionSignature (var "td"))
+      Optionals.cases (Packaging.termDefinitionSignature (var "td"))
         (right (list ([] :: [TypedTerm Binding])))
         ("sig" ~> right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"])),
     _Definition_primitive>>: "pd" ~>
@@ -802,7 +802,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.moduleNameOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Optionals.match (var "ns") (string "") (reify Packaging.unModuleName)) (string "hydra.typed"))
+  Logic.ifElse (Equality.equal (Optionals.cases (var "ns") (string "") (reify Packaging.unModuleName)) (string "hydra.typed"))
     (right nothing)
     (right (just (var "b")))
 

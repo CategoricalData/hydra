@@ -518,7 +518,7 @@ def opt(mc: Optional[TypedTerm[A]]) -> TypedTerm[Optional[A]]:
 def opt_cases(arg: TypedTerm[Optional[A]], if_nothing: TypedTerm[B], if_just: TypedTerm[A]) -> TypedTerm[B]:
     """Pattern match on an optional value."""
     return primitive3(
-        Name("hydra.lib.optionals.match"),
+        Name("hydra.lib.optionals.cases"),
         arg,
         if_nothing,
         if_just

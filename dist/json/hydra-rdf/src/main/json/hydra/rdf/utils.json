@@ -696,7 +696,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                     "type": {"literal": "string"}}},
                                                 "argument": {"variable": "gname"}}},
                                             "argument": {"literal": {"string": ""}}}},

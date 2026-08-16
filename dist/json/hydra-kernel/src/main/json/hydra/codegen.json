@@ -376,7 +376,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.optionals.match"},
+                                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                                 "type": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"list": {"literal": {"integer": "int32"}}}}}}},
                                                             "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                         "argument": {
@@ -673,7 +673,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
                                             "type": {"literal": "string"}}},
                                         "argument": {
                                           "application": {
@@ -6343,7 +6343,7 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.Module"}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.Module"}}},
                                                                                                 "type": {"list": {"variable": "hydra.packaging.ModuleName"}}}},
                                                                                             "argument": {
                                                                                               "application": {

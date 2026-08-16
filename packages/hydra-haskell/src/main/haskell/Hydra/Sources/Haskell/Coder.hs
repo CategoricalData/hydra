@@ -312,7 +312,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
         (asTerm Constants.ignoredVariable)
         (var "v0"),
       "hname">: HaskellUtilsSource.unionFieldReference @@ (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes $ var "g")))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
-          "args" <<~ (Optionals.match (Maps.lookup (var "fn") (var "fieldMap" :: TypedTerm (M.Map Name FieldType)))
+          "args" <<~ (Optionals.cases (Maps.lookup (var "fn") (var "fieldMap" :: TypedTerm (M.Map Name FieldType)))
               (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fn"))) $
               "fieldType" ~> lets [
                 "ft">: Core.fieldTypeType $ var "fieldType",
@@ -332,7 +332,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
       pair (Core.fieldTypeName $ var "f") (var "f"),
     "fieldMap">: ((Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")) :: TypedTerm (M.Map Name FieldType))] $
     "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
-    "dcases" <<~ (Optionals.match (var "def")
+    "dcases" <<~ (Optionals.cases (var "def")
       (right $ list ([] :: [TypedTerm H.CaseRhs])) $
       "d" ~>
         "cs" <<~ Eithers.map (reify $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
@@ -503,7 +503,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         (right $ HaskellUtilsSource.hsvar @@ string "M.empty")
         (var "nonemptyMap" @@ var "m"),
       _Term_optional>>: "m" ~>
-        Optionals.match (var "m")
+        Optionals.cases (var "m")
           (right $ HaskellUtilsSource.hsvar @@ string "Nothing") $
           "t" ~>
             "ht" <<~ var "encode" @@ var "t" $
@@ -773,7 +773,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
-          Optionals.match (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "termDef") (var "metaWithTerm") ("ts" ~>
+          Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "termDef") (var "metaWithTerm") ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts")),
         _Definition_type>>: "typeDef" ~>
@@ -964,7 +964,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hterms" <<~ Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
           "hbindings">: Lists.zipWith (var "toTermDefinition") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
-          "prevBindings">: Optionals.match (var "bindings") (list ([] :: [TypedTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb"),
+          "prevBindings">: Optionals.cases (var "bindings") (list ([] :: [TypedTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb"),
           "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $
           var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "allBindings")]] $
     "comments" <<~ Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term" $
@@ -1150,7 +1150,7 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
   "maybeConstraints" ~> lets [
     "constraintToName">: "tcc" ~> match _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
-    Optionals.match (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
+    Optionals.cases (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
         Maps.map
           ("meta" ~> ((Sets.fromList $
             Optionals.givens $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))

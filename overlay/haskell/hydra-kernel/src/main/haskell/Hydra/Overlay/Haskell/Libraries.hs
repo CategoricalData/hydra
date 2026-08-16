@@ -138,7 +138,6 @@ hydraLibEithers = standardLibrary [
     prim2       DefEithers.mapList          Eithers.mapList          (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
     prim2       DefEithers.mapOptional         Eithers.mapOptional         (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
     prim2       DefEithers.mapSet           Eithers.mapSet           (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
-    prim3       DefEithers.match            Eithers.match            (Prims.either_ x_ y_) (funT x_ z_) (funT y_ z_) z_,
     prim1       DefEithers.partition        Eithers.partition        (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.partition Eithers.partition (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.pure             Eithers.pure             y_ (Prims.either_ x_ y_),
@@ -373,7 +372,7 @@ hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary [
     prim2     DefOptionals.apply     Optionals.apply        (optional $ funT x_ y_) (optional x_) (optional y_),
     prim2     DefOptionals.bind      Optionals.bind         (optional x_) (fun x_ (optional y_)) (optional y_),
-    prim3 DefOptionals.match     Optionals.match        (optional x_) y_ (funT x_ y_) y_,
+    prim3 DefOptionals.cases     Optionals.cases        (optional x_) y_ (funT x_ y_) y_,
     prim1     DefOptionals.givens       Optionals.givens          (list $ optional x_) (list x_),
     prim3     DefOptionals.compose   Optionals.compose      (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
     prim3     DefOptionals.foldList  Optionals.foldList     (fun x_ (fun y_ (optional x_))) x_ (list y_) (optional x_),

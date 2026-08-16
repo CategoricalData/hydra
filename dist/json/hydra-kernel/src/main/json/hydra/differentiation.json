@@ -1550,7 +1550,7 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "argument": {
                                                                           "application": {"function": {"variable": "hydra.differentiation.primitiveDerivative"}, "argument": {"variable": "fname"}}}}},

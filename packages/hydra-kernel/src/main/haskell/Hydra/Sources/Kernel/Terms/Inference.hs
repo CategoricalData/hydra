@@ -189,7 +189,7 @@ atOrFail :: TypedTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
 atOrFail = define "atOrFail" $
   doc "Return the element at the given index, or Left(Other) with the given description if out of range" $
   "i" ~> "desc" ~> "xs" ~>
-  Optionals.match (Lists.at (var "i") (var "xs")) (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc") (reify right)
+  Optionals.cases (Lists.at (var "i") (var "xs")) (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc") (reify right)
 
 bindConstraints :: TypedTermDefinition (InferenceContext -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
 bindConstraints = define "bindConstraints" $
@@ -296,7 +296,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
   "checkOne" <~ ("pair" ~>
     "varName" <~ Pairs.first (var "pair") $
     "varConstraints" <~ Pairs.second (var "pair") $
-    Optionals.match (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
+    Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
       (right unit)
       ("resolvedType" ~>
         "checkClass" <~ ("classConstraint" ~>
@@ -378,7 +378,7 @@ headOrFail :: TypedTermDefinition (String -> [a] -> Prelude.Either Error a)
 headOrFail = define "headOrFail" $
   doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
   "desc" ~> "xs" ~>
-  Optionals.match (Lists.head $ var "xs") (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc") (reify right)
+  Optionals.cases (Lists.head $ var "xs") (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc") (reify right)
 inferGraphTypes :: TypedTermDefinition (InferenceContext -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), InferenceContext))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
@@ -418,7 +418,7 @@ inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
   "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) $ pair (list ([] :: [TypedTerm Type])) (pair Substitution.idTypeSubst (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints)))) (var "fcx")) $
-  Optionals.match (Lists.uncons (var "pairs")) (var "emptyResult") ("pairsUc" ~>
+  Optionals.cases (Lists.uncons (var "pairs")) (var "emptyResult") ("pairsUc" ~>
     "headPair" <~ Pairs.first (var "pairsUc") $
     "tl" <~ Pairs.second (var "pairsUc") $
     "e" <~ Pairs.first (var "headPair") $
@@ -463,7 +463,7 @@ inferTypeOf = define "inferTypeOf" $
     ("binding" <<~ headOrFail @@ string "inferTypeOf: single binding expected" @@ var "bindings" $
      "term1" <~ Core.bindingTerm (var "binding") $
      "mts" <~ Core.bindingTypeScheme (var "binding") $
-     Optionals.match (var "mts") (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
+     Optionals.cases (var "mts") (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
          (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
          (string "Expected a type scheme"))) ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2")))
     (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
@@ -864,7 +864,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
   "originalBindingConstraints" <~ Lists.foldl
     ("acc" ~> "b" ~>
-      Optionals.match (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> Optionals.match (Core.typeSchemeConstraints $ var "ts") (var "acc") ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")))
+      Optionals.cases (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> Optionals.cases (Core.typeSchemeConstraints $ var "ts") (var "acc") ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (var "bins0") $
   "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
@@ -1020,7 +1020,7 @@ inferTypeOfOptional = define "inferTypeOfOptional" $
     @@ var "trmCons"
     @@ (string "optional element")
     @@ (Sets.empty :: TypedTerm (S.Set Name))
-    @@ (Optionals.match (var "m") (list ([] :: [TypedTerm Term])) (reify Lists.singleton))
+    @@ (Optionals.cases (var "m") (list ([] :: [TypedTerm Term])) (reify Lists.singleton))
 
 inferTypeOfPair :: TypedTermDefinition (InferenceContext -> Graph -> (Term, Term) -> Prelude.Either Error InferenceResult)
 inferTypeOfPair = define "inferTypeOfPair" $
@@ -1220,10 +1220,10 @@ inferTypeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> Name ->
 inferTypeOfVariable = define "inferTypeOfVariable" $
   doc "Infer the type of a variable (Either version). Paper: inference.tex, rule Var (elaboration form), with rule Prim as the primitive-namespace fallback." $
   "fcx" ~> "cx" ~> "name" ~>
-  Optionals.match
+  Optionals.cases
     (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "cx"))
     -- Not found in graphBoundTypes: fall through to graphPrimitives
-    (Optionals.match (Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("scheme" ~>
+    (Optionals.cases (Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p"))) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("scheme" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
         "ts" <~ Pairs.first (var "tsResult") $
         "fcx2" <~ Pairs.second (var "tsResult") $
@@ -1285,7 +1285,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
   "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) (pair (list ([] :: [TypedTerm Type])) (pair (Substitution.idTypeSubst) (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))))) (var "fcx")) $
-  Optionals.match (Lists.uncons (var "bins")) (var "emptyResult") ("binsUc" ~>
+  Optionals.cases (Lists.uncons (var "bins")) (var "emptyResult") ("binsUc" ~>
     "binding" <~ Pairs.first (var "binsUc") $
     "tl" <~ Pairs.second (var "binsUc") $
     "k" <~ Core.bindingName (var "binding") $
@@ -1305,7 +1305,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "c1Inferred" <~ Typing.inferenceResultClassConstraints (var "result1") $
 
     -- Extract constraints from the original binding's TypeScheme
-    "originalBindingConstraints" <<~ Optionals.match (Core.bindingTypeScheme $ var "binding") (right (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) ("ts" ~>
+    "originalBindingConstraints" <<~ Optionals.cases (Core.bindingTypeScheme $ var "binding") (right (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) ("ts" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
         "freshConstraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
@@ -1368,7 +1368,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
     ("acc" ~> "pair" ~>
       "k" <~ Pairs.first (var "pair") $
       "v" <~ Pairs.second (var "pair") $
-      Optionals.match (Maps.lookup (var "k" :: TypedTerm Name) (var "acc")) (Maps.insert (var "k") (var "v") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))) ("existing" ~>
+      Optionals.cases (Maps.lookup (var "k" :: TypedTerm Name) (var "acc")) (Maps.insert (var "k") (var "v") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))) ("existing" ~>
           "merged" <~ Core.typeVariableConstraints (Lists.distinct $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
           Maps.insert (var "k") (var "merged") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     (var "m1")

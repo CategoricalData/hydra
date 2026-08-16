@@ -580,7 +580,7 @@ public class Utils {
         .lam("primType").lam("minit")
         .to(() ->
                 let("init_",
-                    Optionals.match(
+                    Optionals.cases(
                         var("minit"),
                         wrap(ArrayInitializer.TYPE_, list()),
                         lambda("i", var("i"))),
@@ -782,7 +782,7 @@ public class Utils {
         .to(() ->
                 let(
                     field("qual",
-                        Optionals.match(
+                        Optionals.cases(
                             var("pkg"),
                             inject(ClassTypeQualifier.TYPE_,
                                 ClassTypeQualifier.NONE,
@@ -1573,7 +1573,7 @@ public class Utils {
     public static final Def javaMethodBody = def("javaMethodBody")
         .lam("mstmts")
         .to(() ->
-                Optionals.match(
+                Optionals.cases(
                     var("mstmts"),
                     inject(MethodBody.TYPE_,
                         MethodBody.NONE,
@@ -2368,7 +2368,7 @@ public class Utils {
     public static final Def lookupJavaVarName = def("lookupJavaVarName")
         .lam("aliases").lam("name")
         .to(() ->
-                Optionals.match(
+                Optionals.cases(
                     Maps.lookup(
                         var("name"),
                         proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
@@ -2442,7 +2442,7 @@ public class Utils {
         .lam("lhs").lam("methodName").lam("args")
         .to(() ->
                 let("header",
-                    Optionals.match(
+                    Optionals.cases(
                         var("lhs"),
                         inject(MethodInvocation_Header.TYPE_,
                             MethodInvocation_Header.SIMPLE,
@@ -2560,13 +2560,13 @@ public class Utils {
                             apply(unwrap(Name.TYPE_), var("name"))),
                         wrap(Identifier.TYPE_,
                             apply(ref(Utils.sanitizeJavaName), var("local"))),
-                        Optionals.match(
+                        Optionals.cases(
                             var("ns_"),
                             wrap(Identifier.TYPE_, var("local")),
                             lambda("gname",
                                 let(
                                     field("parts",
-                                        Optionals.match(
+                                        Optionals.cases(
                                             Maps.lookup(
                                                 var("gname"),
                                                 proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
@@ -2628,12 +2628,12 @@ public class Utils {
                     field("local",
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("alias",
-                        Optionals.match(
+                        Optionals.cases(
                             var("ns_"),
                             nothing(),
                             lambda("n",
                                 just(
-                                    Optionals.match(
+                                    Optionals.cases(
                                         Maps.lookup(
                                             var("n"),
                                             proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
@@ -2648,7 +2648,7 @@ public class Utils {
                     field("pkg",
                         Logic.ifElse(
                             var("qualify"),
-                            Optionals.match(
+                            Optionals.cases(
                                 var("alias"),
                                 inject(ClassTypeQualifier.TYPE_,
                                     ClassTypeQualifier.NONE,
@@ -2663,7 +2663,7 @@ public class Utils {
                     field("jid",
                         apply(
                             ref(Utils.javaTypeIdentifier),
-                            Optionals.match(
+                            Optionals.cases(
                                 var("mlocal"),
                                 apply(ref(Utils.sanitizeJavaName), var("local")),
                                 lambda("l",

@@ -128,7 +128,7 @@ constructModule = def "constructModule" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDefs" ~>
     "groups" <~ (Dependencies.topologicalSortTypeDefinitions @@ var "typeDefs") $
     -- Check for cycles: if any group has more than one element, it's a cycle
-    Optionals.match (Lists.find (lambda "grp" $ Ordering.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
+    Optionals.cases (Lists.find (lambda "grp" $ Ordering.gt (Lists.length (var "grp")) (int32 1)) (var "groups"))
       -- No cycle found: flatten and process
       ("sortedDefs" <~ Lists.concat (var "groups") $
        "schemas" <<~ (Eithers.mapList (lambda "typeDef" $ typeToSchema @@ var "cx" @@ var "g" @@ var "aliases" @@ var "mod" @@ var "typeDef") (var "sortedDefs")) $

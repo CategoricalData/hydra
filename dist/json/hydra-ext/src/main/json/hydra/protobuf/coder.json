@@ -487,7 +487,7 @@
                                                                     "application": {
                                                                       "function": {
                                                                         "typeApplication": {
-                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                                                           "type": {"literal": "string"}}},
                                                                       "argument": {"variable": "desc"}}},
                                                                   "argument": {"literal": {"string": ""}}}},
@@ -612,7 +612,7 @@
                                                                                                               "application": {
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "boolean"}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "boolean"}}},
                                                                                                                     "type": {"literal": "boolean"}}},
                                                                                                                 "argument": {"variable": "checkResult"}}},
                                                                                                             "argument": {
@@ -3537,7 +3537,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                             "type": {"literal": "string"}}},
                                         "argument": {"variable": "ns_"}}},
                                     "argument": {"variable": "local"}}},
@@ -5161,7 +5161,7 @@
                                           "application": {
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                 "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"literal": "boolean"}}}}},
                                             "argument": {
                                               "application": {

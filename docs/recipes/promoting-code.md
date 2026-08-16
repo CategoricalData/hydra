@@ -518,7 +518,7 @@ inject _TypeName _TypeName_variant @@ var "value"
 -- Optionals
 just (var "x")
 nothing
-Optionals.match (var "opt") (var "default") ("x" ~> ...)
+Optionals.cases (var "opt") (var "default") ("x" ~> ...)
 Optionals.cat (var "xs")
 
 -- Pairs

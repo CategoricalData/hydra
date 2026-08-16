@@ -397,7 +397,7 @@ mark, are:
 | Primitive | Lazy parameter(s) | Why |
 |-----------|-------------------|-----|
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
-| `hydra.lib.optionals.match` | the `none`-case default value | Only evaluated when the optional is none |
+| `hydra.lib.optionals.cases` | the `none`-case default value | Only evaluated when the optional is none |
 | `hydra.lib.optionals.fromOptional` | the default value | Only evaluated when the optional is none |
 | `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
@@ -527,7 +527,7 @@ layers in the kernel JSON. The head of `App(App(App(TypeApp(Var "ifElse", T)), c
 *not* `Var "ifElse"` — your `termHeadVariable`-equivalent helper must recurse through
 `Term_typeApplication` (and `Term_annotated`) to find the underlying variable name. If you skip
 this, your detection will fire only for monomorphic primitives and silently miss most of the
-kernel's `ifElse`/`match`/`fromOptional` call sites. The Python coder handles this in
+kernel's `ifElse`/`cases`/`fromOptional` call sites. The Python coder handles this in
 `flatten_application` (which also unwraps annotations); the TypeScript coder does the same in
 `termHeadVariable`.
 

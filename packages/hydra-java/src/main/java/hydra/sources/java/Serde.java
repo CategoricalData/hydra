@@ -658,7 +658,7 @@ public class Serde {
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER, "cice")),
                     field("e",
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION, "cice")),
-                    Optionals.match(var("mqual"), apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")), lambda("q",
+                    Optionals.cases(var("mqual"), apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")), lambda("q",
                             hydra.dsl.Serialization.dotSep(
                                 list(
                                     apply(
@@ -2606,7 +2606,7 @@ public class Serde {
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME, "sea")),
                     field("mv",
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.VALUE, "sea")),
-                    Optionals.match(var("mv"), apply(
+                    Optionals.cases(var("mv"), apply(
                             ref(Serde.markerAnnotationToExpr),
                             wrap(MarkerAnnotation.TYPE_, var("tname"))), lambda("v",
                             hydra.dsl.Serialization.prefix(
@@ -3065,7 +3065,7 @@ public class Serde {
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
                     field("idSec",
                         apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))),
-                    Optionals.match(var("minit"), var("idSec"), lambda("init",
+                    Optionals.cases(var("minit"), var("idSec"), lambda("init",
                             hydra.dsl.Serialization.infixWs(
                                 string("="),
                                 var("idSec"),
@@ -3104,7 +3104,7 @@ public class Serde {
                     field("body",
                         proj(WhileStatement.TYPE_, WhileStatement.BODY, "ws")),
                     field("condSer",
-                        Optionals.match(var("mcond"), hydra.dsl.Serialization.cst( string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
+                        Optionals.cases(var("mcond"), hydra.dsl.Serialization.cst( string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
                     hydra.dsl.Serialization.spaceSep(
                         list(
                             hydra.dsl.Serialization.cst( string("while")),
@@ -3160,7 +3160,7 @@ public class Serde {
         .doc("Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `.")
         .lam("mc").lam("expr")
         .to(() ->
-                Optionals.match(var("mc"), var("expr"), lambda("c",
+                Optionals.cases(var("mc"), var("expr"), lambda("c",
                             hydra.dsl.Serialization.newlineSep(
                                 list(
                                     hydra.dsl.Serialization.cst(

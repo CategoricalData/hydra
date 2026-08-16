@@ -131,7 +131,7 @@ sourceWrapperName = define "sourceWrapperName" $
   "ns" ~>
   "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
   "fallback" <~ Packaging.moduleName2 (Strings.concat $ list [string "hydra.sources.", Packaging.unModuleName (var "ns")]) $
-  Optionals.match (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
+  Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
       Packaging.moduleName2 (Strings.concat $ list [string "hydra.sources.", Strings.join (string ".") (Pairs.second $ var "uc")]))
 
 -- | Map a module name to the package that owns it, via a routing map.
@@ -146,7 +146,7 @@ namespaceToPackageIn :: TypedTermDefinition (M.Map ModuleName String -> ModuleNa
 namespaceToPackageIn = define "namespaceToPackageIn" $
   doc "Map a module name to the package that owns it, failing loudly if unrouted" $
   "rm" ~> "ns" ~>
-  Optionals.match (Maps.lookup (var "ns") (var "rm" :: TypedTerm (M.Map ModuleName String)))
+  Optionals.cases (Maps.lookup (var "ns") (var "rm" :: TypedTerm (M.Map ModuleName String)))
     (left $ Error.errorOther $ Error.otherError $ Strings.concat $ list [
       string "unrouted module: ",
       Packaging.unModuleName (var "ns"),

@@ -760,7 +760,7 @@
                                                                                                                   "application": {
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                                         "type": {"variable": "hydra.core.Type"}}},
                                                                                                                     "argument": {
                                                                                                                       "application": {"function": {"project": {"typeName": "hydra.core.Lambda", "fieldName": "domain"}}, "argument": {"variable": "lam"}}}}},
@@ -1377,7 +1377,7 @@
                                                                                               "application": {
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
                                                                                                     "type": {"set": {"variable": "hydra.core.Name"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {"function": {"project": {"typeName": "hydra.core.Binding", "fieldName": "typeScheme"}}, "argument": {"variable": "el"}}}}},
@@ -2423,7 +2423,7 @@
                                                                                                       "application": {
                                                                                                         "function": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"literal": "boolean"}}},
                                                                                                         "argument": {"variable": "dflt"}}},
                                                                                                     "argument": {"literal": {"boolean": true}}}},

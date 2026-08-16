@@ -196,7 +196,7 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                     "type": {
                                                                       "optional": {
                                                                         "pair": {
@@ -1243,7 +1243,7 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                     "type": {
                                                                       "optional": {
                                                                         "pair": {
@@ -2278,7 +2278,7 @@
                                                                                                                                               "application": {
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                     "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
                                                                                                                                                 "argument": {"variable": "mFirstArg"}}},
                                                                                                                                             "argument": {
@@ -2465,7 +2465,7 @@
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
                                                                                                                                                       "typeApplication": {
-                                                                                                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                                                         "type": {"pair": {"first": {"list": {"variable": "t2"}}, "second": {"variable": "t3"}}}}},
                                                                                                                                                     "type": {"literal": {"integer": "int32"}}}},
                                                                                                                                                 "argument": {"variable": "mSig"}}},
@@ -2571,7 +2571,7 @@
                                                                                                                   "application": {
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                                         "type": {
                                                                                                                           "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                                                                     "argument": {
@@ -2681,7 +2681,7 @@
                                                                                                                   "application": {
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                                         "type": {
                                                                                                                           "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                                                                     "argument": {
@@ -3409,7 +3409,7 @@
                                                                                                               "application": {
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                                     "type": {
                                                                                                                       "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                                                                 "argument": {"variable": "mDefault"}}},
@@ -3596,7 +3596,7 @@
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                                                 "type": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": "int32"}}}}}}},
                                                                                                                                             "type": {"list": {"literal": "string"}}}},
                                                                                                                                         "argument": {"variable": "mUnionVariants"}}},
@@ -4325,7 +4325,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                    "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                     "type": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": "int32"}}}}}}},
                                                                                 "type": {"optional": {"literal": {"integer": "int32"}}}}},
                                                                             "argument": {"variable": "mFields"}}},
@@ -4399,7 +4399,7 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                             "type": {"either": {"left": {"variable": "t2"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                         "argument": {"variable": "mOffset"}}},
                                                                     "argument": {
@@ -5029,7 +5029,7 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                                 "type": {"list": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": "int32"}}}}}}},
                                                                                                                             "type": {"literal": {"integer": "int32"}}}},
                                                                                                                         "argument": {"variable": "mVariants"}}},
@@ -5082,7 +5082,7 @@
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                                            "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                                             "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"literal": {"integer": "int32"}}}}}},
                                                                                                                                         "type": {"literal": {"integer": "int32"}}}},
                                                                                                                                     "argument": {
@@ -5856,7 +5856,7 @@
                                                                                                   "application": {
                                                                                                     "function": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                                         "type": {
                                                                                                           "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                                                     "argument": {
@@ -6362,7 +6362,7 @@
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {
                                                                                           "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
                                                                                     "argument": {"variable": "mt"}}},
@@ -7588,7 +7588,7 @@
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
                                                                                             "type": {"variable": "hydra.core.Type"}}},
                                                                                         "argument": {
                                                                                           "application": {
@@ -7880,7 +7880,7 @@
                                                                                                                                                       "application": {
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
-                                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                                                                                                                                             "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
                                                                                                                                                         "argument": {
                                                                                                                                                           "application": {

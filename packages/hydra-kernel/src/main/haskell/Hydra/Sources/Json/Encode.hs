@@ -213,7 +213,7 @@ toJson = define "toJson" $
           @@ (Core.forallTypeBody $ var "ft"),
       _Type_variable>>: "name" ~>
         "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
-        Optionals.match (var "lookedUp") (left $ Strings.concat $ list [
+        Optionals.cases (var "lookedUp") (left $ Strings.concat $ list [
             string "unknown type variable: ",
             Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
   cases _Type (var "stripped")
@@ -322,7 +322,7 @@ toJson = define "toJson" $
           "fterm" <~ (Core.fieldTerm $ var "field") $
           -- Find the field type that matches this variant
           "ftypeResult" <~ (
-            Optionals.match (Lists.find
+            Optionals.cases (Lists.find
                 ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
                 (var "rt")) (left $ Strings.concat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
           Eithers.either
@@ -437,7 +437,7 @@ toJson = define "toJson" $
     -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types" :: TypedTerm (M.Map Name Type))) $
-      Optionals.match (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "term")]
+      Optionals.cases (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "compactMaps" @@ var "name" @@ var "resolvedType" @@ var "term")]
 
 -- | Encode a Term to a JSON Value without type information.
 -- This is a structural fallback used when type information is unavailable (e.g. unresolved

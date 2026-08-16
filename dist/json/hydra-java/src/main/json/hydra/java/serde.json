@@ -1222,7 +1222,7 @@
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"variable": "hydra.lib.optionals.match"},
+                                    "body": {"variable": "hydra.lib.optionals.cases"},
                                     "type": {"variable": "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier"}}},
                                 "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {"variable": "mqual"}}},
@@ -6848,7 +6848,7 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.java.syntax.ElementValue"}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.java.syntax.ElementValue"}}},
                                 "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {"variable": "mv"}}},
                         "argument": {
@@ -8252,7 +8252,7 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.java.syntax.VariableInitializer"}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.java.syntax.VariableInitializer"}}},
                                 "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {"variable": "minit"}}},
                         "argument": {"variable": "idSec"}}},
@@ -8371,7 +8371,7 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.java.syntax.Expression"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mcond"}}},
                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "true"}}}}}},
@@ -8548,7 +8548,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mc"}}},
                             "argument": {"variable": "expr"}}},

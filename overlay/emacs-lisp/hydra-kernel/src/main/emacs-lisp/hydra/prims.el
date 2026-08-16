@@ -455,7 +455,7 @@ dist/emacs-lisp build)."
 ;; default every parameter to strict, so a target coder's isLazy-driven thunk-wrapping
 ;; (which reads is_lazy from graph_primitives(g), the single source of truth per #391)
 ;; treats every registry-built primitive as fully strict -- eagerly evaluating both
-;; branches of e.g. if_else/optionals.match regardless of which is taken, causing
+;; branches of e.g. if_else/optionals.cases regardless of which is taken, causing
 ;; infinite recursion on self-recursive definitions and O(2^depth) blowup in any
 ;; self-hosted interpretation that walks the resulting eagerly-expanded terms.
 (defun lazy-args (idxs prim)

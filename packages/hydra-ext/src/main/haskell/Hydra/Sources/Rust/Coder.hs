@@ -254,7 +254,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
   doc "Encode a Hydra record projection as a Rust expression. Takes an optional argument for applied projections." $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied projection: |v| v.field
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_fieldAccess $
@@ -347,7 +347,7 @@ encodeTerm = def "encodeTerm" $
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "pairs")]),
      _Term_optional>>: lambda "mt" $
-       Optionals.match (var "mt")
+       Optionals.cases (var "mt")
          (right (rustExprPath @@ string "None"))
          (lambda "val" $
            "sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "val") $
@@ -417,7 +417,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ Optionals.match (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
+    "typ" <~ Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
@@ -620,7 +620,7 @@ encodeUnionElim = def "encodeUnionElim" $
                 R._MatchArm_body>>: var "armBody"]))
           (var "caseFields")) $
         -- Add default arm if present
-        "allArms" <<~ (Optionals.match (var "defCase")
+        "allArms" <<~ (Optionals.cases (var "defCase")
           (right (var "arms"))
           (lambda "dt" $
             "defBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "dt") (Core.termVariable (wrap _Name (string "v")))))) $
@@ -629,7 +629,7 @@ encodeUnionElim = def "encodeUnionElim" $
                 R._MatchArm_pattern>>: inject R._Pattern R._Pattern_wildcard unit,
                 R._MatchArm_guard>>: nothing,
                 R._MatchArm_body>>: var "defBody"]])))) $
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: |v| match v { ... }
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_match $
@@ -649,7 +649,7 @@ encodeUnwrapElim :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Ma
 encodeUnwrapElim = def "encodeUnwrapElim" $
   doc "Encode a Hydra wrap elimination (unwrap) as a Rust expression. Takes an optional argument for applied unwraps." $
   "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: |v| v.0
           (right (rustClosure @@ list [string "v"] @@
             (inject R._Expression R._Expression_tupleIndex $

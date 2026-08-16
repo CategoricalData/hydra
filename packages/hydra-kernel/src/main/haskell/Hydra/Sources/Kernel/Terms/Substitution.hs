@@ -141,7 +141,7 @@ substInClassConstraints = define "substInClassConstraints" $
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   -- Helper to insert a constraint, merging with existing if present
   "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
-    Optionals.match (Maps.lookup (var "varName" :: TypedTerm Name) (var "acc")) (Maps.insert (var "varName" :: TypedTerm Name) (var "metadata") (var "acc")) ("existing" ~>
+    Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "acc")) (Maps.insert (var "varName" :: TypedTerm Name) (var "metadata") (var "acc")) ("existing" ~>
         "merged" <~ Core.typeVariableConstraints (Lists.distinct $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
         Maps.insert (var "varName" :: TypedTerm Name) (var "merged") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
@@ -153,7 +153,7 @@ substInClassConstraints = define "substInClassConstraints" $
     ("acc" ~> "pair" ~>
       "varName" <~ Pairs.first (var "pair") $
       "metadata" <~ Pairs.second (var "pair") $
-      Optionals.match
+      Optionals.cases
         (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
         -- Not in substitution: keep original
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
@@ -198,12 +198,12 @@ substInTypeNonEmpty = define "substInTypeNonEmpty" $
   "subst" ~> "typ0" ~>
     lets [
       "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-        _Type_forall>>: lambda "lt" $ Optionals.match (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")) (var "recurse" @@ var "typ") (lambda "styp" $ Core.typeForall $ Core.forallType
+        _Type_forall>>: lambda "lt" $ Optionals.cases (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")) (var "recurse" @@ var "typ") (lambda "styp" $ Core.typeForall $ Core.forallType
             (Core.forallTypeParameter $ var "lt")
             (substInType
               @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
               @@ (Core.forallTypeBody $ var "lt"))),
-        _Type_variable>>: lambda "v" $ Optionals.match (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst")) (var "typ") (lambda "styp" $ var "styp")],
+        _Type_variable>>: lambda "v" $ Optionals.cases (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst")) (var "typ") (lambda "styp" $ var "styp")],
       "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
       (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
@@ -307,7 +307,7 @@ substituteInTerm = define "substituteInTerm" $
         (Just $ var "recurse" @@ var "term") [
         _Term_lambda>>: "l" ~> var "withLambda" @@ var "l",
         _Term_let>>: "l" ~> var "withLet" @@ var "l",
-        _Term_variable>>: lambda "name" $ Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "s")) (var "recurse" @@ var "term") (lambda "sterm" $ var "sterm")]] $
+        _Term_variable>>: lambda "name" $ Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "s")) (var "recurse" @@ var "term") (lambda "sterm" $ var "sterm")]] $
     Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
 -- W: subst'

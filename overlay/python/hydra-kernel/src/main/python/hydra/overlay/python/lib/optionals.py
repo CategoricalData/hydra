@@ -32,7 +32,7 @@ def bind(x: Optional[A], f: Callable[[A], Optional[B]]) -> Optional[B]:
             return f(val)
 
 
-def match(m: Optional[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
+def cases(m: Optional[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
     """Handle an optional value with the maybe value as the first argument."""
     match m:
         case None_():

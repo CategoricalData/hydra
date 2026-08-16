@@ -111,7 +111,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     ("mp" ~> "p" ~>
       "k" <~ Pairs.first (var "p") $
       "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Optionals.match (Maps.lookup (var "k" :: TypedTerm a) (var "mp")) (list ([] :: [TypedTerm a])) (reify Functions.identity) $
+      "existing" <~ Optionals.cases (Maps.lookup (var "k" :: TypedTerm a) (var "mp")) (list ([] :: [TypedTerm a])) (reify Functions.identity) $
       Maps.insert (var "k" :: TypedTerm a) (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
     (Maps.empty :: TypedTerm (M.Map a [b]))
     (var "pairs")
@@ -186,7 +186,7 @@ popStackUntil = define "popStackUntil" $
   "go" <~ ("acc" ~> "st" ~>
     -- Empty stack: return whatever we've collected (unreachable when Tarjan's
     -- state invariants hold, since v is always on the stack when this is called).
-    Optionals.match (Lists.uncons $ Topology.tarjanStateStack (var "st")) (pair (Lists.reverse (var "acc")) (var "st")) ("uc" ~>
+    Optionals.cases (Lists.uncons $ Topology.tarjanStateStack (var "st")) (pair (Lists.reverse (var "acc")) (var "st")) ("uc" ~>
         "x" <~ Pairs.first (var "uc") $
         "xs" <~ Pairs.second (var "uc") $
         "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
@@ -215,10 +215,10 @@ propagateTags = define "propagateTags" $
   -- For each node, find all reachable nodes and collect their tags
   "getTagsForNode" <~ ("node" ~>
     "reachable" <~ ((findReachableNodes :: TypedTermDefinition ((a -> S.Set a) -> a -> S.Set a))
-      @@ ("n" ~> Sets.fromList $ Optionals.match (Maps.lookup (var "n" :: TypedTerm a) (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Functions.identity))
+      @@ ("n" ~> Sets.fromList $ Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "adjMap")) (list ([] :: [TypedTerm a])) (reify Functions.identity))
       @@ var "node" :: TypedTerm (S.Set a)) $
     Sets.unions (Lists.map
-      ("n" ~> Optionals.match (Maps.lookup (var "n" :: TypedTerm a) (var "tagMap")) (Sets.empty :: TypedTerm (S.Set t)) (reify Functions.identity))
+      ("n" ~> Optionals.cases (Maps.lookup (var "n" :: TypedTerm a) (var "tagMap")) (Sets.empty :: TypedTerm (S.Set t)) (reify Functions.identity))
       (Sets.toList (var "reachable" :: TypedTerm (S.Set a))) :: TypedTerm [S.Set t])) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 

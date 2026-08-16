@@ -365,7 +365,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.AttrList"}}},
                                             "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                         "argument": {"variable": "attr"}}},
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
@@ -751,7 +751,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                     "argument": {"variable": "mi"}}},
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
@@ -775,7 +775,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphviz.dot.CompassPt"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.CompassPt"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                     "argument": {"variable": "mp"}}},
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},

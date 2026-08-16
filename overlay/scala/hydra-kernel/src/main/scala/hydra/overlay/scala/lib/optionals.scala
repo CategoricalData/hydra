@@ -3,7 +3,7 @@ package hydra.overlay.scala.lib
 object optionals:
   def apply[A, B](mf: Option[A => B])(ma: Option[A]): Option[B] = mf.flatMap(f => ma.map(f))
   def bind[A, B](ma: Option[A])(f: A => Option[B]): Option[B] = ma.flatMap(f)
-  def `match`[A, B](ma: Option[A])(ifNone: => B)(ifSome: A => B): B = ma match
+  def cases[A, B](ma: Option[A])(ifNone: => B)(ifSome: A => B): B = ma match
     case None => ifNone
     case Some(a) => ifSome(a)
   def givens[A](xs: Seq[Option[A]]): Seq[A] = xs.flatten

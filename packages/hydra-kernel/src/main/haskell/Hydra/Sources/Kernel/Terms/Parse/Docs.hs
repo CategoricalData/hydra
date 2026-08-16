@@ -144,7 +144,7 @@ parseDocString = define "parseDocString" $
         "inner">:    Optionals.withDefault (string "") (Lists.head (var "subparts")),
         "after">:    Strings.join (string "}") (Lists.drop (int32 1) (var "subparts")),
         "mref">:     parseDocAnnotation @@ var "inner"] $
-      Optionals.match (var "mref")
+      Optionals.cases (var "mref")
         (list [inject _DocSegment _DocSegment_text (Strings.concat2 (string "{@") (var "part"))])
         (lambda "ref" $ Optionals.givens $ list [
           just (inject _DocSegment _DocSegment_ref (var "ref")),

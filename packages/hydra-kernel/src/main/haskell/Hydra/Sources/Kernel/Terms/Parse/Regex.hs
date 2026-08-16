@@ -222,7 +222,7 @@ characterClass = define "characterClass" $
         Parsers.bind @@ (Parsers.char @@ cp ']') @@ (constant $
           Parsers.pure @@ inject _Atom _Atom_class
             (record _CharacterClass [
-              _CharacterClass_negated>>: Optionals.match (var "neg") false (constant true),
+              _CharacterClass_negated>>: Optionals.cases (var "neg") false (constant true),
               _CharacterClass_items>>: var "items"])))))
 
 -- | Parse a non-negative decimal integer.
@@ -256,7 +256,7 @@ quantifier = define "quantifier" $
       Parsers.bind @@ (Parsers.char @@ cp '{') @@ (constant $
         Parsers.bind @@ (asTerm unsignedInt) @@ ("n" ~>
           Parsers.bind @@ (Parsers.optional @@ (Parsers.char @@ cp ',')) @@ ("comma" ~>
-            Optionals.match (var "comma")
+            Optionals.cases (var "comma")
               -- no comma: {n}
               (Parsers.bind @@ (Parsers.char @@ cp '}') @@ (constant $
                  Parsers.pure @@ inject _Quantifier _Quantifier_exactly (var "n")))
@@ -264,7 +264,7 @@ quantifier = define "quantifier" $
               (constant $
                 Parsers.bind @@ (Parsers.optional @@ (asTerm unsignedInt)) @@ ("mm" ~>
                   Parsers.bind @@ (Parsers.char @@ cp '}') @@ (constant $
-                    Optionals.match (var "mm")
+                    Optionals.cases (var "mm")
                       (Parsers.pure @@ inject _Quantifier _Quantifier_atLeast (var "n"))
                       ("m" ~> Parsers.pure @@ inject _Quantifier _Quantifier_range
                         (record _QuantifierRange [

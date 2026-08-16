@@ -839,9 +839,9 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         def_optionals.bind.name, optionals.bind, [_a, _b],
         prims.optional(a), fun(a, prims.optional(b)), prims.optional(b)
     )
-    # match :: optional a -> b -> (a -> b) -> b
-    primitives[def_optionals.match.name] = prims.prim3(
-        def_optionals.match.name, optionals.match, [_a, _b],
+    # cases :: optional a -> b -> (a -> b) -> b
+    primitives[def_optionals.cases.name] = prims.prim3(
+        def_optionals.cases.name, optionals.cases, [_a, _b],
         prims.optional(a), b, fun(a, b), b,
         lazy_args=[1]
     )

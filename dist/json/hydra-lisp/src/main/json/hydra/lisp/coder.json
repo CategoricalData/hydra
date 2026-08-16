@@ -2392,7 +2392,7 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                                                 "argument": {"variable": "marg"}}},
                                                             "argument": {
@@ -3130,7 +3130,7 @@
                                                                   "application": {
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                                                     "argument": {"variable": "mt"}}},
                                                                 "argument": {
@@ -5249,7 +5249,7 @@
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"either": {"left": {"variable": "t1"}, "right": {"optional": {"variable": "hydra.lisp.syntax.Expression"}}}}}},
                                                                                     "argument": {"variable": "defCase"}}},
                                                                                 "argument": {
@@ -5362,7 +5362,7 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                                                                             "argument": {"variable": "marg"}}},
                                                                                         "argument": {
@@ -5499,7 +5499,7 @@
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Term"}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Term"}}},
                                                             "type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                                                         "argument": {"variable": "marg"}}},
                                                     "argument": {
@@ -5654,7 +5654,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.Name"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.Name"}}},
                                     "type": {"list": {"literal": "boolean"}}}},
                                 "argument": {"application": {"function": {"variable": "hydra.lisp.coder.primHeadName"}, "argument": {"variable": "headTerm"}}}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "boolean"}}}}},
@@ -5670,7 +5670,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graph.Primitive"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graph.Primitive"}}},
                                             "type": {"list": {"literal": "boolean"}}}},
                                         "argument": {
                                           "application": {

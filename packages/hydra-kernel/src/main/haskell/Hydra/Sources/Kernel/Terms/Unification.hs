@@ -177,7 +177,7 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
       _Type_record>>: constant true,
       _Type_union>>: constant true,
       _Type_wrap>>: constant true]) $
-    "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.match (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
+    "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
       (var "tryBinding" @@ var "v" @@ var "t")
       ("ts" ~> Logic.ifElse (var "isNominalSchemaType" @@ var "ts")
         (left (Error.unificationError (var "sleft") (var "sright")
@@ -203,7 +203,7 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
                     ++ (string " (") ++ var "comment" ++ (string ")"))))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
-  Optionals.match (Lists.uncons $ var "constraints") (right (asTerm Substitution.idTypeSubst)) ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
+  Optionals.cases (Lists.uncons $ var "constraints") (right (asTerm Substitution.idTypeSubst)) ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
 
 unifyTypeLists :: TypedTermDefinition (InferenceContext -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $

@@ -353,7 +353,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.json.model.Value"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.json.model.Value"}}},
                                         "type": {"either": {"left": {"literal": "string"}, "right": {"optional": {"list": {"variable": "hydra.json.model.Value"}}}}}}},
                                     "argument": {
                                       "application": {
@@ -430,7 +430,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.json.model.Value"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.json.model.Value"}}},
                                         "type": {"either": {"left": {"literal": "string"}, "right": {"optional": {"literal": "string"}}}}}},
                                     "argument": {
                                       "application": {
@@ -501,7 +501,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "t0"}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "t0"}}},
                                         "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "t0"}}}}},
                                     "argument": {
                                       "application": {

@@ -173,7 +173,7 @@ encodeName = def "encodeName" $
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
         (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
-      (Optionals.match (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Optionals.match (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.concat2 (var "cppNs" @@ var "nsVal") (Strings.concat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
+      (Optionals.cases (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Optionals.cases (var "mns") (var "cppLocal") (lambda "nsVal" $ Strings.concat2 (var "cppNs" @@ var "nsVal") (Strings.concat2 (string "::") (var "cppLocal")))) (lambda "n" $ var "n"))
       (var "cppLocal")
 
 -- | Encode a qualified name with namespace
@@ -189,7 +189,7 @@ encodeNameQualified = def "encodeNameQualified" $
     "qualName">: Names.qualifyName @@ var "name",
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"] $
-    Optionals.match (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
+    Optionals.cases (Maps.lookup (var "name") (var "boundVars" :: TypedTerm (M.Map Name String))) (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
         (Strings.join (string "::")
           (Lists.map (asTerm sanitizeCppName)

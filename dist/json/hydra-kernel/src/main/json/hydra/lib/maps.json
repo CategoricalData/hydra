@@ -75,7 +75,7 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"variable": "hydra.lib.optionals.match"},
+                                "function": {"variable": "hydra.lib.optionals.cases"},
                                 "argument": {
                                   "application": {
                                     "function": {"variable": "f"},

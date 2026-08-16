@@ -139,10 +139,10 @@ elementReference = haskellUtilsDefinition "elementReference" $
     "local">: Util.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
     "mns">: Util.qualifiedNameModuleName $ var "qname"] $
-    Optionals.match (Util.qualifiedNameModuleName $ var "qname")
+    Optionals.cases (Util.qualifiedNameModuleName $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
-        Optionals.match (Maps.lookup (var "ns") (var "namespacesMap" :: TypedTerm (M.Map ModuleName H.ModuleName)))
+        Optionals.cases (Maps.lookup (var "ns") (var "namespacesMap" :: TypedTerm (M.Map ModuleName H.ModuleName)))
           (simpleName @@ var "local") $
           "mn" ~> lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $
@@ -280,7 +280,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
           "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
           "existing">: Maps.lookup (var "k") (var "m" :: TypedTerm (M.Map String Int))] $
           Maps.insert (var "k")
-            (Optionals.match (var "existing")
+            (Optionals.cases (var "existing")
               (var "segCount") $
               "prev" ~> Logic.ifElse (Ordering.lt (var "segCount") (var "prev")) (var "segCount") (var "prev"))
             (var "m" :: TypedTerm (M.Map String Int)))

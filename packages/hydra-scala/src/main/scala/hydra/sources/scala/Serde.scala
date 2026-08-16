@@ -150,7 +150,7 @@ object Serde:
     applyP("hydra.lib.optionals.map", fn, xo)
 
   private def optCases(xo: TypedTerm[Any], dflt: TypedTerm[Any], fn: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.match", xo, dflt, fn)
+    applyP("hydra.lib.optionals.cases", xo, dflt, fn)
 
   private def optFromOptional(dflt: TypedTerm[Any], xo: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.optionals.withDefault", dflt, xo)

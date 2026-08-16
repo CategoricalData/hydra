@@ -339,7 +339,7 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.packaging.EntityReference"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.EntityReference"}}},
                                                 "type": {"list": {"variable": "hydra.docs.DocSegment"}}}},
                                             "argument": {"variable": "mref"}}},
                                         "argument": {

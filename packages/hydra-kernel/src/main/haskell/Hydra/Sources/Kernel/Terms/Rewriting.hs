@@ -727,7 +727,7 @@ rewriteTermM = define "rewriteTermM" $
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Optionals.match (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
+        "rdef" <<~ Optionals.cases (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
@@ -901,7 +901,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Optionals.match (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
+        "rdef" <<~ Optionals.cases (var "def") (right nothing) ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t") $
         Eithers.map
           ("rcases" ~> Core.termCases $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
@@ -1115,7 +1115,7 @@ subterms = define "subterms" $
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Optionals.match (Core.caseStatementDefault $ var "cs") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]))
+      (Optionals.cases (Core.caseStatementDefault $ var "cs") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]))
       (Lists.map (reify Core.caseAlternativeHandler) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either
       ("l" ~> list [var "l"])
@@ -1130,7 +1130,7 @@ subterms = define "subterms" $
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"])
       (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))),
-    _Term_optional>>: "m" ~> Optionals.match (var "m") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]),
+    _Term_optional>>: "m" ~> Optionals.cases (var "m") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
     _Term_project>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_record>>: "rt" ~> Lists.map (reify Core.fieldTerm) (Core.recordFields $ var "rt"),
@@ -1152,7 +1152,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
       result Paths.subtermStepApplicationFunction $ Core.applicationFunction $ var "p",
       result Paths.subtermStepApplicationArgument $ Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Optionals.match (Core.caseStatementDefault $ var "cs") none ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t"))
+      (Optionals.cases (Core.caseStatementDefault $ var "cs") none ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t"))
       (Lists.map
         ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
         (Core.caseStatementCases $ var "cs")),
@@ -1171,7 +1171,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
           result (Paths.subtermStepMapKey $ Pairs.first $ var "ip") $ Pairs.first $ Pairs.second $ var "ip",
           result (Paths.subtermStepMapValue $ Pairs.first $ var "ip") $ Pairs.second $ Pairs.second $ var "ip"])
         (withIndices $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
-    _Term_optional>>: "m" ~> Optionals.match (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
+    _Term_optional>>: "m" ~> Optionals.cases (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
     _Term_pair>>: "p" ~> list [
       result (Paths.subtermStepProductTerm $ int32 0) $ Pairs.first $ var "p",
       result (Paths.subtermStepProductTerm $ int32 1) $ Pairs.second $ var "p"],

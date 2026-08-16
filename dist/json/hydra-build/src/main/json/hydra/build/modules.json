@@ -104,7 +104,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                         "type": {"pair": {"first": {"literal": "string"}, "second": {"list": {"literal": "string"}}}}}},
                                                     "type": {"literal": "boolean"}}},
                                                 "argument": {

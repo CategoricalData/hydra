@@ -80,9 +80,9 @@
         (list :none)
         (list :given ((maybe-value mf) (maybe-value ma))))))))
 
-;; match :: Maybe a -> b -> (a -> b) -> b
+;; cases :: Maybe a -> b -> (a -> b) -> b
 ;; Thunk-aware: if nothing-val is a zero-arg fn, only called when Maybe is Nothing
-(def hydra_overlay_clojure_lib_optionals_match
+(def hydra_overlay_clojure_lib_optionals_cases
   (fn [m] (fn [nothing-val] (fn [just-fn]
     (if (maybe-nothing? m)
       (if (fn? nothing-val) (nothing-val) nothing-val)

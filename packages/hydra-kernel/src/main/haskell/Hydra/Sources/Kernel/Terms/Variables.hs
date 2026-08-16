@@ -262,7 +262,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
         "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
-          Optionals.match (Lists.uncons $ var "bs") (Lists.reverse (var "acc")) ("uc" ~>
+          Optionals.cases (Lists.uncons $ var "bs") (Lists.reverse (var "acc")) ("uc" ~>
           "b"  <~ Pairs.first (var "uc") $
           "tl" <~ Pairs.second (var "uc") $
           "noType" <~ (
@@ -399,7 +399,7 @@ substituteVariables = define "substituteVariables" $
       _Term_variable>>: "n" ~>
         Core.termVariable $ Optionals.withDefault (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name)),
       _Term_lambda>>: "l" ~>
-        Optionals.match (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst" :: TypedTerm (M.Map Name Name))) (var "recurse" @@ var "term") (constant $ var "term")]) $
+        Optionals.cases (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst" :: TypedTerm (M.Map Name Name))) (var "recurse" @@ var "term") (constant $ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 unshadowVariables :: TypedTermDefinition (Term -> Term)

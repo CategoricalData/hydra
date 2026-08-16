@@ -477,7 +477,7 @@ encodeProjectionElim = def "encodeProjectionElim" $
       -- Record projection: (:field record) or (record-type-field record)
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: (lambda (__rec) (record-type-field __rec))
           -- The eta-wrapper param must not collide with names commonly bound
           -- in kernel code (e.g., `v` in sorting's strong_connect). Under EL
@@ -565,7 +565,7 @@ encodeTerm = def "encodeTerm" $
              L._MapLiteral_entries>>: var "pairs"]),
 
      _Term_optional>>: lambda "mt" $
-       Optionals.match (var "mt")
+       Optionals.cases (var "mt")
          -- None -> (list :none)
          (right (lispApp @@ (lispVar @@ string "list") @@ list [
            lispKeyword @@ string "none"]))
@@ -854,7 +854,7 @@ encodeUnionElim = def "encodeUnionElim" $
         -- Default clause
         -- Default is a direct result value, NOT a handler function.
         -- The reducer returns the default as-is without applying it to the payload.
-        "defExpr" <<~ (Optionals.match (var "defCase")
+        "defExpr" <<~ (Optionals.cases (var "defCase")
           (right nothing)
           (lambda "dt" $
             "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "dt") $
@@ -868,7 +868,7 @@ encodeUnionElim = def "encodeUnionElim" $
         "innerExpr" <~ (lispApp @@
           (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
           list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
           (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
           (lambda "arg" $
@@ -883,7 +883,7 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
   doc "Encode a Hydra wrap elimination (unwrap) as a Lisp expression, with an optional argument for applied unwraps" $
   "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
-        Optionals.match (var "marg")
+        Optionals.cases (var "marg")
           -- Unapplied: identity function. Param name must not collide with
           -- kernel-bound names like `v` (see #428 and encodeProjectionElim).
           (right (lispLambdaExpr @@ list [string "__rec"] @@ (lispVar @@ string "__rec")))
@@ -913,9 +913,9 @@ lazyFlagsForPrimitiveTerm :: TypedTermDefinition (Graph -> Term -> [Bool])
 lazyFlagsForPrimitiveTerm = def "lazyFlagsForPrimitiveTerm" $
   doc "The per-parameter isLazy flags of the primitive a head term refers to, in order; empty if the head is not a registered primitive" $
   "g" ~> "headTerm" ~>
-    Optionals.match (primHeadName @@ var "headTerm")
+    Optionals.cases (primHeadName @@ var "headTerm")
       (list ([] :: [TypedTerm Bool]))
-      ("name" ~> Optionals.match (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+      ("name" ~> Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
         (list ([] :: [TypedTerm Bool]))
         ("prim" ~>
           Lists.map ("p" ~> Typing.parameterIsLazy (var "p"))

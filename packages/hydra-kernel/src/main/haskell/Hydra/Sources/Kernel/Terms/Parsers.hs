@@ -258,7 +258,7 @@ satisfy = define "satisfy" $
   doc "Parse a character (codepoint) that satisfies the given predicate" $
   "pred" ~>
   "parse" <~ ("input" ~>
-    Optionals.match (Lists.uncons $ var "input") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("uc" ~>
+    Optionals.cases (Lists.uncons $ var "input") (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input"))) ("uc" ~>
        "c" <~ Pairs.first (var "uc") $
        "rest" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "pred" @@ var "c")

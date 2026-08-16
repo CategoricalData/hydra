@@ -467,7 +467,7 @@
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                        "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}},
                                                                                                                     "type": {
                                                                                                                       "map": {
@@ -559,7 +559,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.optionals.match"},
+                                                                                                                    "body": {"variable": "hydra.lib.optionals.cases"},
                                                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}},
                                                                                                                 "type": {
                                                                                                                   "map": {

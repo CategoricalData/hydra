@@ -47,7 +47,7 @@ The decision rule:
 - **Make it a primitive** when there is no way to express it in Hydra terms, or no
   acceptable way: effectful operations (most of `hydra.lib.effects`, file and console
   I/O), host-native computation (arithmetic, character predicates, regex matching),
-  and fundamental eliminators (`optionals.match`, `pairs.first`) that bottom out the
+  and fundamental eliminators (`optionals.cases`, `pairs.first`) that bottom out the
   term language.
 - **Make it a term definition** when it can be written in Hydra in terms of existing
   primitives and term constructs. For example, `fileName : FilePath -> FileName`
@@ -294,16 +294,16 @@ declared arguments (no `Context`, no `Graph`) and reduce using only other
 primitives and term-level constructs. For example:
 
 ```haskell
--- optionals.withDefault def m = match m def (\x -> x)
-withDefault :: PrimitiveDefinition
-withDefault = defineWithDefault "withDefault" "Return the contained value or a default."
-  withDefaultSig
-  ["withDefault(def, m) returns the value inside m if present, or def if m is none."]
-  ("def" ~> "m" ~> Optionals.match (var "m") (var "def") ("x" ~> var "x"))
+-- optionals.fromOptional def m = cases m def (\x -> x)
+fromOptional :: PrimitiveDefinition
+fromOptional = defineWithDefault "fromOptional" "Return the contained value or a default."
+  fromOptionalSig
+  ["fromOptional(def, m) returns the value inside m if present, or def if m is none."]
+  ("def" ~> "m" ~> Optionals.cases (var "m") (var "def") ("x" ~> var "x"))
 ```
 
 Not every primitive has a meaningful default. Fundamental operations
-(`optionals.match`, `pairs.first`, character predicates, arithmetic) cannot be
+(`optionals.cases`, `pairs.first`, character predicates, arithmetic) cannot be
 expressed in terms of other primitives — those use `define` (no default) and rely on the
 host's native implementation.
 
@@ -478,7 +478,7 @@ interpreter strips and reduces arguments before calling the primitive,
 so the default body sees ordinary terms of the declared type.
 
 Higher-order operations (`lists.foldl`, `eithers.bimap`, etc.) are
-typically expressible this way using `foldr`/`foldl`/`match`/`cons`/etc.
+typically expressible this way using `foldr`/`foldl`/`cases`/`cons`/etc.
 For example, `eithers.lefts` from the canonical Eithers registry:
 
 ```haskell
@@ -501,7 +501,7 @@ There is no separate "interpreter-shape" Defaults module any more
 (issue #437). Either a primitive has a portable default that fits its
 public signature — write it inline with `defineWithDefault` — or it doesn't,
 and the registry entry uses `define`. `define` is the right choice for:
-fundamental eliminators (`optionals.match`, `eithers.match`,
+fundamental eliminators (`optionals.cases`, `eithers.either`,
 `pairs.first`, `lists.foldl`, `logic.ifElse`), host-native operations
 (arithmetic, regex, literal parsing), and any primitive whose only
 sensible implementation would have to reference itself.
@@ -829,10 +829,10 @@ a rename starts there and flows out through regeneration — there is no separat
 constant to update. Two things deserve special care.
 
 **Flip every call site, not just the definition.** Removing a primitive in favour of
-another (e.g. the #615 rename of the scrutinee-first `optionals.cases` eliminator to
-`optionals.match`) means rewriting every reference, including ones that
-do not match a simple text search: DSL call sites (`Optionals.cases`), name-binding
-references (`_optionals_cases`), hardcoded `Name "hydra.lib.optionals.cases"` literals in
+another (e.g. the #401 replacement of the value-first `optionals.maybe` eliminator with
+the scrutinee-first `optionals.cases`) means rewriting every reference, including ones that
+do not match a simple text search: DSL call sites (`Optionals.maybe`), name-binding
+references (`_optionals_maybe`), hardcoded `Name "hydra.lib.optionals.maybe"` literals in
 phantom helpers, and the per-host runtime registries (Java `Libraries.java`, Python
 `hydra.sources.libraries`, the four Lisp `lib/libraries.*`, the TypeScript
 `lib/libraries.ts`, and the per-host test runners). When the replacement has a
@@ -960,17 +960,17 @@ implementation notes:
   apply it with `@@` in Haskell DSL:
 
   ```haskell
-  -- optionals.map f m = match m none (\x -> given (f x))
+  -- optionals.map f m = cases m none (\x -> given (f x))
   map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
   map_ = define "map" $
-    doc "Map a function over an optional, defined in terms of match." $
-    "f" ~> "m" ~> Optionals.match (var "m") nothing ("x" ~> just (var "f" @@ var "x"))
+    doc "Map a function over an optional, defined in terms of cases." $
+    "f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x"))
   ```
 
 ## Example: studying an existing migration
 
 The `hydra.lib.optionals` module name is a good case study: 12 primitives, most of
-which have default implementations in terms of `match`. See:
+which have default implementations in terms of `cases`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Optionals.hs)
 - Haskell native impl: [Hydra/Overlay/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Optionals.hs)

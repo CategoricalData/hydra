@@ -170,7 +170,7 @@ commonConstraintToTriples = define "commonConstraintToTriples" $
         "flags_">: project Shacl._Pattern Shacl._Pattern_flags @@ var "pat"] $
         Lists.concat (list [
           list [tripleRIN @@ var "subj" @@ (sh @@ string "pattern") @@ (stringNode @@ var "regex_")],
-          Optionals.match (var "flags_") (list ([] :: [TypedTerm Rdf.Triple]))
+          Optionals.cases (var "flags_") (list ([] :: [TypedTerm Rdf.Triple]))
             (lambda "f" $ list [tripleRIN @@ var "subj" @@ (sh @@ string "flags") @@ (stringNode @@ var "f")])]),
       Shacl._CommonConstraint_closed>>: lambda "cl" $
         list [tripleRIN @@ var "subj" @@ (sh @@ string "closed")
@@ -225,7 +225,7 @@ commonPropertiesToTriples = define "commonPropertiesToTriples" $
       Lists.concat (Lists.map
         (commonConstraintToTriples @@ var "subj")
         (Sets.toList (project Shacl._CommonProperties Shacl._CommonProperties_constraints @@ var "cp"))),
-      Optionals.match
+      Optionals.cases
         (project Shacl._CommonProperties Shacl._CommonProperties_deactivated @@ var "cp")
         (list ([] :: [TypedTerm Rdf.Triple]))
         (lambda "b" $ list [tripleRIN @@ var "subj" @@ (sh @@ string "deactivated") @@ (booleanNode @@ var "b")]),
@@ -360,7 +360,7 @@ propertyShapeToTriples = define "propertyShapeToTriples" $
       Lists.concat (Lists.map
         (propertyShapeConstraintToTriples @@ var "subj")
         (Sets.toList (project Shacl._PropertyShape Shacl._PropertyShape_constraints @@ var "ps"))),
-      Optionals.match
+      Optionals.cases
         (project Shacl._PropertyShape Shacl._PropertyShape_order @@ var "ps")
         (list ([] :: [TypedTerm Rdf.Triple]))
         (lambda "n" $ list [tripleRIN @@ var "subj" @@ (sh @@ string "order") @@ (integerNode @@ var "n")])])

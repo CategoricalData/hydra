@@ -93,7 +93,7 @@ appendFindingEdge :: TypedTermDefinition (
 appendFindingEdge = validationDefinition "appendFindingEdge" $
   doc "Append a rule-tagged InvalidEdgeError finding to a ValidationResult." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -123,7 +123,7 @@ appendFindingGraph :: TypedTermDefinition (
 appendFindingGraph = validationDefinition "appendFindingGraph" $
   doc "Append a rule-tagged InvalidGraphError finding to a ValidationResult." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -162,7 +162,7 @@ appendFindingProperty :: TypedTermDefinition (
 appendFindingProperty = validationDefinition "appendFindingProperty" $
   doc "Append a rule-tagged InvalidElementPropertyError finding to a ValidationResult." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -195,7 +195,7 @@ appendFindingVertex :: TypedTermDefinition (
 appendFindingVertex = validationDefinition "appendFindingVertex" $
   doc "Append a rule-tagged InvalidVertexError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.match (var "finding")
+  Optionals.cases (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -356,10 +356,10 @@ validateEdge = validationDefinition "validateEdge" $
       -- for vertex-existence checks). When labelForVertexId is Nothing,
       -- both outVertexNotFound and outVertexLabel are skipped.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_outVertexNotFound
-        (Optionals.match (var "labelForVertexId") nothing ("f" ~> Optionals.match (var "f" @@ (project _Edge _Edge_out @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_outVertexNotFound $ unit)) ("_label" ~> nothing))),
+        (Optionals.cases (var "labelForVertexId") nothing ("f" ~> Optionals.cases (var "f" @@ (project _Edge _Edge_out @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_outVertexNotFound $ unit)) ("_label" ~> nothing))),
       -- outVertexLabel: out-vertex's label doesn't match the EdgeType's expected out label.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_outVertexLabel
-        (Optionals.match (var "labelForVertexId") nothing ("f" ~> Optionals.match (var "f" @@ (project _Edge _Edge_out @@ var "el")) nothing ("label" ~> Logic.ifElse
+        (Optionals.cases (var "labelForVertexId") nothing ("f" ~> Optionals.cases (var "f" @@ (project _Edge _Edge_out @@ var "el")) nothing ("label" ~> Logic.ifElse
               (Equality.equal
                 (unwrap _VertexLabel @@ var "label")
                 (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_out @@ var "typ")))
@@ -370,10 +370,10 @@ validateEdge = validationDefinition "validateEdge" $
                   _WrongVertexLabelError_actual>>: var "label"])))),
       -- inVertexNotFound: same as outVertexNotFound but for the in-vertex.
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_inVertexNotFound
-        (Optionals.match (var "labelForVertexId") nothing ("f" ~> Optionals.match (var "f" @@ (project _Edge _Edge_in @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_inVertexNotFound $ unit)) ("_label" ~> nothing))),
+        (Optionals.cases (var "labelForVertexId") nothing ("f" ~> Optionals.cases (var "f" @@ (project _Edge _Edge_in @@ var "el")) (just (inject _InvalidEdgeError _InvalidEdgeError_inVertexNotFound $ unit)) ("_label" ~> nothing))),
       -- inVertexLabel
       guardedEdgeRule (var "p") _InvalidEdgeError _InvalidEdgeError_inVertexLabel
-        (Optionals.match (var "labelForVertexId") nothing ("f" ~> Optionals.match (var "f" @@ (project _Edge _Edge_in @@ var "el")) nothing ("label" ~> Logic.ifElse
+        (Optionals.cases (var "labelForVertexId") nothing ("f" ~> Optionals.cases (var "f" @@ (project _Edge _Edge_in @@ var "el")) nothing ("label" ~> Logic.ifElse
               (Equality.equal
                 (unwrap _VertexLabel @@ var "label")
                 (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
@@ -428,7 +428,7 @@ validateGraph = validationDefinition "validateGraph" $
         "tOpt">: Maps.lookup
           (project _Vertex _Vertex_label @@ var "el" :: TypedTerm PG.VertexLabel)
           (project _GraphSchema _GraphSchema_vertices @@ var "schema"),
-        "perVertex">: Optionals.match (var "tOpt") (Validation.validationResult
+        "perVertex">: Optionals.cases (var "tOpt") (Validation.validationResult
             (list [
               inject _InvalidVertexError _InvalidVertexError_label $
                 record _NoSuchVertexLabelError [
@@ -448,7 +448,7 @@ validateGraph = validationDefinition "validateGraph" $
         "tOpt">: Maps.lookup
           (project _Edge _Edge_label @@ var "el" :: TypedTerm PG.EdgeLabel)
           (project _GraphSchema _GraphSchema_edges @@ var "schema"),
-        "perEdge">: Optionals.match (var "tOpt") (Validation.validationResult
+        "perEdge">: Optionals.cases (var "tOpt") (Validation.validationResult
             (list [
               inject _InvalidEdgeError _InvalidEdgeError_label $
                 record _NoSuchEdgeLabelError [
@@ -504,7 +504,7 @@ validateProperties = validationDefinition "validateProperties" $
     "missingChecks">: Lists.map
       ("t" ~> guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_missingRequired
         (Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-          (Optionals.match (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") (var "props" :: TypedTerm (M.Map PG.PropertyKey v))) (just (record _InvalidElementPropertyError [
+          (Optionals.cases (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") (var "props" :: TypedTerm (M.Map PG.PropertyKey v))) (just (record _InvalidElementPropertyError [
               _InvalidElementPropertyError_key>>: project _PropertyType _PropertyType_key @@ var "t",
               _InvalidElementPropertyError_error>>:
                 inject _InvalidPropertyError _InvalidPropertyError_missingRequired $
@@ -523,12 +523,12 @@ validateProperties = validationDefinition "validateProperties" $
         "val">: Pairs.second $ var "kv"]
         $ list [
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_unexpectedKey
-            (Optionals.match (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) (just (record _InvalidElementPropertyError [
+            (Optionals.cases (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) (just (record _InvalidElementPropertyError [
                 _InvalidElementPropertyError_key>>: var "key",
                 _InvalidElementPropertyError_error>>:
                   inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"])) (constant nothing)),
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_invalidValue
-            (Optionals.match (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) nothing ("typ" ~> Optionals.map
+            (Optionals.cases (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) nothing ("typ" ~> Optionals.map
                 ("err" ~> record _InvalidElementPropertyError [
                   _InvalidElementPropertyError_key>>: var "key",
                   _InvalidElementPropertyError_error>>:

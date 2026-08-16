@@ -64,7 +64,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"optional": {"literal": "string"}}}},
                                 "argument": {
                                   "application": {
@@ -266,7 +266,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"literal": "string"}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"literal": "string"}}}},
                                     "type": {"literal": "boolean"}}},
                                 "argument": {"variable": "restrictExts"}}},
                             "argument": {"literal": {"boolean": true}}}},
@@ -282,7 +282,7 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                             "type": {"literal": "boolean"}}},
                                         "argument": {"application": {"function": {"variable": "hydra.build.reconcile.extensionOf"}, "argument": {"variable": "path"}}}}},
                                     "argument": {"literal": {"boolean": false}}}},
@@ -329,7 +329,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"literal": "string"}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"literal": "string"}}}},
                                     "type": {"literal": "boolean"}}},
                                 "argument": {"variable": "restrictPrefixes"}}},
                             "argument": {"literal": {"boolean": true}}}},
