@@ -4,8 +4,9 @@
 -- (hydra.build.format), the manifest-derived module-to-package
 -- router (hydra.build.routing), the kernel/host reconciliation utilities
 -- (hydra.build.reconcile), the pure module-list utilities
--- (hydra.build.modules), and the translingual expected-libraries registry
--- (hydra.build.libraries), plus their test modules. See #546 (extraction from
+-- (hydra.build.modules), the translingual expected-libraries registry
+-- (hydra.build.libraries), and the distribution assembly-plan model
+-- (hydra.build.assembly), plus their test modules. See #546 (extraction from
 -- hydra-kernel), #512 (build formats as Hydra types), #533 (the libraries
 -- registry), and #416 (promotion of the build system into Hydra).
 --
@@ -30,6 +31,7 @@ module Hydra.Sources.Build.Manifest (
 
 import Hydra.Kernel
 
+import qualified Hydra.Sources.Build.Assembly as BuildAssembly
 import qualified Hydra.Sources.Build.BenchResult as BuildBenchResult
 import qualified Hydra.Sources.Build.CompareReport as BuildCompareReport
 import qualified Hydra.Sources.Build.Format as BuildFormat
@@ -51,6 +53,7 @@ import qualified Hydra.Sources.Build.Test.Suite as BuildTestSuite
 
 mainModules :: [Module]
 mainModules = [
+  BuildAssembly.module_,
   BuildBenchResult.module_,
   BuildCompareReport.module_,
   BuildFormat.module_,
@@ -69,6 +72,7 @@ mainModules = [
 -- gives rise to generated DSL wrappers.
 mainDslModules :: [Module]
 mainDslModules = [
+  BuildAssembly.module_,
   BuildBenchResult.module_,
   BuildCompareReport.module_,
   BuildFormat.module_]
@@ -77,6 +81,7 @@ mainDslModules = [
 -- making each on-disk build-format JSON file decodable as its defined type.
 mainEncodingModules :: [Module]
 mainEncodingModules = [
+  BuildAssembly.module_,
   BuildBenchResult.module_,
   BuildCompareReport.module_,
   BuildFormat.module_]
