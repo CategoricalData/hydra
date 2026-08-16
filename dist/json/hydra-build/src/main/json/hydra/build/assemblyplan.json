@@ -337,4 +337,170 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Join a package root and a source-set subdirectory with a / separator"}}}]}}}}}]}
+                  "value": {"literal": {"string": "Join a package root and a source-set subdirectory with a / separator"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.typescriptImportGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "list": {
+                "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "kernelMain",
+                    "term": {"literal": {"string": "dist/typescript/hydra-kernel/src/main/typescript/hydra"}},
+                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "kernelTest",
+                        "term": {"literal": {"string": "dist/typescript/hydra-kernel/src/test/typescript/hydra"}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "rdfMain",
+                            "term": {"literal": {"string": "dist/typescript/hydra-rdf/src/main/typescript/hydra"}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "pgMain",
+                                "term": {"literal": {"string": "dist/typescript/hydra-pg/src/main/typescript/hydra"}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "buildMain",
+                                    "term": {"literal": {"string": "dist/typescript/hydra-build/src/main/typescript/hydra"}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "buildTest",
+                                        "term": {"literal": {"string": "dist/typescript/hydra-build/src/test/typescript/hydra"}},
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                    "body": {
+                                      "list": [
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"variable": "kernelMain"},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "rdfMain"}, "second": {"literal": {"string": "symlinkTree"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"variable": "kernelMain"},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "pgMain"}, "second": {"literal": {"string": "symlinkTree"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"variable": "rdfMain"},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "pgMain"}, "second": {"literal": {"string": "symlinkTree"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"variable": "kernelMain"},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "buildMain"}, "second": {"literal": {"string": "symlinkTree"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {"variable": "buildTest"},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "kernelTest"}, "second": {"literal": {"string": "symlinkTree"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.lib.strings.concat"},
+                                                        "argument": {"list": [{"variable": "buildMain"}, {"literal": {"string": "/build"}}]}}},
+                                                    "second": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "pair": {
+                                                                "first": {
+                                                                  "application": {
+                                                                    "function": {"variable": "hydra.lib.strings.concat"},
+                                                                    "argument": {"list": [{"variable": "kernelMain"}, {"literal": {"string": "/build"}}]}}},
+                                                                "second": {"literal": {"string": "symlinkDir"}}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "type": {"literal": "string"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}]}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The TypeScript cross-package symlink graph as (sourceTree, destTree, kind) triples"}}}]}}}}}]}
