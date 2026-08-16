@@ -1,0 +1,195 @@
+{
+  "name": "hydra.build.assembly",
+  "metadata": {
+    "description": "Type-level model of a distribution package's assembly plan: the ordered copy/symlink entries and keep-paths that a host-native executor realizes on disk when merging overlay source onto a generated distribution package. Factors the copy(overlay/<lang>/<pkg>/) half of the governing equation into data, so the per-host copy scripts share one translingual description. See https://github.com/CategoricalData/hydra/issues/416",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.build.assembly.AssemblyEntry",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "sourceTree",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The source tree to realize, as a worktree-relative path (e.g. overlay/<lang>/<pkg>/src)"}}}]}}}},
+                  {
+                    "name": "destTree",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The destination tree, as a worktree-relative path (e.g. dist/<lang>/<pkg>/src)"}}}]}}}},
+                  {
+                    "name": "kind",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.build.assembly.AssemblyEntryKind"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "How the source tree is realized at the destination"}}}]}}}},
+                  {
+                    "name": "exclude",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Relative path fragments to exclude when realizing the entry (e.g. __pycache__); empty means copy everything"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A single copy-or-link operation in an assembly plan: realize a source tree at a destination tree by the given kind, optionally excluding matching relative paths."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.assembly.AssemblyEntryKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "merge",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Merge-copy the source tree's files into the destination, leaving pre-existing files intact"}}}]}}}},
+                  {
+                    "name": "wipeThenCopy",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Remove the destination tree entirely, then copy the source tree (an exact-mirror replacement)"}}}]}}}},
+                  {
+                    "name": "symlinkTree",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Symlink each of the source tree's files into the destination (per-file links; own real files win)"}}}]}}}},
+                  {
+                    "name": "symlinkDir",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Symlink the source directory itself into the destination as a single directory link"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "How an assembly entry's source tree is realized at its destination. The distinction gates the host-native executor's dispatch (merge-copy vs. wipe-then-copy vs. symlink)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.assembly.AssemblyPlan",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "entries",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.build.assembly.AssemblyEntry"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The copy/symlink entries to realize, in application order"}}}]}}}},
+                  {
+                    "name": "keepPaths",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.build.assembly.KeepPathEntry"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The files this plan is responsible for, recorded so a prune-stale pass does not delete them"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The complete assembly plan for one distribution package in one target language: the ordered copy/symlink entries to realize and the keep-paths a pruning consumer must protect. Entries are ordered because realization order can matter (e.g. a package that links its own subtree back into an already-assembled dependency's tree)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.build.assembly.KeepPathEntry",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "sourceSetDir",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The source-set directory the file belongs to, as a worktree-relative path"}}}]}}}},
+                  {
+                    "name": "relPath",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The file's path relative to its source-set directory"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "One protected path in a keep-paths manifest: a source-set directory paired with a file's path relative to it. Serialized by the native executor as <sourceSetDir>\\t<relPath>, bit-compatible with the prune-stale (#357) and digest-check --keep-paths-from consumers."}}}]}}}}}}]}

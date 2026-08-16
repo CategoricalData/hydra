@@ -1,7 +1,8 @@
 {
-  "mainDslModules": ["hydra.build.benchresult", "hydra.build.comparereport", "hydra.build.format"],
-  "mainEncodingModules": ["hydra.build.benchresult", "hydra.build.comparereport", "hydra.build.format"],
+  "mainDslModules": ["hydra.build.assembly", "hydra.build.benchresult", "hydra.build.comparereport", "hydra.build.format"],
+  "mainEncodingModules": ["hydra.build.assembly", "hydra.build.benchresult", "hydra.build.comparereport", "hydra.build.format"],
   "mainModules": [
+    "hydra.build.assembly",
     "hydra.build.benchresult",
     "hydra.build.comparereport",
     "hydra.build.format",
@@ -15,9 +16,11 @@
     "hydra.build.routing",
     "hydra.build.syncmatrix",
     "hydra.build.versionconsistency",
+    "hydra.decode.build.assembly",
     "hydra.decode.build.benchresult",
     "hydra.decode.build.comparereport",
     "hydra.decode.build.format",
+    "hydra.encode.build.assembly",
     "hydra.encode.build.benchresult",
     "hydra.encode.build.comparereport",
     "hydra.encode.build.format"],
