@@ -1299,7 +1299,7 @@
                                                                                               "application": {
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.core.TypeScheme"}}},
                                                                                                     "type": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
@@ -1674,7 +1674,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.optionals.cases"},
+                                                    "body": {"variable": "hydra.lib.optionals.match"},
                                                     "type": {
                                                       "pair": {"first": {"variable": "hydra.typing.TypeConstraint"}, "second": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}},
                                                 "type": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}},
