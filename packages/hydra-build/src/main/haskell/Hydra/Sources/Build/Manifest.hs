@@ -41,6 +41,7 @@ import qualified Hydra.Sources.Build.PackagingProfile as BuildPackagingProfile
 import qualified Hydra.Sources.Build.PublishSets as BuildPublishSets
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Routing as BuildRouting
+import qualified Hydra.Sources.Build.SyncMatrix as BuildSyncMatrix
 import qualified Hydra.Sources.Build.VersionConsistency as BuildVersionConsistency
 import qualified Hydra.Sources.Build.Test.Libraries as TestBuildLibraries
 import qualified Hydra.Sources.Build.Test.Modules as TestBuildModules
@@ -61,6 +62,7 @@ mainModules = [
   BuildPublishSets.module_,
   BuildReconcile.module_,
   BuildRouting.module_,
+  BuildSyncMatrix.module_,
   BuildVersionConsistency.module_]
 
 -- | hydra.build.format is the package's one type-defining module (#512); it
