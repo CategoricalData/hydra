@@ -1,0 +1,303 @@
+{
+  "name": "hydra.build.syncmatrix",
+  "metadata": {
+    "description": "Pure sync-matrix (package, target) planning core shared by the sync driver",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.build.langexpansion"},
+    {"module": "hydra.strip"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.syncmatrix.crossHostCells",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "hosts",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "targets",
+                    "domain": {"list": {"literal": "string"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.lists.concat"},
+                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                    "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "host",
+                                    "domain": {"literal": "string"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                                "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "target",
+                                                "domain": {"literal": "string"},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "pair": {
+                                                            "first": {
+                                                              "application": {"function": {"variable": "hydra.build.syncmatrix.packageForLanguage"}, "argument": {"variable": "target"}}},
+                                                            "second": {"variable": "host"}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "type": {"literal": "string"}}}}}}},
+                                        "argument": {"variable": "targets"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"literal": "string"}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "host",
+                                        "domain": {"literal": "string"},
+                                        "body": {
+                                          "application": {
+                                            "function": {"variable": "hydra.lib.logic.not"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
+                                                    "argument": {"variable": "host"}}},
+                                                "argument": {"literal": {"string": "haskell"}}}}}}}}}},
+                                "argument": {"variable": "hosts"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Rule 3: (hydra-target, host) for every (host, target) with host /= haskell"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.syncmatrix.kernelCells",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "t0"}}, "isLazy": false}],
+          "result": {"type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "langUnion",
+                    "domain": {"list": {"variable": "t0"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
+                                "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "lang",
+                                "domain": {"variable": "t0"},
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"pair": {"first": {"literal": {"string": "hydra-kernel"}}, "second": {"variable": "lang"}}},
+                                        "type": {"literal": "string"}}},
+                                    "type": {"variable": "t0"}}}}}}},
+                        "argument": {"variable": "langUnion"}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Rule 1: (hydra-kernel, L) for every L in (hosts union targets)"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.build.syncmatrix.packageForLanguage",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "lang",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "hydra-"}}}},
+                    "argument": {"variable": "lang"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The distribution package name for a language: hydra-<language>"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.syncmatrix.rootCoderCells",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "langUnion",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "typeApplication": {
+                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "lang",
+                            "domain": {"literal": "string"},
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "first": {
+                                          "application": {"function": {"variable": "hydra.build.syncmatrix.packageForLanguage"}, "argument": {"variable": "lang"}}},
+                                        "second": {"literal": {"string": "haskell"}}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"literal": "string"}}}}}}},
+                    "argument": {"variable": "langUnion"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Rule 2: (hydra-L, haskell) for every L in (hosts union targets)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.syncmatrix.syncMatrix",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "hosts",
+                "domain": {"list": {"literal": "string"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "targets",
+                    "domain": {"list": {"literal": "string"}},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "expandedHosts",
+                            "term": {"application": {"function": {"variable": "hydra.build.langexpansion.expandLangs"}, "argument": {"variable": "hosts"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "expandedTargets",
+                                "term": {
+                                  "application": {"function": {"variable": "hydra.build.langexpansion.expandLangs"}, "argument": {"variable": "targets"}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "union",
+                                    "term": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.build.langexpansion.langUnion"}, "argument": {"variable": "hosts"}}},
+                                        "argument": {"variable": "targets"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.distinct"},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.concat"},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                        "argument": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.build.syncmatrix.kernelCells"}, "type": {"literal": "string"}}},
+                                                "argument": {"variable": "union"}}},
+                                            {"application": {"function": {"variable": "hydra.build.syncmatrix.rootCoderCells"}, "argument": {"variable": "union"}}},
+                                            {
+                                              "application": {
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.build.syncmatrix.crossHostCells"}, "argument": {"variable": "expandedHosts"}}},
+                                                "argument": {"variable": "expandedTargets"}}}]}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The full (package, target) sync matrix for a (hosts, targets) request"}}}]}}}}}]}

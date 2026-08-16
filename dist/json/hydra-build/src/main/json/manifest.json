@@ -13,6 +13,7 @@
     "hydra.build.publishsets",
     "hydra.build.reconcile",
     "hydra.build.routing",
+    "hydra.build.syncmatrix",
     "hydra.build.versionconsistency",
     "hydra.decode.build.benchresult",
     "hydra.decode.build.comparereport",
