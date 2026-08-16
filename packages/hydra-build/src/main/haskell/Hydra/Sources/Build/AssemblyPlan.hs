@@ -71,10 +71,14 @@ import qualified Data.Maybe                  as Y
 -- trivial, the effect is not translingual).
 --
 -- Scope (per 416-P3-assembly-design.md): this promotes §1a (the overlay-merge
--- triples common to the java\/python\/scala\/haskell copy scripts) and §1b (the
--- keep-paths a prune-stale pass must protect). The richer §1c TypeScript
--- cross-package import graph is deferred pending a design call (symlink
--- realization boundary + the build↔kernel back-edge ordering).
+-- triples common to the java\/python\/scala\/haskell copy scripts), §1b (the
+-- keep-paths a prune-stale pass must protect), and §1c (the TypeScript
+-- cross-package import graph, promoted as plan-as-data per #666). §1c models the
+-- symlink graph that makes each TypeScript distribution package self-contained
+-- for @tsc@ as a pure @typescriptImportGraph@ constant; the native executor
+-- realizes the @symlinkTree@\/@symlinkDir@ entries with @ln -sf@ (symlink I\/O
+-- stays native — #666 ratified adding a symlink primitive family separately, but
+-- §1c does not wait on it).
 --
 -- Trees are passed in (design §4-A): @deriveAssemblyPlan@ is pure and
 -- layout-agnostic; the caller performs the @listDirectory@ effect to discover
@@ -97,7 +101,8 @@ module_ = Module {
      toDefinition keepPathsFor,
      toDefinition overlayEntries,
      toDefinition remapDest,
-     toDefinition sourceSetSubdir]
+     toDefinition sourceSetSubdir,
+     toDefinition typescriptImportGraph]
 
 -- | The full assembly plan for a @(package, language)@ pair: the ordered copy
 -- entries (from 'overlayEntries') paired with the keep-paths (from
@@ -169,3 +174,44 @@ sourceSetSubdir = define "sourceSetSubdir" $
   doc "Join a package root and a source-set subdirectory with a / separator" $
   "root" ~> "subdir" ~>
   Strings.concat (list [var "root", string "/", var "subdir"])
+
+-- | The TypeScript cross-package import graph (§1c): the fixed set of symlink
+-- edges that make each generated TypeScript distribution package self-contained
+-- for @tsc@, promoted verbatim from the case-arms in
+-- @heads/typescript/bin/assemble-distribution.sh@ (lines 61-157) into data. Each
+-- entry is a @(sourceTree, destTree, kind)@ triple over the assembled
+-- @dist/typescript/<pkg>/src/{main,test}/typescript/hydra@ trees. Edges (in
+-- application order — a package's dependencies must be assembled first):
+--
+--   * @hydra-rdf@ imports @hydra-kernel@ (per-file @symlinkTree@).
+--   * @hydra-pg@ imports @hydra-kernel@ and @hydra-rdf@ (per-file @symlinkTree@).
+--   * @hydra-build@ imports @hydra-kernel@ (per-file @symlinkTree@), plus two
+--     back-edges into the already-assembled kernel tree: its @test@ subtree links
+--     into the kernel test tree (kernel's testSuite imports @hydra.test.build.*@,
+--     #546\/#547), and its own @hydra/build@ main subtree links back into the
+--     kernel main tree as a single directory (@symlinkDir@) so the kernel test
+--     imports of @hydra/build/*.js@ resolve.
+--
+-- The design's fuller graph (@jvm@ -> @java@,@scala@; @java@ -> @scala@) is not
+-- yet realized in the TypeScript head and is intentionally omitted until it is.
+-- Native executor realizes each edge with @ln -sf@ under the @! -e@ precedence
+-- rule (own real files\/valid symlinks win).
+typescriptImportGraph :: TypedTermDefinition [(String, String, String)]
+typescriptImportGraph = define "typescriptImportGraph" $
+  doc "The TypeScript cross-package symlink graph as (sourceTree, destTree, kind) triples" $
+  "kernelMain" <~ string "dist/typescript/hydra-kernel/src/main/typescript/hydra" $
+  "kernelTest" <~ string "dist/typescript/hydra-kernel/src/test/typescript/hydra" $
+  "rdfMain" <~ string "dist/typescript/hydra-rdf/src/main/typescript/hydra" $
+  "pgMain" <~ string "dist/typescript/hydra-pg/src/main/typescript/hydra" $
+  "buildMain" <~ string "dist/typescript/hydra-build/src/main/typescript/hydra" $
+  "buildTest" <~ string "dist/typescript/hydra-build/src/test/typescript/hydra" $
+  list [
+    triple (var "kernelMain") (var "rdfMain") (string "symlinkTree"),
+    triple (var "kernelMain") (var "pgMain") (string "symlinkTree"),
+    triple (var "rdfMain") (var "pgMain") (string "symlinkTree"),
+    triple (var "kernelMain") (var "buildMain") (string "symlinkTree"),
+    triple (var "buildTest") (var "kernelTest") (string "symlinkTree"),
+    triple
+      (Strings.concat (list [var "buildMain", string "/build"]))
+      (Strings.concat (list [var "kernelMain", string "/build"]))
+      (string "symlinkDir")]
