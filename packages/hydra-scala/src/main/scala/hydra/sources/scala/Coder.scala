@@ -1734,7 +1734,7 @@ object Coder:
 
   // Variable arm: produce a properly-qualified Scala name.
   private val encodeTermVariableArm = lambda("v",
-    applyP("hydra.lib.optionals.cases",
+    applyP("hydra.lib.optionals.match",
       applyP("hydra.lib.maps.lookup", v("v"), GraphDsl.graphPrimitives(v("g"))),
       Phantoms.let(Seq(
         field("fullName", CoreDsl.unName(v("v"))),

@@ -177,7 +177,7 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
       _Type_record>>: constant true,
       _Type_union>>: constant true,
       _Type_wrap>>: constant true]) $
-    "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
+    "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.match (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
       (var "tryBinding" @@ var "v" @@ var "t")
       ("ts" ~> Logic.ifElse (var "isNominalSchemaType" @@ var "ts")
         (left (Error.unificationError (var "sleft") (var "sright")

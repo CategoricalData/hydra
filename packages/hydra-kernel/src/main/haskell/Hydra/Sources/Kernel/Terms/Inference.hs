@@ -296,7 +296,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
   "checkOne" <~ ("pair" ~>
     "varName" <~ Pairs.first (var "pair") $
     "varConstraints" <~ Pairs.second (var "pair") $
-    Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
+    Optionals.match (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
       (right unit)
       ("resolvedType" ~>
         "checkClass" <~ ("classConstraint" ~>

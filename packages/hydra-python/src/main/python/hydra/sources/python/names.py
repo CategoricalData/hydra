@@ -329,7 +329,7 @@ def _encode_namespace_string_with_overrides():
                 "overlaySubs",
                 lam(
                     "nsVal",
-                    Optionals.cases(
+                    Optionals.match(
                         lib_redirect,
                         Optionals.with_default(
                             default_encoding,
