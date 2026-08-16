@@ -3,6 +3,7 @@
   "mainEncodingModules": ["hydra.build.assembly", "hydra.build.benchresult", "hydra.build.comparereport", "hydra.build.format"],
   "mainModules": [
     "hydra.build.assembly",
+    "hydra.build.assemblyplan",
     "hydra.build.benchresult",
     "hydra.build.comparereport",
     "hydra.build.format",

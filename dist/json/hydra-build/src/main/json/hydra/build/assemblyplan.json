@@ -1,0 +1,340 @@
+{
+  "name": "hydra.build.assemblyplan",
+  "metadata": {
+    "description": "The pure assembly-plan derivation: the ordered overlay-copy entries and keep-paths for a distribution package",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.deriveAssemblyPlan",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"literal": "string"}}, "isLazy": false},
+            {
+              "name": "arg3",
+              "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "pair": {
+                "first": {
+                  "list": {
+                    "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}},
+                "second": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "pkg",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "lang",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "availableTrees",
+                            "domain": {"list": {"literal": "string"}},
+                            "body": {
+                              "lambda": {
+                                "parameter": "treeFiles",
+                                "domain": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}},
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "pair": {
+                                            "first": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.build.assemblyplan.overlayEntries"}, "argument": {"variable": "pkg"}}},
+                                                    "argument": {"variable": "lang"}}},
+                                                "argument": {"variable": "availableTrees"}}},
+                                            "second": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.build.assemblyplan.keepPathsFor"}, "type": {"variable": "t0"}}},
+                                                        "argument": {"variable": "pkg"}}},
+                                                    "argument": {"variable": "lang"}}},
+                                                "argument": {"variable": "treeFiles"}}}}},
+                                        "type": {
+                                          "list": {
+                                            "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}}},
+                                    "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "The full assembly plan (entries, keepPaths) for a (package, language) pair"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.keepPathsFor",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
+            {
+              "name": "arg2",
+              "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}},
+              "isLazy": false}],
+          "result": {"type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "pkg",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "lang",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "treeFiles",
+                            "domain": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.map"},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "tf",
+                                        "domain": {"pair": {"first": {"literal": "string"}, "second": {"variable": "t0"}}},
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "first": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.build.assemblyplan.remapDest"}, "argument": {"variable": "pkg"}}},
+                                                            "argument": {"variable": "lang"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
+                                                                "type": {"variable": "t0"}}},
+                                                            "argument": {"variable": "tf"}}}}},
+                                                    "second": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "argument": {"variable": "tf"}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"variable": "t0"}}}}}}},
+                                "argument": {"variable": "treeFiles"}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "The (sourceSetDir, relPath) keep-paths for a package's copied overlay files"}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.overlayEntries",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {
+            "type": {
+              "list": {
+                "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pkg",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "lang",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "availableTrees",
+                        "domain": {"list": {"literal": "string"}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                    "type": {
+                                      "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "subdir",
+                                    "domain": {"literal": "string"},
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "first": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.build.assemblyplan.sourceSetSubdir"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.strings.concat"},
+                                                            "argument": {"list": [{"literal": {"string": "overlay/"}}, {"variable": "lang"}, {"literal": {"string": "/"}}, {"variable": "pkg"}]}}}}},
+                                                    "argument": {"variable": "subdir"}}},
+                                                "second": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "pair": {
+                                                            "first": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"variable": "hydra.build.assemblyplan.sourceSetSubdir"},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.lib.strings.concat"},
+                                                                        "argument": {"list": [{"literal": {"string": "dist/"}}, {"variable": "lang"}, {"literal": {"string": "/"}}, {"variable": "pkg"}]}}}}},
+                                                                "argument": {"variable": "subdir"}}},
+                                                            "second": {"literal": {"string": "merge"}}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "type": {"literal": "string"}}}}},
+                                            "type": {"literal": "string"}}},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}}}},
+                            "argument": {"variable": "availableTrees"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The ordered (sourceTree, destTree, merge) overlay-copy entries for a package's available trees"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.remapDest",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg2", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pkg",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "lang",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "subdir",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.build.assemblyplan.sourceSetSubdir"},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.concat"},
+                                    "argument": {"list": [{"literal": {"string": "dist/"}}, {"variable": "lang"}, {"literal": {"string": "/"}}, {"variable": "pkg"}]}}}}},
+                            "argument": {"variable": "subdir"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Remap an overlay source-set subdir to its dist/<lang>/<pkg>/<subdir> destination"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.assemblyplan.sourceSetSubdir",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "root",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "subdir",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.strings.concat"},
+                        "argument": {"list": [{"variable": "root"}, {"literal": {"string": "/"}}, {"variable": "subdir"}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Join a package root and a source-set subdirectory with a / separator"}}}]}}}}}]}
