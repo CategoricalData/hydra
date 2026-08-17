@@ -23,8 +23,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.files module.")}
   where
-    definitions = [appendFile, copy, createDirectory, exists, listDirectory, readFile,
-                   removeDirectory, removeFile, rename, status, writeFile]
+    definitions = [appendFile, copy, createDirectory, createSymlink, exists, listDirectory,
+                   readFile, readSymlink, removeDirectory, removeFile, rename, status, writeFile]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = impurePrimitiveInModule module_
@@ -75,6 +75,22 @@ createDirectory = define "createDirectory" "Create a directory."
   \ error. A recoverable file-system failure is returned as left(error); success is returned as\
   \ right(unit)."]
 
+createSymlink :: PrimitiveDefinition
+createSymlink = define "createSymlink" "Create a symbolic link."
+  (sigWithParams [("target", "the path that the new symbolic link will point to"),
+                  ("link", "the path of the symbolic link to create")] $
+    TypeScheme [] (filePath Types.~> filePath Types.~> result Types.unit) Nothing)
+  ["createSymlink(target, link) describes an effectful computation which attempts to create a\
+  \ symbolic link at link, pointing to target (POSIX symlink). target is stored verbatim; it may\
+  \ be a relative path, and it need not exist. There is no force flag: if link already exists\
+  \ (including as a dangling symbolic link), the computation fails with left(alreadyExists); a\
+  \ caller that wants replace-if-exists semantics should compose status(false, link),\
+  \ removeFile, and createSymlink. A missing parent directory yields left(notFound); a host or\
+  \ file system which refuses to create the link (e.g. an unprivileged process on Windows, or an\
+  \ unsupported file system) yields left(permissionDenied) or left(other) as appropriate. A\
+  \ recoverable file-system failure is returned as left(error); success is returned as\
+  \ right(unit)."]
+
 exists :: PrimitiveDefinition
 exists = define "exists" "Test whether a path exists."
   (sigWithParams [("path", "the path to test for existence")] $
@@ -101,6 +117,19 @@ readFile = define "readFile" "Read the complete contents of a file as raw bytes.
   \ the file at path as raw bytes, with no character decoding or newline translation. To interpret\
   \ the result as text, decode it (e.g. via hydra.lib.text.decodeUtf8). A recoverable file-system\
   \ failure is returned as left(error); success is returned as right(contents)."]
+
+readSymlink :: PrimitiveDefinition
+readSymlink = define "readSymlink" "Read the target of a symbolic link."
+  (sigWithParams [("path", "the path of the symbolic link to read")] $
+    TypeScheme [] (filePath Types.~> result filePath) Nothing)
+  ["readSymlink(path) describes an effectful computation which attempts to read the target of the\
+  \ symbolic link at path (POSIX readlink). This is a single-hop, unresolved read: the target is\
+  \ returned exactly as stored, with no chain resolution or canonicalization; a relative target\
+  \ is returned relative, and a dangling target (one that does not exist) is returned as-is. To\
+  \ resolve a chain of links to a canonical path, compose repeated calls to readSymlink and\
+  \ status. A missing path yields left(notFound); a path which exists but is not a symbolic link\
+  \ yields left(invalidPath). A recoverable file-system failure is returned as left(error);\
+  \ success is returned as right(target)."]
 
 removeDirectory :: PrimitiveDefinition
 removeDirectory = define "removeDirectory" "Remove a directory."
@@ -136,13 +165,22 @@ rename = define "rename" "Rename or move a file or directory."
 
 status :: PrimitiveDefinition
 status = define "status" "Retrieve metadata about a file or directory."
-  (sigWithParams [("path", "the path to retrieve metadata for")] $
-    TypeScheme [] (filePath Types.~> result fileStatus) Nothing)
-  ["status(path) describes an effectful computation which retrieves metadata about the file at path\
-  \ (POSIX stat), including its type, size, and modification time. Symbolic links are followed. A\
-  \ path which does not exist yields left(notFound); other recoverable file-system failures are\
-  \ also returned as left(error). Use exists for a boolean presence check that does not error on\
-  \ absence."]
+  (sigWithParams [("followLinks", "whether to resolve symbolic links (true reproduces the\
+                  \ previous, follow, behavior; false inspects the entry itself)"),
+                  ("path", "the path to retrieve metadata for")] $
+    TypeScheme [] (Types.boolean Types.~> filePath Types.~> result fileStatus) Nothing)
+  ["status(followLinks, path) describes an effectful computation which retrieves metadata about\
+  \ the file system entry at path, including its type, size, and modification time. When\
+  \ followLinks is true, this corresponds to POSIX stat: if path is a symbolic link, the metadata\
+  \ describes the link's target, and a dangling link (whose target does not exist) yields\
+  \ left(notFound). When followLinks is false, this corresponds to POSIX lstat: the metadata\
+  \ describes the link itself, with fileType link, a size equal to the length of the stored\
+  \ target path, and the link's own timestamps; a dangling link is not an error in this mode.\
+  \ status(false, path) is the only way to observe fileType link; status(true, path) never\
+  \ produces it, since a followed link's metadata is always that of its (non-link) target. For\
+  \ paths that are not symbolic links, both modes report identical metadata. A path which does\
+  \ not exist yields left(notFound); other recoverable file-system failures are also returned as\
+  \ left(error). Use exists for a boolean presence check that does not error on absence."]
 
 writeFile :: PrimitiveDefinition
 writeFile = define "writeFile" "Write raw bytes as the complete contents of a file."
