@@ -240,7 +240,7 @@ public class Coder {
                             hydra.dsl.Constants.keyType(),
                             just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                             var("t"))),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm( var("term")),
                         apply(var("setAnn"), var("term")),
                         field(
@@ -255,7 +255,7 @@ public class Coder {
                                     field("rhs",
                                         proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                     field("annotatedRhs",
-                                        casesWithDefault(Term.TYPE_,
+                                        matchWithDefault(Term.TYPE_,
                                             hydra.dsl.Strip.deannotateTerm( var("rhs")),
                                             var("rhs"),
                                             field(
@@ -435,7 +435,7 @@ public class Coder {
     public static final Def applyOvergenSubstToTermAnnotationsGo = def("applyOvergenSubstToTermAnnotationsGo")
         .lam("subst").lam("cx").lam("term")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     var("term"),
                     var("term"),
                     field(
@@ -634,7 +634,7 @@ public class Coder {
     public static final Def applySubstFull = def("applySubstFull")
         .lam("s").lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     var("t"),
                     field(
@@ -775,7 +775,7 @@ public class Coder {
     public static final Def applySubstSimple = def("applySubstSimple")
         .lam("subst").lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     var("t"),
                     field(
@@ -880,7 +880,7 @@ public class Coder {
     public static final Def augmentVariantClass = def("augmentVariantClass")
         .lam("aliases").lam("tparams").lam("elName").lam("cd")
         .to(() ->
-                casesWithDefault(ClassDeclaration.TYPE_,
+                matchWithDefault(ClassDeclaration.TYPE_,
                     var("cd"),
                     var("cd"),
                     field(
@@ -958,7 +958,7 @@ public class Coder {
         .to(() ->
                 Optionals.cases(
                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm(
                             proj(Binding.TYPE_, Binding.TERM, "b")),
                         bool(false),
@@ -967,7 +967,7 @@ public class Coder {
                         field(Term.CASES, constant(bool(true))),
                         field(Term.UNWRAP, constant(bool(true)))),
                     lambda("ts",
-                        casesWithDefault(Type.TYPE_,
+                        matchWithDefault(Type.TYPE_,
                             hydra.dsl.Strip.deannotateType(
                                 proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                             bool(false),
@@ -975,7 +975,7 @@ public class Coder {
                             field(
                                 Type.FORALL,
                                 lambda("fa",
-                                    casesWithDefault(Type.TYPE_,
+                                    matchWithDefault(Type.TYPE_,
                                         hydra.dsl.Strip.deannotateType(
                                             proj(ForallType.TYPE_, ForallType.BODY, "fa")),
                                         bool(false),
@@ -1201,7 +1201,7 @@ public class Coder {
     public static final Def boundTypeVariables = def("boundTypeVariables")
         .lam("typ")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("typ"),
                     list(),
                     field(
@@ -1231,7 +1231,7 @@ public class Coder {
                                     Pairs.first(var("p"))),
                                 field("argType",
                                     Pairs.second(var("p"))),
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     hydra.dsl.Strip.deannotateType( var("sdom")),
                                     list(),
                                     field(
@@ -1266,7 +1266,7 @@ public class Coder {
     public static final Def buildSubstFromAnnotations_go = def("buildSubstFromAnnotations_go")
         .lam("schemeVarSet").lam("g").lam("term")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     var("term"),
                     hydra.dsl.lib.Maps.empty(),
                     field(
@@ -1292,7 +1292,7 @@ public class Coder {
                                             Eithers.either(
                                                 constant(hydra.dsl.lib.Maps.empty()),
                                                 lambda("annType",
-                                                    casesWithDefault(Term.TYPE_,
+                                                    matchWithDefault(Term.TYPE_,
                                                         hydra.dsl.Strip.deannotateTerm(
                                                             var("body")),
                                                         hydra.dsl.lib.Maps.empty(),
@@ -1303,7 +1303,7 @@ public class Coder {
                                                                     proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                                                     hydra.dsl.lib.Maps.empty(),
                                                                     lambda("dom",
-                                                                        casesWithDefault(
+                                                                        matchWithDefault(
                                                                             Type.TYPE_,
                                                                             hydra.dsl.Strip.deannotateType(
                                                                                 var("annType")),
@@ -1525,7 +1525,7 @@ public class Coder {
                             var("svs"),
                             hydra.dsl.Strip.deannotateType( var("a")),
                             hydra.dsl.Strip.deannotateType( var("b")))),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         var("st"),
                         hydra.dsl.lib.Maps.empty(),
                         field(
@@ -1538,7 +1538,7 @@ public class Coder {
                         field(
                             Type.FUNCTION,
                             lambda("sft",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1556,7 +1556,7 @@ public class Coder {
                         field(
                             Type.APPLICATION,
                             lambda("sat",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1574,7 +1574,7 @@ public class Coder {
                         field(
                             Type.LIST,
                             lambda("sl",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1583,7 +1583,7 @@ public class Coder {
                         field(
                             Type.SET,
                             lambda("ss",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1592,7 +1592,7 @@ public class Coder {
                         field(
                             Type.OPTIONAL,
                             lambda("sm",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1601,7 +1601,7 @@ public class Coder {
                         field(
                             Type.MAP,
                             lambda("smt",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1619,7 +1619,7 @@ public class Coder {
                         field(
                             Type.PAIR,
                             lambda("spt",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1637,7 +1637,7 @@ public class Coder {
                         field(
                             Type.EITHER,
                             lambda("set'",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1655,7 +1655,7 @@ public class Coder {
                         field(
                             Type.FORALL,
                             lambda("sfa",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("at"),
                                     apply(
                                         var("goSub"),
@@ -1690,9 +1690,9 @@ public class Coder {
                             var("svs"),
                             hydra.dsl.Strip.deannotateType( var("a")),
                             hydra.dsl.Strip.deannotateType( var("b")))),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         var("ft"),
-                        casesWithDefault(Type.TYPE_,
+                        matchWithDefault(Type.TYPE_,
                             var("ct"),
                             hydra.dsl.lib.Maps.empty(),
                             field(
@@ -1707,7 +1707,7 @@ public class Coder {
                         field(
                             Type.VARIABLE,
                             lambda("fn",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1722,7 +1722,7 @@ public class Coder {
                         field(
                             Type.FUNCTION,
                             lambda("fft",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1740,7 +1740,7 @@ public class Coder {
                         field(
                             Type.APPLICATION,
                             lambda("fat",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1758,7 +1758,7 @@ public class Coder {
                         field(
                             Type.LIST,
                             lambda("fl",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1767,7 +1767,7 @@ public class Coder {
                         field(
                             Type.SET,
                             lambda("fs",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1776,7 +1776,7 @@ public class Coder {
                         field(
                             Type.OPTIONAL,
                             lambda("fm",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1785,7 +1785,7 @@ public class Coder {
                         field(
                             Type.MAP,
                             lambda("fmt",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1803,7 +1803,7 @@ public class Coder {
                         field(
                             Type.PAIR,
                             lambda("fpt",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1821,7 +1821,7 @@ public class Coder {
                         field(
                             Type.EITHER,
                             lambda("fet",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     hydra.dsl.lib.Maps.empty(),
                                     field(
@@ -1839,7 +1839,7 @@ public class Coder {
                         field(
                             Type.FORALL,
                             lambda("ffa",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("ct"),
                                     apply(
                                         ref(Coder.buildTypeVarSubst_go),
@@ -1933,7 +1933,7 @@ public class Coder {
     public static final Def classifyDataTerm_countLambdaParams = def("classifyDataTerm_countLambdaParams")
         .lam("t")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     int32(0),
                     field(
@@ -1954,7 +1954,7 @@ public class Coder {
     public static final Def classifyDataTerm_stripTypeLambdas = def("classifyDataTerm_stripTypeLambdas")
         .lam("t")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     var("t"),
                     field(
@@ -2014,7 +2014,7 @@ public class Coder {
     public static final Def collectForallParams = def("collectForallParams")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     list(),
                     field(
@@ -2029,7 +2029,7 @@ public class Coder {
     public static final Def collectLambdaDomains = def("collectLambdaDomains")
         .lam("t")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     pair(list(), var("t")),
                     field(
@@ -2050,7 +2050,7 @@ public class Coder {
     public static final Def collectTypeApps = def("collectTypeApps")
         .lam("t").lam("acc")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     pair(hydra.dsl.Strip.deannotateTerm( var("t")), var("acc")),
                     field(
@@ -2066,7 +2066,7 @@ public class Coder {
     public static final Def collectTypeApps0 = def("collectTypeApps0")
         .lam("t").lam("acc")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     pair(var("t"), var("acc")),
                     field(
@@ -2089,7 +2089,7 @@ public class Coder {
     public static final Def collectTypeVars_go = def("collectTypeVars_go")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("t"),
                     hydra.dsl.lib.Sets.empty(),
                     field(Type.VARIABLE, lambda("name", Sets.singleton(var("name")))),
@@ -2605,7 +2605,7 @@ public class Coder {
     public static final Def correctCastType = def("correctCastType")
         .lam("innerBody").lam("typeArgs").lam("fallback").lam("cx").lam("g")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("innerBody")),
                     right(var("fallback")),
                     field(
@@ -2823,7 +2823,7 @@ public class Coder {
     public static final Def countFunctionParams = def("countFunctionParams")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     int32(0),
                     field(
@@ -3440,7 +3440,7 @@ public class Coder {
                                                 var("resultR"),
                                                 just(list(var("throwStmt"))))),
     field("otherwiseComment",
-                                            string("Default branch for unhandled cases.")),
+                                            string("Default branch for unhandled match.")),
     field("pvVisitMethods",
                                             Lists.map(
                                                 lambda("ft",
@@ -3683,7 +3683,7 @@ public class Coder {
     public static final Def decodeTypeFromTerm = def("decodeTypeFromTerm")
         .lam("term")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("term")),
                     nothing(),
                     field(
@@ -3706,19 +3706,19 @@ public class Coder {
                                             proj(Injection.TYPE_, Injection.FIELD, "inj"))),
                                     Logic.ifElse(
                                         Equality.equal(var("fname"), string("variable")),
-                                        casesWithDefault(Term.TYPE_,
+                                        matchWithDefault(Term.TYPE_,
                                             var("fterm"),
                                             nothing(),
                                             field(
                                                 Term.WRAP,
                                                 lambda("wt",
-                                                    casesWithDefault(Term.TYPE_,
+                                                    matchWithDefault(Term.TYPE_,
                                                         proj(WrappedTerm.TYPE_, WrappedTerm.BODY, "wt"),
                                                         nothing(),
                                                         field(
                                                             Term.LITERAL,
                                                             lambda("lit",
-                                                                casesWithDefault(
+                                                                matchWithDefault(
                                                                     Literal.TYPE_,
                                                                     var("lit"),
                                                                     nothing(),
@@ -3734,7 +3734,7 @@ public class Coder {
                                                                                         var("s"))))))))))))),
                                         Logic.ifElse(
                                             Equality.equal(var("fname"), string("annotated")),
-                                            casesWithDefault(Term.TYPE_,
+                                            matchWithDefault(Term.TYPE_,
                                                 var("fterm"),
                                                 nothing(),
                                                 field(
@@ -3756,7 +3756,7 @@ public class Coder {
                                                                     proj(Field.TYPE_, Field.TERM, "bodyField"))))))),
                                             Logic.ifElse(
                                                 Equality.equal(var("fname"), string("application")),
-                                                casesWithDefault(Term.TYPE_,
+                                                matchWithDefault(Term.TYPE_,
                                                     var("fterm"),
                                                     nothing(),
                                                     field(
@@ -3808,7 +3808,7 @@ public class Coder {
                                                                                             proj(Field.TYPE_, Field.TERM, "argField")))))))))))),
                                                 Logic.ifElse(
                                                     Equality.equal(var("fname"), string("function")),
-                                                    casesWithDefault(Term.TYPE_,
+                                                    matchWithDefault(Term.TYPE_,
                                                         var("fterm"),
                                                         nothing(),
                                                         field(
@@ -3864,7 +3864,7 @@ public class Coder {
                                                         Equality.equal(
                                                             var("fname"),
                                                             string("literal")),
-                                                        casesWithDefault(Term.TYPE_,
+                                                        matchWithDefault(Term.TYPE_,
                                                             var("fterm"),
                                                             nothing(),
                                                             field(
@@ -3976,7 +3976,7 @@ public class Coder {
                         Sets.fromList(
                             Lists.map(lambda("p", Pairs.first(var("p"))), var("directPairs")))),
     field("codVar",
-                        casesWithDefault(Type.TYPE_,
+                        matchWithDefault(Type.TYPE_,
                             hydra.dsl.Strip.deannotateType( var("cod")),
                             nothing(),
                             field(Type.VARIABLE, lambda("v", just(var("v")))))),
@@ -4233,7 +4233,7 @@ public class Coder {
                                         field("deannotatedFun",
                                             hydra.dsl.Strip.deannotateTerm( var("fun"))),
                                         field("calleeName",
-                                            casesWithDefault(Term.TYPE_,
+                                            matchWithDefault(Term.TYPE_,
                                                 var("deannotatedFun"),
                                                 nothing(),
                                                 field(
@@ -4252,7 +4252,7 @@ public class Coder {
                                                         var("cx"),
                                                         var("g")))),
                                             lambda("annotatedArgs",
-                                                casesWithDefault(Term.TYPE_,
+                                                matchWithDefault(Term.TYPE_,
                                                     var("deannotatedFun"),
                                                     apply(
                                                         ref(Coder.encodeApplication_fallback),
@@ -4342,7 +4342,7 @@ public class Coder {
                                                                         lambda("symClass",
                                                                             let(
                                                                                 field("methodArity",
-                                                                                    casesWithDefault(
+                                                                                    matchWithDefault(
                                                                                         JavaSymbolClass.TYPE_,
                                                                                         var("symClass"),
                                                                                         var("arity"),
@@ -4478,7 +4478,7 @@ public class Coder {
                                     var("lhs")),
                                 lambda("typ", right(var("typ")))),
                             lambda("t",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     hydra.dsl.Strip.deannotateTypeParameters(
                                         hydra.dsl.Strip.deannotateType( var("t"))),
                                     Eithers.bind(
@@ -4623,7 +4623,7 @@ public class Coder {
                                                                             var("lhs")),
                                                                         var("cx"),
                                                                         var("g")))))))),
-                                                casesWithDefault(Term.TYPE_,
+                                                matchWithDefault(Term.TYPE_,
                                                     hydra.dsl.Strip.deannotateAndDetypeTerm(
                                                         var("lhs")),
                                                     apply(var("defaultExpr"), unit()),
@@ -4709,7 +4709,7 @@ public class Coder {
         .to(() ->
                 let("aliases",
                     proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateAndDetypeTerm( var("elimTerm")),
                         left(
                             inject(Error_.TYPE_,
@@ -4808,7 +4808,7 @@ public class Coder {
                                                 lambda(
                                                     "ty",
                                                     "acc",
-                                                    casesWithDefault(Type.TYPE_,
+                                                    matchWithDefault(Type.TYPE_,
                                                         hydra.dsl.Strip.deannotateType(
                                                             var("ty")),
                                                         var("acc"),
@@ -5127,7 +5127,7 @@ public class Coder {
                                                                         var("lam1"),
                                                                         var("cx"),
                                                                         var("g")))))))))))))),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm( var("funTerm")),
                         right(
                             apply(
@@ -5186,7 +5186,7 @@ public class Coder {
                                                 proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                             field("body",
                                                 proj(Lambda.TYPE_, Lambda.BODY, "lam")),
-                                            casesWithDefault(Term.TYPE_,
+                                            matchWithDefault(Term.TYPE_,
                                                 hydra.dsl.Strip.deannotateTerm(
                                                     var("body")),
                                                 apply(
@@ -5196,7 +5196,7 @@ public class Coder {
                                                 field(
                                                     Term.LAMBDA,
                                                     lambda("innerLam",
-                                                        casesWithDefault(Type.TYPE_,
+                                                        matchWithDefault(Type.TYPE_,
                                                             hydra.dsl.Strip.deannotateType(
                                                                 var("cod")),
                                                             left(
@@ -5284,7 +5284,7 @@ public class Coder {
                                         lambda("inferredType", right(var("inferredType")))),
                                     lambda("t", right(var("t")))),
                                 lambda("typ",
-                                    casesWithDefault(Type.TYPE_,
+                                    matchWithDefault(Type.TYPE_,
                                         hydra.dsl.Strip.deannotateType( var("typ")),
                                         apply(
                                             ref(Coder.encodeNullaryConstant),
@@ -5408,7 +5408,7 @@ public class Coder {
     public static final Def encodeLiteral = def("encodeLiteral")
         .lam("lit")
         .to(() ->
-                cases(Literal.TYPE_,
+                match(Literal.TYPE_,
                     var("lit"),
                     field(
                         Literal.BINARY,
@@ -5476,7 +5476,7 @@ public class Coder {
     public static final Def encodeLiteralType = def("encodeLiteralType")
         .lam("lt").lam("cx").lam("g")
         .to(() ->
-                cases(LiteralType.TYPE_,
+                match(LiteralType.TYPE_,
                     var("lt"),
                     field(
                         LiteralType.BINARY,
@@ -5534,7 +5534,7 @@ public class Coder {
                     field(
                         LiteralType.FLOAT,
                         lambda("ft",
-                            cases(FloatType.TYPE_,
+                            match(FloatType.TYPE_,
                                 var("ft"),
                                 field(
                                     FloatType.FLOAT32,
@@ -5555,7 +5555,7 @@ public class Coder {
                     field(
                         LiteralType.INTEGER,
                         lambda("it",
-                            cases(IntegerType.TYPE_,
+                            match(IntegerType.TYPE_,
                                 var("it"),
                                 field(
                                     IntegerType.BIGINT,
@@ -5654,7 +5654,7 @@ public class Coder {
     public static final Def encodeLiteral_encodeFloat = def("encodeLiteral_encodeFloat")
         .lam("f")
         .to(() ->
-                cases(FloatValue.TYPE_,
+                match(FloatValue.TYPE_,
                     var("f"),
                     field(
                         FloatValue.FLOAT32,
@@ -5738,7 +5738,7 @@ public class Coder {
     public static final Def encodeLiteral_encodeInteger = def("encodeLiteral_encodeInteger")
         .lam("i")
         .to(() ->
-                cases(IntegerValue.TYPE_,
+                match(IntegerValue.TYPE_,
                     var("i"),
                     field(
                         IntegerValue.BIGINT,
@@ -5948,7 +5948,7 @@ public class Coder {
     public static final Def encodeNullaryConstant_typeArgsFromReturnType = def("encodeNullaryConstant_typeArgsFromReturnType")
         .lam("aliases").lam("t").lam("cx").lam("g")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     right(list()),
                     field(
@@ -6259,7 +6259,7 @@ public class Coder {
                                                                                 field("v",
                                                                                     Pairs.second(
                                                                                         var("entry"))),
-                                                                                casesWithDefault(
+                                                                                matchWithDefault(
                                                                                     Type.TYPE_,
                                                                                     var("v"),
                                                                                     nothing(),
@@ -6657,7 +6657,7 @@ public class Coder {
                     field("encode",
                         lambda("t",
                             apply(ref(Coder.encodeTerm), var("env"), var("t"), var("cx"), var("g")))),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         var("term"),
                         right(
                             apply(
@@ -6732,7 +6732,7 @@ public class Coder {
                                                             Optionals.bind(
                                                                 var("mEitherType"),
                                                                 lambda("etyp",
-                                                                    casesWithDefault(
+                                                                    matchWithDefault(
                                                                         Type.TYPE_,
                                                                         hydra.dsl.Strip.deannotateType(
                                                                             var("etyp")),
@@ -7327,7 +7327,7 @@ public class Coder {
                                         Optionals.bind(
                                             var("strippedRecTyp"),
                                             lambda("bodyTyp",
-                                                casesWithDefault(Type.TYPE_,
+                                                matchWithDefault(Type.TYPE_,
                                                     var("bodyTyp"),
                                                     nothing(),
                                                     field(
@@ -7666,7 +7666,7 @@ public class Coder {
                                                             var("mtyp"),
                                                             proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
                                                             lambda("t",
-                                                                casesWithDefault(
+                                                                matchWithDefault(
                                                                     Type.TYPE_,
                                                                     var("t"),
                                                                     proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
@@ -7791,7 +7791,7 @@ public class Coder {
                                                                 var("term")),
                                                             lambda("t", right(var("t")))),
                                                         lambda("typ",
-                                                            casesWithDefault(Type.TYPE_,
+                                                            matchWithDefault(Type.TYPE_,
                                                                 hydra.dsl.Strip.deannotateType(
                                                                     var("typ")),
                                                                 apply(
@@ -7924,7 +7924,7 @@ public class Coder {
                                                                                 field("allTypeArgs",
                                                                                     Pairs.second(
                                                                                         var("collected"))),
-                                                                                casesWithDefault(
+                                                                                matchWithDefault(
                                                                                     Term.TYPE_,
                                                                                     var("innermostBody"),
                                                                                     apply(
@@ -8133,7 +8133,7 @@ public class Coder {
     field("strippedFun",
                         hydra.dsl.Strip.deannotateAndDetypeTerm( var("gatherFun"))),
     field("isSelfCall",
-                        casesWithDefault(Term.TYPE_,
+                        matchWithDefault(Term.TYPE_,
                             var("strippedFun"),
                             bool(false),
                             field(
@@ -8150,7 +8150,7 @@ public class Coder {
                                 Lists.filter(
                                     lambda("pair",
                                         Logic.not(
-                                            casesWithDefault(Term.TYPE_,
+                                            matchWithDefault(Term.TYPE_,
                                                 hydra.dsl.Strip.deannotateAndDetypeTerm(
                                                     Pairs.second(var("pair"))),
                                                 bool(false),
@@ -8213,7 +8213,7 @@ public class Coder {
                                             Lists.concat2(
                                                 var("assignments"),
                                                 list(var("continueStmt")))))))),
-                        casesWithDefault(Term.TYPE_,
+                        matchWithDefault(Term.TYPE_,
                             var("stripped"),
                             let(
                                 field("gathered2",
@@ -8230,7 +8230,7 @@ public class Coder {
                                                 Term.UNIT,
                                                 unit()),
                                             Lists.head(var("args2"))),
-                                        casesWithDefault(Term.TYPE_,
+                                        matchWithDefault(Term.TYPE_,
                                             hydra.dsl.Strip.deannotateAndDetypeTerm(
                                                 var("body2")),
                                             Eithers.bind(
@@ -8352,7 +8352,7 @@ public class Coder {
                                                                                                             apply(
                                                                                                                 unwrap(Name.TYPE_),
                                                                                                                 var("fieldName")))))),
-                                                                                            casesWithDefault(
+                                                                                            matchWithDefault(
                                                                                                 Term.TYPE_,
                                                                                                 hydra.dsl.Strip.deannotateTerm(
                                                                                                     proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")),
@@ -8649,7 +8649,7 @@ public class Coder {
                         proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                     field("typeVarSubst",
                         proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
                         left(
                             inject(Error_.TYPE_,
@@ -9175,7 +9175,7 @@ public class Coder {
                                             Lists.null_(
                                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         right(nothing()),
-                                        casesWithDefault(Type.TYPE_,
+                                        matchWithDefault(Type.TYPE_,
                                             hydra.dsl.Strip.deannotateType(
                                                 proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                                             right(
@@ -9356,7 +9356,7 @@ public class Coder {
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("cls",
-                                                    cases(
+                                                    match(
                                                         JavaSymbolClass.TYPE_,
                                                         var("cls"),
                                                         field(
@@ -9581,13 +9581,13 @@ public class Coder {
     public static final Def extractArgType = def("extractArgType")
         .lam("_lhs").lam("typ")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("typ"),
                     var("typ"),
                     field(
                         Type.APPLICATION,
                         lambda("at1",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at1"),
                                 var("typ"),
                                 field(
@@ -9603,7 +9603,7 @@ public class Coder {
     public static final Def extractDirectReturn_go = def("extractDirectReturn_go")
         .lam("tparamSet").lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     list(),
                     field(
@@ -9615,7 +9615,7 @@ public class Coder {
                                         proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"))),
                                 field("cod",
                                     proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("dom"),
                                     apply(
                                         ref(Coder.extractDirectReturn_go),
@@ -9626,7 +9626,7 @@ public class Coder {
                                         lambda("inVar",
                                             Logic.ifElse(
                                                 Sets.member(var("inVar"), var("tparamSet")),
-                                                casesWithDefault(Type.TYPE_,
+                                                matchWithDefault(Type.TYPE_,
                                                     hydra.dsl.Strip.deannotateType(
                                                         var("cod")),
                                                     list(),
@@ -9640,10 +9640,10 @@ public class Coder {
                                                                 field("retPart",
                                                                     hydra.dsl.Strip.deannotateType(
                                                                         proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft2"))),
-                                                                casesWithDefault(
+                                                                matchWithDefault(
                                                                     Type.TYPE_,
                                                                     var("midArg"),
-                                                                    casesWithDefault(
+                                                                    matchWithDefault(
                                                                         Type.TYPE_,
                                                                         var("retPart"),
                                                                         list(),
@@ -9667,7 +9667,7 @@ public class Coder {
                                                                                     var("midVar"),
                                                                                     var("tparamSet")),
                                                                                 list(),
-                                                                                casesWithDefault(
+                                                                                matchWithDefault(
                                                                                     Type.TYPE_,
                                                                                     var("retPart"),
                                                                                     list(),
@@ -9692,13 +9692,13 @@ public class Coder {
     public static final Def extractInOutPair = def("extractInOutPair")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     list(),
                     field(
                         Type.FUNCTION,
                         lambda("ft",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 hydra.dsl.Strip.deannotateType(
                                     proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                 list(),
@@ -9709,14 +9709,14 @@ public class Coder {
                                             apply(
                                                 ref(Coder.unwrapReturnType),
                                                 proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
-                                            casesWithDefault(Type.TYPE_,
+                                            matchWithDefault(Type.TYPE_,
                                                 hydra.dsl.Strip.deannotateType(
                                                     var("retType")),
                                                 list(),
                                                 field(
                                                     Type.PAIR,
                                                     lambda("pt",
-                                                        casesWithDefault(Type.TYPE_,
+                                                        matchWithDefault(Type.TYPE_,
                                                             hydra.dsl.Strip.deannotateType(
                                                                 proj(PairType.TYPE_, PairType.FIRST, "pt")),
                                                             list(),
@@ -9736,7 +9736,7 @@ public class Coder {
     public static final Def extractTypeApplicationArgs_go = def("extractTypeApplicationArgs_go")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("t"),
                     list(),
                     field(
@@ -9925,13 +9925,13 @@ public class Coder {
     public static final Def findPairFirst = def("findPairFirst")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     nothing(),
                     field(
                         Type.PAIR,
                         lambda("pt",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 hydra.dsl.Strip.deannotateType(
                                     proj(PairType.TYPE_, PairType.FIRST, "pt")),
                                 nothing(),
@@ -9976,7 +9976,7 @@ public class Coder {
     public static final Def flattenApps = def("flattenApps")
         .lam("t").lam("acc")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("t")),
                     pair(var("acc"), var("t")),
                     field(
@@ -9995,7 +9995,7 @@ public class Coder {
                 Lists.bind(
                     var("bindings"),
                     lambda("b",
-                        casesWithDefault(Term.TYPE_,
+                        matchWithDefault(Term.TYPE_,
                             hydra.dsl.Strip.deannotateTerm(
                                 proj(Binding.TYPE_, Binding.TERM, "b")),
                             list(var("b")),
@@ -10277,7 +10277,7 @@ public class Coder {
                                     wrap(OtherError.TYPE_,
                                         string("type annotation is required for function and elimination terms in Java")))),
                             lambda("t",
-                                casesWithDefault(Type.TYPE_,
+                                matchWithDefault(Type.TYPE_,
                                     var("t"),
                                     left(
                                         inject(Error_.TYPE_,
@@ -10604,20 +10604,20 @@ public class Coder {
     public static final Def isBigNumericType = def("isBigNumericType")
         .lam("typ")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("typ")),
                     bool(false),
                     field(
                         Type.LITERAL,
                         lambda("lt",
-                            casesWithDefault(LiteralType.TYPE_,
+                            matchWithDefault(LiteralType.TYPE_,
                                 var("lt"),
                                 bool(false),
                                 field(LiteralType.DECIMAL, constant(bool(true))),
                                 field(
                                     LiteralType.INTEGER,
                                     lambda("it",
-                                        casesWithDefault(IntegerType.TYPE_,
+                                        matchWithDefault(IntegerType.TYPE_,
                                             var("it"),
                                             bool(false),
                                             field(
@@ -10627,13 +10627,13 @@ public class Coder {
     public static final Def isBinaryType = def("isBinaryType")
         .lam("typ")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("typ")),
                     bool(false),
                     field(
                         Type.LITERAL,
                         lambda("lt",
-                            casesWithDefault(LiteralType.TYPE_,
+                            matchWithDefault(LiteralType.TYPE_,
                                 var("lt"),
                                 bool(false),
                                 field(LiteralType.BINARY, constant(bool(true))))))));
@@ -10647,7 +10647,7 @@ public class Coder {
                         Maps.lookup(var("typeName"), var("schemaTypes")),
                         right(bool(false)),
                         lambda("ts",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 hydra.dsl.Strip.deannotateType(
                                     proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                                 right(bool(false)),
@@ -10718,7 +10718,7 @@ public class Coder {
     public static final Def isNonComparableType = def("isNonComparableType")
         .lam("typ")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("typ")),
                     bool(false),
                     field(Type.EITHER, constant(bool(true))),
@@ -10727,7 +10727,7 @@ public class Coder {
                     field(
                         Type.LITERAL,
                         lambda("lt",
-                            casesWithDefault(LiteralType.TYPE_,
+                            matchWithDefault(LiteralType.TYPE_,
                                 var("lt"),
                                 bool(false),
                                 field(LiteralType.BINARY, constant(bool(true)))))),
@@ -10893,7 +10893,7 @@ public class Coder {
     public static final Def javaTypeParametersForType_bvars = def("javaTypeParametersForType_bvars")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("t"),
                     list(),
                     field(
@@ -11080,7 +11080,7 @@ public class Coder {
                 Logic.ifElse(
                     Ordering.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
                         pair(list(), var("t")),
                         field(
@@ -11103,7 +11103,7 @@ public class Coder {
                 Logic.ifElse(
                     Ordering.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
                         pair(list(), var("t")),
                         field(
@@ -11126,7 +11126,7 @@ public class Coder {
                 Logic.ifElse(
                     Equality.equal(var("n"), int32(0)),
                     list(),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
                         list(),
                         field(
@@ -11152,7 +11152,7 @@ public class Coder {
                             hydra.dsl.Constants.keyType(),
                             just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
                             var("t"))),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm( var("term")),
                         apply(var("setTypeAnn"), var("term")),
                         field(
@@ -11160,7 +11160,7 @@ public class Coder {
                             constant(
                                 let("annotated",
                                     apply(var("setTypeAnn"), var("term")),
-                                    casesWithDefault(Type.TYPE_,
+                                    matchWithDefault(Type.TYPE_,
                                         hydra.dsl.Strip.deannotateType( var("typ")),
                                         var("annotated"),
                                         field(
@@ -11210,7 +11210,7 @@ public class Coder {
                                     field("arg",
                                         proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                     field("annotatedFun",
-                                        casesWithDefault(Term.TYPE_,
+                                        matchWithDefault(Term.TYPE_,
                                             hydra.dsl.Strip.deannotateTerm( var("fun")),
                                             var("fun"),
                                             field(
@@ -11252,7 +11252,7 @@ public class Coder {
     public static final Def propagateType_propagateIntoLambda = def("propagateType_propagateIntoLambda")
         .lam("cod").lam("t")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     var("t"),
                     var("t"),
                     field(
@@ -11292,7 +11292,7 @@ public class Coder {
     public static final Def propagateType_rebuildLet = def("propagateType_rebuildLet")
         .lam("t").lam("bindings").lam("newBody")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     var("t"),
                     var("t"),
                     field(
@@ -11371,7 +11371,7 @@ public class Coder {
                                 var("annotatedFun"),
                                 var("args"),
                                 var("funType"))),
-                        casesWithDefault(Term.TYPE_,
+                        matchWithDefault(Term.TYPE_,
                             hydra.dsl.Strip.deannotateTerm( var("t")),
                             hydra.dsl.Annotations.setTermAnnotation(
                                 hydra.dsl.Constants.keyType(),
@@ -11386,7 +11386,7 @@ public class Coder {
                                         field("rhs",
                                             proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                         field("annotatedLhs",
-                                            casesWithDefault(Term.TYPE_,
+                                            matchWithDefault(Term.TYPE_,
                                                 hydra.dsl.Strip.deannotateTerm( var("lhs")),
                                                 var("lhs"),
                                                 field(
@@ -11437,7 +11437,7 @@ public class Coder {
                 Logic.ifElse(
                     Lists.null_(var("args")),
                     var("f"),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("fType")),
                         Lists.foldl(
                             lambda(
@@ -12269,7 +12269,7 @@ public class Coder {
     public static final Def splitConstantInitializer = def("splitConstantInitializer")
         .lam("member")
         .to(() ->
-                casesWithDefault(InterfaceMemberDeclaration.TYPE_,
+                matchWithDefault(InterfaceMemberDeclaration.TYPE_,
                     var("member"),
                     list(var("member")),
                     field(
@@ -12304,7 +12304,7 @@ public class Coder {
                                         ConstantDeclaration.VARIABLES,
                                         list(var("vd")))))),
                         lambda("init_",
-                            casesWithDefault(VariableInitializer.TYPE_,
+                            matchWithDefault(VariableInitializer.TYPE_,
                                 var("init_"),
                                 list(
                                     inject(InterfaceMemberDeclaration.TYPE_,
@@ -12397,7 +12397,7 @@ public class Coder {
     public static final Def stripForalls = def("stripForalls")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     var("t"),
                     field(
@@ -12418,7 +12418,7 @@ public class Coder {
     public static final Def substituteTypeVarsWithTypes_go = def("substituteTypeVarsWithTypes_go")
         .lam("subst").lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     var("t"),
                     field(
@@ -12747,7 +12747,7 @@ public class Coder {
                                         // the 94-entry typesByName map, do carry the annotation. (#394)
                                         right(list()),
                                         lambda("typ",
-                                            casesWithDefault(Type.TYPE_,
+                                            matchWithDefault(Type.TYPE_,
                                                 hydra.dsl.Strip.deannotateType( var("typ")),
                                                 right(list()),
                                                 field(
@@ -12844,7 +12844,7 @@ public class Coder {
                                         hydra.dsl.Strip.deannotateType( var("t'"))))),
                             var("cx"),
                             var("g"))),
-                    casesWithDefault(Type.TYPE_,
+                    matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("t")),
                         apply(var("wrap"), var("t")),
                         field(
@@ -13185,7 +13185,7 @@ public class Coder {
     public static final Def tryInferFunctionType = def("tryInferFunctionType")
         .lam("funTerm")
         .to(() ->
-                casesWithDefault(Term.TYPE_,
+                matchWithDefault(Term.TYPE_,
                     hydra.dsl.Strip.deannotateTerm( var("funTerm")),
                     nothing(),
                     field(
@@ -13195,7 +13195,7 @@ public class Coder {
                                 proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 lambda("dom",
                                     let("mCod",
-                                        casesWithDefault(Term.TYPE_,
+                                        matchWithDefault(Term.TYPE_,
                                             proj(Lambda.TYPE_, Lambda.BODY, "lam"),
                                             nothing(),
                                             field(
@@ -13284,7 +13284,7 @@ public class Coder {
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("localName",
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
-                    casesWithDefault(JavaSymbolClass.TYPE_,
+                    matchWithDefault(JavaSymbolClass.TYPE_,
                         var("cls"),
                         apply(
                             ref(Coder.typeAppFallbackCast),
@@ -13486,13 +13486,13 @@ public class Coder {
     public static final Def typesMatch = def("typesMatch")
         .lam("a").lam("b")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     var("a"),
                     bool(true),
                     field(
                         Type.VARIABLE,
                         lambda("va",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 var("b"),
                                 bool(true),
                                 field(
@@ -13501,7 +13501,7 @@ public class Coder {
                     field(
                         Type.WRAP,
                         lambda("wa",
-                            casesWithDefault(Type.TYPE_,
+                            matchWithDefault(Type.TYPE_,
                                 var("b"),
                                 bool(true),
                                 field(
@@ -13511,7 +13511,7 @@ public class Coder {
     public static final Def unwrapReturnType = def("unwrapReturnType")
         .lam("t")
         .to(() ->
-                casesWithDefault(Type.TYPE_,
+                matchWithDefault(Type.TYPE_,
                     hydra.dsl.Strip.deannotateType( var("t")),
                     var("t"),
                     field(
@@ -13684,7 +13684,7 @@ public class Coder {
                         inject(Result.TYPE_,
                             Result.TYPE,
                             wrap(UnannType.TYPE_, var("jcod")))),
-                    casesWithDefault(Term.TYPE_,
+                    matchWithDefault(Term.TYPE_,
                         hydra.dsl.Strip.deannotateTerm(
                             proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")),
                         left(

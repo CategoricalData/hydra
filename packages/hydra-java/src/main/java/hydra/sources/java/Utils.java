@@ -249,17 +249,17 @@ public class Utils {
     public static final Def addJavaTypeParameter = def("addJavaTypeParameter")
         .lam("rt").lam("t").lam("cx")
         .to(() ->
-                cases(hydra.java.syntax.Type.TYPE_,
+                match(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
                         hydra.java.syntax.Type.REFERENCE,
                         lambda("rt1",
-                            cases(ReferenceType.TYPE_,
+                            match(ReferenceType.TYPE_,
                                 var("rt1"),
                                 field(
                                     ReferenceType.CLASS_OR_INTERFACE,
                                     lambda("cit",
-                                        cases(ClassOrInterfaceType.TYPE_,
+                                        match(ClassOrInterfaceType.TYPE_,
                                             var("cit"),
                                             field(
                                                 ClassOrInterfaceType.CLASS,
@@ -1060,19 +1060,19 @@ public class Utils {
                             inject(PrimaryNoNewArrayExpression.TYPE_,
                                 PrimaryNoNewArrayExpression.PARENS,
                                 var("e"))),
-                        casesWithDefault(Expression.TYPE_,
+                        matchWithDefault(Expression.TYPE_,
                             var("e"),
                             var("fallback"),
                             field(
                                 Expression.ASSIGNMENT,
                                 lambda("ae",
-                                    casesWithDefault(AssignmentExpression.TYPE_,
+                                    matchWithDefault(AssignmentExpression.TYPE_,
                                         var("ae"),
                                         var("fallback"),
                                         field(
                                             AssignmentExpression.CONDITIONAL,
                                             lambda("ce",
-                                                casesWithDefault(
+                                                matchWithDefault(
                                                     ConditionalExpression.TYPE_,
                                                     var("ce"),
                                                     var("fallback"),
@@ -1128,7 +1128,7 @@ public class Utils {
                                                                                                                         lambda(
                                                                                                                             "eqHead",
                                                                                                                             just(
-                                                                                                                                casesWithDefault(
+                                                                                                                                matchWithDefault(
                                                                                                                                     EqualityExpression.TYPE_,
                                                                                                                                     var("eqHead"),
                                                                                                                                     var("fallback"),
@@ -1136,7 +1136,7 @@ public class Utils {
                                                                                                                                         EqualityExpression.UNARY,
                                                                                                                                         lambda(
                                                                                                                                             "rel",
-                                                                                                                                            casesWithDefault(
+                                                                                                                                            matchWithDefault(
                                                                                                                                                 RelationalExpression.TYPE_,
                                                                                                                                                 var("rel"),
                                                                                                                                                 var("fallback"),
@@ -1144,7 +1144,7 @@ public class Utils {
                                                                                                                                                     RelationalExpression.SIMPLE,
                                                                                                                                                     lambda(
                                                                                                                                                         "shift",
-                                                                                                                                                        casesWithDefault(
+                                                                                                                                                        matchWithDefault(
                                                                                                                                                             ShiftExpression.TYPE_,
                                                                                                                                                             var("shift"),
                                                                                                                                                             var("fallback"),
@@ -1152,7 +1152,7 @@ public class Utils {
                                                                                                                                                                 ShiftExpression.UNARY,
                                                                                                                                                                 lambda(
                                                                                                                                                                     "add",
-                                                                                                                                                                    casesWithDefault(
+                                                                                                                                                                    matchWithDefault(
                                                                                                                                                                         AdditiveExpression.TYPE_,
                                                                                                                                                                         var("add"),
                                                                                                                                                                         var("fallback"),
@@ -1160,7 +1160,7 @@ public class Utils {
                                                                                                                                                                             AdditiveExpression.UNARY,
                                                                                                                                                                             lambda(
                                                                                                                                                                                 "mul",
-                                                                                                                                                                                casesWithDefault(
+                                                                                                                                                                                matchWithDefault(
                                                                                                                                                                                     MultiplicativeExpression.TYPE_,
                                                                                                                                                                                     var("mul"),
                                                                                                                                                                                     var("fallback"),
@@ -1168,7 +1168,7 @@ public class Utils {
                                                                                                                                                                                         MultiplicativeExpression.UNARY,
                                                                                                                                                                                         lambda(
                                                                                                                                                                                             "unary",
-                                                                                                                                                                                            casesWithDefault(
+                                                                                                                                                                                            matchWithDefault(
                                                                                                                                                                                                 UnaryExpression.TYPE_,
                                                                                                                                                                                                 var("unary"),
                                                                                                                                                                                                 var("fallback"),
@@ -1176,7 +1176,7 @@ public class Utils {
                                                                                                                                                                                                     UnaryExpression.OTHER,
                                                                                                                                                                                                     lambda(
                                                                                                                                                                                                         "npm",
-                                                                                                                                                                                                        casesWithDefault(
+                                                                                                                                                                                                        matchWithDefault(
                                                                                                                                                                                                             UnaryExpressionNotPlusMinus.TYPE_,
                                                                                                                                                                                                             var("npm"),
                                                                                                                                                                                                             var("fallback"),
@@ -1184,7 +1184,7 @@ public class Utils {
                                                                                                                                                                                                                 UnaryExpressionNotPlusMinus.POSTFIX,
                                                                                                                                                                                                                 lambda(
                                                                                                                                                                                                                     "pf",
-                                                                                                                                                                                                                    casesWithDefault(
+                                                                                                                                                                                                                    matchWithDefault(
                                                                                                                                                                                                                         PostfixExpression.TYPE_,
                                                                                                                                                                                                                         var("pf"),
                                                                                                                                                                                                                         var("fallback"),
@@ -1918,13 +1918,13 @@ public class Utils {
     public static final Def javaReferenceTypeToRawType = def("javaReferenceTypeToRawType")
         .lam("rt")
         .to(() ->
-                casesWithDefault(ReferenceType.TYPE_,
+                matchWithDefault(ReferenceType.TYPE_,
                     var("rt"),
                     var("rt"),
                     field(
                         ReferenceType.CLASS_OR_INTERFACE,
                         lambda("cit",
-                            cases(ClassOrInterfaceType.TYPE_,
+                            match(ClassOrInterfaceType.TYPE_,
                                 var("cit"),
                                 field(
                                     ClassOrInterfaceType.CLASS,
@@ -2232,7 +2232,7 @@ public class Utils {
     public static final Def javaTypeToJavaReferenceType = def("javaTypeToJavaReferenceType")
         .lam("t").lam("cx")
         .to(() ->
-                cases(hydra.java.syntax.Type.TYPE_,
+                match(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(hydra.java.syntax.Type.REFERENCE, lambda("rt", right(var("rt")))),
                     field(
@@ -2254,7 +2254,7 @@ public class Utils {
     public static final Def javaTypeToJavaTypeArgument = def("javaTypeToJavaTypeArgument")
         .lam("t")
         .to(() ->
-                cases(hydra.java.syntax.Type.TYPE_,
+                match(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
                         hydra.java.syntax.Type.REFERENCE,
@@ -2862,12 +2862,12 @@ public class Utils {
     public static final Def toJavaArrayType = def("toJavaArrayType")
         .lam("t").lam("cx")
         .to(() ->
-                cases(hydra.java.syntax.Type.TYPE_,
+                match(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
                         hydra.java.syntax.Type.REFERENCE,
                         lambda("rt",
-                            cases(ReferenceType.TYPE_,
+                            match(ReferenceType.TYPE_,
                                 var("rt"),
                                 field(
                                     ReferenceType.CLASS_OR_INTERFACE,

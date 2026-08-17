@@ -235,7 +235,7 @@ public class Serde {
     public static final Def additiveExpressionToExpr = def("additiveExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(AdditiveExpression.TYPE_,
+                match(AdditiveExpression.TYPE_,
                     var("e"),
                     field(
                         AdditiveExpression.UNARY,
@@ -290,7 +290,7 @@ public class Serde {
     public static final Def annotationToExpr = def("annotationToExpr")
         .lam("ann")
         .to(() ->
-                cases(Annotation.TYPE_,
+                match(Annotation.TYPE_,
                     var("ann"),
                     field(
                         Annotation.NORMAL,
@@ -314,7 +314,7 @@ public class Serde {
     public static final Def arrayCreationExpressionToExpr = def("arrayCreationExpressionToExpr")
         .lam("ace")
         .to(() ->
-                cases(ArrayCreationExpression.TYPE_,
+                match(ArrayCreationExpression.TYPE_,
                     var("ace"),
                     field(
                         ArrayCreationExpression.NO_INIT,
@@ -324,7 +324,7 @@ public class Serde {
                     field(
                         ArrayCreationExpression.WITH_INIT,
                         lambda("wi",
-                            cases(ArrayCreationExpressionWithInitializer.TYPE_,
+                            match(ArrayCreationExpressionWithInitializer.TYPE_,
                                 var("wi"),
                                 field(
                                     ArrayCreationExpressionWithInitializer.PRIMITIVE,
@@ -386,7 +386,7 @@ public class Serde {
                     field("variant",
                         proj(ArrayType.TYPE_, ArrayType.VARIANT, "at")),
                     field("varExpr",
-                        cases(ArrayType_Variant.TYPE_,
+                        match(ArrayType_Variant.TYPE_,
                             var("variant"),
                             field(
                                 ArrayType_Variant.PRIMITIVE,
@@ -409,7 +409,7 @@ public class Serde {
     public static final Def assignmentExpressionToExpr = def("assignmentExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(AssignmentExpression.TYPE_,
+                match(AssignmentExpression.TYPE_,
                     var("e"),
                     field(
                         AssignmentExpression.CONDITIONAL,
@@ -429,7 +429,7 @@ public class Serde {
                     field("rhs",
                         proj(Assignment.TYPE_, Assignment.EXPRESSION, "a")),
                     field("ctop",
-                        cases(AssignmentOperator.TYPE_,
+                        match(AssignmentOperator.TYPE_,
                             var("op"),
                             field(
                                 AssignmentOperator.SIMPLE,
@@ -463,7 +463,7 @@ public class Serde {
     public static final Def blockStatementToExpr = def("blockStatementToExpr")
         .lam("s")
         .to(() ->
-                cases(BlockStatement.TYPE_,
+                match(BlockStatement.TYPE_,
                     var("s"),
                     field(
                         BlockStatement.LOCAL_VARIABLE_DECLARATION,
@@ -472,7 +472,7 @@ public class Serde {
                     field(
                         BlockStatement.LOCAL_CLASS_OR_INTERFACE,
                         lambda("lcid",
-                            cases(LocalClassOrInterfaceDeclaration.TYPE_,
+                            match(LocalClassOrInterfaceDeclaration.TYPE_,
                                 var("lcid"),
                                 field(
                                     LocalClassOrInterfaceDeclaration.CLASS,
@@ -572,7 +572,7 @@ public class Serde {
     public static final Def castExpressionToExpr = def("castExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(CastExpression.TYPE_,
+                match(CastExpression.TYPE_,
                     var("e"),
                     field(
                         CastExpression.PRIMITIVE,
@@ -588,7 +588,7 @@ public class Serde {
     public static final Def classBodyDeclarationToExpr = def("classBodyDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(ClassBodyDeclaration.TYPE_,
+                match(ClassBodyDeclaration.TYPE_,
                     var("d"),
                     field(
                         ClassBodyDeclaration.CLASS_MEMBER,
@@ -629,7 +629,7 @@ public class Serde {
     public static final Def classDeclarationToExpr = def("classDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(ClassDeclaration.TYPE_,
+                match(ClassDeclaration.TYPE_,
                     var("d"),
                     field(
                         ClassDeclaration.NORMAL,
@@ -641,7 +641,7 @@ public class Serde {
     public static final Def classInstanceCreationExpressionQualifierToExpr = def("classInstanceCreationExpressionQualifierToExpr")
         .lam("q")
         .to(() ->
-                cases(ClassInstanceCreationExpression_Qualifier.TYPE_,
+                match(ClassInstanceCreationExpression_Qualifier.TYPE_,
                     var("q"),
                     field(
                         ClassInstanceCreationExpression_Qualifier.EXPRESSION,
@@ -675,7 +675,7 @@ public class Serde {
     public static final Def classMemberDeclarationToExpr = def("classMemberDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(ClassMemberDeclaration.TYPE_,
+                match(ClassMemberDeclaration.TYPE_,
                     var("d"),
                     field(
                         ClassMemberDeclaration.FIELD,
@@ -696,7 +696,7 @@ public class Serde {
     public static final Def classModifierToExpr = def("classModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(ClassModifier.TYPE_,
+                match(ClassModifier.TYPE_,
                     var("m"),
                     field(
                         ClassModifier.ANNOTATION,
@@ -726,7 +726,7 @@ public class Serde {
     public static final Def classOrInterfaceTypeToExpr = def("classOrInterfaceTypeToExpr")
         .lam("cit")
         .to(() ->
-                cases(ClassOrInterfaceType.TYPE_,
+                match(ClassOrInterfaceType.TYPE_,
                     var("cit"),
                     field(
                         ClassOrInterfaceType.CLASS,
@@ -764,7 +764,7 @@ public class Serde {
                     field("args",
                         proj(ClassType.TYPE_, ClassType.ARGUMENTS, "ct")),
                     field("qualifiedId",
-                        cases(ClassTypeQualifier.TYPE_,
+                        match(ClassTypeQualifier.TYPE_,
                             var("qual"),
                             field(
                                 ClassTypeQualifier.NONE,
@@ -811,7 +811,7 @@ public class Serde {
     public static final Def compilationUnitToExpr = def("compilationUnitToExpr")
         .lam("u")
         .to(() ->
-                cases(CompilationUnit.TYPE_,
+                match(CompilationUnit.TYPE_,
                     var("u"),
                     field(
                         CompilationUnit.ORDINARY,
@@ -880,7 +880,7 @@ public class Serde {
     public static final Def conditionalExpressionToExpr = def("conditionalExpressionToExpr")
         .lam("c")
         .to(() ->
-                cases(ConditionalExpression.TYPE_,
+                match(ConditionalExpression.TYPE_,
                     var("c"),
                     field(
                         ConditionalExpression.SIMPLE,
@@ -1014,7 +1014,7 @@ public class Serde {
     public static final Def constructorModifierToExpr = def("constructorModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(ConstructorModifier.TYPE_,
+                match(ConstructorModifier.TYPE_,
                     var("m"),
                     field(
                         ConstructorModifier.ANNOTATION,
@@ -1069,7 +1069,7 @@ public class Serde {
     public static final Def elementValueToExpr = def("elementValueToExpr")
         .lam("ev")
         .to(() ->
-                cases(ElementValue.TYPE_,
+                match(ElementValue.TYPE_,
                     var("ev"),
                     field(
                         ElementValue.CONDITIONAL_EXPRESSION,
@@ -1095,7 +1095,7 @@ public class Serde {
     public static final Def equalityExpressionToExpr = def("equalityExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(EqualityExpression.TYPE_,
+                match(EqualityExpression.TYPE_,
                     var("e"),
                     field(
                         EqualityExpression.UNARY,
@@ -1162,7 +1162,7 @@ public class Serde {
     public static final Def expressionToExpr = def("expressionToExpr")
         .lam("e")
         .to(() ->
-                cases(Expression.TYPE_,
+                match(Expression.TYPE_,
                     var("e"),
                     field(
                         Expression.LAMBDA,
@@ -1179,7 +1179,7 @@ public class Serde {
                         proj(FieldAccess.TYPE_, FieldAccess.QUALIFIER, "fa")),
                     field("id",
                         proj(FieldAccess.TYPE_, FieldAccess.IDENTIFIER, "fa")),
-                    cases(FieldAccess_Qualifier.TYPE_,
+                    match(FieldAccess_Qualifier.TYPE_,
                         var("qual"),
                         field(
                             FieldAccess_Qualifier.PRIMARY,
@@ -1237,7 +1237,7 @@ public class Serde {
     public static final Def fieldModifierToExpr = def("fieldModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(FieldModifier.TYPE_,
+                match(FieldModifier.TYPE_,
                     var("m"),
                     field(
                         FieldModifier.ANNOTATION,
@@ -1276,7 +1276,7 @@ public class Serde {
     public static final Def floatingPointTypeToExpr = def("floatingPointTypeToExpr")
         .lam("ft")
         .to(() ->
-                cases(FloatingPointType.TYPE_,
+                match(FloatingPointType.TYPE_,
                     var("ft"),
                     field(
                         FloatingPointType.FLOAT,
@@ -1316,7 +1316,7 @@ public class Serde {
     public static final Def formalParameterToExpr = def("formalParameterToExpr")
         .lam("p")
         .to(() ->
-                cases(FormalParameter.TYPE_,
+                match(FormalParameter.TYPE_,
                     var("p"),
                     field(
                         FormalParameter.SIMPLE,
@@ -1356,7 +1356,7 @@ public class Serde {
     public static final Def importDeclarationToExpr = def("importDeclarationToExpr")
         .lam("imp")
         .to(() ->
-                cases(ImportDeclaration.TYPE_,
+                match(ImportDeclaration.TYPE_,
                     var("imp"),
                     field(
                         ImportDeclaration.SINGLE_TYPE,
@@ -1422,7 +1422,7 @@ public class Serde {
     public static final Def integralTypeToExpr = def("integralTypeToExpr")
         .lam("t")
         .to(() ->
-                cases(IntegralType.TYPE_,
+                match(IntegralType.TYPE_,
                     var("t"),
                     field(
                         IntegralType.BYTE,
@@ -1453,7 +1453,7 @@ public class Serde {
     public static final Def interfaceDeclarationToExpr = def("interfaceDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(InterfaceDeclaration.TYPE_,
+                match(InterfaceDeclaration.TYPE_,
                     var("d"),
                     field(
                         InterfaceDeclaration.NORMAL_INTERFACE,
@@ -1465,7 +1465,7 @@ public class Serde {
     public static final Def interfaceMemberDeclarationToExpr = def("interfaceMemberDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(InterfaceMemberDeclaration.TYPE_,
+                match(InterfaceMemberDeclaration.TYPE_,
                     var("d"),
                     field(
                         InterfaceMemberDeclaration.CONSTANT,
@@ -1520,7 +1520,7 @@ public class Serde {
     public static final Def interfaceMethodModifierToExpr = def("interfaceMethodModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(InterfaceMethodModifier.TYPE_,
+                match(InterfaceMethodModifier.TYPE_,
                     var("m"),
                     field(
                         InterfaceMethodModifier.ANNOTATION,
@@ -1547,7 +1547,7 @@ public class Serde {
     public static final Def interfaceModifierToExpr = def("interfaceModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(InterfaceModifier.TYPE_,
+                match(InterfaceModifier.TYPE_,
                     var("m"),
                     field(
                         InterfaceModifier.ANNOTATION,
@@ -1599,7 +1599,7 @@ public class Serde {
     public static final Def lambdaBodyToExpr = def("lambdaBodyToExpr")
         .lam("b")
         .to(() ->
-                cases(LambdaBody.TYPE_,
+                match(LambdaBody.TYPE_,
                     var("b"),
                     field(
                         LambdaBody.EXPRESSION,
@@ -1624,7 +1624,7 @@ public class Serde {
     public static final Def lambdaParametersToExpr = def("lambdaParametersToExpr")
         .lam("p")
         .to(() ->
-                cases(LambdaParameters.TYPE_,
+                match(LambdaParameters.TYPE_,
                     var("p"),
                     field(
                         LambdaParameters.TUPLE,
@@ -1639,7 +1639,7 @@ public class Serde {
     public static final Def leftHandSideToExpr = def("leftHandSideToExpr")
         .lam("lhs")
         .to(() ->
-                cases(LeftHandSide.TYPE_,
+                match(LeftHandSide.TYPE_,
                     var("lhs"),
                     field(
                         LeftHandSide.EXPRESSION_NAME,
@@ -1654,7 +1654,7 @@ public class Serde {
     public static final Def literalToExpr = def("literalToExpr")
         .lam("l")
         .to(() ->
-                cases(Literal.TYPE_,
+                match(Literal.TYPE_,
                     var("l"),
                     field(
                         Literal.NULL,
@@ -1714,7 +1714,7 @@ public class Serde {
     public static final Def localNameToExpr = def("localNameToExpr")
         .lam("t")
         .to(() ->
-                cases(LocalVariableType.TYPE_,
+                match(LocalVariableType.TYPE_,
                     var("t"),
                     field(
                         LocalVariableType.TYPE,
@@ -1772,7 +1772,7 @@ public class Serde {
     public static final Def methodBodyToExpr = def("methodBodyToExpr")
         .lam("b")
         .to(() ->
-                cases(MethodBody.TYPE_,
+                match(MethodBody.TYPE_,
                     var("b"),
                     field(
                         MethodBody.BLOCK,
@@ -1870,7 +1870,7 @@ public class Serde {
                         hydra.dsl.Serialization.parenListAdaptive(
                             Lists.map(ref(Serde.expressionToExpr), var("args")))),
                     field("headerSec",
-                        cases(MethodInvocation_Header.TYPE_,
+                        match(MethodInvocation_Header.TYPE_,
                             var("header"),
                             field(
                                 MethodInvocation_Header.SIMPLE,
@@ -1902,7 +1902,7 @@ public class Serde {
                                                             apply(
                                                                 ref(Serde.identifierToExpr),
                                                                 var("cid"))))))),
-                                        cases(MethodInvocation_Variant.TYPE_,
+                                        match(MethodInvocation_Variant.TYPE_,
                                             var("cvar"),
                                             field(
                                                 MethodInvocation_Variant.TYPE,
@@ -1955,7 +1955,7 @@ public class Serde {
     public static final Def methodModifierToExpr = def("methodModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(MethodModifier.TYPE_,
+                match(MethodModifier.TYPE_,
                     var("m"),
                     field(
                         MethodModifier.ANNOTATION,
@@ -2002,7 +2002,7 @@ public class Serde {
     public static final Def multiplicativeExpressionToExpr = def("multiplicativeExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(MultiplicativeExpression.TYPE_,
+                match(MultiplicativeExpression.TYPE_,
                     var("e"),
                     field(
                         MultiplicativeExpression.UNARY,
@@ -2185,7 +2185,7 @@ public class Serde {
     public static final Def numericTypeToExpr = def("numericTypeToExpr")
         .lam("nt")
         .to(() ->
-                cases(NumericType.TYPE_,
+                match(NumericType.TYPE_,
                     var("nt"),
                     field(
                         NumericType.INTEGRAL,
@@ -2263,7 +2263,7 @@ public class Serde {
     public static final Def postfixExpressionToExpr = def("postfixExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(PostfixExpression.TYPE_,
+                match(PostfixExpression.TYPE_,
                     var("e"),
                     field(
                         PostfixExpression.PRIMARY,
@@ -2289,7 +2289,7 @@ public class Serde {
     public static final Def primaryNoNewArrayExpressionExpressionToExpr = def("primaryNoNewArrayExpressionExpressionToExpr")
         .lam("p")
         .to(() ->
-                cases(PrimaryNoNewArrayExpression.TYPE_,
+                match(PrimaryNoNewArrayExpression.TYPE_,
                     var("p"),
                     field(
                         PrimaryNoNewArrayExpression.LITERAL,
@@ -2333,7 +2333,7 @@ public class Serde {
     public static final Def primaryToExpr = def("primaryToExpr")
         .lam("p")
         .to(() ->
-                cases(Primary.TYPE_,
+                match(Primary.TYPE_,
                     var("p"),
                     field(
                         Primary.NO_NEW_ARRAY,
@@ -2346,7 +2346,7 @@ public class Serde {
     public static final Def primitiveTypeToExpr = def("primitiveTypeToExpr")
         .lam("pt")
         .to(() ->
-                cases(PrimitiveType.TYPE_,
+                match(PrimitiveType.TYPE_,
                     var("pt"),
                     field(
                         PrimitiveType.NUMERIC,
@@ -2381,7 +2381,7 @@ public class Serde {
     public static final Def referenceTypeToExpr = def("referenceTypeToExpr")
         .lam("rt")
         .to(() ->
-                cases(ReferenceType.TYPE_,
+                match(ReferenceType.TYPE_,
                     var("rt"),
                     field(
                         ReferenceType.CLASS_OR_INTERFACE,
@@ -2421,7 +2421,7 @@ public class Serde {
         .lam("io")
         .to(() ->
                 let("rhsExpr",
-                    cases(InstanceofExpression_Rhs.TYPE_,
+                    match(InstanceofExpression_Rhs.TYPE_,
                         proj(InstanceofExpression.TYPE_, InstanceofExpression.RHS, "io"),
                         field(
                             InstanceofExpression_Rhs.REFERENCE_TYPE,
@@ -2463,7 +2463,7 @@ public class Serde {
     public static final Def relationalExpressionToExpr = def("relationalExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(RelationalExpression.TYPE_,
+                match(RelationalExpression.TYPE_,
                     var("e"),
                     field(
                         RelationalExpression.SIMPLE,
@@ -2492,7 +2492,7 @@ public class Serde {
     public static final Def resultToExpr = def("resultToExpr")
         .lam("r")
         .to(() ->
-                cases(Result.TYPE_,
+                match(Result.TYPE_,
                     var("r"),
                     field(
                         Result.TYPE,
@@ -2533,13 +2533,13 @@ public class Serde {
         .doc("Render a hydra.packaging.EntityReference as Javadoc link syntax")
         .lam("ref")
         .to(() ->
-                cases("hydra.packaging.EntityReference", var("ref"),
+                match("hydra.packaging.EntityReference", var("ref"),
                         field("definition",
                             lambda("d",
                                 Strings.concat2(
                                     string("{@code "),
                                     Strings.concat2(
-                                        cases("hydra.packaging.DefinitionReference", var("d"),
+                                        match("hydra.packaging.DefinitionReference", var("d"),
                                             field("primitive", lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
                                             field("term",      lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
                                             field("type",      lambda("n", hydra.dsl.Names.localNameOf( var("n"))))),
@@ -2552,7 +2552,7 @@ public class Serde {
     public static final Def shiftExpressionToExpr = def("shiftExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(ShiftExpression.TYPE_,
+                match(ShiftExpression.TYPE_,
                     var("e"),
                     field(
                         ShiftExpression.UNARY,
@@ -2633,7 +2633,7 @@ public class Serde {
     public static final Def statementExpressionToExpr = def("statementExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(StatementExpression.TYPE_,
+                match(StatementExpression.TYPE_,
                     var("e"),
                     field(
                         StatementExpression.ASSIGNMENT,
@@ -2661,7 +2661,7 @@ public class Serde {
     public static final Def statementToExpr = def("statementToExpr")
         .lam("s")
         .to(() ->
-                cases(Statement.TYPE_,
+                match(Statement.TYPE_,
                     var("s"),
                     field(
                         Statement.WITHOUT_TRAILING,
@@ -2686,7 +2686,7 @@ public class Serde {
     public static final Def statementWithoutTrailingSubstatementToExpr = def("statementWithoutTrailingSubstatementToExpr")
         .lam("s")
         .to(() ->
-                cases(StatementWithoutTrailingSubstatement.TYPE_,
+                match(StatementWithoutTrailingSubstatement.TYPE_,
                     var("s"),
                     field(
                         StatementWithoutTrailingSubstatement.BLOCK,
@@ -2772,7 +2772,7 @@ public class Serde {
     public static final Def typeArgumentToExpr = def("typeArgumentToExpr")
         .lam("a")
         .to(() ->
-                cases(TypeArgument.TYPE_,
+                match(TypeArgument.TYPE_,
                     var("a"),
                     field(
                         TypeArgument.REFERENCE,
@@ -2784,7 +2784,7 @@ public class Serde {
     public static final Def typeArgumentsOrDiamondToExpr = def("typeArgumentsOrDiamondToExpr")
         .lam("targs")
         .to(() ->
-                cases(TypeArgumentsOrDiamond.TYPE_,
+                match(TypeArgumentsOrDiamond.TYPE_,
                     var("targs"),
                     field(
                         TypeArgumentsOrDiamond.ARGUMENTS,
@@ -2799,7 +2799,7 @@ public class Serde {
     public static final Def typeBoundToExpr = def("typeBoundToExpr")
         .lam("b")
         .to(() ->
-                cases(TypeBound.TYPE_,
+                match(TypeBound.TYPE_,
                     var("b"),
                     field(
                         TypeBound.VARIABLE,
@@ -2825,7 +2825,7 @@ public class Serde {
     public static final Def typeDeclarationToExpr = def("typeDeclarationToExpr")
         .lam("d")
         .to(() ->
-                cases(TopLevelClassOrInterfaceDeclaration.TYPE_,
+                match(TopLevelClassOrInterfaceDeclaration.TYPE_,
                     var("d"),
                     field(
                         TopLevelClassOrInterfaceDeclaration.CLASS,
@@ -2912,7 +2912,7 @@ public class Serde {
     public static final Def typeToExpr = def("typeToExpr")
         .lam("t")
         .to(() ->
-                cases(hydra.java.syntax.Type.TYPE_,
+                match(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
                         hydra.java.syntax.Type.PRIMITIVE,
@@ -2951,7 +2951,7 @@ public class Serde {
     public static final Def unaryExpressionNotPlusMinusToExpr = def("unaryExpressionNotPlusMinusToExpr")
         .lam("e")
         .to(() ->
-                cases(UnaryExpressionNotPlusMinus.TYPE_,
+                match(UnaryExpressionNotPlusMinus.TYPE_,
                     var("e"),
                     field(
                         UnaryExpressionNotPlusMinus.POSTFIX,
@@ -2977,7 +2977,7 @@ public class Serde {
     public static final Def unaryExpressionToExpr = def("unaryExpressionToExpr")
         .lam("e")
         .to(() ->
-                cases(UnaryExpression.TYPE_,
+                match(UnaryExpression.TYPE_,
                     var("e"),
                     field(
                         UnaryExpression.PRE_INCREMENT,
@@ -3074,7 +3074,7 @@ public class Serde {
     public static final Def variableInitializerToExpr = def("variableInitializerToExpr")
         .lam("i")
         .to(() ->
-                cases(VariableInitializer.TYPE_,
+                match(VariableInitializer.TYPE_,
                     var("i"),
                     field(
                         VariableInitializer.EXPRESSION,
@@ -3086,7 +3086,7 @@ public class Serde {
     public static final Def variableModifierToExpr = def("variableModifierToExpr")
         .lam("m")
         .to(() ->
-                cases(VariableModifier.TYPE_,
+                match(VariableModifier.TYPE_,
                     var("m"),
                     field(
                         VariableModifier.ANNOTATION,
@@ -3118,7 +3118,7 @@ public class Serde {
     public static final Def wildcardBoundsToExpr = def("wildcardBoundsToExpr")
         .lam("b")
         .to(() ->
-                cases(WildcardBounds.TYPE_,
+                match(WildcardBounds.TYPE_,
                     var("b"),
                     field(
                         WildcardBounds.EXTENDS,

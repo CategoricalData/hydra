@@ -417,50 +417,50 @@ public final class Phantoms {
 
     // ---- Pattern matching ----
 
-    /** {@code cases TypeName x Nothing [branches]} — pattern match on union. */
-    public static <A> TypedTerm<A> cases(String typeName, TypedTerm<?> arg, Field... branches) {
+    /** {@code match TypeName x Nothing [branches]} — pattern match on union. */
+    public static <A> TypedTerm<A> match(String typeName, TypedTerm<?> arg, Field... branches) {
         Term match = Terms.match(typeName, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
-    /** {@code cases TypeName x Nothing [branches]} — Name overload. */
-    public static <A> TypedTerm<A> cases(Name typeName, TypedTerm<?> arg, Field... branches) {
+    /** {@code match TypeName x Nothing [branches]} — Name overload. */
+    public static <A> TypedTerm<A> match(Name typeName, TypedTerm<?> arg, Field... branches) {
         Term match = Terms.match(typeName.value, Optional.<Term>none(), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
-    /** {@code cases TypeName x (Just default) [branches]} — pattern match with default. */
-    public static <A> TypedTerm<A> casesWithDefault(String typeName, TypedTerm<?> arg,
+    /** {@code match TypeName x (Just default) [branches]} — pattern match with default. */
+    public static <A> TypedTerm<A> matchWithDefault(String typeName, TypedTerm<?> arg,
                                                  TypedTerm<?> defaultBranch, Field... branches) {
         Term match = Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
-    /** {@code cases TypeName x (Just default) [branches]} — Name overload. */
-    public static <A> TypedTerm<A> casesWithDefault(Name typeName, TypedTerm<?> arg,
+    /** {@code match TypeName x (Just default) [branches]} — Name overload. */
+    public static <A> TypedTerm<A> matchWithDefault(Name typeName, TypedTerm<?> arg,
                                                  TypedTerm<?> defaultBranch, Field... branches) {
         Term match = Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches);
         return tterm(Terms.apply(match, arg.value));
     }
 
-    /** {@code match TypeName Nothing [branches]} — match function (not yet applied). */
-    public static <A> TypedTerm<A> match(String typeName, Field... branches) {
+    /** {@code cases TypeName Nothing [branches]} — unapplied case-match function. */
+    public static <A> TypedTerm<A> cases(String typeName, Field... branches) {
         return tterm(Terms.match(typeName, Optional.<Term>none(), branches));
     }
 
-    /** {@code match TypeName Nothing [branches]} — Name overload. */
-    public static <A> TypedTerm<A> match(Name typeName, Field... branches) {
+    /** {@code cases TypeName Nothing [branches]} — Name overload. */
+    public static <A> TypedTerm<A> cases(Name typeName, Field... branches) {
         return tterm(Terms.match(typeName.value, Optional.<Term>none(), branches));
     }
 
-    /** {@code match TypeName (Just default) [branches]}. */
-    public static <A> TypedTerm<A> matchWithDefault(String typeName, TypedTerm<?> defaultBranch,
+    /** {@code cases TypeName (Just default) [branches]}. */
+    public static <A> TypedTerm<A> casesWithDefault(String typeName, TypedTerm<?> defaultBranch,
                                                  Field... branches) {
         return tterm(Terms.match(typeName, Optional.<Term>given(defaultBranch.value), branches));
     }
 
-    /** {@code match TypeName (Just default) [branches]} — Name overload. */
-    public static <A> TypedTerm<A> matchWithDefault(Name typeName, TypedTerm<?> defaultBranch,
+    /** {@code cases TypeName (Just default) [branches]} — Name overload. */
+    public static <A> TypedTerm<A> casesWithDefault(Name typeName, TypedTerm<?> defaultBranch,
                                                  Field... branches) {
         return tterm(Terms.match(typeName.value, Optional.<Term>given(defaultBranch.value), branches));
     }

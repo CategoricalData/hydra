@@ -251,7 +251,7 @@ public class Testing {
                         field("tcase", apply(
                             project("hydra.testing.TestCaseWithMetadata", "case"),
                             var("tcm")))),
-                    cases("hydra.testing.TestCase", var("tcase"), field("universal", universalBranch)));
+                    match("hydra.testing.TestCase", var("tcase"), field("universal", universalBranch)));
         });
 
     public static final Def generateJavaTestFile = def("generateJavaTestFile")
@@ -286,7 +286,7 @@ public class Testing {
                 let(
                     binds(
                         field("cases_", apply(
-                            project("hydra.testing.TestGroup", "cases"),
+                            project("hydra.testing.TestGroup", "match"),
                             var("testGroup"))),
                         field("subgroups", apply(
                             project("hydra.testing.TestGroup", "subgroups"),
