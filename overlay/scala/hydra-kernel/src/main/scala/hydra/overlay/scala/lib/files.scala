@@ -149,15 +149,17 @@ object files:
 
   // ---- Helpers (not primitives) ----
 
-  // POSIX st_mode file-type bits (<sys/stat.h> S_IFMT and the individual S_IF* macros).
-  private val S_IFMT   = 0170000
-  private val S_IFSOCK = 0140000
-  private val S_IFLNK  = 0120000
-  private val S_IFREG  = 0100000
-  private val S_IFBLK  = 0060000
-  private val S_IFDIR  = 0040000
-  private val S_IFCHR  = 0020000
-  private val S_IFIFO  = 0010000
+  // POSIX st_mode file-type bits (<sys/stat.h> S_IFMT and the individual S_IF* macros), written in
+  // hex because Scala 3 has no octal literal syntax (a leading-zero literal like 0170000 is
+  // decimal 170000, not octal 0170000 = hex 0xF000 — that silent misparse was the #666 bug).
+  private val S_IFMT   = 0xF000
+  private val S_IFSOCK = 0xC000
+  private val S_IFLNK  = 0xA000
+  private val S_IFREG  = 0x8000
+  private val S_IFBLK  = 0x6000
+  private val S_IFDIR  = 0x4000
+  private val S_IFCHR  = 0x2000
+  private val S_IFIFO  = 0x1000
 
   private def fileTypeFromMode(mode: Int): hydra.file.FileType =
     (mode & S_IFMT) match {

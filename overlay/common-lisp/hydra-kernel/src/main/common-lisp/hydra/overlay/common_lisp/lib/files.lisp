@@ -165,10 +165,17 @@
         nil))))
 
 ;; exists :: FilePath -> effect<Either<FileError, Bool>>
+;; Follows symbolic links (POSIX stat semantics): a dangling link is reported absent, matching
+;; the other hosts. probe-file is not used because its dangling-symlink behavior is
+;; implementation-dependent; sb-posix:stat gives us the same follow-link semantics as `status`.
 (defvar hydra_overlay_common_lisp_lib_files_exists
   (lambda (path)
     (hydra-files-with-error path
-      (if (probe-file path) t nil))))
+      #+sbcl
+      (handler-case
+          (progn (sb-posix:stat path) t)
+        (sb-posix:syscall-error () nil))
+      #-sbcl (if (probe-file path) t nil))))
 
 ;; listDirectory :: FilePath -> effect<Either<FileError, [FilePath]>>
 ;; Returns the bare entry names (not full paths), mirroring the Haskell listDirectory.
