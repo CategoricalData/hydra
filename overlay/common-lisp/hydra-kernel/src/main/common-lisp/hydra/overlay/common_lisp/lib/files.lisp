@@ -42,6 +42,7 @@
            (search "deletion" msg)) (list :not_found path))
       ((or (search "permission" msg) (search "denied" msg)
            (search "not permitted" msg) (search "access" msg)) (list :permission_denied path))
+      ((or (search "invalid argument" msg) (search "invalid" msg)) (list :invalid_path (hydra-files-message e)))
       (t (list :other (hydra-files-message e))))))
 
 ;; Run a file-system action, translating any FILE-ERROR (or other error) into a FileError.
@@ -153,6 +154,16 @@
           (ensure-directories-exist dirpath))
         nil))))
 
+;; createSymlink :: FilePath -> FilePath -> effect<Either<FileError, unit>>
+;; No force flag: an occupied link path (including a dangling symlink) fails with alreadyExists.
+(defvar hydra_overlay_common_lisp_lib_files_create_symlink
+  (lambda (target)
+    (lambda (link)
+      (hydra-files-with-error link
+        #+sbcl (sb-posix:symlink target link)
+        #-sbcl (error "createSymlink requires SBCL")
+        nil))))
+
 ;; exists :: FilePath -> effect<Either<FileError, Bool>>
 (defvar hydra_overlay_common_lisp_lib_files_exists
   (lambda (path)
@@ -193,6 +204,18 @@
         (let ((buf (make-array (file-length in) :element-type '(unsigned-byte 8))))
           (read-sequence buf in)
           buf)))))
+
+;; readSymlink :: FilePath -> effect<Either<FileError, FilePath>>
+;; Single-hop, unresolved read: the target is returned exactly as stored.
+(defvar hydra_overlay_common_lisp_lib_files_read_symlink
+  (lambda (path)
+    (hydra-files-with-error path
+      #+sbcl
+      (progn
+        (unless (sb-posix:s-islnk (sb-posix:stat-mode (sb-posix:lstat path)))
+          (error "invalid path: not a symbolic link: ~A" path))
+        (sb-posix:readlink path))
+      #-sbcl (error "readSymlink requires SBCL"))))
 
 ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
 ;; When recursive is false this corresponds to POSIX rmdir: it fails unless empty.
@@ -237,24 +260,27 @@
     ((sb-posix:s-issock mode) (list :socket nil))
     (t (list :regular nil))))
 
-;; status :: FilePath -> effect<Either<FileError, FileStatus>>
-;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+;; status :: Bool -> FilePath -> effect<Either<FileError, FileStatus>>
+;; When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target, and
+;; a dangling link is not found. When false (POSIX lstat), a symbolic link's own metadata is
+;; reported (fileType link), and a dangling link is not an error.
 ;; FileStatus is a defstruct (make-hydra_file_file_status :file_type ... :size ... :modification_time
 ;; ... :access_time ... :status_change_time ...). sb-posix's stat exposes only whole-second
 ;; timestamps, so nanoseconds is always 0.
 (defvar hydra_overlay_common_lisp_lib_files_status
-  (lambda (path)
-    (hydra-files-with-error path
-      #+sbcl
-      (let* ((s (sb-posix:stat path))
-             (mode (sb-posix:stat-mode s)))
-        (make-hydra_file_file_status
-          :file_type (hydra-files-file-type mode)
-          :size (sb-posix:stat-size s)
-          :modification_time (make-hydra_time_timespec :seconds (sb-posix:stat-mtime s) :nanoseconds 0)
-          :access_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-atime s) :nanoseconds 0))
-          :status_change_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-ctime s) :nanoseconds 0))))
-      #-sbcl (error "status requires SBCL"))))
+  (lambda (follow-links)
+    (lambda (path)
+      (hydra-files-with-error path
+        #+sbcl
+        (let* ((s (if follow-links (sb-posix:stat path) (sb-posix:lstat path)))
+               (mode (sb-posix:stat-mode s)))
+          (make-hydra_file_file_status
+            :file_type (hydra-files-file-type mode)
+            :size (sb-posix:stat-size s)
+            :modification_time (make-hydra_time_timespec :seconds (sb-posix:stat-mtime s) :nanoseconds 0)
+            :access_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-atime s) :nanoseconds 0))
+            :status_change_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-ctime s) :nanoseconds 0))))
+        #-sbcl (error "status requires SBCL")))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
 (defvar hydra_overlay_common_lisp_lib_files_write_file
