@@ -1997,6 +1997,9 @@ const filesPrimitives = (): readonly Primitive[] => {
     // createDirectory : boolean -> FilePath -> effect<either<FileError, unit>>
     effectPrim("hydra.lib.files.createDirectory",
       scheme(tyFnCurried(tyBool, filePath, effEitherErr(tyUnit)))),
+    // createSymlink : FilePath -> FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.createSymlink",
+      scheme(tyFnCurried(filePath, filePath, effEitherErr(tyUnit)))),
     // exists : FilePath -> effect<either<FileError, boolean>>
     effectPrim("hydra.lib.files.exists",
       scheme(tyFn(filePath, effEitherErr(tyBool)))),
@@ -2006,6 +2009,9 @@ const filesPrimitives = (): readonly Primitive[] => {
     // readFile : FilePath -> effect<either<FileError, binary>>
     effectPrim("hydra.lib.files.readFile",
       scheme(tyFn(filePath, effEitherErr(tyBinary)))),
+    // readSymlink : FilePath -> effect<either<FileError, FilePath>>
+    effectPrim("hydra.lib.files.readSymlink",
+      scheme(tyFn(filePath, effEitherErr(filePath)))),
     // removeDirectory : boolean -> FilePath -> effect<either<FileError, unit>>
     effectPrim("hydra.lib.files.removeDirectory",
       scheme(tyFnCurried(tyBool, filePath, effEitherErr(tyUnit)))),
@@ -2015,9 +2021,9 @@ const filesPrimitives = (): readonly Primitive[] => {
     // rename : FilePath -> FilePath -> effect<either<FileError, unit>>
     effectPrim("hydra.lib.files.rename",
       scheme(tyFnCurried(filePath, filePath, effEitherErr(tyUnit)))),
-    // status : FilePath -> effect<either<FileError, FileStatus>>
+    // status : boolean -> FilePath -> effect<either<FileError, FileStatus>>
     effectPrim("hydra.lib.files.status",
-      scheme(tyFn(filePath, effEitherErr(fileStatus)))),
+      scheme(tyFnCurried(tyBool, filePath, effEitherErr(fileStatus)))),
     // writeFile : FilePath -> binary -> effect<either<FileError, unit>>
     effectPrim("hydra.lib.files.writeFile",
       scheme(tyFnCurried(filePath, tyBinary, effEitherErr(tyUnit)))),

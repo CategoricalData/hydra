@@ -78,6 +78,14 @@ def create_directory(recursive: bool, path: "hydra.file.FilePath") -> Either["fi
     return _with_file_error(path, go)
 
 
+def create_symlink(target: "hydra.file.FilePath", link: "hydra.file.FilePath") -> Either["file_error.FileError", None]:
+    """Create a symbolic link at link, pointing to target. Fails if link already exists."""
+    def go() -> None:
+        os.symlink(target.value, link.value)
+        return None
+    return _with_file_error(link, go)
+
+
 def exists(path: "hydra.file.FilePath") -> Either["file_error.FileError", bool]:
     """Test whether anything exists at the given path."""
     return _with_file_error(path, lambda: os.path.exists(path.value))
@@ -94,6 +102,15 @@ def read_file(path: "hydra.file.FilePath") -> Either["file_error.FileError", byt
     def go() -> bytes:
         with open(path.value, "rb") as f:
             return f.read()
+    return _with_file_error(path, go)
+
+
+def read_symlink(path: "hydra.file.FilePath") -> Either["file_error.FileError", "hydra.file.FilePath"]:
+    """Read the target of the symbolic link at path, verbatim and unresolved."""
+    def go() -> "hydra.file.FilePath":
+        if not os.path.islink(path.value):
+            raise OSError(errno.EINVAL, os.strerror(errno.EINVAL), path.value)
+        return FilePath(os.readlink(path.value))
     return _with_file_error(path, go)
 
 
@@ -146,10 +163,13 @@ def _timespec(seconds: float) -> "hydra.time.Timespec":
     return hydra.time.Timespec(seconds=whole_seconds, nanoseconds=nanoseconds)
 
 
-def status(path: "hydra.file.FilePath") -> Either["file_error.FileError", "hydra.file.FileStatus"]:
-    """Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed."""
+def status(follow_links: bool, path: "hydra.file.FilePath") -> Either["file_error.FileError", "hydra.file.FileStatus"]:
+    """Retrieve metadata about the file at path. When follow_links is true, this is POSIX stat: a
+    symbolic link's metadata is that of its target, and a dangling link is not found. When
+    follow_links is false, this is POSIX lstat: a symbolic link's own metadata is reported, with
+    file_type LINK, never an error for a dangling link."""
     def go() -> "hydra.file.FileStatus":
-        result = os.stat(path.value)
+        result = os.stat(path.value) if follow_links else os.lstat(path.value)
         return hydra.file.FileStatus(
             file_type=_file_type(result.st_mode),
             size=result.st_size,

@@ -55,6 +55,14 @@ export const createDirectory = (recursive: boolean, path: any): Either<any, any>
     return Unit;
   });
 
+// target is stored verbatim (may be relative, need not exist). No force flag: an occupied
+// link path (including a dangling symlink) fails with alreadyExists (Node's EEXIST).
+export const createSymlink = (target: any, link: any): Either<any, any> =>
+  withFileError(link, () => {
+    fs.symlinkSync(target.value, link.value);
+    return Unit;
+  });
+
 export const exists = (path: any): Either<any, boolean> =>
   withFileError(path, () => fs.existsSync(path.value));
 
@@ -64,6 +72,18 @@ export const listDirectory = (path: any): Either<any, readonly any[]> =>
 // readFile returns binary as a base64-encoded string, pairing with text.decodeUtf8.
 export const readFile = (path: any): Either<any, string> =>
   withFileError(path, () => fs.readFileSync(path.value).toString("base64"));
+
+// Single-hop, unresolved read: the target is returned exactly as stored (relative stays
+// relative; a dangling target is returned as-is). Fails with invalidPath on a non-link.
+export const readSymlink = (path: any): Either<any, any> =>
+  withFileError(path, () => {
+    if (!fs.lstatSync(path.value).isSymbolicLink()) {
+      const err = new Error(`EINVAL: not a symbolic link, readlink '${path.value}'`) as NodeJS.ErrnoException;
+      err.code = "EINVAL";
+      throw err;
+    }
+    return { value: fs.readlinkSync(path.value) };
+  });
 
 // When recursive is false this corresponds to POSIX rmdir: it fails unless the directory
 // is empty (fs.rmdirSync has no recursive option in that mode, so we call it directly).
@@ -105,10 +125,12 @@ function timespec(ms: number): any {
   return { seconds, nanoseconds };
 }
 
-// Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
-export const status = (path: any): Either<any, any> =>
+// When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target,
+// and a dangling link is not found. When false (POSIX lstat), a symbolic link's own
+// metadata is reported, with fileType link, and a dangling link is not an error.
+export const status = (followLinks: boolean, path: any): Either<any, any> =>
   withFileError(path, () => {
-    const stats = fs.statSync(path.value);
+    const stats = followLinks ? fs.statSync(path.value) : fs.lstatSync(path.value);
     return {
       fileType: fileType(stats),
       size: stats.size,
