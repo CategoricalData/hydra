@@ -227,6 +227,9 @@
             (cons (prim-name def:hydra_lib_files_create_directory) (prim2 (prim-name def:hydra_lib_files_create_directory)
                                                (lambda (recursive) (lambda (path) ((hydra_overlay_scheme_lib_files_create_directory recursive) path)))
                                                #f bool fp (eff (tc-either ferr unit))))
+            (cons (prim-name def:hydra_lib_files_create_symlink) (prim2 (prim-name def:hydra_lib_files_create_symlink)
+                                               (lambda (target) (lambda (link) ((hydra_overlay_scheme_lib_files_create_symlink target) link)))
+                                               #f fp fp (eff (tc-either ferr unit))))
             (cons (prim-name def:hydra_lib_files_exists) (prim1 (prim-name def:hydra_lib_files_exists)
                                                hydra_overlay_scheme_lib_files_exists
                                                #f fp (eff (tc-either ferr bool))))
@@ -236,6 +239,9 @@
             (cons (prim-name def:hydra_lib_files_read_file) (prim1 (prim-name def:hydra_lib_files_read_file)
                                                hydra_overlay_scheme_lib_files_read_file
                                                #f fp (eff (tc-either ferr bin))))
+            (cons (prim-name def:hydra_lib_files_read_symlink) (prim1 (prim-name def:hydra_lib_files_read_symlink)
+                                               hydra_overlay_scheme_lib_files_read_symlink
+                                               #f fp (eff (tc-either ferr fp))))
             (cons (prim-name def:hydra_lib_files_remove_directory) (prim2 (prim-name def:hydra_lib_files_remove_directory)
                                                (lambda (recursive) (lambda (path) ((hydra_overlay_scheme_lib_files_remove_directory recursive) path)))
                                                #f bool fp (eff (tc-either ferr unit))))
@@ -245,9 +251,9 @@
             (cons (prim-name def:hydra_lib_files_rename) (prim2 (prim-name def:hydra_lib_files_rename)
                                                (lambda (source) (lambda (destination) ((hydra_overlay_scheme_lib_files_rename source) destination)))
                                                #f fp fp (eff (tc-either ferr unit))))
-            (cons (prim-name def:hydra_lib_files_status) (prim1 (prim-name def:hydra_lib_files_status)
-                                               hydra_overlay_scheme_lib_files_status
-                                               #f fp (eff (tc-either ferr fstat))))
+            (cons (prim-name def:hydra_lib_files_status) (prim2 (prim-name def:hydra_lib_files_status)
+                                               (lambda (follow-links) (lambda (path) ((hydra_overlay_scheme_lib_files_status follow-links) path)))
+                                               #f bool fp (eff (tc-either ferr fstat))))
             (cons (prim-name def:hydra_lib_files_write_file) (prim2 (prim-name def:hydra_lib_files_write_file)
                                                (lambda (path) (lambda (contents) ((hydra_overlay_scheme_lib_files_write_file path) contents)))
                                                #f fp bin (eff (tc-either ferr unit))))))))

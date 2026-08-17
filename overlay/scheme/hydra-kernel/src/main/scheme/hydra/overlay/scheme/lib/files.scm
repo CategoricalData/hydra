@@ -10,14 +10,17 @@
           (only (guile)
                 mkdir rmdir rename-file copy-file resolve-module module-variable eval
                 opendir readdir closedir
-                stat stat:type stat:size stat:mtime stat:mtimensec
-                stat:atime stat:atimensec stat:ctime stat:ctimensec))
+                stat lstat stat:type stat:size stat:mtime stat:mtimensec
+                stat:atime stat:atimensec stat:ctime stat:ctimensec
+                symlink readlink))
   (export hydra_overlay_scheme_lib_files_copy
           hydra_overlay_scheme_lib_files_append_file
           hydra_overlay_scheme_lib_files_create_directory
+          hydra_overlay_scheme_lib_files_create_symlink
           hydra_overlay_scheme_lib_files_exists
           hydra_overlay_scheme_lib_files_list_directory
           hydra_overlay_scheme_lib_files_read_file
+          hydra_overlay_scheme_lib_files_read_symlink
           hydra_overlay_scheme_lib_files_remove_directory
           hydra_overlay_scheme_lib_files_remove_file
           hydra_overlay_scheme_lib_files_rename
@@ -113,6 +116,7 @@
           ((substring? "not a directory" m) (list 'not_found path))
           ((substring? "permission" m)  (list 'permission_denied path))
           ((substring? "denied" m)      (list 'permission_denied path))
+          ((substring? "invalid argument" m) (list 'invalid_path (err->message e)))
           (else (list 'other (err->message e))))))
 
     (define (string-downcase-ascii s)
@@ -306,6 +310,17 @@
               (make-directory path recursive)
               '())))))
 
+    ;; createSymlink :: FilePath -> FilePath -> effect<Either<FileError, unit>>
+    ;; Create a symbolic link at link, pointing to target (stored verbatim). No force flag: an
+    ;; occupied link path (including a dangling symlink) fails with alreadyExists.
+    (define hydra_overlay_scheme_lib_files_create_symlink
+      (lambda (target)
+        (lambda (link)
+          (with-file-error link
+            (lambda ()
+              (symlink target link)
+              '())))))
+
     ;; exists :: FilePath -> effect<Either<FileError, Bool>>
     ;; Test whether anything exists at the given path (no error on absence).
     (define hydra_overlay_scheme_lib_files_exists
@@ -326,6 +341,16 @@
       (lambda (path)
         (with-file-error path
           (lambda () (read-file-bytes path)))))
+
+    ;; readSymlink :: FilePath -> effect<Either<FileError, FilePath>>
+    ;; Single-hop, unresolved read: the target is returned exactly as stored.
+    (define hydra_overlay_scheme_lib_files_read_symlink
+      (lambda (path)
+        (with-file-error path
+          (lambda ()
+            (if (not (eq? (stat:type (lstat path)) 'symlink))
+                (error "invalid path: not a symbolic link" path)
+                (readlink path))))))
 
     ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
     ;; Remove a directory; when recursive, remove its entire contents (rm -r); otherwise POSIX rmdir.
@@ -356,19 +381,22 @@
               (rename-path source destination)
               '())))))
 
-    ;; status :: FilePath -> effect<Either<FileError, FileStatus>>
-    ;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+    ;; status :: Bool -> FilePath -> effect<Either<FileError, FileStatus>>
+    ;; When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target,
+    ;; and a dangling link is not found. When false (POSIX lstat), a symbolic link's own
+    ;; metadata is reported (fileType link), and a dangling link is not an error.
     (define hydra_overlay_scheme_lib_files_status
-      (lambda (path)
-        (with-file-error path
-          (lambda ()
-            (let ((s (stat path)))
-              (make-rec '(hydra file) 'make-hydra_file_file_status
-                (file-type (stat:type s))
-                (stat:size s)
-                (make-rec '(hydra time) 'make-hydra_time_timespec (stat:mtime s) (stat:mtimensec s))
-                (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:atime s) (stat:atimensec s)))
-                (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:ctime s) (stat:ctimensec s)))))))))
+      (lambda (follow-links)
+        (lambda (path)
+          (with-file-error path
+            (lambda ()
+              (let ((s (if follow-links (stat path) (lstat path))))
+                (make-rec '(hydra file) 'make-hydra_file_file_status
+                  (file-type (stat:type s))
+                  (stat:size s)
+                  (make-rec '(hydra time) 'make-hydra_time_timespec (stat:mtime s) (stat:mtimensec s))
+                  (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:atime s) (stat:atimensec s)))
+                  (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:ctime s) (stat:ctimensec s))))))))))
 
     ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
     ;; Replace the file at path with the raw bytes contents, creating it if necessary.
