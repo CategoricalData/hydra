@@ -190,6 +190,9 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_files_create_directory) (prim2 (prim-name hydra_lib_files_create_directory)
                                                    hydra_overlay_emacs_lisp_lib_files_create_directory
                                                    nil bool fp (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_create_symlink)  (prim2 (prim-name hydra_lib_files_create_symlink)
+                                                   hydra_overlay_emacs_lisp_lib_files_create_symlink
+                                                   nil fp fp (funcall eff (tc-either ferr unit))))
         (cons (prim-name hydra_lib_files_exists)          (prim1 (prim-name hydra_lib_files_exists)
                                                    hydra_overlay_emacs_lisp_lib_files_exists
                                                    nil fp (funcall eff (tc-either ferr bool))))
@@ -199,6 +202,9 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_files_read_file)       (prim1 (prim-name hydra_lib_files_read_file)
                                                    hydra_overlay_emacs_lisp_lib_files_read_file
                                                    nil fp (funcall eff (tc-either ferr bin))))
+        (cons (prim-name hydra_lib_files_read_symlink)    (prim1 (prim-name hydra_lib_files_read_symlink)
+                                                   hydra_overlay_emacs_lisp_lib_files_read_symlink
+                                                   nil fp (funcall eff (tc-either ferr fp))))
         (cons (prim-name hydra_lib_files_remove_directory) (prim2 (prim-name hydra_lib_files_remove_directory)
                                                    hydra_overlay_emacs_lisp_lib_files_remove_directory
                                                    nil bool fp (funcall eff (tc-either ferr unit))))
@@ -208,9 +214,9 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_files_rename)          (prim2 (prim-name hydra_lib_files_rename)
                                                    hydra_overlay_emacs_lisp_lib_files_rename
                                                    nil fp fp (funcall eff (tc-either ferr unit))))
-        (cons (prim-name hydra_lib_files_status)          (prim1 (prim-name hydra_lib_files_status)
+        (cons (prim-name hydra_lib_files_status)          (prim2 (prim-name hydra_lib_files_status)
                                                    hydra_overlay_emacs_lisp_lib_files_status
-                                                   nil fp (funcall eff (tc-either ferr fstat))))
+                                                   nil bool fp (funcall eff (tc-either ferr fstat))))
         (cons (prim-name hydra_lib_files_write_file)      (prim2 (prim-name hydra_lib_files_write_file)
                                                    hydra_overlay_emacs_lisp_lib_files_write_file
                                                    nil fp bin (funcall eff (tc-either ferr unit))))))))

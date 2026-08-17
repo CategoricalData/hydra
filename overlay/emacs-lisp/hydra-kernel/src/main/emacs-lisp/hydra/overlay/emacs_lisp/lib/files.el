@@ -92,6 +92,16 @@
         (make-directory path (and recursive t))
         nil))))
 
+;; createSymlink :: FilePath -> FilePath -> effect<Either<FileError, unit>>
+;; No force flag: an occupied link path (including a dangling symlink) signals
+;; file-already-exists, classified as alreadyExists.
+(defvar hydra_overlay_emacs_lisp_lib_files_create_symlink
+  (lambda (target)
+    (lambda (link)
+      (hydra-files-with-error link
+        (make-symbolic-link target link)
+        nil))))
+
 ;; exists :: FilePath -> effect<Either<FileError, Bool>>
 (defvar hydra_overlay_emacs_lisp_lib_files_exists
   (lambda (path)
@@ -119,6 +129,21 @@
         (set-buffer-multibyte nil)
         (insert-file-contents-literally path)
         (buffer-string)))))
+
+;; readSymlink :: FilePath -> effect<Either<FileError, FilePath>>
+;; Single-hop, unresolved read: the target is returned exactly as stored (file-symlink-p does not
+;; resolve chains). file-symlink-p does not distinguish "missing" from "not a link" (both nil), so
+;; the two cases are told apart via file-attributes (t/nil/string) as in status's no-follow branch.
+(defvar hydra_overlay_emacs_lisp_lib_files_read_symlink
+  (lambda (path)
+    (hydra-files-with-error path
+      (let ((target (file-symlink-p path)))
+        (unless target
+          (let ((attrs (file-attributes path)))
+            (if attrs
+                (signal 'file-error (list "invalid path: not a symbolic link" path))
+              (signal 'file-missing (list "no such file or directory" path)))))
+        target))))
 
 ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
 ;; When recursive is false this corresponds to POSIX rmdir: it fails unless empty.
@@ -157,25 +182,31 @@
      :seconds (floor ns-total 1000000000)
      :nanoseconds (mod ns-total 1000000000))))
 
-;; status :: FilePath -> effect<Either<FileError, FileStatus>>
-;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed
-;; (file-attributes on a symlink path with ID-FORMAT nil follows the link, matching stat()).
+;; status :: Bool -> FilePath -> effect<Either<FileError, FileStatus>>
+;; file-attributes is lstat-flavored BY DEFAULT: on a symbolic link it reports the link's own
+;; entry (file-type is a string, the link's target), not the target's metadata. So followLinks
+;; is implemented by resolving through file-truename first (which follows the full link chain)
+;; and inspecting the result; no-follow inspects path directly. A dangling link's truename still
+;; exists as a *path string*, but file-attributes on it returns nil, so the follow-and-missing
+;; case is naturally notFound.
 (defvar hydra_overlay_emacs_lisp_lib_files_status
-  (lambda (path)
-    (hydra-files-with-error path
-      (let ((attrs (file-attributes path)))
-        (unless attrs
-          (signal 'file-missing (list "no such file or directory" path)))
-        (let ((file-type (nth 0 attrs)))
-          (make-hydra_file_file_status
-           :file_type (cond
-                       ((eq file-type t) (list :directory nil))
-                       ((stringp file-type) (list :link nil))
-                       (t (list :regular nil)))
-           :size (nth 7 attrs)
-           :modification_time (hydra-files-timespec (nth 5 attrs))
-           :access_time (list :given (hydra-files-timespec (nth 4 attrs)))
-           :status_change_time (list :given (hydra-files-timespec (nth 6 attrs)))))))))
+  (lambda (follow-links)
+    (lambda (path)
+      (hydra-files-with-error path
+        (let* ((target (if follow-links (file-truename path) path))
+               (attrs (file-attributes target)))
+          (unless attrs
+            (signal 'file-missing (list "no such file or directory" path)))
+          (let ((file-type (nth 0 attrs)))
+            (make-hydra_file_file_status
+             :file_type (cond
+                         ((eq file-type t) (list :directory nil))
+                         ((stringp file-type) (list :link nil))
+                         (t (list :regular nil)))
+             :size (nth 7 attrs)
+             :modification_time (hydra-files-timespec (nth 5 attrs))
+             :access_time (list :given (hydra-files-timespec (nth 4 attrs)))
+             :status_change_time (list :given (hydra-files-timespec (nth 6 attrs))))))))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
 (defvar hydra_overlay_emacs_lisp_lib_files_write_file
