@@ -2,7 +2,7 @@ package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
 import hydra.overlay.scala.dsl.meta.Defs
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, casesWithDefault, cases, project, unwrap, wrap, constant, makeLocal, define, cat2}
+import hydra.overlay.scala.dsl.Phantoms.{`var` => v, `match`, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, constant, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 
@@ -224,7 +224,7 @@ object Serde:
 
   // ---- dataRefToExpr ----
   private val dataRefToExprBody = lambda("ref",
-    cases("hydra.scala.syntax.RefData", v("ref"),
+    `match`("hydra.scala.syntax.RefData", v("ref"),
       field("name", lambda("name", dataNameToExprCall(v("name")))),
       field("select", lambda("sel", dataSelectToExprCall(v("sel"))))))
 
@@ -316,7 +316,7 @@ object Serde:
         lambda("firstPat",
           let(Seq(
             field("patName",
-              cases("hydra.scala.syntax.Pat", v("firstPat"),
+              `match`("hydra.scala.syntax.Pat", v("firstPat"),
                 field("var", lambda("pv", ScalaSyntax.varPatName(v("pv"))))))),
             ScalaSyntax.unPredefString(ScalaSyntax.nameDataValue(v("patName"))))),
         listMaybeHead(v("pats"))))
@@ -410,7 +410,7 @@ object Serde:
         v("extendsClause")))))
 
   private val defnToExprBody = lambda("def",
-    cases("hydra.scala.syntax.Defn", v("def"),
+    `match`("hydra.scala.syntax.Defn", v("def"),
       field("def", defDefnArmBody),
       field("type", typeDefnArmBody),
       field("val", valDefnArmBody),
@@ -443,7 +443,7 @@ object Serde:
 
   // ---- importExportStatToExpr ----
   private val importExportStatToExprBody = lambda("ie",
-    cases("hydra.scala.syntax.ImportExportStat", v("ie"),
+    `match`("hydra.scala.syntax.ImportExportStat", v("ie"),
       field("import", lambda("imp",
         let(Seq(field("importers", ScalaSyntax.importImporters(v("imp")))),
           newlineSep(map(v(local("importerToExpr")), v("importers"))))))))
@@ -455,7 +455,7 @@ object Serde:
 
   // refName helper: cases on RefData ref, returning the wrapped name string
   private val importerRefName =
-    cases("hydra.scala.syntax.RefData", v("ref"),
+    `match`("hydra.scala.syntax.RefData", v("ref"),
       field("name", lambda("dn",
         ScalaSyntax.unPredefString(ScalaSyntax.nameDataValue(v("dn"))))))
 
@@ -467,11 +467,11 @@ object Serde:
 
   // Per-importee renderer: matches wildcard or name, returns an Expr
   private val importeeRenderer = lambda("it",
-    cases("hydra.scala.syntax.Importee", v("it"),
+    `match`("hydra.scala.syntax.Importee", v("it"),
       field("wildcard", constant(cstS("*"))),
       field("name", lambda("in",
         cst(
-          cases("hydra.scala.syntax.Name",
+          `match`("hydra.scala.syntax.Name",
             ScalaSyntax.nameImporteeName(v("in")),
             field("value", lambda("s", v("s")))))))))
 
@@ -506,11 +506,11 @@ object Serde:
             lambda("firstImp",
               noSep(list(
                 cstS("."),
-                cases("hydra.scala.syntax.Importee", v("firstImp"),
+                `match`("hydra.scala.syntax.Importee", v("firstImp"),
                   field("wildcard", constant(cstS("*"))),
                   field("name", lambda("in",
                     cst(
-                      cases("hydra.scala.syntax.Name",
+                      `match`("hydra.scala.syntax.Name",
                         ScalaSyntax.nameImporteeName(v("in")),
                         field("value", lambda("s", v("s")))))))) ))),
             listMaybeHead(v("importees")))),
@@ -519,11 +519,11 @@ object Serde:
           curlyBracesList(nothing, inlineStyle,
             map(
               lambda("it",
-                cases("hydra.scala.syntax.Importee", v("it"),
+                `match`("hydra.scala.syntax.Importee", v("it"),
                   field("wildcard", constant(cstS("*"))),
                   field("name", lambda("in",
                     cst(
-                      cases("hydra.scala.syntax.Name",
+                      `match`("hydra.scala.syntax.Name",
                         ScalaSyntax.nameImporteeName(v("in")),
                         field("value", lambda("s", v("s")))))))) ),
               v("importees")))))))
@@ -552,7 +552,7 @@ object Serde:
 
   // ---- litToExpr ----
   private val litToExprBody = lambda("lit",
-    casesWithDefault("hydra.scala.syntax.Lit",
+    matchWithDefault("hydra.scala.syntax.Lit",
       v("lit"),
       cstS("TODO:literal"),
       field("boolean", lambda("b",
@@ -603,7 +603,7 @@ object Serde:
 
   // ---- modToExpr ----
   private val modToExprBody = lambda("m",
-    cases("hydra.scala.syntax.Mod", v("m"),
+    `match`("hydra.scala.syntax.Mod", v("m"),
       field("case", constant(cstS("case"))),
       field("sealed", constant(cstS("sealed"))),
       field("abstract", constant(cstS("abstract"))),
@@ -619,7 +619,7 @@ object Serde:
 
   // ---- nameToExpr ----
   private val nameToExprBody = lambda("name",
-    cases("hydra.scala.syntax.Name", v("name"),
+    `match`("hydra.scala.syntax.Name", v("name"),
       field("value", lambda("s", cst(v("s"))))))
 
   lazy val nameToExprDef: Definition =
@@ -638,7 +638,7 @@ object Serde:
           parenList(map(v(local("patToExpr")), v("args"))))))))
 
   private val patToExprBody = lambda("pat",
-    cases("hydra.scala.syntax.Pat", v("pat"),
+    `match`("hydra.scala.syntax.Pat", v("pat"),
       field("extract", patExtractArm),
       field("var", lambda("pv",
         dataNameToExprCall(ScalaSyntax.varPatName(v("pv"))))),
@@ -679,7 +679,7 @@ object Serde:
 
   // ---- statToExpr ----
   private val statToExprBody = lambda("stat",
-    cases("hydra.scala.syntax.Stat", v("stat"),
+    `match`("hydra.scala.syntax.Stat", v("stat"),
       field("term", lambda("t", termToExprCall(v("t")))),
       field("defn", lambda("def", defnToExprCall(v("def")))),
       field("importExport", lambda("ie", importExportStatToExprCall(v("ie"))))))
@@ -725,7 +725,7 @@ object Serde:
         newlineSep(map(v(local("statToExpr")), v("stats"))))))
 
   private val termToExprBody = lambda("term",
-    cases("hydra.scala.syntax.Data", v("term"),
+    `match`("hydra.scala.syntax.Data", v("term"),
       field("lit", lambda("lit", litToExprCall(v("lit")))),
       field("ref", lambda("ref", dataRefToExprCall(v("ref")))),
       field("apply", termApplyArm),
@@ -755,7 +755,7 @@ object Serde:
   // ---- typeToExpr ----
 
   private val typeRefArm = lambda("tr",
-    cases("hydra.scala.syntax.RefType", v("tr"),
+    `match`("hydra.scala.syntax.RefType", v("tr"),
       field("name", lambda("name", typeNameToExprCall(v("name"))))))
 
   private val typeApplyArm = lambda("ta",
@@ -789,7 +789,7 @@ object Serde:
     typeNameToExprCall(ScalaSyntax.varTypeName(v("tv"))))
 
   private val typeToExprBody = lambda("typ",
-    cases("hydra.scala.syntax.Type", v("typ"),
+    `match`("hydra.scala.syntax.Type", v("typ"),
       field("ref", typeRefArm),
       field("apply", typeApplyArm),
       field("function", typeFunctionArm),

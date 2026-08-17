@@ -219,21 +219,21 @@ object Phantoms:
   // ---- Pattern matching ----
 
   /** Pattern match on a union (no default). */
-  def cases[A](typeName: Name, arg: TypedTerm[?], branches: Field*): TypedTerm[A] =
+  def `match`[A](typeName: Name, arg: TypedTerm[?], branches: Field*): TypedTerm[A] =
     val matchTerm = Terms.match_(typeName, None, branches*)
     Terms.apply(matchTerm, arg)
 
   /** Pattern match on a union with a default branch. */
-  def casesWithDefault[A](typeName: Name, arg: TypedTerm[?],
+  def matchWithDefault[A](typeName: Name, arg: TypedTerm[?],
                           defaultBranch: TypedTerm[?], branches: Field*): TypedTerm[A] =
     val matchTerm = Terms.match_(typeName, Some(defaultBranch), branches*)
     Terms.apply(matchTerm, arg)
 
-  /** Match function (not yet applied). */
-  def `match`[A](typeName: Name, branches: Field*): TypedTerm[A] =
+  /** Unapplied case-match function. */
+  def cases[A](typeName: Name, branches: Field*): TypedTerm[A] =
     Terms.match_(typeName, None, branches*)
 
-  def matchWithDefault[A](typeName: Name, defaultBranch: TypedTerm[?],
+  def casesWithDefault[A](typeName: Name, defaultBranch: TypedTerm[?],
                           branches: Field*): TypedTerm[A] =
     Terms.match_(typeName, Some(defaultBranch), branches*)
 

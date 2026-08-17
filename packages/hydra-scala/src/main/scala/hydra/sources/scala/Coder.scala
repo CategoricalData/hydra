@@ -2,7 +2,7 @@ package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
 import hydra.overlay.scala.dsl.meta.Defs
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, constant, cases, casesWithDefault, project, unwrap, wrap, inject, makeLocal, define, cat2}
+import hydra.overlay.scala.dsl.Phantoms.{`var` => v, `match`, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, constant, matchWithDefault, project, unwrap, wrap, inject, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 import hydra.core.{Field, Injection, Literal, Term, WrappedTerm}
@@ -72,7 +72,7 @@ object Coder:
     applyP("hydra.lib.logic.ifElse",
       applyP("hydra.lib.ordering.lte", v("n"), int32(0)),
       v("t"),
-      casesWithDefault("hydra.core.Type",
+      matchWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("t")),
         v("t"),
         field("function", lambda("ft",
@@ -89,7 +89,7 @@ object Coder:
 
   // extractBody
   private val extractBodyBody = lambda("t",
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("t")),
       v("t"),
       field("lambda", lambda("lam",
@@ -106,7 +106,7 @@ object Coder:
 
   // extractCodomain
   private val extractCodomainBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       v("t"),
       field("function", lambda("ft",
@@ -119,7 +119,7 @@ object Coder:
 
   // extractDomains
   private val extractDomainsBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       emptyList,
       field("function", lambda("ft",
@@ -135,7 +135,7 @@ object Coder:
 
   // extractLetBindings
   private val extractLetBindingsBody = lambda("t",
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("t")),
       emptyList,
       field("lambda", lambda("lam",
@@ -154,7 +154,7 @@ object Coder:
 
   // extractParams
   private val extractParamsBody = lambda("t",
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("t")),
       emptyList,
       field("lambda", lambda("lam",
@@ -176,7 +176,7 @@ object Coder:
     let(Seq(
       field("n", ScalaSyntax.paramTypeName(v("tp"))),
       field("s",
-        casesWithDefault("hydra.scala.syntax.Name",
+        matchWithDefault("hydra.scala.syntax.Name",
           v("n"), string(""),
           field("value", lambda("v", v("v")))))),
       inject("hydra.scala.syntax.Type", "var",
@@ -291,7 +291,7 @@ object Coder:
   // inference confusion with the curried CoreDsl.application chain.
   private val applyVarBody = lambda("fterm", lambda("avar",
     let(Seq(field("v", CoreDsl.unName(v("avar")))),
-      casesWithDefault("hydra.core.Term",
+      matchWithDefault("hydra.core.Term",
         applyP("hydra.strip.deannotateAndDetypeTerm", v("fterm")),
         CoreDsl.termApplication(CoreDsl.application(v("fterm"))(CoreDsl.termVariable(v("avar")))),
         field("lambda", lambda("lam",
@@ -313,7 +313,7 @@ object Coder:
     let(Seq(
       field("innerFun", CoreDsl.applicationFunction(v("innerApp"))),
       field("innerArg", CoreDsl.applicationArgument(v("innerApp")))),
-      casesWithDefault("hydra.core.Term",
+      matchWithDefault("hydra.core.Term",
         applyP("hydra.strip.deannotateAndDetypeTerm", v("innerFun")),
         v("t"),
         field("unwrap", constant(
@@ -324,7 +324,7 @@ object Coder:
     let(Seq(
       field("appFun", CoreDsl.applicationFunction(v("app"))),
       field("appArg", CoreDsl.applicationArgument(v("app")))),
-      casesWithDefault("hydra.core.Term",
+      matchWithDefault("hydra.core.Term",
         applyP("hydra.strip.deannotateAndDetypeTerm", v("appFun")),
         v("t"),
         field("unwrap", constant(
@@ -332,7 +332,7 @@ object Coder:
         field("application", stripWrapInnerArm))))
 
   private val stripWrapEliminationsBody = lambda("t",
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("t")),
       v("t"),
       field("application", stripWrapApplicationArm)))
@@ -421,7 +421,7 @@ object Coder:
 
   // encodeLiteral — Coder.hs:441-461
   private val encodeLiteralBody = lambda("cx", lambda("g", lambda("av",
-    casesWithDefault("hydra.core.Literal",
+    matchWithDefault("hydra.core.Literal",
       v("av"),
       errorLeft("unexpected literal"),
       field("binary", lambda("b",
@@ -433,14 +433,14 @@ object Coder:
         Phantoms.right(inject("hydra.scala.syntax.Lit", "string",
           applyP("hydra.lib.literals.showDecimal", v("d")))))),
       field("float", lambda("fv",
-        casesWithDefault("hydra.core.FloatValue", v("fv"),
+        matchWithDefault("hydra.core.FloatValue", v("fv"),
           errorLeft("unexpected float value"),
           field("float32", lambda("f",
             Phantoms.right(inject("hydra.scala.syntax.Lit", "float", v("f"))))),
           field("float64", lambda("f",
             Phantoms.right(inject("hydra.scala.syntax.Lit", "double", v("f")))))))),
       field("integer", lambda("iv",
-        casesWithDefault("hydra.core.IntegerValue", v("iv"),
+        matchWithDefault("hydra.core.IntegerValue", v("iv"),
           errorLeft("unexpected integer value"),
           field("bigint", lambda("i",
             Phantoms.right(inject("hydra.scala.syntax.Lit", "long",
@@ -494,7 +494,7 @@ object Coder:
       applyP("hydra.annotations.getType", g, ann))
 
   private val findDomainTypeCases = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       errorLeft("expected a function type"),
       field("function", lambda("ft",
@@ -528,13 +528,13 @@ object Coder:
         lambda("sdom2", Phantoms.right(just(v("sdom2")))))))
 
   private val findSdomForallArm = lambda("fa",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", CoreDsl.forallTypeBody(v("fa"))),
       Phantoms.right(nothing),
       field("function", findSdomForallInner)))
 
   private val findSdomTypeCases = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       applyP("hydra.lib.eithers.bind",
         applyP(local("encodeType"), v("cx"), v("g"), v("t")),
@@ -569,7 +569,7 @@ object Coder:
     ScalaSyntax.nameData(ScalaSyntax.predefString(v("fname")))
 
   private val fieldToEnumCaseIsUnitExpr =
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("ftyp")),
       bool(false),
       field("unit", constant(bool(true))),
@@ -636,14 +636,14 @@ object Coder:
 
   // Literal-type arms — small enough to inline as a single map
   private val encodeTypeLitFloat = lambda("ft",
-    casesWithDefault("hydra.core.FloatType",
+    matchWithDefault("hydra.core.FloatType",
       v("ft"),
       errorLeft("unsupported float type"),
       field("float32", constant(Phantoms.right(stref(string("scala.Float"))))),
       field("float64", constant(Phantoms.right(stref(string("scala.Double")))))))
 
   private val encodeTypeLitInteger = lambda("it",
-    casesWithDefault("hydra.core.IntegerType",
+    matchWithDefault("hydra.core.IntegerType",
       v("it"),
       errorLeft("unsupported integer type"),
       field("bigint", constant(Phantoms.right(stref(string("scala.math.BigInt"))))),
@@ -657,7 +657,7 @@ object Coder:
       field("uint64", constant(Phantoms.right(stref(string("scala.math.BigInt")))))))
 
   private val encodeTypeLitArm = lambda("lt",
-    casesWithDefault("hydra.core.LiteralType",
+    matchWithDefault("hydra.core.LiteralType",
       v("lt"),
       errorLeft("unsupported literal type"),
       field("binary", constant(Phantoms.right(
@@ -689,7 +689,7 @@ object Coder:
     Phantoms.let(Seq(
       field("collectTypeArgs",
         lambda("t2", lambda("acc",
-          casesWithDefault("hydra.core.Type",
+          matchWithDefault("hydra.core.Type",
             applyP("hydra.strip.deannotateType", v("t2")),
             Phantoms.pair(v("t2"), v("acc")),
             field("application", lambda("at2",
@@ -800,7 +800,7 @@ object Coder:
           ScalaSyntax.varType(ScalaSyntax.nameType(v("typeName")))))))
 
   private val encodeTypeBody = lambda("cx", lambda("g", lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       errorLeft("unsupported type"),
       field("application", encodeTypeApplicationArm),
@@ -849,13 +849,13 @@ object Coder:
   // Routes between encodeComplexTermDef (function types) and lazy val (others).
 
   private val encodeTermDefIsFunctionTypeForall = lambda("fa",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", CoreDsl.forallTypeBody(v("fa"))),
       bool(false),
       field("function", constant(bool(true)))))
 
   private val encodeTermDefIsFunctionType =
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("typ'")),
       bool(false),
       field("function", constant(bool(true))),
@@ -1022,7 +1022,7 @@ object Coder:
       field("forallParam", CoreDsl.forallTypeParameter(v("ft"))),
       field("collectForallParams",
         lambda("t", lambda("acc",
-          casesWithDefault("hydra.core.Type",
+          matchWithDefault("hydra.core.Type",
             applyP("hydra.strip.deannotateType", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("forall", lambda("ft2",
@@ -1041,7 +1041,7 @@ object Coder:
         applyP("hydra.lib.lists.map",
           encodeTypeDefStparam,
           v("allForallParams")))),
-      casesWithDefault("hydra.core.Type",
+      matchWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("innerBody")),
         Phantoms.apply(defaultTypeCase, v("lname"), v("allTparams"), v("cx"), v("g"), v("innerBody")),
         field("record", lambda("rt2",
@@ -1070,7 +1070,7 @@ object Coder:
             applyP("hydra.variables.freeVariablesInType", v("typ"))))),
       field("tparams",
         applyP("hydra.lib.lists.map", encodeTypeDefStparam, v("freeVars")))),
-      casesWithDefault("hydra.core.Type",
+      matchWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("typ")),
         Phantoms.apply(defaultTypeCase, v("lname"), v("tparams"), v("cx"), v("g"), v("typ")),
         field("forall", encodeTypeDefForallArm),
@@ -1086,13 +1086,13 @@ object Coder:
   // ===== encodeLetBinding — Coder.hs:405-438, full translation =====
 
   private val encodeLetBindingIsFnForall = lambda("fa",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", CoreDsl.forallTypeBody(v("fa"))),
       bool(false),
       field("function", constant(bool(true)))))
 
   private val encodeLetBindingIsFnTsArm = lambda("ts",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", CoreDsl.typeSchemeBody(v("ts"))),
       bool(false),
       field("function", constant(bool(true))),
@@ -1399,7 +1399,7 @@ object Coder:
       applyP("hydra.lib.logic.or", v("domIsUnit"), v("bodyIgnoresParam"))))
 
   private val encodeCaseIsUnitFromTerm =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("fterm")),
       Phantoms.bool(false),
       field("lambda", encodeCaseIsUnitLambdaArm),
@@ -1410,7 +1410,7 @@ object Coder:
       field("unit", constant(Phantoms.bool(true))))
 
   private val encodeCaseIsUnitFromType =
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("dom")),
       Phantoms.bool(false),
       field("unit", constant(Phantoms.bool(true))),
@@ -1437,7 +1437,7 @@ object Coder:
             lambda("n", CoreDsl.unName(v("n")))))))
 
   private val encodeCaseLamParamSuffix =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("fterm")),
       string(""),
       field("lambda", lambda("lam",
@@ -1455,7 +1455,7 @@ object Coder:
           applyP("hydra.lib.strings.concat2", string("_"), v("safeName"))))))
 
   private val encodeCaseDomainIsUnit =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("fterm")),
       Phantoms.bool(true),
       field("lambda", lambda("lam",
@@ -1685,7 +1685,7 @@ object Coder:
         encodeFunctionCasesAddDefaultThen)))
 
   private val encodeFunctionBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("meta", lambda("funTerm", lambda("arg",
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("funTerm")),
       errorLeft("unsupported function"),
       field("lambda", encodeFunctionLambdaArm),
@@ -1705,7 +1705,7 @@ object Coder:
       applyP(local("encodeLiteral"), v("cx"), v("g"), v("v")),
       lambda("slit",
         Phantoms.let("litData", inject("hydra.scala.syntax.Data", "lit", v("slit")),
-          casesWithDefault("hydra.core.Literal",
+          matchWithDefault("hydra.core.Literal",
             v("v"),
             Phantoms.right(v("litData")),
             field("decimal", constant(Phantoms.right(
@@ -1713,7 +1713,7 @@ object Coder:
                 applyP(localUtils("sname"), string("BigDecimal")),
                 list(v("litData")))))),
             field("integer", lambda("iv",
-              casesWithDefault("hydra.core.IntegerValue",
+              matchWithDefault("hydra.core.IntegerValue",
                 v("iv"),
                 Phantoms.right(v("litData")),
                 field("bigint", lambda("bi",
@@ -1929,7 +1929,7 @@ object Coder:
       applyP("hydra.lib.logic.ifElse",
         applyP("hydra.lib.optionals.cases",
           applyP("hydra.lib.maps.lookup", v("fn"), v("unionFtypes")),
-          casesWithDefault("hydra.core.Term",
+          matchWithDefault("hydra.core.Term",
             applyP("hydra.strip.deannotateAndDetypeTerm", v("ft")),
             Phantoms.bool(false),
             field("unit", constant(Phantoms.bool(true))),
@@ -1938,7 +1938,7 @@ object Coder:
                 applyP("hydra.lib.lists.length", CoreDsl.recordFields(v("rec"))),
                 int32(0))))),
           lambda("dom",
-            casesWithDefault("hydra.core.Type",
+            matchWithDefault("hydra.core.Type",
               applyP("hydra.strip.deannotateType", v("dom")),
               Phantoms.bool(false),
               field("unit", constant(Phantoms.bool(true))),
@@ -2034,7 +2034,7 @@ object Coder:
 
   // Inner dispatch on lamBody's structure.
   private val encodeTermApplicationLambdaInnerInnerDispatch =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("innerFun")),
       encodeTermApplicationDefault,
       field("cases", encodeTermApplicationLambdaInnerInnerCasesArm))
@@ -2045,7 +2045,7 @@ object Coder:
       encodeTermApplicationLambdaInnerInnerDispatch))
 
   private val encodeTermApplicationLambdaInnerDispatch =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("lamBody")),
       encodeTermApplicationDefault,
       field("application", encodeTermApplicationLambdaInnerArm))
@@ -2055,7 +2055,7 @@ object Coder:
       encodeTermApplicationLambdaInnerDispatch))
 
   private val encodeTermApplicationFunDispatch =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateAndDetypeTerm", v("fun")),
       encodeTermApplicationDefault,
       field("lambda", encodeTermApplicationLambdaArm),
@@ -2081,7 +2081,7 @@ object Coder:
   // These helpers detect and collapse that redundancy before the type args are rendered.
 
   private val collectTypeVarsGoBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       v("hydra.lib.sets.empty"),
       field("variable", lambda("name", applyP("hydra.lib.sets.singleton", v("name")))),
@@ -2140,7 +2140,7 @@ object Coder:
     define(NS, "filterByFlags").doc("Keep elements of xs whose corresponding flag is true (#589)").to(filterByFlagsBody)
 
   private val countFunctionParamsBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       int32(0),
       field("function", lambda("ft",
@@ -2154,7 +2154,7 @@ object Coder:
     applyP("hydra.lib.logic.ifElse",
       applyP("hydra.lib.ordering.lte", v("n"), int32(0)),
       Phantoms.pair(emptyList, v("t")),
-      casesWithDefault("hydra.core.Type",
+      matchWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("t")),
         Phantoms.pair(emptyList, v("t")),
         field("function", lambda("ft",
@@ -2170,7 +2170,7 @@ object Coder:
     define(NS, "peelDomainTypes").doc("Peel up to n curried domain types off a function type (#589)").to(peelDomainTypesBody)
 
   private val unwrapReturnTypeBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       v("t"),
       field("function", lambda("ft", applyP(local("unwrapReturnType"), CoreDsl.functionTypeCodomain(v("ft"))))),
@@ -2181,21 +2181,21 @@ object Coder:
 
   // extractInOutPair: for a domain shaped `inVar -> ... -> Pair(outVar, _)`, extract (inVar, outVar).
   private val extractInOutPairBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       emptyList,
       field("function", lambda("ft",
-        casesWithDefault("hydra.core.Type",
+        matchWithDefault("hydra.core.Type",
           applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft"))),
           emptyList,
           field("variable", lambda("inVar",
             Phantoms.let("retType",
               applyP(local("unwrapReturnType"), CoreDsl.functionTypeCodomain(v("ft"))),
-              casesWithDefault("hydra.core.Type",
+              matchWithDefault("hydra.core.Type",
                 applyP("hydra.strip.deannotateType", v("retType")),
                 emptyList,
                 field("pair", lambda("pt",
-                  casesWithDefault("hydra.core.Type",
+                  matchWithDefault("hydra.core.Type",
                     applyP("hydra.strip.deannotateType", CoreDsl.pairTypeFirst(v("pt"))),
                     emptyList,
                     field("variable", lambda("outVar",
@@ -2207,29 +2207,29 @@ object Coder:
   // extractDirectReturn: for a domain shaped `inVar -> ... -> midArg -> outVar` (a nested
   // function-typed domain directly threading a type var to an eventual output), extract pairs.
   private val extractDirectReturnGoBody = lambda("tparamSet", lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       emptyList,
       field("function", lambda("ft",
         Phantoms.let(Seq(
           field("dom", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft")))),
           field("cod", CoreDsl.functionTypeCodomain(v("ft")))),
-          casesWithDefault("hydra.core.Type",
+          matchWithDefault("hydra.core.Type",
             v("dom"),
             applyP(local("extractDirectReturnGo"), v("tparamSet"), v("cod")),
             field("variable", lambda("inVar",
               applyP("hydra.lib.logic.ifElse",
                 applyP("hydra.lib.sets.member", v("inVar"), v("tparamSet")),
-                casesWithDefault("hydra.core.Type",
+                matchWithDefault("hydra.core.Type",
                   applyP("hydra.strip.deannotateType", v("cod")),
                   emptyList,
                   field("function", lambda("ft2",
                     Phantoms.let(Seq(
                       field("midArg", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeDomain(v("ft2")))),
                       field("retPart", applyP("hydra.strip.deannotateType", CoreDsl.functionTypeCodomain(v("ft2"))))),
-                      casesWithDefault("hydra.core.Type",
+                      matchWithDefault("hydra.core.Type",
                         v("midArg"),
-                        casesWithDefault("hydra.core.Type",
+                        matchWithDefault("hydra.core.Type",
                           v("retPart"),
                           emptyList,
                           field("variable", lambda("outVar",
@@ -2241,7 +2241,7 @@ object Coder:
                           applyP("hydra.lib.logic.ifElse",
                             applyP("hydra.lib.sets.member", v("midVar"), v("tparamSet")),
                             emptyList,
-                            casesWithDefault("hydra.core.Type",
+                            matchWithDefault("hydra.core.Type",
                               v("retPart"),
                               emptyList,
                               field("variable", lambda("outVar",
@@ -2279,11 +2279,11 @@ object Coder:
     define(NS, "groupPairsByFirst").doc("Group a list of pairs into a map keyed by first component (#589)").to(groupPairsByFirstBody)
 
   private val findPairFirstBody = lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       nothing,
       field("pair", lambda("pt",
-        casesWithDefault("hydra.core.Type",
+        matchWithDefault("hydra.core.Type",
           applyP("hydra.strip.deannotateType", CoreDsl.pairTypeFirst(v("pt"))),
           nothing,
           field("variable", lambda("vv", just(v("vv")))))))))
@@ -2383,7 +2383,7 @@ object Coder:
       field("directPairs", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP(local("extractDirectReturn"), v("tparamSet"), v("d"))))),
       field("groupedDirect", applyP(local("groupPairsByFirst"), v("directPairs"))),
       field("directInputVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.map", lambda("p", applyP("hydra.lib.pairs.first", v("p"))), v("directPairs")))),
-      field("codVar", casesWithDefault("hydra.core.Type", applyP("hydra.strip.deannotateType", v("cod")), nothing[Any], field("variable", lambda("vv", just(v("vv")))))),
+      field("codVar", matchWithDefault("hydra.core.Type", applyP("hydra.strip.deannotateType", v("cod")), nothing[Any], field("variable", lambda("vv", just(v("vv")))))),
       field("directRefSubst", applyP(local("directRefSubstitution"), v("directInputVars"), v("codVar"), v("groupedDirect"))),
       field("codSubst", applyP("hydra.lib.optionals.cases", applyP(local("findPairFirst"), v("cod")), v("hydra.lib.maps.empty"), lambda("cv", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.maps.member", v("cv"), v("selfRefSubst")), v("hydra.lib.maps.empty"), applyP("hydra.lib.optionals.cases", applyP(local("findSelfRefVar"), v("groupedByInput")), v("hydra.lib.maps.empty"), lambda("refVar", applyP("hydra.lib.logic.ifElse", applyP("hydra.lib.equality.equal", v("cv"), v("refVar")), v("hydra.lib.maps.empty"), applyP("hydra.lib.maps.singleton", v("cv"), v("refVar"))))))))),
       field("domVars", applyP("hydra.lib.sets.fromList", applyP("hydra.lib.lists.bind", v("doms"), lambda("d", applyP("hydra.lib.sets.toList", applyP(local("collectTypeVars"), v("d"))))))),
@@ -2394,7 +2394,7 @@ object Coder:
     define(NS, "detectAccumulatorUnification").doc("Detect callee-scheme type vars forced together/to-concrete by the callee's own domain shape (#589)").to(detectAccumulatorUnificationBody)
 
   private val substituteTypeVarsWithTypesGoBody = lambda("subst", lambda("t",
-    casesWithDefault("hydra.core.Type",
+    matchWithDefault("hydra.core.Type",
       applyP("hydra.strip.deannotateType", v("t")),
       v("t"),
       field("variable", lambda("vv",
@@ -2526,7 +2526,7 @@ object Coder:
                     v("stypeArgs"))))))))))
 
   private val encodeTermTypeAppInnerDispatch =
-    casesWithDefault("hydra.core.Term",
+    matchWithDefault("hydra.core.Term",
       applyP("hydra.strip.deannotateTerm", v("substitutedBody")),
       applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("substitutedBody")),
       field("project", constant(
@@ -2541,7 +2541,7 @@ object Coder:
     Phantoms.let(Seq(
       field("collectTypeArgs",
         lambda("t", lambda("acc",
-          casesWithDefault("hydra.core.Term",
+          matchWithDefault("hydra.core.Term",
             applyP("hydra.strip.deannotateTerm", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("typeApplication", lambda("ta2",
@@ -2558,7 +2558,7 @@ object Coder:
       field("innerTerm", applyP("hydra.lib.pairs.second", v("collected"))),
       field("collectTypeLambdas",
         lambda("t", lambda("acc",
-          casesWithDefault("hydra.core.Term",
+          matchWithDefault("hydra.core.Term",
             applyP("hydra.strip.deannotateTerm", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("typeLambda", lambda("tl",
@@ -2576,7 +2576,7 @@ object Coder:
 
   // Field order matches Haskell DSL's Coder.hs:524-785 (cases ordering matters for
   // generated Scala match-case structure).
-  private val encodeTermCases = casesWithDefault("hydra.core.Term",
+  private val encodeTermCases = matchWithDefault("hydra.core.Term",
     applyP("hydra.strip.deannotateTerm", v("term")),
     errorLeft("unexpected term"),
     field("typeApplication", encodeTermTypeApplicationArm),
