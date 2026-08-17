@@ -7,6 +7,7 @@
 -- (hydra.build.modules), the translingual expected-libraries registry
 -- (hydra.build.libraries), the distribution assembly-plan model
 -- (hydra.build.assembly) and its pure derivation (hydra.build.assemblyplan),
+-- and the pure directory-traversal decision helpers (hydra.build.walk),
 -- plus their test modules. See #546 (extraction from
 -- hydra-kernel), #512 (build formats as Hydra types), #533 (the libraries
 -- registry), and #416 (promotion of the build system into Hydra).
@@ -47,6 +48,7 @@ import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
 import qualified Hydra.Sources.Build.Routing as BuildRouting
 import qualified Hydra.Sources.Build.SyncMatrix as BuildSyncMatrix
 import qualified Hydra.Sources.Build.VersionConsistency as BuildVersionConsistency
+import qualified Hydra.Sources.Build.Walk as BuildWalk
 import qualified Hydra.Sources.Build.Test.Libraries as TestBuildLibraries
 import qualified Hydra.Sources.Build.Test.Modules as TestBuildModules
 import qualified Hydra.Sources.Build.Test.Reconcile as TestBuildReconcile
@@ -69,7 +71,8 @@ mainModules = [
   BuildReconcile.module_,
   BuildRouting.module_,
   BuildSyncMatrix.module_,
-  BuildVersionConsistency.module_]
+  BuildVersionConsistency.module_,
+  BuildWalk.module_]
 
 -- | hydra.build.format is the package's one type-defining module (#512); it
 -- gives rise to generated DSL wrappers.
