@@ -8261,6 +8261,28 @@ public class Coder {
                                                             proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                                         field("cases_",
                                                             proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
+                                                        field("tnameIsGeneric",
+                                                            Optionals.cases(
+                                                                Maps.lookup(var("tname"),
+                                                                    proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g")),
+                                                                bool(false),
+                                                                lambda("ts",
+                                                                    Logic.not(
+                                                                        Lists.null_(
+                                                                            proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts")))))),
+                                                        field("domArgs",
+                                                            Logic.ifElse(
+                                                                var("tnameIsGeneric"),
+                                                                Lists.map(
+                                                                    lambda("tp",
+                                                                        apply(
+                                                                            ref(Utils.typeParameterToTypeArgument),
+                                                                            apply(
+                                                                                ref(Utils.javaTypeParameter),
+                                                                                hydra.dsl.Formatting.capitalize(
+                                                                                    apply(unwrap(Name.TYPE_), var("tp")))))),
+                                                                    var("tparams")),
+                                                                list())),
                                                                 Eithers.bind(
                                                                     apply(
                                                                         ref(Coder.encodeTerm),
@@ -8310,7 +8332,7 @@ public class Coder {
                                                                                                     ref(Utils.nameToJavaReferenceType),
                                                                                                     var("aliases"),
                                                                                                     bool(true),
-                                                                                                    list(),
+                                                                                                    var("domArgs"),
                                                                                                     var("tname"),
                                                                                                     just(
                                                                                                         hydra.dsl.Formatting.capitalize(
