@@ -17,6 +17,7 @@
     "hydra.build.routing",
     "hydra.build.syncmatrix",
     "hydra.build.versionconsistency",
+    "hydra.build.walk",
     "hydra.decode.build.assembly",
     "hydra.decode.build.benchresult",
     "hydra.decode.build.comparereport",
